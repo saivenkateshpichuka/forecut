@@ -1,0 +1,1408 @@
+/* Forecut flat-sketch engine: front-view garment flats and side-view footwear,
+   built from parts, with the trend detail drawn in and highlighted. */
+var Flats = (function () {
+  var F = function (n) { return Math.round(n * 10) / 10; };
+  var pt = function (p) { return F(p[0]) + ' ' + F(p[1]); };
+  var lerp = function (a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]; };
+  var MIR = 'transform="translate(240 0) scale(-1 1)"';
+  function mir(s) { return s + '<g ' + MIR + '>' + s + '</g>'; }
+  function mb(b) { return [240 - b[0] - b[2], b[1], b[2], b[3]]; }
+  function bbox(pts, pad) {
+    pad = pad || 0;
+    var x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+    pts.forEach(function (p) { x0 = Math.min(x0, p[0]); y0 = Math.min(y0, p[1]); x1 = Math.max(x1, p[0]); y1 = Math.max(y1, p[1]); });
+    return [x0 - pad, y0 - pad, x1 - x0 + 2 * pad, y1 - y0 + 2 * pad];
+  }
+  function qc(a, b, bulge) { var dx = b[0] - a[0], dy = b[1] - a[1], l = Math.sqrt(dx * dx + dy * dy) || 1; return 'Q' + F((a[0] + b[0]) / 2 + dy / l * bulge) + ' ' + F((a[1] + b[1]) / 2 - dx / l * bulge) + ' ' + pt(b); }
+  function both(b) { return [b, mb(b)]; }
+  function union(b) { var m = mb(b); var x0 = Math.min(b[0], m[0]), x1 = Math.max(b[0] + b[2], m[0] + m[2]); return [x0, b[1], x1 - x0, b[3]]; }
+
+  function defs(c) {
+    var s = c.ink;
+    return '<defs>' +
+      '<pattern id="p-stripes" width="12" height="20" patternUnits="userSpaceOnUse"><rect width="12" height="8" fill="' + c.tint + '"/></pattern>' +
+      '<pattern id="p-pin" width="7" height="10" patternUnits="userSpaceOnUse"><path d="M3.5 0V10" stroke="' + s + '" stroke-width=".45" stroke-dasharray="1.2 1"/></pattern>' +
+      '<pattern id="p-check" width="16" height="16" patternUnits="userSpaceOnUse"><rect width="8" height="16" fill="' + c.tint + '" opacity=".75"/><rect width="16" height="8" fill="' + c.tint + '" opacity=".75"/><path d="M12 0V16M0 12H16" stroke="' + s + '" stroke-width=".4"/></pattern>' +
+      '<pattern id="p-beads" width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.1" fill="' + s + '"/><circle cx="6" cy="6" r="1.1" fill="' + s + '"/></pattern>' +
+      '<pattern id="p-sequin" width="7" height="6" patternUnits="userSpaceOnUse"><circle cx="3.5" cy="3" r="2.3" fill="' + c.tint + '" stroke="' + s + '" stroke-width=".4"/></pattern>' +
+      '<pattern id="p-mesh" width="5" height="5" patternUnits="userSpaceOnUse"><path d="M0 0L5 5M5 0L0 5" stroke="' + s + '" stroke-width=".3" opacity=".7"/></pattern>' +
+      '<pattern id="p-quilt" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M0 8L8 0L16 8L8 16Z" fill="none" stroke="' + s + '" stroke-width=".5" stroke-dasharray="1.5 1.2"/></pattern>' +
+      '<pattern id="p-fur" width="7" height="6" patternUnits="userSpaceOnUse"><path d="M1 5Q2 1 3.5 4M4 5Q5.5 1 6.5 4" fill="none" stroke="' + s + '" stroke-width=".55"/></pattern>' +
+      '<pattern id="p-lace" width="10" height="10" patternUnits="userSpaceOnUse"><circle cx="5" cy="5" r="2.6" fill="none" stroke="' + s + '" stroke-width=".45"/><circle cx="0" cy="0" r="1.2" fill="none" stroke="' + s + '" stroke-width=".4"/><circle cx="10" cy="10" r="1.2" fill="none" stroke="' + s + '" stroke-width=".4"/></pattern>' +
+      '<pattern id="p-floral" width="24" height="24" patternUnits="userSpaceOnUse"><g fill="none" stroke="' + s + '" stroke-width=".5"><circle cx="8" cy="8" r="2"/><circle cx="8" cy="4.5" r="2"/><circle cx="11.5" cy="8" r="2"/><circle cx="8" cy="11.5" r="2"/><circle cx="4.5" cy="8" r="2"/><path d="M18 16q3 3 0 6q-3-3 0-6z"/></g></pattern>' +
+      '<pattern id="p-cord" width="4" height="10" patternUnits="userSpaceOnUse"><path d="M2 0V10" stroke="' + s + '" stroke-width=".5" opacity=".7"/></pattern>' +
+      '<pattern id="p-rib" width="3.5" height="10" patternUnits="userSpaceOnUse"><path d="M1.75 0V10" stroke="' + s + '" stroke-width=".35" opacity=".6"/></pattern>' +
+      '<pattern id="p-speck" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="1" cy="2" r=".45" fill="' + s + '"/><circle cx="4" cy="5" r=".45" fill="' + s + '"/><circle cx="4.5" cy="1" r=".35" fill="' + s + '"/></pattern>' +
+      '<pattern id="p-diag" width="8" height="8" patternUnits="userSpaceOnUse"><path d="M0 8L8 0" stroke="' + s + '" stroke-width=".35" opacity=".6"/></pattern>' +
+      '<pattern id="p-zig" width="12" height="10" patternUnits="userSpaceOnUse"><path d="M0 7L3 3L6 7L9 3L12 7" fill="none" stroke="' + s + '" stroke-width=".6"/><circle cx="6" cy="1.2" r=".8" fill="' + s + '"/></pattern>' +
+      '<pattern id="p-seer" width="6" height="12" patternUnits="userSpaceOnUse"><rect width="3" height="12" fill="' + c.tint + '" opacity=".8"/><path d="M3 0Q4.4 3 3 6Q1.6 9 3 12" fill="none" stroke="' + s + '" stroke-width=".35"/></pattern>' +
+      '<pattern id="p-croc" width="14" height="14" patternUnits="userSpaceOnUse"><rect x="1" y="1" width="12" height="12" fill="none" stroke="' + s + '" stroke-width=".45"/><circle cx="7" cy="7" r="3.2" fill="none" stroke="' + s + '" stroke-width=".45"/><circle cx="7" cy="7" r="1" fill="' + s + '"/></pattern>' +
+      '<pattern id="p-waffle" width="6" height="6" patternUnits="userSpaceOnUse"><rect x="1" y="1" width="4" height="4" fill="' + c.tint + '" opacity=".7"/><path d="M0 0.5H6M0.5 0V6" stroke="' + s + '" stroke-width=".35"/></pattern>' +
+      '<pattern id="p-woven" width="10" height="10" patternUnits="userSpaceOnUse"><rect width="5" height="5" fill="' + c.tint + '"/><rect x="5" y="5" width="5" height="5" fill="' + c.tint + '"/><path d="M0 1.7H5M0 3.4H5M6.7 5V10M8.4 5V10M5.5 0V5M7 0V5M8.5 0V5" stroke="' + s + '" stroke-width=".3"/></pattern>' +
+      '<pattern id="p-jute" width="6" height="6" patternUnits="userSpaceOnUse"><rect width="6" height="6" fill="' + c.tint + '"/><path d="M-1 4L2 1M2 7L7 2M5 7L8 4" stroke="' + s + '" stroke-width=".55"/></pattern>' +
+      '<pattern id="p-smock" width="8" height="5" patternUnits="userSpaceOnUse"><path d="M0 2.5Q2 0 4 2.5T8 2.5" fill="none" stroke="' + s + '" stroke-width=".55"/></pattern>' +
+      '</defs>';
+  }
+
+  /* ---------------- shared stroke styles ---------------- */
+  function st(c) {
+    return {
+      o: 'fill="none" stroke="' + c.ink + '" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"',
+      s: 'fill="none" stroke="' + c.ink + '" stroke-width="1" stroke-linejoin="round" stroke-linecap="round"',
+      t: 'fill="none" stroke="' + c.ink + '" stroke-width=".75" stroke-dasharray="2.2 1.5" stroke-linecap="round"',
+      f: function (fill) { return 'fill="' + (fill || c.fill) + '" stroke="' + c.ink + '" stroke-width="1.8" stroke-linejoin="round"'; },
+      fs: function (fill) { return 'fill="' + (fill || c.fill) + '" stroke="' + c.ink + '" stroke-width="1.1" stroke-linejoin="round"'; }
+    };
+  }
+  function btn(x, y, c, r) { r = r || 2.6; return '<circle cx="' + F(x) + '" cy="' + F(y) + '" r="' + r + '" fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width=".9"/><circle cx="' + F(x) + '" cy="' + F(y) + '" r=".5" fill="' + c.ink + '"/>'; }
+
+  /* ================= TOPS: coats, jackets, blazers, shirts, knits ================= */
+  var NECK = {
+    crew: { y: 43, d: 'Q128 42 134 30', show: true }, rib: { y: 43, d: 'Q128 42 134 30', show: true },
+    vneck: { y: 64, d: 'L134 30', show: true }, square: { y: 54, d: 'L132 54 L134 30', show: true },
+    johnny: { y: 72, d: 'L134 30', show: true }, camp: { y: 74, d: 'L134 30', show: false },
+    shirt: { y: 40, d: 'Q128 39 134 30' }, polo: { y: 40, d: 'Q128 39 134 30' }, bigcollar: { y: 40, d: 'Q128 39 134 30' },
+    longpoint: { y: 40, d: 'Q128 39 134 30' }, buttondown: { y: 40, d: 'Q128 39 134 30' }, band: { y: 38, d: 'Q128 37 134 30' },
+    bow: { y: 40, d: 'Q128 39 134 30', show: true }, funnel: { y: 37, d: 'Q128 37 134 30' }, funnelsmall: { y: 38, d: 'Q128 38 134 30' },
+    notch: { y: 36, d: 'Q127 36 134 30' }, peak: { y: 36, d: 'Q127 36 134 30' }, shawl: { y: 36, d: 'Q127 36 134 30' }, fur: { y: 36, d: 'Q127 36 134 30' }
+  };
+  var LAPEL = { notch: 1, peak: 1, shawl: 1, fur: 1 };
+
+  function top(o, c) {
+    var S = st(c), t = o.t, col = o.col || 'crew', cl = o.cl || 'none', x = o.x || [];
+    var has = function (k) { return x.indexOf(k) > -1; };
+    var knitlike = (t === 'knit' || t === 'tee' || t === 'shirt');
+    var L = o.len || { coat: 236, blazer: 198, jacket: 186, shirt: 206, knit: 202, tee: 194, waistcoat: 150 }[t];
+    var fl = o.fl || 0, sh = o.sh || 'set';
+    var sl = t === 'waistcoat' ? 'none' : (o.sl || ((t === 'tee' || col === 'camp') ? 'short' : 'long'));
+    var HPS = [134, 30], SP = knitlike ? [165, 40] : [168, 40], UA = knitlike ? [160, 90] : [163, 92];
+    var SO = knitlike ? [189, 164] : [193, 166], SI = knitlike ? [172, 168] : [175, 170];
+    if (sh === 'drop') { SP = [178, 54]; UA = [167, 106]; SO = [199, 170]; SI = [180, 174]; }
+    if (sh === 'point') { SP = [173, 33]; }
+    if (sl === 'short') { SO = [188, 80]; SI = [173, 90]; UA = [161, 82]; }
+    if (sl === 'none') { SP = [150, 34]; UA = [158, 86]; }
+    var sideX = (knitlike ? 160 : 165) + fl;
+    var nk = NECK[col] || NECK.crew;
+    var FNy = nk.y;
+    var pep = has('peplum'), wYp = o.wY || 126, xw = 0;
+    if (pep) { xw = UA[0] + (sideX - UA[0]) * ((wYp - UA[1]) / (L - UA[1])) - 5; sideX += 20; }
+    var hemCurve = (t === 'shirt' && !o.straightHem && !pep);
+    var hemPath = (pep ? 'L' + F(xw) + ' ' + wYp + ' ' : '') + (hemCurve ? 'L' + F(sideX) + ' ' + (L - 8) + ' Q146 ' + (L + 4) + ' 120 ' + (L + 4) : 'L' + F(sideX) + ' ' + L + ' L120 ' + L);
+    var vol = o.vol != null ? o.vol : (sh === 'drop' ? 13 : (t === 'shirt' || t === 'knit' || t === 'tee') ? 10 : 7);
+    var armPath = sl === 'none' ? qc(HPS, SP, 1.5) + ' Q' + F(SP[0] - 6) + ' 66 ' + pt(UA) : qc(HPS, SP, 1.8) + ' ' + qc(SP, SO, sl === 'short' ? 2 : vol) + ' L' + pt(SI) + ' ' + qc(SI, UA, sl === 'short' ? 1 : vol * .35);
+    if (!pep && t !== 'waistcoat') { var sideQ = 'Q' + F((UA[0] + sideX) / 2 - 2.2) + ' ' + F((UA[1] + L) / 2) + ' '; hemPath = hemPath.replace(/^L/, sideQ); }
+    if (t === 'waistcoat') { hemPath = 'L' + F(sideX) + ' ' + (L - 4) + ' L132 ' + (L - 2) + ' L120 ' + (L + 10); }
+    var half = 'M120 ' + FNy + ' ' + nk.d + ' ' + armPath + ' ' + hemPath + ' Z';
+    var outline = 'M134 30 ' + armPath + ' ' + hemPath;
+    var out = '', hl = {}, under = '', over = '';
+    var bodyFill = has('dark') ? c.tint : (has('velvet') || has('tint') ? c.tint : c.fill);
+    var clip = '<clipPath id="bc"><path d="' + half + '"/><path d="' + half + '" ' + MIR + '/></clipPath>';
+
+    // hood behind
+    if (has('hood')) under += '<path d="M104 33 Q86 18 98 6 Q120 -2 142 6 Q154 18 136 33 Z" ' + S.f(c.tint) + '/><path d="M110 30 Q104 14 120 10 Q136 14 130 30" ' + S.s + '/>';
+    // back collar band for shirt collars
+    if (['shirt', 'polo', 'bigcollar', 'longpoint', 'buttondown', 'johnny'].indexOf(col) > -1) under += mir('<path d="M120 26 Q128 26 134 30 Q127 37 120 39 Z" ' + S.fs() + '/>');
+
+    // body
+    out += mir('<path d="' + half + '" fill="' + bodyFill + '"/>');
+    // surface overlays (clipped)
+    var ov = '';
+    var pat = { check: 'p-check', pin: 'p-pin', cord: 'p-cord', mesh: 'p-mesh', sequin: 'p-sequin', beads: 'p-beads', floral: 'p-floral', quilt: 'p-quilt', fur: 'p-fur', ribbody: 'p-rib', melange: 'p-speck', suede: 'p-speck', bias: 'p-diag', seer: 'p-seer', pointelle: 'p-lace', crochet: 'p-croc', waffle: 'p-waffle' };
+    Object.keys(pat).forEach(function (k) { if (has(k)) ov += '<rect x="0" y="0" width="240" height="260" fill="url(#' + pat[k] + ')"/>'; });
+    if (has('stripes')) for (var yy = 52; yy < L; yy += 22) ov += '<rect x="0" y="' + yy + '" width="240" height="9" fill="' + c.tint + '"/><path d="M0 ' + yy + 'H240M0 ' + (yy + 9) + 'H240" ' + S.s + ' stroke-width=".4"/>';
+    if (has('quiltlines')) for (var qy = 54; qy < L; qy += 17) ov += '<path d="M40 ' + qy + ' H200" ' + S.s + '/>';
+    if (has('patent') || has('leather') || has('gloss')) ov += '<g fill="none" stroke="' + c.fill + '" stroke-width="2.2" stroke-linecap="round" opacity=".9"><path d="M84 70 Q80 110 86 150"/><path d="M152 64 Q158 100 154 132"/><path d="M182 90 L186 130"/></g>';
+    if (has('patent')) ov = '<rect x="0" y="0" width="240" height="260" fill="' + c.ink + '" opacity=".78"/>' + ov;
+    if (has('cable')) { [104, 136].forEach(function (cx) { var d = ''; for (var cy = 62; cy < L - 20; cy += 16) d += 'M' + (cx - 5) + ' ' + cy + ' Q' + cx + ' ' + (cy + 8) + ' ' + (cx + 5) + ' ' + (cy + 16) + ' M' + (cx + 5) + ' ' + cy + ' Q' + cx + ' ' + (cy + 8) + ' ' + (cx - 5) + ' ' + (cy + 16) + ' '; ov += '<path d="' + d + '" ' + S.s + '/><path d="M' + (cx - 9) + ' 60V' + (L - 18) + 'M' + (cx + 9) + ' 60V' + (L - 18) + '" ' + S.s + ' stroke-width=".5"/>'; }); }
+    if (has('fairisle')) { ov += '<rect x="0" y="44" width="240" height="34" fill="url(#p-zig)"/><path d="M0 44H240M0 78H240" ' + S.s + '/>'; hl.yoke = [[60, 38, 120, 46]]; }
+    if (has('westernyoke')) { ov += '<path d="M60 52 L100 56 L120 70 L140 56 L180 52" ' + S.s + '/><path d="M60 55 L100 59 L120 73 L140 59 L180 55" ' + S.t + '/>'; hl.yoke = [[60, 40, 120, 40]]; }
+    if (has('laceyoke')) { ov += '<rect x="0" y="30" width="240" height="44" fill="url(#p-lace)"/><path d="M60 74 ' + (function () { var d = ''; for (var i = 60; i < 180; i += 8) d += 'Q' + (i + 4) + ' 80 ' + (i + 8) + ' 74 '; return d; })() + '" ' + S.s + '/>'; hl.yoke = [[64, 30, 112, 52]]; }
+    if (has('panels')) ov += '<path d="M60 70 L120 140 L180 70 M120 140 V' + L + ' M66 140 L120 190 L174 140" ' + S.s + '/><path d="M60 73 L120 143 L180 73" ' + S.t + '/>';
+    if (has('logo')) { ov += '<rect x="98" y="72" width="44" height="34" rx="4" fill="' + c.tint + '" stroke="' + c.ink + '" stroke-width=".8"/><circle cx="112" cy="89" r="7" fill="none" stroke="' + c.ink + '" stroke-width="1.6"/><path d="M124 82 H134 M124 89 H136 M124 96 H132" ' + S.o + '/>'; hl.chest = [[94, 66, 52, 46]]; }
+    if (has('slogan')) { ov += '<g ' + S.o + '><path d="M104 74 H136 M100 84 H140 M106 94 H134"/></g><path d="M104 74 H136 M100 84 H140 M106 94 H134" stroke="' + c.tint + '" stroke-width="5" opacity=".9" fill="none"/><path d="M104 74 H136 M100 84 H140 M106 94 H134" ' + S.o + ' stroke-width="1.2"/>'; hl.chest = [[94, 64, 52, 40]]; }
+    if (has('embroid')) { var fl1 = function (cx, cy) { return '<g ' + S.s + '><circle cx="' + cx + '" cy="' + cy + '" r="2.2"/><circle cx="' + cx + '" cy="' + (cy - 4) + '" r="2"/><circle cx="' + (cx + 4) + '" cy="' + cy + '" r="2"/><circle cx="' + cx + '" cy="' + (cy + 4) + '" r="2"/><circle cx="' + (cx - 4) + '" cy="' + cy + '" r="2"/><path d="M' + cx + ' ' + (cy + 6) + ' q-4 8 -10 10"/></g>'; }; ov += fl1(98, 64) + fl1(142, 64) + fl1(90, 84) + fl1(150, 84); hl.chest = [[80, 52, 80, 46]]; }
+    if (has('ruchecf')) { hl.centre = [[94, 46, 52, L - 66]]; var r = ''; for (var ry = 56; ry < L - 20; ry += 9) r += 'M120 ' + ry + ' q-8 4 -18 2 '; ov += mir('<path d="' + r + '" ' + S.s + '/>'); }
+    if (has('darts')) ov += mir('<path d="M142 104 Q144 130 142 156" ' + S.s + '/>');
+    if (has('sheer')) ov += '<rect x="0" y="0" width="240" height="260" fill="url(#p-mesh)"/>';
+    if (has('smockneck')) ov += '<rect x="0" y="' + FNy + '" width="240" height="30" fill="url(#p-smock)"/><path d="M60 ' + (FNy + 30) + 'H180" ' + S.s + '/>';
+    if (has('crochetpanel')) { ov += '<rect x="0" y="62" width="240" height="56" fill="' + c.fill + '"/><rect x="0" y="62" width="240" height="56" fill="url(#p-croc)"/><path d="M0 62H240M0 118H240" ' + S.s + '/>'; hl.chest = [[66, 56, 108, 68]]; }
+    if (has('vest')) ov += '<path d="M108 40 L120 ' + (o.by || 116) + ' L132 40 Z" fill="' + c.tint + '"/><path d="M112 44 L120 66 L128 44" ' + S.s + '/>';
+    if (ov) out += '<g clip-path="url(#bc)">' + ov + '</g>';
+
+    // sleeves tint (varsity)
+    if (has('varsity') && sl !== 'none') { out += mir('<path d="M' + pt(SP) + ' L' + pt(SO) + ' L' + pt(SI) + ' L' + pt(UA) + ' Q' + F(SP[0] - 8) + ' 66 ' + pt(SP) + ' Z" fill="' + c.tint + '"/>'); hl.sleeves = both(bbox([SP, SO, SI, UA], 3)); }
+
+    // outline
+    out += mir('<path d="' + outline + '" ' + S.o + '/>');
+    var FD = 'fill="none" stroke="' + c.ink + '" stroke-width=".8" stroke-linecap="round" opacity=".5"', fd = '';
+    if (sl === 'long') {
+      var at = function (t, u) { return pt(lerp(lerp(UA, SI, t), lerp(SP, SO, t), u)); };
+      fd += 'M' + at(.44, .05) + ' Q' + at(.47, .3) + ' ' + at(.52, .55) + ' M' + at(.55, .04) + ' Q' + at(.58, .25) + ' ' + at(.62, .42) + ' M' + at(.84, .08) + ' Q' + at(.86, .35) + ' ' + at(.91, .6);
+    }
+    if (!pep) fd += ' M' + F(UA[0] - 5) + ' ' + F(UA[1] + 14) + ' Q' + F(UA[0] - 9) + ' ' + F(UA[1] + 34) + ' ' + F(UA[0] - 7) + ' ' + F(UA[1] + 52) + ' M' + F(sideX - 9) + ' ' + F(L - 6) + ' Q' + F(sideX - 13) + ' ' + F(L - 24) + ' ' + F(sideX - 12) + ' ' + F(L - 40);
+    if (fd) out += mir('<path d="' + fd + '" ' + FD + '/>');
+    if (nk.show) { out += mir('<path d="M120 ' + FNy + ' ' + nk.d + ' Q128 34 120 35 Z" fill="' + c.tint + '" opacity=".75"/><path d="M134 30 Q128 34 120 35" ' + S.s + '/>'); out += mir('<path d="M120 ' + FNy + ' ' + nk.d + '" ' + S.o + '/>'); }
+    if (pep) { out += mir('<path d="M120 ' + wYp + ' L' + F(xw) + ' ' + wYp + '" ' + S.s + '/><path d="M132 ' + (wYp + 3) + ' L140 ' + (L - 2) + ' M148 ' + (wYp + 3) + ' L160 ' + (L - 2) + '" ' + S.s + ' stroke-width=".6"/>'); hl.waist = [[240 - xw - 10, wYp - 12, 2 * (xw - 120) + 20, 26]]; }
+    if (has('taped')) { var tp = 'M' + F(SP[0] - 20) + ' ' + F(SP[1] - 4) + ' Q' + F(SP[0] - 26) + ' ' + F((SP[1] + L) / 2) + ' ' + F(sideX - 18) + ' ' + (L - 2); out += mir('<path d="' + tp + '" fill="none" stroke="' + c.tint + '" stroke-width="4"/><path d="' + tp + '" ' + S.s + '/><path d="' + tp + '" ' + S.t + ' transform="translate(2.4 0)"/>'); hl.seams = both([F(SP[0] - 34), 30, 26, L - 28]); }
+    // armhole seam
+    if (sl !== 'none') {
+      var am = sh === 'drop' ? 'M' + pt(SP) + ' Q' + F(SP[0] - 5) + ' ' + F(SP[1] + 30) + ' ' + pt(UA) : 'M' + pt(SP) + ' Q' + F(SP[0] - 7) + ' ' + F((SP[1] + UA[1]) / 2) + ' ' + pt(UA);
+      if (sh === 'saddle') am = 'M136 37 L' + (SP[0] - 2) + ' ' + (SP[1] + 7) + ' Q' + F(SP[0] - 8) + ' 70 ' + pt(UA);
+      out += mir('<path d="' + am + '" ' + S.s + '/>');
+      if (t === 'coat' || t === 'jacket' || t === 'shirt' || t === 'blazer') out += mir('<path d="' + am + '" ' + S.t + ' transform="translate(-2.6 .6)"/><path d="M' + pt([HPS[0] + 1, HPS[1] + 2.6]) + ' L' + pt([SP[0] - 2, SP[1] + 2.4]) + '" ' + S.t + '/>');
+      // sleeve inner fold
+      out += mir('<path d="M' + pt(lerp(UA, SI, .15)) + ' L' + pt(lerp(UA, SI, .97)) + '" ' + S.s + ' opacity="0"/>');
+    }
+    hl.shoulders = both([SP[0] - 13, SP[1] - 12, 26, 26]);
+    hl.body = [[240 - Math.max(SO[0], sideX) - 6, 14, 2 * (Math.max(SO[0], sideX) - 120) + 12, L - 4]];
+    if (sl !== 'none' && !hl.sleeves) hl.sleeves = both(bbox([SP, SO, SI, UA], 3));
+
+    // cuffs
+    if (sl === 'long') {
+      var cf = o.cuff || (t === 'knit' ? 'rib' : t === 'shirt' ? 'band' : 'plain');
+      var k = cf === 'longrib' ? .3 : (cf === 'fur' ? .14 : (cf === 'smock' || cf === 'lace') ? .18 : .1);
+      var A = lerp(SI, UA, k), B = lerp(SO, SP, k * .9);
+      var cuffPoly = 'M' + pt(A) + ' L' + pt(B) + ' L' + pt(SO) + ' L' + pt(SI) + ' Z';
+      var cs = '';
+      if (cf === 'fur') { var A2 = [A[0] - 3, A[1]], B2 = [B[0] + 3, B[1] - 1], SO2 = [SO[0] + 4, SO[1] + 3], SI2 = [SI[0] - 4, SI[1] + 4]; cs += '<path d="M' + pt(A2) + ' L' + pt(B2) + ' L' + pt(SO2) + ' L' + pt(SI2) + ' Z" fill="' + c.fill + '"/><path d="M' + pt(A2) + ' L' + pt(B2) + ' L' + pt(SO2) + ' L' + pt(SI2) + ' Z" fill="url(#p-fur)" stroke="' + c.ink + '" stroke-width="1.1" stroke-dasharray="3 1.5"/>'; A = A2; B = B2; }
+      else if (cf === 'contrast' || has('contrastcuff')) cs += '<path d="' + cuffPoly + '" ' + S.f(c.tint) + '/>';
+      else if (cf === 'lace') cs += '<path d="' + cuffPoly + '" fill="url(#p-lace)" stroke="' + c.ink + '" stroke-width=".8"/>';
+      else if (cf === 'smock') cs += '<path d="' + cuffPoly + '" fill="url(#p-smock)" stroke="' + c.ink + '" stroke-width=".8"/>';
+      else cs += '<path d="M' + pt(A) + ' L' + pt(B) + '" ' + S.s + '/>';
+      if (cf === 'rib' || cf === 'longrib') { var n = cf === 'longrib' ? 7 : 4, tk = ''; for (var i = 1; i <= n; i++) { tk += 'M' + pt(lerp(A, B, i / (n + 1))) + ' L' + pt(lerp(SI, SO, i / (n + 1))) + ' '; } cs += '<path d="' + tk + '" ' + S.s + ' stroke-width=".6"/>'; }
+      if (cf === 'band' || cf === 'plain') { var pA = lerp(A, B, .3), pB = lerp(A, B, .55); cs += '<path d="M' + pt(pA) + ' l-2 -9 M' + pt(pB) + ' l-1.5 -8" ' + S.s + ' stroke-width=".8" opacity=".75"/>'; if (cf === 'band') cs += '<path d="M' + pt(lerp(A, SI, .5)) + ' L' + pt(lerp(B, SO, .5)) + '" ' + S.t + ' opacity=".8"/>'; }
+      if (cf === 'band' && t === 'shirt') cs += btn(lerp(SI, SO, .3)[0], lerp(SI, SO, .3)[1] - 3, c, 1.8);
+      if (has('tipping')) cs += '<path d="M' + pt(lerp(A, SI, .35)) + ' L' + pt(lerp(B, SO, .35)) + ' M' + pt(lerp(A, SI, .6)) + ' L' + pt(lerp(B, SO, .6)) + '" stroke="' + c.ink + '" stroke-width="1.6" fill="none"/>';
+      if (cf === 'fringe') { var fr = ''; for (var j = 0; j <= 6; j++) { var p = lerp(SI, SO, j / 6); fr += 'M' + pt(p) + ' l1 12 '; } cs += '<path d="' + fr + '" ' + S.s + '/>'; }
+      if (has('elbow')) { var E1 = lerp(UA, SI, .5), E2 = lerp(SP, SO, .5); cs += '<path d="M' + pt(E1) + ' L' + pt(E2) + '" ' + S.s + '/><path d="M' + pt([E1[0] + .8, E1[1] + 3]) + ' L' + pt([E2[0] + .8, E2[1] + 3]) + '" ' + S.t + '/><path d="M' + pt(lerp(E2, E1, .05)) + ' l-6 -3 M' + pt(lerp(E2, E1, .05)) + ' l-6 4" ' + S.s + '/>'; }
+      out += mir(cs);
+      hl.cuffs = both(bbox([A, B, SO, SI], 5));
+    } else if (sl === 'short') {
+      out += mir('<path d="M' + pt(lerp(SI, UA, .14)) + ' L' + pt(lerp(SO, SP, .12)) + '" ' + S.t + '/>');
+      hl.cuffs = both(bbox([SO, SI], 7));
+    }
+
+    // hem
+    var hm = o.hem || (t === 'knit' || t === 'jacket' ? 'rib' : 'plain');
+    var hb = hm === 'fur' ? 16 : 12;
+    var xh = UA[0] + (sideX - UA[0]) * ((L - hb - UA[1]) / (L - UA[1]));
+    var hs = '';
+    if (hm === 'rib' || hm === 'band') {
+      hs += '<path d="M120 ' + (L - hb) + ' L' + F(xh) + ' ' + (L - hb) + '" ' + S.s + '/>';
+      if (hm === 'rib') { var rt = ''; for (var rx = 123; rx < xh - 1; rx += 4.5) rt += 'M' + F(rx) + ' ' + (L - hb + 1) + ' V' + (L - 1) + ' '; hs += '<path d="' + rt + '" ' + S.s + ' stroke-width=".5"/>'; }
+      else hs += '<path d="M120 ' + (L - 4) + ' L' + F(sideX - 1) + ' ' + (L - 4) + '" ' + S.t + '/>';
+    } else if (hm === 'fur') {
+      hs += '<path d="M120 ' + (L - hb) + ' L' + F(xh + 1) + ' ' + (L - hb) + ' L' + F(sideX + 4) + ' ' + (L + 5) + ' L120 ' + (L + 5) + ' Z" fill="' + c.fill + '"/><path d="M120 ' + (L - hb) + ' L' + F(xh + 1) + ' ' + (L - hb) + ' L' + F(sideX + 4) + ' ' + (L + 5) + ' L120 ' + (L + 5) + '" fill="url(#p-fur)" stroke="' + c.ink + '" stroke-width="1.1" stroke-dasharray="3 1.5"/>';
+    } else if (hm === 'lace' || hm === 'smock') {
+      hs += '<path d="M120 ' + (L - hb) + ' L' + F(xh) + ' ' + (L - hb) + ' L' + F(sideX) + ' ' + L + ' L120 ' + L + ' Z" fill="url(#' + (hm === 'lace' ? 'p-lace' : 'p-smock') + ')" stroke="' + c.ink + '" stroke-width=".8"/>';
+      if (hm === 'lace') { var scl = ''; for (var sx = 120; sx < sideX; sx += 6) scl += 'Q' + (sx + 3) + ' ' + (L + 5) + ' ' + (sx + 6) + ' ' + L + ' '; hs += '<path d="M120 ' + L + ' ' + scl + '" ' + S.s + '/>'; }
+    } else if (hm === 'fringe') {
+      var fh = ''; for (var fx = 122; fx < sideX; fx += 3.5) fh += 'M' + F(fx) + ' ' + L + ' l.6 14 '; hs += '<path d="' + fh + '" ' + S.s + ' stroke-width=".7"/>';
+    } else if (!hemCurve && t !== 'waistcoat' && (t === 'coat' || t === 'blazer')) {
+      hs += '<path d="M120 ' + (L - 5) + ' L' + F(sideX - 1) + ' ' + (L - 5) + '" ' + S.t + '/>';
+    } else if (hemCurve) hs += '<path d="M' + F(sideX - 1) + ' ' + (L - 12) + ' Q146 ' + L + ' 120 ' + L + '" ' + S.t + '/>';
+    if (has('rawedge')) { var re = ''; for (var ex = 122; ex < sideX; ex += 4) re += 'M' + ex + ' ' + L + ' l.5 4 '; hs += '<path d="' + re + '" ' + S.s + ' stroke-width=".6"/>'; }
+    out += mir(hs);
+    hl.hem = [[240 - sideX - 7, L - hb - 6, 2 * (sideX - 120) + 14, hb + (hm === 'fringe' ? 24 : 14)]];
+
+    // cape (front view of capelet)
+    if (has('cape')) { var cp = 'M134 30 L174 40 Q192 80 198 124 Q160 132 120 134 L120 ' + FNy + ' Q127 36 134 30 Z'; out += mir('<path d="' + cp + '" ' + S.f() + '/><path d="M198 120 Q160 128 120 130" ' + S.t + '/>'); hl.cape = [[38, 24, 164, 116]]; }
+
+    // collar / lapels
+    var cs2 = '', ccol = (has('contrastcollar') ? c.tint : c.fill), bx = cl === 'db' ? 136 : 121;
+    var by = o.by || (cl === 'onebutton' ? 142 : (t === 'coat' ? 112 : t === 'waistcoat' ? 60 : 116));
+    if (LAPEL[col]) {
+      cs2 += mir('<path d="M134 30 Q127 37 120 37" ' + S.s + '/>');
+      var lp = { notch: 'M134 30 L145 34 L148 58 L140 61 L153 66 L' + bx + ' ' + by + ' Q129 72 134 30 Z', peak: 'M134 30 L145 34 L147 57 L162 49 L153 69 L' + bx + ' ' + by + ' Q129 72 134 30 Z', shawl: 'M134 30 Q166 58 ' + bx + ' ' + by + ' Q129 72 134 30 Z', fur: 'M132 28 Q182 58 ' + bx + ' ' + (by + 8) + ' Q128 72 132 28 Z' }[col];
+      var lf = has('velvetlapel') ? c.tint : ccol;
+      cs2 += mir('<path d="' + lp + '" ' + S.f(lf) + '/>' + (col === 'fur' ? '<path d="' + lp + '" fill="url(#p-fur)"/>' : '') + (has('handedge') || has('topst') ? '<path d="' + lp + '" fill="none" stroke="' + c.ink + '" stroke-width=".6" stroke-dasharray="2 1.6" transform="translate(1.5 1.5)" opacity=".7"/>' : ''));
+      var lx = col === 'fur' ? 172 : col === 'peak' ? 164 : col === 'shawl' ? 160 : 156;
+      hl.collar = [union([118, 24, lx - 118, by - 20])];
+    } else if (col === 'crew' || col === 'rib') {
+      cs2 += mir('<path d="M139 33 Q132 51 120 51" ' + S.s + '/>');
+      if (col === 'rib') { var tks = ''; for (var ti = 0; ti < 5; ti++) { var p0 = [134 - ti * 3.2, 31 + ti * 2.6], p1 = [139 - ti * 4, 34 + ti * 3.6]; tks += 'M' + pt(p0) + 'L' + pt(p1) + ' '; } cs2 += mir('<path d="' + tks + '" ' + S.s + ' stroke-width=".5"/>'); }
+      hl.collar = [[98, 22, 44, 36]];
+    } else if (col === 'vneck') {
+      cs2 += mir('<path d="M120 73 L140 32" ' + S.s + '/>');
+      if (has('tipping')) cs2 += mir('<path d="M120 68 L137 31" stroke="' + c.ink + '" stroke-width="1.6" fill="none"/>');
+      hl.collar = [[96, 22, 48, 58]];
+    } else if (col === 'square') {
+      hl.collar = [[100, 24, 40, 36]];
+    } else if (['shirt', 'polo', 'longpoint', 'buttondown', 'bigcollar', 'johnny'].indexOf(col) > -1) {
+      var leaf = { shirt: 'M120 40 Q127 38 134 30 L142 34 L131 58 L120 47 Z', polo: 'M120 40 Q127 38 134 30 L141 33 L132 54 L120 46 Z', longpoint: 'M120 40 Q127 38 134 30 L143 34 L132 68 L120 48 Z', buttondown: 'M120 40 Q127 38 134 30 L142 34 L131 58 L120 47 Z', bigcollar: 'M120 40 Q127 38 134 30 L156 36 Q156 66 139 78 Q128 68 120 53 Z', johnny: 'M126 50 L134 30 L142 34 L134 58 Z' }[col];
+      cs2 += mir('<path d="' + leaf + '" ' + S.f(ccol) + '/>' + (col === 'buttondown' ? btn(130, 53, c, 1.6) : '') + '<path d="' + leaf + '" fill="none" stroke="' + c.ink + '" stroke-width=".55" stroke-dasharray="1.6 1.4" transform="translate(' + (col === 'bigcollar' ? '-1.5 2' : '-1 1.5') + ')" opacity=".6"/>');
+      if (col === 'polo') { cs2 += '<path d="M116 44 V84 H124 V44" ' + S.fs(ccol) + '/>' + btn(120, 58, c, 1.8) + btn(120, 72, c, 1.8); }
+      if (col === 'johnny') cs2 += mir('<path d="M120 72 L134 30" ' + S.o + '/>');
+      hl.collar = [col === 'bigcollar' ? [82, 20, 76, 64] : col === 'longpoint' ? [94, 20, 52, 54] : col === 'polo' ? [96, 20, 48, 70] : [94, 20, 52, 44]];
+    } else if (col === 'camp') {
+      cs2 += mir('<path d="M134 30 L148 37 L141 58 L131 62 L120 74 L127 56 Q130 42 134 30 Z" ' + S.f(ccol) + '/>');
+      hl.collar = [[90, 22, 60, 58]];
+    } else if (col === 'band') {
+      cs2 += mir('<path d="M120 38 Q128 37 134 30 L134 22 Q128 29 120 30 Z" ' + S.f(ccol) + '/>');
+      hl.collar = [[100, 16, 40, 30]];
+    } else if (col === 'funnel' || col === 'funnelsmall') {
+      var fy = col === 'funnel' ? 10 : 20;
+      cs2 += mir('<path d="M120 ' + fy + ' L136 ' + (fy + 1) + ' L138 31 Q128 ' + (FNy) + ' 120 ' + FNy + ' Z" ' + S.f(ccol) + '/><path d="M120 ' + (fy + 4) + ' L136 ' + (fy + 5) + '" ' + S.t + '/>');
+      hl.collar = [[98, fy - 6, 44, FNy - fy + 12]];
+    } else if (col === 'bow') {
+      cs2 += '<path d="M118 50 L108 92 L115 94 L120 56 Z M122 50 L132 92 L125 94 L120 56 Z" ' + S.f(ccol) + '/><path d="M120 46 Q102 34 100 48 Q102 60 120 50 Q138 60 140 48 Q138 34 120 46 Z" ' + S.f(ccol) + '/><ellipse cx="120" cy="48" rx="4" ry="3.6" ' + S.f(ccol) + '/>';
+      hl.collar = [[94, 30, 52, 70]];
+    }
+
+    // closures
+    var cz = '', start = LAPEL[col] ? by : FNy;
+    if (cl === 'sb' || cl === 'snapsfront' || cl === 'brooch' || cl === 'onebutton') {
+      cz += '<path d="M120 ' + start + ' V' + (t === 'waistcoat' ? L + 10 : L) + '" ' + S.o + '/>';
+      if (cl === 'onebutton') cz += btn(120, by + 6, c, 3.2);
+      else if (cl === 'brooch') cz += '<g fill="' + c.tint + '" stroke="' + c.ink + '" stroke-width=".8"><circle cx="120" cy="' + (start + 14) + '" r="5.5"/><circle cx="120" cy="' + (start + 14) + '" r="2.2" fill="' + c.ink + '"/></g>';
+      else { var nb = t === 'coat' ? 4 : t === 'blazer' ? 2 : t === 'waistcoat' ? 4 : 5, gap = (L - start - 20) / (nb + (t === 'blazer' ? 2 : 0)); for (var bi = 0; bi < nb; bi++) { var yb = start + 10 + gap * bi; cz += cl === 'snapsfront' ? '<circle cx="120" cy="' + F(yb) + '" r="3" fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width="1"/><circle cx="120" cy="' + F(yb) + '" r="1.4" fill="none" stroke="' + c.ink + '" stroke-width=".7"/>' : btn(120, yb, c, t === 'coat' ? 3.2 : 2.6); } }
+    } else if (cl === 'db') {
+      cz += '<path d="M' + bx + ' ' + by + ' V' + L + '" ' + S.o + '/>';
+      var rows = t === 'coat' ? 3 : 2;
+      for (var ri = 0; ri < rows; ri++) { var ry2 = by + 10 + ri * (t === 'coat' ? 28 : 24); cz += btn(110, ry2, c, 3) + btn(130, ry2, c, 3); }
+    } else if (cl === 'wrap') {
+      cz += '<path d="M' + bx + ' ' + by + ' Q132 ' + F(by + 70) + ' 156 ' + L + '" ' + S.o + '/>';
+    } else if (cl === 'zip' || cl === 'zip-hidden' || cl === 'quarterzip') {
+      var zEnd = cl === 'quarterzip' ? FNy + 46 : L;
+      var zs = col === 'funnel' ? 10 : col === 'funnelsmall' ? 20 : FNy;
+      cz += '<path d="M120 ' + zs + ' V' + zEnd + '" ' + S.o + '/>';
+      if (cl !== 'zip-hidden') cz += '<path d="M121.6 ' + zs + ' V' + zEnd + '" fill="none" stroke="' + c.ink + '" stroke-width="1.4" stroke-dasharray=".8 1.2"/><rect x="118" y="' + (zs + 2) + '" width="5" height="9" rx="1.5" fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width=".9"/>';
+      else cz += '<path d="M127 ' + (zs + 2) + ' V' + (L - 4) + '" ' + S.t + '/>';
+    } else if (cl === 'toggle') {
+      cz += '<path d="M120 ' + start + ' V' + L + '" ' + S.o + '/>';
+      for (var tg = 0; tg < 3; tg++) { var ty = start + 18 + tg * 30; cz += '<path d="M110 ' + (ty - 3) + ' Q104 ' + ty + ' 110 ' + (ty + 3) + ' M110 ' + ty + ' H124" ' + S.s + '/><rect x="122" y="' + (ty - 2.5) + '" width="14" height="5" rx="2.5" ' + S.fs(c.tint) + '/>'; }
+    } else if (cl === 'placket' || cl === 'snaps') {
+      var pe = hemCurve ? L + 4 : L;
+      cz += '<path d="M115 ' + FNy + ' V' + pe + ' M125 ' + FNy + ' V' + pe + '" ' + S.s + '/>';
+      for (var pb = FNy + 12; pb < L - 8; pb += 26) cz += cl === 'snaps' ? '<circle cx="120" cy="' + pb + '" r="2.8" fill="' + c.tint + '" stroke="' + c.ink + '" stroke-width=".9"/><circle cx="120" cy="' + pb + '" r="1" fill="' + c.fill + '"/>' : btn(120, pb, c, 2.2);
+    } else if (cl === 'concealed') {
+      cz += '<path d="M120 ' + start + ' V' + (hemCurve ? L + 4 : L) + '" ' + S.s + '/><path d="M128 ' + (start + 4) + ' V' + (L - 6) + ' Q128 ' + (L - 2) + ' 122 ' + (L - 2) + '" ' + S.t + '/>';
+      if (has('magnet')) for (var mg = start + 16; mg < L - 12; mg += 26) cz += '<circle cx="124" cy="' + mg + '" r="3" fill="none" stroke="' + c.accent + '" stroke-width="1" stroke-dasharray="1.6 1.2"/>';
+    } else if (col === 'band') {
+      cz += '<path d="M115 38 V' + (FNy + 70) + ' H125 V38" ' + S.fs() + '/>'; for (var bb2 = 0; bb2 < 3; bb2++) cz += btn(120, 48 + bb2 * 20, c, 2);
+      hl.closure = [[106, 32, 28, FNy + 46]];
+    }
+    if (cl !== 'none') hl.closure = [[106, start - 4, 28, (t === 'waistcoat' ? L + 14 : L) - start + 8]];
+    if (cl === 'db') hl.closure = [[100, by - 6, 42, L - by + 10]];
+    if (cl === 'wrap') hl.closure = [[112, by - 6, 50, L - by + 10]];
+    if (cl === 'quarterzip') hl.closure = [[106, FNy - 6, 28, 58]];
+
+    if (has('vest')) { [74, 88, 102].forEach(function (vy) { if (vy < (o.by || 116) - 4) cz += btn(120, vy, c, 2); }); }
+    if (has('slimtie')) { cz += '<path d="M117.6 41 H122.4 L123.2 47 L121 50 H119 L116.8 47 Z" ' + S.fs(c.tint) + '/><path d="M119 50 H121 L124 116 L120 122 L116 116 Z" ' + S.fs(c.tint) + '/>'; hl.tie = [[108, 34, 24, 94]]; }
+    // tie in V (menswear tailoring)
+    if (has('tie')) { cz += mir('<path d="M120 39 L128 32 L133 36 L125 50 Z" ' + S.fs() + '/>') + '<path d="M116 40 H124 L126 47 L122 51 H118 L114 47 Z" ' + S.fs(c.tint) + '/><path d="M118 51 H122 L127 102 L120 110 L113 102 Z" fill="url(#p-stripes)" stroke="' + c.ink + '" stroke-width=".9"/><path d="M118 51 H122 L127 102 L120 110 L113 102 Z" fill="url(#p-diag)"/>'; hl.tie = [[106, 34, 28, 80]]; }
+
+    // pockets
+    var pk = o.pk, ps = '', py = t === 'coat' ? L - 72 : t === 'blazer' ? L - 50 : t === 'jacket' ? 120 : 150;
+    if (pk === 'flap' || pk === 'flapbig') {
+      var pw = pk === 'flapbig' ? 32 : 26, ph = pk === 'flapbig' ? 36 : 28;
+      ps += '<rect x="134" y="' + py + '" width="' + pw + '" height="' + ph + '" rx="2" ' + S.fs() + '/><rect x="136.5" y="' + (py + 2.5) + '" width="' + (pw - 5) + '" height="' + (ph - 5) + '" rx="1.5" ' + S.t + '/><path d="M132 ' + (py - 3) + ' H' + (136 + pw) + ' V' + (py + 9) + ' H132 Z" ' + S.fs() + '/>' + btn(134 + pw / 2, py + 4, c, 2.2);
+      hl.pockets = both([128, py - 8, pw + 12, ph + 14]);
+    } else if (pk === 'patch') {
+      ps += '<path d="M136 ' + py + ' H162 V' + (py + 26) + ' Q162 ' + (py + 30) + ' 158 ' + (py + 30) + ' H140 Q136 ' + (py + 30) + ' 136 ' + (py + 26) + ' Z" ' + S.fs() + '/><path d="M136 ' + (py + 3) + ' H162" ' + S.t + '/>';
+      hl.pockets = both([130, py - 6, 38, 42]);
+    } else if (pk === 'welt') {
+      ps += '<path d="M136 ' + py + ' L158 ' + (py - 3) + ' L158.6 ' + (py + 1) + ' L136.6 ' + (py + 4) + ' Z" ' + S.fs() + '/>';
+      hl.pockets = both([130, py - 10, 34, 20]);
+    } else if (pk === 'bellows') {
+      ps += '<rect x="134" y="' + py + '" width="28" height="34" rx="2" ' + S.fs() + '/><path d="M137 ' + (py + 6) + ' V' + (py + 34) + ' M159 ' + (py + 6) + ' V' + (py + 34) + '" ' + S.s + '/><path d="M132 ' + (py - 4) + ' H164 L163 ' + (py + 10) + ' H133 Z" ' + S.fs() + '/>' + btn(148, py + 5, c, 2.2);
+      hl.pockets = both([128, py - 10, 40, 50]);
+    } else if (pk === 'slant') {
+      ps += '<path d="M140 ' + py + ' L149 ' + (py + 30) + ' M143.5 ' + py + ' L152.5 ' + (py + 30) + '" ' + S.s + '/>';
+      hl.pockets = both([134, py - 6, 26, 42]);
+    } else if (pk === 'chestflap2') {
+      ps += '<rect x="132" y="70" width="20" height="24" rx="1.5" ' + S.fs() + '/><path d="M130.5 67 H153.5 V77 H130.5 Z" ' + S.fs() + '/>' + btn(142, 72, c, 1.8);
+      hl.pockets = both([126, 60, 32, 40]);
+    }
+    if (ps) cz += mir(ps);
+    if (has('psquare') || t === 'blazer') { cz += '<path d="M134 88 L154 85 L154.4 88.5 L134.4 91.5 Z" ' + S.fs() + '/>'; if (has('psquare')) { cz += '<path d="M137 88 L141 78 L145 86 L149 79 L152 85.5 Z" ' + S.fs(c.tint) + '/>'; hl.chest = [[130, 70, 30, 26]]; } }
+
+    // epaulettes, storm flap
+    if (has('epaulette')) cz += mir('<path d="M146 33 L167 40 L166 45 L145 38 Z" ' + S.fs() + '/>' + btn(150, 36.5, c, 1.6));
+    if (has('stormflap')) { cz += '<path d="M106 34 L72 44 L76 88 Q92 94 110 88 Z" ' + S.f() + '/><path d="M104 38 L76 47 L79 85 Q93 90 107 85" ' + S.t + '/>' + btn(102, 82, c, 2.2); hl.stormflap = [[66, 28, 50, 70]]; }
+    if (has('handedge') || has('topst')) cz += mir('<path d="M124 ' + (start + 2) + ' V' + (L - 4) + ' H' + F(sideX - 3) + '" ' + S.t + '/>');
+
+    // belts and waist pieces
+    var wY = o.wY || (t === 'coat' ? 134 : 124);
+    var xs = UA[0] + (sideX - UA[0]) * ((wY - UA[1]) / (L - UA[1]));
+    if (has('belt')) {
+      cz += '<path d="M' + F(240 - xs - 1) + ' ' + (wY - 5) + ' H' + F(xs + 1) + ' V' + (wY + 5) + ' H' + F(240 - xs - 1) + ' Z" ' + S.fs() + '/><path d="M' + F(240 - xs) + ' ' + (wY - 3) + ' H' + F(xs) + ' M' + F(240 - xs) + ' ' + (wY + 3) + ' H' + F(xs) + '" ' + S.t + '/>';
+      if (cl === 'wrap') cz += '<path d="M150 ' + (wY - 2) + ' Q146 ' + (wY + 18) + ' 140 ' + (wY + 40) + ' L146 ' + (wY + 41) + ' Q152 ' + (wY + 20) + ' 154 ' + (wY + 2) + ' Z M154 ' + wY + ' Q160 ' + (wY + 20) + ' 164 ' + (wY + 36) + ' L170 ' + (wY + 34) + ' Q164 ' + (wY + 16) + ' 158 ' + (wY - 2) + ' Z" ' + S.fs() + '/><ellipse cx="154" cy="' + wY + '" rx="6" ry="5" ' + S.fs() + '/>';
+      else cz += '<rect x="113" y="' + (wY - 7) + '" width="14" height="14" rx="2" fill="none" stroke="' + c.ink + '" stroke-width="1.4"/><path d="M120 ' + (wY - 4) + ' V' + (wY + 4) + '" ' + S.o + '/>';
+      hl.waist = [[240 - xs - 8, wY - 12, 2 * (xs - 120) + 16, 24]];
+      if (cl === 'wrap') hl.waist = [[240 - xs - 8, wY - 12, 2 * (xs - 120) + 22, 56]];
+    }
+    if (has('doublebelt')) { [wY - 7, wY + 6].forEach(function (yy) { cz += '<path d="M' + F(240 - xs - 1) + ' ' + (yy - 3) + ' H' + F(xs + 1) + ' V' + (yy + 3) + ' H' + F(240 - xs - 1) + ' Z" ' + S.fs(c.tint) + '/><rect x="112" y="' + (yy - 5) + '" width="9" height="10" rx="1.5" fill="none" stroke="' + c.ink + '" stroke-width="1.3"/>'; }); hl.waist = [[240 - xs - 8, wY - 18, 2 * (xs - 120) + 16, 34]]; }
+    if (has('cummerbund')) { cz += '<path d="M' + F(240 - xs - 1) + ' ' + (wY - 10) + ' H' + F(xs + 1) + ' V' + (wY + 12) + ' H' + F(240 - xs - 1) + ' Z" ' + S.f(c.tint) + '/><path d="M' + F(240 - xs) + ' ' + (wY - 3) + ' H' + F(xs) + ' M' + F(240 - xs) + ' ' + (wY + 4) + ' H' + F(xs) + '" ' + S.s + '/>'; hl.waist = [[240 - xs - 8, wY - 16, 2 * (xs - 120) + 16, 34]]; }
+    if (has('darts')) hl.waist = [[240 - xs - 8, wY - 30, 2 * (xs - 120) + 16, 56]];
+
+    if (has('smockneck')) hl.collar = [[76, 22, 88, FNy + 14]];
+    if (cl === 'wrap' && !hl.front) hl.front = [[110, 40, 56, L - 36]];
+    return { svg: '<defs>' + clip + '</defs>' + under + out + cs2 + cz, hl: hl };
+  }
+
+  /* ================= DRESSES ================= */
+  function dress(o, c) {
+    var S = st(c), x = o.x || [], has = function (k) { return x.indexOf(k) > -1; };
+    var nkT = o.nk || 'crew', sl = o.sl || 'none', sk = o.sk || 'aline';
+    var L = o.len || 232, wY = o.wY || 112, hl = {};
+    var nkD = { crew: ['M120 40', 'Q127 40 131 30'], v: ['M120 70', 'L131 30'], slip: ['M120 66', 'Q130 60 146 62'], square: ['M120 56', 'L133 56 L132 30'], high: ['M120 24', 'L132 24'] }[nkT];
+    var arm;
+    if (nkT === 'slip') arm = 'L151 78';
+    else if (sl === 'none') arm = 'L146 33 Q142 58 151 78';
+    else if (sl === 'short') arm = 'L146 33 L166 56 L157 67 L151 66 L151 78';
+    else if (sl === 'long') arm = 'Q140 30.5 146 33 Q170 88 176 160 L163 164 Q155 120 151 80';
+    else if (sl === 'puff') arm = 'L146 33 Q184 28 182 66 Q174 82 158 74 L151 78';
+    var hemX = { column: 150, aline: 176, pleated: 172, tiered: 184, bubble: 168 }[sk];
+    if (L < 170) hemX = { column: 150, aline: 164, pleated: 162, tiered: 168, bubble: 160 }[sk];
+    var skirt = sk === 'column' ? 'L' + (hemX - 2) + ' ' + F(wY + 40) + ' L' + hemX + ' ' + L : sk === 'bubble' ? 'Q176 ' + F((wY + L) / 2) + ' ' + hemX + ' ' + L : 'L' + hemX + ' ' + L;
+    var hemLine = sk === 'tiered' || sk === 'pleated' ? 'L120 ' + (L + 2) : 'L120 ' + L;
+    var half = nkD[0] + ' ' + nkD[1] + ' ' + arm + ' L144 ' + wY + ' ' + skirt + ' ' + hemLine + ' Z';
+    var outlinePath = (nkT === 'slip' ? 'M146 62 ' : nkT === 'square' ? 'M132 30 ' : nkT === 'high' ? 'M132 24 ' : 'M131 30 ') + arm + ' L144 ' + wY + ' ' + skirt + ' ' + hemLine;
+    var out = '<defs><clipPath id="bc"><path d="' + half + '"/><path d="' + half + '" ' + MIR + '/></clipPath></defs>';
+    if (has('layer')) { out += '<path d="M' + (240 - hemX - 3) + ' ' + (L - 8) + ' L' + (hemX + 3) + ' ' + (L - 8) + ' L' + (hemX + 6) + ' ' + (L + 18) + ' L' + (240 - hemX - 6) + ' ' + (L + 18) + ' Z" ' + S.f(c.tint) + '/>'; }
+    var bf = has('velvet') ? c.tint : c.fill;
+    out += mir('<path d="' + half + '" fill="' + bf + '"/>');
+    var ov = '';
+    var pat = { sequin: 'p-sequin', floral: 'p-floral', sheer: 'p-mesh', bias: 'p-diag', beads: 'p-beads', check: 'p-check', quilt: 'p-quilt', ribbody: 'p-rib', seer: 'p-seer', pointelle: 'p-lace' };
+    Object.keys(pat).forEach(function (k) { if (has(k)) ov += '<rect x="0" y="0" width="240" height="260" fill="url(#' + pat[k] + ')"/>'; });
+    if (has('velvet')) ov += '<g fill="none" stroke="' + c.fill + '" stroke-width="2" opacity=".8"><path d="M132 80 Q138 140 132 200"/><path d="M152 130 Q160 170 158 210"/></g>';
+    if (has('boning')) ov += mir('<path d="M128 ' + (nkT === 'slip' ? 64 : 44) + ' V' + (wY - 2) + ' M137 62 V' + (wY - 2) + ' M145 66 V' + (wY - 2) + '" ' + S.s + '/>');
+    if (ov) out += '<g clip-path="url(#bc)">' + ov + '</g>';
+    out += mir('<path d="' + outlinePath + '" ' + S.o + '/>');
+    var FD = 'fill="none" stroke="' + c.ink + '" stroke-width=".8" stroke-linecap="round" opacity=".5"', fd = 'M132 ' + (wY + 12) + ' Q134 ' + F((wY + L) / 2) + ' ' + F(120 + (hemX - 120) * .42) + ' ' + (L - 4) + ' M141 ' + (wY + 16) + ' Q' + F(146 + (hemX - 144) * .4) + ' ' + F((wY + L) / 2 + 10) + ' ' + F(hemX - 10) + ' ' + (L - 6);
+    if (sl === 'long') fd += ' M156 112 Q162 117 168 113 M158 146 Q164 150 171 146';
+    out += mir('<path d="' + fd + '" ' + FD + '/>');
+    out += mir('<path d="' + nkD[0] + ' ' + nkD[1] + '" ' + S.o + '/>');
+    if (nkT === 'slip') out += mir('<path d="M136 61 L133 26" ' + S.o + '/>');
+    if (has('halter')) { out += mir('<path d="M131 56 L128 22" fill="none" stroke="' + c.ink + '" stroke-width="3.6" stroke-linecap="round"/><path d="M131 56 L128 22" fill="none" stroke="' + c.fill + '" stroke-width="1.4" stroke-linecap="round"/>') + '<path d="M120 20 q-12 -10 -14 0 q4 6 14 0 q12 -10 14 0 q-4 6 -14 0 Z M118 21 l-6 14 M122 21 l6 14" ' + S.fs() + '/>'; hl.collar = [[98, 6, 44, 56]]; }
+    if (nkT === 'high') out += mir('<path d="M120 36 Q126 36 133 34" ' + S.s + '/>');
+    if (has('smock')) { var smy0 = nkT === 'square' ? 62 : nkT === 'slip' ? 70 : 48, smd = ''; for (var smy = smy0; smy < wY - 3; smy += 6) { smd += 'M120 ' + smy + ' q3 -2.4 6 0 t6 0 t6 0 t6 0 '; } out += mir('<path d="' + smd + '" ' + S.s + ' stroke-width=".7"/>'); hl.bodice = [[92, smy0 - 8, 56, wY - smy0 + 10]]; }
+    if (has('wrap')) { out += '<path d="M120 70 Q132 96 146 ' + wY + ' M146 ' + wY + ' Q150 ' + F((wY + L) / 2) + ' ' + (hemX - 18) + ' ' + L + '" ' + S.o + '/><path d="M146 ' + (wY - 2) + ' q10 -8 12 2 q-8 6 -12 -2 Z M146 ' + wY + ' l6 30 l5 -2 l-8 -28 Z" ' + S.fs() + '/>'; hl.front = [[112, 62, 56, L - 56]]; }
+    if (has('rawhem')) { var rh = ''; for (var rx = 122; rx < hemX; rx += 3.5) rh += 'M' + rx + ' ' + L + ' l' + ((rx % 7) - 3) * .3 + ' ' + (3 + (rx % 5)) + ' '; out += mir('<path d="' + rh + '" ' + S.s + ' stroke-width=".6"/>'); }
+    if (sl === 'puff') out += mir('<path d="M150 40 Q160 50 160 72 M156 36 Q170 46 170 70" ' + S.s + '/>');
+    if (sl === 'long') out += mir('<path d="M146 33 Q144 58 151 80" ' + S.s + '/><path d="M164 150 L176 148" ' + S.s + '/>');
+    if (sl === 'short') out += mir('<path d="M146 33 Q144 52 151 66" ' + S.s + '/>');
+    // waist seam
+    out += mir('<path d="M120 ' + (o.basque ? wY + 16 : wY) + ' L144 ' + wY + '" ' + S.s + '/>');
+    if (o.basque) out += mir('<path d="M120 ' + (wY + 19) + ' L144.3 ' + (wY + 3) + '" ' + S.t + '/>');
+    if (wY > 125) out += mir('<path d="M120 ' + (wY + 3) + ' L144.3 ' + (wY + 3) + '" ' + S.t + '/>');
+    // skirt details
+    var sd = '';
+    if (sk === 'pleated') for (var i = 1; i <= 5; i++) { var px = 120 + i * 4.4, hx = 120 + i * ((hemX - 120) / 6); sd += 'M' + F(px) + ' ' + (wY + 3) + ' L' + F(hx) + ' ' + (L + 2) + ' '; }
+    if (sk === 'tiered') { [0.33, 0.66].forEach(function (k) { var ty = wY + (L - wY) * k, tx = 144 + (hemX - 144) * k; sd += 'M120 ' + F(ty) + ' L' + F(tx) + ' ' + F(ty) + ' '; for (var g = 124; g < tx; g += 7) sd += 'M' + g + ' ' + F(ty) + ' l1 7 '; }); }
+    if (sk === 'aline' || sk === 'column') sd += '';
+    if (sk === 'bubble') { for (var bg = 124; bg < hemX - 6; bg += 6) sd += 'M' + bg + ' ' + (L - 2) + ' l.5 -9 '; sd += 'M120 ' + (L - 4) + ' Q140 ' + (L - 1) + ' ' + (hemX - 3) + ' ' + (L - 6) + ' '; }
+    if (sd) out += mir('<path d="' + sd + '" ' + S.s + '/>');
+    if (o.hem === 'fringe') { var fr = ''; for (var fx = 121; fx < hemX; fx += 3) fr += 'M' + fx + ' ' + L + ' l.4 16 '; out += mir('<path d="' + fr + '" ' + S.s + ' stroke-width=".7"/>'); }
+    if (has('lacehem')) { var lh = 'M120 ' + (L - 12) + ' L' + F(hemX - 2) + ' ' + (L - 12) + ' L' + hemX + ' ' + L + ' L120 ' + L + ' Z'; var sc = ''; for (var lx = 120; lx < hemX; lx += 6) sc += 'Q' + (lx + 3) + ' ' + (L + 5) + ' ' + (lx + 6) + ' ' + L + ' '; out += mir('<path d="' + lh + '" fill="url(#p-lace)" stroke="' + c.ink + '" stroke-width=".7"/><path d="M120 ' + L + ' ' + sc + '" ' + S.s + '/>'); }
+    if (has('lacetop')) out += mir('<path d="M120 66 Q130 60 146 62 L146 70 Q130 68 120 74 Z" fill="url(#p-lace)" stroke="' + c.ink + '" stroke-width=".7"/>');
+    if (has('ruche')) { var rd = ''; for (var ry = wY - 40; ry < L - 20; ry += 10) rd += 'M' + F(146 + (ry > wY ? (ry - wY) * 0.05 : 0)) + ' ' + ry + ' q-8 3 -14 1 '; out += mir('<path d="' + rd + '" ' + S.s + '/>'); hl.sides = both([132, wY - 46, 26, L - wY + 30]); }
+    if (has('sash')) { out += '<path d="M96 ' + (wY - 6) + ' H144 V' + (wY + 6) + ' H96 Z" ' + S.f(c.tint) + '/><path d="M144 ' + (wY - 2) + ' Q160 ' + (wY - 14) + ' 162 ' + (wY - 2) + ' Q160 ' + (wY + 8) + ' 144 ' + (wY + 2) + ' Z M144 ' + (wY + 2) + ' L152 ' + (wY + 44) + ' L158 ' + (wY + 42) + ' L147 ' + wY + ' Z" ' + S.fs(c.tint) + '/>'; hl.waist = [[88, wY - 18, 80, 66]]; }
+    hl.collar = hl.collar || [nkT === 'slip' ? [90, 52, 60, 30] : [100, 22, 40, (nkT === 'v' ? 56 : 30)]];
+    hl.neck = hl.collar;
+    if (!hl.waist) hl.waist = o.basque ? [[90, wY - 12, 60, 36]] : [[90, wY - 12, 60, 24]];
+    hl.hem = [[240 - hemX - 8, L - 16, 2 * (hemX - 120) + 16, o.hem === 'fringe' || has('layer') ? 40 : 28]];
+    hl.skirt = [[240 - hemX - 6, wY, 2 * (hemX - 120) + 12, L - wY + 8]];
+    hl.body = [[240 - Math.max(hemX, 180) - 4, 18, 2 * (Math.max(hemX, 180) - 120) + 8, L - 8]];
+    if (sl === 'puff') hl.sleeves = both([146, 22, 42, 60]);
+    if (sl === 'long') hl.sleeves = both([142, 28, 40, 140]);
+    return { svg: out, hl: hl };
+  }
+
+  /* ================= TROUSERS ================= */
+  function trousers(o, c) {
+    var S = st(c), x = o.x || [], has = function (k) { return x.indexOf(k) > -1; }, hl = {};
+    var L = o.len || 236, leg = o.leg || 'straight', top = o.high ? 20 : 28, wb = top + 12;
+    var lg = {
+      straight: { outer: 'Q165 140 166 ' + L, ox: 166, ix: 127, inner: 'L127 ' + L },
+      wide: { outer: 'Q172 140 178 ' + L, ox: 178, ix: 123, inner: 'L123 ' + L },
+      slim: { outer: 'Q162 150 154 ' + L, ox: 154, ix: 131, inner: 'L131 ' + L },
+      skinny: { outer: 'Q160 150 150 ' + L, ox: 150, ix: 133, inner: 'L133 ' + L },
+      barrel: { outer: 'Q186 160 158 ' + L, ox: 158, ix: 131, inner: 'Q120 170 131 ' + L },
+      balloon: { outer: 'Q194 150 162 ' + (L - 12) + ' L160 ' + L, ox: 160, ix: 134, inner: 'L134 ' + L + ' L135 ' + (L - 12) + ' Q108 170 122 106' }
+    }[leg];
+    var halfOuter = 'M120 ' + top + ' L160 ' + top + ' L160 ' + wb + ' Q164 64 164 90 ' + lg.outer + ' L' + lg.ix + ' ' + L;
+    var half = halfOuter + (leg === 'balloon' ? ' L135 ' + (L - 12) + ' Q108 170 122 106' : (leg === 'barrel' ? ' Q120 170 122 106' : ' L122 106')) + ' L120 104 Z';
+    var out = '<defs><clipPath id="bc"><path d="' + half + '"/><path d="' + half + '" ' + MIR + '/></clipPath></defs>';
+    var bf = has('dark') || has('leather') ? c.tint : c.fill;
+    out += mir('<path d="' + half + '" fill="' + bf + '"/>');
+    var ov = '';
+    var pat = { check: 'p-check', cord: 'p-cord', sequin: 'p-sequin', beads: 'p-beads', mesh: 'p-mesh', seer: 'p-seer', melange: 'p-speck', floral: 'p-floral' };
+    Object.keys(pat).forEach(function (k) { if (has(k)) ov += '<rect x="0" y="' + wb + '" width="240" height="260" fill="url(#' + pat[k] + ')"/>'; });
+    if (has('leather') || has('satin')) ov += '<g fill="none" stroke="' + c.fill + '" stroke-width="2.4" stroke-linecap="round" opacity=".9"><path d="M146 80 Q150 150 150 220"/><path d="M96 90 Q92 150 94 220"/></g>';
+    if (has('patch')) ov += '<g ' + S.fs(c.tint) + '><rect x="132" y="120" width="26" height="30"/><rect x="88" y="160" width="24" height="34"/><rect x="134" y="186" width="24" height="26"/></g><g ' + S.t + '><rect x="134" y="122" width="22" height="26"/><rect x="90" y="162" width="20" height="30"/></g>';
+    if (has('rips')) ov += '<g ' + S.s + '><path d="M136 150 h16 M134 155 h20 M138 160 h12 M90 168 h16 M88 173 h20 M92 178 h12 M140 112 h10"/></g>';
+    if (ov) out += '<g clip-path="url(#bc)">' + ov + '</g>';
+    out += mir('<path d="' + halfOuter + (leg === 'balloon' ? ' L135 ' + (L - 12) + ' Q108 170 122 106' : leg === 'barrel' ? ' Q120 170 122 106' : ' L122 106') + ' L120 104" ' + S.o + '/>');
+    var FD = 'fill="none" stroke="' + c.ink + '" stroke-width=".8" stroke-linecap="round" opacity=".5"', mx = (lg.ix + lg.ox) / 2;
+    out += mir('<path d="M' + F(mx + 1) + ' 112 Q' + F(mx) + ' ' + F((112 + L) / 2) + ' ' + F(mx) + ' ' + (L - 8) + ' M' + F(lg.ix + 4) + ' ' + (L - 12) + ' Q' + F(lg.ix + 10) + ' ' + (L - 19) + ' ' + F(lg.ix + 16) + ' ' + (L - 15) + ' M' + F(lg.ox - 4) + ' ' + (L - 20) + ' Q' + F(lg.ox - 10) + ' ' + (L - 27) + ' ' + F(lg.ox - 17) + ' ' + (L - 23) + ' M126 ' + (wb + 6) + ' Q134 ' + (wb + 14) + ' 136 ' + (wb + 26) + '" ' + FD + '/>');
+    out += mir('<path d="M120 ' + wb + ' H160" ' + S.s + '/>');
+    // fly
+    if (o.fly === 'buttons') { out += '<path d="M120 ' + wb + ' V100" ' + S.o + '/>'; for (var b = 0; b < 4; b++) out += btn(120, wb + 10 + b * 14, c, 2.4); hl.fly = [[108, wb - 4, 24, 70]]; }
+    else { out += '<path d="M120 ' + wb + ' V98" ' + S.s + '/><path d="M113 ' + (wb + 2) + ' V88 Q113 96 120 99" ' + (has('contrastst') ? 'fill="none" stroke="' + c.accent2 + '" stroke-width="1.1" stroke-dasharray="2.4 1.6"' : S.t) + '/>'; hl.fly = [[106, wb - 4, 26, 64]]; }
+    out += btn(120, top + 6, c, 2.4);
+    // belt loops
+    if (!o.noloops) out += mir('<rect x="138" y="' + (top - 1) + '" width="4" height="14" rx="1" ' + S.fs() + '/>');
+    // pockets
+    if (o.jeans) {
+      out += mir('<path d="M140 ' + wb + ' Q146 62 163 64" ' + S.s + '/><path d="M140 ' + (wb + 3) + ' Q147 60 163 61" ' + (has('contrastst') ? 'fill="none" stroke="' + c.accent2 + '" stroke-width="1.1" stroke-dasharray="2.4 1.6"' : S.t) + '/><circle cx="142" cy="' + (wb + 3) + '" r="1.2" fill="' + c.ink + '"/>');
+      out += '<rect x="144" y="' + (wb + 4) + '" width="10" height="12" ' + S.fs() + '/>';
+      if (has('contrastst')) out += mir('<path d="M162 92 ' + lg.outer.replace(/^Q(\d+) (\d+)/, function (m, a, b2) { return 'Q' + (a - 3) + ' ' + b2; }).replace(/(\d+) (\d+)$/, function (m, a, b2) { return (a - 3) + ' ' + b2; }) + '" fill="none" stroke="' + c.accent2 + '" stroke-width="1.1" stroke-dasharray="2.4 1.6"/>');
+    } else {
+      out += mir('<path d="M148 ' + wb + ' L161 74" ' + S.s + '/>');
+    }
+    hl.pockets = both([138, wb - 4, 30, 40]);
+    // pleats and crease
+    var np = o.pleats || 0;
+    if (np) { var pd = 'M136 ' + wb + ' V' + (wb + 30); if (np > 1) pd += ' M145 ' + wb + ' V' + (wb + 24); out += mir('<path d="' + pd + '" ' + S.s + '/>'); hl.pleats = [[126, wb - 4, 32, 40], [82, wb - 4, 32, 40]]; }
+    if (o.crease || np) out += mir('<path d="M136 ' + (wb + 30) + ' L' + F((lg.ox + lg.ix) / 2) + ' ' + (L - 2) + '" ' + S.s + ' stroke-width=".7"/>');
+    if (has('frontseam')) out += mir('<path d="M142 70 L' + F((lg.ox + lg.ix) / 2) + ' ' + (L - 2) + '" ' + S.s + '/><path d="M144.5 70 L' + F((lg.ox + lg.ix) / 2 + 2.5) + ' ' + (L - 2) + '" ' + S.t + '/>');
+    if (leg === 'barrel') { out += mir('<path d="M152 96 Q172 160 152 ' + (L - 4) + '" ' + S.s + '/><path d="M155 96 Q175 160 155 ' + (L - 4) + '" ' + S.t + '/>'); hl.seams = both([146, 90, 34, L - 86]); }
+    if (leg === 'balloon') out += mir('<path d="M135 ' + (L - 12) + ' L162 ' + (L - 12) + ' M140 ' + (L - 12) + ' l-2 -10 M148 ' + (L - 12) + ' l0 -12 M156 ' + (L - 12) + ' l2 -10" ' + S.s + '/>');
+    if (has('piping')) { out += mir('<path d="M163 92 ' + lg.outer + '" fill="none" stroke="' + c.ink + '" stroke-width="3.2" opacity=".9"/><path d="M163 92 ' + lg.outer + '" fill="none" stroke="' + c.fill + '" stroke-width="1.2"/>'); hl.seams = both([156, 86, 16, L - 82]); }
+    if (!hl.seams) hl.seams = both([154, 86, 18, L - 82]);
+    // hem
+    if (o.turnup) { out += mir('<path d="M' + (lg.ix + .5) + ' ' + (L - 14) + ' L' + F(lg.ox - .8) + ' ' + (L - 14) + '" ' + S.o + '/><path d="M' + (lg.ix + 1) + ' ' + (L - 11) + ' L' + F(lg.ox - 1) + ' ' + (L - 11) + '" ' + S.t + '/>'); }
+    else out += mir('<path d="M' + (lg.ix + 1) + ' ' + (L - 4) + ' L' + F(lg.ox - 1) + ' ' + (L - 4) + '" ' + (has('contrastst') ? 'fill="none" stroke="' + c.accent2 + '" stroke-width="1.1" stroke-dasharray="2.4 1.6"' : S.t) + '/>');
+    hl.hem = both([lg.ix - 6, L - 22, lg.ox - lg.ix + 12, 30]);
+    // side adjusters
+    if (o.adj) { out += mir('<path d="M152 ' + (top + 3) + ' H166 V' + (top + 9) + ' H152 Z" ' + S.fs() + '/><rect x="154" y="' + (top + 1) + '" width="7" height="10" rx="1" fill="none" stroke="' + c.ink + '" stroke-width="1.1"/>'); hl.adjusters = both([146, top - 8, 26, 26]); }
+    // carpenter loop
+    if (o.loop) { out += '<path d="M82 64 h7 v26 h-7 Z" ' + S.fs() + '/><path d="M83.5 66 v22" ' + S.t + '/>'; hl.loop = [[74, 56, 22, 42]]; }
+    // cargo
+    if (o.cargo) { out += mir('<rect x="148" y="122" width="22" height="30" rx="1.5" ' + S.fs() + '/><path d="M147 118 H171 L170 129 H148 Z" ' + S.fs() + '/><path d="M150 126 V150 M168 126 V150" ' + S.t + '/>'); hl.pockets = both([142, 110, 34, 48]); }
+    // belt
+    if (has('elastic')) { var el = ''; for (var ex2 = 141; ex2 < 159; ex2 += 2.4) el += 'M' + F(ex2) + ' ' + (top + 2) + ' q1 5 0 ' + (wb - top - 4) + ' '; out += mir('<path d="' + el + '" ' + S.s + ' stroke-width=".55"/>'); hl.waist = [[72, top - 6, 96, 22]]; }
+    if (has('chain')) { var ch = ''; for (var ci = 0; ci <= 9; ci++) { var tt2 = ci / 9, cx2 = (1 - tt2) * (1 - tt2) * 140 + 2 * (1 - tt2) * tt2 * 146 + tt2 * tt2 * 160, cy2 = (1 - tt2) * (1 - tt2) * (top + 10) + 2 * (1 - tt2) * tt2 * 86 + tt2 * tt2 * 64; ch += '<ellipse cx="' + F(cx2) + '" cy="' + F(cy2) + '" rx="2.4" ry="1.5" fill="none" stroke="' + c.ink + '" stroke-width="1" transform="rotate(' + (ci % 2 ? 60 : -20) + ' ' + F(cx2) + ' ' + F(cy2) + ')"/>'; } out += ch + '<rect x="96" y="70" width="18" height="14" rx="2" ' + S.fs(c.tint) + '/><path d="M98 72 h14 v10 h-14 z" ' + S.t + '/>'; hl.chain = [[132, top + 2, 36, 70], [90, 64, 30, 26]]; }
+    if (has('whisker')) out += mir('<path d="M128 66 q8 -3 15 1 M127 74 q9 -3 17 1 M128 82 q8 -2 13 2" ' + S.s + ' stroke-width=".6"/><ellipse cx="' + F((lg.ox + lg.ix) / 2) + '" cy="160" rx="9" ry="16" fill="none" stroke="' + c.ink + '" stroke-width=".4" stroke-dasharray="1 2"/>');
+    if (has('knee')) { out += mir('<path d="M' + (lg.ix + 2) + ' 156 Q' + F((lg.ix + lg.ox) / 2) + ' 152 ' + F(lg.ox - 2) + ' 156" ' + S.s + '/><path d="M' + (lg.ix + 2) + ' 159 Q' + F((lg.ix + lg.ox) / 2) + ' 155 ' + F(lg.ox - 2) + ' 159" ' + S.t + '/><path d="M' + F(lg.ox - 3) + ' 150 l-8 6 l8 6" ' + S.s + '/>'); hl.knees = both([lg.ix - 4, 140, lg.ox - lg.ix + 10, 32]); }
+    if (has('drawcord')) out += '<path d="M116 ' + (wb - 3) + ' q-4 10 -8 18 M124 ' + (wb - 3) + ' q4 10 6 18" ' + S.s + ' stroke-width="1.3"/><circle cx="116" cy="' + (wb - 4) + '" r="1.4" ' + S.fs() + '/><circle cx="124" cy="' + (wb - 4) + '" r="1.4" ' + S.fs() + '/>';
+    if (has('fray')) { var fr2 = ''; for (var fx2 = lg.ix + 1; fx2 < lg.ox; fx2 += 2.6) fr2 += 'M' + F(fx2) + ' ' + L + ' l' + (((fx2 * 7) % 3) - 1.5) * .4 + ' ' + (3 + (fx2 * 3) % 4) + ' '; out += mir('<path d="' + fr2 + '" ' + S.s + ' stroke-width=".6"/>'); }
+    if (has('selvedge')) out += mir('<path d="M' + F(lg.ox - 3) + ' ' + (L - 14) + ' V' + (L - 1) + '" fill="none" stroke="' + c.accent + '" stroke-width="1.6"/>');
+    if (o.belt === 'double') { [top - 1, top + 8].forEach(function (yy) { out += '<path d="M79 ' + yy + ' H161 V' + (yy + 5) + ' H79 Z" ' + S.fs(c.tint) + '/><rect x="110" y="' + (yy - 2) + '" width="9" height="9" rx="1.5" fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width="1.2"/>'; }); hl.waist = [[72, top - 8, 96, 26]]; }
+    if (o.belt && o.belt !== 'double') {
+      var by = o.belt === 'low' ? wb + 8 : top + 1, bh = 10;
+      if (o.belt === 'low') out += '<path d="M78 ' + (by - 2) + ' Q120 ' + (by + 10) + ' 162 ' + (by - 2) + ' L163 ' + (by + bh - 2) + ' Q120 ' + (by + bh + 10) + ' 77 ' + (by + bh - 2) + ' Z" ' + S.f(c.tint) + '/><rect x="110" y="' + (by + 1) + '" width="18" height="14" rx="3" fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width="1.4"/>';
+      else out += '<path d="M79 ' + by + ' H161 V' + (by + bh) + ' H79 Z" ' + S.f(c.tint) + '/><rect x="113" y="' + (by - 2) + '" width="14" height="14" rx="2" fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width="1.4"/>';
+      hl.waist = [[72, by - 8, 96, bh + 22]];
+    }
+    if (!hl.waist) hl.waist = [[74, top - 6, 92, 20]];
+    hl.legs = both([lg.ix - 4, 92, Math.max(lg.ox, 166) - lg.ix + 16, L - 86]);
+    hl.body = [[240 - Math.max(lg.ox, 166) - 8, top - 6, 2 * (Math.max(lg.ox, 166) - 120) + 16, L - top + 10]];
+    return { svg: out, hl: hl };
+  }
+
+  /* ================= SKIRTS ================= */
+  function skirt(o, c) {
+    var S = st(c), x = o.x || [], has = function (k) { return x.indexOf(k) > -1; }, hl = {};
+    var sh = o.s || 'midi', top = 40, wb = 52;
+    var L = { mini: 134, pencil: 214, midi: 214, bubble: 142 }[sh], hx = { mini: 176, pencil: 150, midi: 178, bubble: 156 }[sh];
+    var side = sh === 'pencil' ? 'Q162 96 156 140 L' + hx + ' ' + L : sh === 'bubble' ? 'Q186 100 ' + hx + ' ' + L : 'L' + hx + ' ' + L;
+    var half = 'M120 ' + top + ' L154 ' + top + ' L155 ' + wb + ' ' + side + ' L120 ' + (L + (sh === 'mini' ? 2 : 0)) + ' Z';
+    var out = '<defs><clipPath id="bc"><path d="' + half + '"/><path d="' + half + '" ' + MIR + '/></clipPath></defs>';
+    out += mir('<path d="' + half + '" fill="' + (has('leather') || has('dark') ? c.tint : c.fill) + '"/>');
+    var ov = '';
+    if (has('check')) ov += '<rect x="0" y="' + wb + '" width="240" height="200" fill="url(#p-check)"/>';
+    if (has('quilt')) ov += '<rect x="0" y="' + wb + '" width="240" height="200" fill="url(#p-quilt)"/>';
+    if (has('mesh')) ov += '<rect x="0" y="' + wb + '" width="240" height="200" fill="url(#p-mesh)"/>';
+    if (has('leather')) ov += '<g fill="none" stroke="' + c.fill + '" stroke-width="2.4" stroke-linecap="round"><path d="M140 70 Q146 130 142 190"/><path d="M98 80 Q94 130 98 180"/></g>';
+    if (ov) out += '<g clip-path="url(#bc)">' + ov + '</g>';
+    out += mir('<path d="M120 ' + top + ' L154 ' + top + ' L155 ' + wb + ' ' + side + ' L120 ' + (L + (sh === 'mini' ? 2 : 0)) + '" ' + S.o + '/><path d="M120 ' + wb + ' H155" ' + S.s + '/>');
+    out += '<path d="M120 ' + top + ' V' + wb + '" ' + S.s + '/>' + btn(146, 46, c, 2);
+    if (o.pleats) { var pd = ''; for (var i = 0; i < 6; i++) { var a = 122 + i * 5.6, b = 120 + (i + .5) * ((hx - 120) / 6); pd += 'M' + F(a) + ' ' + wb + ' L' + F(b) + ' ' + L + ' '; } out += mir('<path d="' + pd + '" ' + S.s + '/>'); hl.pleats = [[240 - hx - 6, wb - 4, 2 * (hx - 120) + 12, L - wb + 10]]; }
+    if (o.slit) { out += '<path d="M106 ' + (L - 50) + ' L104 ' + L + '" ' + S.o + '/><path d="M101 ' + (L - 2) + ' L106 ' + (L - 50) + ' L111 ' + (L - 2) + '" ' + S.t + '/>'; hl.slit = [[92, L - 58, 28, 66]]; }
+    if (sh === 'bubble') out += mir('<path d="M120 ' + (L - 6) + ' Q140 ' + (L - 2) + ' ' + (hx - 2) + ' ' + (L - 8) + '" ' + S.s + '/><path d="M128 ' + (L - 5) + ' l-1 -10 M138 ' + (L - 4) + ' l0 -12 M148 ' + (L - 6) + ' l1 -10" ' + S.s + '/>');
+    else if (!o.pleats && !has('lacehem')) out += mir('<path d="M120 ' + (L - 5) + ' L' + (hx - 1) + ' ' + (L - 5) + '" ' + S.t + '/>');
+    if (has('lacehem')) { var lh = 'M120 ' + (L - 14) + ' L' + F(hx - 2) + ' ' + (L - 14) + ' L' + hx + ' ' + L + ' L120 ' + L + ' Z', sc = ''; for (var lx = 120; lx < hx; lx += 6) sc += 'Q' + (lx + 3) + ' ' + (L + 5) + ' ' + (lx + 6) + ' ' + L + ' '; out += mir('<path d="' + lh + '" fill="url(#p-lace)" stroke="' + c.ink + '" stroke-width=".7"/><path d="M120 ' + L + ' ' + sc + '" ' + S.s + '/>'); }
+    if (has('buttonfront')) { out += '<path d="M120 ' + wb + ' V' + L + '" ' + S.o + '/>'; for (var bf = wb + 12; bf < L - 6; bf += 22) out += btn(120, bf, c, 2.4); hl.closure = [[106, wb - 4, 28, L - wb + 8]]; }
+    if (has('patchpk')) { out += mir('<rect x="134" y="' + (wb + 36) + '" width="24" height="28" rx="2" ' + S.fs() + '/><path d="M132 ' + (wb + 32) + ' H160 V' + (wb + 42) + ' H132 Z" ' + S.fs() + '/>' + btn(146, wb + 37, c, 1.8)); hl.pockets = both([126, wb + 24, 40, 46]); }
+    if (has('tiers')) { var td = ''; [0.38, 0.68].forEach(function (k) { var ty = wb + (L - wb) * k, tx = 155 + (hx - 155) * k; td += 'M120 ' + F(ty) + ' L' + F(tx) + ' ' + F(ty) + ' '; for (var g2 = 124; g2 < tx; g2 += 7) td += 'M' + g2 + ' ' + F(ty) + ' l1 7 '; }); out += mir('<path d="' + td + '" ' + S.s + '/>'); }
+    if (has('wrap')) { out += '<path d="M138 ' + wb + ' Q134 ' + F((wb + L) / 2) + ' 126 ' + L + '" ' + S.o + '/><path d="M150 ' + (wb - 4) + ' q10 -8 12 2 q-8 6 -12 -2 Z M152 ' + (wb - 2) + ' l4 26 l5 -1 l-6 -25 Z" ' + S.fs() + '/>'; hl.front = [[118, wb - 12, 50, L - wb + 18]]; }
+    hl.hem = [[240 - hx - 8, L - 20, 2 * (hx - 120) + 16, 30]];
+    hl.waist = [[80, top - 6, 80, 20]];
+    hl.body = [[240 - hx - 6, top - 6, 2 * (hx - 120) + 12, L - top + 14]];
+    return { svg: out, hl: hl };
+  }
+
+  /* ================= FOOTWEAR (side view, toe to the right) ================= */
+  function shoe(o, c) {
+    var S = st(c), x = o.x || [], has = function (k) { return x.indexOf(k) > -1; }, hl = {}, out = '', s = o.s;
+    var upperFill = has('patent') ? c.ink : (has('suede') || has('dark') ? c.tint : c.fill);
+    var clear = has('clear');
+    var uf = clear ? 'fill="' + c.accent + '" fill-opacity=".06" stroke="' + c.ink + '" stroke-width="1.5" stroke-dasharray="4 2" stroke-linejoin="round"' : S.f(upperFill);
+    var shine = function (d) { return has('patent') || has('leather') ? '<path d="' + d + '" fill="none" stroke="' + (has('patent') ? c.fill : c.tint) + '" stroke-width="2.2" stroke-linecap="round" opacity=".9"/>' : ''; };
+    var thin = 'fill="none" stroke="' + (has('patent') ? c.fill : c.ink) + '" stroke-width=".9" stroke-linecap="round" stroke-linejoin="round"';
+    var tst = 'fill="none" stroke="' + (has('patent') ? c.fill : c.ink) + '" stroke-width=".7" stroke-dasharray="2 1.6" stroke-linecap="round"';
+    var strap = function (d, w) { w = w || 4.2; return '<path d="' + d + '" fill="none" stroke="' + c.ink + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round"/><path d="' + d + '" fill="none" stroke="' + c.fill + '" stroke-width="' + (w - 2.4) + '" stroke-linecap="round" stroke-linejoin="round"/>'; };
+    var qpt = function (p0, p1, p2, t) { var u = 1 - t; return [u * u * p0[0] + 2 * u * t * p1[0] + t * t * p2[0], u * u * p0[1] + 2 * u * t * p1[1] + t * t * p2[1]]; };
+    function toePath(toe, G, V) {
+      if (toe === 'pointed') return 'L220 ' + G + ' Q234 ' + G + ' 237 ' + (G - 2) + ' Q226 ' + (G - 13) + ' ' + pt(V);
+      if (toe === 'square') return 'L222 ' + G + ' L222 ' + (G - 15) + ' Q218 ' + (G - 18) + ' ' + pt(V);
+      return 'L212 ' + G + ' Q224 ' + G + ' 224 ' + (G - 7) + ' Q224 ' + (G - 16) + ' ' + pt(V);
+    }
+    function sportSole(y, x0, x1, h, gum) {
+      var d = 'M' + x0 + ' ' + y + ' H' + (x1 - 4) + ' Q' + (x1 + 4) + ' ' + y + ' ' + (x1 + 3) + ' ' + (y + h / 2) + ' Q' + (x1 + 1) + ' ' + (y + h) + ' ' + (x1 - 10) + ' ' + (y + h) + ' H' + (x0 + 8) + ' Q' + (x0 - 4) + ' ' + (y + h) + ' ' + (x0 - 3) + ' ' + (y + h / 2) + ' Z';
+      return '<path d="' + d + '" ' + S.f(gum === false ? c.fill : c.tint) + '/><path d="M' + (x0 + 2) + ' ' + (y + 4) + ' H' + (x1 - 2) + '" ' + S.t + '/><path d="M' + (x0 + 6) + ' ' + (y + h - 4) + ' Q' + ((x0 + x1) / 2) + ' ' + (y + h - 8) + ' ' + (x1 - 6) + ' ' + (y + h - 4) + '" ' + S.s + ' stroke-width=".6"/>';
+    }
+    if (s === 'pump' || s === 'flat' || s === 'mule' || s === 'sandal' || s === 'slide') {
+      var toe = o.toe || 'round', heel = (s === 'flat' || s === 'slide') ? 'flat' : (o.heel || 'stiletto');
+      var h = { stiletto: 64, block: 52, lowblock: 38, kitten: 28, curved: 56, flat: 4 }[heel], G = 212;
+      var sY = G - h, Sx = 62, Sp = [Sx, sY], K = [56, sY - (heel === 'flat' ? 22 : 30)], B = [158, G], A = [112, sY + (G - sY) * .18];
+      var V = [202, G - 18], T = [138, Math.min(sY + (G - sY) * .38, heel === 'flat' ? 188 : 184)];
+      if (o.strap === 'sling') K = [92, T[1] - 4 + (sY - T[1]) * .2];
+      var body = 'M' + pt(K) + ' Q' + F(K[0] - 5) + ' ' + F((K[1] + sY) / 2) + ' ' + pt(Sp) + ' Q' + pt(A) + ' ' + pt(B) + ' ' + toePath(toe, G, V) +
+        ' Q' + F((V[0] + T[0]) / 2 + 6) + ' ' + F((V[1] + T[1]) / 2 + 3) + ' ' + pt(T) + ' Q' + F((T[0] + K[0]) / 2) + ' ' + F((T[1] + K[1]) / 2 + 10) + ' ' + pt(K) + ' Z';
+      if (o.strap === 'sling') body = 'M' + pt(K) + ' Q76 ' + F(sY - 4) + ' ' + pt(Sp) + ' Q' + pt(A) + ' ' + pt(B) + ' ' + toePath(toe, G, V) + ' Q' + F((V[0] + T[0]) / 2 + 6) + ' ' + F((V[1] + T[1]) / 2 + 3) + ' ' + pt(T) + ' Q' + F((T[0] + K[0]) / 2) + ' ' + F((T[1] + K[1]) / 2 + 6) + ' ' + pt(K) + ' Z';
+      var t0 = .42, P1 = qpt(Sp, A, B, t0);
+      if (s === 'mule') body = 'M' + pt(P1) + ' Q' + pt(lerp(A, B, t0)) + ' ' + pt(B) + ' ' + toePath(toe, G, V) + ' Q' + F((V[0] + T[0]) / 2 + 6) + ' ' + F((V[1] + T[1]) / 2 + 3) + ' ' + pt(T) + ' Q' + F(P1[0] + 4) + ' ' + F(T[1] + 2) + ' ' + pt(P1) + ' Z';
+      // heel
+      var hd = heel === 'curved' ? 'M' + (Sx - 4) + ' ' + (sY - 2) + ' L' + (Sx + 20) + ' ' + (sY + 6) + ' Q' + (Sx + 32) + ' ' + (sY + 28) + ' ' + (Sx + 14) + ' ' + (sY + 42) + ' Q' + (Sx + 6) + ' ' + (G - 8) + ' ' + (Sx + 12) + ' ' + G + ' L' + (Sx + 6) + ' ' + G + ' Q' + Sx + ' ' + (sY + 30) + ' ' + (Sx - 4) + ' ' + (sY - 2) + ' Z'
+        : (heel === 'block' || heel === 'lowblock') ? 'M' + (Sx - 6) + ' ' + (sY - 2) + ' L' + (Sx + 22) + ' ' + (sY + 6) + ' L' + (Sx + 19) + ' ' + G + ' L' + (Sx - 1) + ' ' + G + ' Z'
+        : heel === 'kitten' ? 'M' + (Sx - 3) + ' ' + (sY - 1) + ' L' + (Sx + 15) + ' ' + (sY + 4) + ' Q' + (Sx + 7) + ' ' + (sY + 14) + ' ' + (Sx + 8) + ' ' + G + ' L' + (Sx + 4) + ' ' + G + ' Q' + (Sx + 2) + ' ' + (sY + 12) + ' ' + (Sx - 3) + ' ' + (sY - 1) + ' Z'
+        : heel === 'flat' ? 'M' + (Sx - 6) + ' ' + (sY - 3) + ' L' + (Sx + 16) + ' ' + (sY) + ' L' + (Sx + 16) + ' ' + G + ' L' + (Sx - 3) + ' ' + G + ' Z'
+        : 'M' + (Sx - 4) + ' ' + (sY - 2) + ' L' + (Sx + 16) + ' ' + (sY + 5) + ' Q' + (Sx + 10) + ' ' + (sY + 30) + ' ' + (Sx + 9) + ' ' + G + ' L' + (Sx + 5) + ' ' + G + ' Q' + (Sx + 3) + ' ' + (sY + 30) + ' ' + (Sx - 4) + ' ' + (sY - 2) + ' Z';
+      if (s !== 'slide') out += '<path d="' + hd + '" ' + S.f(heel === 'curved' ? c.tint : c.fill) + '/>';
+      if (s === 'sandal' || s === 'slide') {
+        // footbed seen in profile
+        var fb = 'M' + pt([Sp[0] - 6, Sp[1] - 4]) + ' Q' + pt([A[0], A[1] - 4]) + ' ' + pt([B[0], B[1] - 4]) + ' L214 ' + (G - 4) + ' Q224 ' + (G - 4) + ' 224 ' + G + ' L212 ' + G + ' L' + pt(B) + ' Q' + pt(A) + ' ' + pt(Sp) + ' Z';
+        out += '<path d="' + fb + '" ' + S.f(c.tint) + '/>';
+        var q55 = qpt(Sp, A, B, s === 'slide' ? .4 : .58), q75 = qpt(Sp, A, B, s === 'slide' ? .86 : .8);
+        if (s === 'sandal') {
+          var sd = '';
+          sd += strap('M' + pt([Sp[0] - 4, Sp[1] - 4]) + ' Q' + pt([Sp[0] - 8, Sp[1] - 22]) + ' ' + pt([Sp[0] - 2, Sp[1] - 34]));
+          sd += strap('M' + pt([Sp[0] - 2, Sp[1] - 34]) + ' Q' + pt([Sp[0] + 18, Sp[1] - 42]) + ' ' + pt([Sp[0] + 38, Sp[1] - 30]));
+          sd += strap('M' + pt([q55[0] - 2, q55[1] - 4]) + ' Q' + pt([q55[0] + 2, q55[1] - 28]) + ' ' + pt([q55[0] + 22, q55[1] - 30]));
+          sd += strap('M' + pt([q75[0], q75[1] - 4]) + ' Q' + pt([q75[0] + 6, q75[1] - 22]) + ' ' + pt([q75[0] + 24, q75[1] - 20]));
+          sd += strap('M198 ' + (G - 5) + ' Q202 ' + (G - 16) + ' 214 ' + (G - 15));
+          sd += '<rect x="' + (Sp[0] + 30) + '" y="' + (Sp[1] - 35) + '" width="7" height="7" rx="1.2" fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width="1.1"/>';
+          out += sd;
+          hl.strap = [[Sp[0] - 16, Sp[1] - 52, 170, G - Sp[1] + 46]];
+        } else {
+          var sl = 'M' + pt([q55[0] - 6, q55[1] - 4]) + ' Q' + F(q55[0] + 6) + ' ' + F(q55[1] - 44) + ' ' + F(q75[0] - 8) + ' ' + F(q75[1] - 34) + ' Q' + F(q75[0] + 10) + ' ' + F(q75[1] - 30) + ' ' + F(q75[0] + 16) + ' ' + F(q75[1] - 4) + ' Z';
+          out += '<path d="' + sl + '" ' + S.f(c.fill) + '/>' + (has('woven') ? '<path d="' + sl + '" fill="url(#p-woven)"/>' : '') + '<path d="' + sl + '" fill="none" stroke="' + c.ink + '" stroke-width="1.5" stroke-linejoin="round"/>';
+          hl.strap = [[q55[0] - 16, q55[1] - 44, q75[0] - q55[0] + 40, 50]];
+        }
+        hl.upper = hl.strap; hl.sole = [[44, G - 14, 186, 22]];
+        hl.heel = [[Sx - 14, sY - 10, 52, G - sY + 18]]; hl.toe = [[178, G - 30, 64, 38]];
+        return { svg: out, hl: hl };
+      }
+      if (s === 'mule') out += '<path d="M' + pt([Sp[0] - 6, Sp[1] - 3]) + ' Q' + pt(lerp(Sp, A, t0)) + ' ' + pt(P1) + '" fill="none" stroke="' + c.ink + '" stroke-width="3.4" stroke-linecap="round"/><path d="M' + pt([Sp[0] - 6, Sp[1] - 3]) + ' Q' + pt(lerp(Sp, A, t0)) + ' ' + pt(P1) + '" fill="none" stroke="' + c.tint + '" stroke-width="1.4" stroke-linecap="round"/>';
+      out += '<path d="' + body + '" ' + uf + '/>';
+      if (has('woven')) out += '<path d="' + body + '" fill="url(#p-woven)"/><path d="' + body + '" fill="none" stroke="' + c.ink + '" stroke-width="1.5"/>';
+      if (s !== 'mule') out += '<path d="M' + F(K[0] + 3) + ' ' + F(K[1] + 4) + ' Q' + F((T[0] + K[0]) / 2) + ' ' + F((T[1] + K[1]) / 2 + 14) + ' ' + F(T[0] - 6) + ' ' + F(T[1] + 3) + '" ' + thin + '/>';
+      out += '<path d="M' + pt(s === 'mule' ? P1 : Sp) + ' Q' + pt(s === 'mule' ? lerp(A, B, t0) : A) + ' ' + pt(B) + ' L210 ' + (G - 1) + '" ' + tst + ' transform="translate(0 -3)"/>';
+      out += shine('M' + F(T[0] + 16) + ' ' + F(T[1] + 8) + ' Q' + F((T[0] + V[0]) / 2 + 8) + ' ' + F((T[1] + V[1]) / 2 + 4) + ' ' + F(V[0] - 6) + ' ' + F(V[1] + 3));
+      if (o.cap) { out += '<path d="M190 ' + (G - 17) + ' Q182 ' + (G - 6) + ' 192 ' + G + ' ' + toePath(toe, G, V).replace(/^L\d+ \d+/, 'L' + (toe === 'pointed' ? 220 : toe === 'square' ? 222 : 212) + ' ' + G) + ' Z" ' + S.f(c.tint) + '/>'; hl.toe = [[176, G - 30, 66, 38]]; }
+      if (o.strap === 'tbar') { var ay = K[1] - 4; out += '<path d="M50 ' + ay + ' Q92 ' + (ay - 16) + ' 132 ' + (ay - 2) + ' L131 ' + (ay + 5) + ' Q92 ' + (ay - 9) + ' 51 ' + (ay + 7) + ' Z" ' + S.fs() + '/><path d="M' + (T[0] - 22) + ' ' + (ay - 7) + ' L' + (T[0] - 15) + ' ' + (ay - 8) + ' L' + (T[0] + 2) + ' ' + (T[1] - 1) + ' L' + (T[0] - 6) + ' ' + (T[1] + 1) + ' Z" ' + S.fs() + '/>' + btn(58, ay + 1, c, 1.8); hl.strap = [[42, ay - 24, 102, T[1] - ay + 32]]; }
+      if (o.strap === 'laces') { var ly0 = K[1] - 8; out += '<g ' + S.s + ' stroke-width="1.3"><path d="M' + (T[0] - 30) + ' ' + (T[1] - 6) + ' L' + (T[0] - 52) + ' ' + ly0 + ' M' + (T[0] - 16) + ' ' + (T[1] - 2) + ' L' + (T[0] - 40) + ' ' + (ly0 - 4) + ' M' + (T[0] - 4) + ' ' + T[1] + ' L' + (T[0] - 28) + ' ' + (ly0 - 6) + ' M' + (T[0] - 48) + ' ' + (ly0 + 2) + ' L' + (T[0] - 6) + ' ' + (T[1] - 1) + ' M' + (T[0] - 36) + ' ' + (ly0 - 2) + ' L' + (T[0] + 2) + ' ' + (T[1] - 6) + '"/><path d="M' + (T[0] - 52) + ' ' + ly0 + ' Q' + (T[0] - 64) + ' ' + (ly0 - 10) + ' ' + (T[0] - 58) + ' ' + (ly0 - 16) + ' Q' + (T[0] - 50) + ' ' + (ly0 - 10) + ' ' + (T[0] - 50) + ' ' + (ly0 - 2) + ' Q' + (T[0] - 40) + ' ' + (ly0 - 14) + ' ' + (T[0] - 32) + ' ' + (ly0 - 10) + ' Q' + (T[0] - 38) + ' ' + (ly0 - 2) + ' ' + (T[0] - 48) + ' ' + ly0 + '"/></g>'; hl.strap = [[T[0] - 70, ly0 - 24, 78, T[1] - ly0 + 30]]; }
+      if (o.strap === 'sling') { out += '<path d="M' + F(K[0] + 2) + ' ' + F(K[1] + 2) + ' Q50 ' + F(sY - 12) + ' 54 ' + F(sY - 36) + ' Q60 ' + F(sY - 46) + ' ' + F(K[0] - 10) + ' ' + F(K[1] - 6) + '" fill="none" stroke="' + c.ink + '" stroke-width="3.6" stroke-linecap="round"/><path d="M' + F(K[0] + 2) + ' ' + F(K[1] + 2) + ' Q50 ' + F(sY - 12) + ' 54 ' + F(sY - 36) + ' Q60 ' + F(sY - 46) + ' ' + F(K[0] - 10) + ' ' + F(K[1] - 6) + '" fill="none" stroke="' + c.fill + '" stroke-width="1.6" stroke-linecap="round"/>'; hl.strap = [[42, sY - 54, 60, 58]]; }
+      if (o.hw === 'horsebit') { var hx = T[0] + 18, hy = T[1] + 7; out += '<g fill="none" stroke="' + (has('patent') ? c.fill : c.ink) + '" stroke-width="1.6"><circle cx="' + hx + '" cy="' + hy + '" r="4"/><circle cx="' + (hx + 22) + '" cy="' + (hy + 7) + '" r="4"/><path d="M' + (hx + 4) + ' ' + (hy + 1) + ' Q' + (hx + 12) + ' ' + (hy) + ' ' + (hx + 18) + ' ' + (hy + 6) + '"/></g>'; hl.vamp = [[hx - 12, hy - 12, 48, 30]]; }
+      if (has('feather')) { var fx0 = T[0] + 20, fy0 = T[1] + 8; out += '<g ' + S.s + '><path d="M' + fx0 + ' ' + fy0 + ' Q' + (fx0 - 12) + ' ' + (fy0 - 30) + ' ' + (fx0 + 4) + ' ' + (fy0 - 44) + ' M' + (fx0 + 4) + ' ' + (fy0 + 2) + ' Q' + (fx0 + 6) + ' ' + (fy0 - 34) + ' ' + (fx0 + 26) + ' ' + (fy0 - 40) + ' M' + (fx0 + 8) + ' ' + (fy0 + 4) + ' Q' + (fx0 + 22) + ' ' + (fy0 - 20) + ' ' + (fx0 + 40) + ' ' + (fy0 - 20) + ' M' + (fx0 - 4) + ' ' + fy0 + ' Q' + (fx0 - 26) + ' ' + (fy0 - 20) + ' ' + (fx0 - 18) + ' ' + (fy0 - 40) + '"/>'; for (var fi = 0; fi < 9; fi++) { var fxx = fx0 - 18 + fi * 6, fyy = fy0 - 36 + Math.abs(fi - 4) * 3; out += '<path d="M' + fxx + ' ' + fyy + ' l-4 -5 M' + (fxx + 1) + ' ' + (fyy + 6) + ' l5 -4"/>'; } out += '</g>'; hl.vamp = [[fx0 - 34, fy0 - 54, 82, 66]]; }
+      if (has('beads')) out += '<path d="' + body + '" fill="url(#p-beads)"/>';
+      if (s === 'flat') { out += '<path d="M' + F(T[0] - 2) + ' ' + F(T[1] - 1) + ' q-7 -7 -4 -10 q6 1 8 8 q5 -8 10 -6 q-1 7 -10 8" ' + S.fs() + '/>'; if (o.mj) { out += '<path d="M' + F(T[0] - 30) + ' ' + F(T[1] + 8) + ' Q' + F(T[0] - 22) + ' ' + F(T[1] - 10) + ' ' + F(T[0] + 6) + ' ' + F(T[1] - 2) + ' L' + F(T[0] + 6) + ' ' + F(T[1] + 4) + ' Q' + F(T[0] - 18) + ' ' + F(T[1] - 3) + ' ' + F(T[0] - 23) + ' ' + F(T[1] + 9) + ' Z" ' + S.fs() + '/>' + btn(T[0] + 2, T[1] + 1, c, 1.6); hl.strap = [[T[0] - 38, T[1] - 18, 52, 34]]; } }
+      hl.toe = hl.toe || [[178, G - 30, 64, 38]];
+      hl.heel = [[Sx - 14, sY - 10, 52, G - sY + 18]];
+      hl.upper = s === 'mule' ? [[P1[0] - 8, T[1] - 14, 240 - P1[0], G - T[1] + 22]] : [[44, K[1] - 10, 196, G - K[1] + 18]];
+      hl.vamp = hl.vamp || [[T[0] - 4, T[1] - 12, 70, 34]];
+    } else if (s === 'loafer' || s === 'oxford' || s === 'derby' || s === 'chukka' || s === 'moc' || s === 'espadrille') {
+      var G2 = 198, lug = has('lug');
+      var bodyL;
+      if (s === 'chukka') bodyL = 'M54 116 L100 113 Q104 128 114 140 Q150 160 196 170 Q222 178 222 190 Q222 198 208 ' + G2 + ' L52 ' + G2 + ' Q42 190 44 176 Q46 140 54 116 Z';
+      else if (s === 'oxford' || s === 'derby') bodyL = 'M50 158 C42 168 42 186 50 ' + G2 + ' L208 ' + G2 + ' Q222 ' + G2 + ' 222 190 Q220 178 198 170 Q170 160 150 156 L114 136 Q108 132 103 136 L97 146 Q74 150 50 158 Z';
+      else bodyL = 'M50 164 C42 174 42 188 50 ' + G2 + ' L208 ' + G2 + ' Q222 ' + G2 + ' 222 190 Q220 178 198 170 Q170 158 126 150 Q86 154 50 164 Z';
+      if (has('sock')) { out += '<path d="M54 98 H110 L116 152 Q90 152 66 160 L58 162 Z" ' + S.f(c.tint) + '/><path d="M54 98 H110 L116 152 Q90 152 66 160 L58 162 Z" fill="url(#p-check)"/><path d="M54 106 H110.8 M54 102 H110.4" ' + S.s + '/>'; hl.sock = [[46, 90, 78, 76]]; }
+      out += '<path d="' + bodyL + '" ' + (s === 'moc' || s === 'espadrille' ? S.f(c.tint) : S.f(upperFill)) + '/>';
+      if (s === 'espadrille') out += '<path d="' + bodyL + '" fill="url(#p-diag)"/><path d="' + bodyL + '" fill="none" stroke="' + c.ink + '" stroke-width="1.5"/>';
+      if (has('slots')) { var slots = ''; for (var r0 = 0; r0 < 3; r0++) for (var k0 = 0; k0 < 4; k0++) { var sx0 = 130 + k0 * 15 + r0 * 4, sy0 = 160 + r0 * 9 + k0 * 3.4; slots += '<rect x="' + sx0 + '" y="' + F(sy0) + '" width="10" height="4" rx="2" fill="' + c.tint + '" stroke="' + c.ink + '" stroke-width=".8" transform="rotate(' + (16 - r0 * 4) + ' ' + sx0 + ' ' + F(sy0) + ')"/>'; } out += slots; }
+      if (s !== 'espadrille') out += '<path d="M' + (s === 'chukka' ? '60 130 Q72 160 66 ' + G2 : '62 160 Q74 176 70 ' + G2) + '" ' + thin + '/>';
+      // sole + heel
+      if (has('sportsole')) out += sportSole(G2, 42, 222, 16, true);
+      else if (s === 'espadrille') out += '<path d="M44 ' + G2 + ' H218 Q226 ' + G2 + ' 224 ' + (G2 + 7) + ' Q222 ' + (G2 + 13) + ' 212 ' + (G2 + 13) + ' H52 Q42 ' + (G2 + 12) + ' 44 ' + G2 + ' Z" fill="url(#p-jute)" stroke="' + c.ink + '" stroke-width="1.3"/><path d="M44 ' + (G2 + 13) + ' H218 V' + (G2 + 16) + ' H46 Z" ' + S.fs() + '/>';
+      else if (lug) { out += '<path d="M44 ' + G2 + ' H218 Q226 ' + G2 + ' 224 ' + (G2 + 8) + ' L222 ' + (G2 + 14) + ' H46 Q42 ' + (G2 + 8) + ' 44 ' + G2 + ' Z" ' + S.f(c.tint) + '/>'; var tg = ''; for (var lx = 50; lx < 216; lx += 14) tg += 'M' + lx + ' ' + (G2 + 14) + ' v5 h8 v-5 '; out += '<path d="' + tg + '" ' + S.s + '/>'; }
+      else if (has('slimsole')) out += '<path d="M44 ' + G2 + ' H216 Q222 ' + G2 + ' 221 ' + (G2 + 4) + ' H70 V' + (G2 + 8) + ' H46 Q44 ' + (G2 + 4) + ' 44 ' + G2 + ' Z" ' + S.f(c.tint) + '/>';
+      else if (s === 'moc' && has('boat')) out += '<path d="M44 ' + G2 + ' H216 Q224 ' + G2 + ' 223 ' + (G2 + 8) + ' H46 Q44 ' + (G2 + 4) + ' 44 ' + G2 + ' Z" ' + S.f(c.fill) + '/><path d="M60 ' + (G2 + 2) + ' v5 M76 ' + (G2 + 2) + ' v5 M92 ' + (G2 + 2) + ' v5 M108 ' + (G2 + 2) + ' v5 M124 ' + (G2 + 2) + ' v5 M140 ' + (G2 + 2) + ' v5 M156 ' + (G2 + 2) + ' v5 M172 ' + (G2 + 2) + ' v5 M188 ' + (G2 + 2) + ' v5 M204 ' + (G2 + 2) + ' v5" ' + S.s + ' stroke-width=".6"/>';
+      else if (s === 'moc') out += '<path d="M44 ' + G2 + ' H216 Q222 ' + G2 + ' 221 ' + (G2 + 5) + ' H46 Z" ' + S.fs() + '/>';
+      else out += '<path d="M44 ' + G2 + ' H216 Q224 ' + G2 + ' 223 ' + (G2 + 6) + ' H84 V' + (G2 + 13) + ' H47 Q44 ' + (G2 + 7) + ' 44 ' + G2 + ' Z" ' + S.f(c.tint) + '/><path d="M86 ' + (G2 + 3) + ' H218" ' + S.t + '/>';
+      if (has('nubsole')) { var nb = ''; for (var nx = 54; nx < 214; nx += 9) nb += '<circle cx="' + nx + '" cy="' + (G2 + 6) + '" r="2.6" ' + S.fs(c.tint) + '/>'; nb += '<circle cx="47" cy="' + (G2 - 6) + '" r="2.6" ' + S.fs(c.tint) + '/><circle cx="46" cy="' + (G2 - 15) + '" r="2.6" ' + S.fs(c.tint) + '/>'; out += nb; }
+      out += shine('M150 164 Q178 172 204 178');
+      if (s === 'loafer') {
+        out += '<path d="M126 150 Q128 176 160 178 Q190 180 204 186" ' + thin + '/><path d="M129 153 Q132 173 160 175" ' + tst + '/>';
+        out += '<path d="M54 166 Q90 156 126 152" ' + tst + '/>';
+        if (o.strap === 'penny') { out += '<path d="M112 152 L150 160 L148 170 L110 162 Z" ' + S.fs() + '/><path d="M124 159 Q131 155 138 162" ' + S.s + '/>'; hl.vamp = [[100, 142, 60, 36]]; }
+        if (o.hw === 'horsebit') { out += '<g fill="none" stroke="' + c.ink + '" stroke-width="1.7"><circle cx="116" cy="157" r="4.2"/><circle cx="148" cy="166" r="4.2"/><path d="M120 158 Q134 157 144 164"/></g>'; hl.vamp = [[100, 146, 62, 30]]; }
+        if (has('tassel')) { out += '<path d="M112 154 Q124 160 136 160" ' + S.s + ' stroke-width="1.3"/><g ' + S.fs() + '><path d="M128 160 l-3 12 h7 z"/><path d="M137 160 l-2 12 h7 z"/></g><path d="M126 166 v5 M128.5 166 v5 M135.5 166 v5 M138 166 v5" ' + S.s + ' stroke-width=".5"/>'; hl.vamp = [[104, 144, 52, 36]]; }
+        if (has('checktrim')) { out += '<path d="M50 164 Q86 154 126 150 L127 157 Q88 160 52 172 Z" fill="url(#p-check)" stroke="' + c.ink + '" stroke-width=".8"/>'; hl.topline = [[40, 140, 96, 40]]; }
+        if (has('softback')) out += '<path d="M54 166 q10 -2 14 6 M58 176 q6 -2 10 4 M146 162 q6 4 14 2 M152 166 q6 3 12 1" ' + S.s + ' stroke-width=".7"/>';
+        if (has('anklestrap')) { out += strap('M56 148 Q80 140 108 146', 5) + strap('M58 150 Q60 160 62 170', 5) + '<rect x="100" y="141" width="8" height="9" rx="1.4" fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width="1.2"/>'; hl.upper = [[40, 132, 190, 76]]; }
+        hl.vamp = hl.vamp || [[110, 146, 100, 44]]; hl.topline = hl.topline || [[40, 140, 96, 40]];
+      } else if (s === 'moc') {
+        out += '<path d="M118 152 Q120 178 156 178 Q186 178 200 182" ' + thin + '/><path d="M118 152 Q122 176 156 175" fill="none" stroke="' + c.ink + '" stroke-width="1.1" stroke-dasharray="1 2.2" stroke-linecap="round"/>';
+        if (has('boat')) { out += '<path d="M52 166 Q86 158 118 152" fill="none" stroke="' + c.ink + '" stroke-width="2.6"/><path d="M52 166 Q86 158 118 152" fill="none" stroke="' + c.fill + '" stroke-width=".9"/><g fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width=".8"><circle cx="104" cy="156" r="1.8"/><circle cx="112" cy="154" r="1.8"/></g><path d="M110 154 q-10 -10 -4 -14 q6 2 4 14 q10 -8 14 -4 q-4 6 -14 4 M108 155 l-6 14 M112 155 l-1 15" ' + S.s + ' stroke-width="1.1"/>'; hl.laces = [[44, 134, 96, 44]]; }
+        else out += '<path d="M52 166 Q86 158 120 152" fill="none" stroke="' + c.ink + '" stroke-width="1.4"/><path d="M118 153 q-6 10 -11 14 M118 153 q-2 12 -3 16" ' + S.s + '/>';
+        hl.vamp = [[108, 142, 104, 46]];
+      } else if (s === 'chukka') {
+        out += '<path d="M98 116 Q102 140 128 152 L136 152" ' + thin + '/><g fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width=".9"><circle cx="108" cy="126" r="1.8"/><circle cx="116" cy="136" r="1.8"/></g><path d="M106 126 L118 136 M114 126 L110 136" ' + S.s + ' stroke-width="1.2"/>';
+        hl.laces = [[92, 110, 50, 46]];
+      } else if (s === 'oxford' || s === 'derby') {
+        if (s === 'oxford') out += '<path d="M92 150 Q118 158 146 154" ' + thin + '/><path d="M146 154 Q150 160 146 164" ' + thin + '/>';
+        else out += '<path d="M104 137 Q98 152 80 154" ' + thin + '/><path d="M80 154 Q70 156 62 162" ' + tst + '/>';
+        out += '<g fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width=".8"><circle cx="112" cy="139" r="1.6"/><circle cx="121" cy="144" r="1.6"/><circle cx="130" cy="149" r="1.6"/><circle cx="139" cy="153" r="1.6"/></g><path d="M110 137 L141 154 M113 146 L121 138 M122 151 L131 143 M131 155 L139 148" ' + (has('patent') ? 'fill="none" stroke="' + c.fill + '" stroke-width="1.2"' : S.s + ' stroke-width="1.2"') + '/>';
+        out += '<path d="M182 166 Q174 182 190 ' + G2 + '" ' + thin + '/>';
+        if (has('brogue')) { var bd = ''; for (var k = 0; k <= 10; k++) { var tt = k / 10, bx = (1 - tt) * (1 - tt) * 178 + 2 * (1 - tt) * tt * 170 + tt * tt * 186, byy = (1 - tt) * (1 - tt) * 167 + 2 * (1 - tt) * tt * 182 + tt * tt * (G2 - 1); bd += '<circle cx="' + F(bx) + '" cy="' + F(byy) + '" r=".95" fill="' + c.ink + '"/>'; } for (var q = 0; q < 9; q++) bd += '<circle cx="' + (90 + q * 6) + '" cy="' + F(146.5 + q * 1.1) + '" r=".95" fill="' + c.ink + '"/>'; bd += '<g fill="' + c.ink + '"><circle cx="202" cy="180" r="1"/><circle cx="207" cy="184" r="1"/><circle cx="197" cy="184" r="1"/><circle cx="202" cy="188" r="1"/><circle cx="202" cy="184" r=".8"/></g>'; out += bd; }
+        hl.laces = [[96, 126, 58, 40]];
+      }
+      hl.toe = [[168, 158, 62, 48]]; hl.sole = [[36, G2 - 6, 194, (lug || has('sportsole') || s === 'espadrille') ? 30 : 24]];
+      hl.upper = [[36, s === 'chukka' ? 104 : 126, 194, G2 - (s === 'chukka' ? 98 : 120)]];
+    } else if (s === 'boot' || s === 'chelsea' || s === 'hiker') {
+      var hb = s === 'boot' ? (o.heel || 'block') : 'flat';
+      var flat = hb === 'flat', Gb = flat ? 202 : 212;
+      var hh = { block: 46, stiletto: 60, kitten: 26, flat: 0 }[hb];
+      var sYb = Gb - hh, Sb = [64, sYb], Ab = [112, sYb + (Gb - sYb) * .18], Bb = [158, Gb], Vb = [202, Gb - 18];
+      var ht = s === 'chelsea' ? 'chel' : s === 'hiker' ? 'hike' : (o.h || 'knee');
+      var topY = { otk: 6, knee: 28, mid: 84, ankle: 120, sock: 130, chel: 112, hike: 108 }[ht];
+      var bk = { otk: 60, knee: 62, mid: 64, ankle: 66, sock: 68, chel: 62, hike: 60 }[ht], fr = { otk: 126, knee: 120, mid: 118, ankle: 114, sock: 110, chel: 112, hike: 116 }[ht], calf = { otk: 52, knee: 50, mid: 56, ankle: 62, sock: 64, chel: 58, hike: 56 }[ht];
+      if (o.stretch) { bk += 6; fr -= 6; calf += 8; }
+      var toeB = o.toe || (o.western ? 'pointed' : 'round');
+      var bP = Math.max(topY + 14, sYb - 32), bC = Math.min(bP - 4, Math.max(topY + 6, sYb - 60));
+      var bodyB = 'M' + bk + ' ' + topY + ' C' + calf + ' ' + F(topY + (bP - topY) * .3) + ' ' + (calf + 6) + ' ' + F(bC) + ' 66 ' + F(bP) + ' Q62 ' + F(Math.max(bP + 4, sYb - 12)) + ' ' + pt(Sb) + ' Q' + pt(Ab) + ' ' + pt(Bb) + ' ' + toePath(toeB, Gb, Vb) + ' Q150 ' + F(Gb - 34) + ' 120 ' + F(Math.min(150, sYb - 6)) + ' Q' + (fr + 5) + ' ' + F((150 + topY) / 2) + ' ' + fr + ' ' + topY + ' Z';
+      out += '<path d="' + bodyB + '" ' + S.f(upperFill) + '/>';
+      if (has('mesh')) out += '<path d="' + bodyB + '" fill="url(#p-mesh)"/>';
+      out += shine('M' + (bk + 8) + ' ' + (topY + 16) + ' Q' + (calf + 10) + ' ' + F((topY + sYb) / 2) + ' 74 ' + F(sYb - 40));
+      if (flat) {
+        if (has('sportsole')) out += sportSole(Gb, 52, 226, 16, true);
+        else {
+          var thick = ((has('lug') || s === 'hiker') && !o.slimsole) ? 14 : 8;
+          out += '<path d="M54 ' + Gb + ' H218 Q226 ' + Gb + ' 225 ' + (Gb + 6) + ' L224 ' + (Gb + thick) + ' H56 Q52 ' + (Gb + thick / 2) + ' 54 ' + Gb + ' Z" ' + S.f(c.tint) + '/>';
+          if (thick > 8) { var lg2 = ''; for (var lx2 = 60; lx2 < 218; lx2 += 14) lg2 += 'M' + lx2 + ' ' + (Gb + thick) + ' v5 h8 v-5 '; out += '<path d="' + lg2 + '" ' + S.s + '/><path d="M58 ' + (Gb + 5) + ' H220" ' + S.t + '/>'; }
+        }
+      } else {
+        var Sx2 = Sb[0];
+        var hd2 = hb === 'kitten' ? 'M' + (Sx2 - 3) + ' ' + (sYb - 1) + ' L' + (Sx2 + 16) + ' ' + (sYb + 4) + ' Q' + (Sx2 + 8) + ' ' + (sYb + 14) + ' ' + (Sx2 + 9) + ' ' + Gb + ' L' + (Sx2 + 5) + ' ' + Gb + ' Q' + (Sx2 + 2) + ' ' + (sYb + 12) + ' ' + (Sx2 - 3) + ' ' + (sYb - 1) + ' Z'
+          : hb === 'stiletto' ? 'M' + (Sx2 - 4) + ' ' + (sYb - 2) + ' L' + (Sx2 + 16) + ' ' + (sYb + 5) + ' Q' + (Sx2 + 10) + ' ' + (sYb + 30) + ' ' + (Sx2 + 9) + ' ' + Gb + ' L' + (Sx2 + 5) + ' ' + Gb + ' Q' + (Sx2 + 3) + ' ' + (sYb + 30) + ' ' + (Sx2 - 4) + ' ' + (sYb - 2) + ' Z'
+          : o.western ? 'M' + (Sx2 - 6) + ' ' + (sYb - 2) + ' L' + (Sx2 + 22) + ' ' + (sYb + 6) + ' L' + (Sx2 + 16) + ' ' + Gb + ' L' + (Sx2 + 2) + ' ' + Gb + ' Z'
+          : 'M' + (Sx2 - 6) + ' ' + (sYb - 2) + ' L' + (Sx2 + 22) + ' ' + (sYb + 6) + ' L' + (Sx2 + 20) + ' ' + Gb + ' L' + (Sx2 - 2) + ' ' + Gb + ' Z';
+        out = '<path d="' + hd2 + '" ' + S.f() + '/>' + out;
+        out += '<path d="M' + pt(Sb) + ' Q' + pt(Ab) + ' ' + pt(Bb) + ' L210 ' + (Gb - 1) + '" ' + S.t + ' transform="translate(0 -3)"/>';
+      }
+      out += '<path d="M' + (bk + 3) + ' ' + (topY + 4) + ' C' + (calf + 3) + ' ' + F(topY + (bP - topY) * .3) + ' ' + (calf + 9) + ' ' + F(bC) + ' 69 ' + F(bP) + '" ' + S.t + '/>';
+      if (o.slouch) { var sdl = ''; var nsl = ht === 'ankle' ? 2 : 4; for (var si = 0; si < nsl; si++) { var yy = topY + (ht === 'ankle' ? 10 : 22) + si * (ht === 'ankle' ? 12 : 24); sdl += 'M' + (calf + 3 + si) + ' ' + yy + ' Q' + F((calf + fr) / 2) + ' ' + (yy - 9) + ' ' + (fr + 2) + ' ' + (yy + 4) + ' '; } out += '<path d="' + sdl + '" ' + S.s + '/>'; }
+      if (o.western) { out += '<path d="M' + (bk + 10) + ' ' + (topY + 22) + ' Q' + F((bk + fr) / 2) + ' ' + (topY + 46) + ' ' + (fr - 8) + ' ' + (topY + 20) + (ht === 'ankle' ? '' : ' M' + (bk + 10) + ' ' + (topY + 38) + ' Q' + F((bk + fr) / 2) + ' ' + (topY + 64) + ' ' + (fr - 9) + ' ' + (topY + 36) + ' M' + F((bk + fr) / 2) + ' ' + (topY + 54) + ' q7 10 0 20 q-7 10 0 20 M' + F((bk + fr) / 2 - 10) + ' ' + (topY + 70) + ' q10 4 20 0') + '" ' + S.t + '/><path d="M' + (bk + 4) + ' ' + topY + ' l-1 -10 h9 l-1 10 M' + (fr - 14) + ' ' + topY + ' l-1 -10 h9 l-1 10" ' + S.s + '/><path d="M150 ' + (Gb - 30) + ' Q170 ' + (Gb - 18) + ' 196 ' + (Gb - 16) + '" ' + S.t + '/>'; }
+      if (o.buckles) { [topY + (o.nb === 1 ? 12 : 26), topY + 62].slice(0, o.nb || 2).forEach(function (yb) { var w1 = (yb - topY) / (sYb - topY); var xl = bk - (bk - calf) * 1.4 * w1, xr = fr + 4; out += '<path d="M' + F(xl - 3) + ' ' + yb + ' L' + xr + ' ' + (yb + 6) + ' L' + xr + ' ' + (yb + 13) + ' L' + F(xl - 3) + ' ' + (yb + 7) + ' Z" ' + S.fs(c.tint) + '/><rect x="' + (fr - 16) + '" y="' + (yb + 2) + '" width="10" height="11" rx="1.5" fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width="1.4"/><path d="M' + (fr - 11) + ' ' + (yb + 4) + ' v7" ' + S.s + '/>'; }); hl.strap = [[calf - 10, topY + 4, fr - calf + 24, o.nb === 1 ? 34 : 78]]; }
+      if (o.shearling) { var cuffD = 'M' + (bk - 5) + ' ' + (topY - 8) + ' L' + (fr + 5) + ' ' + (topY - 8) + ' L' + (fr + 3) + ' ' + (topY + 14) + ' Q' + F((bk + fr) / 2) + ' ' + (topY + 18) + ' ' + (bk - 3) + ' ' + (topY + 14) + ' Z'; out += '<path d="' + cuffD + '" fill="' + c.fill + '"/><path d="' + cuffD + '" fill="url(#p-fur)" stroke="' + c.ink + '" stroke-width="1.1" stroke-dasharray="3 1.5"/>'; hl.topline = [[bk - 14, topY - 16, fr - bk + 28, 40]]; }
+      if (has('floral')) out += '<path d="M' + (bk + 2) + ' ' + (topY + 4) + ' L' + (fr - 2) + ' ' + (topY + 4) + ' L' + (fr - 2) + ' ' + F(sYb - 50) + ' L' + (calf + 8) + ' ' + F(sYb - 50) + ' Z" fill="url(#p-floral)"/>';
+      if (has('cutout')) { var co = ''; for (var cr = 0; cr < 4; cr++) for (var cc = 0; cc < 3; cc++) { var cx3 = bk - 2 + cc * 15 + cr * 1.5, cy3 = topY + 12 + cr * 15; co += '<rect x="' + F(cx3) + '" y="' + cy3 + '" width="10" height="7" rx="3.5" ' + S.fs(c.tint) + '/>'; } out += co; }
+      if (s === 'chelsea') { out += '<path d="M96 ' + (topY + 1) + ' Q100 136 96 156 L110 156 Q108 136 110 ' + (topY + 1) + ' Z" fill="url(#p-rib)" stroke="' + c.ink + '" stroke-width=".9"/><path d="M' + (bk + 2) + ' ' + topY + ' l-1 -10 h9 l-1 10" ' + S.s + '/>'; }
+      if (s === 'hiker') { out += '<path d="M' + (bk - 1) + ' ' + (topY + 4) + ' Q' + F((bk + fr) / 2) + ' ' + (topY - 6) + ' ' + (fr + 1) + ' ' + (topY + 2) + '" stroke="' + c.ink + '" stroke-width="5" fill="none" opacity=".2"/>'; var hk = ''; for (var hi = 0; hi < 5; hi++) { var hx2 = fr - 4 + hi * 4, hy2 = topY + 10 + hi * 10; hk += '<circle cx="' + hx2 + '" cy="' + hy2 + '" r="2" ' + S.fs() + '/>'; } out += hk + '<path d="M' + (fr - 4) + ' ' + (topY + 10) + ' L' + (fr + 12) + ' ' + (topY + 50) + ' M' + (fr + 8) + ' ' + (topY + 20) + ' L' + (fr - 2) + ' ' + (topY + 36) + ' M' + (fr + 12) + ' ' + (topY + 32) + ' L' + (fr + 2) + ' ' + (topY + 48) + '" ' + S.s + ' stroke-width="1.3"/>' + (o.slimsole ? '' : '<path d="M150 ' + (Gb - 34) + ' Q160 ' + (Gb - 14) + ' 196 ' + (Gb - 12) + '" ' + S.s + '/>') + '<path d="M70 ' + (Gb - 34) + ' Q90 ' + (Gb - 44) + ' 120 ' + (Gb - 40) + '" ' + S.t + '/>'; hl.laces = [[fr - 14, topY - 2, 40, 64]]; }
+      hl.shaft = [[calf - 10, topY - 10, fr - calf + 22, Math.max(40, sYb - 40 - topY)]];
+      hl.heel = [[46, sYb - 10, 48, Gb - sYb + 18]]; hl.toe = [[176, Gb - 30, 64, 38]];
+      hl.sole = [[44, Gb - 8, 190, flat ? 34 : 18]]; hl.topline = hl.topline || [[bk - 12, topY - 12, fr - bk + 24, 30]];
+      hl.upper = [[calf - 10, topY - 8, 240 - calf, Gb - topY + 12]];
+    } else if (s === 'sneaker') {
+      var chunky = o.chunky, sh2 = chunky ? 22 : 10, Gs = 194;
+      if (o.sandal) {
+        out += sportSole(Gs, 44, 224, 16, true);
+        out += '<path d="M48 ' + Gs + ' Q46 ' + (Gs - 6) + ' 54 ' + (Gs - 6) + ' H214 Q224 ' + (Gs - 6) + ' 224 ' + Gs + ' Z" ' + S.fs() + '/>';
+        var web = function (d) { return '<path d="' + d + '" ' + S.f(c.tint) + '/><path d="' + d + '" ' + S.t + ' transform="translate(0 1.5)"/>'; };
+        out += web('M56 ' + (Gs - 6) + ' L58 ' + (Gs - 44) + ' L66 ' + (Gs - 46) + ' L66 ' + (Gs - 6) + ' Z');
+        out += web('M60 ' + (Gs - 44) + ' Q90 ' + (Gs - 58) + ' 112 ' + (Gs - 44) + ' L110 ' + (Gs - 36) + ' Q88 ' + (Gs - 48) + ' 62 ' + (Gs - 36) + ' Z');
+        out += web('M118 ' + (Gs - 6) + ' Q122 ' + (Gs - 40) + ' 150 ' + (Gs - 36) + ' L156 ' + (Gs - 28) + ' Q132 ' + (Gs - 30) + ' 130 ' + (Gs - 6) + ' Z');
+        out += web('M176 ' + (Gs - 6) + ' Q182 ' + (Gs - 26) + ' 204 ' + (Gs - 20) + ' L206 ' + (Gs - 12) + ' Q190 ' + (Gs - 16) + ' 188 ' + (Gs - 6) + ' Z');
+        out += '<rect x="100" y="' + (Gs - 47) + '" width="9" height="9" rx="1.5" fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width="1.2"/>';
+        hl.strap = [[48, Gs - 64, 168, 62]]; hl.sole = [[36, Gs - 8, 198, 30]]; hl.upper = hl.strap;
+        return { svg: out, hl: hl };
+      }
+      var bodyS = o.ballet ? 'M46 176 C42 182 42 190 48 ' + Gs + ' L206 ' + Gs + ' Q222 ' + Gs + ' 222 186 Q220 176 198 170 Q166 160 138 162 Q96 168 46 176 Z'
+        : 'M50 150 Q44 152 44 164 C42 178 42 188 48 ' + Gs + ' L206 ' + Gs + ' Q222 ' + Gs + ' 222 186 Q220 174 196 166 Q168 156 148 150 L118 134 Q112 130 106 134 L98 146 Q74 148 50 150 Z';
+      out += '<path d="' + bodyS + '" ' + S.f(has('suede') ? c.tint : c.fill) + '/>';
+      if (has('meshup')) out += '<path d="' + bodyS + '" fill="url(#p-mesh)"/>';
+      if (has('knitup')) out += '<path d="' + bodyS + '" fill="url(#p-rib)"/>';
+      if (o.ballet) out += '<path d="' + bodyS + '" fill="url(#p-mesh)"/><path d="M136 162 q-7 -7 -4 -10 q6 1 8 8 q5 -8 10 -6 q-1 7 -10 8" ' + S.fs() + '/><path d="M50 178 Q96 170 136 164" ' + S.t + '/>';
+      else {
+        out += '<path d="M44 164 C42 178 42 188 48 ' + Gs + ' L76 ' + Gs + ' Q74 172 58 156 Q50 152 44 158 Z" ' + S.fs(o.terrace || o.ttoe ? c.tint : c.fill) + '/>';
+        out += '<path d="M196 166 Q222 174 222 186 Q222 ' + Gs + ' 206 ' + Gs + ' L184 ' + Gs + ' Q180 176 196 166 Z" ' + S.fs(o.ttoe || o.terrace ? c.tint : c.fill) + '/>';
+        if (!has('nolace')) out += '<path d="M106 134 L118 134 L150 151 L146 160 L110 144 Z" ' + S.fs(o.ttoe ? c.tint : c.fill) + '/>';
+        if (o.ttoe) out += '<path d="M150 151 Q176 156 196 166 L190 174 Q168 164 146 160 Z" ' + S.fs(c.tint) + '/>';
+        if (o.terrace) out += '<path d="M84 186 Q104 160 138 162 Q156 164 170 186" ' + S.s + '/><path d="M86 182 Q106 158 138 158" ' + S.t + '/>';
+        out += '<path d="M50 150 Q48 142 54 140 L60 146" ' + S.s + '/><path d="M54 152 Q74 150 98 147" ' + S.t + '/>';
+        if (!has('nolace')) out += '<g fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width=".8"><circle cx="116" cy="140" r="1.5"/><circle cx="125" cy="145" r="1.5"/><circle cx="134" cy="149" r="1.5"/><circle cx="143" cy="154" r="1.5"/></g><path d="M112 136 L146 156 M116 147 L124 139 M125 151 L133 143 M134 155 L142 148" ' + S.s + ' stroke-width="1.2"/>';
+        else out += '<path d="M106 136 Q126 140 148 154" ' + S.s + '/><path d="M110 140 h8 M108 144 h6" ' + S.s + ' stroke-width="2"/>';
+        if (has('perf')) { var pf = ''; for (var pi = 0; pi < 6; pi++) pf += '<circle cx="' + (198 + (pi % 3) * 5) + '" cy="' + (172 + Math.floor(pi / 3) * 5) + '" r=".9" fill="' + c.ink + '"/>'; out += pf; }
+        out += '<path d="M78 ' + (Gs - 3) + ' L182 ' + (Gs - 3) + '" ' + S.t + '/>';
+      }
+      if (o.mj) { out += '<path d="M100 172 Q106 142 150 146 L149 154 Q114 152 110 176 Z" ' + S.fs(c.tint) + '/>' + btn(144, 150, c, 1.8); hl.strap = [[92, 134, 66, 50]]; }
+      if (o.split) { out += '<path d="M196 168 Q202 180 214 ' + Gs + '" ' + S.o + '/>'; hl.toe = [[180, 156, 50, 46]]; }
+      out += '<path d="M40 ' + Gs + ' H220 Q228 ' + Gs + ' 226 ' + (Gs + sh2 / 2) + ' Q224 ' + (Gs + sh2) + ' 212 ' + (Gs + sh2) + ' H54 Q40 ' + (Gs + sh2) + ' 40 ' + (Gs + sh2 / 2) + ' Z" ' + S.f(o.gum ? c.tint : c.fill) + '/>';
+      if (chunky) out += '<path d="M44 ' + (Gs + 9) + ' Q70 ' + (Gs + 3) + ' 100 ' + (Gs + 10) + ' Q140 ' + (Gs + 18) + ' 180 ' + (Gs + 8) + ' Q204 ' + (Gs + 4) + ' 222 ' + (Gs + 10) + '" ' + S.s + '/><path d="M48 ' + (Gs + 17) + ' H216" ' + S.t + '/>';
+      else out += '<path d="M44 ' + (Gs + 4) + ' H220" ' + S.t + '/>';
+      if (has('lugtread')) { var lt = ''; for (var lx3 = 50; lx3 < 216; lx3 += 12) lt += 'M' + lx3 + ' ' + (Gs + sh2) + ' l2 5 h6 l2 -5 '; out += '<path d="' + lt + '" ' + S.s + '/>'; }
+      hl.sole = [[32, Gs - 6, 202, sh2 + (has('lugtread') ? 20 : 14)]]; hl.upper = [[36, o.ballet ? 150 : 128, 194, Gs - (o.ballet ? 146 : 124)]];
+      hl.toe = hl.toe || [[176, 156, 56, 46]];
+    } else if (s === 'clog') {
+      var bodyC = 'M60 176 Q62 150 98 146 Q150 144 194 168 Q214 178 212 192 L62 192 Z';
+      out += '<path d="M56 182 Q58 176 64 176 L60 192 Z" ' + S.fs(c.tint) + '/>';
+      out += '<path d="' + bodyC + '" ' + uf + '/>';
+      out += '<path d="M54 192 H216 Q220 204 208 210 H68 Q54 208 54 192 Z" ' + S.f(c.tint) + '/><path d="M64 200 Q120 198 206 202 M70 205 Q130 204 200 206" ' + S.s + ' stroke-width=".5"/>';
+      if (!clear) out += '<path d="M66 178 Q68 156 98 152 Q146 150 188 170" ' + S.t + '/>';
+      if (o.shearling) { var fD = 'M57 180 Q58 148 98 143 Q122 142 138 149 L136 158 Q118 152 98 154 Q70 158 68 182 Z'; out += '<path d="' + fD + '" fill="' + c.fill + '"/><path d="' + fD + '" fill="url(#p-fur)" stroke="' + c.ink + '" stroke-width="1.1" stroke-dasharray="3 1.5"/>'; hl.topline = [[48, 134, 100, 54]]; }
+      hl.upper = [[50, 136, 172, 64]]; hl.sole = [[46, 186, 180, 30]];
+    }
+    return { svg: out, hl: hl };
+  }
+
+  /* ================= SPEC TABLE: one entry per detail ================= */
+  var T = function (o) { o.g = 'top'; return o; };
+  var SPEC = {
+    // Womenswear: coats & jackets
+    'Oversized shawl and notch collars': T({ t: 'coat', col: 'shawl', cl: 'sb', pk: 'flap', sh: 'drop', fl: 8, hl: ['collar'] }),
+    'Faux-fur cuffs and hems': T({ t: 'coat', col: 'notch', cl: 'sb', cuff: 'fur', hem: 'fur', hl: ['cuffs', 'hem'] }),
+    'Dropped, rounded shoulders': T({ t: 'coat', col: 'notch', cl: 'sb', sh: 'drop', fl: 14, pk: 'welt', hl: ['shoulders'] }),
+    'Funnel neck with concealed zip': T({ t: 'coat', col: 'funnel', cl: 'zip-hidden', pk: 'welt', hl: ['collar', 'closure'] }),
+    'Belted wrap fronts': T({ t: 'coat', col: 'shawl', cl: 'wrap', x: ['belt'], hl: ['waist'] }),
+    'Check-printed quilted puffers': T({ t: 'jacket', len: 196, col: 'funnel', cl: 'zip', hem: 'plain', cuff: 'band', fl: 8, x: ['check', 'quiltlines'], hl: ['body'] }),
+    'Patent trench with storm flaps': T({ t: 'coat', col: 'notch', cl: 'db', fl: 10, x: ['patent', 'stormflap', 'epaulette', 'belt'], hl: ['stormflap'] }),
+    'Cape backs and capelets': T({ t: 'coat', col: 'notch', cl: 'sb', x: ['cape'], hl: ['cape'] }),
+    'Toggle and horn-button closures': T({ t: 'coat', len: 214, col: 'band', cl: 'toggle', pk: 'patch', hl: ['closure'] }),
+    'Large flap patch pockets': T({ t: 'coat', col: 'notch', cl: 'sb', pk: 'flapbig', hl: ['pockets'] }),
+    'Raw-edge blanket coats': T({ t: 'coat', col: 'shawl', cl: 'none', fl: 10, x: ['rawedge'], hl: ['hem'] }),
+    // Dresses
+    'Drop waist with pleated skirt': { g: 'dress', nk: 'crew', sl: 'none', wY: 142, sk: 'pleated', hl: ['waist', 'skirt'] },
+    'Fringed hems': { g: 'dress', nk: 'v', sl: 'none', sk: 'column', len: 204, hem: 'fringe', hl: ['hem'] },
+    'Sequin and chainmail minis': { g: 'dress', nk: 'slip', sk: 'aline', len: 160, x: ['sequin'], hl: ['body'] },
+    'Ruched side seams': { g: 'dress', nk: 'crew', sl: 'long', sk: 'column', wY: 112, x: ['ruche'], hl: ['sides'] },
+    'Lace-trimmed slips over knits': { g: 'dress', nk: 'slip', sk: 'column', x: ['lacehem', 'lacetop'], hl: ['hem', 'neck'] },
+    'Sheer organza overlays': { g: 'dress', nk: 'crew', sl: 'long', sk: 'aline', x: ['sheer'], hl: ['body'] },
+    'Moody tiered ruffle maxis': { g: 'dress', nk: 'v', sl: 'long', sk: 'tiered', hl: ['skirt'] },
+    'Bias-cut velvet': { g: 'dress', nk: 'slip', sk: 'column', x: ['velvet', 'bias'], hl: ['body'] },
+    'Contrast sash waists': { g: 'dress', nk: 'v', sl: 'short', sk: 'aline', x: ['sash'], hl: ['waist'] },
+    'Photographic and art prints': { g: 'dress', nk: 'crew', sl: 'none', sk: 'column', x: ['floral'], hl: ['body'] },
+    'Big puff sleeves': { g: 'dress', nk: 'square', sl: 'puff', sk: 'aline', hl: ['sleeves'] },
+    // Tops & shirts
+    'Floppy oversized collars': T({ t: 'shirt', col: 'bigcollar', cl: 'placket', hl: ['collar'] }),
+    'Contrast collars and cuffs': T({ t: 'shirt', col: 'shirt', cl: 'placket', cuff: 'contrast', x: ['contrastcollar', 'pin'], hl: ['collar', 'cuffs'] }),
+    'Pussy-bow and scarf necks': T({ t: 'shirt', col: 'bow', cl: 'none', hl: ['collar'] }),
+    'Gilded embroidered shirting': T({ t: 'shirt', col: 'shirt', cl: 'placket', x: ['embroid'], hl: ['chest'] }),
+    'Sheer mesh layering tops': T({ t: 'knit', col: 'crew', cuff: 'plain', hem: 'plain', x: ['sheer'], hl: ['body'] }),
+    'Rugby stripes, short plackets': T({ t: 'shirt', col: 'polo', straightHem: true, cuff: 'rib', x: ['stripes', 'contrastcollar'], hl: ['collar'] }),
+    'Ruched centre fronts': T({ t: 'knit', col: 'square', cuff: 'plain', hem: 'plain', x: ['ruchecf'], hl: ['centre'] }),
+    'Lace yoke insets': T({ t: 'shirt', col: 'band', cl: 'none', x: ['laceyoke'], hl: ['yoke'] }),
+    'Slogan T-shirts': T({ t: 'tee', col: 'crew', hem: 'plain', x: ['slogan'], hl: ['chest'] }),
+    'Visible corset boning': { g: 'dress', nk: 'slip', sk: 'column', len: 196, wY: 118, x: ['boning'], hl: ['body'] },
+    // Knitwear (women)
+    'Cricket cables with tipping': T({ t: 'knit', col: 'vneck', x: ['cable', 'tipping'], hl: ['collar', 'cuffs'] }),
+    'Chunky shawl-collar cardigans': T({ t: 'knit', len: 220, col: 'shawl', cl: 'sb', pk: 'patch', hl: ['collar'] }),
+    'Knit fringe at hems': T({ t: 'knit', col: 'crew', hem: 'fringe', hl: ['hem'] }),
+    'Beads and sequins on knits': T({ t: 'knit', col: 'crew', x: ['beads'], hl: ['body'] }),
+    'Tartan and check jacquards': T({ t: 'knit', col: 'crew', x: ['check'], hl: ['body'] }),
+    'Sheer fine-gauge layers': T({ t: 'knit', col: 'crew', x: ['sheer'], hl: ['body'] }),
+    'Brooch-fastened cardigans': T({ t: 'knit', col: 'vneck', cl: 'brooch', hl: ['closure'] }),
+    'Knitted polo collars': T({ t: 'knit', col: 'polo', hl: ['collar'] }),
+    'Elongated rib cuffs': T({ t: 'knit', col: 'crew', cuff: 'longrib', hl: ['cuffs'] }),
+    'Cropped boxy jumpers': T({ t: 'knit', len: 150, fl: 8, sh: 'drop', col: 'crew', hl: ['hem'] }),
+    // Trousers & skirts
+    'Pleated tartan minis': { g: 'skirt', s: 'mini', pleats: true, x: ['check'], hl: ['pleats'] },
+    'Balloon trousers': { g: 'trousers', leg: 'balloon', hl: ['legs'] },
+    'Double front pleats, sharp creases': { g: 'trousers', leg: 'wide', pleats: 2, hl: ['pleats'] },
+    'Fluid satin wide legs': { g: 'trousers', leg: 'wide', x: ['satin'], noloops: true, hl: ['legs'] },
+    'Lace-trimmed hems': { g: 'skirt', s: 'midi', x: ['lacehem'], hl: ['hem'] },
+    'Leather pencil skirts with slit': { g: 'skirt', s: 'pencil', slit: true, x: ['leather'], hl: ['slit'] },
+    'Mesh midi skirts': { g: 'skirt', s: 'midi', x: ['mesh'], hl: ['body'] },
+    'Bubble hems': { g: 'skirt', s: 'bubble', hl: ['hem'] },
+    'Low-slung belted waists': { g: 'trousers', leg: 'straight', belt: 'low', hl: ['waist'] },
+    'Cargo pockets': { g: 'trousers', leg: 'straight', cargo: true, hl: ['pockets'] },
+    // Denim
+    'Sequinned and beaded jeans': { g: 'trousers', jeans: true, leg: 'straight', x: ['sequin'], hl: ['legs'] },
+    'Dark rinse, clean finish': { g: 'trousers', jeans: true, leg: 'straight', x: ['dark'], hl: ['body'] },
+    'Barrel leg with curved outseam': { g: 'trousers', jeans: true, leg: 'barrel', hl: ['seams'] },
+    'Pressed front seam': { g: 'trousers', jeans: true, leg: 'straight', x: ['frontseam'], hl: ['legs'] },
+    'Thick contrast topstitching': { g: 'trousers', jeans: true, leg: 'straight', x: ['contrastst'], hl: ['fly', 'pockets'] },
+    'Western yokes and pearl snaps': T({ t: 'shirt', col: 'shirt', cl: 'snaps', x: ['westernyoke'], hl: ['yoke', 'closure'] }),
+    'Long denim coats': T({ t: 'coat', col: 'notch', cl: 'sb', pk: 'patch', x: ['belt', 'topst', 'dark'], hl: ['body'] }),
+    'Long exposed button fly': { g: 'trousers', jeans: true, leg: 'straight', fly: 'buttons', high: true, hl: ['fly'] },
+    'Patchwork panels': { g: 'trousers', jeans: true, leg: 'straight', x: ['patch'], hl: ['legs'] },
+    'Heavy rips and distressing': { g: 'trousers', jeans: true, leg: 'straight', x: ['rips'], hl: ['legs'] },
+    // Tailoring (women)
+    'Pinstripe suiting': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'flap', x: ['pin'], hl: ['body'] }),
+    'Sharp pointed shoulders': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'flap', sh: 'point', hl: ['shoulders'] }),
+    'Double-breasted jackets': T({ t: 'blazer', col: 'peak', cl: 'db', pk: 'flap', hl: ['closure'] }),
+    'Wide peak lapels': T({ t: 'blazer', col: 'peak', cl: 'sb', pk: 'flap', hl: ['collar'] }),
+    'Waistcoats worn as tops': T({ t: 'waistcoat', col: 'vneck', cl: 'sb', pk: 'welt', hl: ['body'] }),
+    'Cinched one-button jackets': T({ t: 'blazer', col: 'notch', cl: 'onebutton', pk: 'flap', fl: -2, x: ['darts'], hl: ['waist'] }),
+    'Velvet lapel facings': T({ t: 'blazer', col: 'shawl', cl: 'onebutton', pk: 'welt', x: ['velvetlapel'], hl: ['collar'] }),
+    'Cummerbunds over suits': T({ t: 'blazer', col: 'shawl', cl: 'onebutton', pk: 'welt', x: ['cummerbund'], hl: ['waist'] }),
+    'Slim cigarette trousers': { g: 'trousers', leg: 'slim', len: 226, crease: true, hl: ['legs'] },
+    'Very oversized blazers': T({ t: 'blazer', len: 214, col: 'notch', cl: 'sb', pk: 'flap', sh: 'drop', fl: 14, hl: ['body'] }),
+    // Menswear: outerwear
+    'Clean leather bombers': T({ t: 'jacket', col: 'rib', cl: 'zip', pk: 'slant', x: ['leather'], hl: ['body'] }),
+    'Fur and shearling collars': T({ t: 'jacket', len: 192, col: 'fur', cl: 'zip', hem: 'band', cuff: 'band', pk: 'slant', hl: ['collar'] }),
+    'Utility trench details': T({ t: 'coat', col: 'notch', cl: 'db', x: ['stormflap', 'epaulette', 'belt'], hl: ['stormflap'] }),
+    'Windbreaker as a blazer': T({ t: 'jacket', col: 'funnelsmall', cl: 'zip', hem: 'band', cuff: 'band', pk: 'slant', x: ['panels'], hl: ['body'] }),
+    'Leather and wool varsity': T({ t: 'jacket', col: 'rib', cl: 'snapsfront', cuff: 'rib', hem: 'rib', pk: 'slant', x: ['varsity', 'tipping'], hl: ['collar', 'cuffs', 'hem'] }),
+    'Padded leather': T({ t: 'jacket', col: 'band', cl: 'zip', hem: 'band', cuff: 'band', x: ['quilt', 'leather'], hl: ['body'] }),
+    'Technical parkas': T({ t: 'coat', len: 214, col: 'funnel', cl: 'zip', pk: 'bellows', hl: ['pockets'] }),
+    'Double-face wool overcoats': T({ t: 'coat', col: 'notch', cl: 'sb', pk: 'welt', x: ['handedge'], hl: ['closure', 'hem'] }),
+    'Short suede blousons': T({ t: 'jacket', col: 'shirt', cl: 'zip', hem: 'rib', cuff: 'rib', pk: 'slant', x: ['suede'], hl: ['hem'] }),
+    'High-shine puffers': T({ t: 'jacket', len: 196, fl: 8, col: 'funnel', cl: 'zip', hem: 'band', cuff: 'band', x: ['quiltlines', 'gloss'], hl: ['body'] }),
+    // Shirts & polos
+    'Statement collars': T({ t: 'shirt', col: 'longpoint', cl: 'placket', hl: ['collar'] }),
+    'Open Johnny-collar knit polos': T({ t: 'knit', col: 'johnny', hl: ['collar'] }),
+    'Quarter-zip tops': T({ t: 'knit', col: 'funnelsmall', cl: 'quarterzip', hl: ['closure'] }),
+    'Striped rugby shirts': T({ t: 'shirt', col: 'polo', straightHem: true, cuff: 'rib', x: ['stripes', 'contrastcollar'], hl: ['body'] }),
+    'Contrast cuffs': T({ t: 'shirt', col: 'shirt', cl: 'placket', cuff: 'contrast', x: ['pin'], hl: ['cuffs'] }),
+    'Geometric panel piecing': T({ t: 'shirt', col: 'shirt', cl: 'placket', x: ['panels'], hl: ['body'] }),
+    'Velvet shirts': T({ t: 'shirt', col: 'shirt', cl: 'placket', x: ['velvet'], hl: ['body'] }),
+    'Oxford button-downs': T({ t: 'shirt', col: 'buttondown', cl: 'placket', pk: 'patch', hl: ['collar'] }),
+    'Overshirt chest flap pockets': T({ t: 'shirt', col: 'shirt', cl: 'placket', pk: 'chestflap2', straightHem: true, hl: ['pockets'] }),
+    'Cuban camp collars': T({ t: 'shirt', col: 'camp', cl: 'placket', straightHem: true, hl: ['collar'] }),
+    // Knitwear (men)
+    'Jewel-tone cashmere': T({ t: 'knit', col: 'crew', x: ['tint'], hl: ['body'] }),
+    'Heavy shawl-collar cardigans': T({ t: 'knit', len: 214, col: 'shawl', cl: 'sb', pk: 'patch', hl: ['collar'] }),
+    'Cricket jumpers': T({ t: 'knit', col: 'vneck', x: ['cable', 'tipping'], hl: ['collar'] }),
+    'Rib-knit sweatshirts': T({ t: 'knit', col: 'crew', x: ['ribbody'], hl: ['body'] }),
+    'Brushed alpaca': T({ t: 'knit', col: 'crew', x: ['fur'], hl: ['body'] }),
+    'Long-sleeve knitted polos': T({ t: 'knit', col: 'polo', hl: ['collar'] }),
+    'Zip-through knit jackets': T({ t: 'knit', col: 'funnelsmall', cl: 'zip', pk: 'slant', hl: ['closure'] }),
+    'Fair Isle yokes': T({ t: 'knit', col: 'crew', x: ['fairisle'], hl: ['yoke'] }),
+    'Saddle shoulders': T({ t: 'knit', col: 'crew', sh: 'saddle', hl: ['shoulders'] }),
+    'Large logo intarsia': T({ t: 'knit', col: 'crew', x: ['logo'], hl: ['chest'] }),
+    // Tailoring (men)
+    'Relaxed 1930s drape': T({ t: 'blazer', len: 206, col: 'peak', cl: 'db', pk: 'flap', fl: 8, sh: 'drop', hl: ['body'] }),
+    'Double-breasted two-piece': T({ t: 'blazer', col: 'peak', cl: 'db', pk: 'flap', hl: ['closure'] }),
+    'Pointed shoulders': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'flap', sh: 'point', hl: ['shoulders'] }),
+    'Grey melange flannel': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'flap', x: ['melange', 'tint'], hl: ['body'] }),
+    'Striped and repp ties': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'flap', x: ['tie'], hl: ['tie'] }),
+    'Pocket squares': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'flap', x: ['psquare'], hl: ['chest'] }),
+    'Patch pockets on soft jackets': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'patch', hl: ['pockets'] }),
+    'Corduroy suits': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'flap', x: ['cord'], hl: ['body'] }),
+    'Hoodie under tailoring': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'flap', x: ['hood'], hl: ['collar'] }),
+    'Skinny suits': T({ t: 'blazer', len: 190, col: 'notch', cl: 'sb', pk: 'flap', fl: -6, hl: ['body'] }),
+    // Trousers (men)
+    'Single and double pleats': { g: 'trousers', leg: 'straight', pleats: 2, hl: ['pleats'] },
+    'Belted high waists': { g: 'trousers', leg: 'straight', high: true, belt: 'high', pleats: 1, hl: ['waist'] },
+    'Full straight legs': { g: 'trousers', leg: 'wide', crease: true, hl: ['legs'] },
+    'Wide-wale corduroy': { g: 'trousers', leg: 'straight', x: ['cord'], hl: ['legs'] },
+    'Buckle side adjusters': { g: 'trousers', leg: 'straight', adj: true, noloops: true, pleats: 1, hl: ['adjusters'] },
+    'Deep turn-ups': { g: 'trousers', leg: 'straight', turnup: true, crease: true, hl: ['hem'] },
+    'Tailored track pants': { g: 'trousers', leg: 'straight', x: ['piping'], crease: true, hl: ['seams'] },
+    'Straight leather trousers': { g: 'trousers', leg: 'straight', x: ['leather'], hl: ['legs'] },
+    'Carpenter hammer loops': { g: 'trousers', jeans: true, leg: 'straight', loop: true, hl: ['loop'] },
+    'Skinny tapered legs': { g: 'trousers', leg: 'skinny', hl: ['legs'] },
+    // Footwear: heels & flats
+    'T-bar and T-strap pumps': { g: 'shoe', s: 'pump', strap: 'tbar', heel: 'stiletto', hl: ['strap'] },
+    'Lace-up court shoes': { g: 'shoe', s: 'pump', strap: 'laces', toe: 'pointed', hl: ['strap'] },
+    'Two-tone cap toes': { g: 'shoe', s: 'pump', strap: 'sling', toe: 'square', heel: 'kitten', cap: true, hl: ['toe'] },
+    'Square toes': { g: 'shoe', s: 'pump', toe: 'square', heel: 'block', hl: ['toe'] },
+    'Curved sculptural heels': { g: 'shoe', s: 'pump', toe: 'pointed', heel: 'curved', hl: ['heel'] },
+    'Patent leather': { g: 'shoe', s: 'pump', toe: 'pointed', x: ['patent'], hl: ['upper'] },
+    'Horsebit vamp hardware': { g: 'shoe', s: 'pump', toe: 'round', heel: 'block', hw: 'horsebit', hl: ['vamp'] },
+    'Feathers on satin': { g: 'shoe', s: 'pump', toe: 'pointed', x: ['feather'], hl: ['vamp'] },
+    'Clear PVC heels': { g: 'shoe', s: 'pump', toe: 'pointed', x: ['clear'], hl: ['upper'] },
+    'Ballet flats': { g: 'shoe', s: 'flat', hl: ['upper'] },
+    // Boots
+    'Over-the-knee boots': { g: 'shoe', s: 'boot', h: 'otk', heel: 'block', hl: ['shaft'] },
+    'Second-skin stretch shafts': { g: 'shoe', s: 'boot', h: 'knee', heel: 'stiletto', stretch: true, hl: ['shaft'] },
+    'Knee-high slouch': { g: 'shoe', s: 'boot', h: 'knee', heel: 'block', slouch: true, hl: ['shaft'] },
+    'Embroidered and silk boots': { g: 'shoe', s: 'boot', h: 'knee', heel: 'block', x: ['floral'], hl: ['shaft'] },
+    'Shearling linings and cuffs': { g: 'shoe', s: 'boot', h: 'mid', heel: 'flat', shearling: true, hl: ['topline'] },
+    'Hiker styles': { g: 'shoe', s: 'hiker', heel: 'flat', hl: ['laces', 'sole'] },
+    'Kitten-heel boots': { g: 'shoe', s: 'boot', h: 'ankle', heel: 'kitten', hl: ['heel'] },
+    'Harness buckle straps': { g: 'shoe', s: 'boot', h: 'mid', heel: 'block', buckles: true, hl: ['strap'] },
+    'Western stitching': { g: 'shoe', s: 'boot', h: 'mid', heel: 'block', western: true, hl: ['shaft'] },
+    'Lug-sole Chelseas': { g: 'shoe', s: 'chelsea', heel: 'flat', x: ['lug'], hl: ['sole'] },
+    // Men's shoes
+    'Black oxfords': { g: 'shoe', s: 'oxford', x: ['patent'], hl: ['laces'] },
+    'Plain derbies': { g: 'shoe', s: 'derby', hl: ['laces'] },
+    'Brogue perforations': { g: 'shoe', s: 'oxford', x: ['brogue'], hl: ['toe'] },
+    'Horsebit loafers': { g: 'shoe', s: 'loafer', hw: 'horsebit', x: ['leather'], hl: ['vamp'] },
+    'Check-trimmed loafers': { g: 'shoe', s: 'loafer', strap: 'penny', x: ['checktrim'], hl: ['topline'] },
+    'Suede chukkas': { g: 'shoe', s: 'chukka', x: ['suede'], hl: ['upper'] },
+    'Hiking boots with tailoring': { g: 'shoe', s: 'hiker', heel: 'flat', hl: ['sole'] },
+    'Statement socks': { g: 'shoe', s: 'loafer', strap: 'penny', x: ['sock'], hl: ['sock'] },
+    'Penny loafers': { g: 'shoe', s: 'loafer', strap: 'penny', hl: ['vamp'] },
+    'Chunky sneakers with suits': { g: 'shoe', s: 'sneaker', chunky: true, hl: ['sole'] },
+    // Sneakers & casual
+    'Slim, low-profile sneakers': { g: 'shoe', s: 'sneaker', gum: true, hl: ['sole'] },
+    'Suede T-toe runners': { g: 'shoe', s: 'sneaker', ttoe: true, gum: true, x: ['suede'], hl: ['toe'] },
+    'Mary Jane sneakers': { g: 'shoe', s: 'sneaker', mj: true, hl: ['strap'] },
+    'Shearling ballet flats and clogs': { g: 'shoe', s: 'clog', shearling: true, hl: ['topline'] },
+    'Soft suede moccasins': { g: 'shoe', s: 'moc', hl: ['vamp'] },
+    'Ballet-sneaker hybrids': { g: 'shoe', s: 'sneaker', ballet: true, hl: ['upper'] },
+    'Plastic clogs and jellies': { g: 'shoe', s: 'clog', x: ['clear'], hl: ['upper'] },
+    'Split-toe trainers': { g: 'shoe', s: 'sneaker', split: true, hl: ['toe'] },
+    'Football terrace trainers': { g: 'shoe', s: 'sneaker', terrace: true, gum: true, hl: ['upper'] },
+    'Chunky dad sneakers': { g: 'shoe', s: 'sneaker', chunky: true, hl: ['sole'] },
+    // ===== Seasons SS27 to AW28: Womenswear coats & jackets =====
+    'Cinched peplum jackets': T({ t: 'blazer', len: 178, col: 'notch', cl: 'onebutton', x: ['peplum'], hl: ['waist'] }),
+    'Collarless cropped jackets': T({ t: 'jacket', len: 168, col: 'crew', cl: 'sb', hem: 'plain', cuff: 'plain', pk: 'welt', x: ['topst'], hl: ['collar'] }),
+    'Lightweight technical trench': T({ t: 'coat', col: 'notch', cl: 'db', x: ['belt', 'taped', 'epaulette'], hl: ['seams'] }),
+    'Hidden magnetic closures': T({ t: 'coat', len: 214, col: 'band', cl: 'concealed', pk: 'welt', x: ['magnet'], hl: ['closure'] }),
+    'Articulated sleeves': T({ t: 'coat', len: 204, col: 'funnel', cl: 'zip', pk: 'bellows', x: ['elbow'], hl: ['sleeves'] }),
+    'Bonded, raw-cut seams': T({ t: 'coat', col: 'notch', cl: 'sb', x: ['taped', 'rawedge'], hl: ['seams'] }),
+    'Double-belted waists': T({ t: 'coat', len: 216, col: 'notch', cl: 'wrap', x: ['doublebelt'], hl: ['waist'] }),
+    'Lace-trimmed jacket edges': T({ t: 'jacket', len: 176, col: 'crew', cl: 'sb', hem: 'lace', cuff: 'lace', hl: ['hem', 'cuffs'] }),
+    'Seersucker and linen jackets': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'patch', x: ['seer'], hl: ['body'] }),
+    // Dresses
+    'Basque waist bodices': { g: 'dress', nk: 'square', sl: 'long', sk: 'aline', basque: true, hl: ['waist'] },
+    'Bubble-hem dresses': { g: 'dress', nk: 'crew', sl: 'none', sk: 'bubble', len: 172, hl: ['hem'] },
+    'Smocked bodices': { g: 'dress', nk: 'square', sl: 'short', sk: 'tiered', x: ['smock'], hl: ['bodice'] },
+    'High necklines': { g: 'dress', nk: 'high', sl: 'long', sk: 'column', hl: ['neck'] },
+    'Gingham and handkerchief checks': { g: 'dress', nk: 'v', sl: 'short', sk: 'aline', x: ['check'], hl: ['body'] },
+    'Wrap and twist-front dresses': { g: 'dress', nk: 'v', sl: 'long', sk: 'aline', x: ['wrap'], hl: ['front'] },
+    'Clean column dresses': { g: 'dress', nk: 'crew', sl: 'none', sk: 'column', hl: ['body'] },
+    'Performance-jersey shirt dresses': T({ t: 'shirt', len: 226, col: 'shirt', cl: 'placket', x: ['belt'], wY: 126, hl: ['body'] }),
+    'Layered slip-over-dress': { g: 'dress', nk: 'slip', sk: 'column', len: 200, x: ['layer'], hl: ['hem'] },
+    'Quilted and padded dresses': { g: 'dress', nk: 'crew', sl: 'none', sk: 'aline', x: ['quilt'], hl: ['body'] },
+    'Funnel-neck knit dresses': { g: 'dress', nk: 'high', sl: 'long', sk: 'column', x: ['ribbody'], hl: ['neck'] },
+    'Unfinished raw hems': { g: 'dress', nk: 'slip', sk: 'aline', len: 206, x: ['rawhem'], hl: ['hem'] },
+    // Tops & shirts
+    'Smocked necklines and cuffs': T({ t: 'knit', col: 'square', cuff: 'smock', hem: 'plain', x: ['smockneck'], hl: ['collar', 'cuffs'] }),
+    'Peplum blouses': T({ t: 'shirt', len: 184, col: 'band', cl: 'none', straightHem: true, x: ['peplum'], hl: ['waist'] }),
+    'Lace-embroidered poplin shirts': T({ t: 'shirt', col: 'shirt', cl: 'placket', cuff: 'lace', x: ['embroid'], hl: ['chest', 'cuffs'] }),
+    'Seersucker and gingham shirting': T({ t: 'shirt', col: 'shirt', cl: 'placket', x: ['check'], hl: ['body'] }),
+    'Band-collar shirts with long placket': T({ t: 'shirt', col: 'band', cl: 'none', hl: ['collar', 'closure'] }),
+    'Concealed-placket shirts': T({ t: 'shirt', col: 'shirt', cl: 'concealed', hl: ['closure'] }),
+    'Technical stretch shirting': T({ t: 'shirt', col: 'shirt', cl: 'concealed', straightHem: true, x: ['taped'], hl: ['seams'] }),
+    'Wrap and tie-front tops': T({ t: 'knit', len: 168, col: 'vneck', cl: 'wrap', cuff: 'plain', hem: 'plain', by: 70, x: ['belt'], wY: 124, hl: ['front'] }),
+    'Performance polo tops': T({ t: 'tee', col: 'polo', hem: 'plain', x: ['mesh'], hl: ['collar'] }),
+    'Funnel-neck base layers': T({ t: 'knit', col: 'funnelsmall', cuff: 'rib', hem: 'plain', x: ['ribbody'], hl: ['collar'] }),
+    'Utility shirt-jackets': T({ t: 'shirt', col: 'shirt', cl: 'snaps', pk: 'chestflap2', straightHem: true, x: ['topst'], hl: ['pockets'] }),
+    'Clean minimal T-shirts': T({ t: 'tee', col: 'crew', hem: 'plain', hl: ['body'] }),
+    'Hidden-zip blouses': T({ t: 'shirt', col: 'funnelsmall', cl: 'zip-hidden', straightHem: true, hl: ['closure'] }),
+    'Backless apron tops': { g: 'dress', nk: 'square', sl: 'none', sk: 'column', len: 178, wY: 108, x: ['halter'], hl: ['neck'] },
+    // Knitwear (women)
+    'Openwork and pointelle knits': T({ t: 'knit', col: 'crew', x: ['pointelle'], hl: ['body'] }),
+    'Crochet tops and cardigans': T({ t: 'knit', col: 'vneck', cl: 'sb', x: ['crochet'], hl: ['body'] }),
+    'Smocked knit details': T({ t: 'knit', col: 'crew', cuff: 'smock', hem: 'smock', hl: ['cuffs', 'hem'] }),
+    'Fine-gauge zip polos': T({ t: 'knit', col: 'shirt', cl: 'quarterzip', hl: ['collar', 'closure'] }),
+    'Wrap cardigans': T({ t: 'knit', len: 214, col: 'shawl', cl: 'wrap', x: ['belt'], hl: ['front'] }),
+    'Brushed mohair': T({ t: 'knit', col: 'crew', sh: 'drop', fl: 8, x: ['fur'], hl: ['body'] }),
+    'Seamless performance knits': T({ t: 'knit', col: 'funnelsmall', cuff: 'plain', hem: 'plain', x: ['ribbody'], hl: ['body'] }),
+    'Funnel-neck knits': T({ t: 'knit', col: 'funnel', hl: ['collar'] }),
+    'Long-line ribbed cardigans': T({ t: 'knit', len: 232, col: 'vneck', cl: 'sb', pk: 'patch', x: ['ribbody'], hl: ['body'] }),
+    // Trousers & skirts
+    'High-waisted pleated trousers': { g: 'trousers', leg: 'wide', high: true, pleats: 2, hl: ['waist', 'pleats'] },
+    'Bermuda shorts': { g: 'trousers', leg: 'wide', len: 146, pleats: 1, turnup: true, hl: ['hem'] },
+    'Gingham and seersucker skirts': { g: 'skirt', s: 'midi', x: ['check'], hl: ['body'] },
+    'Wrap skirts': { g: 'skirt', s: 'midi', x: ['wrap'], hl: ['front'] },
+    'Double-belted waistbands': { g: 'trousers', leg: 'straight', high: true, belt: 'double', hl: ['waist'] },
+    'Tailored stretch trousers': { g: 'trousers', leg: 'slim', crease: true, noloops: true, x: ['elastic'], hl: ['legs'] },
+    'Clean straight-leg trousers': { g: 'trousers', leg: 'straight', crease: true, noloops: true, hl: ['legs'] },
+    'Elastic-back tailored waists': { g: 'trousers', leg: 'straight', pleats: 1, x: ['elastic'], hl: ['waist'] },
+    // Denim
+    'Matching denim suits': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'patch', x: ['dark', 'topst'], hl: ['body'] }),
+    'Denim with chain and patch trims': { g: 'trousers', jeans: true, leg: 'straight', x: ['chain'], hl: ['chain'] },
+    'Light bleached washes': { g: 'trousers', jeans: true, leg: 'wide', x: ['whisker'], hl: ['legs'] },
+    'Stretch performance denim': { g: 'trousers', jeans: true, leg: 'slim', x: ['dark'], hl: ['legs'] },
+    'Clean wide-leg trouser jeans': { g: 'trousers', jeans: true, leg: 'wide', crease: true, high: true, hl: ['legs'] },
+    'Hidden-rivet minimal jeans': { g: 'trousers', jeans: true, leg: 'straight', x: ['dark'], hl: ['pockets'] },
+    'Denim shirt-jackets': T({ t: 'shirt', col: 'shirt', cl: 'placket', pk: 'chestflap2', straightHem: true, x: ['dark', 'topst'], hl: ['pockets'] }),
+    'Raw selvedge denim': { g: 'trousers', jeans: true, leg: 'straight', turnup: true, x: ['dark', 'selvedge'], hl: ['hem'] },
+    'Denim with technical details': T({ t: 'jacket', col: 'funnelsmall', cl: 'zip', hem: 'band', cuff: 'band', pk: 'bellows', x: ['dark', 'taped'], hl: ['pockets'] }),
+    'Dark indigo tailoring': { g: 'trousers', leg: 'straight', pleats: 1, crease: true, x: ['dark'], hl: ['legs'] },
+    'Wax-coated denim': { g: 'trousers', jeans: true, leg: 'straight', x: ['leather', 'dark'], hl: ['legs'] },
+    'Cut-off denim shorts': { g: 'trousers', jeans: true, leg: 'straight', len: 132, x: ['fray'], hl: ['hem'] },
+    // Tailoring (women)
+    'Menswear three-piece suits': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'flap', x: ['vest'], hl: ['closure'] }),
+    'Linen and seersucker suiting': T({ t: 'blazer', col: 'peak', cl: 'db', pk: 'patch', x: ['seer'], hl: ['body'] }),
+    'Collarless tailored jackets': T({ t: 'blazer', col: 'vneck', cl: 'sb', pk: 'welt', hl: ['collar'] }),
+    'Soft unstructured tailoring': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'patch', sh: 'drop', x: ['handedge'], hl: ['shoulders'] }),
+    'Stretch commuter suiting': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'patch', x: ['elbow'], hl: ['sleeves'] }),
+    'Concealed-button blazers': T({ t: 'blazer', col: 'notch', cl: 'concealed', pk: 'welt', hl: ['closure'] }),
+    'Belted suit jackets': T({ t: 'blazer', col: 'peak', cl: 'wrap', x: ['belt'], hl: ['waist'] }),
+    'Technical wool suiting': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'flap', x: ['melange'], hl: ['body'] }),
+    // Menswear outerwear
+    'Lightweight harrington jackets': T({ t: 'jacket', col: 'funnelsmall', cl: 'zip', hem: 'rib', cuff: 'rib', pk: 'slant', hl: ['collar', 'hem'] }),
+    'Chore and work jackets': T({ t: 'jacket', len: 196, col: 'shirt', cl: 'sb', hem: 'plain', cuff: 'plain', pk: 'patch', x: ['topst'], hl: ['pockets'] }),
+    'Packable technical shells': T({ t: 'jacket', col: 'funnel', cl: 'zip', hem: 'band', cuff: 'band', x: ['hood', 'taped'], hl: ['collar'] }),
+    'Coach jackets': T({ t: 'jacket', col: 'shirt', cl: 'snapsfront', hem: 'band', cuff: 'band', pk: 'slant', hl: ['closure'] }),
+    'Denim trucker jackets': T({ t: 'jacket', len: 176, col: 'shirt', cl: 'sb', hem: 'band', cuff: 'band', pk: 'chestflap2', x: ['dark', 'topst'], hl: ['pockets'] }),
+    'Taped-seam commuter jackets': T({ t: 'jacket', len: 200, col: 'funnelsmall', cl: 'zip-hidden', hem: 'plain', cuff: 'band', x: ['taped'], hl: ['seams'] }),
+    'Field jackets with bellows pockets': T({ t: 'jacket', len: 206, col: 'shirt', cl: 'zip', hem: 'plain', cuff: 'band', pk: 'bellows', hl: ['pockets'] }),
+    // Shirts & polos
+    'Linen and seersucker shirts': T({ t: 'shirt', col: 'camp', cl: 'placket', straightHem: true, x: ['seer'], hl: ['body'] }),
+    'Tucked shirts with slim ties': T({ t: 'shirt', col: 'shirt', cl: 'placket', x: ['slimtie'], hl: ['tie'] }),
+    'Band-collar shirts': T({ t: 'shirt', col: 'band', cl: 'none', straightHem: true, hl: ['collar'] }),
+    'Knitted short-sleeve polos': T({ t: 'tee', col: 'polo', hem: 'rib', x: ['ribbody'], hl: ['collar'] }),
+    'Technical stretch shirts': T({ t: 'shirt', col: 'buttondown', cl: 'placket', straightHem: true, x: ['elbow'], hl: ['sleeves'] }),
+    'Fly-front placket shirts': T({ t: 'shirt', col: 'longpoint', cl: 'concealed', hl: ['closure'] }),
+    'Utility overshirts with snaps': T({ t: 'shirt', col: 'shirt', cl: 'snaps', pk: 'chestflap2', straightHem: true, hl: ['closure'] }),
+    'Flannel overshirts': T({ t: 'shirt', col: 'shirt', cl: 'placket', pk: 'chestflap2', straightHem: true, x: ['check'], hl: ['body'] }),
+    // Knitwear (men)
+    'Open-stitch summer knits': T({ t: 'knit', col: 'crew', x: ['pointelle'], hl: ['body'] }),
+    'Knitted tank vests': T({ t: 'knit', sl: 'none', col: 'vneck', x: ['cable', 'tipping'], hl: ['body'] }),
+    'Textured waffle knits': T({ t: 'knit', col: 'crew', x: ['waffle'], hl: ['body'] }),
+    'Seamless technical knits': T({ t: 'knit', col: 'funnelsmall', cl: 'quarterzip', x: ['ribbody'], hl: ['body'] }),
+    'Knitted overshirts': T({ t: 'knit', col: 'shirt', cl: 'placket', pk: 'chestflap2', hl: ['body'] }),
+    'Mock-neck fine knits': T({ t: 'knit', col: 'funnelsmall', hl: ['collar'] }),
+    'Striped cotton crewnecks': T({ t: 'knit', col: 'crew', x: ['stripes'], hl: ['body'] }),
+    'Cardigans worn as shirts': T({ t: 'knit', col: 'shirt', cl: 'sb', hl: ['closure'] }),
+    'Crochet-panel knits': T({ t: 'knit', col: 'crew', x: ['crochetpanel'], hl: ['chest'] }),
+    // Tailoring (men)
+    'Linen travel suits': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'patch', x: ['melange'], hl: ['body'] }),
+    'Puffed pleated suit trousers': { g: 'trousers', leg: 'balloon', pleats: 1, hl: ['pleats', 'legs'] },
+    'Soft shawl-collar dinner jackets': T({ t: 'blazer', col: 'shawl', cl: 'onebutton', pk: 'welt', x: ['velvetlapel'], hl: ['collar'] }),
+    'Unstructured commuter blazers': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'patch', sh: 'drop', x: ['elbow'], hl: ['sleeves'] }),
+    'Technical wool travel suits': T({ t: 'blazer', col: 'notch', cl: 'concealed', pk: 'welt', x: ['melange'], hl: ['body'] }),
+    'Matching waistcoat three-pieces': T({ t: 'blazer', col: 'peak', cl: 'sb', pk: 'flap', x: ['vest'], hl: ['closure'] }),
+    // Trousers (men)
+    'Pleated Bermuda shorts': { g: 'trousers', leg: 'wide', len: 146, pleats: 2, turnup: true, hl: ['hem'] },
+    'Drawstring tailored trousers': { g: 'trousers', leg: 'straight', crease: true, noloops: true, x: ['elastic', 'drawcord'], hl: ['waist'] },
+    'Seersucker trousers': { g: 'trousers', leg: 'straight', x: ['seer'], hl: ['legs'] },
+    'Technical stretch chinos': { g: 'trousers', leg: 'slim', crease: true, x: ['frontseam'], hl: ['legs'] },
+    'Articulated-knee trousers': { g: 'trousers', leg: 'straight', x: ['knee'], hl: ['knees'] },
+    'Gurkha-buckle waists': { g: 'trousers', leg: 'wide', high: true, pleats: 2, adj: true, noloops: true, hl: ['adjusters'] },
+    // Heels & flats
+    'Slingback kitten heels': { g: 'shoe', s: 'pump', strap: 'sling', heel: 'kitten', toe: 'pointed', hl: ['strap'] },
+    'Refined mules': { g: 'shoe', s: 'mule', heel: 'block', toe: 'square', hl: ['upper'] },
+    'Pointed flats': { g: 'shoe', s: 'flat', toe: 'pointed', hl: ['toe'] },
+    'Strappy heeled sandals': { g: 'shoe', s: 'sandal', heel: 'stiletto', hl: ['strap'] },
+    'Sport-sole smart flats': { g: 'shoe', s: 'loafer', x: ['sportsole'], hl: ['sole'] },
+    'Comfort block heels': { g: 'shoe', s: 'pump', heel: 'lowblock', toe: 'round', hl: ['heel'] },
+    'Woven leather flats': { g: 'shoe', s: 'flat', x: ['woven'], hl: ['upper'] },
+    // Boots
+    'Low ankle sock boots': { g: 'shoe', s: 'boot', h: 'sock', heel: 'block', stretch: true, toe: 'pointed', hl: ['shaft'] },
+    'Slim-sole Chelseas': { g: 'shoe', s: 'chelsea', hl: ['sole'] },
+    'Cutout summer boots': { g: 'shoe', s: 'boot', h: 'mid', heel: 'block', x: ['cutout'], hl: ['shaft'] },
+    'Hybrid sport-smart boots': { g: 'shoe', s: 'chelsea', x: ['sportsole'], hl: ['sole'] },
+    'Belted knee-high boots': { g: 'shoe', s: 'boot', h: 'knee', heel: 'block', buckles: true, nb: 1, hl: ['strap'] },
+    'Soft knee-high riding boots': { g: 'shoe', s: 'boot', h: 'knee', heel: 'flat', hl: ['shaft'] },
+    'Western ankle boots': { g: 'shoe', s: 'boot', h: 'ankle', heel: 'block', western: true, hl: ['toe'] },
+    'Mesh and fabric ankle boots': { g: 'shoe', s: 'boot', h: 'ankle', heel: 'block', x: ['mesh'], hl: ['upper'] },
+    'Square-toe ankle boots': { g: 'shoe', s: 'boot', h: 'ankle', heel: 'block', toe: 'square', hl: ['toe'] },
+    'Low-heel slouch ankle boots': { g: 'shoe', s: 'boot', h: 'ankle', heel: 'kitten', slouch: true, hl: ['shaft'] },
+    'Rain boots with refined lasts': { g: 'shoe', s: 'boot', h: 'mid', heel: 'flat', x: ['patent'], hl: ['upper'] },
+    'Lace-up ankle boots': { g: 'shoe', s: 'hiker', slimsole: true, hl: ['laces'] },
+    // Men's shoes
+    'Tasselled loafers': { g: 'shoe', s: 'loafer', x: ['tassel'], hl: ['vamp'] },
+    'Suede driving shoes': { g: 'shoe', s: 'moc', x: ['nubsole'], hl: ['sole'] },
+    'Boat shoes': { g: 'shoe', s: 'moc', x: ['boat'], hl: ['laces'] },
+    'Slim-sole loafers': { g: 'shoe', s: 'loafer', strap: 'penny', x: ['slimsole'], hl: ['sole'] },
+    'Hybrid sport-sole derbies': { g: 'shoe', s: 'derby', x: ['sportsole'], hl: ['sole'] },
+    'Fisherman sandals': { g: 'shoe', s: 'loafer', x: ['slots', 'anklestrap'], hl: ['upper'] },
+    'Unlined soft loafers': { g: 'shoe', s: 'loafer', x: ['softback'], hl: ['upper'] },
+    // Sneakers & casual
+    'Espadrilles': { g: 'shoe', s: 'espadrille', hl: ['sole'] },
+    'Mesh running sneakers': { g: 'shoe', s: 'sneaker', x: ['meshup'], hl: ['upper'] },
+    'Sport sandals': { g: 'shoe', s: 'sneaker', sandal: true, hl: ['strap'] },
+    'Trail-sole hybrids': { g: 'shoe', s: 'sneaker', chunky: true, x: ['lugtread'], hl: ['sole'] },
+    'Leather court sneakers': { g: 'shoe', s: 'sneaker', x: ['perf'], hl: ['upper'] },
+    'Slip-on knit sneakers': { g: 'shoe', s: 'sneaker', x: ['knitup', 'nolace'], hl: ['upper'] },
+    'Woven leather slides': { g: 'shoe', s: 'slide', x: ['woven'], hl: ['strap'] },
+    // ===== AW28 emerging =====
+    'Packable down liners': T({ t: 'jacket', len: 200, col: 'crew', cl: 'snapsfront', hem: 'plain', cuff: 'band', x: ['quiltlines'], hl: ['body'] }),
+    'Utility vest layers': T({ t: 'waistcoat', len: 170, col: 'funnelsmall', cl: 'zip', pk: 'bellows', hl: ['pockets'] }),
+    'Knitted pinafore dresses': { g: 'dress', nk: 'square', sl: 'none', sk: 'aline', x: ['ribbody'], hl: ['body'] },
+    'Thermal-knit base layers': T({ t: 'knit', col: 'crew', x: ['waffle'], hl: ['body'] }),
+    'Knitted hoods and snoods': T({ t: 'knit', col: 'funnel', x: ['hood'], hl: ['collar'] }),
+    'Quilted panel skirts': { g: 'skirt', s: 'midi', x: ['quilt'], hl: ['body'] },
+    'Bonded denim outerwear': T({ t: 'jacket', col: 'shirt', cl: 'zip', hem: 'band', cuff: 'band', x: ['dark', 'taped'], hl: ['seams'] }),
+    'Quilted suit jackets': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'welt', x: ['quilt'], hl: ['body'] }),
+    'Hybrid quilted bombers': T({ t: 'jacket', col: 'rib', cl: 'zip', pk: 'slant', x: ['quilt'], hl: ['body'] }),
+    'Insulated overshirts': T({ t: 'shirt', col: 'shirt', cl: 'snaps', pk: 'chestflap2', straightHem: true, x: ['quilt'], hl: ['body'] }),
+    'Technical merino layers': T({ t: 'knit', col: 'funnelsmall', cl: 'quarterzip', x: ['waffle'], hl: ['body'] }),
+    'Quilted dinner jackets': T({ t: 'blazer', col: 'shawl', cl: 'onebutton', pk: 'welt', x: ['quilt'], hl: ['body'] }),
+    'Technical wool cargo trousers': { g: 'trousers', leg: 'straight', cargo: true, crease: true, x: ['melange'], hl: ['pockets'] },
+    'Wool-felt flats': { g: 'shoe', s: 'flat', x: ['suede'], hl: ['upper'] },
+    'Insulated hybrid hikers': { g: 'shoe', s: 'hiker', x: ['sportsole'], hl: ['sole'] },
+    'Weatherproof derbies': { g: 'shoe', s: 'derby', x: ['lug'], hl: ['sole'] },
+    'Insulated winter sneakers': { g: 'shoe', s: 'sneaker', x: ['suede'], gum: true, hl: ['upper'] },
+    // ===== 25-per-category expansion =====
+    'Raglan sleeve coats': T({ t: 'coat', col: 'notch', cl: 'sb', sh: 'saddle', pk: 'welt', hl: ['shoulders'] }),
+    'Welt-pocket cocoon coats': T({ t: 'coat', col: 'shawl', cl: 'concealed', sh: 'drop', fl: 12, pk: 'welt', hl: ['pockets'] }),
+    'Contrast-piped edges': T({ t: 'coat', col: 'notch', cl: 'sb', x: ['handedge'], hl: ['collar'] }),
+    'Single-breasted car coats': T({ t: 'coat', len: 196, col: 'notch', cl: 'sb', pk: 'patch', hl: ['body'] }),
+    'Quilted liner jackets': T({ t: 'jacket', col: 'crew', cl: 'snapsfront', hem: 'plain', cuff: 'band', x: ['quilt'], hl: ['body'] }),
+    'Belted safari jackets': T({ t: 'jacket', len: 196, col: 'shirt', cl: 'sb', pk: 'bellows', x: ['belt', 'epaulette'], hl: ['pockets'] }),
+    'Boxy cropped jackets': T({ t: 'jacket', len: 160, col: 'notch', cl: 'sb', hem: 'plain', cuff: 'plain', pk: 'welt', fl: 10, sh: 'drop', hl: ['body'] }),
+    'Stand-collar field coats': T({ t: 'coat', len: 204, col: 'funnelsmall', cl: 'zip', pk: 'bellows', hl: ['collar'] }),
+    'Detachable hoods': T({ t: 'coat', col: 'funnel', cl: 'zip', x: ['hood'], hl: ['collar'] }),
+    'Leather-trimmed collars': T({ t: 'coat', col: 'notch', cl: 'sb', x: ['velvetlapel'], hl: ['collar'] }),
+    'Hidden-placket overcoats': T({ t: 'coat', col: 'notch', cl: 'concealed', pk: 'welt', hl: ['closure'] }),
+    'Asymmetric wrap closures': T({ t: 'coat', col: 'shawl', cl: 'wrap', hl: ['front'] }),
+    'Shaped elbow seams': T({ t: 'jacket', len: 190, col: 'notch', cl: 'sb', pk: 'patch', hem: 'plain', cuff: 'plain', x: ['elbow'], hl: ['sleeves'] }),
+    'Two-tone panelled coats': T({ t: 'coat', col: 'notch', cl: 'sb', x: ['panels'], hl: ['body'] }),
+    'Tie-cuff sleeves': T({ t: 'coat', col: 'notch', cl: 'wrap', cuff: 'contrast', x: ['belt'], hl: ['cuffs'] }),
+    'Brushed wool-cashmere coats': T({ t: 'coat', col: 'notch', cl: 'sb', x: ['melange'], hl: ['body'] }),
+    'Shirred bodice midis': { g: 'dress', nk: 'v', sl: 'short', sk: 'aline', x: ['smock'], hl: ['bodice'] },
+    'Puff-shoulder minis': { g: 'dress', nk: 'square', sl: 'puff', sk: 'aline', len: 166, hl: ['sleeves'] },
+    'Lace-edged bias slips': { g: 'dress', nk: 'slip', sk: 'column', x: ['bias', 'lacehem'], hl: ['hem'] },
+    'Square-neck sundresses': { g: 'dress', nk: 'square', sl: 'none', sk: 'tiered', hl: ['neck'] },
+    'Column knit dresses': { g: 'dress', nk: 'crew', sl: 'long', sk: 'column', x: ['ribbody'], hl: ['body'] },
+    'Tiered prairie dresses': { g: 'dress', nk: 'high', sl: 'long', sk: 'tiered', hl: ['skirt'] },
+    'Pleated midi dresses': { g: 'dress', nk: 'v', sl: 'short', sk: 'pleated', hl: ['skirt'] },
+    'Halter-neck dresses': { g: 'dress', nk: 'square', sl: 'none', sk: 'aline', x: ['halter'], hl: ['neck'] },
+    'Sheer-sleeve dresses': { g: 'dress', nk: 'crew', sl: 'long', sk: 'aline', x: ['sheer'], hl: ['sleeves'] },
+    'Drop-shoulder shirt dresses': T({ t: 'shirt', len: 226, col: 'shirt', cl: 'placket', sh: 'drop', fl: 10, hl: ['shoulders'] }),
+    'Belted shirt dresses': T({ t: 'shirt', len: 224, col: 'shirt', cl: 'placket', x: ['belt'], wY: 124, hl: ['waist'] }),
+    'Floral print midis': { g: 'dress', nk: 'v', sl: 'short', sk: 'aline', x: ['floral'], hl: ['body'] },
+    'Gathered waist maxis': { g: 'dress', nk: 'v', sl: 'none', sk: 'tiered', len: 236, hl: ['waist'] },
+    'Corset-seamed dresses': { g: 'dress', nk: 'slip', sk: 'column', x: ['boning'], hl: ['body'] },
+    'Seersucker sundresses': { g: 'dress', nk: 'square', sl: 'none', sk: 'aline', x: ['seer'], hl: ['body'] },
+    'Wrap midi dresses': { g: 'dress', nk: 'v', sl: 'short', sk: 'aline', x: ['wrap'], hl: ['front'] },
+    'Oversized boyfriend shirts': T({ t: 'shirt', col: 'shirt', cl: 'placket', sh: 'drop', fl: 10, hl: ['body'] }),
+    'Cropped boxy shirts': T({ t: 'shirt', len: 160, col: 'camp', cl: 'placket', straightHem: true, hl: ['hem'] }),
+    'Wide ruffle collars': T({ t: 'shirt', col: 'bigcollar', cl: 'concealed', hl: ['collar'] }),
+    'Scarf-tie necklines': T({ t: 'shirt', col: 'bow', cl: 'concealed', hl: ['collar'] }),
+    'Puff-sleeve blouses': { g: 'dress', nk: 'square', sl: 'puff', sk: 'column', len: 164, wY: 104, hl: ['sleeves'] },
+    'Pleated bib fronts': T({ t: 'shirt', col: 'band', cl: 'none', x: ['ruchecf'], hl: ['centre'] }),
+    'Polo-collar knit tops': T({ t: 'tee', col: 'polo', hem: 'plain', hl: ['collar'] }),
+    'Henley plackets': T({ t: 'tee', col: 'band', hem: 'plain', hl: ['closure'] }),
+    'Raglan baseball tees': T({ t: 'tee', col: 'crew', sh: 'saddle', hem: 'plain', x: ['varsity'], hl: ['sleeves'] }),
+    'Striped Breton tops': T({ t: 'tee', col: 'crew', hem: 'plain', x: ['stripes'], hl: ['body'] }),
+    'Lace-cami layering tops': { g: 'dress', nk: 'slip', sk: 'column', len: 166, wY: 104, x: ['lacetop'], hl: ['neck'] },
+    'Sheer organza blouses': T({ t: 'shirt', col: 'band', cl: 'none', x: ['sheer'], hl: ['body'] }),
+    'Epaulette shirts': T({ t: 'shirt', col: 'shirt', cl: 'placket', pk: 'chestflap2', x: ['epaulette'], hl: ['shoulders'] }),
+    'Double-pocket camp shirts': T({ t: 'shirt', col: 'camp', cl: 'placket', pk: 'chestflap2', straightHem: true, hl: ['pockets'] }),
+    'Wrap-front blouses': T({ t: 'shirt', col: 'vneck', cl: 'wrap', by: 70, x: ['belt'], wY: 126, hl: ['front'] }),
+    'Mesh-panel tops': T({ t: 'tee', col: 'crew', hem: 'plain', x: ['panels', 'mesh'], hl: ['body'] }),
+    'Ribbed polo knits': T({ t: 'knit', col: 'polo', x: ['ribbody'], hl: ['collar'] }),
+    'Cable-front cardigans': T({ t: 'knit', col: 'vneck', cl: 'sb', x: ['cable'], hl: ['body'] }),
+    'Square-neck knits': T({ t: 'knit', col: 'square', hl: ['collar'] }),
+    'Puff-shoulder cardigans': T({ t: 'knit', col: 'crew', cl: 'sb', sh: 'point', hl: ['shoulders'] }),
+    'Longline knit vests': T({ t: 'knit', sl: 'none', col: 'vneck', len: 220, x: ['ribbody'], hl: ['body'] }),
+    'Cropped cardigans': T({ t: 'knit', len: 160, col: 'crew', cl: 'sb', hl: ['hem'] }),
+    'Fair Isle yoke cardigans': T({ t: 'knit', col: 'crew', cl: 'sb', x: ['fairisle'], hl: ['yoke'] }),
+    'Half-zip knits': T({ t: 'knit', col: 'funnelsmall', cl: 'quarterzip', hl: ['closure'] }),
+    'Contrast-tipped knits': T({ t: 'knit', col: 'vneck', x: ['tipping'], hl: ['collar', 'cuffs'] }),
+    'Chunky rib turtlenecks': T({ t: 'knit', col: 'funnel', x: ['ribbody'], hl: ['collar'] }),
+    'Bishop-sleeve knits': T({ t: 'knit', col: 'crew', sh: 'drop', fl: 8, cuff: 'longrib', hl: ['cuffs'] }),
+    'Pointelle cardigans': T({ t: 'knit', col: 'crew', cl: 'sb', x: ['pointelle'], hl: ['body'] }),
+    'Shawl-collar knit coats': T({ t: 'knit', len: 232, col: 'shawl', cl: 'sb', pk: 'patch', x: ['ribbody'], hl: ['collar'] }),
+    'Argyle knits': T({ t: 'knit', col: 'vneck', x: ['quilt'], hl: ['body'] }),
+    'Button-shoulder knits': T({ t: 'knit', col: 'crew', x: ['epaulette'], hl: ['shoulders'] }),
+    'Tunic-length knits': T({ t: 'knit', len: 228, col: 'vneck', hl: ['hem'] }),
+    'Wide-leg palazzo trousers': { g: 'trousers', leg: 'wide', noloops: true, x: ['satin'], hl: ['legs'] },
+    'Barrel-leg trousers': { g: 'trousers', leg: 'barrel', pleats: 1, hl: ['legs'] },
+    'Flat-front straight trousers': { g: 'trousers', leg: 'straight', crease: true, hl: ['legs'] },
+    'Side-stripe tuxedo trousers': { g: 'trousers', leg: 'straight', crease: true, x: ['piping'], hl: ['seams'] },
+    'Cuffed wide trousers': { g: 'trousers', leg: 'wide', turnup: true, hl: ['hem'] },
+    'Pleated midi skirts': { g: 'skirt', s: 'midi', pleats: true, hl: ['pleats'] },
+    'Button-front midi skirts': { g: 'skirt', s: 'midi', x: ['buttonfront'], hl: ['closure'] },
+    'Satin slip skirts': { g: 'skirt', s: 'midi', x: ['leather'], hl: ['body'] },
+    'Wrap mini skirts': { g: 'skirt', s: 'mini', x: ['wrap'], hl: ['front'] },
+    'Cargo midi skirts': { g: 'skirt', s: 'midi', x: ['patchpk'], hl: ['pockets'] },
+    'Drawstring wide trousers': { g: 'trousers', leg: 'wide', noloops: true, x: ['elastic', 'drawcord'], hl: ['waist'] },
+    'Cropped ankle trousers': { g: 'trousers', leg: 'slim', len: 214, crease: true, hl: ['hem'] },
+    'Pencil midi skirts': { g: 'skirt', s: 'pencil', hl: ['body'] },
+    'Leather-look trousers': { g: 'trousers', leg: 'straight', x: ['leather'], hl: ['legs'] },
+    'Tiered maxi skirts': { g: 'skirt', s: 'midi', x: ['tiers'], hl: ['hem'] },
+    'High-rise sailor trousers': { g: 'trousers', leg: 'wide', high: true, fly: 'buttons', hl: ['fly'] },
+    'Straight-leg vintage jeans': { g: 'trousers', jeans: true, leg: 'straight', hl: ['legs'] },
+    'Wide-leg jeans': { g: 'trousers', jeans: true, leg: 'wide', hl: ['legs'] },
+    'Mid-rise relaxed jeans': { g: 'trousers', jeans: true, leg: 'straight', x: ['whisker'], hl: ['legs'] },
+    'Carpenter jeans': { g: 'trousers', jeans: true, leg: 'wide', loop: true, hl: ['loop'] },
+    'Denim midi skirts': { g: 'skirt', s: 'midi', x: ['dark', 'buttonfront'], hl: ['body'] },
+    'Denim shirt dresses': T({ t: 'shirt', len: 224, col: 'shirt', cl: 'snaps', x: ['dark', 'topst', 'belt'], wY: 126, hl: ['body'] }),
+    'Black and grey denim': { g: 'trousers', jeans: true, leg: 'straight', x: ['dark'], hl: ['legs'] },
+    'Cuffed jean hems': { g: 'trousers', jeans: true, leg: 'straight', turnup: true, hl: ['hem'] },
+    'Button-fly denim shorts': { g: 'trousers', jeans: true, leg: 'straight', len: 140, fly: 'buttons', hl: ['fly'] },
+    'Denim waistcoats': T({ t: 'waistcoat', col: 'vneck', cl: 'sb', x: ['dark', 'topst'], hl: ['body'] }),
+    'Patch-pocket denim jackets': T({ t: 'jacket', len: 176, col: 'shirt', cl: 'sb', hem: 'band', cuff: 'band', pk: 'patch', x: ['dark', 'topst'], hl: ['pockets'] }),
+    'Barrel-leg cargo jeans': { g: 'trousers', jeans: true, leg: 'barrel', cargo: true, hl: ['pockets'] },
+    'Embroidered denim': { g: 'trousers', jeans: true, leg: 'straight', x: ['floral'], hl: ['legs'] },
+    'Raw-hem jeans': { g: 'trousers', jeans: true, leg: 'straight', x: ['fray'], hl: ['hem'] },
+    'Two-tone denim panels': { g: 'trousers', jeans: true, leg: 'straight', x: ['patch'], hl: ['legs'] },
+    'Denim chore coats': T({ t: 'coat', len: 200, col: 'shirt', cl: 'sb', pk: 'patch', x: ['dark', 'topst'], hl: ['pockets'] }),
+    'Single-button tuxedo jackets': T({ t: 'blazer', col: 'peak', cl: 'onebutton', pk: 'welt', x: ['velvetlapel'], hl: ['collar'] }),
+    'Longline blazers': T({ t: 'blazer', len: 216, col: 'notch', cl: 'sb', pk: 'flap', hl: ['body'] }),
+    'Cropped blazers': T({ t: 'blazer', len: 160, col: 'notch', cl: 'sb', pk: 'welt', hl: ['hem'] }),
+    'Waistcoat and trouser sets': T({ t: 'waistcoat', col: 'vneck', cl: 'sb', pk: 'welt', x: ['melange'], hl: ['body'] }),
+    'Patch-pocket blazers': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'patch', hl: ['pockets'] }),
+    'Flap-pocket blazers': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'flapbig', hl: ['pockets'] }),
+    'Shawl-lapel jackets': T({ t: 'blazer', col: 'shawl', cl: 'onebutton', pk: 'welt', hl: ['collar'] }),
+    'Wide-leg suit trousers': { g: 'trousers', leg: 'wide', pleats: 1, crease: true, hl: ['legs'] },
+    'Pinstripe waistcoats': T({ t: 'waistcoat', col: 'vneck', cl: 'sb', pk: 'welt', x: ['pin'], hl: ['body'] }),
+    'Belted trench blazers': T({ t: 'blazer', col: 'notch', cl: 'db', x: ['belt', 'epaulette'], hl: ['waist'] }),
+    'Collarless double-breasted jackets': T({ t: 'blazer', col: 'vneck', cl: 'db', hl: ['closure'] }),
+    'Check tailoring': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'flap', x: ['check'], hl: ['body'] }),
+    'Bermuda suit shorts': { g: 'trousers', leg: 'wide', len: 146, pleats: 1, crease: true, hl: ['hem'] },
+    'Peak-lapel coats': T({ t: 'coat', col: 'peak', cl: 'db', hl: ['collar'] }),
+    'Soft drape jackets': T({ t: 'blazer', col: 'shawl', cl: 'wrap', sh: 'drop', hl: ['shoulders'] }),
+    'Tuxedo stripe trousers': { g: 'trousers', leg: 'slim', crease: true, x: ['piping'], hl: ['seams'] },
+    'Waxed cotton jackets': T({ t: 'jacket', col: 'shirt', cl: 'zip', pk: 'flap', x: ['gloss'], hl: ['body'] }),
+    'Quilted gilets': T({ t: 'waistcoat', len: 176, col: 'funnelsmall', cl: 'zip', x: ['quilt'], hl: ['body'] }),
+    'Shearling-collar aviators': T({ t: 'jacket', col: 'fur', cl: 'zip', hem: 'band', cuff: 'band', pk: 'slant', x: ['leather'], hl: ['collar'] }),
+    'Raglan-sleeve overcoats': T({ t: 'coat', col: 'notch', cl: 'concealed', sh: 'saddle', pk: 'slant', hl: ['shoulders'] }),
+    'Hooded parkas': T({ t: 'coat', len: 214, col: 'funnel', cl: 'zip', pk: 'bellows', x: ['hood'], hl: ['collar'] }),
+    'Sherpa-lined trucker jackets': T({ t: 'jacket', len: 178, col: 'fur', cl: 'sb', hem: 'band', cuff: 'band', pk: 'chestflap2', x: ['dark'], hl: ['collar'] }),
+    'Overshirt jackets': T({ t: 'jacket', col: 'shirt', cl: 'snapsfront', hem: 'plain', cuff: 'band', pk: 'chestflap2', hl: ['pockets'] }),
+    'Funnel-neck puffers': T({ t: 'jacket', len: 196, col: 'funnel', cl: 'zip', hem: 'band', cuff: 'band', x: ['quiltlines'], hl: ['collar'] }),
+    'Mac coats': T({ t: 'coat', col: 'shirt', cl: 'concealed', pk: 'slant', hl: ['body'] }),
+    'Tech fleece jackets': T({ t: 'jacket', col: 'funnelsmall', cl: 'zip', hem: 'band', cuff: 'band', x: ['fur'], hl: ['body'] }),
+    'Belted field coats': T({ t: 'coat', len: 204, col: 'shirt', cl: 'zip', pk: 'bellows', x: ['belt'], hl: ['waist'] }),
+    'Cropped work jackets': T({ t: 'jacket', len: 168, col: 'shirt', cl: 'sb', hem: 'band', cuff: 'band', pk: 'chestflap2', hl: ['body'] }),
+    'Quilt-lined car coats': T({ t: 'coat', len: 200, col: 'notch', cl: 'sb', pk: 'welt', x: ['quiltlines'], hl: ['body'] }),
+    'Storm-collar jackets': T({ t: 'jacket', col: 'funnel', cl: 'zip', hem: 'band', cuff: 'band', x: ['stormflap'], hl: ['collar'] }),
+    'Leather overshirts': T({ t: 'shirt', col: 'shirt', cl: 'snaps', pk: 'chestflap2', straightHem: true, x: ['leather'], hl: ['body'] }),
+    'Multi-pocket gilets': T({ t: 'waistcoat', len: 170, col: 'funnelsmall', cl: 'zip', pk: 'bellows', hl: ['pockets'] }),
+    'Printed resort shirts': T({ t: 'shirt', col: 'camp', cl: 'placket', straightHem: true, x: ['floral'], hl: ['body'] }),
+    'Short-sleeve knit shirts': T({ t: 'shirt', col: 'camp', cl: 'placket', straightHem: true, x: ['ribbody'], hl: ['body'] }),
+    'Popover shirts': T({ t: 'shirt', col: 'polo', straightHem: true, hl: ['collar'] }),
+    'Grandad collar linen shirts': T({ t: 'shirt', col: 'band', cl: 'none', x: ['melange'], hl: ['collar'] }),
+    'Striped poplin shirts': T({ t: 'shirt', col: 'shirt', cl: 'placket', x: ['stripes'], hl: ['body'] }),
+    'Short-sleeve Oxford shirts': T({ t: 'shirt', sl: 'short', col: 'buttondown', cl: 'placket', straightHem: true, hl: ['collar'] }),
+    'Chambray work shirts': T({ t: 'shirt', col: 'shirt', cl: 'placket', pk: 'chestflap2', x: ['melange'], hl: ['pockets'] }),
+    'Contrast-collar polos': T({ t: 'tee', col: 'polo', hem: 'plain', x: ['contrastcollar'], hl: ['collar'] }),
+    'Zip-neck polos': T({ t: 'tee', col: 'shirt', cl: 'quarterzip', hem: 'plain', hl: ['closure'] }),
+    'Textured knit polos': T({ t: 'tee', col: 'polo', hem: 'plain', x: ['waffle'], hl: ['body'] }),
+    'Check shackets': T({ t: 'shirt', col: 'shirt', cl: 'snaps', pk: 'chestflap2', straightHem: true, x: ['check'], hl: ['body'] }),
+    'Heritage rugby polos': T({ t: 'shirt', col: 'polo', cuff: 'rib', straightHem: true, x: ['stripes'], hl: ['collar'] }),
+    'Pocketless clean shirts': T({ t: 'shirt', col: 'shirt', cl: 'concealed', hl: ['body'] }),
+    'Snap-front western shirts': T({ t: 'shirt', col: 'shirt', cl: 'snaps', x: ['westernyoke'], hl: ['yoke'] }),
+    'Boxy short-sleeve shirts': T({ t: 'shirt', col: 'camp', cl: 'placket', straightHem: true, sh: 'drop', fl: 8, hl: ['body'] }),
+    'Embroidered pocket shirts': T({ t: 'shirt', col: 'shirt', cl: 'placket', x: ['embroid'], hl: ['chest'] }),
+    'Merino crewnecks': T({ t: 'knit', col: 'crew', hl: ['body'] }),
+    'Cable fisherman jumpers': T({ t: 'knit', col: 'crew', x: ['cable'], hl: ['body'] }),
+    'Shawl-collar pullovers': T({ t: 'knit', col: 'shawl', hl: ['collar'] }),
+    'Knitted bomber jackets': T({ t: 'knit', col: 'rib', cl: 'zip', x: ['ribbody'], hl: ['body'] }),
+    'Henley knits': T({ t: 'knit', col: 'band', hl: ['closure'] }),
+    'Ribbed roll necks': T({ t: 'knit', col: 'funnel', x: ['ribbody'], hl: ['collar'] }),
+    'Varsity cardigans': T({ t: 'knit', col: 'vneck', cl: 'sb', x: ['tipping', 'varsity'], hl: ['body'] }),
+    'Elbow-seam jumpers': T({ t: 'knit', col: 'crew', x: ['elbow'], hl: ['sleeves'] }),
+    'Polo-collar cardigans': T({ t: 'knit', col: 'shirt', cl: 'sb', hl: ['collar'] }),
+    'Colour-block knits': T({ t: 'knit', col: 'crew', x: ['panels'], hl: ['body'] }),
+    'Brushed cardigan coats': T({ t: 'knit', len: 220, col: 'shawl', cl: 'sb', pk: 'patch', x: ['fur'], hl: ['body'] }),
+    'Funnel-neck zip knits': T({ t: 'knit', col: 'funnel', cl: 'zip', hl: ['closure'] }),
+    'Raglan sweatshirts': T({ t: 'knit', col: 'crew', sh: 'saddle', hl: ['sleeves'] }),
+    'Textured stripe knits': T({ t: 'knit', col: 'crew', x: ['stripes', 'waffle'], hl: ['body'] }),
+    'Ribbed tank tops': T({ t: 'knit', sl: 'none', col: 'crew', x: ['ribbody'], hl: ['body'] }),
+    'Half-button polo jumpers': T({ t: 'knit', col: 'polo', hl: ['collar'] }),
+    'Unlined summer blazers': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'patch', x: ['handedge'], hl: ['body'] }),
+    'Double-breasted overcoats': T({ t: 'coat', col: 'peak', cl: 'db', hl: ['closure'] }),
+    'Wide-lapel suits': T({ t: 'blazer', col: 'peak', cl: 'sb', pk: 'flap', hl: ['collar'] }),
+    'Knitted ties': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'flap', x: ['slimtie'], hl: ['tie'] }),
+    'Check sports jackets': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'patch', x: ['check'], hl: ['body'] }),
+    'Seersucker suits': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'patch', x: ['seer'], hl: ['body'] }),
+    'Velvet dinner jackets': T({ t: 'blazer', col: 'shawl', cl: 'onebutton', pk: 'welt', x: ['velvet'], hl: ['body'] }),
+    'Single-pleat suit trousers': { g: 'trousers', leg: 'straight', pleats: 1, crease: true, hl: ['pleats'] },
+    'Waistcoats worn alone': T({ t: 'waistcoat', col: 'vneck', cl: 'sb', pk: 'welt', hl: ['body'] }),
+    'Overshirt-style blazers': T({ t: 'blazer', col: 'shirt', cl: 'sb', pk: 'chestflap2', hl: ['pockets'] }),
+    'Mandarin-collar jackets': T({ t: 'blazer', col: 'band', cl: 'sb', hl: ['collar'] }),
+    'Pinstripe double-breasted suits': T({ t: 'blazer', col: 'peak', cl: 'db', pk: 'flap', x: ['pin'], hl: ['body'] }),
+    'Soft-shoulder Neapolitan jackets': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'patch', sh: 'drop', hl: ['shoulders'] }),
+    'Satin side-stripe trousers': { g: 'trousers', leg: 'slim', crease: true, x: ['piping'], hl: ['seams'] },
+    'Linen waistcoats': T({ t: 'waistcoat', col: 'vneck', cl: 'sb', pk: 'welt', x: ['melange'], hl: ['body'] }),
+    'Cropped suit trousers': { g: 'trousers', leg: 'slim', len: 214, crease: true, hl: ['hem'] },
+    'Relaxed pleated chinos': { g: 'trousers', leg: 'wide', pleats: 1, hl: ['pleats'] },
+    'Selvedge chinos': { g: 'trousers', leg: 'straight', crease: true, turnup: true, x: ['selvedge'], hl: ['hem'] },
+    'Utility cargo trousers': { g: 'trousers', leg: 'straight', cargo: true, hl: ['pockets'] },
+    'Drawcord linen trousers': { g: 'trousers', leg: 'wide', noloops: true, x: ['elastic', 'drawcord'], hl: ['waist'] },
+    'Corduroy wide trousers': { g: 'trousers', leg: 'wide', x: ['cord'], hl: ['legs'] },
+    'Painter trousers': { g: 'trousers', leg: 'straight', loop: true, hl: ['loop'] },
+    'Side-tab trousers': { g: 'trousers', leg: 'straight', adj: true, noloops: true, crease: true, hl: ['adjusters'] },
+    'Flat-front slim trousers': { g: 'trousers', leg: 'slim', crease: true, hl: ['legs'] },
+    'Tailored joggers': { g: 'trousers', leg: 'balloon', noloops: true, x: ['elastic'], hl: ['hem'] },
+    'Wool flannel trousers': { g: 'trousers', leg: 'straight', pleats: 1, crease: true, x: ['melange'], hl: ['legs'] },
+    'Barrel trousers': { g: 'trousers', leg: 'barrel', pleats: 1, hl: ['legs'] },
+    'Double-knee work trousers': { g: 'trousers', leg: 'straight', loop: true, x: ['knee'], hl: ['knees'] },
+    'Shorts with turn-ups': { g: 'trousers', leg: 'straight', len: 146, turnup: true, hl: ['hem'] },
+    'Tailored wool shorts': { g: 'trousers', leg: 'wide', len: 146, pleats: 2, x: ['melange'], hl: ['hem'] },
+    'Loop-free waistbands': { g: 'trousers', leg: 'straight', noloops: true, crease: true, hl: ['waist'] },
+    'Technical trail trousers': { g: 'trousers', leg: 'slim', x: ['knee', 'drawcord'], hl: ['knees'] },
+    'Kitten-heel pumps': { g: 'shoe', s: 'pump', heel: 'kitten', toe: 'pointed', hl: ['heel'] },
+    'Block-heel slingbacks': { g: 'shoe', s: 'pump', strap: 'sling', heel: 'block', hl: ['strap'] },
+    'Square-toe ballet flats': { g: 'shoe', s: 'flat', toe: 'square', hl: ['toe'] },
+    'Mary Jane flats': { g: 'shoe', s: 'flat', mj: true, hl: ['strap'] },
+    'Pointed kitten mules': { g: 'shoe', s: 'mule', toe: 'pointed', heel: 'kitten', hl: ['toe'] },
+    'Flat strappy sandals': { g: 'shoe', s: 'sandal', heel: 'flat', hl: ['strap'] },
+    'Low block sandals': { g: 'shoe', s: 'sandal', heel: 'lowblock', hl: ['heel'] },
+    'Bow-trim flats': { g: 'shoe', s: 'flat', hl: ['vamp'] },
+    'Cap-toe kitten slingbacks': { g: 'shoe', s: 'pump', strap: 'sling', heel: 'kitten', cap: true, hl: ['toe'] },
+    'Satin evening pumps': { g: 'shoe', s: 'pump', toe: 'pointed', x: ['leather'], hl: ['upper'] },
+    'Round-toe slingback heels': { g: 'shoe', s: 'pump', strap: 'sling', heel: 'stiletto', toe: 'round', hl: ['strap'] },
+    'Woven leather mules': { g: 'shoe', s: 'mule', heel: 'lowblock', x: ['woven'], hl: ['upper'] },
+    'Embellished flats': { g: 'shoe', s: 'flat', x: ['beads'], hl: ['upper'] },
+    'Stiletto court shoes': { g: 'shoe', s: 'pump', heel: 'stiletto', toe: 'pointed', hl: ['heel'] },
+    'Horsebit mules': { g: 'shoe', s: 'mule', heel: 'block', hw: 'horsebit', hl: ['vamp'] },
+    'Patent ballet flats': { g: 'shoe', s: 'flat', x: ['patent'], hl: ['upper'] },
+    'Chelsea ankle boots': { g: 'shoe', s: 'chelsea', hl: ['shaft'] },
+    'Knee-high block-heel boots': { g: 'shoe', s: 'boot', h: 'knee', heel: 'block', hl: ['heel'] },
+    'Slouchy mid-calf boots': { g: 'shoe', s: 'boot', h: 'mid', heel: 'block', slouch: true, hl: ['shaft'] },
+    'Lug-sole combat boots': { g: 'shoe', s: 'hiker', hl: ['sole'] },
+    'Flat suede knee boots': { g: 'shoe', s: 'boot', h: 'knee', heel: 'flat', x: ['suede'], hl: ['upper'] },
+    'Square-toe knee boots': { g: 'shoe', s: 'boot', h: 'knee', heel: 'block', toe: 'square', hl: ['toe'] },
+    'Pointed-toe ankle boots': { g: 'shoe', s: 'boot', h: 'ankle', heel: 'stiletto', toe: 'pointed', hl: ['toe'] },
+    'Western knee boots': { g: 'shoe', s: 'boot', h: 'knee', heel: 'block', western: true, hl: ['shaft'] },
+    'Buckled ankle boots': { g: 'shoe', s: 'boot', h: 'ankle', heel: 'block', buckles: true, nb: 1, hl: ['strap'] },
+    'Stretch knee boots on block heels': { g: 'shoe', s: 'boot', h: 'knee', heel: 'block', stretch: true, hl: ['shaft'] },
+    'Suede ankle boots': { g: 'shoe', s: 'boot', h: 'ankle', heel: 'block', x: ['suede'], hl: ['upper'] },
+    'Shearling-lined ankle boots': { g: 'shoe', s: 'boot', h: 'ankle', heel: 'flat', shearling: true, hl: ['topline'] },
+    'Patent knee boots': { g: 'shoe', s: 'boot', h: 'knee', heel: 'block', x: ['patent'], hl: ['upper'] },
+    'Kitten-heel knee boots': { g: 'shoe', s: 'boot', h: 'knee', heel: 'kitten', hl: ['heel'] },
+    'Rubber Chelsea boots': { g: 'shoe', s: 'chelsea', x: ['patent'], hl: ['upper'] },
+    'Mid-calf western boots': { g: 'shoe', s: 'boot', h: 'mid', heel: 'block', western: true, hl: ['shaft'] },
+    'Wholecut oxfords': { g: 'shoe', s: 'oxford', x: ['leather'], hl: ['upper'] },
+    'Suede loafers': { g: 'shoe', s: 'loafer', x: ['suede'], hl: ['upper'] },
+    'Crepe-sole desert boots': { g: 'shoe', s: 'chukka', x: ['suede'], hl: ['sole'] },
+    'Cupsole derbies': { g: 'shoe', s: 'derby', x: ['sportsole'], hl: ['sole'] },
+    'Wingtip brogues': { g: 'shoe', s: 'oxford', x: ['brogue'], hl: ['toe'] },
+    'Chelsea boots for tailoring': { g: 'shoe', s: 'chelsea', hl: ['shaft'] },
+    'Lug-sole loafers': { g: 'shoe', s: 'loafer', x: ['lug'], hl: ['sole'] },
+    'Slim tassel loafers': { g: 'shoe', s: 'loafer', x: ['tassel', 'slimsole'], hl: ['vamp'] },
+    'Derby boots': { g: 'shoe', s: 'hiker', slimsole: true, hl: ['laces'] },
+    'Cap-toe oxfords': { g: 'shoe', s: 'oxford', hl: ['toe'] },
+    'Leather slides': { g: 'shoe', s: 'slide', hl: ['strap'] },
+    'Belgian loafers': { g: 'shoe', s: 'loafer', x: ['slimsole', 'softback'], hl: ['upper'] },
+    'Patent evening loafers': { g: 'shoe', s: 'loafer', x: ['patent'], hl: ['upper'] },
+    'Rubber-soled Chelseas': { g: 'shoe', s: 'chelsea', x: ['lug'], hl: ['sole'] },
+    'Apron-toe derbies': { g: 'shoe', s: 'derby', hl: ['toe'] },
+    'Sneaker-sole loafers': { g: 'shoe', s: 'loafer', x: ['sportsole'], hl: ['sole'] },
+    'Retro court sneakers': { g: 'shoe', s: 'sneaker', gum: true, hl: ['upper'] },
+    'Gum-sole trainers': { g: 'shoe', s: 'sneaker', gum: true, x: ['suede'], hl: ['sole'] },
+    'Suede skate shoes': { g: 'shoe', s: 'sneaker', chunky: true, x: ['suede'], hl: ['upper'] },
+    'Slip-on canvas sneakers': { g: 'shoe', s: 'sneaker', x: ['nolace'], hl: ['upper'] },
+    'Strap-closure trainers': { g: 'shoe', s: 'sneaker', mj: true, gum: true, hl: ['strap'] },
+    'Running-inspired sneakers': { g: 'shoe', s: 'sneaker', gum: true, x: ['meshup'], hl: ['upper'] },
+    'Trail runners': { g: 'shoe', s: 'sneaker', chunky: true, x: ['lugtread', 'meshup'], hl: ['sole'] },
+    'Flat espadrille sneakers': { g: 'shoe', s: 'espadrille', hl: ['upper'] },
+    'Shearling-lined mules': { g: 'shoe', s: 'clog', shearling: true, hl: ['topline'] },
+    'Rubber clogs': { g: 'shoe', s: 'clog', hl: ['upper'] },
+    'Sport slides': { g: 'shoe', s: 'slide', hl: ['strap'] },
+    'Perforated leather sneakers': { g: 'shoe', s: 'sneaker', x: ['perf'], hl: ['toe'] },
+    'Flatform sneakers': { g: 'shoe', s: 'sneaker', chunky: true, hl: ['sole'] },
+    'Sock-knit trainers': { g: 'shoe', s: 'sneaker', x: ['knitup', 'nolace'], chunky: true, hl: ['upper'] },
+    'Hiking sandals': { g: 'shoe', s: 'sneaker', sandal: true, hl: ['strap'] },
+    'Satin ballet-trainers': { g: 'shoe', s: 'sneaker', ballet: true, x: ['leather'], hl: ['upper'] }
+  };
+  var LABEL = { knees: 'Knees', bodice: 'Bodice', front: 'Wrap front', chain: 'Chain trim', centre: 'Centre front', collar: 'Collar', cuffs: 'Cuffs', hem: 'Hem', shoulders: 'Shoulders', body: 'Whole piece', closure: 'Front closure', pockets: 'Pockets', waist: 'Waist', cape: 'Cape', stormflap: 'Storm flap', chest: 'Chest', yoke: 'Yoke', tie: 'Tie', sleeves: 'Sleeves', skirt: 'Skirt', sides: 'Side seams', neck: 'Neckline', legs: 'Legs', pleats: 'Pleats', fly: 'Fly', seams: 'Outseams', adjusters: 'Side adjusters', loop: 'Hammer loop', slit: 'Slit', strap: 'Strap', toe: 'Toe', heel: 'Heel', vamp: 'Vamp', upper: 'Upper', sole: 'Sole', shaft: 'Shaft', topline: 'Topline', laces: 'Lacing', sock: 'Sock' };
+
+  var uidN = 0;
+  function render(name, c, opts) {
+    opts = opts || {};
+    var uid = 'f' + (++uidN) + '-';
+    var sp = SPEC[name];
+    if (!sp) return null;
+    var r = sp.g === 'top' ? top(sp, c) : sp.g === 'dress' ? dress(sp, c) : sp.g === 'trousers' ? trousers(sp, c) : sp.g === 'skirt' ? skirt(sp, c) : shoe(sp, c);
+    var marks = '', labels = [];
+    if (!opts.clean) (sp.hl || []).forEach(function (k) {
+      var boxes = r.hl[k]; if (!boxes) return;
+      boxes.forEach(function (b) { marks += '<rect x="' + F(b[0]) + '" y="' + F(b[1]) + '" width="' + F(b[2]) + '" height="' + F(b[3]) + '" rx="8" fill="' + c.accent + '" fill-opacity=".1" stroke="' + c.accent + '" stroke-width="1.6" stroke-dasharray="5 3.5"/>'; });
+      labels.push(LABEL[k] || k);
+    });
+    var view = sp.g === 'shoe' ? 'SIDE VIEW' : 'FRONT VIEW';
+    var w = opts.width ? ' width="' + opts.width + '" height="' + Math.round(opts.width * 250 / 240) + '"' : '';
+    var tag = labels.join(' + ').toUpperCase();
+    (sp.hl || []).forEach(function (k) { if (opts.clean && labels.indexOf(LABEL[k] || k) < 0) labels.push(LABEL[k] || k); });
+    var real = opts.realistic !== false;
+    var rf = real ? '<filter id="rl" x="-10%" y="-8%" width="120%" height="124%" color-interpolation-filters="sRGB">' +
+      '<feGaussianBlur in="SourceAlpha" stdDeviation="7" result="b"/><feOffset in="b" dx="-6" dy="-4" result="bo"/>' +
+      '<feComposite in="SourceAlpha" in2="bo" operator="out" result="edge"/>' +
+      '<feGaussianBlur in="edge" stdDeviation="2.4" result="edgeb"/>' +
+      '<feFlood flood-color="#1b2a35" flood-opacity=".16"/><feComposite in2="edgeb" operator="in"/><feComposite in2="SourceAlpha" operator="in" result="shade"/>' +
+      '<feGaussianBlur in="SourceAlpha" stdDeviation="2.2" result="sb"/><feOffset in="sb" dx="2" dy="3.5" result="so"/>' +
+      '<feColorMatrix in="so" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.12 0" result="shadow"/>' +
+      '<feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/><feMergeNode in="shade"/></feMerge></filter>' : '';
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 250"' + w + ' role="img" aria-label="Technical flat sketch, ' + view.toLowerCase() + ', highlighting ' + labels.join(' and ').toLowerCase() + '">' +
+      (defs(c).replace('</defs>', rf + '</defs>') + (real ? '<g filter="url(#rl)">' + r.svg + '</g>' : r.svg) + marks).replace(/id="(p-[a-z]+|bc|rl)"/g, 'id="' + uid + '$1"').replace(/url\(#(p-[a-z]+|bc|rl)\)/g, 'url(#' + uid + '$1)') +
+      (opts.clean ? '' : '<text x="6" y="246" font-family="IBM Plex Mono,monospace" font-size="7.5" letter-spacing=".6" fill="' + c.muted + '">' + view + '</text>' +
+      '<text x="234" y="246" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="7.5" font-weight="500" letter-spacing=".6" fill="' + c.accent + '">' + tag + '</text>') + '</svg>';
+    svg = svg.replace(/<[a-zA-Z][^<>]*>/g, function (tag) {
+      var seen = {}, attrs = [], m, re = /\s([\w:-]+)="([^"]*)"/g, head = tag.match(/^<[a-zA-Z]+/)[0], close = /\/>$/.test(tag) ? '/>' : '>';
+      while ((m = re.exec(tag))) { if (seen[m[1]] != null) attrs[seen[m[1]]] = null; seen[m[1]] = attrs.length; attrs.push(' ' + m[1] + '="' + m[2] + '"'); }
+      return head + attrs.filter(function (x) { return x; }).join('') + close;
+    });
+    return { svg: svg, labels: labels, view: view };
+  }
+  return { render: render, SPEC: SPEC };
+})();
+if (typeof module !== 'undefined') module.exports = Flats;

@@ -1,0 +1,140 @@
+<title>Forecut Image Prompts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: header with the 3-step workflow, sticky filters, then a list of prompt rows with copy buttons */
+:root{
+  --paper:#eef2ef; --paper-2:#ffffff; --grid:#d3ddd7; --ink:#13241d; --muted:#53655d;
+  --mat:#1d5b47; --mat-ink:#e9f3ee; --chalk:#d9480f;
+  --display:"Bricolage Grotesque","Arial Narrow",system-ui,sans-serif;
+  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#0f1814;--paper-2:#16221d;--grid:#22332b;--ink:#e6efe9;--muted:#9db2a8;--mat:#5fc29b;--mat-ink:#0c1a14;--chalk:#ff8a50;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#0f1814;--paper-2:#16221d;--grid:#22332b;--ink:#e6efe9;--muted:#9db2a8;--mat:#5fc29b;--mat-ink:#0c1a14;--chalk:#ff8a50;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:15px/1.5 var(--body);padding:0 16px;padding-block:24px 56px}
+.wrap{max-width:1100px;margin:0 auto}
+:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
+.mono{font:500 12px var(--mono);letter-spacing:.06em;text-transform:uppercase}
+h1{font:800 clamp(32px,5vw,52px)/1.05 var(--display);letter-spacing:-.02em;margin:10px 0 0}
+.lede{color:var(--muted);max-width:62ch;margin:12px 0 0}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:22px 0}
+.step{background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:14px;display:grid;gap:4px}
+.step b{font-size:15px}
+.step span{color:var(--muted);font-size:14px}
+.stats{display:flex;flex-wrap:wrap;gap:6px 22px;font-variant-numeric:tabular-nums}
+.stats b{font:800 26px var(--display);display:block}
+.stats span{font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.tools{position:sticky;top:env(safe-area-inset-top,0px);background:var(--paper);padding-block:12px;border-bottom:1px solid var(--grid);display:flex;flex-wrap:wrap;gap:8px;align-items:center;z-index:3}
+select,input{font:14px var(--body);padding:8px 10px;border-radius:8px;border:1px solid var(--grid);background:var(--paper-2);color:var(--ink);min-width:0}
+input{flex:1 1 200px}
+.btn{font:600 14px var(--body);border:0;border-radius:999px;padding:9px 14px;cursor:pointer;background:var(--mat);color:var(--mat-ink)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--grid)}
+.msg{font-size:13px;color:var(--muted);min-height:1.2em;margin:8px 0 0}
+.list{display:grid;gap:10px;margin-top:14px}
+.row{background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:14px 16px;display:grid;gap:8px;min-width:0}
+.rtop{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 12px;align-items:baseline}
+.rtop h2{font:800 18px var(--display);margin:0}
+.meta{font:500 11.5px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.tag{font:500 11px var(--mono);padding:3px 7px;border-radius:6px;background:var(--paper);color:var(--ink)}
+.tag.p1{color:var(--chalk)}
+.tag.new{background:var(--chalk);color:#fff}
+.prompt{margin:0;font-size:14px;line-height:1.55;color:var(--ink);background:var(--paper);border-radius:8px;padding:10px 12px;overflow-wrap:anywhere}
+.ract{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.file{font:500 12.5px var(--mono);color:var(--muted);overflow-wrap:anywhere}
+.small{padding:6px 11px;font-size:13px}
+.empty{color:var(--muted);padding:30px 0}
+</style>
+<div class="wrap">
+  <span class="mono" style="color:var(--chalk)">Monthly image brief · %%MONTH%%</span>
+  <h1>Forecut image prompts</h1>
+  <p class="lede">One ChatGPT prompt for every detail on the site, written in the same close-up, studio-lit catalogue style so all images match. Start with priority details (in stores now and next season).</p>
+  <div class="steps">
+    <div class="step"><span class="mono">Step 1</span><b>Copy a prompt into ChatGPT</b><span>Generate the image. Regenerate until the detail is clear.</span></div>
+    <div class="step"><span class="mono">Step 2</span><b>Save it with the file name shown</b><span>The name tells Claude which detail it belongs to.</span></div>
+    <div class="step"><span class="mono">Step 3</span><b>Zip the images and send them to Claude</b><span>Say "add these images to Forecut". The sketches are replaced on every season page.</span></div>
+  </div>
+  <div class="stats">
+    <div><b>%%TOTAL%%</b><span>Details</span></div>
+    <div><b>%%P1%%</b><span>Priority</span></div>
+    <div><b>%%NEWCOUNT%%</b><span>New this month</span></div>
+    <div><b id="shown">0</b><span>Shown</span></div>
+  </div>
+  <div class="tools">
+    <select id="fpri" aria-label="Priority"><option value="1">Priority first</option><option value="all">All details</option><option value="new">New this month</option></select>
+    <select id="fdept" aria-label="Department"><option value="">All departments</option><option>Womenswear</option><option>Menswear</option><option>Footwear</option></select>
+    <select id="fcat" aria-label="Category"><option value="">All categories</option></select>
+    <input id="q" type="search" placeholder="Search details" aria-label="Search details">
+    <button class="btn ghost" type="button" id="copyall">Copy shown prompts</button>
+    <button class="btn" type="button" id="csv">Download CSV</button>
+  </div>
+  <p class="msg" id="msg" role="status"></p>
+  <div class="list" id="list"></div>
+</div>
+<script>
+(function () {
+  var D = %%DATA%%;
+  var list = document.getElementById('list'), msg = document.getElementById('msg');
+  var fpri = document.getElementById('fpri'), fdept = document.getElementById('fdept'), fcat = document.getElementById('fcat'), q = document.getElementById('q');
+  var cats = []; D.forEach(function (r) { var k = r.dept + ' · ' + r.cat; if (cats.indexOf(k) < 0) cats.push(k); });
+  cats.forEach(function (k) { var o = document.createElement('option'); o.value = k; o.textContent = k; fcat.appendChild(o); });
+  if (!D.some(function (r) { return r.new; })) fpri.querySelector('[value="new"]').disabled = true;
+  var shown = [];
+  function el(t, c, x) { var e = document.createElement(t); if (c) e.className = c; if (x != null) e.textContent = x; return e; }
+  function copy(text, label) {
+    var done = function () { msg.textContent = label + ' copied.'; };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, function () { fallback(text); });
+    else fallback(text);
+  }
+  function fallback(text) { var ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); msg.textContent = 'Copied.'; } catch (e) { msg.textContent = 'Select the text and copy it manually.'; } ta.remove(); }
+  function render() {
+    var term = q.value.trim().toLowerCase(), pri = fpri.value, dept = fdept.value, cat = fcat.value;
+    shown = D.filter(function (r) {
+      if (pri === '1' && r.pri !== 1) return false;
+      if (pri === 'new' && !r.new) return false;
+      if (dept && r.dept !== dept) return false;
+      if (cat && (r.dept + ' · ' + r.cat) !== cat) return false;
+      if (term && (r.name + ' ' + r.cat + ' ' + r.sub + ' ' + r.area).toLowerCase().indexOf(term) < 0) return false;
+      return true;
+    });
+    document.getElementById('shown').textContent = shown.length;
+    list.innerHTML = '';
+    if (!shown.length) { list.appendChild(el('p', 'empty', 'No details match. Change a filter or clear the search.')); return; }
+    var frag = document.createDocumentFragment();
+    shown.forEach(function (r) {
+      var row = el('article', 'row'), top = el('div', 'rtop'), h = el('h2', null, r.name), m = el('span', 'meta', r.dept + ' · ' + r.cat + ' · ' + r.sub);
+      top.appendChild(h); top.appendChild(m); row.appendChild(top);
+      var tags = el('div', 'ract');
+      if (r.new) tags.appendChild(el('span', 'tag new', 'New'));
+      tags.appendChild(el('span', 'tag' + (r.pri === 1 ? ' p1' : ''), r.pri === 1 ? 'Priority' : 'Later season'));
+      tags.appendChild(el('span', 'tag', r.seasons.join(' · ')));
+      row.appendChild(tags);
+      row.appendChild(el('p', 'prompt', r.prompt));
+      var act = el('div', 'ract');
+      var b1 = el('button', 'btn small', 'Copy prompt'); b1.type = 'button'; b1.addEventListener('click', function () { copy(r.prompt, 'Prompt'); });
+      var b2 = el('button', 'btn ghost small', 'Copy file name'); b2.type = 'button'; b2.addEventListener('click', function () { copy(r.file, 'File name'); });
+      act.appendChild(b1); act.appendChild(b2); act.appendChild(el('span', 'file', 'Save as: ' + r.file));
+      row.appendChild(act); frag.appendChild(row);
+    });
+    list.appendChild(frag);
+  }
+  [fpri, fdept, fcat].forEach(function (s) { s.addEventListener('change', render); });
+  q.addEventListener('input', render);
+  document.getElementById('copyall').addEventListener('click', function () {
+    copy(shown.map(function (r) { return r.file + '\n' + r.prompt; }).join('\n\n'), shown.length + ' prompts');
+  });
+  var dl = null;
+  function getDl() { if (!dl) dl = (window.claude && window.claude.use) ? window.claude.use('downloads').catch(function () { return null; }) : Promise.resolve(null); return dl; }
+  document.getElementById('csv').addEventListener('click', function () {
+    var esc = function (v) { return '"' + String(v).replace(/"/g, '""') + '"'; };
+    var csv = ['File name,Detail,Department,Category,Subcategory,Seasons,Priority,Prompt'].concat(shown.map(function (r) { return [r.file, r.name, r.dept, r.cat, r.sub, r.seasons.join(' '), r.pri === 1 ? 'Priority' : 'Later', r.prompt].map(esc).join(','); })).join('\n');
+    getDl().then(function (d) {
+      if (!d) { msg.textContent = 'Downloads work when this page is open on claude.ai.'; return; }
+      return d.save({ filename: 'forecut-image-prompts.csv', data: csv }).then(function () { msg.textContent = 'Saved forecut-image-prompts.csv.'; }, function (e) { msg.textContent = e && e.code === 'declined' ? 'Download cancelled.' : 'Downloads are not available in this view.'; });
+    });
+  });
+  render();
+})();
+</script>

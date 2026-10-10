@@ -1,0 +1,710 @@
+{
+ "seasons": [
+  "aw26",
+  "ss27",
+  "aw27",
+  "ss28",
+  "aw28"
+ ],
+ "meta": {
+  "aw26": {
+   "code": "AW26",
+   "title": "Autumn/Winter 2026",
+   "stage": "In stores now",
+   "window": "Aug 2026 – Jan 2027",
+   "basis": "research",
+   "intro": "Rich, maximal and tactile. Big outerwear, sharp tailoring and heavy embellishment, with 1920s glamour running through evening and footwear.",
+   "themes": [
+    [
+     "Roaring Twenties",
+     "Drop waists, fringe, pearls and T-bar heels bring 1920s glamour into evening and daywear.",
+     "deco",
+     "#5e1f24",
+     "#c9a227",
+     "Drop waist with pleated skirt",
+     [
+      "Drop waist",
+      "Fringe",
+      "T-bar heels"
+     ]
+    ],
+    [
+     "Power tailoring",
+     "Pinstripes, pointed shoulders and double-breasted suits in slate and navy.",
+     "pin",
+     "#3d4650",
+     "#d9d4c7",
+     "Sharp pointed shoulders",
+     [
+      "Pinstripe",
+      "Peak lapels",
+      "Pointed shoulders"
+     ]
+    ],
+    [
+     "Preppy sport",
+     "Rugby shirts, cricket knits and statement collars from the playing field.",
+     "rugby",
+     "#264d3a",
+     "#efe9dc",
+     "Rugby stripes, short plackets",
+     [
+      "Rugby stripes",
+      "Cable knits",
+      "Big collars"
+     ]
+    ],
+    [
+     "Big outerwear",
+     "Shearling, fur collars and leather bombers, oversized and protective.",
+     "shear",
+     "#7a5a3e",
+     "#efe1cc",
+     "Fur and shearling collars",
+     [
+      "Shearling",
+      "Fur trims",
+      "Leather"
+     ]
+    ],
+    [
+     "Fully loaded",
+     "Beads, sequins and sheer layers move onto everyday pieces.",
+     "sequin",
+     "#a3245f",
+     "#f3c6da",
+     "Sequin and chainmail minis",
+     [
+      "Sequins",
+      "Beadwork",
+      "Sheer layers"
+     ]
+    ]
+   ],
+   "palette": [
+    [
+     "#d6337f",
+     "Fuchsia"
+    ],
+    [
+     "#5e1f24",
+     "Oxblood"
+    ],
+    [
+     "#4a2a4f",
+     "Aubergine"
+    ],
+    [
+     "#5f6b73",
+     "Slate grey"
+    ],
+    [
+     "#264d3a",
+     "Forest green"
+    ],
+    [
+     "#c9a227",
+     "Mustard"
+    ],
+    [
+     "#efe9dc",
+     "Cream"
+    ]
+   ],
+   "coty": [
+    {
+     "name": "Cloud Dancer",
+     "by": "Pantone",
+     "year": "2026",
+     "code": "PANTONE 11-4201",
+     "hex": "#F0EEE9",
+     "ink": "#13241d",
+     "text": "A soft, airy white chosen as a calm reset. Use it as the base for knits, shirting and winter whites, and as the light partner to oxblood and slate.",
+     "flat": "Oversized shawl and notch collars",
+     "pairs": [
+      [
+       "#5e1f24",
+       "Oxblood"
+      ],
+      [
+       "#5f6b73",
+       "Slate"
+      ],
+      [
+       "#c9a227",
+       "Mustard"
+      ]
+     ]
+    },
+    {
+     "name": "Transformative Teal",
+     "by": "WGSN × Coloro",
+     "year": "2026",
+     "code": "Colour of the Year 2026",
+     "hex": "#2E6B6F",
+     "ink": "#ffffff",
+     "text": "A blue-green between ocean and forest. Strong on outerwear, leather and knitwear, and as an accent on footwear.",
+     "flat": "Clean leather bombers",
+     "pairs": [
+      [
+       "#efe9dc",
+       "Cream"
+      ],
+      [
+       "#c9a227",
+       "Mustard"
+      ],
+      [
+       "#5e1f24",
+       "Oxblood"
+      ]
+     ]
+    }
+   ],
+   "sources": "Season themes summarise published AW26 runway, retail and trade coverage, including Who What Wear, Harrods and Trendalytics. Colours of the year are Pantone 2026 (Cloud Dancer) and WGSN × Coloro 2026 (Transformative Teal)."
+  },
+  "ss27": {
+   "code": "SS27",
+   "title": "Spring/Summer 2027",
+   "stage": "Next season forecast",
+   "window": "Feb – Jul 2027",
+   "basis": "research",
+   "intro": "The waist returns and handcraft moves into everyday clothes. Shapes get defined again, sneakers step back for elegant shoes, and a bright luminous blue leads the palette.",
+   "themes": [
+    [
+     "The waist returns",
+     "Peplums, basque waists and bubble hems bring shape back after years of oversizing.",
+     "waves",
+     "#2f5fc0",
+     "#cfe0ff",
+     "Basque waist bodices",
+     [
+      "Peplum",
+      "Basque waist",
+      "Bubble hem"
+     ]
+    ],
+    [
+     "Handcraft",
+     "Lace, embroidery and smocking move onto crisp everyday shirting.",
+     "lace",
+     "#a8623f",
+     "#f6e2d4",
+     "Lace-embroidered poplin shirts",
+     [
+      "Lace",
+      "Smocking",
+      "Embroidery"
+     ]
+    ],
+    [
+     "Undone",
+     "Exposed straps, unfinished hems and muslin-like cottons.",
+     "raw",
+     "#8f897c",
+     "#f2efe8",
+     "Unfinished raw hems",
+     [
+      "Raw hems",
+      "Slip straps",
+      "Muslin"
+     ]
+    ],
+    [
+     "In motion",
+     "Fringe and bold stripes that move with every step.",
+     "fringe",
+     "#d4651f",
+     "#ffe1c9",
+     "Fringed hems",
+     [
+      "Fringe",
+      "Stripes",
+      "Swing"
+     ]
+    ],
+    [
+     "Elegant ease",
+     "The tie returns, tucked shirts look sharp again and refined flats replace sneakers.",
+     "dots",
+     "#4f7a3c",
+     "#e4f0da",
+     "Tucked shirts with slim ties",
+     [
+      "Slim ties",
+      "Mules",
+      "Pointed flats"
+     ]
+    ],
+    [
+     "Reworked denim",
+     "Cut-offs, wax-coated finishes and denim suits.",
+     "twill",
+     "#24446f",
+     "#c9d8ef",
+     "Cut-off denim shorts",
+     [
+      "Cut-offs",
+      "Coated denim",
+      "Denim suits"
+     ]
+    ]
+   ],
+   "palette": [
+    [
+     "#3d6fd6",
+     "Luminous blue"
+    ],
+    [
+     "#f07a1d",
+     "Energy orange"
+    ],
+    [
+     "#ef6fa7",
+     "Pop pink"
+    ],
+    [
+     "#7fa35a",
+     "Meadow green"
+    ],
+    [
+     "#b57552",
+     "Clay"
+    ],
+    [
+     "#b9b2a3",
+     "Stone"
+    ],
+    [
+     "#f2e9d8",
+     "Panna cotta"
+    ]
+   ],
+   "coty": [
+    {
+     "name": "Luminous Blue",
+     "by": "WGSN × Coloro",
+     "year": "2027",
+     "code": "Colour of the Year 2027",
+     "hex": "#3D6FD6",
+     "ink": "#ffffff",
+     "text": "A bright, optimistic blue with a glow. Use it head to toe on summer tailoring and shirting, or as a sharp accent against clay and stone.",
+     "flat": "Peplum blouses",
+     "pairs": [
+      [
+       "#b57552",
+       "Clay"
+      ],
+      [
+       "#f2e9d8",
+       "Panna cotta"
+      ],
+      [
+       "#f07a1d",
+       "Energy orange"
+      ]
+     ]
+    }
+   ],
+   "sources": "SS27 themes summarise published runway and trade coverage from the September–October 2026 shows, including FashionUnited and The Zoe Report. Colour of the year is WGSN × Coloro 2027 (Luminous Blue); Pantone announces its 2027 colour in December 2026."
+  },
+  "aw27": {
+   "code": "AW27",
+   "title": "Autumn/Winter 2027",
+   "stage": "Early outlook",
+   "window": "Aug 2027 – Jan 2028",
+   "basis": "projection",
+   "intro": "Early outlook. SS27 signals carried into winter: waisted outerwear, handcraft on knits, quiet structure and warmer earth tones, with luminous blue deepening for the cold season.",
+   "themes": [
+    [
+     "Waisted outerwear",
+     "Belted and double-belted coats keep the defined waist going into winter.",
+     "herring",
+     "#7d4326",
+     "#f1dccb",
+     "Double-belted waists",
+     [
+      "Belted coats",
+      "Double belts",
+      "Wrap fronts"
+     ]
+    ],
+    [
+     "Winter handcraft",
+     "Smocking and tonal embroidery move onto knits and wool.",
+     "smock",
+     "#8c1c2a",
+     "#f5d0d4",
+     "Smocked knit details",
+     [
+      "Smocked knits",
+      "Tonal embroidery",
+      "Crochet"
+     ]
+    ],
+    [
+     "Quiet structure",
+     "Pleated wool trousers, funnel necks and clean closures.",
+     "grid",
+     "#55606a",
+     "#dfe3e6",
+     "High-waisted pleated trousers",
+     [
+      "Pleats",
+      "Funnel necks",
+      "Clean fronts"
+     ]
+    ],
+    [
+     "Deep blue",
+     "Luminous blue darkens into ink and cobalt for winter.",
+     "waves",
+     "#23407a",
+     "#b9cdf3",
+     "Funnel-neck knits",
+     [
+      "Cobalt",
+      "Ink blue",
+      "Knitwear"
+     ]
+    ],
+    [
+     "Soft boots",
+     "Flat riding boots and slim soles replace chunky lugs.",
+     "quilt",
+     "#5f5e42",
+     "#e3e1cf",
+     "Soft knee-high riding boots",
+     [
+      "Riding boots",
+      "Slim soles",
+      "Soft leather"
+     ]
+    ]
+   ],
+   "palette": [
+    [
+     "#8a4b2a",
+     "Cognac"
+    ],
+    [
+     "#9c1f2e",
+     "Carmine"
+    ],
+    [
+     "#6f7880",
+     "Steel grey"
+    ],
+    [
+     "#6b6a4b",
+     "Khaki"
+    ],
+    [
+     "#5a3f7a",
+     "Deep purple"
+    ],
+    [
+     "#23407a",
+     "Deep blue"
+    ],
+    [
+     "#efe6d6",
+     "Cream"
+    ]
+   ],
+   "coty": [
+    {
+     "name": "Luminous Blue",
+     "by": "WGSN × Coloro",
+     "year": "2027",
+     "code": "Colour of the Year 2027",
+     "hex": "#3D6FD6",
+     "ink": "#ffffff",
+     "deep": "#23407a",
+     "text": "The 2027 colour carries into winter. Expect it in deeper cobalt and ink versions on knitwear, wool coats and leather accessories.",
+     "flat": "Funnel-neck knits",
+     "pairs": [
+      [
+       "#8a4b2a",
+       "Cognac"
+      ],
+      [
+       "#efe6d6",
+       "Cream"
+      ],
+      [
+       "#9c1f2e",
+       "Carmine"
+      ]
+     ]
+    }
+   ],
+   "sources": "AW27 runway shows take place in February–March 2027, so this season is a Forecut projection built from SS27 runway signals and the 2027 colour of the year. It will be updated as runway coverage arrives."
+  },
+  "ss28": {
+   "code": "SS28",
+   "title": "Spring/Summer 2028",
+   "stage": "Long-range outlook",
+   "window": "Feb – Jul 2028",
+   "basis": "projection",
+   "intro": "Long-range outlook. Structured clarity and easy movement: fewer, better pieces with performance comfort for commuting, anchored by a warm earth orange.",
+   "themes": [
+    [
+     "Structured clarity",
+     "Clean shapes and fewer, better pieces instead of constant novelty.",
+     "grid",
+     "#1f5e63",
+     "#cfe6e4",
+     "Clean column dresses",
+     [
+      "Column shapes",
+      "Clean fronts",
+      "Minimal trims"
+     ]
+    ],
+    [
+     "Performance ease",
+     "Articulated sleeves, stretch and breathable fabrics for movement.",
+     "tech",
+     "#a6492a",
+     "#f6d7c6",
+     "Articulated sleeves",
+     [
+      "Articulation",
+      "Stretch",
+      "Breathable"
+     ]
+    ],
+    [
+     "Commuter tailoring",
+     "Stretch suiting and hidden closures made for city days.",
+     "pin",
+     "#6f6a60",
+     "#ecebe6",
+     "Stretch commuter suiting",
+     [
+      "Stretch suits",
+      "Concealed buttons",
+      "Soft shoulders"
+     ]
+    ],
+    [
+     "Natural tech",
+     "Natural fibres finished to perform: quick-dry, UV-resistant, easy-care.",
+     "weave",
+     "#6d5d44",
+     "#efe6d3",
+     "Performance-jersey shirt dresses",
+     [
+      "Quick-dry",
+      "Easy-care",
+      "Natural fibres"
+     ]
+    ],
+    [
+     "Sport meets smart",
+     "Cushioned sport soles under refined flats, loafers and derbies.",
+     "topo",
+     "#3a3f45",
+     "#d8dde2",
+     "Sport-sole smart flats",
+     [
+      "Sport soles",
+      "Hybrid shoes",
+      "Comfort heels"
+     ]
+    ]
+   ],
+   "palette": [
+    [
+     "#c0582b",
+     "Radiant earth"
+    ],
+    [
+     "#d9b892",
+     "Sand"
+    ],
+    [
+     "#a8a49b",
+     "Stone"
+    ],
+    [
+     "#1f5e63",
+     "Deep teal"
+    ],
+    [
+     "#f3f0e8",
+     "Off-white"
+    ],
+    [
+     "#9fae95",
+     "Sage"
+    ],
+    [
+     "#26324a",
+     "Ink navy"
+    ]
+   ],
+   "coty": [
+    {
+     "name": "Radiant Earth",
+     "by": "WGSN × Coloro",
+     "year": "2028",
+     "code": "Colour of the Year 2028",
+     "hex": "#B5522B",
+     "ink": "#ffffff",
+     "text": "A warm, grounded burnt orange described as a reliable but assertive neutral. Works as a base for tailoring and knitwear or as a strong accent on accessories.",
+     "flat": "Clean column dresses",
+     "pairs": [
+      [
+       "#1f5e63",
+       "Deep teal"
+      ],
+      [
+       "#d9b892",
+       "Sand"
+      ],
+      [
+       "#f3f0e8",
+       "Off-white"
+      ]
+     ]
+    }
+   ],
+   "sources": "SS28 is a long-range Forecut projection. It builds on early SS28 trade coverage (structured clarity and performance design, FashionUnited) and the WGSN × Coloro 2028 colour of the year, Radiant Earth."
+  },
+  "aw28": {
+   "code": "AW28",
+   "title": "Autumn/Winter 2028",
+   "stage": "Long-range outlook",
+   "window": "Aug 2028 – Jan 2029",
+   "basis": "projection",
+   "intro": "Long-range outlook. Functional tailoring and technical wool for winter, hidden closures and hybrid boots, with radiant earth deepening into rust and brick.",
+   "themes": [
+    [
+     "Functional tailoring",
+     "Belted jackets, useful pockets and clean seams.",
+     "herring",
+     "#33363a",
+     "#d8d8d6",
+     "Belted suit jackets",
+     [
+      "Belted jackets",
+      "Utility pockets",
+      "Clean seams"
+     ]
+    ],
+    [
+     "Technical wool",
+     "Wool that stretches, sheds rain and resists creases.",
+     "weave",
+     "#7e705a",
+     "#f0e9dc",
+     "Technical wool suiting",
+     [
+      "Stretch wool",
+      "Water-resistant",
+      "Travel suits"
+     ]
+    ],
+    [
+     "Earth deepens",
+     "Radiant earth turns to rust and brick for winter.",
+     "topo",
+     "#8e3d1f",
+     "#f3d2c2",
+     "Quilted and padded dresses",
+     [
+      "Rust",
+      "Brick",
+      "Quilting"
+     ]
+    ],
+    [
+     "Hybrid boots",
+     "Smart boots on cushioned sport soles.",
+     "tech",
+     "#1f4a35",
+     "#cfe3d6",
+     "Hybrid sport-smart boots",
+     [
+      "Sport soles",
+      "Chelseas",
+      "Comfort"
+     ]
+    ],
+    [
+     "Hidden closures",
+     "Magnetic and concealed fastenings for clean fronts.",
+     "grid",
+     "#7d3426",
+     "#f1d3cb",
+     "Hidden magnetic closures",
+     [
+      "Magnets",
+      "Concealed plackets",
+      "Hidden zips"
+     ]
+    ]
+   ],
+   "palette": [
+    [
+     "#9a4322",
+     "Deep earth"
+    ],
+    [
+     "#8b3a2b",
+     "Rust"
+    ],
+    [
+     "#33363a",
+     "Charcoal"
+    ],
+    [
+     "#d8cdb8",
+     "Oatmeal"
+    ],
+    [
+     "#1f4a35",
+     "Bottle green"
+    ],
+    [
+     "#b08a5e",
+     "Camel"
+    ],
+    [
+     "#4b4f55",
+     "Graphite"
+    ]
+   ],
+   "coty": [
+    {
+     "name": "Radiant Earth",
+     "by": "WGSN × Coloro",
+     "year": "2028",
+     "code": "Colour of the Year 2028",
+     "hex": "#B5522B",
+     "ink": "#ffffff",
+     "deep": "#8e3d1f",
+     "text": "The 2028 colour moves into winter as deeper rust and brick. Strong on wool coats, suede and leather boots.",
+     "flat": "Belted suit jackets",
+     "pairs": [
+      [
+       "#33363a",
+       "Charcoal"
+      ],
+      [
+       "#d8cdb8",
+       "Oatmeal"
+      ],
+      [
+       "#1f4a35",
+       "Bottle green"
+      ]
+     ]
+    }
+   ],
+   "sources": "AW28 is a long-range Forecut projection based on SS28 direction and the WGSN × Coloro 2028 colour of the year, Radiant Earth. It will be refined as SS28 and AW28 coverage arrives."
+  }
+ }
+}

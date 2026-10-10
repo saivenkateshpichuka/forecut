@@ -1,0 +1,97 @@
+{
+ "garment": {
+  "Collars & necklines": [
+   "Collar",
+   "Neckline",
+   "Lapel"
+  ],
+  "Fronts & closures": [
+   "Closure",
+   "Placket",
+   "Front",
+   "Hardware"
+  ],
+  "Pockets & utility": [
+   "Pocket",
+   "Detail"
+  ],
+  "Sleeves, cuffs & shoulders": [
+   "Sleeve",
+   "Cuff",
+   "Shoulder"
+  ],
+  "Waist & silhouette": [
+   "Waist",
+   "Shape",
+   "Leg",
+   "Length",
+   "Pleat",
+   "Cut",
+   "Bodice",
+   "Back",
+   "Garment",
+   "Layer"
+  ],
+  "Hems & edges": [
+   "Hem",
+   "Edge"
+  ],
+  "Seams & construction": [
+   "Seam",
+   "Stitch",
+   "Panel",
+   "Construction"
+  ],
+  "Fabrics & finishes": [
+   "Fabric",
+   "Wash",
+   "Finish",
+   "Colour",
+   "Print",
+   "Pattern",
+   "Lining"
+  ],
+  "Trims & embellishment": [
+   "Trim",
+   "Embellishment",
+   "Graphic",
+   "Accessory",
+   "Styling"
+  ]
+ },
+ "footwear": {
+  "Toe & shape": [
+   "Toe",
+   "Shape",
+   "Style"
+  ],
+  "Heel & sole": [
+   "Heel",
+   "Sole",
+   "Hybrid"
+  ],
+  "Straps & closures": [
+   "Strap",
+   "Closure",
+   "Hardware"
+  ],
+  "Upper & materials": [
+   "Material",
+   "Upper",
+   "Lining",
+   "Perforation",
+   "Trim",
+   "Embellishment",
+   "Stitch",
+   "Construction",
+   "Colour"
+  ],
+  "Shaft & height": [
+   "Shaft",
+   "Height"
+  ],
+  "Styling": [
+   "Styling"
+  ]
+ }
+}
