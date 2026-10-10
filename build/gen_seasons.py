@@ -71,8 +71,8 @@ for si, s in enumerate(SEASONS):
     qj = ''.join(f'<a href="#{slug(d)}-{slug(c)}">{short[d]} · {E(c)}</a>' for d, c in M['order'])
     glance = (f'<div class="glance"><div><h3>Status mix</h3><div class="mixbar" role="img" aria-label="Status mix">{mixbar}</div><div class="mixkey">{mixkey}</div></div>'
               f'<div><h3>Top movers to act on now</h3><div class="movers">{mv}</div></div>'
-              f'<div><h3>Season palette</h3><div class="pstrip" role="img" aria-label="Season palette">{pstrip}</div></div>'
-              '</div>')
+              + (f'<div><h3>Season palette</h3><div class="pstrip" role="img" aria-label="Season palette">{pstrip}</div></div>' if len(m['coty']) > 1 else '')
+              + '</div>')
     snav = ''.join(f'<a href="{URLS.get(x, "#")}"{" aria-current=\"page\"" if x == s else ""}>{META[x]["code"]}<small>{E(META[x]["stage"])}</small></a>' for x in SEASONS)
     themes = ''.join(f'<article class="theme" tabindex="0" role="button" aria-haspopup="dialog" data-i="{ti}"><div class="tart" data-pat="{p}" data-bg="{bg}" data-fg="{fg}" data-flat="{E(fl)}" data-title="{E(t)}"></div><div class="tbody"><h3>{E(t)}</h3><p>{E(d)}</p><ul class="kw">{"".join(f"<li>{E(k)}</li>" for k in kw)}</ul><span class="more">Explore theme →</span></div></article>' for ti, (t, d, p, bg, fg, fl, kw) in enumerate(m['themes']))
     from theme_data import T as TDATA
@@ -97,7 +97,7 @@ for si, s in enumerate(SEASONS):
         '%%TOTAL%%': str(total), '%%CATS%%': str(len(M['order'])),
         '%%RISE%%': str(counts['r']), '%%EMERGE%%': str(counts['e']), '%%PEAK%%': str(counts['p']), '%%FADE%%': str(counts['f']),
         '%%TITLEUP%%': m['title'].upper(), '%%STAGEUP%%': m['stage'].upper(), '%%WINDOWUP%%': m['window'].upper(),
-        '%%GLANCEL%%': glance if len(m['coty']) > 1 else '', '%%GLANCER%%': glance if len(m['coty']) <= 1 else '',
+        '%%GLANCEL%%': glance, '%%GLANCER%%': '' if len(m['coty']) > 1 else ('<div class="glance pcard"><div><h3>' + m['code'] + ' key colours</h3><div class="pgrid">' + ''.join(f'<div><i style="background:{h}"></i><span>{E(n)}</span></div>' for h, n in m['palette']) + '</div></div></div>'),
         '%%DESC%%': json.dumps(descs, ensure_ascii=False).replace('</', '<\\/'), '%%SITE%%': json.dumps(SITE, ensure_ascii=False),
         '%%CODES%%': json.dumps(codes), '%%PALJSON%%': json.dumps([h for h, n in m['palette']]), '%%BASISCLS%%': basis[0], '%%BASISTEXT%%': basis[1],
         '%%STAGE%%': E(m['stage']), '%%WINDOW%%': E(m['window']), '%%TITLE%%': E(m['title']), '%%INTRO%%': E(m['intro']),
