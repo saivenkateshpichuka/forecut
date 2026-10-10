@@ -2,7 +2,7 @@
 
 AI trend forecasting for garments, footwear and detailing.
 
-Live site: https://saivenkateshpichuka.github.io/forecut/
+Live site: https://forecut.in/
 
 - `index.html`: homepage
 - `aw26.html`, `ss27.html`, `aw27.html`, `ss28.html`, `aw28.html`: season reports
