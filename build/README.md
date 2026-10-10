@@ -67,3 +67,10 @@ Everything needed to rebuild the Forecut website. The published pages are genera
 - To hand-write or correct one, add `"desc": {"o": "...", "d": ["...","..."], "f": "...", "u": "..."}` to that detail in details.json (any key is optional).
 - site.json holds the website name, tagline and address printed in the footer of every downloaded card. Change `url` when a domain is bought, then rebuild and republish.
 - Sketch style: clean technical flats (bold outline, flat fill, dashed topstitch, soft fold lines). Keep new SPEC entries in this style.
+
+## India forecast (added Oct 2026)
+- India data lives in india_data.py: windows (CODES), themes, key colours, categories and ~100 details with life strings for Festive 26 / Summer 27 / Festive 27.
+- gen_india.py builds ../india.html (STATIC=..) from season_tpl.txt, so it shares the viewer, descriptions, download cards and photo support. Details without a sketch show a "photo coming soon" pattern until a photo is uploaded.
+- india_prompts.py writes ../india-image-prompts.csv (same file-name rules as the main report). Photos go in images/ like the rest.
+- Homepage source is forecut_home.txt; build_home.py writes ../index.html. GitHub Pages is the live site (forecut.in); Claude artifacts are backups.
+- Each month also refresh India: move lifecycles on, add new Indian runway/retail/festive signals, keep 10+ details per India category.

@@ -74,6 +74,7 @@ for si, s in enumerate(SEASONS):
               + (f'<div><h3>Season palette</h3><div class="pstrip" role="img" aria-label="Season palette">{pstrip}</div></div>' if len(m['coty']) > 1 else '')
               + '</div>')
     snav = ''.join(f'<a href="{URLS.get(x, "#")}"{" aria-current=\"page\"" if x == s else ""}>{META[x]["code"]}<small>{E(META[x]["stage"])}</small></a>' for x in SEASONS)
+    snav = f'<a href="{"india.html" if STATIC else "https://forecut.in/india.html"}">India<small>Festive &amp; wedding</small></a>' + snav
     themes = ''.join(f'<article class="theme" tabindex="0" role="button" aria-haspopup="dialog" data-i="{ti}"><div class="tart" data-pat="{p}" data-bg="{bg}" data-fg="{fg}" data-flat="{E(fl)}" data-title="{E(t)}"></div><div class="tbody"><h3>{E(t)}</h3><p>{E(d)}</p><ul class="kw">{"".join(f"<li>{E(k)}</li>" for k in kw)}</ul><span class="more">Explore theme →</span></div></article>' for ti, (t, d, p, bg, fg, fl, kw) in enumerate(m['themes']))
     from theme_data import T as TDATA
     tdj = []
@@ -107,5 +108,9 @@ for si, s in enumerate(SEASONS):
     for k, v in rep.items():
         out = out.replace(k, v)
     assert '%%' not in out.replace('100%%', ''), [ln for ln in out.split('\n') if '%%' in ln][:3]
+    if STATIC:
+        import re as _re
+        _t = _re.search(r'<title>.*?</title>', out).group(0)
+        out = '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">\n' + out.replace(_t, _t + '</head><body>', 1) + '\n</body></html>'
     open(os.path.join(STATIC, f'{s}.html') if STATIC else f'forecut-{s}.html', 'w').write(out)
     print(s, total, counts)

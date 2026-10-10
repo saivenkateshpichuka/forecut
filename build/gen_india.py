@@ -1,0 +1,147 @@
+"""Build the India forecast page (../india.html when STATIC is set, else forecut-india.html) from india_data.py,
+reusing season_tpl.txt so it shares the viewer, descriptions, download cards and photo support."""
+import json, html, os, re
+import india_data as I
+import desc as DESCMOD
+from seasons_data import SEASONS, META as SMETA
+E = html.escape
+STATIC = os.environ.get('STATIC')
+SITE = json.load(open('site.json'))
+if STATIC and SITE.get('static_url'): SITE = dict(SITE, url=SITE['static_url'])
+IMGS = set(json.load(open('images.json'))) if os.path.exists('images.json') else set()
+URLS = json.load(open('urls.json'))
+def slug(s): return ''.join(ch.lower() if ch.isalnum() else '-' for ch in s).strip('-').replace('--', '-')
+def islug(s): return ''.join(ch.lower() if ch.isalnum() else '-' for ch in s).strip('-').replace('--', '-').replace('--', '-')
+SL = {'e': ('emerge', 'Emerging'), 'r': ('rise', 'Rising'), 'p': ('peak', 'Peaking'), 'f': ('fade', 'Fading')}
+
+INDIA_RULES = [
+    (r'saree|sari', 'Offer pre-stitched pleats or a pre-draped version alongside the classic drape.', None),
+    (r'lehenga', 'Keep the can-can light and add a side zip and adjustable drawstring for fit.', None),
+    (r'anarkali', 'Cut the flare from the empire line and line it so it swirls without clinging.', None),
+    (r'kurta|pathani', 'Offer straight and A-line cuts in three lengths; finish side slits with facings.', None),
+    (r'bandhgala|nehru|sherwani', 'Interface the band collar firmly and grade it carefully so it sits flat on every size.', 'Raw silk, brocade, jacquard or velvet with fabric-covered or metal buttons.'),
+    (r'jutti|mojari', 'Pad the footbed and soften the heel counter; juttis rub at the heel in long wear.', 'Leather uppers with zari or thread embroidery, leather soles with anti-slip patches.'),
+    (r'kolhapuri', 'Credit the GI-tagged Kolhapur cluster and keep the hand-plaited strap construction.', 'Vegetable-tanned leather from the Kolhapur cluster.'),
+    (r'mirror', 'Use flat-backed mirrors and secure stitching; keep them off friction areas.', 'Shisha mirrors with cotton or silk thread.'),
+    (r'chikankari', 'Use fine cotton or georgette and keep the work white-on-white or tonal.', 'Fine cotton, mul or georgette from Lucknow.'),
+    (r'zardozi|zari|gota', 'Use placement work at necklines and borders to control cost and weight.', 'Metallic zari threads, gota ribbon and sequins.'),
+    (r'block print|bandhani|ikat', 'Approve strike-offs for colour and register; handmade irregularity is part of the appeal.', 'Cotton or silk with hand block, tie-dye or ikat processes.'),
+    (r'kantha|rabari', 'Partner with women\'s artisan groups and keep the running stitch visible.', 'Cotton or silk with hand embroidery threads.'),
+    (r'khadi|handloom|chanderi|maheshwari|jamdani|tussar|bhagalpur|banarasi|kanjeevaram', 'Order early: handloom has longer lead times and small minimums.', None),
+    (r'potli|latkan|tassel', 'Match tassel and bag trims to the garment palette for a set look.', None),
+]
+
+def build_desc(cat, it):
+    dept, catname, use, fab = next(c for c in I.CATS if c[1] == cat)
+    txt = (it['name'] + ' ' + it['note']).lower()
+    over = it['note'].rstrip('.') + '. ' + DESCMOD.AREA.get(it['area'], '')
+    tips, f = [], None
+    for pat, tip, ff in INDIA_RULES + DESCMOD.RULES:
+        if re.search(pat, txt):
+            if tip and len(tips) < 2 and tip not in tips: tips.append(tip)
+            if ff and not f: f = ff
+    for t in DESCMOD.AREA_TIP.get(it['area'], []):
+        if len(tips) < 3: tips.append(t)
+    return {'o': over.strip(), 'd': tips, 'f': f or fab, 'u': use}
+
+# sketches: register India-only specs
+extra = {}
+for (cat, sub, name, area, note, life, sk) in I.D:
+    if isinstance(sk, dict): extra[name] = sk
+    elif isinstance(sk, str): extra[name] = '@' + sk
+spec_js = 'Object.keys(XS).forEach(function(k){ var v = XS[k]; Flats.SPEC[k] = typeof v === "string" ? Flats.SPEC[v.slice(1)] : v; });'
+engine = open('flats.js').read().replace("if (typeof module !== 'undefined') module.exports = Flats;\n", '') + '\nvar XS = ' + json.dumps(extra) + ';\n' + spec_js
+
+codes = I.CODES; si = 0
+secs, nav, counts, total, descs = [], [], {k: 0 for k in SL}, 0, {}
+short = {'Women': 'Women', 'Men': 'Men', 'Fusion': 'Fusion', 'Western': 'Western', 'Footwear': 'Shoes', 'Materials': 'Craft'}
+cur = None
+for dept, cat, use, fab in I.CATS:
+    items = [dict(cat=c, sub=sb, name=n, area=a, note=no, life=l) for (c, sb, n, a, no, l, sk) in I.D if c == cat and l[si] != '-']
+    if dept != cur:
+        if cur: secs.append('</div>')
+        secs.append(f'<div class="dept" data-dept="{slug(dept)}"><h2 class="depth">{ {"Materials": "Fabrics, craft & trims"}.get(dept, dept if dept not in ("Women", "Men") else dept + "swear")}</h2>')
+        cur = dept
+    cid = f'{slug(dept)}-{slug(cat)}'
+    nav.append(f'<a href="#{cid}" data-dept="{slug(dept)}">{short[dept]} · {E(cat)}</a>')
+    items.sort(key=lambda it: 'erpf'.index(it['life'][si]))
+    groups = {}
+    for it in items: groups.setdefault(it['sub'], []).append(it)
+    order = []
+    for (c, sb, *_r) in I.D:
+        if c == cat and sb not in order: order.append(sb)
+    subhtml = []
+    for sname in [k for k in order if k in groups]:
+        cards = []
+        for it in groups[sname]:
+            st = it['life'][si]; counts[st] += 1; total += 1
+            descs[it['name']] = build_desc(cat, it)
+            c, l = SL[st]
+            q = E((it['name'] + ' ' + it['area'] + ' ' + it['note'] + ' ' + cat + ' ' + sname).lower())
+            img = f' data-img="img/{islug(it["name"])}.webp"' if islug(it['name']) in IMGS else ''
+            cards.append(f'<article class="d" tabindex="0" role="button" aria-haspopup="dialog" data-st="{st}" data-life="{it["life"]}"{img} data-q="{q}"><div class="thumb" aria-hidden="true"></div><div class="dtop"><span class="area">{E(sname)}</span><span class="pill {c}">{l}</span></div><h4>{E(it["name"])}</h4><p>{E(it["note"])}</p><span class="open">View detail →</span></article>')
+        subhtml.append(f'<div class="sub" data-sub="{E(sname)}"><h5>{E(sname)} <span>{len(groups[sname])}</span></h5><div class="grid">{"".join(cards)}</div></div>')
+    secs.append(f'<section class="cat" id="{cid}" data-dept="{slug(dept)}"><div class="cathead"><h3>{E(cat)}</h3><span class="cnt"><span class="vis">{len(items)}</span> details</span></div>{"".join(subhtml)}</section>')
+secs.append('</div>')
+
+m = I.META
+themes = ''.join(f'<article class="theme" tabindex="0" role="button" aria-haspopup="dialog" data-i="{ti}"><div class="tart" data-pat="{t["pat"]}" data-bg="{t["bg"]}" data-fg="{t["fg"]}" data-flat="{E(t["flat"])}" data-title="{E(t["t"])}"></div><div class="tbody"><h3>{E(t["t"])}</h3><p>{E(t["d"])}</p><ul class="kw">{"".join(f"<li>{E(k)}</li>" for k in t["tags"])}</ul><span class="more">Explore theme →</span></div></article>' for ti, t in enumerate(I.THEMES))
+tdj = [dict(title=t['t'], season='India · Festive & wedding 2026–27', tags=t['tags'], story=t['story'], why=t['why'], brands=t['brands'], src=t['src'], future=False, kw=t['kw'], prices=t['prices'], cost=t['cost'], actions=t['actions']) for t in I.THEMES]
+pal = ''.join(f'<div class="sw2"><i style="background:{h}"></i><span>{E(n)}<small>{h.upper()} approx.</small></span></div>' for h, n in m['palette'])
+coty = ''
+for c in m['keycolours']:
+    pairs = ''.join(f'<span><i style="background:{h}"></i>{E(n)}</span>' for h, n in c['pairs'])
+    coty += (f'<article class="coty" style="--c:{c["hex"]};--ci:{c["ink"]}">'
+             f'<div class="cfield"><span class="mono">{E(c["label"])}</span><div><h2>{E(c["name"])}</h2><span class="code">{c["hex"]} approx.</span></div></div>'
+             f'<div class="cart" data-flat="{E(c["flat"])}" data-hex="{c["hex"]}" role="img" aria-label="{E(c["flat"])} shown in {E(c["name"])}"></div>'
+             f'<div class="cinfo"><p>{E(c["text"])}</p><div class="pairs"><b>Pairs with</b>{pairs}</div></div></article>')
+
+# glance
+movers = []
+for dept, cat, *_ in I.CATS:
+    pool = [x for x in I.D if x[0] == cat and x[5][0] in 'er']
+    pool.sort(key=lambda x: 'er'.index(x[5][0]))
+    if pool and len(movers) < 6 and cat not in ('Western Wear (India)', 'Fabrics & Weaves'): movers.append((pool[0], cat))
+mv = ''.join(f'<button class="mv" type="button" data-name="{E(x[2])}"><span class="gt" aria-hidden="true"></span><span><b>{E(x[2])}</b><small class="{x[5][0]}">{SL[x[5][0]][1]} · {E(cat)}</small></span></button>' for x, cat in movers[:6])
+tot = max(total, 1)
+mixbar = ''.join(f'<i style="width:{counts[k] / tot * 100:.1f}%;background:var(--{v})" title="{SL[k][1]} {counts[k]}"></i>' for k, v in [('e', 'chalk'), ('r', 'rise'), ('p', 'peak'), ('f', 'fade')])
+mixkey = ''.join(f'<span style="--k:var(--{v})">{SL[k][1]} {round(counts[k] / tot * 100)}%</span>' for k, v in [('e', 'chalk'), ('r', 'rise'), ('p', 'peak'), ('f', 'fade')])
+cal = ''.join(f'<div class="calw{" cur" if i == 0 else ""}"><b>{E(c)}</b><span>{E(I.WINDOWS[c])}</span></div>' for i, c in enumerate(codes))
+glance = (f'<div class="glance"><div><h3>Status mix · {codes[0]}</h3><div class="mixbar" role="img" aria-label="Status mix">{mixbar}</div><div class="mixkey">{mixkey}</div></div>'
+          f'<div><h3>Top movers to act on now</h3><div class="movers">{mv}</div></div>'
+          f'<div><h3>India fashion calendar</h3><div class="cal">{cal}</div></div></div>')
+
+HOME = 'index.html' if STATIC else 'https://forecut.in/'
+snav = f'<a href="#" aria-current="page">India<small>Festive &amp; wedding</small></a>' + ''.join(
+    f'<a href="{(x + ".html") if STATIC else URLS.get(x, "#")}">{SMETA[x]["code"]}<small>{E(SMETA[x]["stage"])}</small></a>' for x in SEASONS)
+tpl = open('season_tpl.txt').read()
+rep = {
+    '%%ENGINE%%': engine, '%%SECS%%': ''.join(secs), '%%NAV%%': ''.join(nav), '%%SEASONNAV%%': snav,
+    '%%THEMES%%': themes, '%%THEMEDATA%%': json.dumps(tdj, ensure_ascii=False).replace('</', '<\\/'), '%%PALETTE%%': pal, '%%COTY%%': coty, '%%HOME%%': HOME,
+    '%%TOTAL%%': str(total), '%%CATS%%': str(len(I.CATS)),
+    '%%RISE%%': str(counts['r']), '%%EMERGE%%': str(counts['e']), '%%PEAK%%': str(counts['p']), '%%FADE%%': str(counts['f']),
+    '%%TITLEUP%%': m['title'].upper(), '%%STAGEUP%%': m['stage'].upper(), '%%WINDOWUP%%': m['window'].upper(),
+    '%%CODES%%': json.dumps(codes), '%%PALJSON%%': json.dumps([h for h, n in m['palette']]), '%%BASISCLS%%': 'res', '%%BASISTEXT%%': 'Based on Indian runway, retail and trade coverage',
+    '%%STAGE%%': E(m['stage']), '%%WINDOW%%': E(m['window']), '%%TITLE%%': E(m['title']), '%%INTRO%%': E(m['intro']),
+    '%%SOURCES%%': E(m['sources']), '%%CODE%%': m['code'],
+    '%%GLANCEL%%': glance, '%%GLANCER%%': '',
+    '%%DESC%%': json.dumps(descs, ensure_ascii=False).replace('</', '<\\/'), '%%SITE%%': json.dumps(SITE, ensure_ascii=False),
+}
+out = tpl
+for k, v in rep.items(): out = out.replace(k, v)
+assert '%%' not in out.replace('100%%', ''), [ln for ln in out.split('\n') if '%%' in ln][:3]
+out = out.replace("CUR_SEASON = 'India'", "CUR_SEASON = '" + codes[0] + "'")
+out = out.replace('The stories behind India', 'The stories behind India 2026–27').replace('India palette', 'India colour palette')
+seg_old = re.search(r'<div class="seg" role="group" aria-label="Department">.*?</div>', out, re.S).group(0)
+seg_new = '<div class="seg" role="group" aria-label="Department"><button type="button" data-dept="all" aria-pressed="true">All</button>' + ''.join(f'<button type="button" data-dept="{k}" aria-pressed="false">{v}</button>' for k, v in [('women', 'Women'), ('men', 'Men'), ('fusion', 'Fusion'), ('western', 'Western'), ('footwear', 'Footwear'), ('materials', 'Craft')]) + '</div>'
+out = out.replace(seg_old, seg_new).replace('Search details, e.g. collar, zip, sole', 'Search, e.g. saree, jutti, chikankari')
+out = out.replace('<title>Forecut India Report</title>', '<title>Forecut India Forecast</title>')
+css = '.cal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.calw{border:1px solid var(--grid);border-radius:10px;padding:8px 10px;background:var(--paper);display:grid;gap:2px}.calw b{font:600 13px var(--body)}.calw span{font-size:11.5px;color:var(--muted);line-height:1.35}.calw.cur{border-color:var(--mat);box-shadow:inset 0 0 0 1px var(--mat)}@media (max-width:560px){.cal{grid-template-columns:1fr}}'
+out = out.replace('</style>', css + '</style>', 1)
+json.dump({'codes': codes, 'details': [dict(cat=c, sub=sb, name=n, area=a, note=no, life=l) for (c, sb, n, a, no, l, sk) in I.D]}, open('india.json', 'w'), ensure_ascii=False, indent=0)
+path = os.path.join(STATIC, 'india.html') if STATIC else 'forecut-india.html'
+if STATIC:
+    t = re.search(r'<title>.*?</title>', out).group(0)
+    out = '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">\n' + out.replace(t, t + '</head><body>', 1) + '\n</body></html>'
+open(path, 'w').write(out)
+print('india', total, counts)

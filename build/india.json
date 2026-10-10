@@ -1,0 +1,833 @@
+{
+"codes": [
+"Festive 26",
+"Summer 27",
+"Festive 27"
+],
+"details": [
+{
+"cat": "Women's Ethnic",
+"sub": "Sarees",
+"name": "Pre-draped saree gowns",
+"area": "Garment",
+"note": "Ready-to-wear sarees with stitched pleats and a fixed pallu, worn in minutes.",
+"life": "rpp"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Sarees",
+"name": "Office-ready fluid sarees",
+"area": "Style",
+"note": "Light printed sarees styled for work, as shown by Satya Paul.",
+"life": "err"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Sarees",
+"name": "Organza sarees with scalloped borders",
+"area": "Fabric",
+"note": "Sheer, structured organza that photographs well.",
+"life": "ppf"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Sarees",
+"name": "Tissue sarees in champagne gold",
+"area": "Fabric",
+"note": "Metallic tissue as the base colour, not just the border.",
+"life": "rpp"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Sarees",
+"name": "Pastel handloom sarees",
+"area": "Colour",
+"note": "Dusty rose, powder blue and lavender on handloom bases.",
+"life": "rpp"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Sarees",
+"name": "Sarees with belts and jackets",
+"area": "Layer",
+"note": "Waist belts and cropped jackets over sarees for a modern drape.",
+"life": "rrp"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Lehengas",
+"name": "Cape lehengas",
+"area": "Layer",
+"note": "Lehengas with a cape-style dupatta or overlay.",
+"life": "rpp"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Lehengas",
+"name": "Ombré and dual-tone lehengas",
+"area": "Colour",
+"note": "Skirts shading from a deep base into a lighter hem.",
+"life": "rpf"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Lehengas",
+"name": "Crop-top lehenga sets",
+"area": "Shape",
+"note": "Shorter blouses with high-waisted skirts.",
+"life": "ppf"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Lehengas",
+"name": "Fish-cut lehenga skirts",
+"area": "Shape",
+"note": "Fitted through the hip, flaring at the knee for a longer line.",
+"life": "err"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Lehengas",
+"name": "Light organza lehengas",
+"area": "Fabric",
+"note": "Airy organza lehengas for sangeet and day functions.",
+"life": "rpp"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Suits & kurtas",
+"name": "Fit-and-flare Anarkalis",
+"area": "Shape",
+"note": "Flattering, comfortable Anarkalis that suit most occasions.",
+"life": "ppp"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Suits & kurtas",
+"name": "Embroidered kurta co-ord sets",
+"area": "Garment",
+"note": "Matching kurta and trousers with coordinated embroidery.",
+"life": "rpp"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Suits & kurtas",
+"name": "Straight kurtas with palazzos",
+"area": "Shape",
+"note": "Straight-cut suits with wide palazzos for comfort.",
+"life": "ppf"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Suits & kurtas",
+"name": "Festive kaftan kurtas",
+"area": "Shape",
+"note": "Kaftans with Indian prints and embroidery, worn to festive events.",
+"life": "rrp"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Suits & kurtas",
+"name": "Angrakha wrap kurtas",
+"area": "Closure",
+"note": "Overlapping wrap fronts tied at the side.",
+"life": "err"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Blouses & dupattas",
+"name": "Corset saree blouses",
+"area": "Bodice",
+"note": "Structured corset blouses as a modern alternative.",
+"life": "rpp"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Blouses & dupattas",
+"name": "Off-shoulder blouses",
+"area": "Neckline",
+"note": "Off-shoulder blouses for sarees and lehengas.",
+"life": "rpf"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Blouses & dupattas",
+"name": "Collared shirt blouses",
+"area": "Collar",
+"note": "Crisp collared blouses for a tailored saree look.",
+"life": "err"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Blouses & dupattas",
+"name": "Organza dupattas with embroidered borders",
+"area": "Trim",
+"note": "Sheer dupattas framed with an embroidered edge.",
+"life": "ppf"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Kurtas & sets",
+"name": "Straight kurta with band collar",
+"area": "Collar",
+"note": "Straight kurtas with a Nehru (band) collar and churidar or straight trousers.",
+"life": "ppp"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Kurtas & sets",
+"name": "Linen kurta sets",
+"area": "Fabric",
+"note": "Breathable linen and cotton-silk for relaxed celebrations.",
+"life": "rpp"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Kurtas & sets",
+"name": "Short kurtas with jeans",
+"area": "Length",
+"note": "Hip-length kurtas worn with denim for everyday wear.",
+"life": "rrp"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Kurtas & sets",
+"name": "Asymmetric-hem kurtas",
+"area": "Hem",
+"note": "Angled or layered hems for a modern kurta.",
+"life": "rrp"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Kurtas & sets",
+"name": "Pathani suits",
+"area": "Garment",
+"note": "Collared Pathani kurtas with salwar, in solid tones.",
+"life": "rpp"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Kurtas & sets",
+"name": "Neckline and cuff embroidery",
+"area": "Embellishment",
+"note": "Subtle embroidery placed only at the neckline and cuffs.",
+"life": "rpp"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Jackets & bandhgalas",
+"name": "Brocade and Chanderi Nehru jackets",
+"area": "Fabric",
+"note": "Nehru jackets over kurtas or shirts, in brocade, Chanderi or jacquard.",
+"life": "ppp"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Jackets & bandhgalas",
+"name": "Contrast-piped Nehru jackets",
+"area": "Trim",
+"note": "Contrast piping on the collar and edges.",
+"life": "err"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Jackets & bandhgalas",
+"name": "Tone-on-tone bandhgalas",
+"area": "Embellishment",
+"note": "Bandhgala (Jodhpuri) suits with tonal embroidery instead of heavy work.",
+"life": "rpp"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Jackets & bandhgalas",
+"name": "Velvet bandhgalas",
+"area": "Fabric",
+"note": "Velvet bandhgalas in bottle green, navy and burgundy for winter weddings.",
+"life": "r-p"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Jackets & bandhgalas",
+"name": "Collar brooches on bandhgalas",
+"area": "Accessory",
+"note": "A brooch or decorative button at the bandhgala collar.",
+"life": "r-p"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Occasion & wedding",
+"name": "Ivory and pastel sherwanis",
+"area": "Colour",
+"note": "Ivory, mint and powder shades for day weddings.",
+"life": "p-p"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Occasion & wedding",
+"name": "Fluid draped menswear",
+"area": "Shape",
+"note": "Relaxed drapes and soft tailoring, as shown by AK|OK.",
+"life": "err"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Occasion & wedding",
+"name": "Tussar and Kanjeevaram menswear",
+"area": "Fabric",
+"note": "Silks usually reserved for women, cut for men by Vivek Karunakaran.",
+"life": "err"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Bottoms",
+"name": "Straight trousers over churidars",
+"area": "Leg",
+"note": "Straight trousers replacing fitted churidars under kurtas.",
+"life": "rpp"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Bottoms",
+"name": "Dhoti pants and cowl trousers",
+"area": "Leg",
+"note": "Draped dhoti pants for sangeet and mehendi.",
+"life": "rrp"
+},
+{
+"cat": "Indo-Western",
+"sub": "Women",
+"name": "Sarees with sneakers",
+"area": "Styling",
+"note": "Sarees worn with clean sneakers for day events.",
+"life": "rrp"
+},
+{
+"cat": "Indo-Western",
+"sub": "Women",
+"name": "Jackets over lehengas",
+"area": "Layer",
+"note": "Cropped or denim jackets layered over lehengas.",
+"life": "rpp"
+},
+{
+"cat": "Indo-Western",
+"sub": "Women",
+"name": "Printed fusion kaftans",
+"area": "Garment",
+"note": "Kaftans with Indian print and embroidery for festive brunches.",
+"life": "rpp"
+},
+{
+"cat": "Indo-Western",
+"sub": "Women",
+"name": "Draped dhoti skirts",
+"area": "Shape",
+"note": "Dhoti-inspired draped skirts with crop tops or shirts.",
+"life": "err"
+},
+{
+"cat": "Indo-Western",
+"sub": "Men",
+"name": "Indo-western blazer sets",
+"area": "Garment",
+"note": "Bandhgala-collar blazers with matching trousers.",
+"life": "err"
+},
+{
+"cat": "Indo-Western",
+"sub": "Men",
+"name": "Kurta-shirt hybrids",
+"area": "Garment",
+"note": "Gender-fluid shirts with kurta length and band collars.",
+"life": "err"
+},
+{
+"cat": "Indo-Western",
+"sub": "Everyday",
+"name": "Kurtas with jeans and sneakers",
+"area": "Styling",
+"note": "The everyday Gen Z mix of kurta, denim and sneakers.",
+"life": "ppp"
+},
+{
+"cat": "Indo-Western",
+"sub": "Everyday",
+"name": "Chanderi with denim",
+"area": "Fabric",
+"note": "Silk Chanderi paired with denim, as shown by Saim.",
+"life": "err"
+},
+{
+"cat": "Indo-Western",
+"sub": "Everyday",
+"name": "Indigo denim with handloom",
+"area": "Fabric",
+"note": "Indigo denim teamed with handloom pieces.",
+"life": "rrp"
+},
+{
+"cat": "Indo-Western",
+"sub": "Everyday",
+"name": "Embroidered denim jackets",
+"area": "Embellishment",
+"note": "Denim jackets with Indian embroidery.",
+"life": "erp"
+},
+{
+"cat": "Western Wear (India)",
+"sub": "Women",
+"name": "Baby tees and low-rise denim",
+"area": "Style",
+"note": "Soft Y2K: baby tees with low or mid-rise jeans.",
+"life": "erp"
+},
+{
+"cat": "Western Wear (India)",
+"sub": "Women",
+"name": "Breezy resort dresses",
+"area": "Garment",
+"note": "Easy, resort-style dresses for city daytime, as shown by Verandah.",
+"life": "err"
+},
+{
+"cat": "Western Wear (India)",
+"sub": "Women",
+"name": "Monochrome co-ords",
+"area": "Garment",
+"note": "Matching tops and trousers in one colour.",
+"life": "rpp"
+},
+{
+"cat": "Western Wear (India)",
+"sub": "Men",
+"name": "Boxy blazers and straight trousers",
+"area": "Shape",
+"note": "Relaxed, gender-fluid tailoring for internships and work.",
+"life": "rrp"
+},
+{
+"cat": "Western Wear (India)",
+"sub": "Men",
+"name": "Cargo and utility pants",
+"area": "Pocket",
+"note": "Cargo pants and workwear jackets with street details.",
+"life": "ppf"
+},
+{
+"cat": "Western Wear (India)",
+"sub": "Men",
+"name": "Varsity jackets",
+"area": "Garment",
+"note": "Retro varsity jackets for campus wear.",
+"life": "rpf"
+},
+{
+"cat": "Western Wear (India)",
+"sub": "Unisex",
+"name": "Baggy and wide-leg jeans",
+"area": "Leg",
+"note": "Relaxed, wide denim for comfort.",
+"life": "ppf"
+},
+{
+"cat": "Western Wear (India)",
+"sub": "Unisex",
+"name": "Oversized tees and shirts",
+"area": "Shape",
+"note": "Roomy tees and boyfriend shirts.",
+"life": "ppp"
+},
+{
+"cat": "Western Wear (India)",
+"sub": "Unisex",
+"name": "Athleisure co-ord sets",
+"area": "Garment",
+"note": "Matching jogger and sweat sets for hybrid campus days.",
+"life": "rpp"
+},
+{
+"cat": "Western Wear (India)",
+"sub": "Unisex",
+"name": "Quiet-luxury basics",
+"area": "Style",
+"note": "Crisp shirts, neutral trousers and clean sneakers.",
+"life": "rrp"
+},
+{
+"cat": "Indian Footwear",
+"sub": "Ethnic",
+"name": "Kolhapuri chappals",
+"area": "Style",
+"note": "GI-tagged Kolhapuris, back in focus after Prada's Spring/Summer 2026 show.",
+"life": "rpp"
+},
+{
+"cat": "Indian Footwear",
+"sub": "Ethnic",
+"name": "Embellished wedding juttis",
+"area": "Embellishment",
+"note": "Juttis with zari, beads and mirror work for weddings.",
+"life": "ppp"
+},
+{
+"cat": "Indian Footwear",
+"sub": "Ethnic",
+"name": "Pointed juttis with bandhgalas",
+"area": "Toe",
+"note": "Pointed juttis as the correct shoe for bandhgalas.",
+"life": "p-p"
+},
+{
+"cat": "Indian Footwear",
+"sub": "Ethnic",
+"name": "Block-heel juttis",
+"area": "Heel",
+"note": "Juttis on a low block heel for comfort at long events.",
+"life": "rrp"
+},
+{
+"cat": "Indian Footwear",
+"sub": "Ethnic",
+"name": "Mojaris with kurta sets",
+"area": "Style",
+"note": "Classic mojaris for festive kurta looks.",
+"life": "ppp"
+},
+{
+"cat": "Indian Footwear",
+"sub": "Ethnic",
+"name": "Mirror-work flats",
+"area": "Embellishment",
+"note": "Mirror embellishment moving onto shoes.",
+"life": "rpf"
+},
+{
+"cat": "Indian Footwear",
+"sub": "Sneakers",
+"name": "Retro gum-sole sneakers",
+"area": "Sole",
+"note": "Vintage trainers with suede overlays and gum soles.",
+"life": "rpp"
+},
+{
+"cat": "Indian Footwear",
+"sub": "Sneakers",
+"name": "Handcrafted leather sneakers",
+"area": "Material",
+"note": "Full-grain leather sneakers made in India.",
+"life": "err"
+},
+{
+"cat": "Indian Footwear",
+"sub": "Sneakers",
+"name": "Kantha-embroidered sneakers",
+"area": "Embellishment",
+"note": "Suede sneakers with kantha embroidery.",
+"life": "err"
+},
+{
+"cat": "Indian Footwear",
+"sub": "Sneakers",
+"name": "Wide lasts for Indian feet",
+"area": "Construction",
+"note": "Broader lasts shaped for Indian foot widths.",
+"life": "err"
+},
+{
+"cat": "Indian Footwear",
+"sub": "Sneakers",
+"name": "Sneakers for the groom",
+"area": "Styling",
+"note": "Embellished or clean sneakers for sangeet and mehendi.",
+"life": "rpp"
+},
+{
+"cat": "Fabrics & Weaves",
+"sub": "Handloom",
+"name": "Chanderi",
+"area": "Fabric",
+"note": "Light, sheer Madhya Pradesh weave for kurtas, sarees and jackets.",
+"life": "ppp"
+},
+{
+"cat": "Fabrics & Weaves",
+"sub": "Handloom",
+"name": "Maheshwari",
+"area": "Fabric",
+"note": "Fine cotton-silk handloom with reversible borders.",
+"life": "rpp"
+},
+{
+"cat": "Fabrics & Weaves",
+"sub": "Handloom",
+"name": "Jamdani",
+"area": "Fabric",
+"note": "Hand-woven motifs on fine cotton.",
+"life": "rrp"
+},
+{
+"cat": "Fabrics & Weaves",
+"sub": "Handloom",
+"name": "Handspun khadi",
+"area": "Fabric",
+"note": "Khadi in silk, wool, linen and cotton, shown at the Navdhara Khadi showcase.",
+"life": "err"
+},
+{
+"cat": "Fabrics & Weaves",
+"sub": "Silks",
+"name": "Banarasi brocade",
+"area": "Fabric",
+"note": "Rich woven brocade for weddings and Nehru jackets.",
+"life": "p-p"
+},
+{
+"cat": "Fabrics & Weaves",
+"sub": "Silks",
+"name": "Reworked vintage Banarasi",
+"area": "Fabric",
+"note": "Vintage Banarasi cut into structured eveningwear, as by Amit Aggarwal.",
+"life": "err"
+},
+{
+"cat": "Fabrics & Weaves",
+"sub": "Silks",
+"name": "Kanjeevaram silk",
+"area": "Fabric",
+"note": "Heavy South Indian silk for weddings, now also in menswear.",
+"life": "p-p"
+},
+{
+"cat": "Fabrics & Weaves",
+"sub": "Silks",
+"name": "Tussar silk",
+"area": "Fabric",
+"note": "Textured, natural-gold wild silk.",
+"life": "rrp"
+},
+{
+"cat": "Fabrics & Weaves",
+"sub": "Silks",
+"name": "Bhagalpur silk",
+"area": "Fabric",
+"note": "Bihar silk used for structured gowns.",
+"life": "err"
+},
+{
+"cat": "Fabrics & Weaves",
+"sub": "Silks",
+"name": "Raw silk",
+"area": "Fabric",
+"note": "Textured, earthy silk for bandhgalas and lehengas.",
+"life": "p-p"
+},
+{
+"cat": "Fabrics & Weaves",
+"sub": "Sheers & metallics",
+"name": "Organza",
+"area": "Fabric",
+"note": "Sheer, structured and photogenic.",
+"life": "ppf"
+},
+{
+"cat": "Fabrics & Weaves",
+"sub": "Sheers & metallics",
+"name": "Tissue",
+"area": "Fabric",
+"note": "Metallic sheen for evening functions.",
+"life": "rpp"
+},
+{
+"cat": "Fabrics & Weaves",
+"sub": "Everyday",
+"name": "Cotton silk",
+"area": "Fabric",
+"note": "Comfortable, breathable everyday ethnic fabric.",
+"life": "ppp"
+},
+{
+"cat": "Fabrics & Weaves",
+"sub": "Everyday",
+"name": "Linen",
+"area": "Fabric",
+"note": "Breathable linen for summer kurtas and co-ords.",
+"life": "rpr"
+},
+{
+"cat": "Fabrics & Weaves",
+"sub": "Everyday",
+"name": "Natural-dyed fabrics",
+"area": "Colour",
+"note": "Plant dyes and slow processes.",
+"life": "err"
+},
+{
+"cat": "Embroidery & Surface",
+"sub": "Hand embroidery",
+"name": "Mirror work",
+"area": "Embellishment",
+"note": "Mirror work on garments, dupattas, bags and shoes.",
+"life": "rpp"
+},
+{
+"cat": "Embroidery & Surface",
+"sub": "Hand embroidery",
+"name": "Chikankari",
+"area": "Embellishment",
+"note": "Lucknow white-on-white embroidery for summer and festive.",
+"life": "ppp"
+},
+{
+"cat": "Embroidery & Surface",
+"sub": "Hand embroidery",
+"name": "Zardozi",
+"area": "Embellishment",
+"note": "Metal-thread embroidery for weddings.",
+"life": "p-p"
+},
+{
+"cat": "Embroidery & Surface",
+"sub": "Hand embroidery",
+"name": "Tone-on-tone embroidery",
+"area": "Embellishment",
+"note": "Embroidery in the fabric colour for quiet luxury.",
+"life": "rpp"
+},
+{
+"cat": "Embroidery & Surface",
+"sub": "Hand embroidery",
+"name": "Rabari embroidery",
+"area": "Embellishment",
+"note": "Kutch Rabari embroidery, shown by Kartik Research.",
+"life": "err"
+},
+{
+"cat": "Embroidery & Surface",
+"sub": "Hand embroidery",
+"name": "Kantha",
+"area": "Embellishment",
+"note": "Running-stitch embroidery from Bengal.",
+"life": "err"
+},
+{
+"cat": "Embroidery & Surface",
+"sub": "Hand embroidery",
+"name": "Gota patti",
+"area": "Trim",
+"note": "Rajasthani ribbon appliqué in gold and silver.",
+"life": "prp"
+},
+{
+"cat": "Embroidery & Surface",
+"sub": "Prints & dyes",
+"name": "Block print",
+"area": "Print",
+"note": "Hand block prints from Bagru and Sanganer.",
+"life": "ppp"
+},
+{
+"cat": "Embroidery & Surface",
+"sub": "Prints & dyes",
+"name": "Bandhani",
+"area": "Pattern",
+"note": "Tie-dye dots from Gujarat and Rajasthan.",
+"life": "rrp"
+},
+{
+"cat": "Embroidery & Surface",
+"sub": "Prints & dyes",
+"name": "Ikat",
+"area": "Pattern",
+"note": "Resist-dyed yarns woven into blurred patterns.",
+"life": "rpp"
+},
+{
+"cat": "Embroidery & Surface",
+"sub": "Prints & dyes",
+"name": "Patchwork and layered textures",
+"area": "Panel",
+"note": "Patchwork and layered textures, as shown by Kartik Research.",
+"life": "err"
+},
+{
+"cat": "Embroidery & Surface",
+"sub": "Embellishment",
+"name": "All-over heavy sequins",
+"area": "Embellishment",
+"note": "Head-to-toe sequins giving way to placement work.",
+"life": "ff-"
+},
+{
+"cat": "Trims & Accessories",
+"sub": "Trims",
+"name": "Latkans and tassels",
+"area": "Trim",
+"note": "Decorative tassels on blouses, dupattas and drawstrings.",
+"life": "ppp"
+},
+{
+"cat": "Trims & Accessories",
+"sub": "Trims",
+"name": "Contrast piping",
+"area": "Trim",
+"note": "Piping on collars, cuffs and edges of kurtas and jackets.",
+"life": "rrp"
+},
+{
+"cat": "Trims & Accessories",
+"sub": "Trims",
+"name": "Potli and fabric-covered buttons",
+"area": "Hardware",
+"note": "Small round buttons as a crafted finish.",
+"life": "rpp"
+},
+{
+"cat": "Trims & Accessories",
+"sub": "Trims",
+"name": "Scalloped and cutwork borders",
+"area": "Edge",
+"note": "Scalloped edges on sarees, dupattas and sleeves.",
+"life": "ppf"
+},
+{
+"cat": "Trims & Accessories",
+"sub": "Trims",
+"name": "Raw, unfinished edges",
+"area": "Edge",
+"note": "Deliberately unfinished edges, as shown by AK|OK.",
+"life": "err"
+},
+{
+"cat": "Trims & Accessories",
+"sub": "Accessories",
+"name": "Potli bags",
+"area": "Accessory",
+"note": "Drawstring pouch bags for festive looks.",
+"life": "ppp"
+},
+{
+"cat": "Trims & Accessories",
+"sub": "Accessories",
+"name": "Belts over sarees and kurtas",
+"area": "Accessory",
+"note": "Embellished or leather belts to define the waist.",
+"life": "rpp"
+},
+{
+"cat": "Trims & Accessories",
+"sub": "Accessories",
+"name": "Mirror-work bags",
+"area": "Accessory",
+"note": "Bags with mirror embellishment.",
+"life": "rpf"
+},
+{
+"cat": "Trims & Accessories",
+"sub": "Accessories",
+"name": "Statement brooches",
+"area": "Accessory",
+"note": "Brooches on bandhgalas, kurtas and saree pallus.",
+"life": "rpp"
+}
+]
+}
