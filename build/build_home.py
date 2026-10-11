@@ -57,8 +57,17 @@ jsec = f'''  <section id="journal" aria-labelledby="jlh">
     <div class="jrow">{jc}</div>
   </section>
 '''
-h = h.replace('<!--GALLERY-->', gal + jsec)
+import reports_data as RD
+rs = [('reports.html', 'All reports', 'pre-draped-saree-gowns', 'Hub'), ('core-item-sarees.html', 'Core Item Update: Sarees', 'pre-draped-saree-gowns', 'Core Item Update'), ('capsule-festive-made-easy.html', 'Design Capsule: Festive made easy', 'cape-lehengas', 'Design Capsule'), ('india-colour-forecast.html', 'India Colour Forecast 2026–27', 'fit-and-flare-anarkalis', 'Colour Forecast'), ('india-textile-craft-guide.html', 'Textile and Craft Sourcing Guide', 'chanderi', 'Sourcing Guide')][1:]
+rc = ''.join(f'<a class="jc" href="{u}"><span class="ph"><img src="img/{im}.webp" alt="" loading="lazy" width="800" height="800"></span><small>{k}</small><b>{t}</b></a>' for u, t, im, k in rs)
+rsec = f'''  <section id="reports" aria-labelledby="rph">
+    <div class="sechead"><div><span class="mono eyebrow">Reports</span><h2 id="rph">Ready-to-use trend reports.</h2></div><p>Item-by-item updates, design capsules with flat sketches, colour and sourcing guides. <a href="reports.html">All reports →</a></p></div>
+    <div class="jrow r4">{rc}</div>
+  </section>
+'''
+h = h.replace('<!--GALLERY-->', gal + rsec + jsec)
 for k, u in json.load(open('urls.json')).items(): h = h.replace(u, f'{k}.html')
+h = h.replace('https://forecut.in/reports.html', 'reports.html').replace('https://forecut.in/journal.html', 'journal.html')
 h = h.replace('https://forecut.in/india.html', 'india.html').replace('https://forecut.in/about.html', 'about.html').replace('https://forecut.in/contact.html', 'contact.html').replace('https://forecut.in/terms.html', 'terms.html').replace('https://forecut.in/privacy.html', 'privacy.html').replace(' target="_blank" rel="noopener"', '')
 if not h.lstrip().lower().startswith('<!doctype'):
     h = ('<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'

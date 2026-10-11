@@ -16,6 +16,8 @@ for fn, t, d in [('about.html', 'About Forecut · Fashion Trend Forecasting for 
 import journal_data as JD
 pages['journal.html'] = ('Forecut Journal · Indian Fashion Trend Analysis & Guides', 'Analysis and practical guides on Indian and global fashion trends: festive and wedding wear, handloom, footwear, Gen Z fusion and colour, with rupee price bands.', 'journal.html')
 ARTS = {}
+for fn_, t_, d_ in json.load(open('reports_index.json')):
+    pages[fn_] = (t_ + ' · Forecut', d_, fn_)
 for a in JD.ARTICLES:
     pages[a['slug'] + '.html'] = (a['title'] + ' · Forecut Journal', a['desc'], a['slug'] + '.html'); ARTS[a['slug'] + '.html'] = a
 for k in SEAS:

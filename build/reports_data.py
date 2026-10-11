@@ -1,0 +1,100 @@
+"""Text for Forecut report pages (Core Item Updates, Design Capsules, Colour Forecast, Textile & Craft Guide).
+All statuses come from india_data.py; this file only adds Forecut's own editorial text."""
+
+# Core Item Updates: (slug, title, (cat, sub) keys, intro, how-to bullets, hero detail)
+ITEMS = [
+ ('sarees', 'Sarees', [("Women's Ethnic", 'Sarees')],
+  'The saree is being redesigned for speed. Pre-draped and stitched versions are rising into Festive 26, handloom and tissue add quiet shine, and office-ready fluid drapes are an early signal worth testing. Heavier scalloped organza is at its peak and starts to fade by Festive 27.',
+  ['Offer every hero saree in a classic and a pre-draped version.', 'Add belts and jackets as styling add-ons to sell the look, not just the drape.', 'Use pastel handloom and champagne tissue for festive capsules that can be worn again.', 'Plan the exit for heavy scalloped organza after Summer 27.'],
+  'pre-draped-saree-gowns'),
+ ('lehengas', 'Lehengas', [("Women's Ethnic", 'Lehengas')],
+  'Lehengas are getting lighter and easier to wear across several functions. Cape lehengas and light organza lead the rise; ombré skirts peak in Summer 27; fish-cut skirts are the emerging silhouette. Crop-top sets have peaked and begin to fade.',
+  ['Lead with cape and light organza lehengas for sangeet and day functions.', 'Test fish-cut skirts in a small premium drop.', 'Keep can-can light and add side zips and drawstrings for fit.', 'Reduce crop-top sets from Festive 27.'],
+  'cape-lehengas'),
+ ('suits-kurtas', "Women's suits and kurtas", [("Women's Ethnic", 'Suits & kurtas')],
+  'Kurta sets are the backbone of Indian womenswear. Fit-and-flare Anarkalis hold steady at their peak, embroidered co-ord sets are rising fast, and festive kaftan kurtas grow through 2027. Angrakha wrap kurtas are the emerging shape to watch.',
+  ['Keep Anarkalis in core ranges in jewel tones.', 'Invest in embroidered kurta co-ords with placement work at the neckline.', 'Test angrakha wraps with ties instead of buttons.', 'Reduce straight kurtas with palazzos after Summer 27.'],
+  'embroidered-kurta-co-ord-sets'),
+ ('blouses-dupattas', 'Saree blouses and dupattas', [("Women's Ethnic", 'Blouses & dupattas')],
+  'The blouse and dupatta are the fastest way to refresh an existing look. Corset blouses rise into the festive season, collared shirt blouses are emerging for office and day wear, and embroidered organza dupattas are at their peak as an add-on.',
+  ['Sell corset and off-shoulder blouses as separates to update existing sarees.', 'Test collared shirt blouses with cotton and handloom sarees.', 'Use embroidered organza dupattas as an add-on to plain sets.'],
+  'corset-saree-blouses'),
+ ('mens-kurtas', "Men's kurtas and sets", [("Men's Ethnic", 'Kurtas & sets')],
+  'Menswear is quieter and more versatile. The straight band-collar kurta is a stable classic, linen sets and pathani suits are rising, and short and asymmetric kurtas carry the fusion energy. Embroidery moves to the neckline and cuffs.',
+  ['Keep the straight band-collar kurta in calm handloom colours.', 'Invest in linen kurta sets for summer weddings.', 'Add short kurtas styled with denim for younger customers.', 'Move embroidery to neckline and cuffs, tone-on-tone.'],
+  'straight-kurta-with-band-collar'),
+ ('jackets-bandhgalas', 'Nehru jackets and bandhgalas', [("Men's Ethnic", 'Jackets & bandhgalas')],
+  'Tailored ethnic menswear is the wedding-guest uniform. Brocade and Chanderi Nehru jackets are a steady peak, contrast piping is the emerging detail, and tone-on-tone and velvet bandhgalas rise into the winter wedding season.',
+  ['Keep brocade and Chanderi Nehru jackets as a core wedding offer.', 'Test contrast piping on collars and front edges.', 'Add velvet bandhgalas for winter weddings, with a collar brooch as an add-on.'],
+  'tone-on-tone-bandhgalas'),
+ ('ethnic-footwear', 'Ethnic footwear', [('Indian Footwear', 'Ethnic')],
+  'Indian footwear is having a moment. GI-tagged Kolhapuris rise after Prada\'s Spring/Summer 2026 show, block-heel juttis bring comfort to long events, and embellished wedding juttis and mojaris remain steady sellers.',
+  ['Source authentic GI-tagged Kolhapuris and credit the Kolhapur cluster.', 'Add block-heel juttis for comfort at long functions.', 'Keep embellished wedding juttis and mojaris as core festive pairings.', 'Reduce mirror-work flats after Summer 27.'],
+  'kolhapuri-chappals'),
+ ('sneakers', 'Sneakers', [('Indian Footwear', 'Sneakers')],
+  'The Indian sneaker is growing up. Handcrafted leather and kantha-embroidered sneakers are emerging, wider lasts address Indian foot shapes, and sneakers have become acceptable for sangeet and mehendi.',
+  ['Test handcrafted leather and embroidered sneakers in small runs.', 'Offer a wider-fit last.', 'Market clean and embellished sneakers for the groom\'s pre-wedding functions.'],
+  'handcrafted-leather-sneakers'),
+]
+
+# Design Capsules: theme title -> (slug, palette [(hex, name)], key pieces, hero)
+CAPSULES = {
+ 'Handloom quiet luxury': ('handloom-quiet-luxury', [('#f3ecdc', 'Ivory'), ('#9fae8f', 'Sage'), ('#d8c08a', 'Champagne gold'), ('#d9a3a6', 'Dusty rose')],
+   ['Pastel handloom sarees', 'Straight kurta with band collar', 'Linen kurta sets', 'Tone-on-tone embroidery', 'Chanderi', 'Raw, unfinished edges'], 'pastel-handloom-sarees'),
+ 'Indigo, blue and white': ('indigo-blue-white', [('#2f3f7a', 'Indigo'), ('#1f4e9c', 'Sapphire'), ('#f3ecdc', 'Ivory'), ('#b5522b', 'Rust')],
+   ['Indigo denim with handloom', 'Chanderi with denim', 'Embroidered denim jackets', 'Ikat', 'Block print', 'Kurtas with jeans and sneakers'], 'indigo-denim-with-handloom'),
+ 'Festive made easy': ('festive-made-easy', [('#0f6b4f', 'Emerald'), ('#6e1f33', 'Deep wine'), ('#1f4e9c', 'Sapphire'), ('#d8c08a', 'Champagne gold')],
+   ['Pre-draped saree gowns', 'Embroidered kurta co-ord sets', 'Cape lehengas', 'Light organza lehengas', 'Fit-and-flare Anarkalis', 'Organza dupattas with embroidered borders'], 'cape-lehengas'),
+ 'Indian craft goes global': ('indian-craft-global', [('#b5522b', 'Rust'), ('#2f3f7a', 'Indigo'), ('#d8c08a', 'Champagne gold'), ('#f3ecdc', 'Ivory')],
+   ['Kolhapuri chappals', 'Mirror work', 'Rabari embroidery', 'Kantha-embroidered sneakers', 'Bandhani', 'Embellished wedding juttis'], 'kolhapuri-chappals'),
+ 'Gen Z fusion': ('gen-z-fusion', [('#2f3f7a', 'Indigo'), ('#9fae8f', 'Sage'), ('#b5522b', 'Rust'), ('#f3ecdc', 'Ivory')],
+   ['Short kurtas with jeans', 'Sarees with sneakers', 'Jackets over lehengas', 'Baggy and wide-leg jeans', 'Athleisure co-ord sets', 'Varsity jackets'], 'short-kurtas-with-jeans'),
+}
+
+# Colour Forecast: (hex, name, group, mood, best for, pair with, related details)
+COLOUR_GROUPS = [
+ ('Festive jewels', 'Richer, more refined jewel tones for weddings and festive evenings, paired with soft metallics rather than bright yellow gold.'),
+ ('Calm handloom', 'Quiet, natural shades that let the weave and the hand-work show. Right for handloom, day functions and everyday ethnic wear.'),
+ ('Earth and indigo', 'Grounded heritage colours that work across ethnic, fusion and western wear, from denim to block prints.'),
+]
+COLOURS = [
+ ('#0f6b4f', 'Emerald', 'Festive jewels', 'Deep, confident green; the festive key colour.', 'Anarkalis, lehengas, bandhgalas, silk sarees', ['Champagne gold', 'Deep wine', 'Ivory'], ['Fit-and-flare Anarkalis', 'Cape lehengas']),
+ ('#1f4e9c', 'Sapphire', 'Festive jewels', 'A clear, rich blue that bridges festive and evening.', 'Organza lehengas, sherwanis, evening sarees', ['Champagne gold', 'Ivory'], ['Light organza lehengas']),
+ ('#6e1f33', 'Deep wine', 'Festive jewels', 'A dark, warm red for winter weddings.', 'Velvet bandhgalas, lehengas, blouses', ['Champagne gold', 'Emerald'], ['Velvet bandhgalas', 'Corset saree blouses']),
+ ('#d8c08a', 'Champagne gold', 'Festive jewels', 'A soft metallic that replaces bright yellow gold.', 'Tissue sarees, zari borders, trims, footwear', ['Emerald', 'Ivory', 'Indigo'], ['Tissue sarees in champagne gold', 'Embellished wedding juttis']),
+ ('#9fae8f', 'Sage', 'Calm handloom', 'A muted green-grey with a natural, hand-dyed feel.', 'Handloom kurtas, Chanderi sets, linen', ['Ivory', 'Dusty rose'], ['Linen kurta sets', 'Embroidered kurta co-ord sets']),
+ ('#f3ecdc', 'Ivory', 'Calm handloom', 'Warm off-white; the base of quiet luxury.', 'Sherwanis, chikankari, handloom sarees, menswear', ['Every colour in the palette'], ['Ivory and pastel sherwanis', 'Chikankari']),
+ ('#d9a3a6', 'Dusty rose', 'Calm handloom', 'A soft, grown-up pink for day functions.', 'Pastel sarees, organza dupattas, blouses', ['Sage', 'Champagne gold'], ['Pastel handloom sarees', 'Organza dupattas with embroidered borders']),
+ ('#2f3f7a', 'Indigo', 'Earth and indigo', 'The most-seen colour story at Lakmé Fashion Week 2026; the key colour for everyday.', 'Denim, handloom kurtas, printed co-ords, footwear', ['Ivory', 'Champagne gold', 'Rust'], ['Indigo denim with handloom', 'Ikat']),
+ ('#b5522b', 'Rust', 'Earth and indigo', 'A warm earth red with a craft and natural-dye feel.', 'Block prints, Kolhapuris, kurtas, accessories', ['Indigo', 'Ivory'], ['Block print', 'Kolhapuri chappals']),
+]
+
+# Textile & Craft Guide: name -> (origin / cluster, character, best for, sourcing note)
+FABRICS = {
+ 'Chanderi': ('Chanderi, Madhya Pradesh', 'Light, sheer, with a subtle sheen; cotton, silk or silk-cotton.', 'Kurtas, sarees, dupattas, Nehru jackets', 'Handloom Chanderi carries a GI tag; powerloom Chanderi-look fabric works for value ranges.'),
+ 'Maheshwari': ('Maheshwar, Madhya Pradesh', 'Fine cotton-silk with distinctive reversible borders.', 'Sarees, kurta sets, dupattas', 'Small weaver clusters; plan for longer lead times.'),
+ 'Jamdani': ('West Bengal (and Bangladesh)', 'Fine cotton with motifs woven in by hand on the loom.', 'Sarees, kurtas, dupattas', 'Labour-intensive and slow; best for premium hero pieces.'),
+ 'Handspun khadi': ('Across India, through khadi institutions', 'Handspun, handwoven; now in cotton, silk, wool and linen.', 'Kurtas, shirts, jackets, everyday wear', 'Texture varies by batch; approve swatches per lot.'),
+ 'Banarasi brocade': ('Varanasi, Uttar Pradesh', 'Rich woven brocade with zari patterns.', 'Wedding sarees, lehengas, Nehru jackets', 'GI-tagged; reworked vintage Banarasi is an emerging premium story.'),
+ 'Kanjeevaram silk': ('Kanchipuram, Tamil Nadu', 'Heavy mulberry silk with contrast borders.', 'Wedding sarees, and now menswear', 'GI-tagged; high cost, best for occasion and bridal.'),
+ 'Tussar silk': ('Bihar, Jharkhand, Chhattisgarh and Odisha', 'Textured wild silk with a natural gold tone.', 'Sarees, kurtas, menswear, jackets', 'Natural colour varies; good for quiet luxury.'),
+ 'Bhagalpur silk': ('Bhagalpur, Bihar', 'Soft, textured silk with a matte handle.', 'Structured gowns, sarees, stoles', 'An emerging premium story from Bihar.'),
+ 'Raw silk': ('Silk clusters across India', 'Textured, slubby silk with body.', 'Bandhgalas, lehengas, kurtas', 'Holds structure well for tailoring.'),
+ 'Organza': ('Varanasi and Surat mills', 'Sheer, crisp and photogenic.', 'Lehengas, dupattas, sarees, overlays', 'At its peak; plan to reduce from Festive 27.'),
+ 'Tissue': ('Varanasi and Surat mills', 'Metallic sheen woven with zari.', 'Evening sarees, lehengas, dupattas', 'Delivers shine without heavy embroidery.'),
+ 'Cotton silk': ('Widely available', 'Comfortable, breathable, with a light sheen.', 'Everyday ethnic: kurtas, sarees, sets', 'A dependable value-to-mid base fabric.'),
+ 'Linen': ('Mills across India', 'Breathable, textured, crisp.', 'Summer kurtas, co-ords, shirts', 'Rises again for Summer weddings.'),
+ 'Natural-dyed fabrics': ('Craft clusters in Rajasthan, Gujarat and beyond', 'Plant-based dyes with soft, uneven colour.', 'Premium kurtas, sarees, scarves', 'Slow process; tell the story on the label.'),
+}
+CRAFTS = {
+ 'Mirror work': ('Kutch, Gujarat and Rajasthan', 'Small mirrors (shisha) stitched onto fabric.', 'Kurtas, jackets, bags, footwear', 'Use flat-backed mirrors; keep away from friction areas.'),
+ 'Chikankari': ('Lucknow, Uttar Pradesh', 'Fine white-on-white shadow and knot embroidery.', 'Kurtas, sarees, menswear', 'GI-tagged; works best on fine cotton or georgette.'),
+ 'Zardozi': ('Lucknow, Agra and other centres', 'Heavy metallic thread embroidery.', 'Bridal and wedding wear', 'Use as placement work to control cost and weight.'),
+ 'Tone-on-tone embroidery': ('Machine and hand embroidery units', 'Embroidery in the same colour as the base.', 'Necklines, cuffs, yokes on kurtas and jackets', 'The quiet-luxury replacement for contrast work.'),
+ 'Rabari embroidery': ('Kutch, Gujarat', 'Bold chain stitch and mirror motifs from Rabari communities.', 'Jackets, kurtas, accessories', 'Partner with artisan groups and credit them.'),
+ 'Kantha': ('West Bengal', 'Running-stitch embroidery, traditionally layered.', 'Jackets, sneakers, stoles', 'Moving onto sneakers and streetwear.'),
+ 'Gota patti': ('Rajasthan', 'Appliqué with gold or silver ribbon.', 'Lehengas, dupattas, festive kurtas', 'Lightweight shine for festive.'),
+ 'Block print': ('Bagru and Sanganer, Rajasthan', 'Hand-carved wooden blocks printed by hand.', 'Kurtas, co-ords, home and resort wear', 'Approve strike-offs; irregularity is part of the appeal.'),
+ 'Bandhani': ('Gujarat and Rajasthan', 'Tie-dye with tiny resist dots.', 'Dupattas, sarees, festive sets', 'Rising for Festive 26 and 27.'),
+ 'Ikat': ('Pochampally (Telangana), Odisha, Patan (Gujarat)', 'Yarns dyed before weaving for a blurred pattern.', 'Sarees, kurtas, shirts, jackets', 'A natural fit with the indigo colour story.'),
+}

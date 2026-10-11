@@ -163,7 +163,14 @@ if pick:
   </section>
 """
     anchor = '  <section class="sec" aria-labelledby="th">'
-    out = out.replace(anchor, lb + '\n' + anchor, 1)
+    import reports_data as RD
+    rl = ''.join(f'<a href="core-item-{s}.html">{E(t)}</a>' for s, t, *_ in RD.ITEMS)
+    cl = ''.join(f'<a href="capsule-{v[0]}.html">{E(k)}</a>' for k, v in RD.CAPSULES.items())
+    rep = f'''  <section class="sec" id="reports" aria-labelledby="rph"><div class="sechead"><span class="mono eb">India reports</span><h2 id="rph">Go deeper.</h2></div>
+    <div class="rpl"><div><b>Core Item Updates</b><p>{rl}</p></div><div><b>Design Capsules</b><p>{cl}</p></div><div><b>Guides</b><p><a href="india-colour-forecast.html">India Colour Forecast</a><a href="india-textile-craft-guide.html">Textile and Craft Sourcing Guide</a><a href="reports.html">All reports →</a></p></div></div></section>
+'''
+    out = out.replace(anchor, lb + '\n' + rep + anchor, 1)
+    out = out.replace('</style>', '.rpl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.rpl>div{background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:16px 18px}.rpl b{font:700 16px var(--display)}.rpl p{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0}.rpl a{font:600 13.5px var(--body);text-decoration:none;color:var(--ink);border:1px solid var(--grid);border-radius:99px;padding:6px 12px;background:var(--paper)}.rpl a:hover{border-color:var(--ink)}@media (max-width:820px){.rpl{grid-template-columns:1fr}}</style>', 1)
     lcss = ('.lbp{color:var(--muted);font-size:15px;max-width:60ch;margin:6px 0 0}'
             '.lbrow{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(200px,240px);gap:16px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:thin}'
             '.lbk{all:unset;box-sizing:border-box;cursor:pointer;scroll-snap-align:start;display:grid;gap:7px;align-content:start}'

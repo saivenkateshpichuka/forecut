@@ -406,6 +406,12 @@ p,li{line-height:1.6}
 :root{--serif:"Source Serif 4","Source Serif Pro",Georgia,serif}
 h1,h2,.sechead h2,.hero h1,.vinfo h2{font-family:var(--display)!important;font-weight:700!important;letter-spacing:-.025em!important}
 p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.method p,.card p,.wcard p,.cover p,.hero p,.htext p:not(.basis){font-family:var(--serif)!important;letter-spacing:0!important}
+
+/* trend curve */
+.tcurve svg{width:100%;max-width:340px;height:auto;display:block}
+.tcurve .tcmsg{margin:4px 0 0;font-size:14px;color:var(--muted)}
+@media (prefers-reduced-motion:no-preference){.tcdot{animation:tcpulse 2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}}
+@keyframes tcpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
 </style>
 <div class="wrap">
   <div class="bar">
@@ -508,6 +514,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
           <dt>Detail area</dt><dd id="varea"></dd>
           <dt>Action</dt><dd id="vact"></dd>
           <dt>Lifecycle</dt><dd><div class="life" id="vlife"></div></dd>
+          <dt>Trend curve</dt><dd><div class="tcurve" id="vcurve"></div></dd>
         </dl>
         <div class="vact">
           <button class="vbtn" type="button" id="vdl">Download detail card</button>
@@ -520,7 +527,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
 
   <div class="foot">
     <p>SS28 is a long-range Forecut projection. It builds on early SS28 trade coverage (structured clarity and performance design, FashionUnited) and the WGSN × Coloro 2028 colour of the year, Radiant Earth. Individual details and their statuses are Forecut's curated assessment, written in our own words. Colour swatches are screen approximations, not official colour standards. Questions or feedback: <a href="mailto:hello@forecut.in">hello@forecut.in</a>. Forecut is free while in testing.</p>
-    <p class="flinks"><a href="https://forecut.in/journal.html">Journal</a> · <a href="https://forecut.in/about.html">About</a> · <a href="https://forecut.in/contact.html">Contact</a> · <a href="https://forecut.in/terms.html">Terms &amp; Conditions</a> · <a href="https://forecut.in/privacy.html">Privacy Policy</a> · © 2026 Forecut</p>
+    <p class="flinks"><a href="https://forecut.in/reports.html">Reports</a> · <a href="https://forecut.in/journal.html">Journal</a> · <a href="https://forecut.in/about.html">About</a> · <a href="https://forecut.in/contact.html">Contact</a> · <a href="https://forecut.in/terms.html">Terms &amp; Conditions</a> · <a href="https://forecut.in/privacy.html">Privacy Policy</a> · © 2026 Forecut</p>
     <p>Status key: <b>Emerging</b> early signals · <b>Rising</b> gaining fast, add now · <b>Peaking</b> at full adoption, use in core styles · <b>Fading</b> phase out in new development.</p>
   </div>
 </div>
@@ -2074,6 +2081,23 @@ var Flats = (function () {
       sub: (card.closest('.sub') || {getAttribute: function () { return ''; }}).getAttribute('data-sub')
     };
   }
+
+  function trendCurve(life, curCode) {
+    var X = {e: 46, r: 98, p: 160, f: 236}, COL = {e: '#ff5a1f', r: '#00a85a', p: '#e09a00', f: '#8b5cf6'}, NM = {e: 'Emerging', r: 'Rising', p: 'Peaking', f: 'Fading'};
+    function y(x) { return 92 - 74 * Math.exp(-Math.pow((x - 160) / 62, 2)); }
+    var pts = []; for (var x = 8; x <= 312; x += 4) pts.push(x + ',' + y(x).toFixed(1));
+    var ci = SEASON_CODES.indexOf(curCode), ch = life.charAt(ci < 0 ? 0 : ci); if (ch === '-') { for (var k = 0; k < life.length; k++) if (life.charAt(k) !== '-') { ch = life.charAt(k); ci = k; break; } }
+    var cx = X[ch] || 160, done = []; for (var x2 = 8; x2 <= cx; x2 += 4) done.push(x2 + ',' + y(x2).toFixed(1));
+    var s = '<svg viewBox="0 -16 320 144" role="img" aria-label="Trend curve: ' + (NM[ch] || '') + ' in ' + SEASON_CODES[ci] + '">';
+    s += '<polyline points="' + pts.join(' ') + '" fill="none" stroke="var(--grid)" stroke-width="5" stroke-linecap="round"/>';
+    s += '<polyline points="' + done.join(' ') + '" fill="none" stroke="' + COL[ch] + '" stroke-width="5" stroke-linecap="round"/>';
+    ['e', 'r', 'p', 'f'].forEach(function (k) { var on = k === ch; s += '<circle cx="' + X[k] + '" cy="' + y(X[k]).toFixed(1) + '" r="' + (on ? 8 : 4.5) + '" fill="' + (on ? COL[k] : 'var(--paper-2)') + '" stroke="' + COL[k] + '" stroke-width="2.5"' + (on ? ' class="tcdot"' : '') + '/>' +
+      '<text x="' + X[k] + '" y="118" text-anchor="middle" font-size="11.5" font-weight="' + (on ? 700 : 500) + '" fill="' + (on ? COL[k] : 'var(--muted)') + '" font-family="DM Sans,sans-serif">' + NM[k] + '</text>'; });
+    s += '<text x="' + cx + '" y="' + (y(cx) - 15).toFixed(1) + '" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)" font-family="DM Sans,sans-serif">' + SEASON_CODES[ci] + '</text></svg>';
+    var nxt = life.charAt(ci + 1), msg = {e: 'Early signals: test in small quantities.', r: 'Growth is building: the best time to invest.', p: 'At its height: keep in core ranges, avoid over-buying.', f: 'Demand is slowing: clear stock and move on.'}[ch] || '';
+    if (nxt && nxt !== '-' && SEASON_CODES[ci + 1]) msg += ' Next, ' + SEASON_CODES[ci + 1] + ': ' + NM[nxt].toLowerCase() + '.';
+    return s + '<p class="tcmsg">' + msg + '</p>';
+  }
   function show(card) {
     current = card;
     var d = info(card), s = ST[d.st], r = Flats.render(d.name, colorsFor(d.name, PAGE_C));
@@ -2093,6 +2117,7 @@ var Flats = (function () {
     document.getElementById('vcat').textContent = d.cat;
     document.getElementById('varea').textContent = d.sub && d.sub !== d.area ? d.sub + ' · ' + d.area : d.area;
     document.getElementById('vact').textContent = s[2];
+    document.getElementById('vcurve').innerHTML = trendCurve(d.life, CUR_SEASON);
     var lifeEl = document.getElementById('vlife'), LBL = {e:'Emerging', r:'Rising', p:'Peaking', f:'Fading'}; lifeEl.innerHTML = '';
     SEASON_CODES.forEach(function (code, i) {
       var ch = d.life.charAt(i), cell = document.createElement('span');

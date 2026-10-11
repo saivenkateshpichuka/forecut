@@ -16,4 +16,5 @@ python3 india_prompts.py
 python3 season_prompts.py
 python3 legal.py
 python3 journal.py
+python3 reports.py
 python3 seo.py
