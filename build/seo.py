@@ -8,6 +8,11 @@ pages = {
  'india.html': ('India Fashion Trend Forecast 2026–27 · Sarees, Lehengas, Kurtas, Juttis | Forecut',
    'India fashion trends for Festive 2026, Summer 2027 and Festive 2027: sarees, lehengas, kurtas, bandhgalas, juttis, Kolhapuris, handloom fabrics, chikankari, mirror work and trims, with ₹ price guides.', 'india.html'),
 }
+for fn, t, d in [('about.html', 'About Forecut · Fashion Trend Forecasting for India', 'Forecut is an independent, detail-level fashion trend forecasting platform built for the Indian market.'),
+                 ('contact.html', 'Contact Forecut', 'Contact Forecut at hello@forecut.in for questions, feedback, partnerships and enterprise enquiries.'),
+                 ('terms.html', 'Terms & Conditions · Forecut', 'Terms and conditions for using the Forecut fashion trend forecasting website.'),
+                 ('privacy.html', 'Privacy Policy · Forecut', 'How Forecut collects, uses and protects information, in line with Indian data protection law.')]:
+    pages[fn] = (t, d, fn)
 for k in SEAS:
     m = META[k]
     pages[f'{k}.html'] = (f"{m['code']} Fashion Trend Forecast ({m['title']}) · Garments, Footwear & Details | Forecut",
@@ -40,7 +45,7 @@ for fn, (title, desc, path) in pages.items():
     if '<html lang="en">' in h: h = h.replace('<html lang="en">', '<html lang="en-IN">', 1)
     open(p, 'w').write(h)
 today = datetime.date.today().isoformat()
-pri = {'index.html': '1.0', 'india.html': '0.9'}
+pri = {'index.html': '1.0', 'india.html': '0.9', 'about.html': '0.5', 'contact.html': '0.4', 'terms.html': '0.2', 'privacy.html': '0.2'}
 sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
     f'  <url><loc>{BASE}{v[2]}</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>{pri.get(k, "0.8")}</priority></url>\n' for k, v in pages.items()) + '</urlset>\n'
 open(os.path.join(R, 'sitemap.xml'), 'w').write(sm)

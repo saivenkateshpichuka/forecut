@@ -235,6 +235,7 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
 textarea{width:100%;font:16px var(--body);padding:13px 14px;border-radius:10px;border:1px solid color-mix(in srgb,var(--paper) 25%,transparent);background:color-mix(in srgb,var(--paper) 8%,transparent);color:var(--paper);resize:vertical}
 .wait a{color:inherit}
 footer a{color:inherit}
+.flinks{display:flex;gap:6px 4px;flex-wrap:wrap}
 .gal{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(180px,220px);gap:12px;overflow-x:auto;padding-bottom:10px;scroll-snap-type:x mandatory}
 .gal a{scroll-snap-align:start;text-decoration:none;display:grid;gap:8px}
 .gal img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;background:var(--grid)}
@@ -756,6 +757,7 @@ p,li{line-height:1.6}
 
   <footer>
     <span>© 2026 Forecut</span>
+    <span class="flinks"><a href="https://forecut.in/about.html">About</a> · <a href="https://forecut.in/contact.html">Contact</a> · <a href="https://forecut.in/terms.html">Terms &amp; Conditions</a> · <a href="https://forecut.in/privacy.html">Privacy Policy</a></span>
     <span><a href="mailto:hello@forecut.in">hello@forecut.in</a></span>
     <span>Detail-level fashion forecasting · Made in India</span>
   </footer>
