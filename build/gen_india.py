@@ -143,9 +143,40 @@ path = os.path.join(STATIC, 'india.html') if STATIC else 'forecut-india.html'
 if STATIC:
     t = re.search(r'<title>.*?</title>', out).group(0)
     out = '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">\n' + out.replace(t, t + '</head><body>', 1) + '\n</body></html>'
-# Keep the India-only photos active when rebuilding the static page.
-if STATIC:
-    out = out.replace('<script>\n(function () {\n  function pat(type, fg, id) {',
-                      '<script src="india-photos.js"></script>\n<script>\n(function () {\n  function pat(type, fg, id) {', 1)
+# Lookbook strip of India photos under the hero
+IMGS = set(json.load(open('images.json')))
+SLN = {'e': 'Emerging', 'r': 'Rising', 'p': 'Peaking', 'f': 'Fading'}
+bycat = {}
+for x in I.D:
+    if islug(x[2]) in IMGS and x[5][0] in 'erp': bycat.setdefault(x[1], []).append(x)
+for v in bycat.values(): v.sort(key=lambda x: 'rep'.index(x[5][0]))
+pick, rnd = [], 0
+while len(pick) < 16 and any(len(v) > rnd for v in bycat.values()):
+    for v in bycat.values():
+        if len(v) > rnd and len(pick) < 16: pick.append(v[rnd])
+    rnd += 1
+if pick:
+    cards = ''.join(f'<button type="button" class="lbk" data-name="{E(x[2])}"><span class="lbi"><img src="img/{islug(x[2])}.webp" alt="{E(x[2])}" loading="lazy" width="440" height="550"></span><small class="{x[5][0]}">{SLN[x[5][0]]} · {E(x[1])}</small><b>{E(x[2])}</b></button>' for x in pick)
+    lb = f"""  <section class="sec" id="lookbook" aria-labelledby="lbh">
+    <div class="sechead"><span class="mono eb">The India edit</span><h2 id="lbh">This season, up close.</h2><p class="lbp">The details we're watching across Indian wear right now. Tap any look for notes, timing and a downloadable card.</p></div>
+    <div class="lbrow">{cards}</div>
+  </section>
+"""
+    anchor = '  <section class="sec" aria-labelledby="th">'
+    out = out.replace(anchor, lb + '\n' + anchor, 1)
+    lcss = ('.lbp{color:var(--muted);font-size:15px;max-width:60ch;margin:6px 0 0}'
+            '.lbrow{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(200px,240px);gap:16px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:thin}'
+            '.lbk{all:unset;box-sizing:border-box;cursor:pointer;scroll-snap-align:start;display:grid;gap:7px;align-content:start}'
+            '.lbk:focus-visible{outline:2px solid var(--chalk);outline-offset:3px}'
+            '.lbi{display:block;aspect-ratio:4/5;overflow:hidden;border-radius:4px;background:var(--surface-img)}'
+            '.lbi img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}'
+            '.lbk:hover .lbi img{transform:scale(1.04)}'
+            '.lbk small{font:600 11px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:3px}'
+            '.lbk small.e{color:var(--chalk)}.lbk small.r{color:var(--rise)}.lbk small.p{color:var(--peak)}'
+            '.lbk b{font:600 18px/1.25 var(--display)}'
+            '@media (max-width:560px){.lbrow{grid-auto-columns:62vw;gap:12px}.lbk b{font-size:16px}}')
+    out = out.replace('</style>', lcss + '</style>', 1)
+    js = "<script>document.querySelectorAll('.lbk').forEach(function(b){b.addEventListener('click',function(){var n=b.getAttribute('data-name'),hit=Array.prototype.find.call(document.querySelectorAll('.d'),function(c){return c.querySelector('h4').textContent===n;});if(hit&&window.ForecutOpenDetail)window.ForecutOpenDetail(hit);});});</script>"
+    out = out.replace('</body></html>', js + '\n</body></html>') if '</body></html>' in out else out + js
 open(path, 'w').write(out)
 print('india', total, counts)
