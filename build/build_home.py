@@ -12,13 +12,42 @@ for k, items in M.items():
         if sl in imgs and sl not in info:
             si = next((i for i, c in enumerate(it['life']) if c != '-'), 0)
             info[sl] = (it['name'], k.split('|')[1], SEAS[si], {'e': 'Emerging', 'r': 'Rising', 'p': 'Peaking', 'f': 'Fading'}[it['life'][si]])
-order = sorted(info, key=lambda x: (info[x][3] != 'Rising', x))[:16]
+# India photos too (India is the main market)
+import india_data as I
+for x in I.D:
+    sl = islug(x[2])
+    if sl in imgs and sl not in info and x[5][0] in 'erp':
+        info[sl] = (x[2], x[1], 'india', {'e': 'Emerging', 'r': 'Rising', 'p': 'Peaking'}[x[5][0]])
+# mix seasons and categories so the edit isn't all coats
+from collections import OrderedDict
+lanes = OrderedDict()
+for x in sorted(info, key=lambda x: ({'Rising': 0, 'Emerging': 1, 'Peaking': 2, 'Fading': 3}[info[x][3]], x)):
+    lanes.setdefault((info[x][2], info[x][1]), []).append(x)
+keys = list(lanes); subord = []
+[subord.append(x[1]) for x in I.D if x[1] not in subord]
+ik = sorted([k for k in keys if k[0] == 'india'], key=lambda k: subord.index(k[1]) if k[1] in subord else 99); gk = [k for k in keys if k[0] != 'india']
+mixed = []
+for n in range(max(len(ik), len(gk))):
+    if n < len(ik): mixed.append(ik[n])
+    if n < len(gk): mixed.append(gk[n])
+lanes = OrderedDict((k, lanes[k]) for k in mixed)
+order, seen_cat = [], set()
+while len(order) < 9 and any(lanes.values()):
+    for key in list(lanes):
+        if lanes[key] and len(order) < 9:
+            order.append(lanes[key].pop(0))
+KC = {'Emerging': 'chalk', 'Rising': 'rise', 'Peaking': 'peak', 'Fading': 'fade'}
 gal = ''
 if order:
-    cards = ''.join(f'<a href="{info[x][2]}.html"><img src="img/{x}.webp" alt="{info[x][0]}" loading="lazy" width="440" height="550"><small>{info[x][3]} · {info[x][2].upper()}</small><b>{info[x][0]}</b></a>' for x in order)
+    cards = ''.join(
+        f'<a href="{info[x][2]}.html"{" class=\"big\"" if n == 0 else ""}><img src="img/{x}.webp" alt="{info[x][0]}" loading="lazy" width="800" height="800">'
+        f'<span class="cap"><span class="tag" style="--k:var(--{KC[info[x][3]]})"><i></i>{info[x][3]}</span><b>{info[x][0]}</b><small>{'India' if info[x][2] == 'india' else info[x][2].upper()} · {info[x][1]}</small></span></a>'
+        for n, x in enumerate(order))
+    more = ''.join(f'<a href="{s}.html">{s.upper()} →</a>' for s in SEAS) + '<a href="india.html">India →</a>'
     gal = f'''  <section id="lookbook" aria-labelledby="lh">
     <div class="sechead"><div><span class="mono eyebrow">The detail edit</span><h2 id="lh">This season, up close.</h2></div><p>A few of the details we're tracking now. Open any season to see every detail, with notes and downloadable cards.</p></div>
     <div class="gal">{cards}</div>
+    <div class="galmore" role="navigation" aria-label="Browse seasons">{more}</div>
   </section>
 '''
 h = h.replace('<!--GALLERY-->', gal)
