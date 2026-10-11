@@ -80,9 +80,9 @@ tk = ''.join(f'<span>{x[2]} <span class="pill {_CL[x[5][0]][0]}">{_CL[x[5][0]][1
 h = h.replace('<!--TICKER-->', tk + tk)
 # live tracker from the global season data
 import datetime as _dt, os as _os
-_SITE = json.load(open('site.json')); _LK = [z.lower() for z in _SITE.get('locked', [])]
+_LK = []  # tracker always shows all seasons
 _rows, _seen, _cats = [], set(), set()
-for _pat in ['errrp', 'eerrr', 'rrrpf', 'errpf', 'rrpf-', 'ppppf', 'rrrrp', 'pppff']:
+for _pat in ['errrp', 'eerrr', 'rrrpf', 'errpf', 'rrpf-', 'ppppf', 'rrrrp', 'pppff', 'eerrp', 'rrppf', 'rpff-']:
     for _k, _items in M.items():
         _cat = _k.split('|')[1]
         if _cat in _cats: continue

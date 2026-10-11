@@ -612,7 +612,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
 
     <div class="track" id="tracker">
       <div class="trh"><h3>Trend lifecycle tracker</h3><span class="hxlive"><i></i>Live · updated <!--TRDATE--></span></div>
-      <p>Pulled live from the Forecut database: the same statuses you see on every season page, refreshed whenever the forecast updates. Future seasons open at launch.</p>
+      <p>Pulled live from the Forecut database: the same statuses you see on every season page, refreshed whenever the forecast updates.</p>
       <div class="tablewrap">
         <table>
           <!--TRTABLE-->
