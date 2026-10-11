@@ -143,5 +143,9 @@ path = os.path.join(STATIC, 'india.html') if STATIC else 'forecut-india.html'
 if STATIC:
     t = re.search(r'<title>.*?</title>', out).group(0)
     out = '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">\n' + out.replace(t, t + '</head><body>', 1) + '\n</body></html>'
+# Keep the India-only photos active when rebuilding the static page.
+if STATIC:
+    out = out.replace('<script>\n(function () {\n  function pat(type, fg, id) {',
+                      '<script src="india-photos.js"></script>\n<script>\n(function () {\n  function pat(type, fg, id) {', 1)
 open(path, 'w').write(out)
 print('india', total, counts)
