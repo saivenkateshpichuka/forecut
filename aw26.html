@@ -562,7 +562,7 @@ var Flats = (function () {
     if (pep) { xw = UA[0] + (sideX - UA[0]) * ((wYp - UA[1]) / (L - UA[1])) - 5; sideX += 20; }
     var hemCurve = (t === 'shirt' && !o.straightHem && !pep);
     var hemPath = (pep ? 'L' + F(xw) + ' ' + wYp + ' ' : '') + (hemCurve ? 'L' + F(sideX) + ' ' + (L - 8) + ' Q146 ' + (L + 4) + ' 120 ' + (L + 4) : 'L' + F(sideX) + ' ' + L + ' L120 ' + L);
-    var vol = o.vol != null ? o.vol : (sh === 'drop' ? 13 : (t === 'shirt' || t === 'knit' || t === 'tee') ? 10 : 7);
+    var vol = o.vol != null ? o.vol : (sh === 'drop' ? 16 : (t === 'shirt' || t === 'knit' || t === 'tee') ? 13 : 9);
     var armPath = sl === 'none' ? qc(HPS, SP, 1.5) + ' Q' + F(SP[0] - 6) + ' 66 ' + pt(UA) : qc(HPS, SP, 1.8) + ' ' + qc(SP, SO, sl === 'short' ? 2 : vol) + ' L' + pt(SI) + ' ' + qc(SI, UA, sl === 'short' ? 1 : vol * .35);
     if (!pep && t !== 'waistcoat') { var sideQ = 'Q' + F((UA[0] + sideX) / 2 - 2.2) + ' ' + F((UA[1] + L) / 2) + ' '; hemPath = hemPath.replace(/^L/, sideQ); }
     if (t === 'waistcoat') { hemPath = 'L' + F(sideX) + ' ' + (L - 4) + ' L132 ' + (L - 2) + ' L120 ' + (L + 10); }
@@ -644,7 +644,7 @@ var Flats = (function () {
       else if (cf === 'smock') cs += '<path d="' + cuffPoly + '" fill="url(#p-smock)" stroke="' + c.ink + '" stroke-width=".8"/>';
       else cs += '<path d="M' + pt(A) + ' L' + pt(B) + '" ' + S.s + '/>';
       if (cf === 'rib' || cf === 'longrib') { var n = cf === 'longrib' ? 7 : 4, tk = ''; for (var i = 1; i <= n; i++) { tk += 'M' + pt(lerp(A, B, i / (n + 1))) + ' L' + pt(lerp(SI, SO, i / (n + 1))) + ' '; } cs += '<path d="' + tk + '" ' + S.s + ' stroke-width=".6"/>'; }
-      if (cf === 'band' || cf === 'plain') { var pA = lerp(A, B, .3), pB = lerp(A, B, .55); cs += '<path d="M' + pt(pA) + ' l-2 -9 M' + pt(pB) + ' l-1.5 -8" ' + S.s + ' stroke-width=".8" opacity=".75"/>'; if (cf === 'band') cs += '<path d="M' + pt(lerp(A, SI, .5)) + ' L' + pt(lerp(B, SO, .5)) + '" ' + S.t + ' opacity=".8"/>'; }
+      if (cf === 'band' || cf === 'plain') { var gd = ''; [.18, .36, .54, .72].forEach(function (u, gi) { var g0 = lerp(A, B, u); gd += 'M' + pt(g0) + ' q' + F(-2 + gi * .4) + ' ' + F(-6 - gi % 2 * 3) + ' ' + F(-1 + gi * .6) + ' ' + F(-11 - gi % 2 * 4) + ' '; }); cs += '<path d="' + gd + '" ' + S.s + ' stroke-width=".75" opacity=".7"/>'; if (cf === 'band') cs += '<path d="M' + pt(lerp(A, SI, .5)) + ' L' + pt(lerp(B, SO, .5)) + '" ' + S.t + ' opacity=".8"/>'; }
       if (cf === 'band' && t === 'shirt') cs += btn(lerp(SI, SO, .3)[0], lerp(SI, SO, .3)[1] - 3, c, 1.8);
       if (has('tipping')) cs += '<path d="M' + pt(lerp(A, SI, .35)) + ' L' + pt(lerp(B, SO, .35)) + ' M' + pt(lerp(A, SI, .6)) + ' L' + pt(lerp(B, SO, .6)) + '" stroke="' + c.ink + '" stroke-width="1.6" fill="none"/>';
       if (cf === 'fringe') { var fr = ''; for (var j = 0; j <= 6; j++) { var p = lerp(SI, SO, j / 6); fr += 'M' + pt(p) + ' l1 12 '; } cs += '<path d="' + fr + '" ' + S.s + '/>'; }
@@ -846,6 +846,8 @@ var Flats = (function () {
     out += mir('<path d="' + outlinePath + '" ' + S.o + '/>');
     var FD = 'fill="none" stroke="' + c.ink + '" stroke-width=".8" stroke-linecap="round" opacity=".5"', fd = 'M132 ' + (wY + 12) + ' Q134 ' + F((wY + L) / 2) + ' ' + F(120 + (hemX - 120) * .42) + ' ' + (L - 4) + ' M141 ' + (wY + 16) + ' Q' + F(146 + (hemX - 144) * .4) + ' ' + F((wY + L) / 2 + 10) + ' ' + F(hemX - 10) + ' ' + (L - 6);
     if (sl === 'long') fd += ' M156 112 Q162 117 168 113 M158 146 Q164 150 171 146';
+    if (sk === 'aline' || sk === 'tiered' || sk === 'bubble') { for (var gx = 124; gx < 142; gx += 4.5) fd += ' M' + gx + ' ' + (wY + 2) + ' q' + F((gx - 120) * .08) + ' 8 ' + F((gx - 120) * .12) + ' 16'; }
+    if (sl === 'long') fd += ' M163 156 q1 -5 3 -9 M168 157 q1 -5 3 -10';
     out += mir('<path d="' + fd + '" ' + FD + '/>');
     out += mir('<path d="' + nkD[0] + ' ' + nkD[1] + '" ' + S.o + '/>');
     if (nkT === 'slip') out += mir('<path d="M136 61 L133 26" ' + S.o + '/>');
@@ -1867,7 +1869,7 @@ var Flats = (function () {
       '<feColorMatrix in="so" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.12 0" result="shadow"/>' +
       '<feMerge><feMergeNode in="shadow"/><feMergeNode in="SourceGraphic"/><feMergeNode in="shade"/></feMerge></filter>' : '';
     var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 250"' + w + ' role="img" aria-label="Technical flat sketch, ' + view.toLowerCase() + ', highlighting ' + labels.join(' and ').toLowerCase() + '">' +
-      (defs(c).replace('</defs>', rf + '</defs>') + (real ? '<g filter="url(#rl)">' + r.svg + '</g>' : r.svg) + marks).replace(/id="(p-[a-z]+|bc|rl)"/g, 'id="' + uid + '$1"').replace(/url\(#(p-[a-z]+|bc|rl)\)/g, 'url(#' + uid + '$1)') +
+      (defs(c).replace('</defs>', rf + '<filter id="hd" x="-4%" y="-4%" width="108%" height="108%"><feTurbulence type="fractalNoise" baseFrequency="0.028" numOctaves="2" seed="11" result="t"/><feDisplacementMap in="SourceGraphic" in2="t" scale="1.25" xChannelSelector="R" yChannelSelector="G"/></filter></defs>') + (real ? '<g filter="url(#rl)"><g filter="url(#hd)">' + r.svg + '</g></g>' : '<g filter="url(#hd)">' + r.svg + '</g>') + marks).replace(/id="(p-[a-z]+|bc|rl|hd)"/g, 'id="' + uid + '$1"').replace(/url\(#(p-[a-z]+|bc|rl|hd)\)/g, 'url(#' + uid + '$1)') +
       (opts.clean ? '' : '<text x="6" y="246" font-family="IBM Plex Mono,monospace" font-size="7.5" letter-spacing=".6" fill="' + c.muted + '">' + view + '</text>' +
       '<text x="234" y="246" text-anchor="end" font-family="IBM Plex Mono,monospace" font-size="7.5" font-weight="500" letter-spacing=".6" fill="' + c.accent + '">' + tag + '</text>') + '</svg>';
     svg = svg.replace(/<[a-zA-Z][^<>]*>/g, function (tag) {
