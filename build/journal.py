@@ -12,26 +12,26 @@ CSS = '''<style>
 .jfig{margin:26px 0;}
 .jfig .ph{border-radius:8px;overflow:hidden;background:var(--grid);aspect-ratio:4/3;max-width:560px}
 .jfig figcaption{font-size:14px;color:var(--muted);margin-top:8px}
-.jtag{display:inline-block;font:700 11.5px Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--chalk);padding:4px 10px;border-radius:99px}
+.jtag{display:inline-block;font:700 11.5px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--chalk);padding:4px 10px;border-radius:99px}
 .jmeta{font-size:14px;color:var(--muted);margin:6px 0 0}
 article p,article li{font-size:17.5px;line-height:1.75}
-article h2{font:600 26px/1.25 Fraunces,Georgia,serif;margin:40px 0 10px;letter-spacing:-.01em}
+article h2{letter-spacing:-.02em!important;font:700 26px/1.25 "DM Sans",system-ui,sans-serif;margin:40px 0 10px;letter-spacing:-.01em}
 .ptab{width:100%;border-collapse:collapse;font-size:15px;margin:10px 0 6px;background:var(--paper-2);border:1px solid var(--grid);border-radius:10px;overflow:hidden}
 .ptab th,.ptab td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--grid)}
-.ptab th{font:600 12px Inter,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.ptab th{font:600 12px "DM Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
 .ptab tr:last-child td{border-bottom:0}
 .tw{overflow-x:auto}
 .cta{background:var(--mat);color:var(--mat-ink);border-radius:12px;padding:20px 22px;margin:34px 0 10px;font-size:17px}
 .cta a{color:var(--mat-ink);font-weight:700}
-.more h3{font:600 22px Fraunces,Georgia,serif;margin:48px 0 14px}
+.more h3{font:600 22px "DM Sans",system-ui,sans-serif;margin:48px 0 14px}
 .jgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px 18px;margin-top:22px}
 .jcard{text-decoration:none;color:inherit;display:grid;gap:8px}
 .jcard .ph{aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:var(--grid)}
 .jcard img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
 .jcard:hover img{transform:scale(1.04)}
-.jcard b{font:600 20px/1.25 Fraunces,Georgia,serif}
-.jcard span.d{font-size:15px;color:var(--muted);line-height:1.5}
-.jcard small{font:600 11.5px Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--chalk)}
+.jcard b{font:700 19px/1.3 "DM Sans",system-ui,sans-serif}
+.jcard span.d{font-family:"Source Serif 4",Georgia,serif;font-size:15.5px;color:var(--muted);line-height:1.5}
+.jcard small{font:600 11.5px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--chalk)}
 .byline{font-size:14px;color:var(--muted);border-top:1px solid var(--grid);margin-top:36px;padding-top:14px}
 </style>'''
 def head(title):

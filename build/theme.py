@@ -1,6 +1,6 @@
 """Apply the Forecut editorial theme (ivory, ink, forest, rust; Fraunces serif) to the page templates. Safe to run more than once."""
 import re
-FONT = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500..700;1,9..144,500..700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">'
+FONT = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">'
 LIGHT = ('--paper:#f5f0e8; --paper-2:#fffcf7; --grid:#e3d9cc; --ink:#1c1714; --muted:#6e6259;\n'
          '  --mat:#1f3d33; --mat-ink:#f5f0e8; --chalk:#b4532a; --chalk-soft:#f3e1d6;\n'
          '  --rise:#2e7d55; --peak:#a8701f; --fade:#8a6f86;')
@@ -50,9 +50,9 @@ def apply(path):
     s = re.sub(r'--paper:#[0-9a-f]{6}; --paper-2:#[0-9a-f]{6}; --grid:#[0-9a-f]{6}; --ink:#[0-9a-f]{6}; --muted:#[0-9a-f]{6};\s*--mat:#[0-9a-f]{6}; --mat-ink:#[0-9a-f]{6}; --chalk:#[0-9a-f]{6}; --chalk-soft:#[0-9a-f]{6};\s*--rise:#[0-9a-f]{6}; --peak:#[0-9a-f]{6}; --fade:#[0-9a-f]{6};',
                lambda m: LIGHT if 'eef2ef' in m.group(0) or 'f5f0e8' in m.group(0) else DARK, s)
     s = s.replace('--tint:#dbe3de; --surface-img:#eef2ef;', '--tint:#e6ddd1; --surface-img:#efe8de;').replace('--tint:#2b3c34; --surface-img:#dfe6e1;', '--tint:#3a322b; --surface-img:#efe8de;')
-    s = s.replace('--display:"Bricolage Grotesque","Arial Narrow",system-ui,sans-serif;', '--display:"Fraunces","Playfair Display",Georgia,serif;')
-    s = s.replace('--body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;', '--body:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;')
-    s = s.replace('--mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;', '--mono:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;')
+    s = s.replace('--display:"Bricolage Grotesque","Arial Narrow",system-ui,sans-serif;', '--display:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;')
+    s = s.replace('--body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;', '--body:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;')
+    s = s.replace('--mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;', '--mono:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;')
     if '/* live status */' not in s:
         i = s.index('</style>'); s = s[:i] + LIVE + s[i:]
     if '/* editorial theme */' not in s:

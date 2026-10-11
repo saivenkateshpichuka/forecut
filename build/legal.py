@@ -5,28 +5,28 @@ HEAD = '''<!doctype html>
 <html lang="en-IN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{title}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
 <style>
 :root{{--paper:#f5f0e8;--paper-2:#fffcf7;--grid:#e3d9cc;--ink:#1c1714;--muted:#6e6259;--mat:#1f3d33;--mat-ink:#f5f0e8;--chalk:#b4532a;--chalk-soft:#f3e1d6}}
 @media (prefers-color-scheme:dark){{:root:not([data-theme="light"]){{--paper:#14110f;--paper-2:#1e1a17;--grid:#352d27;--ink:#f2ebe2;--muted:#b3a698;--mat:#e8dccb;--mat-ink:#1c1714;--chalk:#e08a5e;--chalk-soft:#3a2418;color-scheme:dark}}}}
 :root[data-theme="dark"]{{--paper:#14110f;--paper-2:#1e1a17;--grid:#352d27;--ink:#f2ebe2;--muted:#b3a698;--mat:#e8dccb;--mat-ink:#1c1714;--chalk:#e08a5e;--chalk-soft:#3a2418;color-scheme:dark}}
 *{{box-sizing:border-box}}
-body{{margin:0;background:var(--paper);color:var(--ink);font:16.5px/1.7 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;padding:0 16px 56px;-webkit-font-smoothing:antialiased}}
+body{{margin:0;background:var(--paper);color:var(--ink);font:16.5px/1.7 "DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;padding:0 16px 56px;-webkit-font-smoothing:antialiased}}
 .wrap{{max-width:780px;margin:0 auto}}
 nav{{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:20px;flex-wrap:wrap}}
-.logo{{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;font:600 22px Fraunces,Georgia,serif}}
+.logo{{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;font:600 22px "DM Sans",system-ui,sans-serif}}
 .logo svg{{width:28px;height:28px}}
 nav .links{{display:flex;gap:18px;flex-wrap:wrap;font-size:14.5px}}
 nav .links a{{color:var(--muted);text-decoration:none}} nav .links a:hover{{color:var(--ink)}}
-.eb{{font:600 12px Inter,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--chalk);margin:40px 0 8px}}
-h1{{font:600 clamp(34px,6vw,52px)/1.08 Fraunces,Georgia,serif;letter-spacing:-.015em;margin:0 0 14px}}
-h2{{font:700 20px/1.3 Inter,sans-serif;margin:34px 0 8px}}
-p,li{{color:var(--ink)}} .lead{{font-size:18.5px;color:var(--muted)}}
+.eb{{font:600 12px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--chalk);margin:40px 0 8px}}
+h1{{letter-spacing:-.03em!important;font:700 clamp(34px,6vw,52px)/1.08 "DM Sans",system-ui,sans-serif;letter-spacing:-.015em;margin:0 0 14px}}
+h2{{font:700 20px/1.3 "DM Sans",sans-serif;margin:34px 0 8px}}
+p,li{{color:var(--ink);font-family:"Source Serif 4",Georgia,serif;font-size:17.5px}} nav,footer,.eb,.meta{{font-family:"DM Sans",sans-serif}} .lead{{font-size:18.5px;color:var(--muted)}}
 ul{{padding-left:20px}} li{{margin:5px 0}}
 a{{color:var(--ink)}}
 .meta{{font-size:14px;color:var(--muted)}}
 .box{{background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:22px 24px;margin:22px 0}}
-.mail{{display:inline-block;font:600 clamp(22px,4.5vw,30px) Inter,sans-serif;color:var(--mat);text-decoration:none;border-bottom:2px solid var(--chalk);word-break:break-all}}
+.mail{{display:inline-block;font:600 clamp(22px,4.5vw,30px) "DM Sans",sans-serif;color:var(--mat);text-decoration:none;border-bottom:2px solid var(--chalk);word-break:break-all}}
 footer{{margin-top:56px;padding-top:22px;border-top:1px solid var(--grid);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--muted)}}
 footer a{{color:var(--muted)}} footer .fl{{display:flex;gap:16px;flex-wrap:wrap}}
 :focus-visible{{outline:2px solid var(--chalk);outline-offset:3px}}
