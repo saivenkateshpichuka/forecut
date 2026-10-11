@@ -391,6 +391,22 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
 .dlgl{font:600 12px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:2px}
 .dlg .vbtn{padding:11px 18px;min-width:70px}
 #vdlpdf{background:#b4532a;color:#fff}
+
+/* lifecycle chips: live + locked */
+.lc{position:relative;transition:transform .2s ease}
+.lc i{display:inline-flex;align-items:center;gap:5px}
+.lc.emerge i::before,.lc.rise i::before,.lc.peak i::before,.lc.fade i::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor;flex:none}
+.lc.lock{border-style:dashed;opacity:.75}.lc.lock i{color:var(--muted);font-weight:600}
+@media (prefers-reduced-motion:no-preference){
+ .lc.emerge i::before,.lc.rise i::before{animation:fcPing 1.8s ease-out infinite}
+ .lc.peak i::before{animation:fcGlow 1.8s ease-in-out infinite}
+ .lc.fade i::before{animation:fcBreath 2.6s ease-in-out infinite}
+ .lc.cur{animation:lcGlow 2.4s ease-in-out infinite}
+ .life .lc{animation:lcIn .4s ease both}.life .lc:nth-child(2){animation-delay:.06s}.life .lc:nth-child(3){animation-delay:.12s}.life .lc:nth-child(4){animation-delay:.18s}.life .lc:nth-child(5){animation-delay:.24s}.life .lc:nth-child(6){animation-delay:.3s}
+ .life .lc.cur{animation:lcIn .4s ease both,lcGlow 2.4s ease-in-out .4s infinite}
+}
+@keyframes lcIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes lcGlow{0%,100%{box-shadow:inset 0 0 0 1px var(--ink),0 0 0 0 rgba(0,168,90,0)}50%{box-shadow:inset 0 0 0 1px var(--ink),0 0 0 4px rgba(0,168,90,.18)}}
 </style>
 <div class="wrap">
   <div class="bar">
@@ -626,6 +642,8 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
   window.ForecutColors = function (name) { return colorsFor(name, FILE_C); };
   var FILE_C = {ink:'#13241d', fill:'#ffffff', tint:'#dbe3de', accent:'#d9480f', accent2:'#d9480f', muted:'#53655d'};
   var DESC = %%DESC%%, SITE = %%SITE%%;
+  function isLocked(code) { return (SITE.locked || []).some(function (x) { return String(x).toLowerCase() === String(code).toLowerCase(); }); }
+  function maskLife(life) { return life.split('').map(function (ch, i) { return isLocked(SEASON_CODES[i]) ? 'L' : ch; }).join(''); }
   var moN = 0;
   function motif(name, w) {
     var f = fabricFor(name), id = 'mo' + (++moN), c = f.tint, wh = w ? ' width="' + w + '" height="' + Math.round(w * 250 / 240) + '"' : '';
@@ -635,7 +653,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
       '<rect x="44" y="96" width="152" height="48" rx="10" fill="#ffffff" opacity=".92"/><text x="120" y="117" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" letter-spacing="1" fill="#53655d">PHOTO</text><text x="120" y="133" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="9" letter-spacing="1" fill="#53655d">COMING SOON</text></svg>';
   }
   var LBLS = {e:'emerging', r:'rising', p:'peaking', f:'fading'};
-  function timing(life) { var parts = []; SEASON_CODES.forEach(function (code, i) { var ch = life.charAt(i); if (ch !== '-') parts.push(code + ' ' + LBLS[ch]); }); return parts.length ? 'Forecut lifecycle: ' + parts.join(' → ') + '.' : ''; }
+  function timing(life) { var lk = life.indexOf('L') > -1; var parts = []; SEASON_CODES.forEach(function (code, i) { var ch = life.charAt(i); if (ch !== '-' && ch !== 'L') parts.push(code + ' ' + LBLS[ch]); }); var _r = parts.length ? 'Forecut lifecycle: ' + parts.join(' → ') + '.' : ''; return _r + (lk ? ' Later seasons open at launch.' : ''); }
   var ST = {e:['emerge','Emerging','Watch closely and test in small capsules.'],r:['rise','Rising','Add to new development now.'],p:['peak','Peaking','Use in core styles; plan the next step.'],f:['fade','Fading','Phase out of new development.']};
   var scrim = document.getElementById('scrim'), msg = document.getElementById('vmsg'), dlBtn = document.getElementById('vdl');
   var current = null, lastFocus = null;
@@ -648,7 +666,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
       cat: card.closest('.cat').querySelector('h3').textContent,
       dept: card.closest('.dept').querySelector('.depth').textContent,
       img: card.getAttribute('data-img') || '',
-      life: card.getAttribute('data-life') || '',
+      life: maskLife(card.getAttribute('data-life') || ''),
       desc: DESC[card.querySelector('h4').textContent] || null,
       sub: (card.closest('.sub') || {getAttribute: function () { return ''; }}).getAttribute('data-sub')
     };
@@ -667,7 +685,8 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
       '<text x="' + X[k] + '" y="118" text-anchor="middle" font-size="11.5" font-weight="' + (on ? 700 : 500) + '" fill="' + (on ? COL[k] : 'var(--muted)') + '" font-family="DM Sans,sans-serif">' + NM[k] + '</text>'; });
     s += '<text x="' + cx + '" y="' + (y(cx) - 15).toFixed(1) + '" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)" font-family="DM Sans,sans-serif">' + SEASON_CODES[ci] + '</text></svg>';
     var nxt = life.charAt(ci + 1), msg = {e: 'Early signals: test in small quantities.', r: 'Growth is building: the best time to invest.', p: 'At its height: keep in core ranges, avoid over-buying.', f: 'Demand is slowing: clear stock and move on.'}[ch] || '';
-    if (nxt && nxt !== '-' && SEASON_CODES[ci + 1]) msg += ' Next, ' + SEASON_CODES[ci + 1] + ': ' + NM[nxt].toLowerCase() + '.';
+    if (nxt === 'L' && SEASON_CODES[ci + 1]) msg += ' ' + SEASON_CODES[ci + 1] + ' opens at launch.';
+    else if (nxt && nxt !== '-' && SEASON_CODES[ci + 1]) msg += ' Next, ' + SEASON_CODES[ci + 1] + ': ' + NM[nxt].toLowerCase() + '.';
     return s + '<p class="tcmsg">' + msg + '</p>';
   }
   function show(card) {
@@ -693,10 +712,10 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
     var lifeEl = document.getElementById('vlife'), LBL = {e:'Emerging', r:'Rising', p:'Peaking', f:'Fading'}; lifeEl.innerHTML = '';
     SEASON_CODES.forEach(function (code, i) {
       var ch = d.life.charAt(i), cell = document.createElement('span');
-      cell.className = 'lc' + (code === CUR_SEASON ? ' cur' : '') + (ch === '-' ? ' none' : ' ' + ST[ch][0]);
-      cell.title = code + ': ' + (ch === '-' ? 'not tracked' : LBL[ch]);
+      cell.className = 'lc' + (code === CUR_SEASON ? ' cur' : '') + (ch === 'L' ? ' lock' : ch === '-' ? ' none' : ' ' + ST[ch][0]);
+      cell.title = code + ': ' + (ch === 'L' ? 'opens at launch' : ch === '-' ? 'not tracked' : LBL[ch]);
       var c1 = document.createElement('b'); c1.textContent = code;
-      var c2 = document.createElement('i'); c2.textContent = ch === '-' ? '–' : LBL[ch];
+      var c2 = document.createElement('i'); c2.textContent = ch === 'L' ? '🔒 At launch' : ch === '-' ? '–' : LBL[ch];
       cell.appendChild(c1); cell.appendChild(c2); lifeEl.appendChild(cell);
     });
     msg.textContent = '';
@@ -807,11 +826,11 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
           head('Trend timing');
           var n = SEASON_CODES.length, gap = 12, cw = (TW - gap * (n - 1)) / n, LB = {e:'Emerging', r:'Rising', p:'Peaking', f:'Fading'};
           SEASON_CODES.forEach(function (code, i) {
-            var ch = d.life.charAt(i), cx = M + i * (cw + gap), col = ch === '-' ? C.line : SC[ch];
+            var ch = d.life.charAt(i); if (ch === 'L') ch = '-'; var lockd = d.life.charAt(i) === 'L', cx = M + i * (cw + gap), col = ch === '-' ? C.line : SC[ch];
             x.fillStyle = ch === '-' ? '#f6f8f7' : col; x.globalAlpha = ch === '-' ? 1 : .13; rr(x, cx, y - 30, cw, 84, 14); x.fill(); x.globalAlpha = 1;
             x.strokeStyle = code === CUR_SEASON ? C.ink : C.line; x.lineWidth = code === CUR_SEASON ? 3 : 2; rr(x, cx, y - 30, cw, 84, 14); x.stroke();
             x.fillStyle = C.muted; x.font = '500 19px "DM Sans", monospace'; x.fillText(code, cx + 16, y + 2);
-            x.fillStyle = ch === '-' ? C.muted : col; x.font = '600 24px "DM Sans", Arial, sans-serif'; x.fillText(ch === '-' ? '–' : LB[ch], cx + 16, y + 38);
+            x.fillStyle = ch === '-' ? C.muted : col; x.font = '600 24px "DM Sans", Arial, sans-serif'; x.fillText(lockd ? 'At launch' : ch === '-' ? '–' : LB[ch], cx + 16, y + 38);
           });
           y += 90; para(s2(d));
           // website footer

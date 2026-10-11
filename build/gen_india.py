@@ -112,9 +112,10 @@ glance = (f'<div class="glance"><div><h3>Status mix · {codes[0]}</h3><div class
           f'<div><h3>Top movers to act on now</h3><div class="movers">{mv}</div></div>'
           '</div>')
 
+LOCKSVG = '<svg class="lk" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="7" width="10" height="7" rx="1.6" fill="currentColor"/></svg>'
 HOME = '/' if STATIC else 'https://forecut.in/'
 snav = f'<a href="#" aria-current="page">India<small>Festive &amp; wedding</small></a>' + ''.join(
-    f'<a href="{(x + ".html") if STATIC else URLS.get(x, "#")}">{SMETA[x]["code"]}<small>{E(SMETA[x]["stage"])}</small></a>' for x in SEASONS)
+    f'<a href="{(x + ".html") if STATIC else URLS.get(x, "#")}"{" class=\"lockt\"" if x in [z.lower() for z in SITE.get("locked", [])] else ""}>{SMETA[x]["code"]}<small>{(LOCKSVG + "Opens at launch") if x in [z.lower() for z in SITE.get("locked", [])] else E(SMETA[x]["stage"])}</small></a>' for x in SEASONS)
 tpl = open('season_tpl.txt').read()
 rep = {
     '%%ENGINE%%': engine, '%%SECS%%': ''.join(secs), '%%NAV%%': ''.join(nav), '%%SEASONNAV%%': snav,
@@ -137,6 +138,7 @@ seg_old = re.search(r'<div class="seg" role="group" aria-label="Department">.*?<
 seg_new = '<div class="seg" role="group" aria-label="Department"><button type="button" data-dept="all" aria-pressed="true">All</button>' + ''.join(f'<button type="button" data-dept="{k}" aria-pressed="false">{v}</button>' for k, v in [('women', 'Women'), ('men', 'Men'), ('fusion', 'Fusion'), ('western', 'Western'), ('footwear', 'Footwear'), ('materials', 'Craft')]) + '</div>'
 out = out.replace(seg_old, seg_new).replace('Search details, e.g. collar, zip, sole', 'Search, e.g. saree, jutti, chikankari')
 out = out.replace('<title>Forecut India Report</title>', '<title>Forecut India Forecast</title>')
+out = out.replace('</style>', '.seasons a.lockt{opacity:.7}.seasons a .lk{width:9px;height:9px;margin-right:4px;vertical-align:-1px;display:inline}' + '</style>', 1)
 # season guide (full width, after hero)
 import pantone as _PT
 sc = ''
@@ -146,8 +148,8 @@ for i, c in enumerate(codes):
     bar = ''.join(f'<i style="width:{cnt[k] / max(tot, 1) * 100:.1f}%;background:var(--{v})"></i>' for k, v in [('e', 'chalk'), ('r', 'rise'), ('p', 'peak'), ('f', 'fade')])
     sw = ''.join(f'<i style="background:{h}" title="{_PT.nearest(h)[0]}"></i>' for h in si_['colours'])
     when, occ = I.WINDOWS[c].split(' · ')[0], si_['occasions']
-    tag = ('<span class="stag now">Now · open</span>' if si_['open'] else '<span class="stag lock"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="7" width="10" height="7" rx="1.6" fill="currentColor"/></svg>Opens at launch</span>')
-    sc += (f'<article class="scard{" open" if si_["open"] else " locked"}"><div class="shd">{tag}<b>{E(c)}</b><span>{E(when)}</span></div>'
+    tag = ('<span class="stag now">Now · open</span>' if (c not in SITE.get('locked', [])) else '<span class="stag lock"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="7" width="10" height="7" rx="1.6" fill="currentColor"/></svg>Opens at launch</span>')
+    sc += (f'<article class="scard{" open" if (c not in SITE.get("locked", [])) else " locked"}"><div class="shd">{tag}<b>{E(c)}</b><span>{E(when)}</span></div>'
            f'<p class="socc">{E(occ)}</p><p class="sfoc">{E(si_["focus"])}</p>'
            f'<div class="ssw">{sw}</div><div class="smix">{bar}</div><p class="sct">{tot} details · {cnt["e"]} emerging · {cnt["r"]} rising · {cnt["p"]} peaking · {cnt["f"]} fading</p>'
            f'<p class="splan"><b>Plan:</b> {E(si_["plan"])}</p></article>')
@@ -157,7 +159,7 @@ ssec = f"""  <section class="sec" id="seasons" aria-labelledby="sgh"><div class=
 out = out.replace('  </header>\n', '  </header>\n' + ssec, 1)
 out = out.replace('</style>', '.sgrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}.scard{border:1px solid var(--grid);border-radius:14px;background:var(--paper-2);padding:16px;display:flex;flex-direction:column;gap:10px}.scard.open{border-color:var(--mat);box-shadow:inset 0 0 0 1px var(--mat)}.shd{display:flex;flex-direction:column;align-items:flex-start;gap:4px}.shd .stag{margin-bottom:6px}.shd b{display:block;font:700 20px var(--display);letter-spacing:-.01em;white-space:nowrap}.shd span{font:500 13px var(--body);color:var(--muted)}.stag{display:inline-flex;align-items:center;gap:5px;font:700 10.5px var(--body);letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:99px;white-space:nowrap;flex:none}.stag svg{width:11px;height:11px}.stag.now{background:linear-gradient(135deg,#00a85a,#1fd17f);color:#fff}.stag.lock{background:var(--grid);color:var(--muted)}.socc{margin:0;font:600 13.5px var(--body);color:var(--chalk);line-height:1.4}.sfoc{margin:0;font-size:14.5px;line-height:1.5}.ssw{display:flex;gap:4px}.ssw i{width:22px;height:22px;border-radius:5px;border:1px solid rgba(0,0,0,.08)}.smix{display:flex;height:7px;border-radius:99px;overflow:hidden;background:var(--grid)}.smix i{display:block;height:100%}.sct{margin:0;font:500 12px var(--body);color:var(--muted)}.splan{margin:auto 0 0;font-size:13.5px;line-height:1.45;padding-top:8px;border-top:1px dashed var(--grid)}.splan b{font-family:var(--body)}@media (max-width:1100px){.sgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media (max-width:700px){.sgrid{grid-template-columns:1fr}}</style>', 1)
 # season switcher (all India seasons)
-sbtn = ''.join(f'<button type="button" data-si="{i}"{"" if I.SEASON_INFO[c]["open"] else " data-lock aria-disabled=\"true\""} aria-pressed="{"true" if i == 0 else "false"}"><b>{E(c)}{"" if I.SEASON_INFO[c]["open"] else " 🔒"}</b><small>{E(I.WINDOWS[c].split(" · ")[0])}</small></button>' for i, c in enumerate(codes))
+sbtn = ''.join(f'<button type="button" data-si="{i}"{"" if (c not in SITE.get("locked", [])) else " data-lock aria-disabled=\"true\""} aria-pressed="{"true" if i == 0 else "false"}"><b>{E(c)}{"" if (c not in SITE.get("locked", [])) else " 🔒"}</b><small>{E(I.WINDOWS[c].split(" · ")[0])}</small></button>' for i, c in enumerate(codes))
 srow = f'<div class="row srow"><span class="slbl">Season</span><div class="sseg" role="group" aria-label="Season">{sbtn}</div></div><p class="snote" id="snote" hidden>Long-range outlook: statuses are projected from today\'s signals. New emerging details are added each month as they appear.</p>'
 out = out.replace('<div class="tools">\n    <div class="row">', '<div class="tools">\n    ' + srow + '\n    <div class="row">', 1)
 sjs = '''<script>(function(){var C=''' + json.dumps(codes) + ''',CL={e:'emerge',r:'rise',p:'peak',f:'fade'},LB={e:'Emerging',r:'Rising',p:'Peaking',f:'Fading'},bs=document.querySelectorAll('.sseg button');

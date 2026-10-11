@@ -66,6 +66,36 @@ rsec = f'''  <section id="reports" aria-labelledby="rph">
   </section>
 '''
 h = h.replace('<!--GALLERY-->', gal + rsec + jsec)
+# hero stack + live ticker from India data
+import india_data as _I
+_CL = {'e': ('emerge', 'Emerging'), 'r': ('rise', 'Rising'), 'p': ('peak', 'Peaking'), 'f': ('fade', 'Fading')}
+_hero = [x for x in _I.D if islug(x[2]) in imgs and x[5][0] in 'er']
+_pick = []
+for want in ['Pre-draped saree gowns', 'Kolhapuri chappals', 'Cape lehengas', 'Embroidered kurta co-ord sets']:
+    _pick += [x for x in _hero if x[2] == want]
+hs = ''.join(f'<a class="hc" data-p="{i}" href="india.html"><img src="img/{islug(x[2])}.webp" alt="{x[2]}" width="800" height="800"{" fetchpriority=\"high\"" if i == 0 else " loading=\"lazy\""}><span class="pill {_CL[x[5][0]][0]}">{_CL[x[5][0]][1]}</span><span class="hcb"><b>{x[2]}</b><small>{x[1]} · Festive 26</small></span></a>' for i, x in enumerate(_pick))
+h = h.replace('<!--HEROSTACK-->', hs)
+_tk = [x for x in _I.D if x[5][0] in 'erp'][:24]
+tk = ''.join(f'<span>{x[2]} <span class="pill {_CL[x[5][0]][0]}">{_CL[x[5][0]][1]}</span></span>' for x in _tk)
+h = h.replace('<!--TICKER-->', tk + tk)
+# live tracker from the global season data
+import datetime as _dt, os as _os
+_SITE = json.load(open('site.json')); _LK = [z.lower() for z in _SITE.get('locked', [])]
+_rows, _seen, _cats = [], set(), set()
+for _pat in ['errrp', 'eerrr', 'rrrpf', 'errpf', 'rrpf-', 'ppppf', 'rrrrp', 'pppff']:
+    for _k, _items in M.items():
+        _cat = _k.split('|')[1]
+        if _cat in _cats: continue
+        _hit = next((_it for _it in _items if _it['life'] == _pat and _it['name'] not in _seen), None)
+        if _hit: _rows.append((_hit['name'], _cat, _pat)); _seen.add(_hit['name']); _cats.add(_cat); break
+_PL = {'e': ('emerge', 'Emerging'), 'r': ('rise', 'Rising'), 'p': ('peak', 'Peaking'), 'f': ('fade', 'Fading')}
+_head = '<thead><tr><th scope="col">Detail</th>' + ''.join(f'<th scope="col" class="{"now" if i == 0 else ("lockh" if s in _LK else "")}">{s.upper()}{" · now" if i == 0 else (" 🔒" if s in _LK else "")}</th>' for i, s in enumerate(SEAS)) + '</tr></thead>'
+_body = '<tbody>' + ''.join('<tr><th scope="row">' + n + '<small style="display:block;font-weight:500;color:var(--muted);font-size:12px">' + cat + '</small></th>' + ''.join(
+    ('<td class="lockc"><span>🔒 At launch</span></td>' if SEAS[i] in _LK else ('<td class="dash">–</td>' if ch == '-' else f'<td><span class="pill {_PL[ch][0]}">{_PL[ch][1]}</span></td>'))
+    for i, ch in enumerate(pat)) + '</tr>' for n, cat, pat in _rows) + '</tbody>'
+h = h.replace('<!--TRTABLE-->', _head + _body)
+_mt = max(_os.path.getmtime(f) for f in ['details.json', 'india_data.py', 'seasons.json'] if _os.path.exists(f))
+h = h.replace('<!--TRDATE-->', _dt.date.fromtimestamp(_mt).strftime('%-d %b %Y'))
 for k, u in json.load(open('urls.json')).items(): h = h.replace(u, f'{k}.html')
 h = h.replace('https://forecut.in/reports.html', 'reports.html').replace('https://forecut.in/journal.html', 'journal.html')
 h = h.replace('https://forecut.in/india.html', 'india.html').replace('https://forecut.in/about.html', 'about.html').replace('https://forecut.in/contact.html', 'contact.html').replace('https://forecut.in/terms.html', 'terms.html').replace('https://forecut.in/privacy.html', 'privacy.html').replace(' target="_blank" rel="noopener"', '')

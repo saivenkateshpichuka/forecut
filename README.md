@@ -15,3 +15,6 @@ Updated monthly.
 - `build/reports_data.py` → `reports.py`: Core Item Updates, Design Capsules, India Colour Forecast, Textile & Craft Sourcing Guide, reports.html hub. Flat sketches are pre-rendered with node + flats.js.
 - Statuses always come from `india_data.py`, so reports update when the India forecast is refreshed. Run `sh build.sh` from build/.
 - Never copy text, palettes, data or images from paid forecasting services (e.g. WGSN) into these pages; use them only as format inspiration.
+
+## Launch locks
+`build/site.json` → `"locked"` lists seasons that stay locked (tabs, lifecycle chips, tracker columns, India calendar/switcher, AW27/SS28/AW28 detail sections). At official launch set it to `[]` and run `sh build.sh`.

@@ -5,5 +5,14 @@
  "static_url": "forecut.in",
  "email": "hello@forecut.in",
  "ga": "G-EHT7W1C07R",
- "adsense": "ca-pub-7948077880470389"
+ "adsense": "ca-pub-7948077880470389",
+ "locked": [
+  "aw27",
+  "ss28",
+  "aw28",
+  "Summer 27",
+  "Festive 27",
+  "Summer 28",
+  "Festive 28"
+ ]
 }
