@@ -78,3 +78,8 @@ Everything needed to rebuild the Forecut website. The published pages are genera
 ## SEO (added Oct 2026)
 - seo.py adds titles, meta descriptions, canonical URLs, Open Graph/Twitter tags, JSON-LD (Organization, WebSite, WebPage + breadcrumbs) to every page, and writes ../sitemap.xml, ../robots.txt and ../favicon.svg. build.sh runs it last; always run it after rebuilding pages.
 - Google Search Console and Bing Webmaster Tools are verified for forecut.in (DNS TXT on GoDaddy). Sitemap: https://forecut.in/sitemap.xml
+
+## Season-specific photos (added Oct 2026)
+- A detail can have a different photo in each season. File name rules: first season = <slug>.webp (from the main prompt report); later seasons = <slug>-<season>.webp (e.g. cape-lehengas-ss27.webp). Both live in img/ and are listed in images.json.
+- gen_seasons.py uses <slug>-<season> if present, else the plain photo only in the detail's first season, else the sketch.
+- season_prompts.py writes ../season-prompts/<season>-image-prompts.csv with season colours, fabric weight and camera angle so photos differ by season; rows already uploaded are marked Done.
