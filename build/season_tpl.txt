@@ -1,25 +1,25 @@
 <title>Forecut %%CODE%% Report</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: report header with season facts, sticky filter bar, then department > category > detail-card grids */
 :root{
-  --paper:#eef2ef; --paper-2:#ffffff; --grid:#d3ddd7; --ink:#13241d; --muted:#53655d;
-  --mat:#1d5b47; --mat-ink:#e9f3ee; --chalk:#d9480f; --chalk-soft:#fbe3d6;
-  --rise:#1d7a4f; --peak:#b7791f; --fade:#8a6f86; --tint:#dbe3de; --surface-img:#eef2ef;
-  --display:"Bricolage Grotesque","Arial Narrow",system-ui,sans-serif;
+  --paper:#f5f0e8; --paper-2:#fffcf7; --grid:#e3d9cc; --ink:#1c1714; --muted:#6e6259;
+  --mat:#1f3d33; --mat-ink:#f5f0e8; --chalk:#b4532a; --chalk-soft:#f3e1d6;
+  --rise:#2e7d55; --peak:#a8701f; --fade:#8a6f86; --tint:#e6ddd1; --surface-img:#efe8de;
+  --display:"Fraunces","Playfair Display",Georgia,serif;
   --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --paper:#0f1814; --paper-2:#16221d; --grid:#22332b; --ink:#e6efe9; --muted:#9db2a8;
-  --mat:#5fc29b; --mat-ink:#0c1a14; --chalk:#ff8a50; --chalk-soft:#3a2016;
-  --rise:#5fd39a; --peak:#f0b955; --fade:#c4a6c0; --tint:#2b3c34; --surface-img:#dfe6e1; color-scheme:dark}}
+  --paper:#14110f; --paper-2:#1e1a17; --grid:#352d27; --ink:#f2ebe2; --muted:#b3a698;
+  --mat:#e8dccb; --mat-ink:#1c1714; --chalk:#e08a5e; --chalk-soft:#3a2418;
+  --rise:#6fcf9b; --peak:#e8b860; --fade:#c4a6c0; --tint:#3a322b; --surface-img:#efe8de; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --paper:#0f1814; --paper-2:#16221d; --grid:#22332b; --ink:#e6efe9; --muted:#9db2a8;
-  --mat:#5fc29b; --mat-ink:#0c1a14; --chalk:#ff8a50; --chalk-soft:#3a2016;
-  --rise:#5fd39a; --peak:#f0b955; --fade:#c4a6c0; --tint:#2b3c34; --surface-img:#dfe6e1; color-scheme:dark}
+  --paper:#14110f; --paper-2:#1e1a17; --grid:#352d27; --ink:#f2ebe2; --muted:#b3a698;
+  --mat:#e8dccb; --mat-ink:#1c1714; --chalk:#e08a5e; --chalk-soft:#3a2418;
+  --rise:#6fcf9b; --peak:#e8b860; --fade:#c4a6c0; --tint:#3a322b; --surface-img:#efe8de; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--paper);color:var(--ink);font:16px/1.55 var(--body);padding:0 16px;padding-block:0 56px}
 img{max-width:100%}
@@ -274,6 +274,34 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;line-height:1.08;text-wrap:balan
 .tdet small i{width:8px;height:8px;border-radius:50%}
 @media (max-width:760px){.thero{grid-template-columns:1fr}.tgrid{grid-template-columns:1fr}.tsec:nth-child(odd):not(.wide){border-right:0}}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+
+
+/* mobile */
+@media (max-width:700px){
+  .bar{gap:10px}
+  .seasons{flex-wrap:nowrap;overflow-x:auto;width:100%;padding-bottom:4px;scrollbar-width:none}
+  .seasons::-webkit-scrollbar{display:none}
+  .seasons a{flex:none}
+  .tools{position:static}
+  .themes2{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:82%;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:8px}
+  .themes2 > *{scroll-snap-align:start}
+}
+@media (max-width:560px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+  .d{padding:8px 8px 10px;gap:5px;border-radius:8px}
+  .d h4{font-size:14.5px}
+  .d p{font-size:12.5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .d .open{display:none}
+  .dtop{flex-wrap:wrap;gap:4px}
+  .dtop .area{font-size:9.5px}
+  .vinfo{padding:20px 16px 16px}
+  .stats b{font-size:24px}
+}
+/* editorial theme */
+h1,h2,h3,.d h4,.tbody h3,.vinfo h2,.panelhead h3,.card h3,.plan h3,.logo,.back{font-weight:600!important;letter-spacing:-.012em!important}
+h1 em,.hero h1 em{font-style:italic}
+.mono,.eyebrow,.eb{letter-spacing:.12em}
+.btn,.vbtn{border-radius:2px!important;letter-spacing:.02em}
 </style>
 <div class="wrap">
   <div class="bar">
@@ -387,7 +415,7 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;line-height:1.08;text-wrap:balan
   </div>
 
   <div class="foot">
-    <p>%%SOURCES%% Individual details and their statuses are Forecut's curated assessment, written in our own words. Colour swatches are screen approximations, not official colour standards.</p>
+    <p>%%SOURCES%% Individual details and their statuses are Forecut's curated assessment, written in our own words. Colour swatches are screen approximations, not official colour standards. Questions or feedback: <a href="mailto:hello@forecut.in">hello@forecut.in</a>. Forecut is free while in testing.</p>
     <p>Status key: <b>Emerging</b> early signals · <b>Rising</b> gaining fast, add now · <b>Peaking</b> at full adoption, use in core styles · <b>Fading</b> phase out in new development.</p>
   </div>
 </div>
@@ -606,10 +634,10 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;line-height:1.08;text-wrap:balan
   }
   function rr(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
   function makePng(d) {
-    var C = {bg:'#eef2ef', card:'#ffffff', ink:'#13241d', muted:'#53655d', chalk:'#d9480f', mat:'#1d5b47', line:'#d3ddd7'};
+    var C = {bg:'#f5f0e8', card:'#fffcf7', ink:'#1c1714', muted:'#6e6259', chalk:'#b4532a', mat:'#1f3d33', line:'#e3d9cc'};
     var SC = {e:'#d9480f', r:'#1d7a4f', p:'#b7791f', f:'#8a6f86'};
     var rr0 = Flats.render(d.name, colorsFor(d.name, FILE_C), {width: 960}), svg = rr0 ? rr0.svg : motif(d.name, 960);
-    var fonts = Promise.all(['800 64px "Bricolage Grotesque"', '400 30px "Instrument Sans"', '600 30px "Instrument Sans"', '500 22px "IBM Plex Mono"'].map(function (f) { return document.fonts ? document.fonts.load(f).catch(function () {}) : null; }));
+    var fonts = Promise.all(['600 64px "Fraunces"', '400 30px "Instrument Sans"', '600 30px "Instrument Sans"', '500 22px "IBM Plex Mono"'].map(function (f) { return document.fonts ? document.fonts.load(f).catch(function () {}) : null; }));
     return fonts.then(function () {
       return new Promise(function (res, rej) {
         var img = new Image(), url = d.img ? d.img : URL.createObjectURL(new Blob([svg], {type:'image/svg+xml'}));
@@ -619,8 +647,8 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;line-height:1.08;text-wrap:balan
           x.fillStyle = C.bg; x.fillRect(0, 0, W, 3600);
           // header
           x.fillStyle = C.mat; rr(x, M, 56, 44, 44, 10); x.fill();
-          x.fillStyle = '#e9f3ee'; x.font = '800 28px "Bricolage Grotesque", Arial, sans-serif'; x.fillText('F', M + 13, 88);
-          x.fillStyle = C.ink; x.font = '800 40px "Bricolage Grotesque", Arial, sans-serif'; x.fillText(SITE.name, M + 60, 92);
+          x.fillStyle = '#e9f3ee'; x.font = '600 28px \"Fraunces\", Arial, sans-serif'; x.fillText('F', M + 13, 88);
+          x.fillStyle = C.ink; x.font = '600 40px \"Fraunces\", Arial, sans-serif'; x.fillText(SITE.name, M + 60, 92);
           x.fillStyle = C.muted; x.font = '500 20px "IBM Plex Mono", monospace'; x.textAlign = 'right'; x.fillText('%%CODE%% DETAIL REPORT', W - M, 88); x.textAlign = 'left';
           // picture
           x.fillStyle = C.card; rr(x, M, 128, TW, 600, 28); x.fill(); x.strokeStyle = C.line; x.lineWidth = 2; x.stroke();
@@ -634,7 +662,7 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;line-height:1.08;text-wrap:balan
           x.beginPath(); x.arc(M + 24, y - 8, 7, 0, 7); x.fill(); x.fillText(label, M + 40, y);
           x.fillStyle = C.muted; x.textAlign = 'right'; x.fillText((d.dept + ' · ' + d.cat).toUpperCase(), W - M, y); x.textAlign = 'left';
           // title
-          y += 76; x.fillStyle = C.ink; x.font = '800 60px "Bricolage Grotesque", Arial, sans-serif';
+          y += 76; x.fillStyle = C.ink; x.font = '600 60px \"Fraunces\", Arial, sans-serif';
           wrap(x, d.name, TW).forEach(function (l) { x.fillText(l, M, y); y += 66; });
           y += 2; x.fillStyle = C.chalk; x.font = '500 21px "IBM Plex Mono", monospace'; x.fillText(('DETAIL AREA · ' + (d.sub ? d.sub + ' · ' : '') + d.area).toUpperCase(), M, y);
           // overview
@@ -657,10 +685,10 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;line-height:1.08;text-wrap:balan
           y += 90; para(s2(d));
           // website footer
           y += 30; var fy = y; x.fillStyle = C.mat; rr(x, 0, fy, W, 150, 0); x.fill();
-          x.fillStyle = '#e9f3ee'; x.font = '800 36px "Bricolage Grotesque", Arial, sans-serif'; x.fillText(SITE.name, M, fy + 58);
+          x.fillStyle = '#e9f3ee'; x.font = '600 36px \"Fraunces\", Arial, sans-serif'; x.fillText(SITE.name, M, fy + 58);
           x.font = '400 23px "Instrument Sans", Arial, sans-serif'; x.globalAlpha = .9; x.fillText(SITE.tagline, M, fy + 94); x.globalAlpha = 1;
           x.font = '500 19px "IBM Plex Mono", monospace'; x.fillStyle = '#bfe3d2';
-          x.fillText(((SITE.url ? SITE.url + '  ·  ' : '') + '%%TITLEUP%% · %%STAGEUP%%'), M, fy + 128);
+          x.fillText(((SITE.url ? SITE.url + '  ·  ' : '') + (SITE.email ? SITE.email + '  ·  ' : '') + '%%TITLEUP%% · %%STAGEUP%%'), M, fy + 128);
           var H = Math.ceil(fy + 150), out = document.createElement('canvas'); out.width = W; out.height = H;
           out.getContext('2d').drawImage(cv, 0, 0);
           out.toBlob(function (b) { b ? res(b) : rej(new Error('render')); }, 'image/png');
