@@ -1,7 +1,9 @@
-# Upload ChatGPT images here
+# Upload images here, and they go live automatically
 
-1. Generate an image in ChatGPT using a prompt from the Forecut image-prompt report.
-2. Save it with the exact file name shown in the report (for example `fur-and-shearling-collars.png`).
-3. On GitHub, open this `images` folder → **Add file → Upload files** → drag the images in → **Commit changes**.
+Upload PNG, JPG or WebP files with the exact **File name** from the prompt CSVs:
+- first-season photo: `cape-backs-and-capelets.png`
+- photo for a later season: `cape-backs-and-capelets-ss27.png`
+- India photo: `kolhapuri-chappals.png`
 
-Claude picks them up in the monthly update (or straight away if you ask in chat), converts them to web size and shows them on the site in place of the sketch.
+Within about 2 minutes GitHub converts them, places them in the right season, rebuilds the site and moves the originals to `images/done/`.
+If a name doesn't match, it's listed in `images/UNMATCHED.txt`. Rename it and upload again.
