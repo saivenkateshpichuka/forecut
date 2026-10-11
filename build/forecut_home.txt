@@ -66,6 +66,8 @@ section{padding-block:72px 0}
 .card{background:var(--paper-2);border-radius:14px;padding:18px;display:grid;gap:12px;grid-template-rows:auto auto 1fr auto;border:1px solid var(--grid)}
 .card .art{height:120px;border-radius:10px;background:var(--paper);display:grid;place-items:center;color:var(--ink)}
 .card .art svg{height:96px;width:auto}
+.card .art:has(img){height:auto;aspect-ratio:306/199;overflow:hidden}
+.card .art img{width:100%;height:100%;object-fit:cover;display:block;border-radius:10px}
 .card .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
 .pill{font:500 11.5px/1 var(--mono);letter-spacing:.05em;text-transform:uppercase;padding:6px 9px;border-radius:999px;display:inline-flex;align-items:center;gap:6px}
 .pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
@@ -618,7 +620,7 @@ p,li{line-height:1.6}
     </div>
     <div class="cards">
       <article class="card">
-        <div class="art" aria-hidden="true"><svg viewBox="98 260 310 203" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;overflow:hidden;border-radius:10px"><image href="img/sample-forecast-photos.png" width="1644" height="957"/></svg></div>
+        <div class="art"><img src="img/sample-bellows-flap-pocket.webp" alt="Bellows flap pocket on an olive utility shirt" loading="lazy" width="306" height="199"></div>
         <div class="top"><span class="pill rise">Rising</span><span class="mono muted">Menswear · Shirts</span></div>
         <h3>Bellows flap pocket</h3>
         <p>Utility shirting moves from workwear into smart-casual, with expanding pockets and buttoned flaps.</p>
@@ -629,7 +631,7 @@ p,li{line-height:1.6}
         </dl>
       </article>
       <article class="card">
-        <div class="art" aria-hidden="true"><svg viewBox="461 260 310 203" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;overflow:hidden;border-radius:10px"><image href="img/sample-forecast-photos.png" width="1644" height="957"/></svg></div>
+        <div class="art"><img src="img/sample-band-collar-placket.webp" alt="Band collar with long placket on a light blue shirt" loading="lazy" width="306" height="199"></div>
         <div class="top"><span class="pill rise">Rising</span><span class="mono muted">Womenswear · Tops</span></div>
         <h3>Band collar with long placket</h3>
         <p>Collarless shirting returns in fluid fabrics, with an extended placket replacing the classic point collar.</p>
@@ -640,7 +642,7 @@ p,li{line-height:1.6}
         </dl>
       </article>
       <article class="card">
-        <div class="art" aria-hidden="true"><svg viewBox="824 260 310 203" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;overflow:hidden;border-radius:10px"><image href="img/sample-forecast-photos.png" width="1644" height="957"/></svg></div>
+        <div class="art"><img src="img/sample-two-way-zip.webp" alt="Exposed two-way metal zip on green ripstop outerwear" loading="lazy" width="306" height="199"></div>
         <div class="top"><span class="pill peak">Peaking</span><span class="mono muted">Unisex · Outerwear</span></div>
         <h3>Exposed two-way zip</h3>
         <p>Strong this season, but already widespread. Use it in core styles and expect it to cool by AW27.</p>
@@ -651,7 +653,7 @@ p,li{line-height:1.6}
         </dl>
       </article>
       <article class="card">
-        <div class="art" aria-hidden="true"><svg viewBox="1186 260 311 203" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%;overflow:hidden;border-radius:10px"><image href="img/sample-forecast-photos.png" width="1644" height="957"/></svg></div>
+        <div class="art"><img src="img/sample-chunky-lug-sole.webp" alt="Brown penny loafer with a chunky lug sole" loading="lazy" width="306" height="199"></div>
         <div class="top"><span class="pill fade">Fading</span><span class="mono muted">Footwear · Loafers</span></div>
         <h3>Chunky lug sole</h3>
         <p>Heavy lug soles are easing toward slimmer, low-profile soles. Reduce depth in new styles.</p>
