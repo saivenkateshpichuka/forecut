@@ -5,7 +5,7 @@ S = json.load(open('seasons.json')); META = S['meta']; SEAS = S['seasons'] if 's
 pages = {
  'index.html': ('Forecut · Fashion Trend Forecast for India | Garments, Footwear, Fabrics & Details',
    'Forecut is detail-level fashion trend forecasting for India: what\'s emerging, rising, peaking and fading in ethnic and western wear, footwear, fabrics, embroidery and trims, with ₹ price guides. Free during early access.', ''),
- 'india.html': ('India Fashion Trend Forecast 2026–27 · Sarees, Lehengas, Kurtas, Juttis | Forecut',
+ 'india.html': ('India Fashion Trend Forecast 2026–28 · Sarees, Lehengas, Kurtas, Juttis | Forecut',
    'India fashion trends for Festive 2026, Summer 2027 and Festive 2027: sarees, lehengas, kurtas, bandhgalas, juttis, Kolhapuris, handloom fabrics, chikankari, mirror work and trims, with ₹ price guides.', 'india.html'),
 }
 for fn, t, d in [('about.html', 'About Forecut · Fashion Trend Forecasting for India', 'Forecut is an independent, detail-level fashion trend forecasting platform built for the Indian market.'),
@@ -47,6 +47,7 @@ def block(fn, title, desc, path):
     if fn in ARTS:
         a = ARTS[fn]
         b.append('<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@type": "Article", "headline": a['title'], "description": a['desc'], "image": BASE + 'img/' + a['hero'] + '.webp', "datePublished": JD.DATE, "dateModified": JD.DATE, "author": {"@type": "Organization", "name": "Forecut Editorial", "url": BASE + 'about.html'}, "publisher": {"@id": BASE + "#org"}, "mainEntityOfPage": url, "inLanguage": "en-IN"}, ensure_ascii=False) + '</script>')
+    b.append("<style>html{scroll-behavior:smooth}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}\n@media (prefers-reduced-motion:no-preference){.rv{opacity:0;transform:translateY(22px);transition:opacity .75s cubic-bezier(.2,.7,.2,1),transform .75s cubic-bezier(.2,.7,.2,1)}.rv.in{opacity:1;transform:none}\nbody{animation:fcIn .5s ease both}@keyframes fcIn{from{opacity:0}to{opacity:1}}}\n@media print{.rv{opacity:1!important;transform:none!important}}</style>\n<script>document.addEventListener('DOMContentLoaded',function(){if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion: reduce)').matches)return;\nvar sel='section,.sec,.sechead,.d,.dt,.cad,.cc,.jcard,.jc,.rc,.gal a,.theme,.coty,.plan,.wcard,.card,figure,.jfig,.howto,.cta,.lbk,.rpl>div,.summary>div';\nvar els=[].slice.call(document.querySelectorAll(sel)).filter(function(e){return !e.closest('[role=dialog],.scrim,#scrim,#tscrim,nav,header.cover')&&e.getBoundingClientRect().top>innerHeight*.9;});\nvar io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{rootMargin:'0px 0px -6% 0px'});\nels.forEach(function(e){var p=e.parentElement,i=p?[].indexOf.call(p.children,e):0;e.classList.add('rv');e.style.transitionDelay=Math.min(i%6,5)*70+'ms';io.observe(e);});});</script>")
     b.append('<!--/seo-->'); return '\n'.join(b)
 for fn, (title, desc, path) in pages.items():
     p = os.path.join(R, fn)

@@ -120,6 +120,13 @@ CSS = '''<style>
 .rc b{font:700 19px/1.25 "DM Sans",sans-serif;letter-spacing:-.01em}.rc small{font:700 11.5px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--chalk)}
 .rc span{font-family:"Source Serif 4",Georgia,serif;font-size:15px;color:var(--muted);line-height:1.5}
 .note{font-size:14px!important;color:var(--muted)!important}
+.bws{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:18px}
+.bw{background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:18px 20px;display:grid;gap:8px;align-content:start}
+.bw h3{font:700 21px "DM Sans",sans-serif!important;margin:0;letter-spacing:-.01em}.bw .bt{margin:2px 0 0;font:600 12px "DM Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--chalk)}
+.bw p{margin:0;font-size:15.5px!important;line-height:1.55}
+.bchips{display:grid;gap:8px;margin:4px 0}.bchip{display:flex;align-items:center;gap:10px}.bchip .bph{width:46px;height:56px;border-radius:5px;overflow:hidden;background:var(--grid);flex:none}.bchip img{width:100%;height:100%;object-fit:cover}
+.bchip>span{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font:600 14px "DM Sans",sans-serif}
+@media print{.bws{grid-template-columns:repeat(3,1fr)!important}.bw{break-inside:avoid}}
 .dlpdf{display:inline-flex;align-items:center;gap:8px;margin-top:6px;font:700 14px "DM Sans",sans-serif;background:#b4532a;color:#fff!important;text-decoration:none;padding:11px 18px;border-radius:2px}
 .dlpdf:hover{background:#9a4522}
 @page{size:A4 landscape;margin:12mm 12mm 16mm}
@@ -138,7 +145,7 @@ def page(fn, title, body):
 def cover(kicker, title, lead, img, extra=''):
     return (f'<header class="cover"><div class="ct"><p class="kicker">{E(kicker)}</p><h1>{E(title)}</h1><p class="lead">{E(lead)}</p>'
             f'<p class="by">Forecut Editorial · {DATE_TXT}{extra}</p>{{PDFBTN}}</div><div class="ci"><img src="img/{img}.webp" alt="{E(title)}" width="800" height="800"></div></header>')
-SRC = '<p class="note">Statuses are Forecut\'s forecast for India: Festive 26 (Oct 2026 – Feb 2027), Summer 27 (Mar – Jul 2027) and Festive 27 (Aug – Dec 2027). Sources: ' + E(I.META['sources']) + '</p>'
+SRC = '<p class="note">Statuses are Forecut\'s forecast for India: Festive 26 (Oct 2026 – Feb 2027), Summer 27 (Mar – Jul 2027), Festive 27 (Aug – Dec 2027), and long-range outlooks for Summer 28 (Mar – Jul 2028) and Festive 28 (Aug – Dec 2028). Sources: ' + E(I.META['sources']) + '</p>'
 PAGES = []  # (fn, title, desc, kind, img)
 
 # ---------- Core Item Updates ----------
@@ -152,13 +159,13 @@ for slug, title, keys, intro, how, hero in R.ITEMS:
         v, vt = verdict(x[5])
         tiles += (f'<article class="dt">{photo(x[2])}<div class="hd"><span class="vd {v.split(",")[0]}">{E(v)}</span>{pill(x[5][0])}</div><h3>{E(x[2])}</h3><p>{E(x[4])} {E(vt)}</p>'
                   f'{curve(x[5])}{timeline(x[5])}</article>')
-    fn = f'core-item-{slug}.html'; t = f'Core Item Update: {title} 2026–27'
+    fn = f'core-item-{slug}.html'; t = f'Core Item Update: {title} 2026–28'
     lead = intro.split('. ')[0] + '.'
     body = (cover('Core Item Update · India', t, lead, hero) +
             f'<section class="sec"><h2>Overview</h2><p>{E(intro)}</p><div class="summary">{summ}</div><p class="note">Invest: rising now. Test: emerging. Maintain: at its peak. Reduce: fading.</p></section>'
             f'<section class="sec"><h2>The details</h2><p class="sub">Each detail with its status for Festive 26, its trend curve and what it does next.</p><div class="dgrid">{tiles}</div></section>'
             f'<section class="sec howto"><h2>How to update your {E(title.lower())} range</h2><ul>' + ''.join(f'<li>{E(h)}</li>' for h in how) + '</ul></section>'
-            f'<p>See every {E(title.lower())} detail with design notes and downloadable cards in the <a href="india.html">India Forecast 2026–27</a>.</p>' + SRC)
+            f'<p>See every {E(title.lower())} detail with design notes and downloadable cards in the <a href="india.html">India Forecast 2026–28</a>.</p>' + SRC)
     page(fn, t + ' · Forecut', body); PAGES.append((fn, t, intro[:155], 'Core Item Update', hero))
 
 # ---------- Design Capsules ----------
@@ -176,8 +183,8 @@ for t in I.THEMES:
     prices = ''.join(f'<tr><td>{E(a)}</td><td>₹{E(b)}</td><td>₹{E(c)}</td><td>₹{E(d)}</td></tr>' for a, b, c, d in t['prices'])
     brands = ''.join(f'<li><b>{E(b)}</b>: {E(w)}</li>' for b, w in t['brands'])
     fn = f'capsule-{slug}.html'; ti = f'Design Capsule: {t["t"]}'
-    body = (cover('Design Capsule · India 2026–27', ti, t['d'] if 'd' in t else t['story'], hero) +
-            f'<section class="sec"><h2>Mood and colour</h2><div class="mood"><div><div class="sw">{sw}</div><p class="note">Pantone TPX codes are the nearest match to the screen colour; confirm against a physical Pantone book and lab dips before production.</p></div>'
+    body = (cover('Design Capsule · India 2026–28', ti, t['d'] if 'd' in t else t['story'], hero) +
+            f'<section class="sec"><h2>Mood and colour</h2><div class="mood"><div><div class="sw">{sw}</div><p class="note">Pantone TCX (cotton) codes are the nearest match to the screen colour; confirm against a physical Pantone book and lab dips before production.</p></div>'
             f'<div class="wh"><p><b>Why?</b> {E(t["why"])}</p><p><b>What?</b> {E(t["story"])}</p><p><b>Who\'s showing it?</b></p><ul>{brands}</ul></div></div></section>'
             f'<section class="sec"><h2>Key pieces</h2><p class="sub">Forecut flat sketches with reference photos, ready to brief into design.</p><div class="cads">{cads}</div></section>'
             f'<section class="sec"><h2>Price guide (India)</h2><div class="tw"><table class="ptab"><thead><tr><th>Key garment</th><th>Value</th><th>Mid</th><th>Premium</th></tr></thead><tbody>{prices}</tbody></table></div>'
@@ -199,11 +206,11 @@ for g, gd in R.COLOUR_GROUPS:
                   f'<div class="cb"><p>{E(mood)}</p><dl><dt>Best for</dt><dd>{E(best)}</dd><dt>Pair with</dt><dd>{E(", ".join(pairs))}</dd></dl><div class="thumbs">{th}</div></div></article>')
     grp += f'<section class="sec"><h2>{E(g)}</h2><p class="sub">{E(gd)}</p><div class="cgrp">{cards}</div></section>'
 kc = ''.join(f'<li><b>{E(c["name"])}</b> (Pantone {PT.nearest(c["hex"])[0]} · {c["hex"]}): {E(c["text"])}</li>' for c in I.META['keycolours'])
-body = (cover('Colour Forecast · India 2026–27', 'India Colour Forecast 2026–27', 'Nine colours for Indian fashion from Festive 26 to Festive 27, in three families: festive jewels, calm handloom, and earth and indigo.', 'fit-and-flare-anarkalis') +
+body = (cover('Colour Forecast · India 2026–28', 'India Colour Forecast 2026–28', 'Nine colours for Indian fashion from Festive 26 to Festive 28, in three families: festive jewels, calm handloom, and earth and indigo.', 'fit-and-flare-anarkalis') +
         f'<section class="sec"><h2>Key colours</h2><ul>{kc}</ul></section>' + grp +
-        '<section class="sec howto"><h2>How to use the palette</h2><ul><li>Build festive capsules from one jewel tone plus champagne gold and ivory.</li><li>Use sage, ivory and dusty rose for handloom and day-function ranges.</li><li>Run indigo across every category, from denim to sarees and footwear, and warm it with rust.</li><li>Pantone TPX codes are the nearest match to each screen colour. Confirm with a physical Pantone book and lab dips before bulk dyeing.</li></ul></section>' + SRC)
-page('india-colour-forecast.html', 'India Colour Forecast 2026–27 · Forecut', body)
-PAGES.append(('india-colour-forecast.html', 'India Colour Forecast 2026–27', 'Nine colours for Indian fashion in 2026–27: emerald, sapphire, deep wine, champagne gold, sage, ivory, dusty rose, indigo and rust.', 'Colour Forecast', 'fit-and-flare-anarkalis'))
+        '<section class="sec howto"><h2>How to use the palette</h2><ul><li>Build festive capsules from one jewel tone plus champagne gold and ivory.</li><li>Use sage, ivory and dusty rose for handloom and day-function ranges.</li><li>Run indigo across every category, from denim to sarees and footwear, and warm it with rust.</li><li>Pantone TCX (cotton) codes are the nearest match to each screen colour. Confirm with a physical Pantone book and lab dips before bulk dyeing.</li></ul></section>' + SRC)
+page('india-colour-forecast.html', 'India Colour Forecast 2026–28 · Forecut', body)
+PAGES.append(('india-colour-forecast.html', 'India Colour Forecast 2026–28', 'Nine colours for Indian fashion in 2026–28: emerald, sapphire, deep wine, champagne gold, sage, ivory, dusty rose, indigo and rust.', 'Colour Forecast', 'fit-and-flare-anarkalis'))
 
 # ---------- Textile & Craft Guide ----------
 def gtable(dd):
@@ -214,18 +221,36 @@ def gtable(dd):
     return f'<div class="tw"><table class="ptab gtab"><thead><tr><th>Name</th><th>Origin / cluster</th><th>Character</th><th>Best for</th><th>Festive 26</th><th>Sourcing note</th></tr></thead><tbody>{rows}</tbody></table></div>'
 def gcards(dd):
     return '<div class="dgrid">' + ''.join(f'<article class="dt">{photo(n)}<div class="hd"><h3>{E(n)}</h3>{pill(D[n][5][0]) if n in D else ""}</div><p><b>{E(o)}</b>. {E(c)}</p>{timeline(D[n][5]) if n in D else ""}</article>' for n, (o, c, b, s) in dd.items() if islug(n) in IMGS) + '</div>'
-body = (cover('Sourcing Guide · India 2026–27', 'India Textile and Craft Sourcing Guide', 'Where India\'s key weaves and hand-crafts come from, what they are like, what they suit, and where each one sits in the trend cycle.', 'chanderi') +
+body = (cover('Sourcing Guide · India 2026–28', 'India Textile and Craft Sourcing Guide', 'Where India\'s key weaves and hand-crafts come from, what they are like, what they suit, and where each one sits in the trend cycle.', 'chanderi') +
         f'<section class="sec"><h2>Fabrics and weaves</h2><p class="sub">Handloom and silk lead the quiet-luxury direction. True handloom has longer lead times and minimums: use it for hero pieces.</p>{gtable(R.FABRICS)}</section>'
         f'<section class="sec"><h2>Hand-crafts and surface</h2><p class="sub">Placement work at necklines, cuffs and borders keeps cost and weight under control.</p>{gtable(R.CRAFTS)}</section>'
         f'<section class="sec"><h2>At a glance</h2>{gcards({**R.FABRICS, **R.CRAFTS})}</section>'
         '<section class="sec howto"><h2>Sourcing checklist</h2><ul><li>Order handloom early and confirm minimums with the cluster.</li><li>Ask for GI certification where it applies, such as Chanderi, Banarasi, Kanjeevaram and Kolhapuri.</li><li>Approve strike-offs and lab dips before bulk.</li><li>Credit the craft cluster or artisan group on labels and product pages.</li></ul></section>' + SRC)
-page('india-textile-craft-guide.html', 'India Textile and Craft Sourcing Guide 2026–27 · Forecut', body)
+page('india-textile-craft-guide.html', 'India Textile and Craft Sourcing Guide 2026–28 · Forecut', body)
 PAGES.append(('india-textile-craft-guide.html', 'India Textile and Craft Sourcing Guide', 'Origins, character, best uses and trend status for India\'s key weaves and hand-crafts: Chanderi, Banarasi, Kanjeevaram, chikankari, mirror work and more.', 'Sourcing Guide', 'chanderi'))
+
+# ---------- Brand Watch ----------
+bcards = ''
+for name, typ, coll, what, dets, stitle, surl, sdate in R.BRANDS:
+    chips = ''.join(f'<span class="bchip">{photo(n, "bph")}<span><b>{E(n)}</b>{pill(D[n][5][0])}</span></span>' for n in dets)
+    bcards += (f'<article class="bw"><div class="bwh"><div><h3>{E(name)}</h3><p class="bt">{E(typ)} · {E(coll)}</p></div></div><p>{E(what)}</p>'
+               f'<div class="bchips">{chips}</div><p class="note">Source: <a href="{E(surl)}" rel="noopener">{E(stitle)}</a>, {E(sdate)}</p></article>')
+inv = {}
+for b in R.BRANDS:
+    for n in b[4]: inv.setdefault(n, []).append(b[0])
+rows = ''.join(f'<tr><td>{E(n)}</td><td>{pill(D[n][5][0])}</td><td>{E(", ".join(v))}</td></tr>' for n, v in sorted(inv.items(), key=lambda kv: -len(kv[1])))
+body = (cover('Brand Watch · India Festive 2026', 'Brand Watch: what Indian labels are launching', 'How India\'s startups, D2C labels, designers and retailers are bringing Forecut\'s tracked details to market this festive season.', 'tissue-sarees-in-champagne-gold') +
+        f'<section class="sec"><h2>Signals at a glance</h2><p class="sub">Forecut details, their Festive 26 status, and the Indian labels showing them.</p><div class="tw"><table class="ptab"><thead><tr><th>Forecut detail</th><th>Festive 26</th><th>Seen at</th></tr></thead><tbody>{rows}</tbody></table></div></section>'
+        f'<section class="sec"><h2>The labels</h2><p class="sub">Summaries of published collection coverage and brand pages. Product photos are Forecut references, not the brands\' own products.</p><div class="bws">{bcards}</div></section>'
+        '<section class="sec howto"><h2>What this tells you</h2><ul><li>Craft-led festive is mainstream: tissue, gota, bandhani and block print run from value retailers to designer labels.</li><li>Corsets and ready-to-wear drapes are moving from designer capsules into D2C labels.</li><li>Pastels with sage and ivory lead day festive; jewel tones lead evening.</li><li>Indian footwear startups are building on juttis, Kolhapuri shapes and hand-lasted sneakers.</li></ul></section>'
+        '<p class="note">Brand Watch summarises public coverage and brand websites as of October 2026. Mentions are for trend analysis only and do not imply endorsement or partnership.</p>')
+page('india-brand-watch.html', 'Brand Watch: Indian labels Festive 2026 · Forecut', body)
+PAGES.append(('india-brand-watch.html', 'Brand Watch: what Indian labels are launching', 'Soch, Max Fashion, POMCHA, Manyavar, Fizzy Goblet, Gully Labs and more: how Indian brands are bringing festive 2026 trends to market.', 'Brand Watch', 'tissue-sarees-in-champagne-gold'))
 
 # ---------- Hub ----------
 def rcard(p): return f'<a class="rc" href="{p[0]}"><div class="ph"><img src="img/{p[4]}.webp" alt="" loading="lazy" width="800" height="800"></div><small>{E(p[3])}</small><b>{E(p[1])}</b><span>{E(p[2])}</span></a>'
 hub = '<p class="kicker" style="margin-top:40px">Reports</p><h1>Forecut Reports</h1><p class="lead">Ready-to-use trend reports for Indian fashion: item-by-item updates, design capsules, colour and sourcing guides. Built from Forecut\'s own research.</p>'
-for kind, d in [('Core Item Update', 'What to invest in, test, maintain and reduce, item by item.'), ('Design Capsule', 'Mood, colour, key pieces with flat sketches, and prices for each theme.'), ('Colour Forecast', ''), ('Sourcing Guide', '')]:
+for kind, d in [('Brand Watch', 'What India\'s startups, D2C labels and retailers are launching, mapped to Forecut details.'), ('Core Item Update', 'What to invest in, test, maintain and reduce, item by item.'), ('Design Capsule', 'Mood, colour, key pieces with flat sketches, and prices for each theme.'), ('Colour Forecast', ''), ('Sourcing Guide', '')]:
     ps = [p for p in PAGES if p[3] == kind]
     hub += f'<section class="sec"><h2>{E(kind)}{"s" if len(ps) > 1 else ""}</h2>' + (f'<p class="sub">{E(d)}</p>' if d else '') + f'<div class="rgrid">{"".join(rcard(p) for p in ps)}</div></section>'
 page('reports.html', 'Forecut Reports · Indian fashion trend reports', hub)

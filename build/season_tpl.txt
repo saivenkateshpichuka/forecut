@@ -525,7 +525,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
       dp.querySelectorAll('.cat').forEach(function (c) {
         var n = 0;
         c.querySelectorAll('.d').forEach(function (d) {
-          var ok = dOk && (!anySt || sts[d.getAttribute('data-st')]) && (!q || d.getAttribute('data-q').indexOf(q) > -1);
+          var ok = dOk && !d.hasAttribute('data-off') && (!anySt || sts[d.getAttribute('data-st')]) && (!q || d.getAttribute('data-q').indexOf(q) > -1);
           d.hidden = !ok; if (ok) n++;
         });
         c.querySelectorAll('.sub').forEach(function (sb) { sb.hidden = !sb.querySelector('.d:not([hidden])'); });
@@ -542,6 +542,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
     });
     document.getElementById('empty').hidden = shownTotal > 0;
   }
+  window.FCApply = apply;
   deptBtns.forEach(function (b) {
     b.addEventListener('click', function () {
       dept = b.getAttribute('data-dept');
@@ -618,6 +619,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
 (function () {
   var PAGE_C = {ink:'#13241d', fill:'#ffffff', tint:'#dbe3de', accent:'#d9480f', accent2:'#d9480f', muted:'#53655d'};
   var SEASON_CODES = %%CODES%%, CUR_SEASON = '%%CODE%%', SEASON_PAL = %%PALJSON%%;
+  window.FCSetSeason = function (c) { CUR_SEASON = c; };
   function mixHex(h, to, w) { var a = parseInt(h.slice(1), 16), b = parseInt(to.slice(1), 16); return '#' + [16, 8, 0].map(function (s) { var v = Math.round(((a >> s) & 255) * (1 - w) + ((b >> s) & 255) * w); return ('0' + v.toString(16)).slice(-2); }).join(''); }
   function fabricFor(name) { var hsh = 0; for (var i = 0; i < name.length; i++) hsh = (hsh * 31 + name.charCodeAt(i)) >>> 0; var base = SEASON_PAL[hsh % SEASON_PAL.length]; var fill = mixHex(base, '#ffffff', 0.42); return { fill: fill, tint: mixHex(fill, '#13241d', 0.22) }; }
   function colorsFor(name, base) { var f = fabricFor(name), o = {}; for (var k in base) o[k] = base[k]; o.fill = f.fill; o.tint = f.tint; return o; }

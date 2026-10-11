@@ -1,4 +1,4 @@
-"""Nearest Pantone Fashion, Home + Interiors (TPX/TCX) match for a hex colour, by CIEDE2000.
+"""Nearest Pantone Fashion, Home + Interiors TCX (cotton) match for a hex colour, by CIEDE2000.
 Reference hex values are public screen approximations (github.com/Margaret2/pantone-colors); always confirm with a physical Pantone book."""
 import json, math, os
 _D = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'pantone_fhi.json')))
@@ -30,9 +30,9 @@ def _de2000(a, b):
 _LAB = {k: _lab(v[1]) for k, v in _D.items()}
 _cache = {}
 def nearest(hexc):
-    """Return (code like '19-4052 TPX', name, deltaE)."""
+    """Return (code like '19-4052 TCX', name, deltaE)."""
     if hexc in _cache: return _cache[hexc]
     t = _lab(hexc); k = min(_LAB, key=lambda c: _de2000(t, _LAB[c]))
-    r = (k + ' TPX', _D[k][0].replace('-', ' ').title(), round(_de2000(t, _LAB[k]), 1)); _cache[hexc] = r; return r
+    r = (k + ' TCX', _D[k][0].replace('-', ' ').title(), round(_de2000(t, _LAB[k]), 1)); _cache[hexc] = r; return r
 if __name__ == '__main__':
     for h in ['#0f6b4f', '#2f3f7a', '#f3ecdc', '#b5522b', '#d8c08a']: print(h, nearest(h))

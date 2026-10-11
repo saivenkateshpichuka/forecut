@@ -441,7 +441,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
   <section id="india" aria-labelledby="ih">
     <div class="india">
       <div class="itext">
-        <span class="mono eyebrow">India forecast 2026–27</span>
+        <span class="mono eyebrow">India forecast 2026–28</span>
         <h2 id="ih">Made for the Indian market.</h2>
         <p>Sarees, lehengas, kurtas, bandhgalas, juttis and Kolhapuris, handloom weaves, chikankari, mirror work and gota, plus the western wear Gen Z India is buying. Planned around the Indian calendar, from Diwali and wedding season to summer and the next festive.</p>
         <div class="istats"><div><b>103</b><span>India details</span></div><div><b>8</b><span>Categories</span></div><div><b>3</b><span>Festive windows</span></div><div><b>₹</b><span>Price guides</span></div></div>
@@ -758,7 +758,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
         <span class="offer">Free</span>
         <h3>Explorer</h3>
         <div class="price">₹0</div>
-        <ul><li>One visit to the current season report</li><li>Browse every category and detail</li><li>No card needed</li></ul>
+        <ul><li>One visit to the current season report</li><li>Browse every category and detail</li><li>The Journal and one sample report</li><li>No card needed</li></ul>
         <a class="btn ghost" href="https://forecut.in/india.html">Explore free now</a>
       </div>
       <div class="plan feat">
@@ -766,7 +766,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
         <h3>Individual</h3>
         <div class="price">₹1,499 <small>/ year</small></div>
         <p class="per">Per user · one login</p>
-        <ul><li>All seasons, AW26 to AW28</li><li>Full descriptions and downloadable detail cards</li><li>Monthly trend updates</li></ul>
+        <ul><li>All seasons: global AW26 to AW28 and India Festive 26 to Festive 28</li><li>Every report: Core Item Updates, Design Capsules, Colour Forecast, Sourcing Guide and Brand Watch</li><li>PDF downloads of every report, and detail cards as PNG or PDF</li><li>Pantone TCX references on every palette</li><li>Monthly trend updates</li></ul>
         <a class="btn" href="#waitlist">Reserve the launch price</a>
       </div>
       <div class="plan">
@@ -775,7 +775,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
         <div class="was"><s>₹15,000</s> <span>Save ₹5,001</span></div>
         <div class="price">₹9,999 <small>/ year</small></div>
         <p class="per">Starts with 10 users · one login each</p>
-        <ul><li>Everything in Individual</li><li>Add more users as your team grows</li><li>Category requests and team onboarding</li></ul>
+        <ul><li>Everything in Individual, for the whole team</li><li>Add more users as your team grows</li><li>Custom reports for your categories</li><li>Team onboarding</li></ul>
         <a class="btn ghost" href="mailto:hello@forecut.in?subject=Forecut%20Enterprise">Talk to us</a>
       </div>
     </div>

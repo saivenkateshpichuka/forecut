@@ -58,7 +58,7 @@ jsec = f'''  <section id="journal" aria-labelledby="jlh">
   </section>
 '''
 import reports_data as RD
-rs = [('reports.html', 'All reports', 'pre-draped-saree-gowns', 'Hub'), ('core-item-sarees.html', 'Core Item Update: Sarees', 'pre-draped-saree-gowns', 'Core Item Update'), ('capsule-festive-made-easy.html', 'Design Capsule: Festive made easy', 'cape-lehengas', 'Design Capsule'), ('india-colour-forecast.html', 'India Colour Forecast 2026–27', 'fit-and-flare-anarkalis', 'Colour Forecast'), ('india-textile-craft-guide.html', 'Textile and Craft Sourcing Guide', 'chanderi', 'Sourcing Guide')][1:]
+rs = [('reports.html', 'All reports', 'pre-draped-saree-gowns', 'Hub'), ('core-item-sarees.html', 'Core Item Update: Sarees', 'pre-draped-saree-gowns', 'Core Item Update'), ('capsule-festive-made-easy.html', 'Design Capsule: Festive made easy', 'cape-lehengas', 'Design Capsule'), ('india-colour-forecast.html', 'India Colour Forecast 2026–27', 'fit-and-flare-anarkalis', 'Colour Forecast'), ('india-brand-watch.html', 'Brand Watch: what Indian labels are launching', 'tissue-sarees-in-champagne-gold', 'Brand Watch')][1:]
 rc = ''.join(f'<a class="jc" href="{u}"><span class="ph"><img src="img/{im}.webp" alt="" loading="lazy" width="800" height="800"></span><small>{k}</small><b>{t}</b></a>' for u, t, im, k in rs)
 rsec = f'''  <section id="reports" aria-labelledby="rph">
     <div class="sechead"><div><span class="mono eyebrow">Reports</span><h2 id="rph">Ready-to-use trend reports.</h2></div><p>Item-by-item updates, design capsules with flat sketches, colour and sourcing guides. <a href="reports.html">All reports →</a></p></div>
