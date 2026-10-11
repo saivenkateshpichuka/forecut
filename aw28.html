@@ -21,8 +21,7 @@
 <meta name="twitter:description" content="AW28 trend forecast: Long-range outlook. Functional tailoring and technical wool for winter, hidden closures and hybrid boots, with radiant earth deepening into rust and brick. Every detail marked emerging, rising, peaking or fading, with themes, colours and downloadable cards.">
 <meta name="twitter:image" content="https://forecut.in/og-image.png">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "WebPage", "name": "AW28 Fashion Trend Forecast (Autumn/Winter 2028) · Garments, Footwear & Details | Forecut", "description": "AW28 trend forecast: Long-range outlook. Functional tailoring and technical wool for winter, hidden closures and hybrid boots, with radiant earth deepening into rust and brick. Every detail marked emerging, rising, peaking or fading, with themes, colours and downloadable cards.", "url": "https://forecut.in/aw28.html", "isPartOf": {"@id": "https://forecut.in/#site"}, "publisher": {"@id": "https://forecut.in/#org"}, "inLanguage": "en-IN", "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Forecut", "item": "https://forecut.in/"}, {"@type": "ListItem", "position": 2, "name": "AW28 Fashion Trend Forecast", "item": "https://forecut.in/aw28.html"}]}}</script>
-<!--/seo-->
-</head><body>
+<!--/seo--></head><body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500..700;1,9..144,500..700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
@@ -230,7 +229,7 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;line-height:1.08;text-wrap:balan
 .mv:hover{border-color:var(--ink)}
 .mv:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}
 .mv .gt{width:44px;height:46px;border-radius:7px;background:var(--surface-img);display:grid;place-items:center;overflow:hidden}
-.mv .gt svg{width:44px;height:46px}
+.mv .gt svg{width:44px;height:46px}.mv .gt img{width:100%;height:100%;object-fit:cover;display:block}.cart .cphoto{width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0}.cart:has(.cphoto){position:relative;min-height:220px}
 .mv b{font-size:12.5px;line-height:1.25;font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .mv small{display:block;font:500 10px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted);margin-top:2px}
 .mv small.e{color:var(--chalk)} .mv small.r{color:var(--rise)}
@@ -1990,6 +1989,7 @@ var Flats = (function () {
     var id = 'tp' + (++n);
     var r = window.Flats ? Flats.render(name, {ink:'#13241d', fill:'#f7f4ee', tint:fg, accent:'#d9480f', accent2:'#d9480f', muted:'#53655d'}, {clean:true}) : null;
     var flat = r ? r.svg.replace('<svg ', '<svg x="150" y="8" width="168" height="175" ') : '';
+    var ph = el.getAttribute('data-photo'); if (ph) flat = '<clipPath id="' + id + 'c"><rect x="176" y="14" width="128" height="162" rx="6"/></clipPath><rect x="172" y="10" width="136" height="170" rx="8" fill="#fff" opacity=".9"/><image href="' + ph + '" x="176" y="14" width="128" height="162" preserveAspectRatio="xMidYMid slice" clip-path="url(#' + id + 'c)"/>';
     var bgArt = type === 'topo' ? topo(fg) : '<rect width="320" height="190" fill="url(#' + id + ')" opacity=".75"/>';
     el.innerHTML = '<svg viewBox="0 0 320 190" role="img" aria-label="' + el.getAttribute('data-title') + ' mood: textile pattern with a key garment"><defs>' + (type === 'topo' ? '' : pat(type, fg, id)) + '</defs>' +
       '<rect width="320" height="190" fill="' + bg + '"/>' + bgArt +
@@ -1997,6 +1997,7 @@ var Flats = (function () {
       '<ellipse cx="234" cy="180" rx="66" ry="7" fill="#000" opacity=".18"/>' + flat + '</svg>';
   }
   function coty(el) {
+    if (el.getAttribute('data-photo')) { el.innerHTML = '<img class="cphoto" src="' + el.getAttribute('data-photo') + '" alt="" loading="lazy">'; return; }
     var name = el.getAttribute('data-flat'), hex = el.getAttribute('data-hex'), deep = el.getAttribute('data-deep') || null;
     var r = window.Flats ? Flats.render(name, {ink:'#13241d', fill:deep || hex, tint:'rgba(19,36,29,.22)', accent:'#d9480f', accent2:'#d9480f', muted:'#53655d'}, {clean:true}) : null;
     el.innerHTML = r ? r.svg : '';
@@ -2077,7 +2078,7 @@ var Flats = (function () {
   function close() { scrim.hidden = true; if (lastFocus) lastFocus.focus(); }
   window.ForecutOpenDetail = open;
   document.querySelectorAll('.mv').forEach(function (b) {
-    var n = b.getAttribute('data-name'), r = Flats.render(n, colorsFor(n, FILE_C), {clean: true}); b.querySelector('.gt').innerHTML = r ? r.svg : motif(n);
+    var n = b.getAttribute('data-name'); if (b.getAttribute('data-photo')) { b.querySelector('.gt').innerHTML = '<img src="' + b.getAttribute('data-photo') + '" alt="" loading="lazy">'; } else { var r = Flats.render(n, colorsFor(n, FILE_C), {clean: true}); b.querySelector('.gt').innerHTML = r ? r.svg : motif(n); }
     b.addEventListener('click', function () { var hit = Array.prototype.find.call(document.querySelectorAll('.d'), function (c) { return c.querySelector('h4').textContent === n; }); if (hit) open(hit); });
   });
   (function thumbs() {
@@ -2218,7 +2219,7 @@ var Flats = (function () {
     var d = TD[i]; if (!d) return; last = document.activeElement;
     var art = document.getElementById('tvart'); art.innerHTML = '';
     var src = tileEl.querySelector('.tart'); var a2 = el('div', 'tart');
-    ['data-pat', 'data-bg', 'data-fg', 'data-flat', 'data-title'].forEach(function (k) { a2.setAttribute(k, src.getAttribute(k)); });
+    ['data-pat', 'data-bg', 'data-fg', 'data-flat', 'data-title'].forEach(function (k) { a2.setAttribute(k, src.getAttribute(k)); }); if (src.getAttribute('data-photo')) a2.setAttribute('data-photo', src.getAttribute('data-photo'));
     art.appendChild(a2); if (window.ForecutTile) window.ForecutTile(a2);
     document.getElementById('tvseason').textContent = d.season;
     document.getElementById('tvname').textContent = d.title;
