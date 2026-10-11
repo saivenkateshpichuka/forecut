@@ -11,3 +11,6 @@ STATIC=.. python3 gen_seasons.py
 STATIC=.. python3 gen_india.py
 python3 build_home.py
 python3 india_prompts.py
+
+# SEO tags, sitemap, robots (run last)
+python3 seo.py

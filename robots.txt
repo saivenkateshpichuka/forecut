@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /build/
+Disallow: /images/
+
+Sitemap: https://forecut.in/sitemap.xml

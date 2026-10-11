@@ -74,3 +74,7 @@ Everything needed to rebuild the Forecut website. The published pages are genera
 - india_prompts.py writes ../india-image-prompts.csv (same file-name rules as the main report). Photos go in images/ like the rest.
 - Homepage source is forecut_home.txt; build_home.py writes ../index.html. GitHub Pages is the live site (forecut.in); Claude artifacts are backups.
 - Each month also refresh India: move lifecycles on, add new Indian runway/retail/festive signals, keep 10+ details per India category.
+
+## SEO (added Oct 2026)
+- seo.py adds titles, meta descriptions, canonical URLs, Open Graph/Twitter tags, JSON-LD (Organization, WebSite, WebPage + breadcrumbs) to every page, and writes ../sitemap.xml, ../robots.txt and ../favicon.svg. build.sh runs it last; always run it after rebuilding pages.
+- Google Search Console and Bing Webmaster Tools are verified for forecut.in (DNS TXT on GoDaddy). Sitemap: https://forecut.in/sitemap.xml
