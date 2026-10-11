@@ -353,6 +353,29 @@ p,li{line-height:1.6}
   .d p{font-size:13px!important}
   .d .dtop{flex-direction:column;align-items:flex-start;gap:4px}
 }
+/* bright status */
+.chipf.e{--b1:#ff4d1a;--b2:#ff8a3d}.chipf.r{--b1:#00a85a;--b2:#1fd17f}.chipf.p{--b1:#ffb000;--b2:#ffd34d}.chipf.f{--b1:#8b5cf6;--b2:#b69cff}
+.chipf.e,.chipf.r,.chipf.p,.chipf.f{color:var(--ink)!important;font-weight:700!important;border-color:color-mix(in srgb,var(--b1) 45%,var(--grid))!important}
+.chipf.e::before,.chipf.r::before,.chipf.p::before,.chipf.f::before{background:linear-gradient(135deg,var(--b1),var(--b2))!important;width:10px;height:10px;box-shadow:0 0 0 3px color-mix(in srgb,var(--b1) 22%,transparent)}
+.chipf[aria-pressed="true"]{background:linear-gradient(135deg,var(--b1),var(--b2))!important;color:#fff!important;border-color:transparent!important}
+.chipf.p[aria-pressed="true"]{color:#3d2600!important}
+.chipf[aria-pressed="true"]::before{background:currentColor!important;box-shadow:none}
+.pill.emerge,.pill.rise,.pill.peak,.pill.fade{color:#fff!important;border:0;box-shadow:0 2px 8px -3px var(--pg);font-weight:700!important;text-shadow:0 1px 0 rgba(0,0,0,.12)}
+.pill.emerge{--pg:#ff5a1f;background:linear-gradient(135deg,#ff4d1a,#ff8a3d)!important}
+.pill.rise{--pg:#00a85a;background:linear-gradient(135deg,#00a85a,#1fd17f)!important}
+.pill.peak{--pg:#f0a000;background:linear-gradient(135deg,#ffb000,#ffd34d)!important;color:#3d2600!important;text-shadow:none}
+.pill.fade{--pg:#7c4dff;background:linear-gradient(135deg,#8b5cf6,#b69cff)!important}
+.pill.emerge::before,.pill.rise::before,.pill.fade::before{background:#fff!important;color:#fff}
+.pill.peak::before{background:#3d2600!important;color:#3d2600}
+@keyframes fcShine{0%{background-position:-120% 0}60%,100%{background-position:220% 0}}
+.pill.emerge,.pill.rise,.pill.peak,.pill.fade{background-size:100% 100%}
+.pill.emerge::after,.pill.rise::after,.pill.fade::after{color:inherit}
+@media (prefers-reduced-motion:no-preference){
+  .pill.fade{animation:fcSoft 3.2s ease-in-out infinite!important}
+  .pill.rise,.pill.emerge,.pill.peak{animation:fcPop 2.4s ease-in-out infinite}
+}
+@keyframes fcSoft{0%,100%{opacity:1}50%{opacity:.78}}
+@keyframes fcPop{0%,100%{box-shadow:0 2px 8px -3px var(--pg)}50%{box-shadow:0 2px 14px -2px var(--pg)}}
 </style>
 <div class="wrap">
   <div class="bar">
