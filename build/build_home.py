@@ -50,7 +50,14 @@ if order:
     <div class="galmore" role="navigation" aria-label="Browse seasons">{more}</div>
   </section>
 '''
-h = h.replace('<!--GALLERY-->', gal)
+import journal_data as JD
+jc = ''.join(f'<a class="jc" href="{a["slug"]}.html"><span class="ph"><img src="img/{a["hero"]}.webp" alt="" loading="lazy" width="800" height="800"></span><small>{a["tag"]} · {a["read"]} min read</small><b>{a["title"]}</b></a>' for a in JD.ARTICLES[:3])
+jsec = f'''  <section id="journal" aria-labelledby="jlh">
+    <div class="sechead"><div><span class="mono eyebrow">The Journal</span><h2 id="jlh">Read the analysis.</h2></div><p>Practical guides on what India will wear next, and how to act on it. <a href="journal.html">All articles →</a></p></div>
+    <div class="jrow">{jc}</div>
+  </section>
+'''
+h = h.replace('<!--GALLERY-->', gal + jsec)
 for k, u in json.load(open('urls.json')).items(): h = h.replace(u, f'{k}.html')
 h = h.replace('https://forecut.in/india.html', 'india.html').replace('https://forecut.in/about.html', 'about.html').replace('https://forecut.in/contact.html', 'contact.html').replace('https://forecut.in/terms.html', 'terms.html').replace('https://forecut.in/privacy.html', 'privacy.html').replace(' target="_blank" rel="noopener"', '')
 if not h.lstrip().lower().startswith('<!doctype'):

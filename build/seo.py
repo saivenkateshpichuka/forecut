@@ -4,7 +4,7 @@ R = '..'; BASE = 'https://forecut.in/'
 S = json.load(open('seasons.json')); META = S['meta']; SEAS = S['seasons'] if 'seasons' in S else list(META)
 pages = {
  'index.html': ('Forecut · Fashion Trend Forecast for India | Garments, Footwear, Fabrics & Details',
-   'Forecut is detail-level fashion trend forecasting for India: what\'s emerging, rising, peaking and fading in ethnic and western wear, footwear, fabrics, embroidery and trims, with ₹ price guides. Free while in testing.', ''),
+   'Forecut is detail-level fashion trend forecasting for India: what\'s emerging, rising, peaking and fading in ethnic and western wear, footwear, fabrics, embroidery and trims, with ₹ price guides. Free during early access.', ''),
  'india.html': ('India Fashion Trend Forecast 2026–27 · Sarees, Lehengas, Kurtas, Juttis | Forecut',
    'India fashion trends for Festive 2026, Summer 2027 and Festive 2027: sarees, lehengas, kurtas, bandhgalas, juttis, Kolhapuris, handloom fabrics, chikankari, mirror work and trims, with ₹ price guides.', 'india.html'),
 }
@@ -13,6 +13,11 @@ for fn, t, d in [('about.html', 'About Forecut · Fashion Trend Forecasting for 
                  ('terms.html', 'Terms & Conditions · Forecut', 'Terms and conditions for using the Forecut fashion trend forecasting website.'),
                  ('privacy.html', 'Privacy Policy · Forecut', 'How Forecut collects, uses and protects information, in line with Indian data protection law.')]:
     pages[fn] = (t, d, fn)
+import journal_data as JD
+pages['journal.html'] = ('Forecut Journal · Indian Fashion Trend Analysis & Guides', 'Analysis and practical guides on Indian and global fashion trends: festive and wedding wear, handloom, footwear, Gen Z fusion and colour, with rupee price bands.', 'journal.html')
+ARTS = {}
+for a in JD.ARTICLES:
+    pages[a['slug'] + '.html'] = (a['title'] + ' · Forecut Journal', a['desc'], a['slug'] + '.html'); ARTS[a['slug'] + '.html'] = a
 for k in SEAS:
     m = META[k]
     pages[f'{k}.html'] = (f"{m['code']} Fashion Trend Forecast ({m['title']}) · Garments, Footwear & Details | Forecut",
@@ -37,6 +42,9 @@ def block(fn, title, desc, path):
         "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Forecut", "item": BASE}, {"@type": "ListItem", "position": 2, "name": title.split(' · ')[0].split(' (')[0], "item": url}]}}, ensure_ascii=False) + '</script>')
     if SITE.get('ga'): b.append('<script async src="https://www.googletagmanager.com/gtag/js?id=' + SITE['ga'] + '"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","' + SITE['ga'] + '");</script>')
     if SITE.get('adsense'): b.append('<meta name="google-adsense-account" content="' + SITE['adsense'] + '"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + SITE['adsense'] + '" crossorigin="anonymous"></script>')
+    if fn in ARTS:
+        a = ARTS[fn]
+        b.append('<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@type": "Article", "headline": a['title'], "description": a['desc'], "image": BASE + 'img/' + a['hero'] + '.webp', "datePublished": JD.DATE, "dateModified": JD.DATE, "author": {"@type": "Organization", "name": "Forecut Editorial", "url": BASE + 'about.html'}, "publisher": {"@id": BASE + "#org"}, "mainEntityOfPage": url, "inLanguage": "en-IN"}, ensure_ascii=False) + '</script>')
     b.append('<!--/seo-->'); return '\n'.join(b)
 for fn, (title, desc, path) in pages.items():
     p = os.path.join(R, fn)
@@ -48,7 +56,7 @@ for fn, (title, desc, path) in pages.items():
     if '<html lang="en">' in h: h = h.replace('<html lang="en">', '<html lang="en-IN">', 1)
     open(p, 'w').write(h)
 today = datetime.date.today().isoformat()
-pri = {'index.html': '1.0', 'india.html': '0.9', 'about.html': '0.5', 'contact.html': '0.4', 'terms.html': '0.2', 'privacy.html': '0.2'}
+pri = {'index.html': '1.0', 'india.html': '0.9', 'journal.html': '0.8', 'about.html': '0.5', 'contact.html': '0.4', 'terms.html': '0.2', 'privacy.html': '0.2'}
 sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
     f'  <url><loc>{BASE}{v[2]}</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>{pri.get(k, "0.8")}</priority></url>\n' for k, v in pages.items()) + '</urlset>\n'
 open(os.path.join(R, 'sitemap.xml'), 'w').write(sm)
