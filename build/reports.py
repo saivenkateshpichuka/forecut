@@ -2,6 +2,7 @@
 Uses india_data.py (statuses, themes) + reports_data.py (editorial text). Flat sketches are pre-rendered with node + flats.js."""
 import html, json, math, subprocess, tempfile, os
 import india_data as I
+import pantone as PT
 import reports_data as R
 E = html.escape
 src = open('legal.py').read(); ns = {}; exec(src.split('\nP = ')[0], ns)
@@ -104,7 +105,7 @@ CSS = '''<style>
 .ptab tr:last-child td{border-bottom:0}.tw{overflow-x:auto}
 .cgrp{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
 .cc{border:1px solid var(--grid);border-radius:12px;overflow:hidden;background:var(--paper-2)}
-.cc .chip{height:150px;padding:14px;display:flex;flex-direction:column;justify-content:flex-end;font-family:"DM Sans",sans-serif}
+.cc .chip{height:170px;padding:14px;display:flex;flex-direction:column;justify-content:flex-end;font-family:"DM Sans",sans-serif}
 .cc .chip b{font-size:22px}.cc .chip span{font-size:12.5px;opacity:.85}
 .cc .cb{padding:14px 16px;display:grid;gap:6px}
 .cc .cb p{margin:0;font-size:15px!important;line-height:1.5}
@@ -119,15 +120,24 @@ CSS = '''<style>
 .rc b{font:700 19px/1.25 "DM Sans",sans-serif;letter-spacing:-.01em}.rc small{font:700 11.5px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--chalk)}
 .rc span{font-family:"Source Serif 4",Georgia,serif;font-size:15px;color:var(--muted);line-height:1.5}
 .note{font-size:14px!important;color:var(--muted)!important}
+.dlpdf{display:inline-flex;align-items:center;gap:8px;margin-top:6px;font:700 14px "DM Sans",sans-serif;background:#b4532a;color:#fff!important;text-decoration:none;padding:11px 18px;border-radius:2px}
+.dlpdf:hover{background:#9a4522}
+@page{size:A4 landscape;margin:12mm 12mm 16mm}
+@media print{body{padding:0!important;background:#fff!important;font-size:14px}nav,footer,.dlpdf,.more{display:none!important}.wrap.r{max-width:none}
+.sec,.dt,.cad,.cc,tr,.howto,.summary{break-inside:avoid}.sec>h2{break-after:avoid}.cover{margin-top:0;min-height:170mm;break-after:page}.cover .ci{aspect-ratio:auto;height:170mm}.cover .ci::before{display:none}
+.dgrid{grid-template-columns:repeat(4,1fr)!important}.cads{grid-template-columns:repeat(3,1fr)!important}.cgrp{grid-template-columns:repeat(4,1fr)!important}.mood{grid-template-columns:300px 1fr!important}
+a{text-decoration:none}}
 @media (max-width:820px){.cover{grid-template-columns:1fr}.cover .ci{aspect-ratio:4/3}.cover .ci::before{display:none}.mood{grid-template-columns:1fr}.summary{grid-template-columns:repeat(2,1fr)}}
 </style>'''
 DATE_TXT = '11 October 2026'
 def page(fn, title, body):
+    pdf = fn.replace('.html', '.pdf')
+    body = body.replace('{PDFBTN}', f'<a class="dlpdf" href="{pdf}" download>Download PDF ↓</a>') if fn != 'reports.html' else body
     h = HEAD.format(title=E(title)).replace('</style></head>', '</style>' + CSS + '</head>', 1).replace('<div class="wrap">', '<div class="wrap r">', 1)
     open('../' + fn, 'w').write(h + body + FOOT)
 def cover(kicker, title, lead, img, extra=''):
     return (f'<header class="cover"><div class="ct"><p class="kicker">{E(kicker)}</p><h1>{E(title)}</h1><p class="lead">{E(lead)}</p>'
-            f'<p class="by">Forecut Editorial · {DATE_TXT}{extra}</p></div><div class="ci"><img src="img/{img}.webp" alt="{E(title)}" width="800" height="800"></div></header>')
+            f'<p class="by">Forecut Editorial · {DATE_TXT}{extra}</p>{{PDFBTN}}</div><div class="ci"><img src="img/{img}.webp" alt="{E(title)}" width="800" height="800"></div></header>')
 SRC = '<p class="note">Statuses are Forecut\'s forecast for India: Festive 26 (Oct 2026 – Feb 2027), Summer 27 (Mar – Jul 2027) and Festive 27 (Aug – Dec 2027). Sources: ' + E(I.META['sources']) + '</p>'
 PAGES = []  # (fn, title, desc, kind, img)
 
@@ -156,7 +166,7 @@ cap_names = [n for t in I.THEMES for n in R.CAPSULES[t['t']][2]]
 FL = render_flats(sorted(set(cap_names)))
 for t in I.THEMES:
     slug, pal, pieces, hero = R.CAPSULES[t['t']]
-    sw = ''.join(f'<div style="background:{h};color:{"#1c1714" if h in ("#f3ecdc", "#d8c08a", "#9fae8f", "#d9a3a6") else "#fff"}">{E(n)}<br>{h.upper()}</div>' for h, n in pal)
+    sw = ''.join(f'<div style="background:{h};color:{"#1c1714" if h in ("#f3ecdc", "#d8c08a", "#9fae8f", "#d9a3a6") else "#fff"}">{E(n)}<br>{PT.nearest(h)[0]}<br>{h.upper()}</div>' for h, n in pal)
     cads = ''
     for n in pieces:
         x = D[n]; svg = FL.get(n, '')
@@ -167,7 +177,7 @@ for t in I.THEMES:
     brands = ''.join(f'<li><b>{E(b)}</b>: {E(w)}</li>' for b, w in t['brands'])
     fn = f'capsule-{slug}.html'; ti = f'Design Capsule: {t["t"]}'
     body = (cover('Design Capsule · India 2026–27', ti, t['d'] if 'd' in t else t['story'], hero) +
-            f'<section class="sec"><h2>Mood and colour</h2><div class="mood"><div><div class="sw">{sw}</div><p class="note">Hex values are approximate screen references; match to physical lab dips before production.</p></div>'
+            f'<section class="sec"><h2>Mood and colour</h2><div class="mood"><div><div class="sw">{sw}</div><p class="note">Pantone TPX codes are the nearest match to the screen colour; confirm against a physical Pantone book and lab dips before production.</p></div>'
             f'<div class="wh"><p><b>Why?</b> {E(t["why"])}</p><p><b>What?</b> {E(t["story"])}</p><p><b>Who\'s showing it?</b></p><ul>{brands}</ul></div></div></section>'
             f'<section class="sec"><h2>Key pieces</h2><p class="sub">Forecut flat sketches with reference photos, ready to brief into design.</p><div class="cads">{cads}</div></section>'
             f'<section class="sec"><h2>Price guide (India)</h2><div class="tw"><table class="ptab"><thead><tr><th>Key garment</th><th>Value</th><th>Mid</th><th>Premium</th></tr></thead><tbody>{prices}</tbody></table></div>'
@@ -185,13 +195,13 @@ for g, gd in R.COLOUR_GROUPS:
         r_, g_, b_ = int(h[1:3], 16), int(h[3:5], 16), int(h[5:7], 16)
         ink = '#1c1714' if (r_ * 299 + g_ * 587 + b_ * 114) / 1000 > 150 else '#fff'
         th = ''.join(photo(x) for x in rel)
-        cards += (f'<article class="cc"><div class="chip" style="background:{h};color:{ink}"><b>{E(n)}</b><span>{h.upper()} · RGB {r_}, {g_}, {b_}</span></div>'
+        cards += (f'<article class="cc"><div class="chip" style="background:{h};color:{ink}"><b>{E(n)}</b><span>Pantone {PT.nearest(h)[0]}<br>{h.upper()} · RGB {r_}, {g_}, {b_}</span></div>'
                   f'<div class="cb"><p>{E(mood)}</p><dl><dt>Best for</dt><dd>{E(best)}</dd><dt>Pair with</dt><dd>{E(", ".join(pairs))}</dd></dl><div class="thumbs">{th}</div></div></article>')
     grp += f'<section class="sec"><h2>{E(g)}</h2><p class="sub">{E(gd)}</p><div class="cgrp">{cards}</div></section>'
-kc = ''.join(f'<li><b>{E(c["name"])}</b> ({c["hex"]}): {E(c["text"])}</li>' for c in I.META['keycolours'])
+kc = ''.join(f'<li><b>{E(c["name"])}</b> (Pantone {PT.nearest(c["hex"])[0]} · {c["hex"]}): {E(c["text"])}</li>' for c in I.META['keycolours'])
 body = (cover('Colour Forecast · India 2026–27', 'India Colour Forecast 2026–27', 'Nine colours for Indian fashion from Festive 26 to Festive 27, in three families: festive jewels, calm handloom, and earth and indigo.', 'fit-and-flare-anarkalis') +
         f'<section class="sec"><h2>Key colours</h2><ul>{kc}</ul></section>' + grp +
-        '<section class="sec howto"><h2>How to use the palette</h2><ul><li>Build festive capsules from one jewel tone plus champagne gold and ivory.</li><li>Use sage, ivory and dusty rose for handloom and day-function ranges.</li><li>Run indigo across every category, from denim to sarees and footwear, and warm it with rust.</li><li>Match hex values to physical lab dips before bulk dyeing.</li></ul></section>' + SRC)
+        '<section class="sec howto"><h2>How to use the palette</h2><ul><li>Build festive capsules from one jewel tone plus champagne gold and ivory.</li><li>Use sage, ivory and dusty rose for handloom and day-function ranges.</li><li>Run indigo across every category, from denim to sarees and footwear, and warm it with rust.</li><li>Pantone TPX codes are the nearest match to each screen colour. Confirm with a physical Pantone book and lab dips before bulk dyeing.</li></ul></section>' + SRC)
 page('india-colour-forecast.html', 'India Colour Forecast 2026–27 · Forecut', body)
 PAGES.append(('india-colour-forecast.html', 'India Colour Forecast 2026–27', 'Nine colours for Indian fashion in 2026–27: emerald, sapphire, deep wine, champagne gold, sage, ivory, dusty rose, indigo and rust.', 'Colour Forecast', 'fit-and-flare-anarkalis'))
 
@@ -222,3 +232,42 @@ page('reports.html', 'Forecut Reports · Indian fashion trend reports', hub)
 PAGES.insert(0, ('reports.html', 'Forecut Reports', 'Indian fashion trend reports: core item updates, design capsules, colour forecast and textile and craft sourcing guide.', 'Hub', 'pre-draped-saree-gowns'))
 json.dump([[p[0], p[1], p[2]] for p in PAGES], open('reports_index.json', 'w'), ensure_ascii=False, indent=0)
 print('reports ok', len(PAGES))
+
+# ---------- PDFs (A4 landscape) via headless Chromium ----------
+import threading, http.server, socketserver, functools, sys
+if '--no-pdf' not in sys.argv:
+    from playwright.sync_api import sync_playwright
+    root = os.path.abspath('..')
+    class _Q(http.server.SimpleHTTPRequestHandler):
+        def log_message(self, *a): pass
+    H = functools.partial(_Q, directory=root)
+    from PIL import Image as _Im
+    import io as _io
+    _jc = {}
+    def _small(route):
+        u = route.request.url
+        if '/img/' in u and u.endswith('.webp'):
+            from urllib.parse import unquote
+            fp = os.path.join(root, unquote(u.split(f':{port}/', 1)[1]))
+            if fp not in _jc:
+                im = _Im.open(fp).convert('RGB'); im.thumbnail((560, 560)); bio = _io.BytesIO(); im.save(bio, 'JPEG', quality=72, optimize=True); _jc[fp] = bio.getvalue()
+            return route.fulfill(status=200, body=_jc[fp], headers={'Content-Type': 'image/jpeg'})
+        return route.continue_() if u.startswith(f'http://127.0.0.1:{port}') else route.abort()
+    srv = socketserver.TCPServer(('127.0.0.1', 0), H); port = srv.server_address[1]
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    foot = ('<div style="font:9px DM Sans,Arial,sans-serif;color:#6e6259;width:100%;padding:0 12mm;display:flex;justify-content:space-between">'
+            '<span><b style="color:#1f3d33">Forecut</b> · forecut.in · hello@forecut.in</span><span class="pageNumber"></span></div>')
+    with sync_playwright() as p:
+        b = p.chromium.launch(); pg = b.new_page(viewport={'width': 1200, 'height': 900})
+        pg.route('**/*', _small)
+        n = 0
+        for fn, *_ in PAGES:
+            if fn == 'reports.html': continue
+            pg.goto(f'http://127.0.0.1:{port}/{fn}', wait_until='load')
+            pg.evaluate('''() => Promise.all([...document.images].map(i => { i.loading = 'eager'; return i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; }); }))''')
+            pg.evaluate('document.fonts.ready'); pg.emulate_media(media='print')
+            pg.pdf(path=os.path.join(root, fn.replace('.html', '.pdf')), format='A4', landscape=True, print_background=True, display_header_footer=True,
+                   header_template='<span></span>', footer_template=foot, margin={'top': '12mm', 'bottom': '16mm', 'left': '12mm', 'right': '12mm'})
+            n += 1
+        b.close()
+    srv.shutdown(); print('pdfs ok', n)

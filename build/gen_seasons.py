@@ -1,3 +1,4 @@
+import pantone as PT
 import json, html, os
 from seasons_data import SEASONS, META
 M = json.load(open('details.json'))
@@ -82,7 +83,7 @@ for si, s in enumerate(SEASONS):
         x = TDATA[(s, t)]
         tdj.append(dict(title=t, season=m['code'] + ' · ' + m['stage'], tags=kw, story=x['story'], why=x['why'], brands=x['brands'], src=x['src'],
                         future=(m['basis'] != 'research'), kw=x['kw'], prices=x['prices'], cost=x['cost'], actions=x['actions']))
-    pal = ''.join(f'<div class="sw2"><i style="background:{h}"></i><span>{E(n)}<small>{h.upper()} approx.</small></span></div>' for h, n in m['palette'])
+    pal = ''.join(f'<div class="sw2"><i style="background:{h}"></i><span>{E(n)}<small>Pantone {PT.nearest(h)[0]}<br>{h.upper()}</small></span></div>' for h, n in m['palette'])
     coty = ''
     for c in m['coty']:
         pairs = ''.join(f'<span><i style="background:{h}"></i>{E(n)}</span>' for h, n in c['pairs'])

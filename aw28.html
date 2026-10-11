@@ -24,9 +24,7 @@
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-EHT7W1C07R"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","G-EHT7W1C07R");</script>
 <meta name="google-adsense-account" content="ca-pub-7948077880470389"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7948077880470389" crossorigin="anonymous"></script>
 <!--/seo--></head><body>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="preload" href="fonts/dm-sans.woff" as="font" type="font/woff" crossorigin><link rel="stylesheet" href="fonts/fonts.css">
 <style>
 /* Layout: report header with season facts, sticky filter bar, then department > category > detail-card grids */
 :root{
@@ -412,6 +410,12 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
 .tcurve .tcmsg{margin:4px 0 0;font-size:14px;color:var(--muted)}
 @media (prefers-reduced-motion:no-preference){.tcdot{animation:tcpulse 2s ease-in-out infinite;transform-box:fill-box;transform-origin:center}}
 @keyframes tcpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.25)}}
+
+/* download PNG + PDF */
+.dlg{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
+.dlgl{font:600 12px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:2px}
+.dlg .vbtn{padding:11px 18px;min-width:70px}
+#vdlpdf{background:#b4532a;color:#fff}
 </style>
 <div class="wrap">
   <div class="bar">
@@ -448,7 +452,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
 
   <section class="sec" aria-labelledby="kc">
     <div class="sechead"><span class="mono eb">Key colours</span><h2 id="kc">AW28 palette</h2></div>
-    <div class="palette"><div class="sw2"><i style="background:#9a4322"></i><span>Deep earth<small>#9A4322 approx.</small></span></div><div class="sw2"><i style="background:#8b3a2b"></i><span>Rust<small>#8B3A2B approx.</small></span></div><div class="sw2"><i style="background:#33363a"></i><span>Charcoal<small>#33363A approx.</small></span></div><div class="sw2"><i style="background:#d8cdb8"></i><span>Oatmeal<small>#D8CDB8 approx.</small></span></div><div class="sw2"><i style="background:#1f4a35"></i><span>Bottle green<small>#1F4A35 approx.</small></span></div><div class="sw2"><i style="background:#b08a5e"></i><span>Camel<small>#B08A5E approx.</small></span></div><div class="sw2"><i style="background:#4b4f55"></i><span>Graphite<small>#4B4F55 approx.</small></span></div></div>
+    <div class="palette"><div class="sw2"><i style="background:#9a4322"></i><span>Deep earth<small>Pantone 18-1340 TPX<br>#9A4322</small></span></div><div class="sw2"><i style="background:#8b3a2b"></i><span>Rust<small>Pantone 19-1250 TPX<br>#8B3A2B</small></span></div><div class="sw2"><i style="background:#33363a"></i><span>Charcoal<small>Pantone 19-4218 TPX<br>#33363A</small></span></div><div class="sw2"><i style="background:#d8cdb8"></i><span>Oatmeal<small>Pantone 12-0110 TPX<br>#D8CDB8</small></span></div><div class="sw2"><i style="background:#1f4a35"></i><span>Bottle green<small>Pantone 19-6050 TPX<br>#1F4A35</small></span></div><div class="sw2"><i style="background:#b08a5e"></i><span>Camel<small>Pantone 17-1045 TPX<br>#B08A5E</small></span></div><div class="sw2"><i style="background:#4b4f55"></i><span>Graphite<small>Pantone 19-3910 TPX<br>#4B4F55</small></span></div></div>
   </section>
 
   <div class="sechead dh"><span class="mono eb">Detail report</span><h2>Every detail, by category</h2><p class="hint">Open any detail to see it on a flat sketch, follow its lifecycle across seasons and download it as an image card.</p></div>
@@ -517,7 +521,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
           <dt>Trend curve</dt><dd><div class="tcurve" id="vcurve"></div></dd>
         </dl>
         <div class="vact">
-          <button class="vbtn" type="button" id="vdl">Download detail card</button>
+          <div class="dlg"><span class="dlgl">Download card</span><button class="vbtn" type="button" id="vdl">PNG</button><button class="vbtn" type="button" id="vdlpdf">PDF</button></div>
           <div class="nav2"><button class="vbtn ghost" type="button" id="vprev" aria-label="Previous detail">← Prev</button><button class="vbtn ghost" type="button" id="vnext" aria-label="Next detail">Next →</button></div>
         </div>
         <p class="vmsg" id="vmsg" role="status"></p>
@@ -2174,7 +2178,25 @@ var Flats = (function () {
     if (line) lines.push(line); return lines;
   }
   function rr(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
-  function makePng(d) {
+  function jpegPdf(jpg, W, H) {
+    var enc = new TextEncoder(), parts = [], off = 0, xref = [];
+    function add(x) { var b = typeof x === 'string' ? enc.encode(x) : x; parts.push(b); off += b.length; }
+    var pw = 595.28, ph = +(H * pw / W).toFixed(2);
+    add('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+    function obj(n, body, stream) { xref[n] = off; add(n + ' 0 obj\n' + body + '\n'); if (stream) { add('stream\n'); add(stream); add('\nendstream\n'); } add('endobj\n'); }
+    var cs = 'q ' + pw + ' 0 0 ' + ph + ' 0 0 cm /Im0 Do Q';
+    obj(1, '<< /Type /Catalog /Pages 2 0 R >>');
+    obj(2, '<< /Type /Pages /Kids [3 0 R] /Count 1 >>');
+    obj(3, '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + pw + ' ' + ph + '] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>');
+    obj(4, '<< /Type /XObject /Subtype /Image /Width ' + W + ' /Height ' + H + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + jpg.length + ' >>', jpg);
+    obj(5, '<< /Length ' + cs.length + ' >>', enc.encode(cs));
+    obj(6, '<< /Title (Forecut detail card) /Creator (forecut.in) /Producer (Forecut) >>');
+    var xo = off, s = 'xref\n0 7\n0000000000 65535 f \n';
+    for (var i = 1; i <= 6; i++) s += ('0000000000' + xref[i]).slice(-10) + ' 00000 n \n';
+    add(s + 'trailer\n<< /Size 7 /Root 1 0 R /Info 6 0 R >>\nstartxref\n' + xo + '\n%' + '%EOF\n');
+    return new Blob(parts, {type: 'application/pdf'});
+  }
+  function makePng(d, asPdf) {
     var C = {bg:'#f5f0e8', card:'#fffcf7', ink:'#1c1714', muted:'#6e6259', chalk:'#b4532a', mat:'#1f3d33', line:'#e3d9cc'};
     var SC = {e:'#d9480f', r:'#1d7a4f', p:'#b7791f', f:'#8a6f86'};
     var rr0 = Flats.render(d.name, colorsFor(d.name, FILE_C), {width: 960}), svg = rr0 ? rr0.svg : motif(d.name, 960);
@@ -2232,7 +2254,8 @@ var Flats = (function () {
           x.fillText(((SITE.url ? SITE.url + '  ·  ' : '') + (SITE.email ? SITE.email + '  ·  ' : '') + 'AUTUMN/WINTER 2028 · LONG-RANGE OUTLOOK'), M, fy + 128);
           var H = Math.ceil(fy + 150), out = document.createElement('canvas'); out.width = W; out.height = H;
           out.getContext('2d').drawImage(cv, 0, 0);
-          out.toBlob(function (b) { b ? res(b) : rej(new Error('render')); }, 'image/png');
+          if (asPdf) { var fx = out.getContext('2d'); fx.globalCompositeOperation = 'destination-over'; fx.fillStyle = '#ffffff'; fx.fillRect(0, 0, W, H); }
+          out.toBlob(function (b) { if (!b) return rej(new Error('render')); if (!asPdf) return res(b); b.arrayBuffer().then(function (ab) { res(jpegPdf(new Uint8Array(ab), W, H)); }, rej); }, asPdf ? 'image/jpeg' : 'image/png', .93);
         };
         img.onerror = function () { URL.revokeObjectURL(url); rej(new Error('render')); };
         img.src = url;
@@ -2240,21 +2263,23 @@ var Flats = (function () {
     });
   }
   function s2(d) { return 'Now: ' + ST[d.st][1] + '. ' + ST[d.st][2]; }
-  function fileName(d) { return 'Forecut_AW28_' + (d.dept + '_' + d.name).replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '') + '.png'; }
-  dlBtn.addEventListener('click', function () {
+  function fileName(d, ext) { return 'Forecut_AW28_' + (d.dept + '_' + d.name).replace(/[^A-Za-z0-9]+/g, '_').replace(/^_|_$/g, '') + '.' + (ext || 'png'); }
+  function doDl(asPdf) {
     if (!current) return;
-    var d = info(current);
-    dlBtn.disabled = true; msg.textContent = 'Preparing the detail card…';
+    var d = info(current), ext = asPdf ? 'pdf' : 'png', btn = asPdf ? document.getElementById('vdlpdf') : dlBtn;
+    btn.disabled = true; msg.textContent = 'Preparing the detail card…';
     getDl().then(function (dl) {
       if (!dl) { msg.textContent = 'Downloads are available when you open this report on claude.ai.'; return; }
-      return makePng(d).then(function (blob) {
-        return dl.save({filename: fileName(d), data: blob});
-      }).then(function () { msg.textContent = 'Saved ' + fileName(d) + '.'; }, function (err) {
+      return makePng(d, asPdf).then(function (blob) {
+        return dl.save({filename: fileName(d, ext), data: blob});
+      }).then(function () { msg.textContent = 'Saved ' + fileName(d, ext) + '.'; }, function (err) {
         var c = err && err.code;
         msg.textContent = c === 'declined' ? 'Download cancelled.' : c === 'rate_limited' ? 'A download prompt is already open. Finish it, then try again.' : c ? 'Downloads aren’t available in this view.' : 'The card could not be drawn. Try again.';
       });
-    }).then(function () { dlBtn.disabled = false; });
-  });
+    }).then(function () { btn.disabled = false; });
+  }
+  dlBtn.addEventListener('click', function () { doDl(false); });
+  document.getElementById('vdlpdf').addEventListener('click', function () { doDl(true); });
 })();
 </script>
 <script>

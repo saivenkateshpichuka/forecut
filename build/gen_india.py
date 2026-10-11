@@ -1,5 +1,6 @@
 """Build the India forecast page (../india.html when STATIC is set, else forecut-india.html) from india_data.py,
 reusing season_tpl.txt so it shares the viewer, descriptions, download cards and photo support."""
+import pantone as PT
 import json, html, os, re
 import india_data as I
 import desc as DESCMOD
@@ -87,12 +88,12 @@ secs.append('</div>')
 m = I.META
 themes = ''.join(f'<article class="theme" tabindex="0" role="button" aria-haspopup="dialog" data-i="{ti}"><div class="tart" data-pat="{t["pat"]}" data-bg="{t["bg"]}" data-fg="{t["fg"]}" data-flat="{E(t["flat"])}" data-title="{E(t["t"])}"{(chr(32) + 'data-photo="img/' + islug(t["flat"]) + '.webp"') if islug(t["flat"]) in IMGS else ""}></div><div class="tbody"><h3>{E(t["t"])}</h3><p>{E(t["d"])}</p><ul class="kw">{"".join(f"<li>{E(k)}</li>" for k in t["tags"])}</ul><span class="more">Explore theme →</span></div></article>' for ti, t in enumerate(I.THEMES))
 tdj = [dict(title=t['t'], season='India · Festive & wedding 2026–27', tags=t['tags'], story=t['story'], why=t['why'], brands=t['brands'], src=t['src'], future=False, kw=t['kw'], prices=t['prices'], cost=t['cost'], actions=t['actions']) for t in I.THEMES]
-pal = ''.join(f'<div class="sw2"><i style="background:{h}"></i><span>{E(n)}<small>{h.upper()} approx.</small></span></div>' for h, n in m['palette'])
+pal = ''.join(f'<div class="sw2"><i style="background:{h}"></i><span>{E(n)}<small>Pantone {PT.nearest(h)[0]}<br>{h.upper()}</small></span></div>' for h, n in m['palette'])
 coty = ''
 for c in m['keycolours']:
     pairs = ''.join(f'<span><i style="background:{h}"></i>{E(n)}</span>' for h, n in c['pairs'])
     coty += (f'<article class="coty" style="--c:{c["hex"]};--ci:{c["ink"]}">'
-             f'<div class="cfield"><span class="mono">{E(c["label"])}</span><div><h2>{E(c["name"])}</h2><span class="code">{c["hex"]} approx.</span></div></div>'
+             f'<div class="cfield"><span class="mono">{E(c["label"])}</span><div><h2>{E(c["name"])}</h2><span class="code">Pantone {PT.nearest(c["hex"])[0]} · {c["hex"]}</span></div></div>'
              f'<div class="cart" data-flat="{E(c["flat"])}" data-hex="{c["hex"]}"{(chr(32) + 'data-photo="img/' + islug(c["flat"]) + '.webp"') if islug(c["flat"]) in IMGS else ""} role="img" aria-label="{E(c["flat"])} shown in {E(c["name"])}"></div>'
              f'<div class="cinfo"><p>{E(c["text"])}</p><div class="pairs"><b>Pairs with</b>{pairs}</div></div></article>')
 

@@ -1,6 +1,6 @@
 """Apply the Forecut editorial theme (ivory, ink, forest, rust; Fraunces serif) to the page templates. Safe to run more than once."""
 import re
-FONT = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">'
+FONT = '<link rel="preload" href="fonts/dm-sans.woff" as="font" type="font/woff" crossorigin><link rel="stylesheet" href="fonts/fonts.css">'
 LIGHT = ('--paper:#f5f0e8; --paper-2:#fffcf7; --grid:#e3d9cc; --ink:#1c1714; --muted:#6e6259;\n'
          '  --mat:#1f3d33; --mat-ink:#f5f0e8; --chalk:#b4532a; --chalk-soft:#f3e1d6;\n'
          '  --rise:#2e7d55; --peak:#a8701f; --fade:#8a6f86;')

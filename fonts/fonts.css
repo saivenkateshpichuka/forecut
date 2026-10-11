@@ -1,0 +1,5 @@
+/* Forecut fonts, self-hosted. DM Sans and Source Serif 4 are licensed under the SIL Open Font License (see OFL-*.txt). */
+@font-face{font-family:"DM Sans";src:url(dm-sans.woff) format("woff");font-weight:100 1000;font-style:normal;font-display:swap}
+@font-face{font-family:"DM Sans";src:url(dm-sans-italic.woff) format("woff");font-weight:100 1000;font-style:italic;font-display:swap}
+@font-face{font-family:"Source Serif 4";src:url(source-serif-4.woff) format("woff");font-weight:200 900;font-style:normal;font-display:swap}
+@font-face{font-family:"Source Serif 4";src:url(source-serif-4-italic.woff) format("woff");font-weight:200 900;font-style:italic;font-display:swap}
