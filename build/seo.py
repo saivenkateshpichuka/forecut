@@ -21,6 +21,7 @@ org = {"@context": "https://schema.org", "@graph": [
   {"@type": "Organization", "@id": BASE + "#org", "name": "Forecut", "url": BASE, "logo": BASE + "favicon.svg", "email": "hello@forecut.in",
    "description": "Detail-level fashion trend forecasting for India.", "areaServed": "IN"},
   {"@type": "WebSite", "@id": BASE + "#site", "name": "Forecut", "url": BASE, "publisher": {"@id": BASE + "#org"}, "inLanguage": "en-IN"}]}
+SITE = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'site.json')))
 def block(fn, title, desc, path):
     url = BASE + path
     E = lambda x: x.replace('&', '&amp;').replace('"', '&quot;').replace('<', '&lt;')
@@ -34,6 +35,7 @@ def block(fn, title, desc, path):
     if fn == 'index.html': b.append('<script type="application/ld+json">' + json.dumps(org, ensure_ascii=False) + '</script>')
     else: b.append('<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@type": "WebPage", "name": title, "description": desc, "url": url, "isPartOf": {"@id": BASE + "#site"}, "publisher": {"@id": BASE + "#org"}, "inLanguage": "en-IN",
         "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Forecut", "item": BASE}, {"@type": "ListItem", "position": 2, "name": title.split(' · ')[0].split(' (')[0], "item": url}]}}, ensure_ascii=False) + '</script>')
+    if SITE.get('ga'): b.append('<script async src="https://www.googletagmanager.com/gtag/js?id=' + SITE['ga'] + '"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","' + SITE['ga'] + '");</script>')
     b.append('<!--/seo-->'); return '\n'.join(b)
 for fn, (title, desc, path) in pages.items():
     p = os.path.join(R, fn)
