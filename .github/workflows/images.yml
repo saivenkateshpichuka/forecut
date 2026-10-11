@@ -1,0 +1,33 @@
+name: Publish uploaded images
+on:
+  push:
+    branches: [main]
+    paths: ['images/**']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: { group: images, cancel-in-progress: false }
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install pillow
+      - name: Convert images and rebuild pages
+        run: |
+          cd build
+          python process_images.py
+          STATIC=.. python gen_seasons.py
+          STATIC=.. python gen_india.py
+          python build_home.py
+          python season_prompts.py
+          python india_prompts.py
+          python seo.py
+      - name: Commit
+        run: |
+          git config user.name "forecut-bot"
+          git config user.email "hello@forecut.in"
+          git add -A
+          git diff --cached --quiet || (git commit -m "Publish uploaded images" && git push)
