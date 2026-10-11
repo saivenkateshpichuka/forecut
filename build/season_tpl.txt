@@ -331,6 +331,28 @@ p,li{line-height:1.6}
   .pill.fade{animation:fcBreath 3.2s ease-in-out infinite}
   .pill.fade::after{animation:fcDown 1.6s ease-in-out infinite}
 }
+
+/* lookbook cards */
+.grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))!important;gap:30px 18px!important}
+.d{background:transparent!important;border:0!important;border-radius:0!important;padding:0!important;box-shadow:none!important;gap:7px!important}
+.d:hover{transform:none!important}
+.d .thumb{aspect-ratio:4/5!important;border-radius:4px!important;background:var(--surface-img)}
+.d .thumb svg{width:86%!important;height:86%!important}
+.d .thumb img.photo{transition:transform .5s ease}
+.d:hover .thumb img.photo{transform:scale(1.04)}
+.d:hover .thumb{outline:1px solid var(--grid)}
+.d .dtop{margin-top:4px}
+.d .area{font:600 11px var(--body)!important;letter-spacing:.06em!important;text-transform:uppercase;color:var(--muted)}
+.d h4{font-family:var(--display)!important;font-weight:600!important;font-size:18px!important;line-height:1.25!important;letter-spacing:-.005em!important}
+.d p{font-size:14px!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.d .open{display:none!important}
+.sub h5{margin-top:8px}
+@media (max-width:560px){
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:22px 12px!important}
+  .d h4{font-size:15.5px!important}
+  .d p{font-size:13px!important}
+  .d .dtop{flex-direction:column;align-items:flex-start;gap:4px}
+}
 </style>
 <div class="wrap">
   <div class="bar">
