@@ -23,7 +23,7 @@ for k in SEAS:
     pages[f'{k}.html'] = (f"{m['code']} Fashion Trend Forecast ({m['title']}) · Garments, Footwear & Details | Forecut",
         f"{m['code']} trend forecast: {m['intro']} Every detail marked emerging, rising, peaking or fading, with themes, colours and downloadable cards."[:300], f'{k}.html')
 org = {"@context": "https://schema.org", "@graph": [
-  {"@type": "Organization", "@id": BASE + "#org", "name": "Forecut", "url": BASE, "logo": BASE + "favicon.svg", "email": "hello@forecut.in",
+  {"@type": "Organization", "@id": BASE + "#org", "name": "Forecut", "url": BASE, "logo": BASE + "favicon-192.png", "email": "hello@forecut.in",
    "description": "Detail-level fashion trend forecasting for India.", "areaServed": "IN"},
   {"@type": "WebSite", "@id": BASE + "#site", "name": "Forecut", "url": BASE, "publisher": {"@id": BASE + "#org"}, "inLanguage": "en-IN"}]}
 SITE = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'site.json')))
@@ -32,7 +32,7 @@ def block(fn, title, desc, path):
     E = lambda x: x.replace('&', '&amp;').replace('"', '&quot;').replace('<', '&lt;')
     b = ['<!--seo-->', f'<meta name="description" content="{E(desc)}">', f'<link rel="canonical" href="{url}">',
          '<meta name="robots" content="index,follow">', '<meta name="theme-color" content="#1f3d33">',
-         '<link rel="icon" href="favicon.svg" type="image/svg+xml">',
+         '<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96"><link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest">',
          '<meta property="og:type" content="website">', '<meta property="og:site_name" content="Forecut">', '<meta property="og:locale" content="en_IN">',
          f'<meta property="og:title" content="{E(title)}">', f'<meta property="og:description" content="{E(desc)}">', f'<meta property="og:url" content="{url}">',
          f'<meta property="og:image" content="{BASE}og-image.png">', '<meta property="og:image:width" content="1200">', '<meta property="og:image:height" content="630">',
