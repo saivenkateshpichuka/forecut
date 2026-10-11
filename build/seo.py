@@ -20,14 +20,39 @@ for fn_, t_, d_ in json.load(open('reports_index.json')):
     pages[fn_] = (t_ + ' · Forecut', d_, fn_)
 for a in JD.ARTICLES:
     pages[a['slug'] + '.html'] = (a['title'] + ' · Forecut Journal', a['desc'], a['slug'] + '.html'); ARTS[a['slug'] + '.html'] = a
+OVR = {
+ 'index.html': ('Forecut | Fashion Trend Forecasting for India 2026–2028',
+   "Forecut is India's detail-level trend forecasting platform, combining expert research with data to show what's emerging, rising, peaking and fading, and when to act."),
+ 'india.html': ('India Fashion Forecast 2026–28 | Forecut',
+   'Season-by-season forecasts for Indian fashion, Festive 26 to Festive 28: sarees, lehengas, kurtas, menswear, footwear, fabrics and crafts, with rupee price guides.'),
+ 'reports.html': ('Trend Reports | Forecut',
+   'Ready-to-use trend reports for Indian fashion: core item updates, design capsules, colour forecasts with Pantone TCX, sourcing guides and brand watch, with PDF downloads.'),
+ 'journal.html': ('Journal | Forecut',
+   'Expert analysis of Indian and global fashion trends: festive and wedding wear, handloom, footwear, Gen Z fusion and colour, with practical next steps for brands.'),
+ 'about.html': ('About Us | Forecut',
+   'Forecut is an independent fashion trend forecasting company for India, combining expert research with AI and data to help brands, designers and manufacturers plan ahead.'),
+ 'contact.html': ('Contact | Forecut', 'Contact Forecut at hello@forecut.in for questions, partnerships and enterprise enquiries about fashion trend forecasting for India.'),
+ 'terms.html': ('Terms & Conditions | Forecut', 'Terms and conditions for using the Forecut fashion trend forecasting website and reports.'),
+ 'privacy.html': ('Privacy Policy | Forecut', 'How Forecut collects, uses and protects information, including analytics and advertising cookies.'),
+}
 for k in SEAS:
     m = META[k]
     pages[f'{k}.html'] = (f"{m['code']} Fashion Trend Forecast ({m['title']}) · Garments, Footwear & Details | Forecut",
         f"{m['code']} trend forecast: {m['intro']} Every detail marked emerging, rising, peaking or fading, with themes, colours and downloadable cards."[:300], f'{k}.html')
 org = {"@context": "https://schema.org", "@graph": [
   {"@type": "Organization", "@id": BASE + "#org", "name": "Forecut", "url": BASE, "logo": BASE + "favicon-192.png", "email": "hello@forecut.in",
-   "description": "Detail-level fashion trend forecasting for India.", "areaServed": "IN"},
-  {"@type": "WebSite", "@id": BASE + "#site", "name": "Forecut", "url": BASE, "publisher": {"@id": BASE + "#org"}, "inLanguage": "en-IN"}]}
+   "description": "India's detail-level fashion trend forecasting platform, combining expert research with data.", "slogan": "Know the next detail before it trends.", "foundingDate": "2026", "contactPoint": {"@type": "ContactPoint", "email": "hello@forecut.in", "contactType": "customer support", "areaServed": "IN", "availableLanguage": "en"}, "areaServed": "IN"},
+  {"@type": "WebSite", "@id": BASE + "#site", "name": "Forecut", "alternateName": ["Forecut India", "forecut.in"], "url": BASE, "publisher": {"@id": BASE + "#org"}, "inLanguage": "en-IN"}]}
+for _fn, (_t, _d) in OVR.items():
+    if _fn in pages: pages[_fn] = (_t, _d, pages[_fn][2])
+for _k in SEAS:
+    _fn = f'{_k}.html'
+    if _fn in pages: pages[_fn] = (f"{META[_k]['code']} Fashion Trend Forecast | Forecut", pages[_fn][1], pages[_fn][2])
+for _fn in list(pages):
+    _t, _d, _p = pages[_fn]
+    if _t.endswith(' · Forecut Journal'): _t = _t[:-len(' · Forecut Journal')] + ' | Forecut Journal'
+    elif _t.endswith(' · Forecut'): _t = _t[:-len(' · Forecut')] + ' | Forecut'
+    pages[_fn] = (_t, _d, _p)
 SITE = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'site.json')))
 def block(fn, title, desc, path):
     url = BASE + path
