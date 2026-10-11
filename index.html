@@ -24,7 +24,7 @@
 <!--/seo--></head><body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500..700;1,9..144,500..700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
 /* Layout: pattern-paper page. Grid-paper hero with an annotated pattern piece, then sample detail cards, coverage, method, pricing, waitlist. */
 :root{
@@ -32,8 +32,8 @@
   --mat:#1f3d33; --mat-ink:#f5f0e8; --chalk:#b4532a; --chalk-soft:#f3e1d6;
   --rise:#2e7d55; --peak:#a8701f; --fade:#8a6f86;
   --display:"Fraunces","Playfair Display",Georgia,serif;
-  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --body:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --paper:#14110f; --paper-2:#1e1a17; --grid:#352d27; --ink:#f2ebe2; --muted:#b3a698;
@@ -245,6 +245,10 @@ footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;paddin
 
 
 /* mobile + beta */
+.who2{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.wcard{background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:18px 18px 16px;display:grid;gap:6px}
+.wcard b{font-size:17px}
+.wcard span{font-size:15px;color:var(--muted)}
 .menu{display:none;font:600 14px var(--body);border:1px solid var(--ink);background:transparent;color:var(--ink);border-radius:2px;padding:9px 14px;cursor:pointer}
 .hero{background-image:none!important;background:var(--paper-2)!important;border:1px solid var(--grid)}
 .beta{font-size:14.5px;color:var(--muted);margin:-8px 0 22px;padding:10px 14px;border-left:3px solid var(--chalk);background:var(--chalk-soft)}
@@ -275,6 +279,35 @@ h1,h2,h3,.d h4,.tbody h3,.vinfo h2,.panelhead h3,.card h3,.plan h3,.logo,.back{f
 h1 em,.hero h1 em{font-style:italic}
 .mono,.eyebrow,.eb{letter-spacing:.12em}
 .btn,.vbtn{border-radius:2px!important;letter-spacing:.02em}
+
+/* readable type */
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h3,h4,.d h4,.tbody h3,.card h3,.plan h3,.wcard b,.cover h3,.method h3,.panelhead h3,.vinfo h2,.track h3{font-family:var(--body)!important;font-weight:700!important;letter-spacing:-.01em!important}
+.mono,.eyebrow,.eb,.pill,.area,.cnt,.open,.more,.kw li,.sub h5,.vmeta dt,.vdesc h3,.mixkey,.cal b{letter-spacing:.04em!important}
+.pill{font-weight:600!important;font-size:11.5px!important}
+p,li{line-height:1.6}
+@media (max-width:560px){body{font-size:16px}.d p{font-size:13.5px!important}.pill{font-size:10.5px!important}}
+/* live status */
+.pill{position:relative}
+.pill::before{flex:none}
+@keyframes fcPing{0%{box-shadow:0 0 0 0 currentColor}70%{box-shadow:0 0 0 6px transparent}100%{box-shadow:0 0 0 0 transparent}}
+@keyframes fcBreath{0%,100%{opacity:1}50%{opacity:.45}}
+@keyframes fcUp{0%,100%{transform:translateY(1px)}50%{transform:translateY(-2px)}}
+@keyframes fcDown{0%,100%{transform:translateY(-1px)}50%{transform:translateY(2px)}}
+@keyframes fcGlow{0%,100%{transform:scale(1)}50%{transform:scale(1.35)}}
+.pill.emerge::after,.pill.rise::after,.pill.fade::after{font-size:10px;line-height:1;display:inline-block}
+.pill.rise::after{content:"\2191"}
+.pill.fade::after{content:"\2193"}
+.pill.emerge::after{content:"\2726"}
+@media (prefers-reduced-motion:no-preference){
+  .pill.emerge::before{animation:fcPing 1.6s ease-out infinite}
+  .pill.emerge::after{animation:fcBreath 1.6s ease-in-out infinite}
+  .pill.rise::before{animation:fcPing 2.2s ease-out infinite}
+  .pill.rise::after{animation:fcUp 1.2s ease-in-out infinite}
+  .pill.peak::before{animation:fcGlow 1.8s ease-in-out infinite}
+  .pill.fade{animation:fcBreath 3.2s ease-in-out infinite}
+  .pill.fade::after{animation:fcDown 1.6s ease-in-out infinite}
+}
 </style>
 
 <div class="wrap">
@@ -417,7 +450,7 @@ h1 em,.hero h1 em{font-style:italic}
     </div>
 
     <div class="panel" role="tabpanel" id="p-aw26" aria-labelledby="t-aw26">
-      <div class="panelhead"><h3>Autumn/Winter 2026</h3><p>Rich, maximal and tactile: big outerwear, sharp tailoring and heavy embellishment.</p></div>
+      <div class="panelhead"><h3>Autumn/Winter 2026</h3><p>A rich, tactile season led by statement outerwear, sharp tailoring and considered embellishment.</p></div>
       <a class="reportlink" href="aw26.html">Open the full AW26 report <span>418 details · themes · colour of the year: Cloud Dancer & Transformative Teal</span><b aria-hidden="true">→</b></a>
       
       <div class="cats">
@@ -451,7 +484,7 @@ h1 em,.hero h1 em{font-style:italic}
     </div>
 
     <div class="panel" role="tabpanel" id="p-ss27" aria-labelledby="t-ss27" hidden>
-      <div class="panelhead"><h3>Spring/Summer 2027</h3><p>The waist returns, sneakers give way to elegant shoes, and handcraft moves into everyday shirting.</p></div>
+      <div class="panelhead"><h3>Spring/Summer 2027</h3><p>Defined waists return, refined footwear replaces the everyday sneaker, and handcraft moves into daily shirting.</p></div>
       <a class="reportlink" href="ss27.html">Open the full SS27 report <span>451 details · themes · colour of the year: Luminous Blue</span><b aria-hidden="true">→</b></a>
       <div class="cats">
         <div class="cat"><h4>Silhouettes</h4><ul>
@@ -484,7 +517,7 @@ h1 em,.hero h1 em{font-style:italic}
     </div>
 
     <div class="panel" role="tabpanel" id="p-aw27" aria-labelledby="t-aw27" hidden>
-      <div class="panelhead"><h3>Autumn/Winter 2027</h3><p>Early outlook: where SS27 signals are likely to lead. This season is an example projection and will update as runway data arrives.</p></div>
+      <div class="panelhead"><h3>Autumn/Winter 2027</h3><p>Early outlook projecting where SS27 signals are likely to lead. Updated as runway data becomes available.</p></div>
       <a class="reportlink" href="aw27.html">Open the full AW27 report <span>486 details · themes · colour of the year: Luminous Blue</span><b aria-hidden="true">→</b></a>
       <div class="cats">
         <div class="cat"><h4>Silhouettes</h4><ul>
@@ -517,7 +550,7 @@ h1 em,.hero h1 em{font-style:italic}
     </div>
 
     <div class="panel" role="tabpanel" id="p-ss28" aria-labelledby="t-ss28" hidden>
-      <div class="panelhead"><h3>Spring/Summer 2028</h3><p>Long-range outlook: structured clarity and easy movement. Fewer, better pieces with performance comfort, anchored by a warm earth orange. Example projection.</p></div>
+      <div class="panelhead"><h3>Spring/Summer 2028</h3><p>Long-range outlook: structured clarity and ease of movement, with fewer, better pieces anchored by a warm earth orange. Projection.</p></div>
       <a class="reportlink" href="ss28.html">Open the full SS28 report <span>460 details · themes · colour of the year: Radiant Earth</span><b aria-hidden="true">→</b></a>
       <div class="cats">
         <div class="cat"><h4>Silhouettes</h4><ul>
@@ -550,7 +583,7 @@ h1 em,.hero h1 em{font-style:italic}
     </div>
 
     <div class="panel" role="tabpanel" id="p-aw28" aria-labelledby="t-aw28" hidden>
-      <div class="panelhead"><h3>Autumn/Winter 2028</h3><p>Long-range outlook: functional tailoring and quiet structure for winter, as SS27 handcraft details fade. Example projection.</p></div>
+      <div class="panelhead"><h3>Autumn/Winter 2028</h3><p>Long-range outlook: functional tailoring and quiet structure for winter as SS27 handcraft details recede. Projection.</p></div>
       <a class="reportlink" href="aw28.html">Open the full AW28 report <span>400 details · themes · colour of the year: Radiant Earth</span><b aria-hidden="true">→</b></a>
       <div class="cats">
         <div class="cat"><h4>Silhouettes</h4><ul>
@@ -584,7 +617,7 @@ h1 em,.hero h1 em{font-style:italic}
 
     <div class="track">
       <h3>Trend lifecycle tracker</h3>
-      <p>Follow a detail across seasons to see when to adopt it and when to move on. Example outlook.</p>
+      <p>Track each detail across seasons to time adoption and phase-out with confidence. Illustrative outlook.</p>
       <div class="tablewrap">
         <table>
           <thead><tr><th scope="col">Trend</th><th scope="col">AW25</th><th scope="col" class="now">AW26 · now</th><th scope="col">SS27</th><th scope="col">AW27</th><th scope="col">SS28</th><th scope="col">AW28</th></tr></thead>
@@ -600,14 +633,14 @@ h1 em,.hero h1 em{font-style:italic}
           </tbody>
         </table>
       </div>
-      <p class="note">AW26 and SS27 directions summarise published runway and trade coverage. The 2028 earth orange follows the forecast 2028 colour of the year. AW27, SS28, AW28 and the tracker are example projections that show how Forecut reports will look.</p>
+      <p class="note">AW26 and SS27 directions summarise published runway and trade coverage. The 2028 earth orange follows the forecast 2028 colour of the year. AW27, SS28, AW28 and the tracker are forward projections and will be refined as new data arrives.</p>
     </div>
   </section>
 
   <section id="details" aria-labelledby="dh">
     <div class="sechead">
-      <div><span class="mono eyebrow">Sample forecast cards</span><h2 id="dh">Details, not just directions.</h2></div>
-      <p>Each card names the detail, where it's heading, and the trims, fabric and colours that pair with it, so you can move straight to a sketch or tech pack.</p>
+      <div><span class="mono eyebrow">Sample forecast cards</span><h2 id="dh">Precise details, not broad directions.</h2></div>
+      <p>Each card identifies a specific design detail, its current trend stage and the trims, fabrics and colours that complement it, ready to move directly into sketching and tech packs.</p>
     </div>
     <div class="cards">
       <article class="card">
@@ -655,12 +688,12 @@ h1 em,.hero h1 em{font-style:italic}
         </dl>
       </article>
     </div>
-    <p class="note">These cards show the format of a Forecut report. The trends shown are illustrative examples, not live forecasts.</p>
+    <p class="note">These cards illustrate the Forecut report format. The trends shown are representative examples.</p>
   </section>
 
   <section id="coverage" aria-labelledby="ch">
     <div class="sechead">
-      <div><span class="mono eyebrow">What we forecast</span><h2 id="ch">One report, every layer of the garment.</h2></div>
+      <div><span class="mono eyebrow">What we forecast</span><h2 id="ch">One report covering every layer of the garment.</h2></div>
     </div>
     <div class="cover">
       <div><span class="mono">01 · Garments</span><h3>Silhouettes</h3><p>Shapes, lengths and proportions by category.</p></div>
@@ -674,30 +707,30 @@ h1 em,.hero h1 em{font-style:italic}
 
   <section id="method" aria-labelledby="mh">
     <div class="sechead">
-      <div><span class="mono eyebrow">How it works</span><h2 id="mh">From signal to sample-ready.</h2></div>
+      <div><span class="mono eyebrow">How it works</span><h2 id="mh">From market signal to sample-ready insight.</h2></div>
     </div>
     <div class="method">
-      <div><h3>We read the signals</h3><p>Runway coverage, street style, search interest and retail launches, gathered every week.</p></div>
-      <div><h3>AI tags every detail</h3><p>Image analysis identifies construction details, trims and materials, then tracks which are rising, peaking or fading.</p></div>
-      <div><h3>You get a ready-to-use report</h3><p>Monthly detail cards with pairing suggestions, so your team can sketch, spec and sample faster.</p></div>
+      <div><h3>Signal collection</h3><p>We monitor runway coverage, street style, search interest and retail launches across India and global markets every week.</p></div>
+      <div><h3>Detail-level analysis</h3><p>AI-assisted analysis identifies construction details, trims and materials, and classifies each as emerging, rising, peaking or fading.</p></div>
+      <div><h3>Actionable reports</h3><p>Monthly detail cards with design notes, fabric guidance and pairing recommendations help your team sketch, specify and sample faster.</p></div>
     </div>
   </section>
 
   <section aria-labelledby="wh">
     <div class="sechead">
-      <div><span class="mono eyebrow">Built for</span><h2 id="wh">People who make the clothes.</h2></div>
+      <div><span class="mono eyebrow">Who it serves</span><h2 id="wh">Built for the people behind every collection.</h2></div>
     </div>
-    <div class="who">
-      <span>Fashion designers</span><span>Small and D2C brands</span><span>Manufacturers and exporters</span><span>Sourcing and merchandising teams</span><span>3D and digital product teams</span><span>Fashion students</span>
+    <div class="who2">
+      <div class="wcard"><b>Fashion designers</b><span>Identify the details worth developing next, and the ones to retire.</span></div><div class="wcard"><b>D2C and retail brands</b><span>Plan drops around the Indian festive and wedding calendar with confidence.</span></div><div class="wcard"><b>Manufacturers and exporters</b><span>Anticipate buyer requests and sample the right construction early.</span></div><div class="wcard"><b>Sourcing and merchandising</b><span>Align fabrics, trims and price points with the season ahead.</span></div><div class="wcard"><b>3D and digital product teams</b><span>Build accurate digital samples from detail-level references.</span></div><div class="wcard"><b>Fashion students and educators</b><span>Learn how trends move, season by season, with real examples.</span></div>
     </div>
   </section>
 
   <section id="pricing" aria-labelledby="ph">
     <div class="sechead">
-      <div><span class="mono eyebrow">Plans from launch</span><h2 id="ph">Free now. Plans start at launch.</h2></div>
-      <p>Forecut is in testing, so you get full access free today. Paid plans begin after launch; early testers keep the launch price below.</p>
+      <div><span class="mono eyebrow">Plans from launch</span><h2 id="ph">Complimentary today. Plans at launch.</h2></div>
+      <p>Forecut is currently in its testing phase, with full access at no cost. Subscription plans begin at launch, and early-access members retain the launch price shown below.</p>
     </div>
-    <div class="testing"><div><b>Testing phase · full access free</b><span>Every season, the India forecast, descriptions and download cards are open while we test. Your feedback shapes the launch.</span></div><a class="btn" href="mailto:hello@forecut.in?subject=Forecut%20feedback">Send feedback</a></div>
+    <div class="testing"><div><b>Early-access programme · complimentary</b><span>During our testing phase, the complete platform is open: every season, the India forecast, detailed analysis and downloadable detail cards. Your feedback directly informs the launch release.</span></div><a class="btn" href="mailto:hello@forecut.in?subject=Forecut%20feedback">Send feedback</a></div>
     <div class="plans">
       <div class="plan">
         <span class="offer">Free</span>

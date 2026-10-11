@@ -24,7 +24,7 @@
 <!--/seo--></head><body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500..700;1,9..144,500..700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
 /* Layout: report header with season facts, sticky filter bar, then department > category > detail-card grids */
 :root{
@@ -32,8 +32,8 @@
   --mat:#1f3d33; --mat-ink:#f5f0e8; --chalk:#b4532a; --chalk-soft:#f3e1d6;
   --rise:#2e7d55; --peak:#a8701f; --fade:#8a6f86; --tint:#e6ddd1; --surface-img:#efe8de;
   --display:"Fraunces","Playfair Display",Georgia,serif;
-  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  --body:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --paper:#14110f; --paper-2:#1e1a17; --grid:#352d27; --ink:#f2ebe2; --muted:#b3a698;
@@ -325,6 +325,35 @@ h1,h2,h3,.d h4,.tbody h3,.vinfo h2,.panelhead h3,.card h3,.plan h3,.logo,.back{f
 h1 em,.hero h1 em{font-style:italic}
 .mono,.eyebrow,.eb{letter-spacing:.12em}
 .btn,.vbtn{border-radius:2px!important;letter-spacing:.02em}
+
+/* readable type */
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h3,h4,.d h4,.tbody h3,.card h3,.plan h3,.wcard b,.cover h3,.method h3,.panelhead h3,.vinfo h2,.track h3{font-family:var(--body)!important;font-weight:700!important;letter-spacing:-.01em!important}
+.mono,.eyebrow,.eb,.pill,.area,.cnt,.open,.more,.kw li,.sub h5,.vmeta dt,.vdesc h3,.mixkey,.cal b{letter-spacing:.04em!important}
+.pill{font-weight:600!important;font-size:11.5px!important}
+p,li{line-height:1.6}
+@media (max-width:560px){body{font-size:16px}.d p{font-size:13.5px!important}.pill{font-size:10.5px!important}}
+/* live status */
+.pill{position:relative}
+.pill::before{flex:none}
+@keyframes fcPing{0%{box-shadow:0 0 0 0 currentColor}70%{box-shadow:0 0 0 6px transparent}100%{box-shadow:0 0 0 0 transparent}}
+@keyframes fcBreath{0%,100%{opacity:1}50%{opacity:.45}}
+@keyframes fcUp{0%,100%{transform:translateY(1px)}50%{transform:translateY(-2px)}}
+@keyframes fcDown{0%,100%{transform:translateY(-1px)}50%{transform:translateY(2px)}}
+@keyframes fcGlow{0%,100%{transform:scale(1)}50%{transform:scale(1.35)}}
+.pill.emerge::after,.pill.rise::after,.pill.fade::after{font-size:10px;line-height:1;display:inline-block}
+.pill.rise::after{content:"\2191"}
+.pill.fade::after{content:"\2193"}
+.pill.emerge::after{content:"\2726"}
+@media (prefers-reduced-motion:no-preference){
+  .pill.emerge::before{animation:fcPing 1.6s ease-out infinite}
+  .pill.emerge::after{animation:fcBreath 1.6s ease-in-out infinite}
+  .pill.rise::before{animation:fcPing 2.2s ease-out infinite}
+  .pill.rise::after{animation:fcUp 1.2s ease-in-out infinite}
+  .pill.peak::before{animation:fcGlow 1.8s ease-in-out infinite}
+  .pill.fade{animation:fcBreath 3.2s ease-in-out infinite}
+  .pill.fade::after{animation:fcDown 1.6s ease-in-out infinite}
+}
 .cal{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.calw{border:1px solid var(--grid);border-radius:10px;padding:8px 10px;background:var(--paper);display:grid;gap:2px}.calw b{font:600 13px var(--body)}.calw span{font-size:11.5px;color:var(--muted);line-height:1.35}.calw.cur{border-color:var(--mat);box-shadow:inset 0 0 0 1px var(--mat)}@media (max-width:560px){.cal{grid-template-columns:1fr}}</style>
 <div class="wrap">
   <div class="bar">
