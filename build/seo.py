@@ -36,6 +36,7 @@ def block(fn, title, desc, path):
     else: b.append('<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@type": "WebPage", "name": title, "description": desc, "url": url, "isPartOf": {"@id": BASE + "#site"}, "publisher": {"@id": BASE + "#org"}, "inLanguage": "en-IN",
         "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Forecut", "item": BASE}, {"@type": "ListItem", "position": 2, "name": title.split(' · ')[0].split(' (')[0], "item": url}]}}, ensure_ascii=False) + '</script>')
     if SITE.get('ga'): b.append('<script async src="https://www.googletagmanager.com/gtag/js?id=' + SITE['ga'] + '"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());gtag("config","' + SITE['ga'] + '");</script>')
+    if SITE.get('adsense'): b.append('<meta name="google-adsense-account" content="' + SITE['adsense'] + '"><script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=' + SITE['adsense'] + '" crossorigin="anonymous"></script>')
     b.append('<!--/seo-->'); return '\n'.join(b)
 for fn, (title, desc, path) in pages.items():
     p = os.path.join(R, fn)
