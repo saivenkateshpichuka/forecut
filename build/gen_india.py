@@ -111,7 +111,7 @@ glance = (f'<div class="glance"><div><h3>Status mix · {codes[0]}</h3><div class
           f'<div><h3>Top movers to act on now</h3><div class="movers">{mv}</div></div>'
           f'<div><h3>India fashion calendar</h3><div class="cal">{cal}</div></div></div>')
 
-HOME = 'index.html' if STATIC else 'https://forecut.in/'
+HOME = '/' if STATIC else 'https://forecut.in/'
 snav = f'<a href="#" aria-current="page">India<small>Festive &amp; wedding</small></a>' + ''.join(
     f'<a href="{(x + ".html") if STATIC else URLS.get(x, "#")}">{SMETA[x]["code"]}<small>{E(SMETA[x]["stage"])}</small></a>' for x in SEASONS)
 tpl = open('season_tpl.txt').read()

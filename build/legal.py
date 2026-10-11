@@ -31,8 +31,8 @@ footer{{margin-top:56px;padding-top:22px;border-top:1px solid var(--grid);displa
 footer a{{color:var(--muted)}} footer .fl{{display:flex;gap:16px;flex-wrap:wrap}}
 :focus-visible{{outline:2px solid var(--chalk);outline-offset:3px}}
 </style></head><body><div class="wrap">
-<nav><a class="logo" href="index.html"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/><path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="#b4532a" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Forecut</a>
-<div class="links"><a href="index.html">Home</a><a href="india.html">India forecast</a><a href="aw26.html">Seasons</a></div></nav>
+<nav><a class="logo" href="/"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/><path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="#b4532a" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Forecut</a>
+<div class="links"><a href="/">Home</a><a href="india.html">India forecast</a><a href="aw26.html">Seasons</a></div></nav>
 '''
 FOOT = '''<footer><span>© 2026 Forecut · <a href="mailto:hello@forecut.in">hello@forecut.in</a></span>
 <span class="fl"><a href="about.html">About</a><a href="contact.html">Contact</a><a href="terms.html">Terms &amp; Conditions</a><a href="privacy.html">Privacy Policy</a></span></footer>

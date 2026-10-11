@@ -5,7 +5,7 @@ STATIC = os.environ.get('STATIC')  # set STATIC=<outdir> to build the GitHub Pag
 URLS = json.load(open('urls.json')) if os.path.exists('urls.json') else {}
 HOME = 'https://claude.ai/artifact/NqT7n8hWTei6RbndhLrHe6'
 if STATIC:
-    URLS = {k: f'{k}.html' for k in URLS}; HOME = 'index.html'
+    URLS = {k: f'{k}.html' for k in URLS}; HOME = '/'
 SL = {'e': ('emerge', 'Emerging'), 'r': ('rise', 'Rising'), 'p': ('peak', 'Peaking'), 'f': ('fade', 'Fading')}
 E = html.escape
 def slug(s): return ''.join(ch.lower() if ch.isalnum() else '-' for ch in s).strip('-').replace('--', '-')
