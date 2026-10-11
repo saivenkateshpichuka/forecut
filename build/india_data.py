@@ -206,3 +206,22 @@ D = [
  ('Trims & Accessories', 'Accessories', 'Mirror-work bags', 'Accessory', 'Bags with mirror embellishment.', 'rpff-', None),
  ('Trims & Accessories', 'Accessories', 'Statement brooches', 'Accessory', 'Brooches on bandhgalas, kurtas and saree pallus.', 'rpppf', None),
 ]
+
+# Season guide shown on the India page. 'open': visible now; locked seasons release at official launch.
+SEASON_INFO = {
+ 'Festive 26': dict(open=True, occasions='Dussehra, Diwali, Bhai Dooj and the winter wedding season',
+   focus='Festive made easy: pre-draped sarees, kurta co-ords, cape and light organza lehengas, velvet and brocade menswear, Kolhapuris.',
+   colours=['#0f6b4f', '#6e1f33', '#d8c08a', '#2f3f7a'], plan='In stores now. Reorder winners for December–February weddings.'),
+ 'Summer 27': dict(open=False, occasions='Holi, Eid, summer weddings and resort travel',
+   focus='Light and breathable: linen and handloom sets, pastels, chikankari, block print and light organza for day functions.',
+   colours=['#9fae8f', '#d9a3a6', '#f3ecdc', '#2f3f7a'], plan='Design by November 2026, sample in December, deliver by February 2027.'),
+ 'Festive 27': dict(open=False, occasions='Rakhi, Onam, Ganesh Chaturthi, Navratri, Durga Puja, Diwali and weddings',
+   focus='Craft-led festive at its peak: tissue, gota patti, bandhani, mirror work, tone-on-tone bandhgalas and embellished juttis.',
+   colours=['#0f6b4f', '#1f4e9c', '#6e1f33', '#d8c08a'], plan='Design by March 2027, sample in April, deliver by July 2027.'),
+ 'Summer 28': dict(open=False, occasions='Holi, Eid, summer weddings and resort travel',
+   focus='Long-range outlook: handloom quiet luxury matures, khadi and natural dyes move up, Indian-made sneakers become everyday.',
+   colours=['#f3ecdc', '#9fae8f', '#b5522b', '#2f3f7a'], plan='Concept by September 2027; details refined monthly as signals arrive.'),
+ 'Festive 28': dict(open=False, occasions='Navratri, Durga Puja, Diwali and the wedding season',
+   focus='Long-range outlook: today\'s rising festive details settle into core ranges; new emerging details are added each month.',
+   colours=['#6e1f33', '#0f6b4f', '#d8c08a', '#f3ecdc'], plan='Concept by February 2028; details refined monthly as signals arrive.'),
+}
