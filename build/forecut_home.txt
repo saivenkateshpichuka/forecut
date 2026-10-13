@@ -391,7 +391,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
       <a href="https://forecut.in/journal.html">Journal</a>
       <a href="#method">How it works</a>
       <a href="#pricing">Pricing</a>
-      <a class="btn" href="#waitlist">Get early access</a>
+      <a class="btn" href="https://forecut.in/account.html#signup">Get early access</a>
     </div>
     <button class="menu" type="button" aria-expanded="false" aria-controls="navlinks">Menu</button>
   </nav>
@@ -405,7 +405,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
         <a class="btn" href="https://forecut.in/india.html">Explore the India forecast</a>
         <a class="btn ghost" href="https://forecut.in/reports.html">See the reports</a>
       </div>
-      <p class="beta"><b>Free during early access.</b> No sign-up. Feedback: <a href="mailto:hello@forecut.in?subject=Forecut%20feedback">hello@forecut.in</a></p>
+      <p class="beta"><b>Free during early access.</b> <a href="https://forecut.in/account.html#signup">Create a free account</a> · Feedback: <a href="mailto:hello@forecut.in?subject=Forecut%20feedback">hello@forecut.in</a></p>
     </div>
     <div class="hxs" aria-label="Live detail forecasts"><!--HEROSTACK--></div>
   </header>

@@ -16,6 +16,7 @@ for fn, t, d in [('about.html', 'About Forecut · Fashion Trend Forecasting for 
 import journal_data as JD
 pages['journal.html'] = ('Forecut Journal · Indian Fashion Trend Analysis & Guides', 'Analysis and practical guides on Indian and global fashion trends: festive and wedding wear, handloom, footwear, Gen Z fusion and colour, with rupee price bands.', 'journal.html')
 ARTS = {}
+pages['account.html'] = ('Sign in · Forecut', 'Sign in or create your Forecut account.', 'account.html')
 for fn_, t_, d_ in json.load(open('reports_index.json')):
     pages[fn_] = (t_ + ' · Forecut', d_, fn_)
 for a in JD.ARTICLES:
@@ -58,7 +59,7 @@ def block(fn, title, desc, path):
     url = BASE + path
     E = lambda x: x.replace('&', '&amp;').replace('"', '&quot;').replace('<', '&lt;')
     b = ['<!--seo-->', f'<meta name="description" content="{E(desc)}">', f'<link rel="canonical" href="{url}">',
-         '<meta name="robots" content="index,follow">', '<meta name="theme-color" content="#1f3d33">',
+         ('<meta name="robots" content="noindex,follow">' if fn == 'account.html' else '<meta name="robots" content="index,follow">'), '<meta name="theme-color" content="#1f3d33">',
          '<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96"><link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest">',
          '<meta property="og:type" content="website">', '<meta property="og:site_name" content="Forecut">', '<meta property="og:locale" content="en_IN">',
          f'<meta property="og:title" content="{E(title)}">', f'<meta property="og:description" content="{E(desc)}">', f'<meta property="og:url" content="{url}">',
@@ -79,6 +80,7 @@ def block(fn, title, desc, path):
         a = ARTS[fn]
         b.append('<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@type": "Article", "headline": a['title'], "description": a['desc'], "image": BASE + 'img/' + a['hero'] + '.webp', "datePublished": JD.DATE, "dateModified": JD.DATE, "author": {"@type": "Organization", "name": "Forecut Editorial", "url": BASE + 'about.html'}, "publisher": {"@id": BASE + "#org"}, "mainEntityOfPage": url, "inLanguage": "en-IN"}, ensure_ascii=False) + '</script>')
     b.append('<style>html{scroll-behavior:smooth}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}</style>')
+    b.append('<script type="module" src="/auth.js"></script>')
     b.append('<!--/seo-->'); return '\n'.join(b)
 for fn, (title, desc, path) in pages.items():
     p = os.path.join(R, fn)
@@ -94,7 +96,7 @@ for fn, (title, desc, path) in pages.items():
 today = datetime.date.today().isoformat()
 pri = {'index.html': '1.0', 'india.html': '0.9', 'journal.html': '0.8', 'about.html': '0.5', 'contact.html': '0.4', 'terms.html': '0.2', 'privacy.html': '0.2'}
 sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
-    f'  <url><loc>{BASE}{v[2]}</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>{pri.get(k, "0.8")}</priority></url>\n' for k, v in pages.items()) + '</urlset>\n'
+    f'  <url><loc>{BASE}{v[2]}</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>{pri.get(k, "0.8")}</priority></url>\n' for k, v in pages.items() if k != 'account.html') + '</urlset>\n'
 open(os.path.join(R, 'sitemap.xml'), 'w').write(sm)
 open(os.path.join(R, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\nDisallow: /build/\nDisallow: /images/\n\nSitemap: {BASE}sitemap.xml\n')
 open(os.path.join(R, 'favicon.svg'), 'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/><path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="#b4532a" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>')

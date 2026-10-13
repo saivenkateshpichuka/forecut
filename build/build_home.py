@@ -97,7 +97,7 @@ h = h.replace('<!--TRTABLE-->', _head + _body)
 _mt = max(_os.path.getmtime(f) for f in ['details.json', 'india_data.py', 'seasons.json'] if _os.path.exists(f))
 h = h.replace('<!--TRDATE-->', _dt.date.fromtimestamp(_mt).strftime('%-d %b %Y'))
 for k, u in json.load(open('urls.json')).items(): h = h.replace(u, f'{k}.html')
-h = h.replace('https://forecut.in/reports.html', 'reports.html').replace('https://forecut.in/journal.html', 'journal.html')
+h = h.replace('https://forecut.in/account.html', 'account.html').replace('https://forecut.in/reports.html', 'reports.html').replace('https://forecut.in/journal.html', 'journal.html')
 h = h.replace('https://forecut.in/india.html', 'india.html').replace('https://forecut.in/about.html', 'about.html').replace('https://forecut.in/contact.html', 'contact.html').replace('https://forecut.in/terms.html', 'terms.html').replace('https://forecut.in/privacy.html', 'privacy.html').replace(' target="_blank" rel="noopener"', '')
 if not h.lstrip().lower().startswith('<!doctype'):
     h = ('<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
