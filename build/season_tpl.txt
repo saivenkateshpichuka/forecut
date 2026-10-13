@@ -460,6 +460,14 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
   .palette{grid-template-columns:repeat(3,1fr)!important}
   .themes2{grid-auto-columns:84%!important}
 }
+
+/* flat sketch images */
+.thumb img.flatimg{width:100%;height:100%;object-fit:contain;background:#fff;padding:6%}
+.vflat{background:#fff;object-fit:contain!important}
+.vart{position:relative}
+.vtoggle{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:2px;background:rgba(28,23,20,.72);backdrop-filter:blur(8px);padding:3px;border-radius:99px;z-index:2}
+.vtoggle button{all:unset;cursor:pointer;color:#fff;font:600 12.5px var(--body);padding:7px 13px;border-radius:99px}
+.vtoggle button[aria-pressed="true"]{background:#fff;color:#1c1714}
 </style>
 <div class="wrap">
   <div class="bar">
@@ -748,8 +756,14 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
     current = card;
     var d = info(card), s = ST[d.st], r = Flats.render(d.name, colorsFor(d.name, PAGE_C));
     var vimg = card.getAttribute('data-img');
-    if (vimg) { var vi = new Image(); vi.src = vimg; vi.alt = d.name + ' detail photo'; vi.className = 'vphoto'; var vs = document.getElementById('vsvg'); vs.innerHTML = ''; vs.appendChild(vi); }
-    else document.getElementById('vsvg').innerHTML = r ? r.svg : motif(d.name);
+    var vflat = card.getAttribute('data-flatimg'), vs = document.getElementById('vsvg');
+    function showPhoto() { var vi = new Image(); vi.src = vimg; vi.alt = d.name + ' detail photo'; vi.className = 'vphoto'; vs.innerHTML = ''; vs.appendChild(vi); }
+    function showFlat() { if (vflat) { var vf = new Image(); vf.src = vflat; vf.alt = d.name + ' technical flat sketch'; vf.className = 'vphoto vflat'; vs.innerHTML = ''; vs.appendChild(vf); } else vs.innerHTML = r ? r.svg : motif(d.name); }
+    if (vimg) showPhoto(); else showFlat();
+    var tg = document.getElementById('vtoggle'); if (!tg) { tg = document.createElement('div'); tg.id = 'vtoggle'; tg.className = 'vtoggle'; vs.parentNode.appendChild(tg); }
+    tg.hidden = !(vimg && (vflat || r));
+    tg.innerHTML = '<button type="button" data-v="p" aria-pressed="true">Photo</button><button type="button" data-v="f" aria-pressed="false">Flat sketch</button>';
+    tg.querySelectorAll('button').forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); tg.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); if (b.getAttribute('data-v') === 'p') showPhoto(); else showFlat(); }; });
     var pill = document.getElementById('vpill'); pill.className = 'pill ' + s[0]; pill.textContent = s[1];
     document.getElementById('vname').textContent = d.name;
     document.getElementById('vnote').textContent = d.desc ? d.desc.o : d.note;
@@ -800,6 +814,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
     var els = document.querySelectorAll('.thumb');
     function draw(el) { if (el.getAttribute('data-done')) return; el.setAttribute('data-done', '1'); var card = el.closest('.d'), name = card.querySelector('h4').textContent, img = card.getAttribute('data-img');
       if (img) { var im = new Image(); im.alt = ''; im.loading = 'lazy'; im.src = img; im.className = 'photo'; el.innerHTML = ''; el.appendChild(im); return; }
+      var fimg = card.getAttribute('data-flatimg'); if (fimg) { var fm = new Image(); fm.alt = ''; fm.loading = 'lazy'; fm.src = fimg; fm.className = 'flatimg'; el.innerHTML = ''; el.appendChild(fm); return; }
       var r = Flats.render(name, colorsFor(name, FILE_C), {clean: true}); el.innerHTML = r ? r.svg : motif(name); }
     if ('IntersectionObserver' in window) { var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { draw(e.target); io.unobserve(e.target); } }); }, {rootMargin: '400px'}); els.forEach(function (el) { io.observe(el); }); }
     else els.forEach(draw);

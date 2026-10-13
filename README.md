@@ -23,3 +23,6 @@ Updated monthly.
 Details (global and India), Journal articles, Brand Watch entries, photos and season pages are only ever **added or updated, never removed**.
 - Fading items stay, marked "Fading"; past seasons are archived (rollover.py keeps the page and saves past statuses), not deleted.
 - `python3 keep_check.py` (run by build.sh) fails the build if anything that existed in the last commit is missing. If it fails, restore the item; do not bypass the check.
+
+## Flat sketch images
+Upload `flat-<slug>.png` (or `flat-<slug>-<season>.png`) to images/. They are padded to 1000×1000 on white (never cropped), replace the code-drawn sketch on cards without a photo, and appear as a "Flat sketch" toggle next to photos in the detail viewer. Prompts: season-prompts/ss27-flat-sketch-prompts.csv.

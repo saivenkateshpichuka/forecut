@@ -12,7 +12,8 @@ seasons = json.load(open('seasons.json'))['seasons']
 heroes = {'hero-' + s for s in seasons} | {'hero-india'}
 _S = json.load(open('seasons.json'))
 themes_v = {'theme-' + s + '-' + islug(t[0]) for s in seasons for t in _S['meta'][s]['themes']} | {'theme-india-' + islug(t['t']) for t in I.THEMES}
-valid = base | {b + '-' + s for b in base for s in seasons} | heroes | themes_v
+flats_v = {'flat-' + b for b in base} | {'flat-' + b + '-' + s for b in base for s in seasons}
+valid = base | {b + '-' + s for b in base for s in seasons} | heroes | themes_v | flats_v
 imgs = set(json.load(open('images.json')))
 import datetime
 log = json.load(open('upload_log.json')) if os.path.exists('upload_log.json') else {}
@@ -26,7 +27,10 @@ for root, dirs, files in os.walk(src):
         p = os.path.join(root, f)
         if s not in valid: bad.append(f); continue
         im = Image.open(p).convert('RGB'); w, h = im.size
-        if s in themes_v:  # theme tile photo: 16:10, 1600x1000
+        if s in flats_v:  # technical flat sketch: keep whole drawing, pad to square on white
+            im.thumbnail((1000, 1000), Image.LANCZOS); bg = Image.new('RGB', (1000, 1000), (255, 255, 255))
+            bg.paste(im, ((1000 - im.width) // 2, (1000 - im.height) // 2)); bg.save(f'../img/{s}.webp', 'WEBP', quality=86)
+        elif s in themes_v:  # theme tile photo: 16:10, 1600x1000
             th = int(w * 10 / 16)
             if th <= h: im = im.crop((0, (h - th) // 2, w, (h - th) // 2 + th))
             else: tw = int(h * 16 / 10); im = im.crop(((w - tw) // 2, 0, (w - tw) // 2 + tw, h))

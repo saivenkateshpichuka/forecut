@@ -80,6 +80,7 @@ for dept, cat, use, fab in I.CATS:
             c, l = SL[st]
             q = E((it['name'] + ' ' + it['area'] + ' ' + it['note'] + ' ' + cat + ' ' + sname).lower())
             img = f' data-img="img/{islug(it["name"])}.webp"' if islug(it['name']) in IMGS else ''
+            if ('flat-' + islug(it['name'])) in IMGS: img += f' data-flatimg="img/flat-{islug(it["name"])}.webp"'
             cards.append(f'<article class="d" tabindex="0" role="button" aria-haspopup="dialog" data-st="{st}" data-life="{it["life"]}"{img} data-q="{q}"><div class="thumb" aria-hidden="true"></div><div class="dtop"><span class="area">{E(sname)}</span><span class="pill {c}">{l}</span></div><h4>{E(it["name"])}</h4><p>{E(it["note"])}</p><span class="open">View detail →</span></article>')
         subhtml.append(f'<div class="sub" data-sub="{E(sname)}"><h5>{E(sname)} <span>{len(groups[sname])}</span></h5><div class="grid">{"".join(cards)}</div></div>')
     secs.append(f'<section class="cat" id="{cid}" data-dept="{slug(dept)}"><div class="cathead"><h3>{E(cat)}</h3><span class="cnt"><span class="vis">{len(items)}</span> details</span></div>{"".join(subhtml)}</section>')
