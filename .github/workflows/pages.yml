@@ -1,0 +1,30 @@
+name: Deploy site
+# Deploys forecut.in. A deploy that has started always finishes (no cancelling), so the site
+# keeps updating even while many images are being uploaded.
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['images/**']
+  workflow_call:
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency: { group: pages-deploy, cancel-in-progress: false }
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: { name: github-pages, url: 'https://forecut.in' }
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: main }
+      - name: Collect site files
+        run: |
+          mkdir _site
+          rsync -a --exclude '.git' --exclude '.github' --exclude 'images' --exclude 'build' --exclude '_site' ./ _site/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with: { path: _site }
+      - id: deployment
+        uses: actions/deploy-pages@v4
