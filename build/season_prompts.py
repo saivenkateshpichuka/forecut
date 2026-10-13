@@ -21,6 +21,7 @@ STORY = {  # seasons whose photos are people-in-a-story with a zoomed detail ins
           'on a café terrace in a sunlit old town square',
           'backstage just before a runway show, natural window light'],
 }
+REDO = json.load(open('redo_images.json')) if os.path.exists('redo_images.json') else {}
 STORY_SINCE = {'ss27': '2026-10-13'}  # uploads on/after this date are already in story style
 LOG = json.load(open('upload_log.json')) if os.path.exists('upload_log.json') else {}
 STAT = {'e': 'emerging', 'r': 'rising', 'p': 'peaking', 'f': 'fading'}
@@ -40,19 +41,22 @@ for si, s in enumerate(SEASONS):
             shoe = dept == 'Footwear'
             if s in STORY:
                 scene = STORY[s][h31(it['name']) % len(STORY[s])]
-                who = 'a male model' if dept == 'Menswear' else ('a model, framed to show the shoes clearly while walking' if shoe else 'a female model')
-                prompt = (f"Natural editorial fashion photograph for {m['code']} ({m['title']}): {who} wearing {it['name'].lower()} ({cat.lower()}) {scene}, caught mid-movement with a real, candid feel. "
-                          f"{it['note']} Main colour: {col}; styling: {MOOD['SS' if m['code'].startswith('SS') else 'AW'].split(':')[1].split(';')[0].strip()}. "
-                          f"Add ONE circular magnified close-up inset in the lower-right area (about 28% of the frame, thin white border, kept about 12% in from the right and bottom edges so it is never cropped) zooming into the {it['area'].lower()} so the detail is crystal clear: fabric texture, stitching and construction visible. "
-                          "Photorealistic, natural skin and fabric, professional photoshoot quality, diverse adult model. No logos, no brand names, no text, no watermarks. Square 1:1.")
-                rows.append([fn + '.png', it['name'], dept, cat, m['code'], STAT[ch].title(), 'Done' if (done and LOG.get(fn, '') >= STORY_SINCE.get(s, '9999')) else 'Redo (story style)' if done else ('New for this season' if si != first else 'First season'), prompt])
+                who = 'a male model' if dept == 'Menswear' else ('a model, framed so the shoes are clearly visible while walking' if shoe else 'a female model')
+                view = (['lateral side profile', 'side profile plus top view', 'three-quarter view'] if shoe else ['front view and back view', 'front view', 'front view with a small back view'])[h31(s + it['name']) % 3]
+                prompt = (f"One single square image (1:1) split into two clean panels side by side, like a page from a professional fashion trend report. "
+                          f"LEFT PANEL (about 55% width): a natural, realistic editorial photograph of {who} wearing {it['name'].lower()} ({cat.lower()}) {scene}, candid mid-movement, real skin and fabric texture, professional photoshoot quality, diverse adult model. "
+                          f"{it['note']} Main colour: {col}; {MOOD['SS' if m['code'].startswith('SS') else 'AW'].split(':')[1].split(';')[0].strip()}. "
+                          f"RIGHT PANEL (about 45% width, plain white background): an accurate technical flat sketch of the SAME garment in the same colour, {view}, drawn like an Adobe Illustrator tech-pack flat by a garment technician: crisp black vector outlines, dashed topstitching, correct seams and construction, the {('key' if it['area'].lower() == 'detail' else it['area'].lower())} detail drawn most clearly, flat colour fill with no shading or 3D. "
+                          "A thin neutral gap between the two panels. No text, no labels, no arrows, no logos, no watermarks anywhere. It must look like a real photo plus a real designer's flat, not AI-generated.")
+                redo = fn in REDO.get(s, [])
+                rows.append([fn + '.png', it['name'], dept, cat, m['code'], STAT[ch].title(), 'Redo (photo + flat)' if (done and redo) else ('Done' if done else ('New for this season' if si != first else 'First season')), prompt])
                 continue
             prompt = (f"{'Product photograph' if shoe else 'Close-up product photograph'} of {it['name'].lower()} ({cat.lower()}) for {m['code']} ({m['title']}), {angle}, clearly showing the {it['area'].lower()} detail. "
                       f"{it['note']} Colour: {col}. Season styling: {MOOD['AW' if m['code'].startswith('AW') else 'SS']}. Trend stage: {STAT[ch]}. "
                       f"{'Realistic leather or fabric texture, crisp stitching.' if shoe else 'Realistic fabric texture with visible seams and topstitching, garment on an invisible mannequin.'} "
                       "Plain warm-grey background, shallow depth of field. One single photo, no collage. No logos, no brand names, no text, no people or faces. Square 1:1, editorial catalogue style.")
             rows.append([fn + '.png', it['name'], dept, cat, m['code'], STAT[ch].title(), 'Done' if done else ('New for this season' if si != first else 'First season'), prompt])
-    rows.sort(key=lambda r: (r[6] == 'Done', r[6] != 'First season', r[6] == 'Redo (story style)'))
+    rows.sort(key=lambda r: (r[6] == 'Done', r[6] != 'First season', r[6].startswith('Redo')))
     with open(f'../season-prompts/{s}-image-prompts.csv', 'w', newline='', encoding='utf-8') as f:
         w = csv.writer(f); w.writerow(['File name', 'Detail', 'Department', 'Category', 'Season', 'Status', 'Progress', 'Prompt']); w.writerows(rows)
     tot[s] = (len(rows), sum(r[6] == 'Done' for r in rows))
