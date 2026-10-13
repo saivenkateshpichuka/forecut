@@ -21,6 +21,8 @@ STORY = {  # seasons whose photos are people-in-a-story with a zoomed detail ins
           'on a café terrace in a sunlit old town square',
           'backstage just before a runway show, natural window light'],
 }
+STORY_SINCE = {'ss27': '2026-10-13'}  # uploads on/after this date are already in story style
+LOG = json.load(open('upload_log.json')) if os.path.exists('upload_log.json') else {}
 STAT = {'e': 'emerging', 'r': 'rising', 'p': 'peaking', 'f': 'fading'}
 os.makedirs('../season-prompts', exist_ok=True)
 tot = {}
@@ -43,7 +45,7 @@ for si, s in enumerate(SEASONS):
                           f"{it['note']} Main colour: {col}; styling: {MOOD['SS' if m['code'].startswith('SS') else 'AW'].split(':')[1].split(';')[0].strip()}. "
                           f"Add ONE circular magnified close-up inset in the lower-right area (about 28% of the frame, thin white border, kept about 12% in from the right and bottom edges so it is never cropped) zooming into the {it['area'].lower()} so the detail is crystal clear: fabric texture, stitching and construction visible. "
                           "Photorealistic, natural skin and fabric, professional photoshoot quality, diverse adult model. No logos, no brand names, no text, no watermarks. Square 1:1.")
-                rows.append([fn + '.png', it['name'], dept, cat, m['code'], STAT[ch].title(), 'Redo (story style)' if done else ('New for this season' if si != first else 'First season'), prompt])
+                rows.append([fn + '.png', it['name'], dept, cat, m['code'], STAT[ch].title(), 'Done' if (done and LOG.get(fn, '') >= STORY_SINCE.get(s, '9999')) else 'Redo (story style)' if done else ('New for this season' if si != first else 'First season'), prompt])
                 continue
             prompt = (f"{'Product photograph' if shoe else 'Close-up product photograph'} of {it['name'].lower()} ({cat.lower()}) for {m['code']} ({m['title']}), {angle}, clearly showing the {it['area'].lower()} detail. "
                       f"{it['note']} Colour: {col}. Season styling: {MOOD['AW' if m['code'].startswith('AW') else 'SS']}. Trend stage: {STAT[ch]}. "

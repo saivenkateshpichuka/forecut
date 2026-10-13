@@ -12,6 +12,8 @@ seasons = json.load(open('seasons.json'))['seasons']
 heroes = {'hero-' + s for s in seasons} | {'hero-india'}
 valid = base | {b + '-' + s for b in base for s in seasons} | heroes
 imgs = set(json.load(open('images.json')))
+import datetime
+log = json.load(open('upload_log.json')) if os.path.exists('upload_log.json') else {}
 src = '../images'; os.makedirs('../img', exist_ok=True); os.makedirs(src + '/done', exist_ok=True)
 added, bad = [], []
 for root, dirs, files in os.walk(src):
@@ -31,9 +33,10 @@ for root, dirs, files in os.walk(src):
             m = min(w, h)
             im = im.crop(((w - m) // 2, (h - m) // 2, (w - m) // 2 + m, (h - m) // 2 + m)).resize((800, 800), Image.LANCZOS)
             im.save(f'../img/{s}.webp', 'WEBP', quality=82)
-        imgs.add(s); added.append(s)
+        imgs.add(s); added.append(s); log[s] = datetime.date.today().isoformat()
         shutil.move(p, os.path.join(src, 'done', f))
 json.dump(sorted(imgs), open('images.json', 'w'))
+json.dump(log, open('upload_log.json', 'w'), indent=1, sort_keys=True)
 u = os.path.join(src, 'UNMATCHED.txt')
 if bad: open(u, 'w').write('These files did not match any detail. Rename them to the exact File name from the prompt CSV and upload again:\n' + '\n'.join(bad) + '\n')
 elif os.path.exists(u): os.remove(u)
