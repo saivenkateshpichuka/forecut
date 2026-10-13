@@ -14,6 +14,12 @@ tpl = open('season_tpl.txt').read()
 IMGS = set(json.load(open('images.json'))) if os.path.exists('images.json') else set()
 def islug(s): return ''.join(ch.lower() if ch.isalnum() else '-' for ch in s).strip('-').replace('--', '-').replace('--', '-')
 import desc as DESCMOD
+
+def story_html(code_slug, eyebrow, title, intro, tags):
+    if ('hero-' + code_slug) not in IMGS: return ''
+    tg = ''.join(f'<span>{E(x)}</span>' for x in tags[:5])
+    return (f'<section class="story" style="--bg:url(img/hero-{code_slug}.webp)" aria-label="Season story"><div class="st">'
+            f'<span class="mono eb">{eyebrow}</span><h1>{title}</h1><p>{intro}</p><div class="stt">{tg}</div></div></section>')
 LOCKSVG = '<svg class="lk" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="7" width="10" height="7" rx="1.6" fill="currentColor"/></svg>'
 SITE = json.load(open('site.json')) if os.path.exists('site.json') else {'name': 'Forecut', 'tagline': '', 'url': ''}
 if STATIC and SITE.get('static_url'): SITE = dict(SITE, url=SITE['static_url'])
@@ -106,6 +112,7 @@ for si, s in enumerate(SEASONS):
         '%%CODES%%': json.dumps(codes), '%%PALJSON%%': json.dumps([h for h, n in m['palette']]), '%%BASISCLS%%': basis[0], '%%BASISTEXT%%': basis[1],
         '%%STAGE%%': E(m['stage']), '%%WINDOW%%': E(m['window']), '%%TITLE%%': E(m['title']), '%%INTRO%%': E(m['intro']),
         '%%SOURCES%%': E(m['sources']), '%%CODE%%': m['code'],
+        '%%STORY%%': story_html(s, E(m['stage']) + ' · ' + E(m['window']), E(m['title']), E(m['intro']), [th[0] for th in m['themes']]),
     }
     out = tpl
     for k, v in rep.items():

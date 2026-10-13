@@ -112,6 +112,12 @@ glance = (f'<div class="glance"><div><h3>Status mix · {codes[0]}</h3><div class
           f'<div><h3>Top movers to act on now</h3><div class="movers">{mv}</div></div>'
           '</div>')
 
+
+def story_html(code_slug, eyebrow, title, intro, tags):
+    if ('hero-' + code_slug) not in IMGS: return ''
+    tg = ''.join(f'<span>{E(x)}</span>' for x in tags[:5])
+    return (f'<section class="story" style="--bg:url(img/hero-{code_slug}.webp)" aria-label="Season story"><div class="st">'
+            f'<span class="mono eb">{eyebrow}</span><h1>{title}</h1><p>{intro}</p><div class="stt">{tg}</div></div></section>')
 LOCKSVG = '<svg class="lk" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="7" width="10" height="7" rx="1.6" fill="currentColor"/></svg>'
 HOME = '/' if STATIC else 'https://forecut.in/'
 snav = f'<a href="#" aria-current="page">India<small>Festive &amp; wedding</small></a>' + ''.join(
@@ -126,6 +132,7 @@ rep = {
     '%%CODES%%': json.dumps(codes), '%%PALJSON%%': json.dumps([h for h, n in m['palette']]), '%%BASISCLS%%': 'res', '%%BASISTEXT%%': 'Based on Indian runway, retail and trade coverage',
     '%%STAGE%%': E(m['stage']), '%%WINDOW%%': E(m['window']), '%%TITLE%%': E(m['title']), '%%INTRO%%': E(m['intro']),
     '%%SOURCES%%': E(m['sources']), '%%CODE%%': m['code'],
+    '%%STORY%%': story_html('india', E(m['stage']) + ' · ' + E(m['window']), E(m['title']), E(m['intro']), [t['t'] for t in I.THEMES]),
     '%%GLANCEL%%': glance, '%%GLANCER%%': '',
     '%%DESC%%': json.dumps(descs, ensure_ascii=False).replace('</', '<\\/'), '%%SITE%%': json.dumps(SITE, ensure_ascii=False),
 }
