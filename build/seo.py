@@ -90,6 +90,8 @@ def block(fn, title, desc, path):
         b.append('<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@type": "Article", "headline": a['title'], "description": a['desc'], "image": BASE + 'img/' + a['hero'] + '.webp', "datePublished": JD.DATE, "dateModified": JD.DATE, "author": {"@type": "Organization", "name": "Forecut Editorial", "url": BASE + 'about.html'}, "publisher": {"@id": BASE + "#org"}, "mainEntityOfPage": url, "inLanguage": "en-IN"}, ensure_ascii=False) + '</script>')
     b.append('<style>html{scroll-behavior:smooth}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}</style>')
     b.append('<script type="module" src="/auth.js"></script>')
+    b.append('<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Forecut"><meta name="apple-mobile-web-app-status-bar-style" content="default">')
+    b.append("<script>if('serviceWorker' in navigator)addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){})});</script>")
     b.append('<!--/seo-->'); return '\n'.join(b)
 for fn, (title, desc, path) in pages.items():
     p = os.path.join(R, fn)

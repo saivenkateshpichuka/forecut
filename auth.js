@@ -93,4 +93,24 @@ onAuthStateChanged(auth, (u) => {
   document.addEventListener('click', (e) => { if (!w.contains(e.target)) { m.hidden = true; b.setAttribute('aria-expanded', 'false'); } });
   w.querySelector('.fcout').onclick = () => signOut(auth);
 });
+// ---- install app button ----
+(function () {
+  const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+  if (standalone || !w) return;
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  let deferred = null;
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'fcinst'; b.innerHTML = '<span class="fcl">Get the </span>app'; b.hidden = true;
+  w.parentNode.insertBefore(b, w);
+  const st = document.createElement('style'); st.textContent = '.fcinst{all:unset;cursor:pointer;font:600 13.5px "DM Sans",sans-serif;color:inherit;border-bottom:1.5px solid currentColor;margin:0 10px;white-space:nowrap}.fcip{position:fixed;left:12px;right:12px;bottom:14px;z-index:9999;background:#1f3d33;color:#f5f0e8;border-radius:14px;padding:14px 16px;font:15px/1.5 "DM Sans",sans-serif;box-shadow:0 12px 30px -10px rgba(0,0,0,.5)}.fcip b{display:block}.fcip button{all:unset;cursor:pointer;float:right;font-weight:700;margin-left:10px}@media (max-width:520px){.fcinst{margin:0 4px 0 auto;font-size:12.5px}.fcinst .fcl{display:none}.fca a.fcin{padding:6px 9px!important;font-size:12.5px!important}.fca{margin-right:6px!important;margin-left:8px!important}}';
+  document.head.appendChild(st);
+  addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferred = e; b.hidden = false; });
+  if (ios) b.hidden = false;
+  b.onclick = async () => {
+    if (deferred) { deferred.prompt(); await deferred.userChoice; deferred = null; b.hidden = true; return; }
+    const p = document.createElement('div'); p.className = 'fcip';
+    p.innerHTML = '<button type="button" aria-label="Close">✕</button><b>Install Forecut</b>Tap the Share button <span aria-hidden="true">⬆︎</span> in Safari, then <b style="display:inline">Add to Home Screen</b>.';
+    document.body.appendChild(p); p.querySelector('button').onclick = () => p.remove();
+  };
+  addEventListener('appinstalled', () => { b.hidden = true; });
+})();
 document.dispatchEvent(new Event('fcauth-ready'));
