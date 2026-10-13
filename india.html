@@ -2394,12 +2394,14 @@ Object.keys(XS).forEach(function(k){ var v = XS[k]; Flats.SPEC[k] = typeof v ===
           x.fillStyle = C.ink; x.font = '600 40px \"DM Sans\", Arial, sans-serif'; x.fillText(SITE.name, M + 60, 92);
           x.fillStyle = C.muted; x.font = '500 20px "DM Sans", monospace'; x.textAlign = 'right'; x.fillText('India DETAIL REPORT', W - M, 88); x.textAlign = 'left';
           // picture
-          x.fillStyle = C.card; rr(x, M, 128, TW, 600, 28); x.fill(); x.strokeStyle = C.line; x.lineWidth = 2; x.stroke();
-          if (d.img) { var bx = M + 20, by = 148, bw = TW - 40, bh = 560, sc0 = Math.max(bw / img.width, bh / img.height), iw = img.width * sc0, ih = img.height * sc0; x.save(); rr(x, bx, by, bw, bh, 18); x.clip(); x.drawImage(img, bx + (bw - iw) / 2, by + (bh - ih) / 2, iw, ih); x.restore(); }
+          // full image, never cropped: the box takes the image's own proportions
+          var PH = d.img ? Math.min(1100, Math.round((TW - 40) * img.height / img.width)) : 560, DY = PH - 560;
+          x.fillStyle = C.card; rr(x, M, 128, TW, PH + 40, 28); x.fill(); x.strokeStyle = C.line; x.lineWidth = 2; x.stroke();
+          if (d.img) { var bx = M + 20, by = 148, bw = TW - 40, bh = PH, sc0 = Math.min(bw / img.width, bh / img.height), iw = img.width * sc0, ih = img.height * sc0; x.fillStyle = '#ffffff'; rr(x, bx, by, bw, bh, 18); x.fill(); x.save(); rr(x, bx, by, bw, bh, 18); x.clip(); x.drawImage(img, bx + (bw - iw) / 2, by + (bh - ih) / 2, iw, ih); x.restore(); }
           else { var sh = 570, sw = sh * 240 / 250; x.drawImage(img, (W - sw) / 2, 142, sw, sh); }
           URL.revokeObjectURL(url);
           // status + category
-          var y = 790, sc = SC[d.st], label = ST[d.st][1].toUpperCase();
+          var y = 790 + DY, sc = SC[d.st], label = ST[d.st][1].toUpperCase();
           x.font = '500 22px "DM Sans", monospace'; var pw = x.measureText(label).width + 56;
           x.fillStyle = sc; x.globalAlpha = .14; rr(x, M, y - 30, pw, 44, 22); x.fill(); x.globalAlpha = 1;
           x.beginPath(); x.arc(M + 24, y - 8, 7, 0, 7); x.fill(); x.fillText(label, M + 40, y);
