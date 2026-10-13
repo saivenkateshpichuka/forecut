@@ -63,6 +63,16 @@ def share_img(fn):
     m = re.search(r'<div class="(?:jhero|ci)"><img src="(img/[^"]+)"', html_)
     if m: return m.group(1), 800, 800
     return 'og-image.png', 1200, 630
+TAB = '<style>.fctab{display:none}@media (max-width:760px){body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))!important}\n.fctab{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb,#fffcf7 92%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid #e3d9cc;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}\n.fctab a{display:grid;justify-items:center;gap:2px;text-decoration:none;color:#6e6259;font:600 10.5px "DM Sans",system-ui,sans-serif;padding:4px 0;border-radius:10px}\n.fctab svg{width:22px;height:22px}.fctab a[aria-current="page"]{color:#1f3d33}.fctab a[aria-current="page"] svg{transform:translateY(-1px)}\n.fctab a[aria-current="page"]::after{content:"";width:18px;height:3px;border-radius:3px;background:#b4532a;margin-top:1px}\n.scrim:not([hidden])~.fctab,body:has(.scrim:not([hidden])) .fctab,body:has(#tscrim:not([hidden])) .fctab{display:none}}\n@media (max-width:760px) and (prefers-color-scheme:dark){.fctab{background:color-mix(in srgb,#1e1a17 92%,transparent);border-color:#352d27}.fctab a{color:#b3a698}.fctab a[aria-current="page"]{color:#f2ebe2}}\n@media print{.fctab{display:none!important}}</style>'
+NAV = '<nav class="fctab" aria-label="App navigation"><a href="/" data-m="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</a><a href="/india.html" data-m="india"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M5.5 6.5c3.5 2.5 9.5 2.5 13 0M5.5 17.5c3.5-2.5 9.5-2.5 13 0"/></svg>India</a><a href="/aw26.html" data-m="seasons"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Seasons</a><a href="/reports.html" data-m="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg>Reports</a><a href="/account.html#saved" data-m="saved"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.3-9-8.6C1.6 8.2 3.6 5 6.8 5c1.9 0 3.2 1 4.2 2.3C12 6 13.3 5 15.2 5c3.2 0 5.2 3.2 3.8 6.4C17 15.7 12 20 12 20z"/></svg>Saved</a></nav>'
+REPORT_FILES = set()
+def tab_for(fn):
+    if fn == 'index.html': return 'home'
+    if fn == 'india.html': return 'india'
+    if fn[:4] in ('aw26', 'ss27', 'aw27', 'ss28', 'aw28'): return 'seasons'
+    if fn == 'account.html': return 'saved'
+    if fn == 'reports.html' or fn.startswith(('core-item', 'capsule', 'india-')): return 'reports'
+    return ''
 def block(fn, title, desc, path):
     url = BASE + path
     _si, _sw, _sh = share_img(fn)
@@ -92,6 +102,7 @@ def block(fn, title, desc, path):
     b.append('<script type="module" src="/auth.js"></script>')
     b.append('<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Forecut"><meta name="apple-mobile-web-app-status-bar-style" content="default">')
     b.append("<script>if('serviceWorker' in navigator)addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){})});</script>")
+    b.append(TAB)
     b.append('<!--/seo-->'); return '\n'.join(b)
 for fn, (title, desc, path) in pages.items():
     p = os.path.join(R, fn)
@@ -103,6 +114,9 @@ for fn, (title, desc, path) in pages.items():
     _ff = open(os.path.join(R, 'fonts', 'fonts.css')).read().split('*/', 1)[1].strip().replace('url(', 'url(fonts/')
     h = h.replace('<link rel="stylesheet" href="fonts/fonts.css">', '<style>' + _ff + '</style>')
     if '<html lang="en">' in h: h = h.replace('<html lang="en">', '<html lang="en-IN">', 1)
+    h = re.sub(r'<nav class="fctab".*?</nav>', '', h, flags=re.S)
+    _nav = NAV.replace('data-m="' + tab_for(fn) + '"', 'data-m="' + tab_for(fn) + '" aria-current="page"') if tab_for(fn) else NAV
+    h = h.replace('</body>', _nav + '</body>', 1) if '</body>' in h else h + _nav
     open(p, 'w').write(h)
 today = datetime.date.today().isoformat()
 pri = {'index.html': '1.0', 'india.html': '0.9', 'journal.html': '0.8', 'about.html': '0.5', 'contact.html': '0.4', 'terms.html': '0.2', 'privacy.html': '0.2'}

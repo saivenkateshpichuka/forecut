@@ -4,6 +4,11 @@ src = open('legal.py').read(); ns = {}; exec(src.split('\nP = ')[0], ns)
 HEAD, FOOT = ns['HEAD'], ns['FOOT']
 CSS = '''<style>
 [hidden]{display:none!important}
+.svd{margin:0 0 22px;padding-bottom:18px;border-bottom:1px solid var(--grid)}.svd h2{font:700 20px "DM Sans",sans-serif;margin:0 0 4px}
+.svl{display:grid;gap:8px;margin-top:10px}.svi{display:flex;gap:12px;align-items:center;text-decoration:none;color:var(--ink);border:1px solid var(--grid);border-radius:12px;padding:8px;background:var(--paper)}
+.svi .ph{width:52px;height:52px;border-radius:8px;background:var(--grid);overflow:hidden;flex:none}.svi img{width:100%;height:100%;object-fit:cover}
+.svi b{display:block;font:700 15px "DM Sans",sans-serif}.svi small{color:var(--muted);font:500 12.5px "DM Sans",sans-serif}
+.svi button{all:unset;cursor:pointer;margin-left:auto;color:var(--muted);font-size:18px;padding:6px}
 .acc{max-width:440px;margin:34px auto 10px;background:var(--paper-2);border:1px solid var(--grid);border-radius:16px;padding:26px 26px 22px}
 .acc h1{font-size:30px!important;margin:0 0 6px!important}.acc .sub{color:var(--muted);margin:0 0 18px;font-size:15px}
 .tabs{display:grid;grid-template-columns:1fr 1fr;background:var(--paper);border:1px solid var(--grid);border-radius:10px;padding:4px;margin-bottom:18px}
@@ -28,6 +33,7 @@ CSS = '''<style>
 </style>'''
 G = '<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>'
 BODY = f'''<div class="acc" id="acc">
+ <section id="saved" class="svd"><h2>Saved details</h2><p class="sub" id="svsub">Tap the ♡ Save button on any detail to keep it here. Saved on this device.</p><div class="svl" id="svl"></div></section>
  <div id="authv">
   <h1 id="ttl">Welcome back</h1><p class="sub" id="sub">Sign in to your Forecut account.</p>
   <div class="tabs" role="tablist"><button type="button" role="tab" id="t-in" aria-selected="true">Sign in</button><button type="button" role="tab" id="t-up" aria-selected="false">Sign up</button></div>
@@ -51,9 +57,21 @@ BODY = f'''<div class="acc" id="acc">
   <button class="go" type="button" id="out" style="background:transparent;color:var(--ink);border:1px solid var(--grid)">Sign out</button>
  </div>
 </div>
+<script>
+  (function sv() {{ let L = []; try {{ L = JSON.parse(localStorage.getItem('fc-saved') || '[]'); }} catch (e) {{}}
+    const box = document.getElementById('svl'), NM = {{e: 'Emerging', r: 'Rising', p: 'Peaking', f: 'Fading'}};
+    box.innerHTML = '';
+    if (!L.length) {{ document.getElementById('svsub').textContent = 'Nothing saved yet. Open any detail and tap ♡ Save to keep it here.'; }}
+    L.forEach((x, i) => {{ const a = document.createElement('a'); a.className = 'svi'; a.href = x.page;
+      a.innerHTML = '<span class="ph">' + (x.img ? '<img alt="" src="/' + x.img.replace(/^\//, '') + '">' : '') + '</span><span><b></b><small></small></span><button type="button" aria-label="Remove">✕</button>';
+      a.querySelector('b').textContent = x.name; a.querySelector('small').textContent = (x.season || '') + ' · ' + (NM[x.st] || '') + ' · ' + (x.cat || '');
+      a.querySelector('button').onclick = (e) => {{ e.preventDefault(); L.splice(i, 1); try {{ localStorage.setItem('fc-saved', JSON.stringify(L)); }} catch (er) {{}} sv(); }};
+      box.appendChild(a); }}); }})();
+</script>
 <script type="module">
 function ready(f) {{ window.FCAuth ? f() : document.addEventListener('fcauth-ready', f, {{ once: true }}); }}
 ready(function () {{
+
   const A = window.FCAuth, $ = (i) => document.getElementById(i);
   let mode = 'in';
   const next = new URLSearchParams(location.search).get('next');
