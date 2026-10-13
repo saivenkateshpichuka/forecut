@@ -86,7 +86,7 @@ for dept, cat, use, fab in I.CATS:
 secs.append('</div>')
 
 m = I.META
-themes = ''.join(f'<article class="theme" tabindex="0" role="button" aria-haspopup="dialog" data-i="{ti}"><div class="tart" data-pat="{t["pat"]}" data-bg="{t["bg"]}" data-fg="{t["fg"]}" data-flat="{E(t["flat"])}" data-title="{E(t["t"])}"{(chr(32) + 'data-photo="img/' + islug(t["flat"]) + '.webp"') if islug(t["flat"]) in IMGS else ""}></div><div class="tbody"><h3>{E(t["t"])}</h3><p>{E(t["d"])}</p><ul class="kw">{"".join(f"<li>{E(k)}</li>" for k in t["tags"])}</ul><span class="more">Explore theme →</span></div></article>' for ti, t in enumerate(I.THEMES))
+themes = ''.join(f'<article class="theme" tabindex="0" role="button" aria-haspopup="dialog" data-i="{ti}"><div class="tart" data-pat="{t["pat"]}" data-bg="{t["bg"]}" data-fg="{t["fg"]}" data-flat="{E(t["flat"])}" data-title="{E(t["t"])}"{(chr(32) + 'data-full="img/theme-india-' + islug(t["t"]) + '.webp"') if ('theme-india-' + islug(t["t"])) in IMGS else ""}{(chr(32) + 'data-photo="img/' + islug(t["flat"]) + '.webp"') if islug(t["flat"]) in IMGS else ""}></div><div class="tbody"><h3>{E(t["t"])}</h3><p>{E(t["d"])}</p><ul class="kw">{"".join(f"<li>{E(k)}</li>" for k in t["tags"])}</ul><span class="more">Explore theme →</span></div></article>' for ti, t in enumerate(I.THEMES))
 tdj = [dict(title=t['t'], season='India · Festive & wedding 2026–28', tags=t['tags'], story=t['story'], why=t['why'], brands=t['brands'], src=t['src'], future=False, kw=t['kw'], prices=t['prices'], cost=t['cost'], actions=t['actions']) for t in I.THEMES]
 pal = ''.join(f'<div class="sw2"><i style="background:{h}"></i><span>{E(n)}<small>Pantone {PT.nearest(h)[0]}<br>{h.upper()}</small></span></div>' for h, n in m['palette'])
 coty = ''

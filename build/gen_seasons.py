@@ -84,7 +84,7 @@ for si, s in enumerate(SEASONS):
     LOCKED = [z.lower() for z in SITE.get('locked', [])]
     snav = ''.join(f'<a href="{URLS.get(x, "#")}"{" aria-current=\"page\"" if x == s else ""}{(" class=\"lockt\" data-stage=\"" + E(META[x]["stage"]) + "\"") if x in LOCKED else ""}>{META[x]["code"]}<small>{(LOCKSVG + "Opens at launch") if x in LOCKED else E(META[x]["stage"])}</small></a>' for x in SEASONS)
     snav = f'<a href="{"india.html" if STATIC else "https://forecut.in/india.html"}">India<small>Festive &amp; wedding</small></a>' + snav
-    themes = ''.join(f'<article class="theme" tabindex="0" role="button" aria-haspopup="dialog" data-i="{ti}"><div class="tart" data-pat="{p}" data-bg="{bg}" data-fg="{fg}" data-flat="{E(fl)}" data-title="{E(t)}"></div><div class="tbody"><h3>{E(t)}</h3><p>{E(d)}</p><ul class="kw">{"".join(f"<li>{E(k)}</li>" for k in kw)}</ul><span class="more">Explore theme →</span></div></article>' for ti, (t, d, p, bg, fg, fl, kw) in enumerate(m['themes']))
+    themes = ''.join(f'<article class="theme" tabindex="0" role="button" aria-haspopup="dialog" data-i="{ti}"><div class="tart" data-pat="{p}" data-bg="{bg}" data-fg="{fg}" data-flat="{E(fl)}" data-title="{E(t)}"{(chr(32) + 'data-full="img/theme-' + s + '-' + islug(t) + '.webp"') if ('theme-' + s + '-' + islug(t)) in IMGS else ""}></div><div class="tbody"><h3>{E(t)}</h3><p>{E(d)}</p><ul class="kw">{"".join(f"<li>{E(k)}</li>" for k in kw)}</ul><span class="more">Explore theme →</span></div></article>' for ti, (t, d, p, bg, fg, fl, kw) in enumerate(m['themes']))
     from theme_data import T as TDATA
     tdj = []
     for (t, d, p, bg, fg, fl, kw) in m['themes']:
