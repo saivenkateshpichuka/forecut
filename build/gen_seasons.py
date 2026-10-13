@@ -130,5 +130,6 @@ for si, s in enumerate(SEASONS):
         import re as _re
         _t = _re.search(r'<title>.*?</title>', out).group(0)
         out = '<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">\n' + out.replace(_t, _t + '</head><body>', 1) + '\n</body></html>'
+    import panels; out = panels.add(out)
     open(os.path.join(STATIC, f'{s}.html') if STATIC else f'forecut-{s}.html', 'w').write(out)
     print(s, total, counts)

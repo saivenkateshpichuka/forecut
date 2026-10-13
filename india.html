@@ -508,8 +508,47 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
 .vflat{background:#fff;object-fit:contain!important}
 .vart{position:relative}
 .vtoggle{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:2px;background:rgba(28,23,20,.72);backdrop-filter:blur(8px);padding:3px;border-radius:99px;z-index:2}
-.vtoggle button{all:unset;cursor:pointer;color:#fff;font:600 12.5px var(--body);padding:7px 13px;border-radius:99px}
+.vtoggle button{all:unset;white-space:nowrap;cursor:pointer;color:#fff;font:600 12.5px var(--body);padding:7px 13px;border-radius:99px}
 .vtoggle button[aria-pressed="true"]{background:#fff;color:#1c1714}
+
+/* two-panel uploads: separate flat views */
+.vflats{display:grid;gap:12px;width:100%;grid-template-columns:1fr 1fr;align-items:center}
+.vflats.n1{grid-template-columns:1fr}
+.vflats.n3,.vflats.n4{grid-template-columns:1fr 1fr}
+.vflats.n3 img,.vflats.n4 img{max-height:30vh}
+.vflats{padding-bottom:50px}
+.vflats figure{margin:0;background:#fff;border-radius:12px;padding:10px;display:grid;gap:4px;justify-items:center}
+.vflats img{width:100%;height:auto;max-height:62vh;object-fit:contain}
+.vflats figcaption{font:600 11px var(--body);letter-spacing:.08em;text-transform:uppercase;color:#8a8178}
+/* image stays fixed; only the text scrolls */
+@media (min-width:761px){
+  .viewer{overflow:hidden!important;height:min(900px,calc(100vh - 32px))}
+  .vart{position:relative!important;height:100%;min-height:0!important;align-self:stretch;overflow:hidden}
+  .vart img.vphoto{max-height:calc(100% - 60px);width:auto;max-width:100%;object-fit:contain;border-radius:12px}
+  .vinfo{overflow-y:auto;max-height:100%;overscroll-behavior:contain}
+  .vart img.vtall{height:calc(100vh - 140px)!important;max-height:780px!important;width:auto!important;max-width:100%!important}
+}
+@media (max-width:760px){
+  .viewer{display:flex!important;flex-direction:column;overflow:hidden!important}
+  .vart{flex:none;max-height:44vh!important;overflow:hidden}
+  .vart img,.vart svg{max-height:40vh!important}
+  .vart{height:44vh!important;width:100%;align-self:stretch;box-sizing:border-box}
+  #vsvg{height:100%}
+  .vart img.vtall{height:calc(44vh - 28px)!important;max-height:none!important;width:auto!important;max-width:100%;object-fit:contain}
+  .vflats{grid-auto-flow:column;grid-template-columns:none!important;grid-auto-columns:minmax(46%,1fr);overflow-x:auto;scroll-snap-type:x mandatory;height:100%;align-items:center;padding-bottom:44px;scrollbar-width:none}
+  .vflats figure{scroll-snap-align:start}
+  .vflats img{max-height:calc(44vh - 110px)!important}
+  .vinfo{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+}
+/* download, save, pin and prev/next on one line */
+.vact{display:flex!important;flex-wrap:nowrap!important;align-items:center;gap:6px!important;grid-template-columns:none!important}
+.dlg{display:flex!important;flex-wrap:nowrap!important;gap:6px!important;grid-template-columns:none!important}
+.dlgl{display:none!important}
+.dlg .vbtn{padding:10px 14px!important;min-width:0!important;font-size:14px!important;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.dlg .vbtn svg{width:15px;height:15px}
+.nav2{display:flex!important;gap:6px;margin-left:auto}
+.nav2 .vbtn{width:40px;height:40px;padding:0!important;display:grid;place-items:center;font-size:17px!important}
+@media (max-width:420px){.dlg .vbtn{padding:9px 10px!important;font-size:13px!important}.nav2 .vbtn{width:36px;height:36px}}
 .seasons a.lockt{opacity:.7}.seasons a .lk{width:9px;height:9px;margin-right:4px;vertical-align:-1px;display:inline}.sgrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}.scard{border:1px solid var(--grid);border-radius:14px;background:var(--paper-2);padding:16px;display:flex;flex-direction:column;gap:10px}.scard.open{border-color:var(--mat);box-shadow:inset 0 0 0 1px var(--mat)}.shd{display:flex;flex-direction:column;align-items:flex-start;gap:4px}.shd .stag{margin-bottom:6px}.shd b{display:block;font:700 20px var(--display);letter-spacing:-.01em;white-space:nowrap}.shd span{font:500 13px var(--body);color:var(--muted)}.stag{display:inline-flex;align-items:center;gap:5px;font:700 10.5px var(--body);letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:99px;white-space:nowrap;flex:none}.stag svg{width:11px;height:11px}.stag.now{background:linear-gradient(135deg,#00a85a,#1fd17f);color:#fff}.stag.lock{background:var(--grid);color:var(--muted)}.socc{margin:0;font:600 13.5px var(--body);color:var(--chalk);line-height:1.4}.sfoc{margin:0;font-size:14.5px;line-height:1.5}.ssw{display:flex;gap:4px}.ssw i{width:22px;height:22px;border-radius:5px;border:1px solid rgba(0,0,0,.08)}.smix{display:flex;height:7px;border-radius:99px;overflow:hidden;background:var(--grid)}.smix i{display:block;height:100%}.sct{margin:0;font:500 12px var(--body);color:var(--muted)}.splan{margin:auto 0 0;font-size:13.5px;line-height:1.45;padding-top:8px;border-top:1px dashed var(--grid)}.splan b{font-family:var(--body)}@media (max-width:1100px){.sgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}@media (max-width:700px){.sgrid{grid-template-columns:1fr}}.srow{align-items:center;gap:10px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px}.snote{margin:-4px 0 10px;font-size:13.5px;color:var(--muted)}.slbl{font:700 12px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);flex:none}.sseg{display:flex;gap:6px}.sseg button{all:unset;cursor:pointer;flex:none;border:1px solid var(--grid);background:var(--paper-2);border-radius:10px;padding:7px 12px;display:grid;line-height:1.25}.sseg button b{font:700 14px var(--body)}.sseg button small{font:500 11px var(--body);color:var(--muted)}.sseg button[aria-pressed="true"]{background:var(--mat);border-color:var(--mat);color:var(--mat-ink)}.sseg button[aria-pressed="true"] small{color:var(--mat-ink);opacity:.8}.sseg button[data-lock]{opacity:.6;cursor:not-allowed}.sseg button:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}.cal{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px}.calw{border:1px solid var(--grid);border-radius:10px;padding:8px 10px;background:var(--paper);display:grid;gap:2px}.calw b{font:600 13px var(--body)}.calw span{font-size:11.5px;color:var(--muted);line-height:1.35}.calw.cur{border-color:var(--mat);box-shadow:inset 0 0 0 1px var(--mat)}@media (max-width:560px){.cal{grid-template-columns:1fr}}.rpl{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.rpl>div{background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:16px 18px}.rpl b{font:700 16px var(--display)}.rpl p{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0 0}.rpl a{font:600 13.5px var(--body);text-decoration:none;color:var(--ink);border:1px solid var(--grid);border-radius:99px;padding:6px 12px;background:var(--paper)}.rpl a:hover{border-color:var(--ink)}@media (max-width:820px){.rpl{grid-template-columns:1fr}}.lbp{color:var(--muted);font-size:15px;max-width:60ch;margin:6px 0 0}.lbrow{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(200px,240px);gap:16px;overflow-x:auto;padding:4px 2px 14px;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:thin}.lbk{all:unset;box-sizing:border-box;cursor:pointer;scroll-snap-align:start;display:grid;gap:7px;align-content:start}.lbk:focus-visible{outline:2px solid var(--chalk);outline-offset:3px}.lbi{display:block;aspect-ratio:4/5;overflow:hidden;border-radius:4px;background:var(--surface-img)}.lbi img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}.lbk:hover .lbi img{transform:scale(1.04)}.lbk small{font:600 11px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:3px}.lbk small.e{color:var(--chalk)}.lbk small.r{color:var(--rise)}.lbk small.p{color:var(--peak)}.lbk b{font:600 18px/1.25 var(--display)}@media (max-width:560px){.lbrow{grid-auto-columns:62vw;gap:12px}.lbk b{font-size:16px}}</style>
 <div class="wrap">
   <div class="bar">
@@ -622,7 +661,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
         </dl>
         <div class="vact">
           <div class="dlg"><span class="dlgl">Download card</span><button class="vbtn" type="button" id="vdl">PNG</button><button class="vbtn" type="button" id="vdlpdf">PDF</button><button class="vbtn savb" type="button" id="vsave" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.3 3 4.5 6.6 4.5c2 0 3.4 1.1 4.4 2.5 1-1.4 2.4-2.5 4.4-2.5 3.6 0 5.7 3.8 4.2 7.3C19.5 16.4 12 21 12 21z"/></svg><span>Save</span></button><a class="vbtn pinb" id="vpin" target="_blank" rel="noopener" aria-label="Save to Pinterest"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.6 19.3c-.1-.8-.2-2 0-2.9l1.2-5s-.3-.6-.3-1.5c0-1.4.8-2.4 1.8-2.4.9 0 1.3.6 1.3 1.4 0 .9-.6 2.2-.9 3.4-.2 1 .5 1.9 1.6 1.9 1.9 0 3.3-2 3.3-4.9 0-2.6-1.8-4.4-4.5-4.4-3 0-4.8 2.3-4.8 4.6 0 .9.4 1.9.8 2.4.1.1.1.2.1.3l-.3 1.2c0 .2-.2.3-.4.2-1.4-.6-2.2-2.6-2.2-4.2 0-3.4 2.5-6.6 7.2-6.6 3.8 0 6.7 2.7 6.7 6.3 0 3.8-2.4 6.8-5.7 6.8-1.1 0-2.2-.6-2.5-1.3l-.7 2.6c-.2 1-.9 2.2-1.4 2.9A10 10 0 1 0 12 2z"/></svg>Pin</a></div>
-          <div class="nav2"><button class="vbtn ghost" type="button" id="vprev" aria-label="Previous detail">← Prev</button><button class="vbtn ghost" type="button" id="vnext" aria-label="Next detail">Next →</button></div>
+          <div class="nav2"><button class="vbtn ghost" type="button" id="vprev" aria-label="Previous detail" title="Previous">←</button><button class="vbtn ghost" type="button" id="vnext" aria-label="Next detail" title="Next">→</button></div>
         </div>
         <p class="vmsg" id="vmsg" role="status"></p>
       </div>
@@ -2215,11 +2254,16 @@ Object.keys(XS).forEach(function(k){ var v = XS[k]; Flats.SPEC[k] = typeof v ===
     var d = info(card), s = ST[d.st], r = Flats.render(d.name, colorsFor(d.name, PAGE_C));
     var vimg = card.getAttribute('data-img');
     var vflat = card.getAttribute('data-flatimg'), vs = document.getElementById('vsvg');
-    function showPhoto() { var vi = new Image(); vi.src = vimg; vi.alt = d.name + ' detail photo'; vi.className = 'vphoto'; vs.innerHTML = ''; vs.appendChild(vi); }
-    function showFlat() { if (vflat) { var vf = new Image(); vf.src = vflat; vf.alt = d.name + ' technical flat sketch'; vf.className = 'vphoto vflat'; vs.innerHTML = ''; vs.appendChild(vf); } else vs.innerHTML = r ? r.svg : motif(d.name); }
+    var vph = card.getAttribute('data-photo'), vfl = card.getAttribute('data-flats');
+    function showPhoto() { var vi = new Image(); vi.src = vph || vimg; vi.alt = d.name + ' detail photo'; vi.className = 'vphoto' + (vph ? ' vtall' : ''); vs.innerHTML = ''; vs.appendChild(vi); }
+    function showFlat() { if (vfl) { var fl = vfl.split('|'), box = document.createElement('div'); box.className = 'vflats n' + Math.min(fl.length, 4);
+        var lbl = fl.length === 2 ? ['Front', 'Back'] : [];
+        fl.forEach(function (u, i) { var fg = document.createElement('figure'), im = new Image(); im.src = u; im.alt = d.name + ' flat sketch ' + (i + 1); fg.appendChild(im); if (lbl[i]) { var fc = document.createElement('figcaption'); fc.textContent = lbl[i]; fg.appendChild(fc); } box.appendChild(fg); });
+        vs.innerHTML = ''; vs.appendChild(box); return; }
+      if (vflat) { var vf = new Image(); vf.src = vflat; vf.alt = d.name + ' technical flat sketch'; vf.className = 'vphoto vflat'; vs.innerHTML = ''; vs.appendChild(vf); } else vs.innerHTML = r ? r.svg : motif(d.name); }
     if (vimg) showPhoto(); else showFlat();
     var tg = document.getElementById('vtoggle'); if (!tg) { tg = document.createElement('div'); tg.id = 'vtoggle'; tg.className = 'vtoggle'; vs.parentNode.appendChild(tg); }
-    tg.hidden = !(vimg && (vflat || r));
+    tg.hidden = !(vimg && (vfl || vflat || r));
     tg.innerHTML = '<button type="button" data-v="p" aria-pressed="true">Photo</button><button type="button" data-v="f" aria-pressed="false">Flat sketch</button>';
     tg.querySelectorAll('button').forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); tg.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); if (b.getAttribute('data-v') === 'p') showPhoto(); else showFlat(); }; });
     var pill = document.getElementById('vpill'); pill.className = 'pill ' + s[0]; pill.textContent = s[1];

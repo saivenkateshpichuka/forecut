@@ -83,3 +83,9 @@ Everything needed to rebuild the Forecut website. The published pages are genera
 - A detail can have a different photo in each season. File name rules: first season = <slug>.webp (from the main prompt report); later seasons = <slug>-<season>.webp (e.g. cape-lehengas-ss27.webp). Both live in img/ and are listed in images.json.
 - gen_seasons.py uses <slug>-<season> if present, else the plain photo only in the detail's first season, else the sketch.
 - season_prompts.py writes ../season-prompts/<season>-image-prompts.csv with season colours, fabric weight and camera angle so photos differ by season; rows already uploaded are marked Done.
+
+## Two-panel detail images (photo | flat sketch)
+`split_panels.py` runs after `process_images.py` in the image workflow. For each uploaded detail image that has a
+white flat-sketch panel on the right, it writes `img/<slug>-photo.webp` (photo only) and `img/<slug>-f1..fN.webp`
+(each flat drawing separately, e.g. front and back), and records them in `panels.json`. The detail viewer shows the
+photo alone under "Photo" and the separate drawings under "Flat sketch". Cards keep the combined image.

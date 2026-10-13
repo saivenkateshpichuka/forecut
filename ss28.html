@@ -508,8 +508,47 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
 .vflat{background:#fff;object-fit:contain!important}
 .vart{position:relative}
 .vtoggle{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:2px;background:rgba(28,23,20,.72);backdrop-filter:blur(8px);padding:3px;border-radius:99px;z-index:2}
-.vtoggle button{all:unset;cursor:pointer;color:#fff;font:600 12.5px var(--body);padding:7px 13px;border-radius:99px}
+.vtoggle button{all:unset;white-space:nowrap;cursor:pointer;color:#fff;font:600 12.5px var(--body);padding:7px 13px;border-radius:99px}
 .vtoggle button[aria-pressed="true"]{background:#fff;color:#1c1714}
+
+/* two-panel uploads: separate flat views */
+.vflats{display:grid;gap:12px;width:100%;grid-template-columns:1fr 1fr;align-items:center}
+.vflats.n1{grid-template-columns:1fr}
+.vflats.n3,.vflats.n4{grid-template-columns:1fr 1fr}
+.vflats.n3 img,.vflats.n4 img{max-height:30vh}
+.vflats{padding-bottom:50px}
+.vflats figure{margin:0;background:#fff;border-radius:12px;padding:10px;display:grid;gap:4px;justify-items:center}
+.vflats img{width:100%;height:auto;max-height:62vh;object-fit:contain}
+.vflats figcaption{font:600 11px var(--body);letter-spacing:.08em;text-transform:uppercase;color:#8a8178}
+/* image stays fixed; only the text scrolls */
+@media (min-width:761px){
+  .viewer{overflow:hidden!important;height:min(900px,calc(100vh - 32px))}
+  .vart{position:relative!important;height:100%;min-height:0!important;align-self:stretch;overflow:hidden}
+  .vart img.vphoto{max-height:calc(100% - 60px);width:auto;max-width:100%;object-fit:contain;border-radius:12px}
+  .vinfo{overflow-y:auto;max-height:100%;overscroll-behavior:contain}
+  .vart img.vtall{height:calc(100vh - 140px)!important;max-height:780px!important;width:auto!important;max-width:100%!important}
+}
+@media (max-width:760px){
+  .viewer{display:flex!important;flex-direction:column;overflow:hidden!important}
+  .vart{flex:none;max-height:44vh!important;overflow:hidden}
+  .vart img,.vart svg{max-height:40vh!important}
+  .vart{height:44vh!important;width:100%;align-self:stretch;box-sizing:border-box}
+  #vsvg{height:100%}
+  .vart img.vtall{height:calc(44vh - 28px)!important;max-height:none!important;width:auto!important;max-width:100%;object-fit:contain}
+  .vflats{grid-auto-flow:column;grid-template-columns:none!important;grid-auto-columns:minmax(46%,1fr);overflow-x:auto;scroll-snap-type:x mandatory;height:100%;align-items:center;padding-bottom:44px;scrollbar-width:none}
+  .vflats figure{scroll-snap-align:start}
+  .vflats img{max-height:calc(44vh - 110px)!important}
+  .vinfo{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+}
+/* download, save, pin and prev/next on one line */
+.vact{display:flex!important;flex-wrap:nowrap!important;align-items:center;gap:6px!important;grid-template-columns:none!important}
+.dlg{display:flex!important;flex-wrap:nowrap!important;gap:6px!important;grid-template-columns:none!important}
+.dlgl{display:none!important}
+.dlg .vbtn{padding:10px 14px!important;min-width:0!important;font-size:14px!important;display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.dlg .vbtn svg{width:15px;height:15px}
+.nav2{display:flex!important;gap:6px;margin-left:auto}
+.nav2 .vbtn{width:40px;height:40px;padding:0!important;display:grid;place-items:center;font-size:17px!important}
+@media (max-width:420px){.dlg .vbtn{padding:9px 10px!important;font-size:13px!important}.nav2 .vbtn{width:36px;height:36px}}
 .seasons a.lockt{opacity:.7}.seasons a .lk{width:9px;height:9px;margin-right:4px;vertical-align:-1px;display:inline}.lockpanel{margin:40px 0;padding:34px 28px;border:1px dashed var(--grid);border-radius:16px;background:var(--paper-2);text-align:center}.lockpanel .lpi{width:46px;height:46px;margin:0 auto 10px;border-radius:50%;background:var(--grid);display:grid;place-items:center;color:var(--muted)}.lockpanel .lpi svg{width:20px;height:20px}.lockpanel h2{margin:0 0 8px}.lockpanel p{max-width:60ch;margin:0 auto;color:var(--muted)}.lockpanel a{color:var(--ink);font-weight:600}.lpb{margin-top:14px!important;display:flex;gap:16px;justify-content:center;align-items:center;flex-wrap:wrap}.lpsign{background:var(--mat);color:var(--mat-ink)!important;text-decoration:none;padding:11px 18px;border-radius:2px}</style>
 <div class="wrap">
   <div class="bar">
@@ -617,7 +656,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
         </dl>
         <div class="vact">
           <div class="dlg"><span class="dlgl">Download card</span><button class="vbtn" type="button" id="vdl">PNG</button><button class="vbtn" type="button" id="vdlpdf">PDF</button><button class="vbtn savb" type="button" id="vsave" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.3 3 4.5 6.6 4.5c2 0 3.4 1.1 4.4 2.5 1-1.4 2.4-2.5 4.4-2.5 3.6 0 5.7 3.8 4.2 7.3C19.5 16.4 12 21 12 21z"/></svg><span>Save</span></button><a class="vbtn pinb" id="vpin" target="_blank" rel="noopener" aria-label="Save to Pinterest"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-3.6 19.3c-.1-.8-.2-2 0-2.9l1.2-5s-.3-.6-.3-1.5c0-1.4.8-2.4 1.8-2.4.9 0 1.3.6 1.3 1.4 0 .9-.6 2.2-.9 3.4-.2 1 .5 1.9 1.6 1.9 1.9 0 3.3-2 3.3-4.9 0-2.6-1.8-4.4-4.5-4.4-3 0-4.8 2.3-4.8 4.6 0 .9.4 1.9.8 2.4.1.1.1.2.1.3l-.3 1.2c0 .2-.2.3-.4.2-1.4-.6-2.2-2.6-2.2-4.2 0-3.4 2.5-6.6 7.2-6.6 3.8 0 6.7 2.7 6.7 6.3 0 3.8-2.4 6.8-5.7 6.8-1.1 0-2.2-.6-2.5-1.3l-.7 2.6c-.2 1-.9 2.2-1.4 2.9A10 10 0 1 0 12 2z"/></svg>Pin</a></div>
-          <div class="nav2"><button class="vbtn ghost" type="button" id="vprev" aria-label="Previous detail">← Prev</button><button class="vbtn ghost" type="button" id="vnext" aria-label="Next detail">Next →</button></div>
+          <div class="nav2"><button class="vbtn ghost" type="button" id="vprev" aria-label="Previous detail" title="Previous">←</button><button class="vbtn ghost" type="button" id="vnext" aria-label="Next detail" title="Next">→</button></div>
         </div>
         <p class="vmsg" id="vmsg" role="status"></p>
       </div>
@@ -2208,11 +2247,16 @@ var Flats = (function () {
     var d = info(card), s = ST[d.st], r = Flats.render(d.name, colorsFor(d.name, PAGE_C));
     var vimg = card.getAttribute('data-img');
     var vflat = card.getAttribute('data-flatimg'), vs = document.getElementById('vsvg');
-    function showPhoto() { var vi = new Image(); vi.src = vimg; vi.alt = d.name + ' detail photo'; vi.className = 'vphoto'; vs.innerHTML = ''; vs.appendChild(vi); }
-    function showFlat() { if (vflat) { var vf = new Image(); vf.src = vflat; vf.alt = d.name + ' technical flat sketch'; vf.className = 'vphoto vflat'; vs.innerHTML = ''; vs.appendChild(vf); } else vs.innerHTML = r ? r.svg : motif(d.name); }
+    var vph = card.getAttribute('data-photo'), vfl = card.getAttribute('data-flats');
+    function showPhoto() { var vi = new Image(); vi.src = vph || vimg; vi.alt = d.name + ' detail photo'; vi.className = 'vphoto' + (vph ? ' vtall' : ''); vs.innerHTML = ''; vs.appendChild(vi); }
+    function showFlat() { if (vfl) { var fl = vfl.split('|'), box = document.createElement('div'); box.className = 'vflats n' + Math.min(fl.length, 4);
+        var lbl = fl.length === 2 ? ['Front', 'Back'] : [];
+        fl.forEach(function (u, i) { var fg = document.createElement('figure'), im = new Image(); im.src = u; im.alt = d.name + ' flat sketch ' + (i + 1); fg.appendChild(im); if (lbl[i]) { var fc = document.createElement('figcaption'); fc.textContent = lbl[i]; fg.appendChild(fc); } box.appendChild(fg); });
+        vs.innerHTML = ''; vs.appendChild(box); return; }
+      if (vflat) { var vf = new Image(); vf.src = vflat; vf.alt = d.name + ' technical flat sketch'; vf.className = 'vphoto vflat'; vs.innerHTML = ''; vs.appendChild(vf); } else vs.innerHTML = r ? r.svg : motif(d.name); }
     if (vimg) showPhoto(); else showFlat();
     var tg = document.getElementById('vtoggle'); if (!tg) { tg = document.createElement('div'); tg.id = 'vtoggle'; tg.className = 'vtoggle'; vs.parentNode.appendChild(tg); }
-    tg.hidden = !(vimg && (vflat || r));
+    tg.hidden = !(vimg && (vfl || vflat || r));
     tg.innerHTML = '<button type="button" data-v="p" aria-pressed="true">Photo</button><button type="button" data-v="f" aria-pressed="false">Flat sketch</button>';
     tg.querySelectorAll('button').forEach(function (b) { b.onclick = function (e) { e.stopPropagation(); tg.querySelectorAll('button').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); if (b.getAttribute('data-v') === 'p') showPhoto(); else showFlat(); }; });
     var pill = document.getElementById('vpill'); pill.className = 'pill ' + s[0]; pill.textContent = s[1];

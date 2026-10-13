@@ -14,11 +14,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
-      - run: pip install pillow
+      - run: pip install pillow numpy scipy
       - name: Convert images and rebuild pages
         run: |
           cd build
           python process_images.py
+          python split_panels.py
           STATIC=.. python gen_seasons.py
           STATIC=.. python gen_india.py
           python build_home.py

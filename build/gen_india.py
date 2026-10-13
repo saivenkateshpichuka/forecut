@@ -225,5 +225,6 @@ if pick:
     out = out.replace('</style>', lcss + '</style>', 1)
     js = "<script>document.querySelectorAll('.lbk').forEach(function(b){b.addEventListener('click',function(){var n=b.getAttribute('data-name'),hit=Array.prototype.find.call(document.querySelectorAll('.d'),function(c){return c.querySelector('h4').textContent===n;});if(hit&&window.ForecutOpenDetail)window.ForecutOpenDetail(hit);});});</script>"
     out = out.replace('</body></html>', js + '\n</body></html>') if '</body></html>' in out else out + js
+import panels; out = panels.add(out)
 open(path, 'w').write(out)
 print('india', total, counts)
