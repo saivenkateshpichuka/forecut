@@ -33,7 +33,14 @@ jobs:
           git config user.name "forecut-bot"
           git config user.email "hello@forecut.in"
           git add -A
-          git diff --cached --quiet || (git commit -m "Publish uploaded images" && git push)
+          git diff --cached --quiet && exit 0
+          git commit -m "Publish uploaded images"
+          for i in 1 2 3 4 5; do
+            git push && exit 0
+            sleep $((RANDOM % 8 + 3))
+            git pull --rebase -X theirs origin main || { git checkout --theirs . && git add -A && GIT_EDITOR=true git rebase --continue; }
+          done
+          exit 1
   deploy:
     needs: publish
     uses: ./.github/workflows/pages.yml
