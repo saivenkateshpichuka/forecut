@@ -55,16 +55,25 @@ for _fn in list(pages):
     elif _t.endswith(' · Forecut'): _t = _t[:-len(' · Forecut')] + ' | Forecut'
     pages[_fn] = (_t, _d, _p)
 SITE = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'site.json')))
+def share_img(fn):
+    html_ = open(os.path.join(R, fn)).read() if os.path.exists(os.path.join(R, fn)) else ''
+    k = fn[:-5]
+    for cand in [f'img/hero-{k}.webp', f'img/hero-{"india" if k == "india" else k}.webp']:
+        if os.path.exists(os.path.join(R, cand)): return cand, 1920, 1080
+    m = re.search(r'<div class="(?:jhero|ci)"><img src="(img/[^"]+)"', html_)
+    if m: return m.group(1), 800, 800
+    return 'og-image.png', 1200, 630
 def block(fn, title, desc, path):
     url = BASE + path
+    _si, _sw, _sh = share_img(fn)
     E = lambda x: x.replace('&', '&amp;').replace('"', '&quot;').replace('<', '&lt;')
     b = ['<!--seo-->', f'<meta name="description" content="{E(desc)}">', f'<link rel="canonical" href="{url}">',
          ('<meta name="robots" content="noindex,follow">' if fn == 'account.html' else '<meta name="robots" content="index,follow">'), '<meta name="theme-color" content="#1f3d33">',
          '<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96"><link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest">',
          '<meta property="og:type" content="website">', '<meta property="og:site_name" content="Forecut">', '<meta property="og:locale" content="en_IN">',
          f'<meta property="og:title" content="{E(title)}">', f'<meta property="og:description" content="{E(desc)}">', f'<meta property="og:url" content="{url}">',
-         f'<meta property="og:image" content="{BASE}og-image.png">', '<meta property="og:image:width" content="1200">', '<meta property="og:image:height" content="630">',
-         '<meta name="twitter:card" content="summary_large_image">', f'<meta name="twitter:title" content="{E(title)}">', f'<meta name="twitter:description" content="{E(desc)}">', f'<meta name="twitter:image" content="{BASE}og-image.png">']
+         f'<meta property="og:image" content="{BASE}{_si}">', f'<meta property="og:image:width" content="{_sw}">', f'<meta property="og:image:height" content="{_sh}">', f'<meta property="og:image:alt" content="{E(title)}">',
+         '<meta name="twitter:card" content="summary_large_image">', f'<meta name="twitter:title" content="{E(title)}">', f'<meta name="twitter:description" content="{E(desc)}">', f'<meta name="twitter:image" content="{BASE}{_si}">'] + ([f'<meta name="p:domain_verify" content="{SITE["pinterest"]}">'] if SITE.get('pinterest') else [])
     if fn == 'index.html': b.append('<script type="application/ld+json">' + json.dumps(org, ensure_ascii=False) + '</script>')
     else: b.append('<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@type": "WebPage", "name": title, "description": desc, "url": url, "isPartOf": {"@id": BASE + "#site"}, "publisher": {"@id": BASE + "#org"}, "inLanguage": "en-IN",
         "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Forecut", "item": BASE}, {"@type": "ListItem", "position": 2, "name": title.split(' · ')[0].split(' (')[0], "item": url}]}}, ensure_ascii=False) + '</script>')
@@ -95,8 +104,22 @@ for fn, (title, desc, path) in pages.items():
     open(p, 'w').write(h)
 today = datetime.date.today().isoformat()
 pri = {'index.html': '1.0', 'india.html': '0.9', 'journal.html': '0.8', 'about.html': '0.5', 'contact.html': '0.4', 'terms.html': '0.2', 'privacy.html': '0.2'}
-sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
-    f'  <url><loc>{BASE}{v[2]}</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>{pri.get(k, "0.8")}</priority></url>\n' for k, v in pages.items() if k != 'account.html') + '</urlset>\n'
+def page_images(fn):
+    h = open(os.path.join(R, fn)).read() if os.path.exists(os.path.join(R, fn)) else ''
+    out, seen = [], set()
+    def add(src, cap):
+        if src in seen or not os.path.exists(os.path.join(R, src)): return
+        seen.add(src); out.append((src, cap))
+    m = re.search(r'--bg:url\((img/hero-[^)]+)\)', h)
+    if m: add(m.group(1), pages[fn][0].split(' | ')[0])
+    for m in re.finditer(r'data-title="([^"]*)"[^>]*data-full="(img/[^"]+)"', h): add(m.group(2), m.group(1) + ' (fashion trend theme)')
+    for m in re.finditer(r'<article class="d"[^>]*data-img="(img/[^"]+)"[^>]*>.*?<h4>([^<]+)</h4>', h, re.S): add(m.group(1), m.group(2) + ' (fashion trend detail)')
+    for m in re.finditer(r'<img src="(img/[^"]+)" alt="([^"]+)"', h): add(m.group(1), m.group(2))
+    return out[:1000]
+def esc(x): return x.replace('&', '&amp;').replace('<', '&lt;').replace('"', '&quot;')
+def imgxml(fn): return ''.join(f'<image:image><image:loc>{BASE}{src}</image:loc><image:title>{esc(cap)}</image:title></image:image>' for src, cap in page_images(fn))
+sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' + ''.join(
+    f'  <url><loc>{BASE}{v[2]}</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>{pri.get(k, "0.8")}</priority>{imgxml(k)}</url>\n' for k, v in pages.items() if k != 'account.html') + '</urlset>\n'
 open(os.path.join(R, 'sitemap.xml'), 'w').write(sm)
 open(os.path.join(R, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\nDisallow: /build/\nDisallow: /images/\n\nSitemap: {BASE}sitemap.xml\n')
 open(os.path.join(R, 'favicon.svg'), 'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/><path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="#b4532a" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>')
