@@ -18,3 +18,8 @@ Updated monthly.
 
 ## Launch locks
 `build/site.json` → `"locked"` lists seasons that stay locked (tabs, lifecycle chips, tracker columns, India calendar/switcher, AW27/SS28/AW28 detail sections). At official launch set it to `[]` and run `sh build.sh`.
+
+## Golden rule: never delete
+Details (global and India), Journal articles, Brand Watch entries, photos and season pages are only ever **added or updated, never removed**.
+- Fading items stay, marked "Fading"; past seasons are archived (rollover.py keeps the page and saves past statuses), not deleted.
+- `python3 keep_check.py` (run by build.sh) fails the build if anything that existed in the last commit is missing. If it fails, restore the item; do not bypass the check.
