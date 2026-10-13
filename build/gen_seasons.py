@@ -76,7 +76,7 @@ for si, s in enumerate(SEASONS):
               + (f'<div><h3>Season palette</h3><div class="pstrip" role="img" aria-label="Season palette">{pstrip}</div></div>' if len(m['coty']) > 1 else '')
               + '</div>')
     LOCKED = [z.lower() for z in SITE.get('locked', [])]
-    snav = ''.join(f'<a href="{URLS.get(x, "#")}"{" aria-current=\"page\"" if x == s else ""}{" class=\"lockt\"" if x in LOCKED else ""}>{META[x]["code"]}<small>{(LOCKSVG + "Opens at launch") if x in LOCKED else E(META[x]["stage"])}</small></a>' for x in SEASONS)
+    snav = ''.join(f'<a href="{URLS.get(x, "#")}"{" aria-current=\"page\"" if x == s else ""}{(" class=\"lockt\" data-stage=\"" + E(META[x]["stage"]) + "\"") if x in LOCKED else ""}>{META[x]["code"]}<small>{(LOCKSVG + "Opens at launch") if x in LOCKED else E(META[x]["stage"])}</small></a>' for x in SEASONS)
     snav = f'<a href="{"india.html" if STATIC else "https://forecut.in/india.html"}">India<small>Festive &amp; wedding</small></a>' + snav
     themes = ''.join(f'<article class="theme" tabindex="0" role="button" aria-haspopup="dialog" data-i="{ti}"><div class="tart" data-pat="{p}" data-bg="{bg}" data-fg="{fg}" data-flat="{E(fl)}" data-title="{E(t)}"></div><div class="tbody"><h3>{E(t)}</h3><p>{E(d)}</p><ul class="kw">{"".join(f"<li>{E(k)}</li>" for k in kw)}</ul><span class="more">Explore theme →</span></div></article>' for ti, (t, d, p, bg, fg, fl, kw) in enumerate(m['themes']))
     from theme_data import T as TDATA
@@ -114,11 +114,11 @@ for si, s in enumerate(SEASONS):
     out = out.replace('</style>', '.seasons a.lockt{opacity:.7}.seasons a .lk{width:9px;height:9px;margin-right:4px;vertical-align:-1px;display:inline}' + '</style>', 1)
     if s in LOCKED:
         lockp = (f'<div class="lockpanel" id="details-locked"><div class="lpi">{LOCKSVG}</div><h2>{E(m["code"])} details open at launch</h2>'
-                 f'<p>The full {E(m["code"])} detail report, with every detail, status, flat sketch and downloadable card, releases at Forecut\'s official launch. '
-                 f'The themes and colours above are a preview. <a href="{URLS.get(SEASONS[0], "aw26.html")}">Explore {E(META[SEASONS[0]]["code"])} now →</a></p></div>')
+                 f'<p>The full {E(m["code"])} detail report, with every detail, status, flat sketch and downloadable card, is open to signed-in members now and to everyone at Forecut\'s official launch. '
+                 f'The themes and colours above are a preview.</p><p class="lpb"><a class="lpsign" href="/account.html?next=/{s}.html">Sign in free to unlock</a> <a href="{URLS.get(SEASONS[0], "aw26.html")}">Explore {E(META[SEASONS[0]]["code"])} now →</a></p></div>')
         i1 = out.index('<div class="sechead dh">'); i2 = out.index('<footer') if '<footer' in out else out.index('<p class="flinks"')
         out = out[:i1] + lockp + '<div class="lockhide" hidden>' + out[i1:i2] + '</div>' + out[i2:]
-        out = out.replace('</style>', '.lockpanel{margin:40px 0;padding:34px 28px;border:1px dashed var(--grid);border-radius:16px;background:var(--paper-2);text-align:center}.lockpanel .lpi{width:46px;height:46px;margin:0 auto 10px;border-radius:50%;background:var(--grid);display:grid;place-items:center;color:var(--muted)}.lockpanel .lpi svg{width:20px;height:20px}.lockpanel h2{margin:0 0 8px}.lockpanel p{max-width:60ch;margin:0 auto;color:var(--muted)}.lockpanel a{color:var(--ink);font-weight:600}</style>', 1)
+        out = out.replace('</style>', '.lockpanel{margin:40px 0;padding:34px 28px;border:1px dashed var(--grid);border-radius:16px;background:var(--paper-2);text-align:center}.lockpanel .lpi{width:46px;height:46px;margin:0 auto 10px;border-radius:50%;background:var(--grid);display:grid;place-items:center;color:var(--muted)}.lockpanel .lpi svg{width:20px;height:20px}.lockpanel h2{margin:0 0 8px}.lockpanel p{max-width:60ch;margin:0 auto;color:var(--muted)}.lockpanel a{color:var(--ink);font-weight:600}.lpb{margin-top:14px!important;display:flex;gap:16px;justify-content:center;align-items:center;flex-wrap:wrap}.lpsign{background:var(--mat);color:var(--mat-ink)!important;text-decoration:none;padding:11px 18px;border-radius:2px}</style>', 1)
     if STATIC:
         import re as _re
         _t = _re.search(r'<title>.*?</title>', out).group(0)

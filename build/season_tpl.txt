@@ -642,7 +642,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
   window.ForecutColors = function (name) { return colorsFor(name, FILE_C); };
   var FILE_C = {ink:'#13241d', fill:'#ffffff', tint:'#dbe3de', accent:'#d9480f', accent2:'#d9480f', muted:'#53655d'};
   var DESC = %%DESC%%, SITE = %%SITE%%;
-  function isLocked(code) { return (SITE.locked || []).some(function (x) { return String(x).toLowerCase() === String(code).toLowerCase(); }); }
+  function isLocked(code) { if (document.documentElement.classList.contains('fc-member')) return false; return (SITE.locked || []).some(function (x) { return String(x).toLowerCase() === String(code).toLowerCase(); }); }
   function maskLife(life) { return life.split('').map(function (ch, i) { return isLocked(SEASON_CODES[i]) ? 'L' : ch; }).join(''); }
   var moN = 0;
   function motif(name, w) {
