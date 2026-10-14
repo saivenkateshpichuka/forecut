@@ -18,15 +18,17 @@ imgs = set(json.load(open('images.json')))
 import datetime
 log = json.load(open('upload_log.json')) if os.path.exists('upload_log.json') else {}
 src = '../images'; os.makedirs('../img', exist_ok=True); os.makedirs(src + '/done', exist_ok=True)
-added, bad = [], []
+added, bad, broken = [], [], []
 for root, dirs, files in os.walk(src):
-    if '/done' in root.replace('\\', '/'): continue
+    if '/done' in root.replace('\\', '/') or '/broken' in root.replace('\\', '/'): continue
     for f in files:
         if not f.lower().endswith(('.png', '.jpg', '.jpeg', '.webp')): continue
         s = os.path.splitext(f)[0].strip().lower().replace(' ', '-').replace('_', '-')
         p = os.path.join(root, f)
         if s not in valid: bad.append(f); continue
-        im = Image.open(p).convert('RGB'); w, h = im.size
+        try: im = Image.open(p); im.load(); im = im.convert('RGB'); w, h = im.size
+        except Exception:  # corrupt/partial upload: set aside so the row stays "not Done" and gets regenerated
+            os.makedirs(os.path.join(src, 'broken'), exist_ok=True); shutil.move(p, os.path.join(src, 'broken', f)); broken.append(f); continue
         if s in flats_v:  # technical flat sketch: keep whole drawing, pad to square on white
             im.thumbnail((1000, 1000), Image.LANCZOS); bg = Image.new('RGB', (1000, 1000), (255, 255, 255))
             bg.paste(im, ((1000 - im.width) // 2, (1000 - im.height) // 2)); bg.save(f'../img/{s}.webp', 'WEBP', quality=86)
@@ -51,4 +53,6 @@ json.dump(log, open('upload_log.json', 'w'), indent=1, sort_keys=True)
 u = os.path.join(src, 'UNMATCHED.txt')
 if bad: open(u, 'w').write('These files did not match any detail. Rename them to the exact File name from the prompt CSV and upload again:\n' + '\n'.join(bad) + '\n')
 elif os.path.exists(u): os.remove(u)
-print('added', len(added), 'unmatched', len(bad))
+bk = os.path.join(src, 'BROKEN.txt')
+if broken: open(bk, 'a').write(''.join(f'{f} — upload was corrupted (not a valid image). Generate and upload it again.\n' for f in broken))
+print('added', len(added), 'unmatched', len(bad), 'broken', len(broken))
