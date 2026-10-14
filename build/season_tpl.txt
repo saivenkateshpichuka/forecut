@@ -468,6 +468,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
 .vtoggle{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:2px;background:rgba(28,23,20,.72);backdrop-filter:blur(8px);padding:3px;border-radius:99px;z-index:2}
 .vtoggle button{all:unset;white-space:nowrap;cursor:pointer;color:#fff;font:600 12.5px var(--body);padding:7px 13px;border-radius:99px}
 .vtoggle button[aria-pressed="true"]{background:#fff;color:#1c1714}
+.vsoc{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:10px 0 4px;padding-top:12px;border-top:1px dashed var(--grid);font:600 13.5px var(--body);color:var(--muted)}.vsoc .soc a{width:32px;height:32px}
 
 /* two-panel uploads: separate flat views */
 .vflats{display:grid;gap:12px;width:100%;grid-template-columns:1fr 1fr;align-items:center}
@@ -619,6 +620,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
           <div class="nav2"><button class="vbtn ghost" type="button" id="vprev" aria-label="Previous detail" title="Previous">←</button><button class="vbtn ghost" type="button" id="vnext" aria-label="Next detail" title="Next">→</button></div>
         </div>
         <p class="vmsg" id="vmsg" role="status"></p>
+        <div class="vsoc"><span>Follow Forecut for weekly trend updates</span>%%SOCIAL%%</div>
       </div>
     </div>
   </div>
@@ -971,12 +973,13 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
           });
           y += 90; para(s2(d));
           // website footer
-          y += 30; var fy = y; x.fillStyle = C.mat; rr(x, 0, fy, W, 150, 0); x.fill();
+          y += 30; var fy = y; x.fillStyle = C.mat; rr(x, 0, fy, W, 196, 0); x.fill();
           x.fillStyle = '#e9f3ee'; x.font = '600 36px \"DM Sans\", Arial, sans-serif'; x.fillText(SITE.name, M, fy + 58);
           x.font = '400 23px "DM Sans", Arial, sans-serif'; x.globalAlpha = .9; x.fillText(SITE.tagline, M, fy + 94); x.globalAlpha = 1;
           x.font = '500 19px "DM Sans", monospace'; x.fillStyle = '#bfe3d2';
           x.fillText(((SITE.url ? SITE.url + '  ·  ' : '') + (SITE.email ? SITE.email + '  ·  ' : '') + '%%TITLEUP%% · %%STAGEUP%%'), M, fy + 128);
-          var H = Math.ceil(fy + 150), out = document.createElement('canvas'); out.width = W; out.height = H;
+          x.font = '600 21px "DM Sans", Arial, sans-serif'; x.fillStyle = '#ffffff'; x.fillText('Follow @forecut.in  ·  Instagram  ·  LinkedIn  ·  Facebook', M, fy + 170);
+          var H = Math.ceil(fy + 196), out = document.createElement('canvas'); out.width = W; out.height = H;
           out.getContext('2d').drawImage(cv, 0, 0);
           if (asPdf) { var fx = out.getContext('2d'); fx.globalCompositeOperation = 'destination-over'; fx.fillStyle = '#ffffff'; fx.fillRect(0, 0, W, H); }
           out.toBlob(function (b) { if (!b) return rej(new Error('render')); if (!asPdf) return res(b); b.arrayBuffer().then(function (ab) { res(jpegPdf(new Uint8Array(ab), W, H)); }, rej); }, asPdf ? 'image/jpeg' : 'image/png', .93);

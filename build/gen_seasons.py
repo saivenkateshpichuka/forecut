@@ -111,7 +111,7 @@ for si, s in enumerate(SEASONS):
         '%%DESC%%': json.dumps(descs, ensure_ascii=False).replace('</', '<\\/'), '%%SITE%%': json.dumps(SITE, ensure_ascii=False),
         '%%CODES%%': json.dumps(codes), '%%PALJSON%%': json.dumps([h for h, n in m['palette']]), '%%BASISCLS%%': basis[0], '%%BASISTEXT%%': basis[1],
         '%%STAGE%%': E(m['stage']), '%%WINDOW%%': E(m['window']), '%%TITLE%%': E(m['title']), '%%INTRO%%': E(m['intro']),
-        '%%SOURCES%%': E(m['sources']), '%%CODE%%': m['code'],
+        '%%SOURCES%%': E(m['sources']), '%%SOCIAL%%': __import__('social').icons(), '%%CODE%%': m['code'],
         '%%STORY%%': story_html(s, E(m['stage']) + ' · ' + E(m['window']), E(m['title']), E(m['intro']), [th[0] for th in m['themes']]),
     }
     out = tpl

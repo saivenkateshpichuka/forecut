@@ -1,5 +1,6 @@
 """Add SEO tags to every page in the repo root, and write sitemap.xml and robots.txt. Safe to rerun (replaces its own block)."""
 import re, json, datetime, os
+import social as SO
 R = '..'; BASE = 'https://forecut.in/'
 S = json.load(open('seasons.json')); META = S['meta']; SEAS = S['seasons'] if 'seasons' in S else list(META)
 pages = {
@@ -49,7 +50,7 @@ for k in SEAS:
     pages[f'{k}.html'] = (f"{m['code']} Fashion Trend Forecast ({m['title']}) · Garments, Footwear & Details | Forecut",
         f"{m['code']} trend forecast: {m['intro']} Every detail marked emerging, rising, peaking or fading, with themes, colours and downloadable cards."[:300], f'{k}.html')
 org = {"@context": "https://schema.org", "@graph": [
-  {"@type": "Organization", "@id": BASE + "#org", "name": "Forecut", "url": BASE, "logo": BASE + "favicon-192.png", "email": "hello@forecut.in",
+  {"@type": "Organization", "@id": BASE + "#org", "name": "Forecut", "url": BASE, "logo": BASE + "favicon-192.png", "email": "hello@forecut.in", "sameAs": SO.SAME_AS,
    "description": "India's detail-level fashion trend forecasting platform, combining expert research with data.", "slogan": "Know the next detail before it trends.", "foundingDate": "2026", "contactPoint": {"@type": "ContactPoint", "email": "hello@forecut.in", "contactType": "customer support", "areaServed": "IN", "availableLanguage": "en"}, "areaServed": "IN"},
   {"@type": "WebSite", "@id": BASE + "#site", "name": "Forecut", "alternateName": ["Forecut India", "forecut.in"], "url": BASE, "publisher": {"@id": BASE + "#org"}, "inLanguage": "en-IN"}]}
 for _fn, (_t, _d) in OVR.items():
@@ -111,6 +112,7 @@ def block(fn, title, desc, path):
     b.append('<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Forecut"><meta name="apple-mobile-web-app-status-bar-style" content="default">')
     b.append("<script>if('serviceWorker' in navigator)addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){})});</script>")
     b.append(TAB)
+    b.append(SO.CSS)
     b.append('<!--/seo-->'); return '\n'.join(b)
 for fn, (title, desc, path) in pages.items():
     p = os.path.join(R, fn)
@@ -123,6 +125,14 @@ for fn, (title, desc, path) in pages.items():
     h = h.replace('<link rel="stylesheet" href="fonts/fonts.css">', '<style>' + _ff + '</style>')
     if '<html lang="en">' in h: h = h.replace('<html lang="en">', '<html lang="en-IN">', 1)
     h = re.sub(r'<nav class="fctab".*?</nav>', '', h, flags=re.S)
+    h = re.sub(r'<!--soc-->.*?<!--/soc-->|<!--socf-->.*?<!--/socf-->', '', h, flags=re.S)
+    _plain = fn in ('404.html', 'offline.html', 'account.html', 'terms.html', 'privacy.html')
+    _kind = 'report' if ('<article>' in h or 'report' in fn or fn.startswith('innovation-')) else 'page'
+    if '</footer>' in h:
+        h = h.replace('</footer>', '<!--socf-->' + SO.icons() + '<!--/socf--></footer>', 1)
+        if not _plain: i = h.rfind('<footer'); h = h[:i] + SO.follow(_kind) + h[i:]
+    elif '<div class="foot">' in h:
+        h = h.replace('<div class="foot">', SO.follow('page') + '<div class="foot"><!--socf-->' + SO.icons() + '<!--/socf-->', 1)
     _nav = NAV.replace('data-m="' + tab_for(fn) + '"', 'data-m="' + tab_for(fn) + '" aria-current="page"') if tab_for(fn) else NAV
     h = h.replace('</body>', _nav + '</body>', 1) if '</body>' in h else h + _nav
     open(p, 'w').write(h)
