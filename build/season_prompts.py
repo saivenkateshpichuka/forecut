@@ -12,27 +12,25 @@ def h31(x):
 MOOD = {'AW': 'autumn/winter: heavier fabrics such as wool, melton, tweed, velvet, leather, knit; deeper tones; soft moody studio light',
         'SS': 'spring/summer: lighter fabrics such as cotton, linen, poplin, seersucker, organza; fresh brighter tones; bright airy studio light'}
 STORY = {  # seasons whose photos are people-in-a-story with a zoomed detail inset
- 'ss27': ['walking the runway at a bright daylight fashion show, front-row blur behind',
-          'crossing a city street at golden hour, street-style photographer shot',
-          'at a garden party under dappled sunlight',
-          'backstage just before a runway show, natural window light',
-          'outside an Art Deco building on a Mumbai street in the late afternoon',
-          'in a sandstone courtyard with carved jharokha windows in Jaipur, soft shade',
-          'on the steps of a modernist concrete building, Chandigarh-style architecture, hard midday shadows',
-          'by a quiet Goa beach shack at sunset, warm low light',
-          'browsing a busy flower market in the early morning, motion blur of people behind',
-          'on a Delhi metro platform, cool overcast daylight',
-          'on a breezy rooftop terrace in the city at blue hour',
-          'in a minimal photo studio against a coloured seamless paper backdrop, soft flash',
-          'cycling slowly down a leafy Bengaluru avenue, dappled light',
-          'at a design-week café, sitting and laughing with a friend, natural window light',
-          'walking past colourful old Fort Kochi walls after rain, soft diffused light',
-          'in a sunlit textile workshop surrounded by fabric bolts'],
+ 'ss27': ['walking the runway of a daylight fashion show in a sunlit stone courtyard, front-row audience softly blurred',
+          'walking a long white minimal runway under bright even show lights, photographers at the end of the catwalk',
+          'walking the runway inside a converted industrial warehouse with concrete floors and high windows',
+          'walking an outdoor garden runway lined with green hedges, soft afternoon light',
+          'walking the runway in a heritage palace courtyard in Jaipur, sandstone arches behind, warm evening light',
+          'walking a rooftop runway above the city at golden hour, skyline softly blurred',
+          'walking a beachside runway on a wooden boardwalk at sunset, sea in the background',
+          'walking a runway with a glossy mirrored floor reflecting the model, cool white light',
+          'walking the runway past a seated front row at a Mumbai design week show, warm stage lights',
+          'walking a sand-coloured runway set with tall linen drapes moving in the breeze',
+          'walking the runway in a modernist concrete pavilion, crisp shadows, architectural lines',
+          'walking a runway through a greenhouse filled with tropical plants, diffused daylight',
+          'turning at the end of the runway, photographers pit in the foreground slightly out of focus',
+          'walking the runway in a colonnaded museum hall with polished stone floors'],
 }
 MODELS = ['South Asian', 'South Asian', 'South Asian', 'Black', 'East Asian', 'Latino', 'Middle Eastern', 'white', 'mixed-heritage']
 AGES = ['in their twenties', 'in their twenties', 'in their thirties', 'in their forties']
 BUILD = ['', '', ', with a curvier build', ', tall and lean', ', with an athletic build']
-SHOT = ['shot on 35mm film', 'shot on a full-frame camera at 50mm', 'shot with a slightly wide 28mm lens', 'shot from a low angle', 'shot from across the street with a telephoto lens']
+SHOT = ['shot head-on from the end of the runway with a telephoto lens', 'shot from a three-quarter angle at the side of the runway', 'shot on a full-frame camera at 85mm, full-length', 'shot from a slightly low angle at the runway edge', 'shot on 35mm film, full-length mid-stride']
 REDO = json.load(open('redo_images.json')) if os.path.exists('redo_images.json') else {}
 STORY_SINCE = {'ss27': '2026-10-13'}  # uploads on/after this date are already in story style
 LOG = json.load(open('upload_log.json')) if os.path.exists('upload_log.json') else {}
@@ -62,7 +60,7 @@ for si, s in enumerate(SEASONS):
                 modest = (" Styled modestly for a family-friendly fashion catalogue: any sheer, mesh, lace or slip fabric is layered over an opaque camisole, lining or top, the model is fully covered, nothing is see-through on the body, relaxed natural pose."
                           if any(w in lowname for w in ['sheer', 'mesh', 'slip', 'lace', 'cami', 'corset', 'backless', 'organza', 'bodice', 'cutout', 'bralette', 'bias']) and not shoe else '')
                 prompt = (f"One single square image (1:1) split into two clean panels side by side, like a page from a professional fashion trend report. "
-                          f"LEFT PANEL (about 55% width): a natural, realistic editorial photograph of {who} wearing {it['name'].lower()} ({cat.lower()}) {scene}, candid mid-movement, real skin and fabric texture, professional photoshoot quality, a unique face and pose not repeated from other images, natural unretouched skin, styled simply so the garment is the hero.{modest} "
+                          f"LEFT PANEL (about 55% width): a natural, realistic editorial photograph of {who} wearing {it['name'].lower()} ({cat.lower()}) {scene}, mid-stride runway walk, full-length so the whole outfit is visible, confident catwalk posture, real skin and fabric texture, professional photoshoot quality, a unique face and pose not repeated from other images, natural unretouched skin, styled simply so the garment is the hero.{modest} "
                           f"{it['note']} Main colour: {col}; {MOOD['SS' if m['code'].startswith('SS') else 'AW'].split(':')[1].split(';')[0].strip()}. "
                           f"RIGHT PANEL (about 45% width, plain white background): an accurate technical flat sketch of the SAME garment in the same colour, {view}, drawn like an Adobe Illustrator tech-pack flat by a garment technician: crisp black vector outlines, dashed topstitching, correct seams and construction, the {('key' if it['area'].lower() == 'detail' else it['area'].lower())} detail drawn most clearly, flat colour fill with no shading or 3D. "
                           "A thin neutral gap between the two panels. No text, no labels, no arrows, no logos, no watermarks anywhere. It must look like a real photo plus a real designer's flat, not AI-generated.")
