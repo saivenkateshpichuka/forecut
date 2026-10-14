@@ -204,3 +204,100 @@ ARTICLES = [
    ('p', _src([('Alliance for European Flax-Linen & Hemp', 'https://allianceflaxlinenhemp.eu/en/european-flax-linen-hemp-news/news-archive/milano-unica-2026-european-flax-linen-hemp-innovations'), ('LYCRA', 'https://www.lycra.com/en/business/events/milano-unica'), ('Textile World', 'https://www.textileworld.com/textile-world/knitting-apparel/2026/08/global-sourcing-re-imagined-as-intertextile-apparel-champions-sustainability-craftsmanship-and-digitalization/'), ('Première Vision', 'https://paris.premierevision.com/en/content/details-de-la-saison-ah-27-28-pv-paris-septembre-2026')])),
   ]},
 ]
+
+
+# ---------------- Innovation reports (one full report per radar row) ----------------
+def _islug(x): return ''.join(ch.lower() if ch.isalnum() else '-' for ch in x).strip('-').replace('--', '-').replace('--', '-')
+
+
+_TW = ('Textile World', 'https://www.textileworld.com/textile-world/2026/04/innovation-as-the-answer-techtextil-and-texprocess-frankfurt-honour-solutions-to-global-challenges-with-the-2026-innovation-awards/')
+_TWI = ('Textile World', 'https://www.textileworld.com/textile-world/knitting-apparel/2026/08/global-sourcing-re-imagined-as-intertextile-apparel-champions-sustainability-craftsmanship-and-digitalization/')
+_ALL = ('Alliance for European Flax-Linen & Hemp', 'https://allianceflaxlinenhemp.eu/en/european-flax-linen-hemp-news/news-archive/milano-unica-2026-european-flax-linen-hemp-innovations')
+
+
+def _rep(key, slug, title, desc, what, seen, how, means, act, srcs, read=5):
+    stage, horizon = next((r[2], r[3]) for r in RADAR if r[0] == key)
+    return {'slug': slug, 'tag': 'Innovation report', 'read': read, 'img': [f'hub-fabrics-inn-{_islug(key)}'], 'radar': key,
+            'title': title, 'desc': desc,
+            'body': [('p', what), ('cta', f'<b>Forecut radar:</b> {stage} · expected in stores {horizon}. <a href="fabrics.html#innovations">See the full innovation radar →</a>'),
+                     ('h2', 'Where it was seen'), ('p', seen), ('h2', 'How it works'), ('p', how),
+                     ('h2', 'What it means for Indian brands'), ('p', means), ('h2', 'What to do now'), ('ul', act),
+                     ('p', _src(srcs))]}
+
+
+INNOV_REPORTS = [
+ _rep('Plant-based stretch', 'innovation-plant-based-stretch', 'Plant-based stretch: the easy sustainability swap for spandex',
+      'Stretch fibre with 70% plant-based content, a drop-in for mills and up to 45% lower footprint. Forecut\'s innovation report.',
+      'Almost every jean, legging, shirt and swimsuit with "comfort stretch" relies on spandex (elastane), traditionally made from fossil feedstock. A renewable version of LYCRA® fibre replaces 70% of that content with a plant-based ingredient, made from field corn grown in the US Midwest.',
+      'At Milano Unica (7–9 July 2026, Fiera Milano Rho), European mills showed ready-to-wear and swimwear fabrics made with the fibre: Milior (wovens), Brugnoli and Maglificio Alto Milanese (knits for sport and ready-to-wear) and Casa Da Malha (knits). Carvico\'s Vita Life swimwear fabrics are an earlier commercial example.',
+      'The plant-based content replaces part of the fibre\'s fossil-derived building block. Because the fibre is a drop-in replacement, mills can switch without changing machinery, and the fabrics keep the stretch and recovery of conventional LYCRA® fibre. A 2026 Ramboll life cycle assessment estimates a carbon footprint up to 45% lower than the fossil-derived version.',
+      'This is the lowest-risk sustainability upgrade for denim, activewear, shapewear and stretch shirting: the garment, fit and price story stay the same while the fibre story improves. It suits Indian exporters selling to EU and US brands that ask for lower-impact materials.',
+      ['Ask your denim and knit mills whether they can offer renewable stretch versions of core qualities.', 'Test it on one best-selling stretch article for AW27 or SS28 before scaling.', 'Keep the claim precise: "made with 70% plant-based content" refers to the stretch fibre, not the whole garment.'],
+      [('LYCRA', 'https://www.lycra.com/en/business/events/milano-unica')]),
+ _rep('Water resistance in the yarn', 'innovation-water-resistance-in-the-yarn', 'Water resistance in the yarn: performance without PFAS finishes',
+      'Unifi\'s Resist2O Pro builds water resistance into the yarn instead of a chemical finish. What it means for outerwear and travel wear.',
+      'Rainwear and outdoor clothing usually get their water repellence from a topical finish (DWR), historically based on fluorinated chemistry (PFAS) that regulators and brands are phasing out. A new approach moves water resistance into the yarn itself.',
+      'Unifi announced Resist2O Pro on 12 October 2026 and shows it at Performance Days in Munich (13–14 October 2026), then at the Functional Fabric Fair in Portland (26–28 October 2026). The 2026 Techtextil innovation awards also rewarded two other PFAS-free routes: a dry plasma coating that makes yarns water-repellent (EC0Tex, Bäumlin & Ernst) and plant-based fatty acids grafted onto cellulose fibres (H&B Materials).',
+      'Resist2O Pro is engineered to minimise water absorption without topical treatments or fluorinated chemistry (Unifi states fluorine-free and PFOA-free, under 5 ppb), so the separate finishing step disappears. It works across different fabric constructions, for apparel, footwear, furnishings and industrial textiles.',
+      'Monsoon wear, commuter jackets, travel trousers and school and uniform fabrics all need water resistance. As export buyers demand PFAS-free products, yarn-level and plant-based solutions will become a sourcing requirement, not a bonus.',
+      ['Audit which of your products still use fluorinated water-repellent finishes.', 'Request PFAS-free samples from yarn and fabric suppliers for AW27 outerwear.', 'Check durability after washing in your own tests before making performance claims.'],
+      [('Innovation in Textiles', 'https://innovationintextiles.com/unifi-moves-water-resistance-into-the-yarn'), _TW]),
+ _rep('Elastane-free natural stretch', 'innovation-elastane-free-natural-stretch', 'Elastane-free natural stretch: comfort tailoring without synthetics',
+      'Wool, cashmere and mohair fabrics that stretch through yarn and weave alone. Forecut\'s report on the premium tailoring innovation.',
+      'Stretch normally comes from blending in elastane, which makes natural-fibre fabrics harder to recycle. Mills are now engineering stretch from the yarn and weave themselves, so a 100% natural-fibre fabric can still move with the body.',
+      'At Intertextile Shanghai Apparel Fabrics (25–27 August 2026), Italian mill Trabaldo Togna presented 100% natural-fibre stretch fabrics in fine wool, cashmere and mohair, made without elastane.',
+      'Mechanical stretch comes from highly twisted yarns and weave structures (such as crepe and certain twills) that act like a spring when the fabric is pulled and recover when released. The stretch is gentler than elastane but keeps the fabric mono-material.',
+      'Premium tailoring, travel suits and wedding menswear are growing in India, and buyers want comfort without a "technical" look. Natural stretch lets brands sell comfort and a pure-fibre story together.',
+      ['Ask suiting suppliers for mechanical-stretch wool qualities for AW27 tailoring.', 'Fit-test: mechanical stretch behaves differently from elastane, so adjust ease in patterns.', 'Use the "100% wool, natural stretch" story on labels and product pages.'],
+      [_TWI]),
+ _rep('Waterless denim finishing', 'innovation-waterless-denim-finishing', 'Waterless denim finishing: the new standard for washes',
+      'Low-water washing and low-impact indigo are scaling across denim. Why Indian denim makers should move first.',
+      'Denim\'s worn-in look traditionally comes from heavy wet processing: stone washing, bleaching and repeated rinses that use large amounts of water and chemicals. Waterless and low-water finishing is now scaling across the industry.',
+      'At Intertextile Shanghai (August 2026), Turkish mill Kipaş Denim presented circular solutions with waterless finishing and low-impact indigo dyeing, and Pakistan\'s Azgard Nine showed low-resource washing. Première Vision Denim\'s AW27-28 directions also put regenerative cotton and responsible denim at the centre.',
+      'Common tools include laser finishing to create fades and whiskers without chemicals, ozone in place of bleaching, nano-bubble or mist technology that uses a fraction of the water, and indigo dyeing processes that cut water, energy and chemical use.',
+      'India is one of the world\'s largest denim producers, and water stress is a real constraint in denim clusters. Brands that can document low-water processing gain an edge with export buyers and with consumers.',
+      ['Ask laundries for the water use per garment of each wash recipe.', 'Move hero washes to laser and ozone recipes first.', 'Combine with regenerative or organic cotton for a complete denim story.'],
+      [_TWI, ('Première Vision', 'https://www.premierevision.com/articles/5bc3727d-1f3e-f111-8ef3-000d3a4af15b/denim-innovation-for-autumn-winter-27-28')]),
+ _rep('Fibre traceability', 'innovation-fibre-traceability', 'Fibre traceability: from farm to garment, digitally',
+      'Digital traceability platforms and the coming EU Digital Product Passport. What fashion brands need to prepare.',
+      'Buyers and regulators increasingly want proof of where a fibre was grown and how it was processed. Digital traceability platforms record each step from farm to finished garment.',
+      'The flax-linen and hemp alliance runs a digital traceability platform with TextileGenesis (Lectra Group) for its Masters of FLAX FIBRE™ and Masters of LINEN™ certifications, presented at Milano Unica in July 2026. In the EU, the Ecodesign for Sustainable Products Regulation (ESPR) will introduce a Digital Product Passport for textiles; the Commission\'s working plan gives an indicative 2027 timeline for the textile delegated act, with obligations expected to follow about 18 months after it enters into force.',
+      'Each batch of certified fibre gets a digital record that travels with it through spinning, weaving and making. The passport is expected to cover material composition, manufacturing, environmental indicators, chemical compliance, supply-chain traceability and durability or recyclability. Final data rules are not yet adopted.',
+      'Indian exporters to the EU will need traceability data from their suppliers. Domestic brands can use the same data as a premium story for handloom, organic cotton and linen.',
+      ['Start collecting fibre origin and certificates for your top 20 styles.', 'Ask suppliers which traceability platforms they already use.', 'Watch for the EU textile delegated act; Forecut will update this report when it is adopted.'],
+      [_ALL, ('COSH!', 'https://cosh.eco/en/articles/eu-digital-product-passport-espr-explained-fashion-textiles')]),
+ _rep('Long-fibre European hemp', 'innovation-long-fibre-european-hemp', 'Long-fibre hemp: the next linen?',
+      'A pilot long-fibre hemp collection from the Hemp4Circularity project. Why hemp could become a summer staple.',
+      'Hemp grows fast with little water and few inputs, but most hemp is processed as short fibre, which limits it to rougher fabrics. Long-fibre hemp, processed more like flax for linen, can be spun into finer, smoother yarns.',
+      'At Milano Unica in July 2026, the Alliance for European Flax-Linen & Hemp opened its first Hemp Lab, with a European Hemp Textile Inspiration Book and a pilot long-fibre hemp collection from Hemp4Circularity, an Interreg North-West Europe project (2023–2026) with about €2.3 million of EU funding.',
+      'The project runs pilots across the chain: cultivation, primary processing, data-driven farming, spinning and fabric production, to build a local long-fibre hemp supply in North-West Europe.',
+      'Hemp handles heat well and has a linen-like look, ideal for Indian summers. It is still a pilot, so volumes and prices are not yet commercial; expect it first in premium shirting, suiting and home textiles.',
+      ['Watch hemp-linen blends as the first accessible step.', 'Request swatches from linen suppliers already sampling hemp.', 'Plan a small capsule for SS28 or later, when supply grows.'],
+      [_ALL, ('Hemp4Circularity', 'https://hemp4circularity.nweurope.eu/')]),
+ _rep('Biodegradable biopolyester', 'innovation-biodegradable-biopolyester', 'Biodegradable biopolyester: a polyester that can go away',
+      'Mariva, a bio-based polymer with PET-like properties that is chemically recyclable and biodegradable. Forecut\'s innovation report.',
+      'Polyester is the world\'s most used fibre and a major source of microplastics. A new bio-based polymer aims to behave like polyester in use but break down or be recycled at end of life.',
+      'Senbis Polymer Innovations (Netherlands) won a 2026 Techtextil innovation award for Mariva, announced on 14 April 2026. Senbis founded the start-up Mariva Materials in April 2026 to develop uses in sportswear, footwear, technical textiles and nonwovens.',
+      'Mariva is a bio-based, high-performance polymer with properties similar to PET and polyamide. It is designed for conventional polymerisation and melt-spinning lines, and pilot trials reportedly spun it on standard PET machinery. Senbis says it is chemically recyclable and biodegradable without producing microplastics.',
+      'Indian sportswear and athleisure brands rely heavily on polyester. A material that runs on existing machinery could scale faster than most bio-materials, but it is still at pilot stage.',
+      ['Track Mariva Materials\' commercial partners through 2027.', 'Ask your polyester suppliers about bio-based or biodegradable trials.', 'Avoid "biodegradable" claims until certified test results are available.'],
+      [_TW]),
+ _rep('Mono-material thread', 'innovation-mono-material-thread', 'Mono-material thread: making garments recyclable at the seams',
+      'Amann\'s AeoniQ Fil cellulose thread lets a cotton or viscose garment stay one material. Why seams matter for recycling.',
+      'A cotton shirt is rarely 100% cotton: it is usually sewn with polyester thread. Those synthetic seams complicate recycling. A new cellulose thread lets the whole garment stay in one material family.',
+      'Amann (Germany) won a 2026 Techtextil innovation award for AeoniQ Fil, described as the world\'s first sewing and embroidery thread made from AeoniQ, a wood-pulp-based cellulose fibre. It made its market debut at Texprocess in April 2026.',
+      'Amann describes the thread as microplastic-free and biodegradable, with tear resistance and elasticity approaching synthetic threads and about twice the elasticity of conventional cellulose threads. It is meant for mono-material garments and home textiles.',
+      'Embroidery is central to Indian fashion. A cellulose embroidery thread could let cotton and viscose kurtas, shirts and home textiles be designed for recycling, a growing requirement from European buyers.',
+      ['Test the thread on cotton basics and embroidered styles for seam strength.', 'Combine with cellulose labels and trims for a true mono-material product.', 'Watch EU recycling and ecodesign rules that reward mono-material design.'],
+      [_TW]),
+ _rep('Recycled-plastic embellishment', 'innovation-recycled-plastic-embellishment', 'Recycled-plastic embellishment: waste turned into couture flowers',
+      'Vin + Omi\'s 3D flowers from recycled plastic at London Fashion Week SS27. How embellishment can carry a circular story.',
+      'Sequins, beads and three-dimensional flowers are usually made from new plastic. Designers are now making embellishment from recycled plastic waste instead.',
+      'At London Fashion Week SS27 (September 2026), Vin + Omi showed a sheer white gown covered in hundreds of 3D flowers made from recycled plastic, part of a wider runway trend for appliqué flowers.',
+      'Plastic waste is cleaned, shredded and reformed into sheets, films or filaments, then cut, heat-shaped or moulded into petals, sequins and beads that are applied by hand or machine, just like conventional embellishment.',
+      'India is the world\'s embellishment workshop. Recycled-plastic sequins and flowers let Indian embroidery units offer export clients a circular version of the same craft. Expect it first in capsule collections in 2027.',
+      ['Source recycled sequins and beads with verified recycled content.', 'Pair with appliqué and organza flowers, a key SS27 runway trend.', 'Tell the waste-to-flower story clearly on product pages.'],
+      [('TheIndustry.fashion', 'https://www.theindustry.fashion/fringe-florals-and-acid-green-7-trends-from-london-fashion-week-ss27/')], read=4),
+]
+INNOV_SLUGS = {r['radar']: r['slug'] for r in INNOV_REPORTS}
+EXTRA_IMGS += [r['img'][0] for r in INNOV_REPORTS]

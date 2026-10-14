@@ -190,12 +190,15 @@ FCSS = """<style>
 .fair{display:grid;grid-template-columns:120px 1fr;gap:18px;background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:16px 18px}
 .fairs{display:grid;gap:12px}.fair time{font:700 12px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--chalk)}.fair time span{display:inline-block;margin-top:6px;color:var(--ink);border:1px solid var(--grid);border-radius:99px;padding:3px 8px;letter-spacing:.04em}
 .fair h3{font:700 18px "DM Sans",sans-serif;margin:0 0 6px}.fair ul{margin:0;padding-left:18px;font-size:15px;line-height:1.55}
-.radar{border:1px solid var(--grid);border-radius:12px;overflow:hidden;background:var(--paper-2)}.rrow{display:grid;grid-template-columns:1.1fr 1.6fr 1.2fr 90px;gap:14px;padding:13px 16px;border-top:1px solid var(--grid);align-items:center;font:14.5px/1.45 "DM Sans",sans-serif}
+.radar{border:1px solid var(--grid);border-radius:12px;overflow:hidden;background:var(--paper-2)}.rrow{display:grid;grid-template-columns:1.3fr 1.6fr 1.1fr 90px;gap:14px;padding:13px 16px;border-top:1px solid var(--grid);align-items:center;font:14.5px/1.45 "DM Sans",sans-serif}
 .rrow:first-child{border-top:0}.rrow.h{font:700 11.5px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--paper)}.rrow b{font-size:15.5px}.rrow a{color:var(--muted);font-size:12.5px}
 .stage{display:flex;gap:3px}.stage i{flex:1;height:7px;border-radius:4px;background:var(--grid)}.stage i.on{background:var(--chalk)}.stage+small{font:600 12px "DM Sans",sans-serif;color:var(--chalk)}
 .isig{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}.isig .mini span{font:700 11px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--c);border-radius:99px;padding:3px 9px;margin-right:6px}.isig .mini small{font:600 12.5px "DM Sans",sans-serif;color:var(--muted)}
 .ref details{background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;margin:10px 0;padding:0 18px}.ref summary{cursor:pointer;font:700 17px "DM Sans",sans-serif;padding:15px 0;list-style:none;display:flex;justify-content:space-between}.ref summary::-webkit-details-marker{display:none}
 .ref summary:after{content:"+";font-weight:400;font-size:22px;line-height:1}.ref details[open] summary:after{content:"–"}.ref details>div{padding:0 0 18px}.ref summary small{font:500 13px "DM Sans",sans-serif;color:var(--muted);margin-left:auto;margin-right:14px;align-self:center}
+.rname{display:grid;grid-template-columns:72px 1fr;gap:12px;align-items:center;text-decoration:none;color:var(--ink)}.rname em{display:block;font:600 12.5px "DM Sans",sans-serif;font-style:normal;color:var(--chalk);margin-top:2px}.rname:hover b{text-decoration:underline}
+.rth{width:72px;height:54px;border-radius:8px;overflow:hidden;background:var(--grid)}.rth img{width:100%;height:100%;object-fit:cover;display:block}.rth.ph0 em{font-size:9px!important;padding:0 4px!important;line-height:1.1!important}
+.radarmini .mini .sw{height:150px}.radarmini .sw.ph0 em{font-size:15px!important}
 @media (max-width:900px){.board{grid-template-columns:1fr 1fr}}
 @media (max-width:760px){.kpis{grid-template-columns:1fr 1fr}.board{grid-template-columns:1fr}.fair{grid-template-columns:1fr;gap:6px}.rrow{grid-template-columns:1fr;gap:6px}.rrow.h{display:none}.rw{grid-template-columns:1fr}.live a{font-size:13px}}
 </style>"""
@@ -262,7 +265,9 @@ def radar_table():
     for n, w, st, hz, src in FL.RADAR:
         k = FL.STAGES.index(st)
         bar = '<div class="stage">' + ''.join(f'<i class="{"on" if j <= k else ""}"></i>' for j in range(len(FL.STAGES))) + f'</div><small>{E(st)}</small>'
-        rows += f'<div class="rrow"><b>{E(n)}</b><span>{E(w)} <a href="{src[1]}" rel="noopener" target="_blank">{E(src[0])}</a></span><div>{bar}</div><span style="font-weight:700">{E(hz)}</span></div>'
+        sl = FL.INNOV_SLUGS.get(n); th = im([f'hub-fabrics-inn-{FL._islug(n)}'], n, 'rth ph')
+        name = f'<a class="rname" href="{sl}.html">{th}<span><b>{E(n)}</b><em>Read report →</em></span></a>' if sl else f'<b>{E(n)}</b>'
+        rows += f'<div class="rrow">{name}<span>{E(w)} <a href="{src[1]}" rel="noopener" target="_blank">{E(src[0])}</a></span><div>{bar}</div><span style="font-weight:700">{E(hz)}</span></div>'
     return f'<div class="radar">{rows}</div>'
 
 
@@ -278,10 +283,13 @@ def build_fabrics(h):
     wv = ''.join(f'<div class="mini"><div class="sw">{weave_svg(k)}</div><b>{E(a)}</b><p>{E(b)}</p></div>' for a, k, b in h['weaves'])
     kn = ''.join(f'<div class="mini"><b>{E(a)}</b><p>{E(b)}</p></div>' for a, b in h['knits'])
     hl = ''.join(f'<div class="mini">{im(c, a, "sw") if pick(c) else ""}<b>{E(a)}</b><p>{E(b)}</p></div>' for a, b, c in h['handloom'])
-    inn = ''.join(f'<div class="mini"><b>{E(a)}</b><p>{E(b)}</p></div>' for a, b in h['innov'])
-    pr = minis(h['prints']); ef = minis(h['embfab']); hw = minis(h['handwork']); up = minis(h['upcoming'])
+    rm = lambda a, b: f'<div class="mini">{im(["hub-fabrics-radar-" + FL._islug(a)], a, "sw ph")}<b>{E(a)}</b><p>{E(b)}</p></div>'
+    radar_more = '<div class="g4 radarmini">' + ''.join(rm(x[0], x[-1]) for x in h['upcoming'] + h['innov']) + '</div>'
+    pr = minis(h['prints']); ef = minis(h['embfab']); hw = minis(h['handwork'])
     nlive = len(FL.ARTICLES) + 1
-    fc, guides = h['articles'][:nlive], h['articles'][nlive:]
+    fc = h['articles'][:nlive]
+    inv = [a for a in h['articles'] if a.get('tag') == 'Innovation report']
+    guides = [a for a in h['articles'][nlive:] if a.get('tag') != 'Innovation report']
     live = '<div class="live">' + ''.join(f'<a href="{u}"><b>{E(l)}</b>{E(t)}</a>' for l, t, u in FL.LIVE) + '</div>'
     ref = lambda i, t, sub, body: f'<details id="{i}"><summary>{t}<small>{sub}</small></summary><div>{body}</div></details>'
     top = hub_top(h, [('forecast', 'Fabric forecast'), ('runway', 'Runway fabrics'), ('india', 'India'), ('mills', 'Mills & fairs'), ('innovations', 'Innovation radar'), ('news', 'Fabric news'), ('articles', 'Reports'), ('reference', 'Reference')])
@@ -293,7 +301,8 @@ def build_fabrics(h):
             f'<section class="sec" id="india"><h2>India fabric signals</h2><p class="sub">Forecut\'s read on the fabrics moving in the Indian market, Festive 2026 to AW27.</p>{india_sig()}</section>'
             f'<section class="sec" id="mills"><h2>Mills & fabric fairs</h2><p class="sub">Fabric fairs show materials a year or more before stores. What the latest fairs signal.</p>{fair_rows()}</section>'
             f'<section class="sec" id="innovations"><h2>Innovation radar</h2><p class="sub">New fibres and finishes, rated by how close they are to your shelves.</p>{radar_table()}'
-            f'<h3 style="font:700 19px DM Sans,sans-serif;margin:26px 0 10px">More on the radar</h3>{up}<div class="g4" style="margin-top:14px">{inn}</div></section>'
+            f'<h3 style="font:700 19px DM Sans,sans-serif;margin:30px 0 12px">Innovation reports</h3><div class="g3">{"".join(acard(a) for a in inv)}</div>'
+            f'<h3 style="font:700 19px DM Sans,sans-serif;margin:30px 0 12px">More on the radar</h3>{radar_more}</section>'
             f'<section class="sec" id="news"><h2>Fabric news</h2><p class="sub">The latest fibre, mill and runway news, summarised by Forecut with links to the original sources.</p>{news(h["news"])}</section>'
             f'<section class="sec" id="articles"><h2>Fabric reports</h2><p class="sub">Forecast reports and runway analysis from the Forecut team.</p><div class="g3">{"".join(acard(a) for a in fc)}</div></section>'
             f'<section class="sec ref" id="reference"><h2>Fabric reference</h2><p class="sub">Technical reference for designers and merchandisers: fabrics, weaves, knits, prints and crafts.</p>'
@@ -338,7 +347,7 @@ for h in H.HUBS:
         ab = (f'<p class="eb"><a href="{h["file"]}" style="color:inherit;text-decoration:none">{E(h["eb"])}</a></p><article>'
               f'<span class="jtag">{E(a["tag"])}</span><h1 style="margin-top:12px">{E(a["title"])}</h1><p class="lead">{E(a["desc"])}</p>'
               f'<p class="jmeta">By Forecut Editorial · {H.DATE_TXT} · {a["read"]} min read</p>'
-              + (f'<div class="jhero"><img src="img/{pick(a["img"])}.webp" alt="{E(a["title"])}" width="800" height="450"></div>' + CR.cap(pick(a['img'])) if pick(a['img']) else '')
+              + (f'<div class="jhero"><img src="img/{pick(a["img"])}.webp" alt="{E(a["title"])}" width="800" height="450"></div>' + CR.cap(pick(a['img'])) if pick(a['img']) else f'<div class="jhero ph ph0"><em>{E(a["title"])}</em></div>')
               + ''.join(block(b) for b in a['body']) + '</article>'
               f'<section class="more"><h3>More from Forecut {E(h["eb"])}</h3><div class="g3">{"".join(acard(x) for x in others)}</div></section>')
         open(f'../{a["slug"]}.html', 'w').write(head(a['title'] + ' · Forecut ' + h['eb'], 'art') + ab + FOOT); n += 1

@@ -730,6 +730,8 @@ def _fabric_forecast_article():
 
 
 FABRICS['articles'] = FL.ARTICLES + [_fabric_forecast_article()] + FABRICS['articles']
+FABRICS['articles'] += FL.INNOV_REPORTS
+FABRICS['extra_imgs'] = FL.EXTRA_IMGS + ['hub-fabrics-radar-' + FL._islug(x[0]) for x in FABRICS['upcoming'] + FABRICS['innov']]
 
 # --- Couture images generated in ChatGPT (Oct 2026): put first so they win over older fallbacks ---
 _CT = {'Zardozi': 'zardozi', 'Aari': 'aari', 'Chikankari': 'chikankari', 'Gota patti': 'gota-patti', 'Shisha': 'shisha',
