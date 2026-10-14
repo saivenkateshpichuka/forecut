@@ -418,6 +418,7 @@ COLOUR = {
 
 # ================================================================ EXPANSION: WORLD COUTURE
 COUTURE.update({
+ 'hero_pos': '50% 12%',
  'title': 'Couture: the world of made-to-measure',
  'seo': ('Haute Couture Worldwide: Couture Weeks, Houses, Techniques & Indian Couture | Forecut', 'Explore couture worldwide: Paris haute couture, Indian bridal couture, couture capitals, the couture calendar, gowns, bespoke menswear, kids occasion wear, techniques, news and articles.'),
  'lead': 'Couture is fashion at its most personal: one client, one body, hundreds of hours of hand work. Forecut explores couture worldwide, from the Paris haute couture calendar to Indian bridal ateliers, with the techniques, stories, news and innovations behind it.',

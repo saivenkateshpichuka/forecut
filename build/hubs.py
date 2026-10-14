@@ -126,7 +126,7 @@ bs.forEach(function(b){b.onclick=function(){g=b.textContent;bs.forEach(function(
 
 def hub_top(h, jumps):
     return (f'<p class="eb">{E(h["eb"])}</p><h1>{E(h["title"])}</h1><p class="lead">{E(h["lead"])}</p>'
-            + (f'<div class="hhero"><img src="img/{pick(h["hero"])}.webp" alt="{E(h["title"])}" width="1600" height="686" fetchpriority="high"></div>' + CR.cap(pick(h['hero'])) if pick(h['hero']) else '') +
+            + (f'<div class="hhero"><img src="img/{pick(h["hero"])}.webp" alt="{E(h["title"])}" width="1600" height="686" fetchpriority="high" style="object-position:{h.get('hero_pos', '50% 30%')}"></div>' + CR.cap(pick(h['hero'])) if pick(h['hero']) else '') +
             '<nav class="jump" aria-label="On this page">' + ''.join(f'<a href="#{a}">{E(b)}</a>' for a, b in jumps) + '</nav>')
 
 
