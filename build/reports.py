@@ -247,10 +247,12 @@ body = (cover('Brand Watch · India Festive 2026', 'Brand Watch: what Indian lab
 page('india-brand-watch.html', 'Brand Watch: Indian labels Festive 2026 · Forecut', body)
 PAGES.append(('india-brand-watch.html', 'Brand Watch: what Indian labels are launching', 'Soch, Max Fashion, POMCHA, Manyavar, Fizzy Goblet, Gully Labs and more: how Indian brands are bringing festive 2026 trends to market.', 'Brand Watch', 'tissue-sarees-in-champagne-gold'))
 
+exec(open('reports_world.py').read())
+
 # ---------- Hub ----------
 def rcard(p): return f'<a class="rc" href="{p[0]}"><div class="ph"><img src="img/{p[4]}.webp" alt="" loading="lazy" width="800" height="800"></div><small>{E(p[3])}</small><b>{E(p[1])}</b><span>{E(p[2])}</span></a>'
-hub = '<p class="kicker" style="margin-top:40px">Reports</p><h1>Forecut Reports</h1><p class="lead">Ready-to-use trend reports for Indian fashion: item-by-item updates, design capsules, colour and sourcing guides. Built from Forecut\'s own research.</p>'
-for kind, d in [('Brand Watch', 'What India\'s startups, D2C labels and retailers are launching, mapped to Forecut details.'), ('Core Item Update', 'What to invest in, test, maintain and reduce, item by item.'), ('Design Capsule', 'Mood, colour, key pieces with flat sketches, and prices for each theme.'), ('Colour Forecast', ''), ('Sourcing Guide', '')]:
+hub = '<p class="kicker" style="margin-top:40px">Reports</p><h1>Forecut Reports</h1><p class="lead">Ready-to-use fashion reports: the global trend outlook, market and competition data, marketing trends, industry controversies, Indian brand watch, item-by-item updates, design capsules, colour and sourcing guides.</p>'
+for kind, d in [('Global Trend Report', 'Forecut\'s worldwide outlook: what is rising, emerging and fading, season by season.'), ('Market Data', 'Sales, growth and store counts for the biggest global and Indian fashion players.'), ('Marketing Trends', 'How fashion brands reach and convert customers now.'), ('Industry Watch', 'The controversies and debates shaping fashion, and the lessons for brands.'), ('Brand Watch', 'What India\'s startups, D2C labels and retailers are launching, mapped to Forecut details.'), ('Core Item Update', 'What to invest in, test, maintain and reduce, item by item.'), ('Design Capsule', 'Mood, colour, key pieces with flat sketches, and prices for each theme.'), ('Colour Forecast', ''), ('Sourcing Guide', '')]:
     ps = [p for p in PAGES if p[3] == kind]
     hub += f'<section class="sec"><h2>{E(kind)}{"s" if len(ps) > 1 else ""}</h2>' + (f'<p class="sub">{E(d)}</p>' if d else '') + f'<div class="rgrid">{"".join(rcard(p) for p in ps)}</div></section>'
 page('reports.html', 'Forecut Reports · Indian fashion trend reports', hub)
