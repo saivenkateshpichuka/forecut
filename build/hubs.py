@@ -51,7 +51,16 @@ CSS = '''<style>
 article p,article li{font-size:17.5px;line-height:1.75}article h2{font:700 25px/1.25 "DM Sans",system-ui,sans-serif;letter-spacing:-.01em;margin:38px 0 10px}
 .ctab{background:var(--mat);color:var(--mat-ink);border-radius:12px;padding:20px 22px;margin:34px 0 10px;font-size:17px}.ctab a{color:var(--mat-ink);font-weight:700}
 .more h3{font:600 22px "DM Sans",sans-serif;margin:48px 0 14px}
-.ph.ph0{display:grid;place-items:center;background:linear-gradient(135deg,#e9e1d5,#d8cbb8)}
+.ph.ph0{display:grid;place-items:center;background:radial-gradient(circle at 30% 20%,#f3ece2,#d9ccb9 70%);position:relative}
+.ph.ph0 em{font:italic 500 clamp(22px,2.6vw,30px)/1.15 "Source Serif 4",Georgia,serif;color:#5e5348;text-align:center;padding:0 18px}
+.news{display:grid;gap:14px}.nw{display:grid;grid-template-columns:130px 1fr;gap:18px;background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:16px 18px}
+.nw time{font:700 12px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--chalk);padding-top:4px}
+.nw b{display:block;font:700 18px/1.3 "DM Sans",sans-serif;margin-bottom:4px}.nw p{margin:0;font-size:15.5px;line-height:1.55}
+.nw .src{font:13px "DM Sans",sans-serif;color:var(--muted);margin-top:6px}.nw .src a{color:var(--muted)}
+.cal{display:grid;gap:0;border:1px solid var(--grid);border-radius:12px;overflow:hidden;background:var(--paper-2)}
+.cal div{display:grid;grid-template-columns:130px 220px 1fr;gap:14px;padding:12px 16px;border-bottom:1px solid var(--grid);font:15px/1.45 "DM Sans",sans-serif}.cal div:last-child{border:0}
+.cal b{color:var(--chalk)}
+@media (max-width:760px){.nw{grid-template-columns:1fr;gap:4px}.cal div{grid-template-columns:1fr;gap:2px}}
 @media (max-width:760px){.hhero{aspect-ratio:4/3}.g3,.lib{grid-template-columns:1fr}}
 </style>'''
 
@@ -70,7 +79,7 @@ def pick(c):
 
 def im(c, alt, cls='ph', eager=False):
     s = pick(c)
-    if not s: return f'<div class="{cls} ph0"></div>'
+    if not s: return f'<div class="{cls} ph0"><em>{E(alt)}</em></div>'
     return f'<div class="{cls}"><img src="img/{s}.webp" alt="{E(alt)}" {"" if eager else "loading=\"lazy\""} width="800" height="600"></div>'
 
 
@@ -124,15 +133,29 @@ def articles_sec(h, title='Articles'):
     return f'<section class="sec" id="articles"><h2>{title}</h2><p class="sub">Guides and analysis from the Forecut editorial team.</p><div class="g3">{"".join(acard(a) for a in h["articles"])}</div></section>'
 
 
+def news(items):
+    return '<div class="news">' + ''.join(f'<div class="nw"><time>{E(d)}</time><div><b>{E(t)}</b><p>{E(p)}</p><p class="src">Source: ' + ', '.join(f'<a href="{u}" rel="noopener" target="_blank">{E(n)}</a>' for n, u in src) + '</p></div></div>' for d, t, p, src in items) + '</div>'
+
+
+def minis(items):
+    return '<div class="g4">' + ''.join(f'<div class="mini"><b>{E(x[0])}</b>' + (f'<p style="color:var(--chalk);font:600 12.5px DM Sans,sans-serif;margin-bottom:4px">{E(x[1])}</p><p>{E(x[2])}</p>' if len(x) == 3 else f'<p>{E(x[1])}</p>') + '</div>' for x in items) + '</div>'
+
+
 def build_couture(h):
     at = ''.join(f'<div class="card">{im(a["img"], a["k"])}<div class="in"><h3>{E(a["k"])}</h3><p>{E(a["p"])}</p><ul>{"".join(f"<li>{E(x)}</li>" for x in a["li"])}</ul></div></div>' for a in h['ateliers'])
     th = ''.join(f'<div class="theme"><b>{E(a)}</b><p>{E(b)}</p></div>' for a, b in h['themes'])
     te = ''.join(f'<div class="mini">{im(c, a, "sw") if pick(c) else ""}<b>{E(a)}</b><p>{E(b)}</p></div>' for a, b, c in h['techniques'])
     inn = ''.join(f'<div class="mini"><b>{E(a)}</b><p>{E(b)}</p></div>' for a, b in h['innov'])
-    return (hub_top(h, [('ateliers', 'Women · Men · Kids'), ('themes', 'Couture themes'), ('techniques', 'Techniques'), ('innovations', 'Innovations'), ('articles', 'Articles')]) +
-            f'<section class="sec" id="ateliers"><h2>Three ateliers</h2><p class="sub">Couture for women, men and kids: what defines each, and where it is heading.</p><div class="g3">{at}</div></section>'
+    cal = '<div class="cal">' + ''.join(f'<div><b>{E(a)}</b><span style="font-weight:700">{E(b)}</span><span>{E(c)}</span></div>' for a, b, c in h['calendar']) + '</div>'
+    feat = h['articles'][:2]
+    return (hub_top(h, [('news', 'Couture news'), ('capitals', 'Couture worldwide'), ('calendar', 'Calendar'), ('wear', 'Couture wear'), ('ateliers', 'Women · Men · Kids'), ('themes', 'Themes'), ('techniques', 'Techniques'), ('innovations', 'Innovations'), ('articles', 'Articles')]) +
+            f'<section class="sec" id="news"><h2>Couture news</h2><p class="sub">The latest from the world\'s couture runways, summarised by Forecut with links to the original coverage.</p>{news(h["news"])}<div class="g3" style="margin-top:22px">{"".join(acard(a) for a in feat)}</div></section>'
+            f'<section class="sec" id="capitals"><h2>Couture around the world</h2><p class="sub">Each couture capital has its own strengths, clients and craft.</p>{minis(h["capitals"])}</section>'
+            f'<section class="sec" id="calendar"><h2>The couture calendar</h2><p class="sub">When couture is shown and when demand peaks. Dates vary by year.</p>{cal}</section>'
+            f'<section class="sec" id="wear"><h2>Explore couture wear</h2><p class="sub">The full scope of couture, from red-carpet gowns to kids\' occasion wear.</p>{minis(h["wear"])}</section>'
+            f'<section class="sec" id="ateliers"><h2>Three ateliers: women, men and kids</h2><p class="sub">What defines each, and where it is heading.</p><div class="g3">{at}</div></section>'
             f'<section class="sec" id="themes"><h2>Couture themes for the coming wedding seasons</h2><p class="sub">Forecut\'s story directions for bridal and occasion couture, 2026–27.</p><div class="g3" style="gap:22px">{th}</div></section>'
-            f'<section class="sec" id="techniques"><h2>Couture techniques</h2><p class="sub">The hand techniques behind couture, from Indian embroidery to Western atelier construction.</p><div class="g4">{te}</div></section>'
+            f'<section class="sec" id="techniques"><h2>Couture techniques</h2><p class="sub">The hand techniques behind couture, from Indian embroidery to Paris atelier crafts.</p><div class="g4">{te}</div></section>'
             f'<section class="sec" id="innovations"><h2>New innovations</h2><p class="sub">How the atelier is changing.</p><div class="g4">{inn}</div></section>'
             + articles_sec(h, 'Couture articles & storytelling'))
 
@@ -145,14 +168,20 @@ def build_fabrics(h):
     kn = ''.join(f'<div class="mini"><b>{E(a)}</b><p>{E(b)}</p></div>' for a, b in h['knits'])
     hl = ''.join(f'<div class="mini">{im(c, a, "sw") if pick(c) else ""}<b>{E(a)}</b><p>{E(b)}</p></div>' for a, b, c in h['handloom'])
     inn = ''.join(f'<div class="mini"><b>{E(a)}</b><p>{E(b)}</p></div>' for a, b in h['innov'])
-    return (hub_top(h, [('library', 'Fabric library'), ('weaves', 'Weaves'), ('knits', 'Knits'), ('handloom', 'Indian handlooms'), ('innovations', 'Innovations'), ('articles', 'Articles')]) +
+    pr = minis(h['prints']); ef = minis(h['embfab']); hw = minis(h['handwork']); up = minis(h['upcoming'])
+    return (hub_top(h, [('news', 'Fabric news'), ('upcoming', 'Upcoming fabrics'), ('innovations', 'Innovations'), ('library', 'Fabric library'), ('weaves', 'Weaves'), ('knits', 'Knits'), ('prints', 'Prints'), ('embroidery', 'Embroidery fabrics'), ('handwork', 'Hand work'), ('handloom', 'Indian handlooms'), ('articles', 'Articles')]) +
+            f'<section class="sec" id="news"><h2>Fabric news</h2><p class="sub">New fibres, finishes and fair directions, summarised by Forecut with links to the original sources.</p>{news(h["news"])}<div class="g3" style="margin-top:22px">{"".join(acard(a) for a in h["articles"][:2])}</div></section>'
+            f'<section class="sec" id="upcoming"><h2>Upcoming fabrics</h2><p class="sub">Material directions Forecut expects to grow over 2027–28.</p>{up}</section>'
+            f'<section class="sec" id="innovations"><h2>New fabric innovations</h2><p class="sub">Materials and processes changing the industry.</p><div class="g4">{inn}</div></section>'
             f'<section class="sec" id="library"><h2>Fabric library</h2><p class="sub">{len(h["library"])} fabrics designers use most: fibre, construction, weight, handle, best uses and care.</p>'
             f'<input class="fsearch" id="fq" type="search" placeholder="Search fabrics, e.g. linen, satin, shirts" aria-label="Search fabrics"><div class="chips" id="fchips">'
             + ''.join(f'<button type="button" aria-pressed="{"true" if g == "All" else "false"}">{g}</button>' for g in groups) + f'</div><div class="lib">{lib}</div></section>'
             f'<section class="sec" id="weaves"><h2>Weave techniques</h2><p class="sub">How yarns interlace decides how a fabric looks, feels and wears.</p><div class="g4">{wv}</div></section>'
             f'<section class="sec" id="knits"><h2>Knitting designs</h2><p class="sub">The knit structures behind T-shirts, polos and sweaters.</p><div class="g4">{kn}</div></section>'
+            f'<section class="sec" id="prints"><h2>Prints & printing techniques</h2><p class="sub">From hand block printing to digital: how prints are made.</p>{pr}</section>'
+            f'<section class="sec" id="embroidery"><h2>Embroidery fabrics</h2><p class="sub">Choosing the right base for each kind of embroidery and embellishment.</p>{ef}</section>'
+            f'<section class="sec" id="handwork"><h2>Hand work & embroideries</h2><p class="sub">Hand embroidery traditions from India and around the world.</p>{hw}</section>'
             f'<section class="sec" id="handloom"><h2>Indian handlooms & textile crafts</h2><p class="sub">India\'s great weaving and dyeing traditions.</p><div class="g4">{hl}</div></section>'
-            f'<section class="sec" id="innovations"><h2>New fabric innovations</h2><p class="sub">Materials Forecut is watching for the next few seasons.</p><div class="g4">{inn}</div></section>'
             + articles_sec(h, 'Fabric articles'))
 
 
