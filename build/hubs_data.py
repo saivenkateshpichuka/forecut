@@ -700,4 +700,19 @@ FABRICS['articles'] = [
   ]},
 ] + FABRICS['articles']
 
+# --- Couture images generated in ChatGPT (Oct 2026): put first so they win over older fallbacks ---
+_CT = {'Zardozi': 'zardozi', 'Aari': 'aari', 'Chikankari': 'chikankari', 'Gota patti': 'gota-patti', 'Shisha': 'shisha',
+       'Resham': 'resham', 'Dabka': 'dabka-nakshi', 'Kantha': 'kantha', '3D floral': '3d-floral-applique', 'Draping': 'draping-plisse',
+       'Corsetry': 'corsetry', 'Beading': 'beading-crystal', 'Featherwork': 'featherwork', 'Couture lace': 'lace', 'Fabric flowers': 'fabric-flowers',
+       'Hand pleating': 'hand-pleating-smocking', 'Bespoke tailoring': 'bespoke-tailoring'}
+COUTURE['techniques'] = [(a, b, ([f'couture-{v}-2026' for k, v in _CT.items() if a.startswith(k)][:1] + c)) for a, b, c in COUTURE['techniques']]
+for _a, _v in zip(COUTURE['ateliers'], ['womenswear', 'menswear', 'kidswear']): _a['img'] = [f'couture-{_v}-2026'] + _a['img']
+_CA = {'couture-news-paris-july-2026': 'featherwork', 'couture-india-couture-week-2026': 'cape-lehengas', 'couture-what-is-haute-couture': 'draping-plisse',
+       'couture-brand-theory': 'velvet-bandhgalas', 'couture-storytelling': 'womenswear', 'couture-menswear-guide': 'menswear',
+       'couture-kids-occasion': 'kidswear', 'couture-innovations': 'organza-dupattas', 'couture-history': 'lace', 'couture-capitals': 'beading-crystal',
+       'couture-gown-anatomy': 'corsetry', 'couture-bespoke-menswear': 'bespoke-tailoring', 'couture-bridal-east-west': 'ombre-lehengas'}
+for _a in COUTURE['articles']:
+    if _a['slug'] in _CA: _a['img'] = [f"couture-{_CA[_a['slug']]}-2026"] + _a['img']
+COUTURE['hero'] = ['couture-hero-2026'] + COUTURE['hero']; COUTURE['hero_pos'] = '50% 45%'
+
 HUBS = [COUTURE, FABRICS, COLOUR]
