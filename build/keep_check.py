@@ -14,6 +14,8 @@ pat = r"\(\s*['\"][^'\"]+['\"],\s*['\"][^'\"]+['\"],\s*['\"]([^'\"]+)['\"],"
 if old: missing += sorted(py_names(old, pat) - py_names(open('india_data.py').read(), pat))
 old = at_head('journal_data.py')
 if old: missing += ['journal:' + s for s in sorted(py_names(old, r"'slug': '([^']+)'") - py_names(open('journal_data.py').read(), r"'slug': '([^']+)'"))]
+old = at_head('hubs_data.py')
+if old: missing += ['hub article:' + s for s in sorted(py_names(old, r"'slug': '([^']+)'") - py_names(open('hubs_data.py').read(), r"'slug': '([^']+)'"))]
 old = at_head('images.json')
 if old: missing += ['image:' + s for s in sorted(set(json.loads(old)) - set(json.load(open('images.json'))))]
 if missing:

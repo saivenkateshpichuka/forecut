@@ -89,3 +89,13 @@ Everything needed to rebuild the Forecut website. The published pages are genera
 white flat-sketch panel on the right, it writes `img/<slug>-photo.webp` (photo only) and `img/<slug>-f1..fN.webp`
 (each flat drawing separately, e.g. front and back), and records them in `panels.json`. The detail viewer shows the
 photo alone under "Photo" and the separate drawings under "Flat sketch". Cards keep the combined image.
+
+## Image rule (articles, hubs, Journal)
+1. **Real, free-licensed photo first.** Use only photos you may legally reuse: Unsplash, Pexels (free commercial use),
+   Wikimedia Commons (follow the licence, credit required) or The Met Open Access (CC0). Never copy runway, campaign,
+   celebrity or news-agency photos without written permission.
+2. **If no good real photo exists, generate one** that matches the article (realistic, modest, no logos, no real people).
+3. Upload to `images/` with the exact file name from `image-requests.csv`.
+4. For every real photo, add a row to `image-credits.csv` (File name, Credit, Source URL, Licence). The credit appears
+   under the image on the site.
+`image-requests.csv` is rebuilt on every build and lists each needed image with search links and an AI fallback prompt.

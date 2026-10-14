@@ -28,6 +28,7 @@ jobs:
           python season_prompts.py
           python india_prompts.py
           python hubs.py
+          python image_requests.py
           python seo.py
       - name: Commit
         run: |

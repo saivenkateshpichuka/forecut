@@ -1,6 +1,7 @@
 """Write ../journal.html and one page per article from journal_data.py, in the shared Forecut page style (from legal.py)."""
 import html, json
 import journal_data as J
+import credits as CR
 src = open('legal.py').read()
 ns = {}; exec(src.split('\nP = ')[0], ns)
 HEAD, FOOT = ns['HEAD'], ns['FOOT']
@@ -35,7 +36,7 @@ article h2{letter-spacing:-.02em!important;font:700 26px/1.25 "DM Sans",system-u
 .byline{font-size:14px;color:var(--muted);border-top:1px solid var(--grid);margin-top:36px;padding-top:14px}
 </style>'''
 def head(title):
-    h = HEAD.format(title=E(title)).replace('</style></head>', '</style>' + CSS + '</head>', 1)
+    h = HEAD.format(title=E(title)).replace('</style></head>', '</style>' + CSS + '<style>' + CR.CSS + '</style></head>', 1)
     return h.replace('<div class="wrap">', '<div class="wrap j">', 1)
 def img(sl, alt, cls):
     return f'<div class="{cls}"><img src="img/{sl}.webp" alt="{E(alt)}" loading="lazy" width="800" height="800"></div>'
@@ -56,7 +57,7 @@ for a in J.ARTICLES:
     body = (f'<p class="eb"><a href="journal.html" style="color:inherit;text-decoration:none">Journal</a></p><article>'
             f'<span class="jtag">{E(a["tag"])}</span><h1 style="margin-top:12px">{E(a["title"])}</h1>'
             f'<p class="lead">{E(a["desc"])}</p><p class="jmeta">By Forecut Editorial · {J.DATE_TXT} · {a["read"]} min read</p>'
-            f'<div class="jhero"><img src="img/{a["hero"]}.webp" alt="{E(a["title"])}" width="800" height="800"></div>'
+            f'<div class="jhero"><img src="img/{a["hero"]}.webp" alt="{E(a["title"])}" width="800" height="800"></div>' + CR.cap(a["hero"])
             + ''.join(block(b) for b in a['body']) +
             '<p class="byline">Written by the Forecut editorial team. Sources include public coverage of Lakmé Fashion Week x FDCI 2026 (Harper\'s Bazaar India, Free Press Journal), Aza Fashions and Lashkaraa trend guides, Pearl Academy Gen Z reports, Global Indian and Outlook Business. Statuses are Forecut\'s forecast and will be refined as new data arrives.</p></article>'
             f'<section class="more"><h3>More from the Journal</h3><div class="jgrid">{"".join(card(x) for x in others)}</div></section>')
