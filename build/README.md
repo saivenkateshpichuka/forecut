@@ -99,3 +99,5 @@ photo alone under "Photo" and the separate drawings under "Flat sketch". Cards k
 4. For every real photo, add a row to `image-credits.csv` (File name, Credit, Source URL, Licence). The credit appears
    under the image on the site.
 `image-requests.csv` is rebuilt on every build and lists each needed image with search links and an AI fallback prompt.
+New Journal articles may set `'hero_new': 'art-<slug>'`, `'img_kw': '<search words>'` and `'img_prompt': '<AI prompt>'`.
+The existing `'hero'` image is shown until `art-<slug>` is uploaded; the request appears in `image-requests.csv`.

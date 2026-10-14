@@ -31,6 +31,15 @@ for slug, r in prompts.items():
                  'https://commons.wikimedia.org/w/index.php?title=Special:MediaSearch&type=image&search=' + U.quote_plus(kw),
                  ('https://www.metmuseum.org/art/collection/search?showOnly=openAccess&q=' + U.quote_plus(kw)) if any(m in slug for m in MET) else '',
                  r['Prompt']])
+import journal_data as JD
+for a in JD.ARTICLES:
+    s = a.get('hero_new')
+    if not s or s in prompts: continue
+    kw = a.get('img_kw', a['title'])
+    has = os.path.exists(os.path.join(R, 'img', s + '.webp'))
+    status = 'Done: real photo' if s in CR.C else ('Done: AI image (replace with a real photo if you find one)' if has else 'Needed')
+    rows.append([s + '.jpg', 'Journal: ' + a['title'], status, kw, 'https://unsplash.com/s/photos/' + U.quote(kw.replace(' ', '-')), 'https://www.pexels.com/search/' + U.quote(kw) + '/',
+                 'https://commons.wikimedia.org/w/index.php?title=Special:MediaSearch&type=image&search=' + U.quote_plus(kw), '', a.get('img_prompt', '')])
 rows.sort(key=lambda x: (not x[2].startswith('Needed'), x[0]))
 with open(os.path.join(R, 'image-requests.csv'), 'w', newline='', encoding='utf-8') as f:
     w = csv.writer(f)

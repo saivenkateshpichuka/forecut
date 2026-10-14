@@ -2,6 +2,9 @@
 import html, json
 import journal_data as J
 import credits as CR
+import os
+for _a in J.ARTICLES:
+    if _a.get('hero_new') and os.path.exists(f"../img/{_a['hero_new']}.webp"): _a['hero'] = _a['hero_new']
 src = open('legal.py').read()
 ns = {}; exec(src.split('\nP = ')[0], ns)
 HEAD, FOOT = ns['HEAD'], ns['FOOT']
