@@ -29,6 +29,7 @@
 "cargo-midi-skirts-ss27": 2,
 "carpenter-jeans-ss27": 2,
 "chambray-work-shirts-ss27": 2,
+"check-shackets-ss27": 2,
 "chore-and-work-jackets": 2,
 "cinched-one-button-jackets-ss27": 2,
 "clean-leather-bombers-ss27": 2,
@@ -98,6 +99,7 @@
 "half-zip-knits-ss27": 2,
 "halter-neck-dresses-ss27": 1,
 "henley-plackets-ss27": 2,
+"heritage-rugby-polos-ss27": 1,
 "hidden-placket-overcoats-ss27": 1,
 "high-rise-sailor-trousers-ss27": 2,
 "high-waisted-pleated-trousers": 2,
@@ -227,6 +229,7 @@
 "suede-driving-shoes": 1,
 "tasselled-loafers": 1,
 "tech-fleece-jackets-ss27": 1,
+"textured-knit-polos-ss27": 1,
 "textured-waffle-knits": 2,
 "thick-contrast-topstitching-ss27": 1,
 "tie-cuff-sleeves-ss27": 2,
@@ -260,5 +263,6 @@
 "wrap-front-blouses-ss27": 1,
 "wrap-midi-dresses-ss27": 1,
 "wrap-mini-skirts-ss27": 1,
-"wrap-skirts": 2
+"wrap-skirts": 2,
+"zip-neck-polos-ss27": 1
 }
