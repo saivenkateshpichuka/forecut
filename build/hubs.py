@@ -5,6 +5,7 @@ import hubs_data as H
 import india_data as I
 import pantone as PT
 import credits as CR
+import fabrics_live as FL
 src = open('legal.py').read(); ns = {}; exec(src.split('\nP = ')[0], ns)
 HEAD, FOOT = ns['HEAD'], ns['FOOT']
 E = html.escape
@@ -161,6 +162,115 @@ def build_couture(h):
             + articles_sec(h, 'Couture articles & storytelling'))
 
 
+FCSS = """<style>
+.live{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 4px}.live a{display:flex;gap:8px;align-items:center;text-decoration:none;color:var(--ink);background:var(--paper-2);border:1px solid var(--grid);border-radius:99px;padding:6px 14px 6px 6px;font:500 14px/1.3 "DM Sans",sans-serif}
+.live a b{font:700 11px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--chalk);border-radius:99px;padding:4px 9px;flex:none}
+.live a:first-child b{background:#c4302b}.live a:first-child b:before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:#fff;margin-right:6px;vertical-align:1px;animation:blink 1.4s infinite}
+@keyframes blink{50%{opacity:.25}}.upd{font:600 12.5px "DM Sans",sans-serif;color:var(--muted);letter-spacing:.04em}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 18px}.kpi{background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:14px 16px}
+.kpi b{display:block;font:700 30px/1 "DM Sans",sans-serif}.kpi span{font:600 12.5px "DM Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase}
+.st-e{--c:#2f7d5b}.st-r{--c:#c8691c}.st-p{--c:#b4532a}.st-f{--c:#8a8178}.kpi b,.lane h3{color:var(--c)}
+.stabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 0 14px}.stabs::-webkit-scrollbar{display:none}
+.stabs button{all:unset;cursor:pointer;flex:none;font:600 14px "DM Sans",sans-serif;border:1px solid var(--grid);border-radius:10px;padding:9px 14px;background:var(--paper-2);text-align:center}
+.stabs button small{display:block;font:500 11.5px "DM Sans",sans-serif;color:var(--muted)}.stabs button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}.stabs button[aria-pressed="true"] small{color:var(--paper)}
+.board{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.lane{background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:12px;border-top:4px solid var(--c)}
+.lane h3{font:700 15px "DM Sans",sans-serif;margin:2px 4px 10px;display:flex;justify-content:space-between}.lane h3 i{font-style:normal;color:var(--muted)}
+.ft{display:grid;grid-template-columns:48px 1fr;gap:10px;align-items:center;padding:7px 4px;border-top:1px solid var(--grid)}.ft:first-of-type{border-top:0}
+.ft .th{width:48px;height:48px;border-radius:8px;overflow:hidden;background:var(--grid)}.ft .th img{width:100%;height:100%;object-fit:cover;object-position:50% 25%;display:block}
+.ft .th.no{display:grid;place-items:center;font:700 15px "DM Sans",sans-serif;color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent)}
+.ft b{display:block;font:600 14.5px/1.25 "DM Sans",sans-serif}.ft small{font:12px "DM Sans",sans-serif;color:var(--muted)}
+.lc{display:flex;gap:3px;margin-top:4px}.lc i{width:16px;height:5px;border-radius:3px;background:var(--grid)}.lc i.e{background:#2f7d5b}.lc i.r{background:#c8691c}.lc i.p{background:#b4532a}.lc i.f{background:#8a8178}.lc i.now{outline:1.5px solid var(--ink);outline-offset:1px}
+.ft.more{display:none}.lane.open .ft.more{display:grid}.lane .sa{all:unset;cursor:pointer;display:block;text-align:center;font:600 13px "DM Sans",sans-serif;color:var(--chalk);padding:8px 0 2px}
+.lane .none{font:14px "DM Sans",sans-serif;color:var(--muted);padding:6px 4px}.spanel[hidden]{display:none}
+.spanel .lead2{font-size:15.5px;color:var(--muted);margin:0 0 12px}.spanel .lead2 a{color:var(--ink);font-weight:600}
+.rw{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:18px}.rw .card .tagl{display:flex;justify-content:space-between;align-items:center;font:700 11.5px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--chalk);margin-bottom:4px}
+.rw .card .tagl em{font-style:normal;color:#fff;background:var(--ink);border-radius:99px;padding:3px 9px}.rw .card .tagl em.live{background:#c4302b}
+.read{margin-top:12px;background:var(--mat);color:var(--mat-ink);border-radius:10px;padding:10px 12px;font:14.5px/1.5 "DM Sans",sans-serif}.read b{display:block;font:700 11px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;margin-bottom:2px}
+.srcs{font:12.5px "DM Sans",sans-serif;color:var(--muted);margin-top:10px}.srcs a{color:var(--muted)}
+.fair{display:grid;grid-template-columns:120px 1fr;gap:18px;background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:16px 18px}
+.fairs{display:grid;gap:12px}.fair time{font:700 12px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--chalk)}.fair time span{display:inline-block;margin-top:6px;color:var(--ink);border:1px solid var(--grid);border-radius:99px;padding:3px 8px;letter-spacing:.04em}
+.fair h3{font:700 18px "DM Sans",sans-serif;margin:0 0 6px}.fair ul{margin:0;padding-left:18px;font-size:15px;line-height:1.55}
+.radar{border:1px solid var(--grid);border-radius:12px;overflow:hidden;background:var(--paper-2)}.rrow{display:grid;grid-template-columns:1.1fr 1.6fr 1.2fr 90px;gap:14px;padding:13px 16px;border-top:1px solid var(--grid);align-items:center;font:14.5px/1.45 "DM Sans",sans-serif}
+.rrow:first-child{border-top:0}.rrow.h{font:700 11.5px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--paper)}.rrow b{font-size:15.5px}.rrow a{color:var(--muted);font-size:12.5px}
+.stage{display:flex;gap:3px}.stage i{flex:1;height:7px;border-radius:4px;background:var(--grid)}.stage i.on{background:var(--chalk)}.stage+small{font:600 12px "DM Sans",sans-serif;color:var(--chalk)}
+.isig{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px}.isig .mini span{font:700 11px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--c);border-radius:99px;padding:3px 9px;margin-right:6px}.isig .mini small{font:600 12.5px "DM Sans",sans-serif;color:var(--muted)}
+.ref details{background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;margin:10px 0;padding:0 18px}.ref summary{cursor:pointer;font:700 17px "DM Sans",sans-serif;padding:15px 0;list-style:none;display:flex;justify-content:space-between}.ref summary::-webkit-details-marker{display:none}
+.ref summary:after{content:"+";font-weight:400;font-size:22px;line-height:1}.ref details[open] summary:after{content:"–"}.ref details>div{padding:0 0 18px}.ref summary small{font:500 13px "DM Sans",sans-serif;color:var(--muted);margin-left:auto;margin-right:14px;align-self:center}
+@media (max-width:900px){.board{grid-template-columns:1fr 1fr}}
+@media (max-width:760px){.kpis{grid-template-columns:1fr 1fr}.board{grid-template-columns:1fr}.fair{grid-template-columns:1fr;gap:6px}.rrow{grid-template-columns:1fr;gap:6px}.rrow.h{display:none}.rw{grid-template-columns:1fr}.live a{font-size:13px}}
+</style>"""
+
+FJS = """<script>(function(){var bs=document.querySelectorAll('.stabs button');bs.forEach(function(b){b.onclick=function(){bs.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});document.querySelectorAll('.spanel').forEach(function(p){p.hidden=p.id!==b.dataset.s})}});
+document.querySelectorAll('.lane .sa').forEach(function(b){b.onclick=function(){var l=b.closest('.lane');l.classList.toggle('open');b.textContent=l.classList.contains('open')?'Show fewer':b.dataset.t}})})();</script>"""
+
+STN = {'e': 'Emerging', 'r': 'Rising', 'p': 'Peaking', 'f': 'Fading'}
+
+
+def _islug(x): return ''.join(ch.lower() if ch.isalnum() else '-' for ch in x).strip('-').replace('--', '-').replace('--', '-')
+
+
+def fabric_items():
+    D = json.load(open('details.json'))
+    return [(d, c, x) for (d, c) in D['order'] for x in D['model'][f'{d}|{c}'] if x['area'] in ('Fabric', 'Material')]
+
+
+def forecast_board():
+    its = fabric_items(); seasons = S['seasons']; default = 'ss27'
+    tabs = ''.join(f'<button type="button" data-s="fs-{s}" aria-pressed="{"true" if s == default else "false"}">{E(S["meta"][s]["code"])}<small>{E(S["meta"][s].get("stage", ""))}</small></button>' for s in seasons)
+    panels = ''
+    for si, s in enumerate(seasons):
+        m = S['meta'][s]; lanes = ''
+        cnt = {k: sum(x['life'][si] == k for _, _, x in its) for k in 'erpf'}
+        for st in 'erpf':
+            rows = [(d, c, x) for d, c, x in its if x['life'][si] == st]
+            cards = ''
+            for i, (d, c, x) in enumerate(rows):
+                sl = _islug(x['name']); first = next(j for j, ch in enumerate(x['life']) if ch != '-')
+                fn = sl if si == first else f'{sl}-{s}'
+                p = pick([fn + '-photo', fn, sl + '-photo', sl])
+                th = f'<div class="th"><img src="img/{p}.webp" alt="" loading="lazy" width="48" height="48"></div>' if p else f'<div class="th no">{E(x["name"][0])}</div>'
+                lc = ''.join(f'<i class="{ch if ch != "-" else ""}{" now" if j == si else ""}" title="{E(S["meta"][seasons[j]]["code"])}: {STN.get(ch, "not tracked")}"></i>' for j, ch in enumerate(x['life']))
+                cards += f'<div class="ft{" more" if i >= 6 else ""}">{th}<div><b>{E(x["name"])}</b><small>{E(d)} · {E(c)}</small><div class="lc" aria-label="Lifecycle AW26 to AW28">{lc}</div></div></div>'
+            more = f'<button class="sa" type="button" data-t="Show all {len(rows)}">Show all {len(rows)}</button>' if len(rows) > 6 else ''
+            lanes += f'<div class="lane st-{st}"><h3>{STN[st]} <i>{len(rows)}</i></h3>{cards or "<p class=none>None this season</p>"}{more}</div>'
+        kp = ''.join(f'<div class="kpi st-{k}"><b>{cnt[k]}</b><span>{STN[k]}</span></div>' for k in 'erpf')
+        panels += (f'<div class="spanel" id="fs-{s}"{"" if s == default else " hidden"}><p class="lead2"><b>{E(m["code"])} · {E(m.get("title", ""))}</b> · {E(m.get("window", ""))} · '
+                   f'{"Based on runway and trade research" if m.get("basis") == "research" else "Forecut projection, updated as runways arrive"}. <a href="{s}.html">Full {E(m["code"])} report →</a></p>'
+                   f'<div class="kpis">{kp}</div><div class="board">{lanes}</div></div>')
+    return f'<div class="stabs" role="group" aria-label="Season">{tabs}</div>{panels}'
+
+
+def runway_cards():
+    out = ''
+    for r in FL.RUNWAY:
+        live = r['status'] == 'Live'
+        out += (f'<div class="card">{im(r["img"], r["city"] + " " + r["head"])}<div class="in"><div class="tagl">{E(r["city"])} · {E(r["dates"])}<em class="{"live" if live else ""}">{"Live" if live else E(r["status"])}</em></div>'
+                f'<h3>{E(r["head"])}</h3><ul>{"".join(f"<li>{E(x)}</li>" for x in r["fabrics"])}</ul><div class="read"><b>Forecut read</b>{E(r["read"])}</div>'
+                f'<p class="srcs">Source: {", ".join(f"<a href=\"{u}\" rel=\"noopener\" target=\"_blank\">{E(n)}</a>" for n, u in r["src"])}</p></div></div>')
+    return f'<div class="rw">{out}</div>'
+
+
+def fair_rows():
+    return '<div class="fairs">' + ''.join(
+        f'<div class="fair"><time>{E(d)}<br><span>{E(sea)}</span></time><div><h3>{E(n)}</h3><ul>{"".join(f"<li>{E(x)}</li>" for x in sig)}</ul>'
+        f'<div class="read"><b>Forecut read</b>{E(rd)}</div><p class="srcs">Source: {", ".join(f"<a href=\"{u}\" rel=\"noopener\" target=\"_blank\">{E(a)}</a>" for a, u in src)}</p></div></div>'
+        for d, n, sea, sig, rd, src in FL.FAIRS) + '</div>'
+
+
+def radar_table():
+    rows = '<div class="rrow h"><span>Innovation</span><span>What it is</span><span>Market readiness</span><span>In stores</span></div>'
+    for n, w, st, hz, src in FL.RADAR:
+        k = FL.STAGES.index(st)
+        bar = '<div class="stage">' + ''.join(f'<i class="{"on" if j <= k else ""}"></i>' for j in range(len(FL.STAGES))) + f'</div><small>{E(st)}</small>'
+        rows += f'<div class="rrow"><b>{E(n)}</b><span>{E(w)} <a href="{src[1]}" rel="noopener" target="_blank">{E(src[0])}</a></span><div>{bar}</div><span style="font-weight:700">{E(hz)}</span></div>'
+    return f'<div class="radar">{rows}</div>'
+
+
+def india_sig():
+    sc = {'Emerging': 'e', 'Rising': 'r', 'Peaking': 'p', 'Fading': 'f'}
+    return '<div class="isig">' + ''.join(f'<div class="mini st-{sc[st]}"><b>{E(n)}</b><p style="margin:2px 0 8px"><span>{E(st)}</span><small>{E(when)}</small></p><p>{E(t)}</p></div>' for n, st, when, t in FL.INDIA) + '</div>'
+
+
 def build_fabrics(h):
     groups = ['All', 'Natural', 'Regenerated', 'Synthetic', 'Knit']
     lib = ''.join(f'<div class="fab" data-g="{E(g)}"><b>{E(n)}</b><span class="t">{E(g)}</span><dl><dt>Fibre</dt><dd>{E(fi)}</dd><dt>Build</dt><dd>{E(c)}</dd><dt>Weight</dt><dd>{E(w)}</dd><dt>Handle</dt><dd>{E(ha)}</dd><dt>Best for</dt><dd>{E(b)}</dd><dt>Care</dt><dd>{E(ca)}</dd></dl></div>'
@@ -170,20 +280,32 @@ def build_fabrics(h):
     hl = ''.join(f'<div class="mini">{im(c, a, "sw") if pick(c) else ""}<b>{E(a)}</b><p>{E(b)}</p></div>' for a, b, c in h['handloom'])
     inn = ''.join(f'<div class="mini"><b>{E(a)}</b><p>{E(b)}</p></div>' for a, b in h['innov'])
     pr = minis(h['prints']); ef = minis(h['embfab']); hw = minis(h['handwork']); up = minis(h['upcoming'])
-    return (hub_top(h, [('news', 'Fabric news'), ('upcoming', 'Upcoming fabrics'), ('innovations', 'Innovations'), ('library', 'Fabric library'), ('weaves', 'Weaves'), ('knits', 'Knits'), ('prints', 'Prints'), ('embroidery', 'Embroidery fabrics'), ('handwork', 'Hand work'), ('handloom', 'Indian handlooms'), ('articles', 'Articles')]) +
-            f'<section class="sec" id="news"><h2>Fabric news</h2><p class="sub">New fibres, finishes and fair directions, summarised by Forecut with links to the original sources.</p>{news(h["news"])}<div class="g3" style="margin-top:22px">{"".join(acard(a) for a in h["articles"][:2])}</div></section>'
-            f'<section class="sec" id="upcoming"><h2>Upcoming fabrics</h2><p class="sub">Material directions Forecut expects to grow over 2027–28.</p>{up}</section>'
-            f'<section class="sec" id="innovations"><h2>New fabric innovations</h2><p class="sub">Materials and processes changing the industry.</p><div class="g4">{inn}</div></section>'
-            f'<section class="sec" id="library"><h2>Fabric library</h2><p class="sub">{len(h["library"])} fabrics designers use most: fibre, construction, weight, handle, best uses and care.</p>'
-            f'<input class="fsearch" id="fq" type="search" placeholder="Search fabrics, e.g. linen, satin, shirts" aria-label="Search fabrics"><div class="chips" id="fchips">'
-            + ''.join(f'<button type="button" aria-pressed="{"true" if g == "All" else "false"}">{g}</button>' for g in groups) + f'</div><div class="lib">{lib}</div></section>'
-            f'<section class="sec" id="weaves"><h2>Weave techniques</h2><p class="sub">How yarns interlace decides how a fabric looks, feels and wears.</p><div class="g4">{wv}</div></section>'
-            f'<section class="sec" id="knits"><h2>Knitting designs</h2><p class="sub">The knit structures behind T-shirts, polos and sweaters.</p><div class="g4">{kn}</div></section>'
-            f'<section class="sec" id="prints"><h2>Prints & printing techniques</h2><p class="sub">From hand block printing to digital: how prints are made.</p>{pr}</section>'
-            f'<section class="sec" id="embroidery"><h2>Embroidery fabrics</h2><p class="sub">Choosing the right base for each kind of embroidery and embellishment.</p>{ef}</section>'
-            f'<section class="sec" id="handwork"><h2>Hand work & embroideries</h2><p class="sub">Hand embroidery traditions from India and around the world.</p>{hw}</section>'
-            f'<section class="sec" id="handloom"><h2>Indian handlooms & textile crafts</h2><p class="sub">India\'s great weaving and dyeing traditions.</p><div class="g4">{hl}</div></section>'
-            + articles_sec(h, 'Fabric articles'))
+    nlive = len(FL.ARTICLES) + 1
+    fc, guides = h['articles'][:nlive], h['articles'][nlive:]
+    live = '<div class="live">' + ''.join(f'<a href="{u}"><b>{E(l)}</b>{E(t)}</a>' for l, t, u in FL.LIVE) + '</div>'
+    ref = lambda i, t, sub, body: f'<details id="{i}"><summary>{t}<small>{sub}</small></summary><div>{body}</div></details>'
+    top = hub_top(h, [('forecast', 'Fabric forecast'), ('runway', 'Runway fabrics'), ('india', 'India'), ('mills', 'Mills & fairs'), ('innovations', 'Innovation radar'), ('news', 'Fabric news'), ('articles', 'Reports'), ('reference', 'Reference')])
+    top = top.replace('<div class="hhero">', f'<p class="upd">Live forecast · Updated {FL.UPDATED}</p>{live}<div class="hhero">', 1)
+    return (FCSS + top +
+            f'<section class="sec" id="forecast"><h2>Fabric forecast, season by season</h2><p class="sub">{len(fabric_items())} fabric and material trends tracked from AW26 to AW28. Pick a season to see what is emerging, rising, peaking and fading. The bars show each trend\'s full lifecycle.</p>{forecast_board()}</section>'
+            f'<section class="sec" id="runway"><h2>Runway fabric watch</h2><p class="sub">The fabrics of the SS27 shows and India\'s fashion weeks, with Forecut\'s read on what reaches stores.</p>{runway_cards()}'
+            '</section>'
+            f'<section class="sec" id="india"><h2>India fabric signals</h2><p class="sub">Forecut\'s read on the fabrics moving in the Indian market, Festive 2026 to AW27.</p>{india_sig()}</section>'
+            f'<section class="sec" id="mills"><h2>Mills & fabric fairs</h2><p class="sub">Fabric fairs show materials a year or more before stores. What the latest fairs signal.</p>{fair_rows()}</section>'
+            f'<section class="sec" id="innovations"><h2>Innovation radar</h2><p class="sub">New fibres and finishes, rated by how close they are to your shelves.</p>{radar_table()}'
+            f'<h3 style="font:700 19px DM Sans,sans-serif;margin:26px 0 10px">More on the radar</h3>{up}<div class="g4" style="margin-top:14px">{inn}</div></section>'
+            f'<section class="sec" id="news"><h2>Fabric news</h2><p class="sub">The latest fibre, mill and runway news, summarised by Forecut with links to the original sources.</p>{news(h["news"])}</section>'
+            f'<section class="sec" id="articles"><h2>Fabric reports</h2><p class="sub">Forecast reports and runway analysis from the Forecut team.</p><div class="g3">{"".join(acard(a) for a in fc)}</div></section>'
+            f'<section class="sec ref" id="reference"><h2>Fabric reference</h2><p class="sub">Technical reference for designers and merchandisers: fabrics, weaves, knits, prints and crafts.</p>'
+            + ref('library', 'Fabric library', f'{len(h["library"])} fabrics', '<input class="fsearch" id="fq" type="search" placeholder="Search fabrics, e.g. linen, satin, shirts" aria-label="Search fabrics"><div class="chips" id="fchips">'
+                  + ''.join(f'<button type="button" aria-pressed="{"true" if g == "All" else "false"}">{g}</button>' for g in groups) + f'</div><div class="lib">{lib}</div>')
+            + ref('weaves', 'Weave techniques', f'{len(h["weaves"])} weaves', f'<div class="g4">{wv}</div>')
+            + ref('knits', 'Knit structures', f'{len(h["knits"])} knits', f'<div class="g4">{kn}</div>')
+            + ref('prints', 'Prints & printing techniques', f'{len(h["prints"])} techniques', pr)
+            + ref('embroidery', 'Embroidery fabrics', f'{len(h["embfab"])} bases', ef)
+            + ref('handwork', 'Hand work & embroideries', f'{len(h["handwork"])} crafts', hw)
+            + ref('handloom', 'Indian handlooms & textile crafts', f'{len(h["handloom"])} crafts', f'<div class="g4">{hl}</div>')
+            + f'<h3 style="font:700 19px DM Sans,sans-serif;margin:26px 0 12px">Designer guides</h3><div class="g3">{"".join(acard(a) for a in guides)}</div></section>' + FJS)
 
 
 def swatch(name, hx):

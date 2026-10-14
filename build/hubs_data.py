@@ -700,6 +700,37 @@ FABRICS['articles'] = [
   ]},
 ] + FABRICS['articles']
 
+# --- Fabrics: live forecast rebuild (Oct 2026). Old reference content is kept; forecast content goes first. ---
+import fabrics_live as FL
+FABRICS['title'] = FL.TITLE; FABRICS['lead'] = FL.LEAD; FABRICS['seo'] = FL.SEO; FABRICS['hero'] = FL.HERO + [x for x in FABRICS['hero'] if x not in FL.HERO]
+FABRICS['hero_pos'] = '50% 40%'; FABRICS['extra_imgs'] = FL.EXTRA_IMGS
+FABRICS['news'] = FL.NEWS + FABRICS['news']
+
+
+def _fabric_forecast_article():
+    import json as _j
+    from seasons_data import SEASONS as _S, META as _M
+    _D = _j.load(open('details.json'))
+    _it = [(d, c, x) for (d, c) in _D['order'] for x in _D['model'][f'{d}|{c}'] if x['area'] in ('Fabric', 'Material')]
+    def lst(si, st, n=8):
+        return [f"<b>{x['name']}</b> ({d.lower()}): {x['note'][0].lower() + x['note'][1:]}" for d, c, x in _it if x['life'][si] == st][:n]
+    i27, a27 = _S.index('ss27'), _S.index('aw27')
+    return {'slug': 'fabrics-forecast-ss27-aw27', 'tag': 'Fabric forecast', 'read': 5, 'img': ['hub-fabrics-art-forecast', 'seersucker-sundresses-ss27-photo'],
+      'title': 'Fabric forecast SS27 to AW27: what rises, what peaks, what fades',
+      'desc': "Forecut's data on more than 110 fabric and material trends: the emerging fabrics to sample now and the ones to stop reordering.",
+      'body': [
+        ('p', f"Forecut tracks {len(_it)} fabric and material trends across five seasons and gives each a stage: emerging, rising, peaking or fading. This is the outlook from Spring/Summer 2027 into Autumn/Winter 2027, updated {FL.UPDATED}."),
+        ('h2', 'SS27: emerging fabrics to sample now'), ('ul', lst(i27, 'e')),
+        ('h2', 'SS27: fabrics at their peak'), ('p', 'These are at maximum demand. Buy depth, but plan the exit for the following season.'), ('ul', lst(i27, 'p')),
+        ('h2', 'AW27: new fabric signals'), ('ul', lst(a27, 'e')),
+        ('h2', 'AW27: fading, reduce depth'), ('ul', lst(a27, 'f') or ['No fabric trends are fading yet in AW27.']),
+        ('cta', 'See all stages, season by season, in the <a href="fabrics.html#forecast">live fabric forecast</a>, or the full <a href="ss27.html">SS27</a> and <a href="aw27.html">AW27</a> reports.'),
+        ('p', 'AW27 runways take place in February and March 2027; until then AW27 is a Forecut projection, and it will be updated as coverage arrives.'),
+      ]}
+
+
+FABRICS['articles'] = FL.ARTICLES + [_fabric_forecast_article()] + FABRICS['articles']
+
 # --- Couture images generated in ChatGPT (Oct 2026): put first so they win over older fallbacks ---
 _CT = {'Zardozi': 'zardozi', 'Aari': 'aari', 'Chikankari': 'chikankari', 'Gota patti': 'gota-patti', 'Shisha': 'shisha',
        'Resham': 'resham', 'Dabka': 'dabka-nakshi', 'Kantha': 'kantha', '3D floral': '3d-floral-applique', 'Draping': 'draping-plisse',
