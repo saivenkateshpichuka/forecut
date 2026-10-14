@@ -17,6 +17,7 @@ python3 india_prompts.py
 python3 season_prompts.py
 python3 legal.py
 python3 journal.py
+python3 hubs.py
 python3 account.py
 cp auth_src.js ../auth.js
 python3 reports.py

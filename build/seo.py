@@ -21,6 +21,14 @@ for fn_, t_, d_ in json.load(open('reports_index.json')):
     pages[fn_] = (t_ + ' · Forecut', d_, fn_)
 for a in JD.ARTICLES:
     pages[a['slug'] + '.html'] = (a['title'] + ' · Forecut Journal', a['desc'], a['slug'] + '.html'); ARTS[a['slug'] + '.html'] = a
+import hubs_data as HD
+_IM = set(json.load(open('images.json')))
+def _pick(c): return next((x for x in c if x in _IM or os.path.exists(os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'img', x + '.webp'))), 'og-image')
+for _h in HD.HUBS:
+    pages[_h['file']] = (_h['seo'][0], _h['seo'][1], _h['file'])
+    for a in _h['articles']:
+        pages[a['slug'] + '.html'] = (a['title'] + ' | Forecut ' + _h['eb'], a['desc'], a['slug'] + '.html')
+        ARTS[a['slug'] + '.html'] = dict(a, hero=_pick(a['img']), date=HD.DATE)
 OVR = {
  'index.html': ('Forecut | Fashion Trend Forecasting for India 2026–2028',
    "Forecut is India's detail-level trend forecasting platform, combining expert research with data to show what's emerging, rising, peaking and fading, and when to act."),
@@ -60,7 +68,7 @@ def share_img(fn):
     k = fn[:-5]
     for cand in [f'img/hero-{k}.webp', f'img/hero-{"india" if k == "india" else k}.webp']:
         if os.path.exists(os.path.join(R, cand)): return cand, 1920, 1080
-    m = re.search(r'<div class="(?:jhero|ci)"><img src="(img/[^"]+)"', html_)
+    m = re.search(r'<div class="(?:jhero|ci|hhero)"><img src="(img/[^"]+)"', html_)
     if m: return m.group(1), 800, 800
     return 'og-image.png', 1200, 630
 TAB = '<style>.fctab{display:none}@media (max-width:760px){body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))!important}\n.fctab{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb,#fffcf7 92%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid #e3d9cc;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}\n.fctab a{display:grid;justify-items:center;gap:2px;text-decoration:none;color:#6e6259;font:600 10.5px "DM Sans",system-ui,sans-serif;padding:4px 0;border-radius:10px}\n.fctab svg{width:22px;height:22px}.fctab a[aria-current="page"]{color:#1f3d33}.fctab a[aria-current="page"] svg{transform:translateY(-1px)}\n.fctab a[aria-current="page"]::after{content:"";width:18px;height:3px;border-radius:3px;background:#b4532a;margin-top:1px}\n.scrim:not([hidden])~.fctab,body:has(.scrim:not([hidden])) .fctab,body:has(#tscrim:not([hidden])) .fctab{display:none}}\n@media (max-width:760px) and (prefers-color-scheme:dark){.fctab{background:color-mix(in srgb,#1e1a17 92%,transparent);border-color:#352d27}.fctab a{color:#b3a698}.fctab a[aria-current="page"]{color:#f2ebe2}}\n@media print{.fctab{display:none!important}}</style>'
@@ -97,7 +105,7 @@ def block(fn, title, desc, path):
 
     if fn in ARTS:
         a = ARTS[fn]
-        b.append('<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@type": "Article", "headline": a['title'], "description": a['desc'], "image": BASE + 'img/' + a['hero'] + '.webp', "datePublished": JD.DATE, "dateModified": JD.DATE, "author": {"@type": "Organization", "name": "Forecut Editorial", "url": BASE + 'about.html'}, "publisher": {"@id": BASE + "#org"}, "mainEntityOfPage": url, "inLanguage": "en-IN"}, ensure_ascii=False) + '</script>')
+        b.append('<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@type": "Article", "headline": a['title'], "description": a['desc'], "image": BASE + 'img/' + a['hero'] + '.webp', "datePublished": a.get("date", JD.DATE), "dateModified": a.get("date", JD.DATE), "author": {"@type": "Organization", "name": "Forecut Editorial", "url": BASE + 'about.html'}, "publisher": {"@id": BASE + "#org"}, "mainEntityOfPage": url, "inLanguage": "en-IN"}, ensure_ascii=False) + '</script>')
     b.append('<style>html{scroll-behavior:smooth}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}</style>')
     b.append('<script type="module" src="/auth.js"></script>')
     b.append('<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Forecut"><meta name="apple-mobile-web-app-status-bar-style" content="default">')
@@ -119,7 +127,7 @@ for fn, (title, desc, path) in pages.items():
     h = h.replace('</body>', _nav + '</body>', 1) if '</body>' in h else h + _nav
     open(p, 'w').write(h)
 today = datetime.date.today().isoformat()
-pri = {'index.html': '1.0', 'india.html': '0.9', 'journal.html': '0.8', 'about.html': '0.5', 'contact.html': '0.4', 'terms.html': '0.2', 'privacy.html': '0.2'}
+pri = {'index.html': '1.0', 'india.html': '0.9', 'journal.html': '0.8', 'couture.html': '0.8', 'fabrics.html': '0.8', 'colour.html': '0.8', 'about.html': '0.5', 'contact.html': '0.4', 'terms.html': '0.2', 'privacy.html': '0.2'}
 def page_images(fn):
     h = open(os.path.join(R, fn)).read() if os.path.exists(os.path.join(R, fn)) else ''
     out, seen = [], set()

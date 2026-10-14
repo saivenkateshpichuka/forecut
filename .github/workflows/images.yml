@@ -27,6 +27,7 @@ jobs:
           python build_home.py
           python season_prompts.py
           python india_prompts.py
+          python hubs.py
           python seo.py
       - name: Commit
         run: |
