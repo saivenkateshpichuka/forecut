@@ -115,6 +115,7 @@ def block(fn, title, desc, path):
     b.append(SO.CSS)
     b.append('<!--/seo-->'); return '\n'.join(b)
 for fn, (title, desc, path) in pages.items():
+    if os.environ.get('ONLY') and fn not in os.environ['ONLY'].split(','): continue
     p = os.path.join(R, fn)
     if not os.path.exists(p): continue
     h = open(p).read()
@@ -136,25 +137,26 @@ for fn, (title, desc, path) in pages.items():
     _nav = NAV.replace('data-m="' + tab_for(fn) + '"', 'data-m="' + tab_for(fn) + '" aria-current="page"') if tab_for(fn) else NAV
     h = h.replace('</body>', _nav + '</body>', 1) if '</body>' in h else h + _nav
     open(p, 'w').write(h)
-today = datetime.date.today().isoformat()
-pri = {'index.html': '1.0', 'india.html': '0.9', 'journal.html': '0.8', 'couture.html': '0.8', 'fabrics.html': '0.8', 'colour.html': '0.8', 'about.html': '0.5', 'contact.html': '0.4', 'terms.html': '0.2', 'privacy.html': '0.2'}
-def page_images(fn):
-    h = open(os.path.join(R, fn)).read() if os.path.exists(os.path.join(R, fn)) else ''
-    out, seen = [], set()
-    def add(src, cap):
-        if src in seen or not os.path.exists(os.path.join(R, src)): return
-        seen.add(src); out.append((src, cap))
-    m = re.search(r'--bg:url\((img/hero-[^)]+)\)', h)
-    if m: add(m.group(1), pages[fn][0].split(' | ')[0])
-    for m in re.finditer(r'data-title="([^"]*)"[^>]*data-full="(img/[^"]+)"', h): add(m.group(2), m.group(1) + ' (fashion trend theme)')
-    for m in re.finditer(r'<article class="d"[^>]*data-img="(img/[^"]+)"[^>]*>.*?<h4>([^<]+)</h4>', h, re.S): add(m.group(1), m.group(2) + ' (fashion trend detail)')
-    for m in re.finditer(r'<img src="(img/[^"]+)" alt="([^"]+)"', h): add(m.group(1), m.group(2))
-    return out[:1000]
-def esc(x): return x.replace('&', '&amp;').replace('<', '&lt;').replace('"', '&quot;')
-def imgxml(fn): return ''.join(f'<image:image><image:loc>{BASE}{src}</image:loc><image:title>{esc(cap)}</image:title></image:image>' for src, cap in page_images(fn))
-sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' + ''.join(
-    f'  <url><loc>{BASE}{v[2]}</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>{pri.get(k, "0.8")}</priority>{imgxml(k)}</url>\n' for k, v in pages.items() if k != 'account.html') + '</urlset>\n'
-open(os.path.join(R, 'sitemap.xml'), 'w').write(sm)
-open(os.path.join(R, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\nDisallow: /build/\nDisallow: /images/\n\nSitemap: {BASE}sitemap.xml\n')
-open(os.path.join(R, 'favicon.svg'), 'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/><path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="#b4532a" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>')
-print('seo ok', len(pages))
+if not os.environ.get('ONLY'):
+    today = datetime.date.today().isoformat()
+    pri = {'index.html': '1.0', 'india.html': '0.9', 'journal.html': '0.8', 'couture.html': '0.8', 'fabrics.html': '0.8', 'colour.html': '0.8', 'about.html': '0.5', 'contact.html': '0.4', 'terms.html': '0.2', 'privacy.html': '0.2'}
+    def page_images(fn):
+        h = open(os.path.join(R, fn)).read() if os.path.exists(os.path.join(R, fn)) else ''
+        out, seen = [], set()
+        def add(src, cap):
+            if src in seen or not os.path.exists(os.path.join(R, src)): return
+            seen.add(src); out.append((src, cap))
+        m = re.search(r'--bg:url\((img/hero-[^)]+)\)', h)
+        if m: add(m.group(1), pages[fn][0].split(' | ')[0])
+        for m in re.finditer(r'data-title="([^"]*)"[^>]*data-full="(img/[^"]+)"', h): add(m.group(2), m.group(1) + ' (fashion trend theme)')
+        for m in re.finditer(r'<article class="d"[^>]*data-img="(img/[^"]+)"[^>]*>.*?<h4>([^<]+)</h4>', h, re.S): add(m.group(1), m.group(2) + ' (fashion trend detail)')
+        for m in re.finditer(r'<img src="(img/[^"]+)" alt="([^"]+)"', h): add(m.group(1), m.group(2))
+        return out[:1000]
+    def esc(x): return x.replace('&', '&amp;').replace('<', '&lt;').replace('"', '&quot;')
+    def imgxml(fn): return ''.join(f'<image:image><image:loc>{BASE}{src}</image:loc><image:title>{esc(cap)}</image:title></image:image>' for src, cap in page_images(fn))
+    sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' + ''.join(
+        f'  <url><loc>{BASE}{v[2]}</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>{pri.get(k, "0.8")}</priority>{imgxml(k)}</url>\n' for k, v in pages.items() if k != 'account.html') + '</urlset>\n'
+    open(os.path.join(R, 'sitemap.xml'), 'w').write(sm)
+    open(os.path.join(R, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\nDisallow: /build/\nDisallow: /images/\n\nSitemap: {BASE}sitemap.xml\n')
+    open(os.path.join(R, 'favicon.svg'), 'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/><path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="#b4532a" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>')
+    print('seo ok', len(pages))

@@ -45,7 +45,7 @@
 "name": "Pastel handloom sarees",
 "area": "Colour",
 "note": "Dusty rose, powder blue and lavender on handloom bases.",
-"life": "rpppf"
+"life": "rrprp"
 },
 {
 "cat": "Women's Ethnic",
@@ -93,7 +93,7 @@
 "name": "Light organza lehengas",
 "area": "Fabric",
 "note": "Airy organza lehengas for sangeet and day functions.",
-"life": "rpppf"
+"life": "rrprp"
 },
 {
 "cat": "Women's Ethnic",
@@ -133,7 +133,7 @@
 "name": "Angrakha wrap kurtas",
 "area": "Closure",
 "note": "Overlapping wrap fronts tied at the side.",
-"life": "errpp"
+"life": "errrr"
 },
 {
 "cat": "Women's Ethnic",
@@ -157,7 +157,7 @@
 "name": "Collared shirt blouses",
 "area": "Collar",
 "note": "Crisp collared blouses for a tailored saree look.",
-"life": "errpp"
+"life": "errrr"
 },
 {
 "cat": "Women's Ethnic",
@@ -181,7 +181,7 @@
 "name": "Linen kurta sets",
 "area": "Fabric",
 "note": "Breathable linen and cotton-silk for relaxed celebrations.",
-"life": "rpppf"
+"life": "rrprp"
 },
 {
 "cat": "Men's Ethnic",
@@ -245,7 +245,7 @@
 "name": "Velvet bandhgalas",
 "area": "Fabric",
 "note": "Velvet bandhgalas in bottle green, navy and burgundy for winter weddings.",
-"life": "r-p-p"
+"life": "rfpfp"
 },
 {
 "cat": "Men's Ethnic",
@@ -285,7 +285,7 @@
 "name": "Straight trousers over churidars",
 "area": "Leg",
 "note": "Straight trousers replacing fitted churidars under kurtas.",
-"life": "rpppf"
+"life": "rrrrr"
 },
 {
 "cat": "Men's Ethnic",
@@ -341,7 +341,7 @@
 "name": "Kurta-shirt hybrids",
 "area": "Garment",
 "note": "Gender-fluid shirts with kurta length and band collars.",
-"life": "errpp"
+"life": "errrr"
 },
 {
 "cat": "Indo-Western",
@@ -389,7 +389,7 @@
 "name": "Breezy resort dresses",
 "area": "Garment",
 "note": "Easy, resort-style dresses for city daytime, as shown by Verandah.",
-"life": "errpp"
+"life": "erprp"
 },
 {
 "cat": "Western Wear (India)",
@@ -533,7 +533,7 @@
 "name": "Wide lasts for Indian feet",
 "area": "Construction",
 "note": "Broader lasts shaped for Indian foot widths.",
-"life": "errpp"
+"life": "errrr"
 },
 {
 "cat": "Indian Footwear",
@@ -565,7 +565,7 @@
 "name": "Jamdani",
 "area": "Fabric",
 "note": "Hand-woven motifs on fine cotton.",
-"life": "rrppf"
+"life": "rrrrr"
 },
 {
 "cat": "Fabrics & Weaves",
@@ -573,7 +573,7 @@
 "name": "Handspun khadi",
 "area": "Fabric",
 "note": "Khadi in silk, wool, linen and cotton, shown at the Navdhara Khadi showcase.",
-"life": "errpp"
+"life": "errrr"
 },
 {
 "cat": "Fabrics & Weaves",
@@ -581,7 +581,7 @@
 "name": "Banarasi brocade",
 "area": "Fabric",
 "note": "Rich woven brocade for weddings and Nehru jackets.",
-"life": "p-p-p"
+"life": "prprp"
 },
 {
 "cat": "Fabrics & Weaves",
@@ -589,7 +589,7 @@
 "name": "Reworked vintage Banarasi",
 "area": "Fabric",
 "note": "Vintage Banarasi cut into structured eveningwear, as by Amit Aggarwal.",
-"life": "errpp"
+"life": "eeeee"
 },
 {
 "cat": "Fabrics & Weaves",
@@ -637,7 +637,7 @@
 "name": "Tissue",
 "area": "Fabric",
 "note": "Metallic sheen for evening functions.",
-"life": "rpppf"
+"life": "rrprp"
 },
 {
 "cat": "Fabrics & Weaves",
@@ -661,7 +661,7 @@
 "name": "Natural-dyed fabrics",
 "area": "Colour",
 "note": "Plant dyes and slow processes.",
-"life": "errpp"
+"life": "errrr"
 },
 {
 "cat": "Embroidery & Surface",
@@ -677,7 +677,7 @@
 "name": "Chikankari",
 "area": "Embellishment",
 "note": "Lucknow white-on-white embroidery for summer and festive.",
-"life": "ppppp"
+"life": "prprp"
 },
 {
 "cat": "Embroidery & Surface",
@@ -693,7 +693,7 @@
 "name": "Tone-on-tone embroidery",
 "area": "Embellishment",
 "note": "Embroidery in the fabric colour for quiet luxury.",
-"life": "rpppf"
+"life": "rrrrr"
 },
 {
 "cat": "Embroidery & Surface",
@@ -709,7 +709,7 @@
 "name": "Kantha",
 "area": "Embellishment",
 "note": "Running-stitch embroidery from Bengal.",
-"life": "errpp"
+"life": "errrr"
 },
 {
 "cat": "Embroidery & Surface",
@@ -725,7 +725,7 @@
 "name": "Block print",
 "area": "Print",
 "note": "Hand block prints from Bagru and Sanganer.",
-"life": "ppppp"
+"life": "pprpr"
 },
 {
 "cat": "Embroidery & Surface",
@@ -733,7 +733,7 @@
 "name": "Bandhani",
 "area": "Pattern",
 "note": "Tie-dye dots from Gujarat and Rajasthan.",
-"life": "rrppf"
+"life": "rrrrr"
 },
 {
 "cat": "Embroidery & Surface",
@@ -757,7 +757,7 @@
 "name": "All-over heavy sequins",
 "area": "Embellishment",
 "note": "Head-to-toe sequins giving way to placement work.",
-"life": "ff---"
+"life": "fffff"
 },
 {
 "cat": "Trims & Accessories",
@@ -805,7 +805,7 @@
 "name": "Potli bags",
 "area": "Accessory",
 "note": "Drawstring pouch bags for festive looks.",
-"life": "ppppp"
+"life": "prprp"
 },
 {
 "cat": "Trims & Accessories",
@@ -830,6 +830,134 @@
 "area": "Accessory",
 "note": "Brooches on bandhgalas, kurtas and saree pallus.",
 "life": "rpppf"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Suits & kurtas",
+"name": "Airy kurta separates with opacity-tested inners",
+"area": "Construction",
+"note": "Separate inner and loose outer layers for coverage with less bulk. Test opacity, shrinkage and seam stability.",
+"life": "-errp"
+},
+{
+"cat": "Indo-Western",
+"sub": "Summer layers",
+"name": "Adjustable light draped separates",
+"area": "Closure",
+"note": "Trial secure ties and adjustable drape for seated and walking comfort. Keep styling instructions clear.",
+"life": "-errp"
+},
+{
+"cat": "Embroidery & Surface",
+"sub": "Craft accents",
+"name": "Crochet-edged summer shirts",
+"area": "Surface",
+"note": "Small crochet accents on breathable shirts; approve repeatability and wash recovery before scaling.",
+"life": "-errr"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Summer tailoring",
+"name": "Half-lined textured Nehru layers",
+"area": "Construction",
+"note": "Light textured cloth with reduced lining bulk; check collar recovery and perspiration marks.",
+"life": "-errp"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Lehengas",
+"name": "Pocketed light occasion skirts",
+"area": "Construction",
+"note": "A lighter wedding-guest skirt with supported pockets and an independently wearable top. Check pocket distortion.",
+"life": "--err"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Occasion construction",
+"name": "Secure draped occasion stoles",
+"area": "Closure",
+"note": "Develop unobtrusive original fastening solutions for free movement; stress-test closures and skin contact.",
+"life": "--err"
+},
+{
+"cat": "Embroidery & Surface",
+"sub": "Placed ornament",
+"name": "Controlled metallic-cord accents",
+"area": "Surface",
+"note": "Small placed reflective details, limited to premium trials. Check weight, abrasion, repair and humidity exposure.",
+"life": "--eer"
+},
+{
+"cat": "Trims & Accessories",
+"sub": "Occasion layers",
+"name": "Detachable festive cape panels",
+"area": "Layer",
+"note": "Trial a removable occasion layer with discreet, durable attachment points and clear care instructions.",
+"life": "--err"
+},
+{
+"cat": "Indo-Western",
+"sub": "Wardrobe systems",
+"name": "Modular travel kurta sets",
+"area": "Construction",
+"note": "Summer 28 hypothesis: compatible separates with useful adjustment. Validate through paid customer pilots in 2027.",
+"life": "---er"
+},
+{
+"cat": "Trims & Accessories",
+"sub": "Aftercare",
+"name": "Replaceable ties and spare trim kits",
+"area": "Construction",
+"note": "Summer 28 hypothesis: documented repair components supplied with selected products. Cost the service before promising it.",
+"life": "---er"
+},
+{
+"cat": "Fabrics & Weaves",
+"sub": "Sourcing trials",
+"name": "Traceable lightweight blend trials",
+"area": "Fabric",
+"note": "Summer 28 hypothesis: test light blends with supplier composition and origin records. Certification does not replace performance testing.",
+"life": "---er"
+},
+{
+"cat": "Indian Footwear",
+"sub": "Comfort development",
+"name": "Serviceable occasion-flat components",
+"area": "Construction",
+"note": "Summer 28 hypothesis: explore replaceable parts with footwear suppliers; safety, adhesion and flex tests come before scale.",
+"life": "---ee"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Rewear systems",
+"name": "Reconfigurable saree occasion layers",
+"area": "Layer",
+"note": "Festive 28 hypothesis: refresh an existing saree with an independent layer. Validate attachment security and fit.",
+"life": "----e"
+},
+{
+"cat": "Trims & Accessories",
+"sub": "Repairable ornament",
+"name": "Removable occasion embellishment panels",
+"area": "Construction",
+"note": "Festive 28 hypothesis: separate fragile ornament for storage and servicing. Test snagging and care economics.",
+"life": "----e"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Rewear systems",
+"name": "Reversible light occasion waistcoats",
+"area": "Construction",
+"note": "Festive 28 hypothesis: two useful faces with stable seams and unobtrusive labels. Validate demand before booking cloth.",
+"life": "----e"
+},
+{
+"cat": "Embroidery & Surface",
+"sub": "Craft development",
+"name": "Maker-attributed placed craft capsules",
+"area": "Surface",
+"note": "Festive 28 hypothesis: a limited range built with a named craft partner. Confirm origin, labour cost and capacity before claims.",
+"life": "----e"
 }
 ]
 }

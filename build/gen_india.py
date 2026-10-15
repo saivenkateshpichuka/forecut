@@ -3,6 +3,8 @@ reusing season_tpl.txt so it shares the viewer, descriptions, download cards and
 import pantone as PT
 import json, html, os, re
 import india_data as I
+import india_seasons as IS
+ORIGINAL_INDIA = IS.apply(I)
 import desc as DESCMOD
 from seasons_data import SEASONS, META as SMETA
 E = html.escape
@@ -58,14 +60,14 @@ secs, nav, counts, total, descs = [], [], {k: 0 for k in SL}, 0, {}
 short = {'Women': 'Women', 'Men': 'Men', 'Fusion': 'Fusion', 'Western': 'Western', 'Footwear': 'Shoes', 'Materials': 'Craft'}
 cur = None
 for dept, cat, use, fab in I.CATS:
-    items = [dict(cat=c, sub=sb, name=n, area=a, note=no, life=l) for (c, sb, n, a, no, l, sk) in I.D if c == cat and l[si] != '-']
+    items = [dict(cat=c, sub=sb, name=n, area=a, note=no, life=l) for (c, sb, n, a, no, l, sk) in I.D if c == cat and any(ch != '-' for ch in l)]
     if dept != cur:
         if cur: secs.append('</div>')
         secs.append(f'<div class="dept" data-dept="{slug(dept)}"><h2 class="depth">{ {"Materials": "Fabrics, craft & trims"}.get(dept, dept if dept not in ("Women", "Men") else dept + "swear")}</h2>')
         cur = dept
     cid = f'{slug(dept)}-{slug(cat)}'
     nav.append(f'<a href="#{cid}" data-dept="{slug(dept)}">{short[dept]} · {E(cat)}</a>')
-    items.sort(key=lambda it: 'erpf'.index(it['life'][si]))
+    items.sort(key=lambda it: 'erpf-'.index(it['life'][si]))
     groups = {}
     for it in items: groups.setdefault(it['sub'], []).append(it)
     order = []
@@ -75,13 +77,15 @@ for dept, cat, use, fab in I.CATS:
     for sname in [k for k in order if k in groups]:
         cards = []
         for it in groups[sname]:
-            st = it['life'][si]; counts[st] += 1; total += 1
+            st = it['life'][si]
+            if st != '-': counts[st] += 1; total += 1
             descs[it['name']] = build_desc(cat, it)
-            c, l = SL[st]
+            c, l = SL.get(st, ('emerge', 'Not tracked in this season'))
+            off = ' data-off hidden' if st == '-' else ''
             q = E((it['name'] + ' ' + it['area'] + ' ' + it['note'] + ' ' + cat + ' ' + sname).lower())
             img = f' data-img="img/{islug(it["name"])}.webp"' if islug(it['name']) in IMGS else ''
             if ('flat-' + islug(it['name'])) in IMGS: img += f' data-flatimg="img/flat-{islug(it["name"])}.webp"'
-            cards.append(f'<article class="d" tabindex="0" role="button" aria-haspopup="dialog" data-st="{st}" data-life="{it["life"]}"{img} data-q="{q}"><div class="thumb" aria-hidden="true"></div><div class="dtop"><span class="area">{E(sname)}</span><span class="pill {c}">{l}</span></div><h4>{E(it["name"])}</h4><p>{E(it["note"])}</p><span class="open">View detail →</span></article>')
+            cards.append(f'<article class="d"{off} tabindex="0" role="button" aria-haspopup="dialog" data-area="{E(it["area"])}" data-st="{st}" data-life="{it["life"]}"{img} data-q="{q}"><div class="thumb" aria-hidden="true"></div><div class="dtop"><span class="area">{E(sname)}</span><span class="pill {c}">{l}</span></div><h4>{E(it["name"])}</h4><p>{E(it["note"])}</p><span class="open">View detail →</span></article>')
         subhtml.append(f'<div class="sub" data-sub="{E(sname)}"><h5>{E(sname)} <span>{len(groups[sname])}</span></h5><div class="grid">{"".join(cards)}</div></div>')
     secs.append(f'<section class="cat" id="{cid}" data-dept="{slug(dept)}"><div class="cathead"><h3>{E(cat)}</h3><span class="cnt"><span class="vis">{len(items)}</span> details</span></div>{"".join(subhtml)}</section>')
 secs.append('</div>')
@@ -141,6 +145,7 @@ out = tpl
 for k, v in rep.items(): out = out.replace(k, v)
 assert '%%' not in out.replace('100%%', ''), [ln for ln in out.split('\n') if '%%' in ln][:3]
 out = out.replace("CUR_SEASON = 'India'", "CUR_SEASON = '" + codes[0] + "'")
+out = out.replace("window.FCSetSeason = function (c) { CUR_SEASON = c; };", "window.FCSetSeason = function (c, palette, descriptions) { CUR_SEASON = c; if(palette) SEASON_PAL = palette; if(descriptions) DESC = descriptions; var label=document.getElementById('india-viewer-season'); if(label) label.textContent=c; };")
 out = out.replace('The stories behind India', 'The stories behind India 2026–28').replace('India palette', 'India colour palette')
 seg_old = re.search(r'<div class="seg" role="group" aria-label="Department">.*?</div>', out, re.S).group(0)
 seg_new = '<div class="seg" role="group" aria-label="Department"><button type="button" data-dept="all" aria-pressed="true">All</button>' + ''.join(f'<button type="button" data-dept="{k}" aria-pressed="false">{v}</button>' for k, v in [('women', 'Women'), ('men', 'Men'), ('fusion', 'Fusion'), ('western', 'Western'), ('footwear', 'Footwear'), ('materials', 'Craft')]) + '</div>'
@@ -160,7 +165,7 @@ for i, c in enumerate(codes):
     sc += (f'<article class="scard{" open" if (c not in SITE.get("locked", [])) else " locked"}"><div class="shd">{tag}<b>{E(c)}</b><span>{E(when)}</span></div>'
            f'<p class="socc">{E(occ)}</p><p class="sfoc">{E(si_["focus"])}</p>'
            f'<div class="ssw">{sw}</div><div class="smix">{bar}</div><p class="sct">{tot} details · {cnt["e"]} emerging · {cnt["r"]} rising · {cnt["p"]} peaking · {cnt["f"]} fading</p>'
-           f'<p class="splan"><b>Plan:</b> {E(si_["plan"])}</p></article>')
+           f'<p class="splan"><b>Plan:</b> {E(si_["plan"])}</p><button type="button" class="season-open" data-open-si="{i}">Explore {E(c)} →</button></article>')
 ssec = f"""  <section class="sec" id="seasons" aria-labelledby="sgh"><div class="sechead"><span class="mono eb">India fashion calendar</span><h2 id="sgh">Five seasons, one plan.</h2><p class="hint">Festive 26 is open to everyone. Later seasons are open to signed-in members now, and to everyone at launch.</p></div>
     <div class="sgrid">{sc}</div></section>
 """
@@ -171,9 +176,9 @@ sbtn = ''.join(f'<button type="button" data-si="{i}"{"" if (c not in SITE.get("l
 srow = f'<div class="row srow"><span class="slbl">Season</span><div class="sseg" role="group" aria-label="Season">{sbtn}</div></div><p class="snote" id="snote" hidden>Long-range outlook: statuses are projected from today\'s signals. New emerging details are added each month as they appear.</p>'
 out = out.replace('<div class="tools">\n    <div class="row">', '<div class="tools">\n    ' + srow + '\n    <div class="row">', 1)
 sjs = '''<script>(function(){var C=''' + json.dumps(codes) + ''',CL={e:'emerge',r:'rise',p:'peak',f:'fade'},LB={e:'Emerging',r:'Rising',p:'Peaking',f:'Fading'},bs=document.querySelectorAll('.sseg button');
-function set(i){document.querySelectorAll('.d').forEach(function(d){var ch=(d.getAttribute('data-life')||'').charAt(i);if(!ch||ch==='-'){d.setAttribute('data-off','');return;}d.removeAttribute('data-off');d.setAttribute('data-st',ch);var p=d.querySelector('.pill');if(p){p.className='pill '+CL[ch];p.textContent=LB[ch];}});
-bs.forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-si')==String(i)?'true':'false');});var sn=document.getElementById('snote');if(sn)sn.hidden=true;if(window.FCSetSeason)FCSetSeason(C[i]);if(window.FCApply)FCApply();}
-bs.forEach(function(b){b.addEventListener('click',function(){var sn=document.getElementById('snote');if(b.hasAttribute('data-lock')){if(sn){sn.hidden=false;sn.textContent=b.querySelector('b').textContent.replace(' 🔒','')+' is open to members. Sign in free (top right) to unlock it.';}return;}set(+b.getAttribute('data-si'));});});})();</script>'''
+function set(i){if(!bs[i]||bs[i].hasAttribute('data-lock'))return;document.querySelectorAll('.d').forEach(function(d){var ch=(d.getAttribute('data-life')||'').charAt(i);if(!ch||ch==='-'){d.setAttribute('data-off','');return;}d.removeAttribute('data-off');d.setAttribute('data-st',ch);var p=d.querySelector('.pill');if(p){p.className='pill '+CL[ch];p.textContent=LB[ch];}});
+bs.forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-si')==String(i)?'true':'false');});var sn=document.getElementById('snote');if(sn)sn.hidden=true;if(window.FCIndiaEditorial)FCIndiaEditorial(i);else if(window.FCSetSeason)FCSetSeason(C[i]);if(window.FCApply)FCApply();}
+window.FCIndiaSelect=set;bs.forEach(function(b){b.addEventListener('click',function(){var sn=document.getElementById('snote');if(b.hasAttribute('data-lock')){if(sn){sn.hidden=false;sn.textContent=b.querySelector('b').textContent.replace(' 🔒','')+' is open to members. Sign in free (top right) to unlock it.';}return;}set(+b.getAttribute('data-si'));});});})();</script>'''
 out = out.replace('</body></html>', sjs + '\n</body></html>') if '</body></html>' in out else out + sjs
 out = out.replace('</style>', '.srow{align-items:center;gap:10px;flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px}.snote{margin:-4px 0 10px;font-size:13.5px;color:var(--muted)}.slbl{font:700 12px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);flex:none}.sseg{display:flex;gap:6px}.sseg button{all:unset;cursor:pointer;flex:none;border:1px solid var(--grid);background:var(--paper-2);border-radius:10px;padding:7px 12px;display:grid;line-height:1.25}.sseg button b{font:700 14px var(--body)}.sseg button small{font:500 11px var(--body);color:var(--muted)}.sseg button[aria-pressed="true"]{background:var(--mat);border-color:var(--mat);color:var(--mat-ink)}.sseg button[aria-pressed="true"] small{color:var(--mat-ink);opacity:.8}.sseg button[data-lock]{opacity:.6;cursor:not-allowed}.sseg button:focus-visible{outline:2px solid var(--chalk);outline-offset:2px}</style>', 1)
 css = '.cal{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:8px}.calw{border:1px solid var(--grid);border-radius:10px;padding:8px 10px;background:var(--paper);display:grid;gap:2px}.calw b{font:600 13px var(--body)}.calw span{font-size:11.5px;color:var(--muted);line-height:1.35}.calw.cur{border-color:var(--mat);box-shadow:inset 0 0 0 1px var(--mat)}@media (max-width:560px){.cal{grid-template-columns:1fr}}'
@@ -226,5 +231,7 @@ if pick:
     js = "<script>document.querySelectorAll('.lbk').forEach(function(b){b.addEventListener('click',function(){var n=b.getAttribute('data-name'),hit=Array.prototype.find.call(document.querySelectorAll('.d'),function(c){return c.querySelector('h4').textContent===n;});if(hit&&window.ForecutOpenDetail)window.ForecutOpenDetail(hit);});});</script>"
     out = out.replace('</body></html>', js + '\n</body></html>') if '</body></html>' in out else out + js
 import panels; out = panels.add(out)
+import india_editorial
+out = india_editorial.add(out, I, descs, ORIGINAL_INDIA, IMGS)
 open(path, 'w').write(out)
 print('india', total, counts)

@@ -101,3 +101,25 @@ photo alone under "Photo" and the separate drawings under "Flat sketch". Cards k
 `image-requests.csv` is rebuilt on every build and lists each needed image with search links and an AI fallback prompt.
 New Journal articles may set `'hero_new': 'art-<slug>'`, `'img_kw': '<search words>'` and `'img_prompt': '<AI prompt>'`.
 The existing `'hero'` image is shown until `art-<slug>` is uploaded; the request appears in `image-requests.csv`.
+
+### India season research
+
+`india_research.json` holds the dated source register, four independent seasonal
+editorials, original palettes, category actions and validation checkpoints.
+`india_seasons.py` adds future-only development ideas and explicit lifecycle
+reassessments while preserving Festive 26. These are editorial priorities, not
+measured sales; 2028 is explicitly a conditional scenario.
+
+Build only this page with Python 3.12+ (the generator uses modern f-strings):
+
+```sh
+STATIC=.. python3 gen_india.py
+ONLY=india.html python3 seo.py
+python3 test_india.py
+python3 keep_check.py
+```
+
+`ONLY` restricts SEO processing to named, comma-separated pages and skips
+shared sitemap/assets. The normal complete build remains unchanged. Node.js
+is needed by the India inline-script validation. Do not publish local member
+preview fixtures; they only simulate an authenticated UI during testing.

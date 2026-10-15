@@ -1,0 +1,602 @@
+{
+  "reviewed": "2026-10-15",
+  "method": "Forecut editorial forecasts synthesise public Indian designer interviews, international SS27 show notes, textile-trade coverage and brand collections. Runway presence is not sell-through. Lifecycle labels are qualitative development priorities, not measured market shares. 2028 entries are conditional scenarios; no 2028 runway or sales evidence is claimed. Palettes are original Forecut working colours, not an official colour authority forecast. Festival groupings are merchandising windows, not verified religious dates; Eid timing requires a separate calendar check.",
+  "sources": [
+    {
+      "id": "fdci-rawal",
+      "title": "FDCI · Kunal Rawal, India Couture Week 2026",
+      "date": "2026-07-28",
+      "url": "https://fdci.org/chikankari-meets-raffia-french-knots-elevate-chattai-kunal-rawal-style/",
+      "note": "Designer interview: functional linings, wearable drapes and tonal craft in menswear. An occasionwear input, not measured retail demand."
+    },
+    {
+      "id": "fdci-arpita",
+      "title": "FDCI · Arpita Mehta, India Couture Week 2026",
+      "date": "2026-07-28",
+      "url": "https://fdci.org/patola-kantha-and-bandhini-get-a-new-vocab/",
+      "note": "Pastel Bandhani on fluid bases and reinterpretations of Patola and Kantha. Supports craft experimentation, not a mass-market adoption claim."
+    },
+    {
+      "id": "fdci-rimzim",
+      "title": "FDCI · Rimzim Dadu, India Couture Week 2026",
+      "date": "2026-07-28",
+      "url": "https://fdci.org/craft-must-have-a-newer-design-language/",
+      "note": "Mother-of-pearl and metal-cord couture, with an emphasis on aftercare. A premium experimental signal rather than a volume direction."
+    },
+    {
+      "id": "fdci-aisha",
+      "title": "FDCI · Aisha Rao, Preyasi",
+      "date": "2026-07-31",
+      "url": "https://fdci.org/dearly-beloved-lehenga-you-can-be-upcycled/",
+      "note": "Textile appliqué, lighter occasion silhouettes and practical pockets provide a useful wedding-guest development reference."
+    },
+    {
+      "id": "fdci-margn",
+      "title": "FDCI · Margn, Circular Design Challenge",
+      "date": "2026-10-13",
+      "url": "https://fdci.org/farmers-son-from-coal-mines-wins-circular-design-challenge/",
+      "note": "Hand knitting and repurposed materials illustrate small-scale circular design. Commercial consistency and supply still need checking."
+    },
+    {
+      "id": "elle-pero",
+      "title": "ELLE India · In conversation with Aneeth Arora",
+      "date": "2026-10-14",
+      "url": "https://elle.in/fashion/in-conversation-with-aneeth-arora-12672767",
+      "note": "Designer interview offers a journal perspective on péro SS27 and playful craft. Treat as brand intent, not evidence of sales."
+    },
+    {
+      "id": "dior-ss27",
+      "title": "Dior · Summer 2027 show",
+      "date": "SS27 collection",
+      "url": "https://www.dior.com/en_gb/fashion/womens-fashion/ready-to-wear-shows/summer-2027-show",
+      "note": "Sheer and opaque contrasts, light fabrics and floral volume inform occasionwear experimentation. Translate for Indian coverage and climate."
+    },
+    {
+      "id": "hermes-ss27",
+      "title": "Hermès · Women’s spring-summer 2027",
+      "date": "SS27 collection",
+      "url": "https://www.hermes.com/us/en/content/402900-women-spring-summer-runway-show/",
+      "note": "Airy layering and adjustable silk drapes suggest movement-led summer construction; luxury runway evidence does not establish Indian demand."
+    },
+    {
+      "id": "pv-ss27",
+      "title": "Première Vision · SS27 fabric decoding",
+      "date": "2026-02-13",
+      "url": "https://www.premierevision.com/articles/e620fe9e-3407-f111-8333-000d3a2973d4/spring-summer-27-decodings-fabrics",
+      "note": "Public trade coverage supports light natural blends, fluid shirting, textured weaves and sheer layers. Supplier availability must be verified."
+    },
+    {
+      "id": "pv-aw27",
+      "title": "Première Vision · AW27–28 season overview",
+      "date": "September 2026 edition",
+      "url": "https://paris.premierevision.com/en/content/details-de-la-saison-ah-27-28-pv-paris-septembre-2026",
+      "note": "Public textile-fair overview puts material development at the centre. Used as a long-lead input, not as a reproduced proprietary forecast."
+    },
+    {
+      "id": "anokhi",
+      "title": "ANOKHI · Summer 2026, Kambaya",
+      "date": "Summer 2026 collection",
+      "url": "https://www.anokhi.com/whatsnew/",
+      "note": "Indian brand reference for mud-resist, indigo and restrained handmade detailing. A prior-season retail offer, not a 2027 collection."
+    },
+    {
+      "id": "te-2026",
+      "title": "Textile Exchange · Materials Benchmark Insights and Trends 2026",
+      "date": "2026 report",
+      "url": "https://textileexchange.org/knowledge-center/reports/materials-benchmark-insights-and-trends-2026/",
+      "note": "Materials benchmarking highlights the need to distinguish sourcing commitments from actual scale. Circular-material claims require traceable supplier evidence."
+    }
+  ],
+  "seasons": {
+    "Summer 27": {
+      "title": "Air, craft and ease",
+      "basis": "Near-term forecast · medium directional confidence; product demand unmeasured",
+      "focus": "Build around breathable separates, fluid drapes and light craft. Reserve sheer, playful and experimental surfaces for small capsules rather than making them the whole range.",
+      "palette": [
+        [
+          "#F1E9D8",
+          "Unbleached chalk"
+        ],
+        [
+          "#A9B89C",
+          "Leaf mist"
+        ],
+        [
+          "#D6A2A7",
+          "Rose clay"
+        ],
+        [
+          "#314779",
+          "Inky blue"
+        ],
+        [
+          "#B75C42",
+          "Warm terracotta"
+        ]
+      ],
+      "themes": [
+        {
+          "title": "Cloth before decoration",
+          "story": "Summer comfort is the starting point. Develop tactile cotton, linen and fine woven sets whose value comes from handle, proportion and finish.",
+          "products": "Straight kurta with relaxed trousers; linen overshirt; handloom shirt dress; lightweight everyday saree.",
+          "make": "Compare unlined and half-lined samples. Test shrinkage, opacity, seam slippage and hand feel after laundering. Avoid heavy fusible panels that defeat airflow.",
+          "commercial": "Protect easy-care core styles; introduce higher-cost handloom in a tightly edited premium capsule. Validate supplier lead times before range sign-off.",
+          "sources": [
+            "pv-ss27",
+            "anokhi"
+          ]
+        },
+        {
+          "title": "Light, with coverage",
+          "story": "Sheer runway layers become wearable when opacity is designed into the garment. The Indian opportunity is a light overlay with an intentional inner, not an exposed look copied from a show.",
+          "products": "Organza over cotton-silk; airy cape over a day lehenga; fluid dupatta; sleeveless inner with a loose shirt.",
+          "make": "Specify inner length, armhole coverage and attachment points. Check snagging, perspiration marks and movement in daylight.",
+          "commercial": "Offer the inner as part of the product; keep the outer usable with existing wardrobe pieces. Test colour and size demand before widening.",
+          "sources": [
+            "dior-ss27",
+            "hermes-ss27"
+          ]
+        },
+        {
+          "title": "Playful craft, controlled scale",
+          "story": "Use handwork as a recognisable small detail, with clear maker attribution. Current designer and brand references support experimentation without establishing a universal trend.",
+          "products": "Contrast hand-stitched pockets; crochet-edge shirts; indigo printed co-ords; small patchwork panels.",
+          "make": "Keep high-labour detailing away from seams and alteration points. Approve print registration, wash fastness and repeatable stitch quality.",
+          "commercial": "Create one recognisable craft code across apparel and a small accessory. Replenish the simpler version if the test performs.",
+          "sources": [
+            "elle-pero",
+            "fdci-margn",
+            "anokhi"
+          ]
+        },
+        {
+          "title": "Occasionwear that moves",
+          "story": "Bring festive dressing into summer through less bulk and more flexible styling. Practical menswear construction is a relevant Indian lead signal.",
+          "products": "Light embroidered kurta sets; draped skirt separates; a soft Nehru layer; rewearable wedding-guest lehenga.",
+          "make": "Use lighter linings, practical pockets and secure drape fastenings. Fit seated, walking and with raised arms; check trim abrasion.",
+          "commercial": "Sell separates with two styling options. Keep ornate pieces in depth-limited occasion drops and compare returns against simpler sets.",
+          "sources": [
+            "fdci-rawal",
+            "fdci-aisha"
+          ]
+        }
+      ],
+      "categories": [
+        [
+          "Womenswear",
+          "Prioritise light kurta separates, easy sarees and day-function layers. Test a covered sheer capsule; keep fitted statement bodices selective."
+        ],
+        [
+          "Menswear",
+          "Develop linen and cotton-silk kurtas, soft jackets and straight trousers. Comfort construction should be visible in the product explanation."
+        ],
+        [
+          "Fusion & western",
+          "Use fluid shirts, relaxed sets and craft accents. Build travel versatility through pockets and adjustable styling rather than excess utility trims."
+        ],
+        [
+          "Footwear",
+          "Develop padded flats and flexible occasion shoes. Wide-fit grading, rub testing and outsole grip are essential; no demand uplift is assumed."
+        ],
+        [
+          "Textiles & trims",
+          "Cotton, linen blends, light handloom and restrained embroidery lead development. Specify composition, weight and care; do not call a fabric sustainable without proof."
+        ]
+      ],
+      "plan": [
+        [
+          "October–November 2026",
+          "Set customer, occasion and price architecture; source fabric and make first silhouettes."
+        ],
+        [
+          "December 2026",
+          "Approve washed fit samples, colour fastness, opacity and costing; book craft capacity."
+        ],
+        [
+          "January–February 2027",
+          "Complete pilot production, product photography and size checks; phase deliveries by climate and occasion."
+        ],
+        [
+          "March–July 2027",
+          "Review actual full-price sales, returns and replenishment weekly; do not confuse social engagement with purchase."
+        ]
+      ],
+      "watch": [
+        "Confirm Holi and Eid drop timing separately; lunar dates can shift.",
+        "Look for repeated lighter construction across Indian SS27 shows, not one standout look.",
+        "Stop a sheer or handwork option if opacity, care or quality complaints exceed your own benchmark."
+      ],
+      "sources": [
+        "pv-ss27",
+        "dior-ss27",
+        "hermes-ss27",
+        "fdci-rawal",
+        "fdci-aisha",
+        "elle-pero",
+        "anokhi",
+        "fdci-margn"
+      ]
+    },
+    "Festive 27": {
+      "title": "Craft with a second life",
+      "basis": "Forward forecast · medium-low directional confidence; recheck against 2027 Indian shows",
+      "focus": "Plan festive capsules around lighter embellishment, adaptable separates and rich textile character. Treat sculptural metallic work as an experimental premium edge rather than a volume assumption.",
+      "palette": [
+        [
+          "#175E4A",
+          "Deep botanical"
+        ],
+        [
+          "#743047",
+          "Mulberry"
+        ],
+        [
+          "#C6AE7A",
+          "Soft antique gold"
+        ],
+        [
+          "#263D6C",
+          "Night blue"
+        ],
+        [
+          "#EDE2CF",
+          "Warm ivory"
+        ]
+      ],
+      "themes": [
+        {
+          "title": "Textile becomes the occasion",
+          "story": "Use the weave and placement of craft to create festive identity. The 2026 couture inputs support fresh treatments of familiar techniques, not a claim that every heritage craft is accelerating.",
+          "products": "Tonal brocade jackets; fine Bandhani drapes; textured silk kurta sets; narrow-border sarees.",
+          "make": "Approve handloom yardage early. Align motif placement across sizes and price embroidery by actual labour hours.",
+          "commercial": "Pair one statement textile with simpler coordinates. Separate cloth-led premium options from entry-price print interpretations.",
+          "sources": [
+            "fdci-arpita",
+            "fdci-rawal",
+            "pv-aw27"
+          ]
+        },
+        {
+          "title": "Rewear the celebration",
+          "story": "Design wedding-guest pieces to be useful after the event. Lighter construction and modular styling are Forecut development recommendations anchored in current Indian occasionwear practice.",
+          "products": "Lehenga with a wearable separate blouse; detachable cape; reversible waistcoat; light occasion skirt with pockets.",
+          "make": "Make fastenings accessible, include alteration allowance and test pocket distortion. Photograph both dressed-up and everyday combinations.",
+          "commercial": "Use bundles and separate purchasing to improve outfit flexibility. Test attach rates before multiplying accessory SKUs.",
+          "sources": [
+            "fdci-aisha",
+            "fdci-rawal"
+          ]
+        },
+        {
+          "title": "Light as ornament",
+          "story": "Material reflection can deliver impact with fewer all-over trims. Reflective couture is a premium signal with substantial weight, repair and sourcing risks.",
+          "products": "Small pearl-effect borders; metallic-cord accents; controlled tissue panels; a statement brooch.",
+          "make": "Sample skin contact, sharp edges, tarnishing and storage. Offer repair guidance and keep non-washable components removable where possible.",
+          "commercial": "Keep fragile or expensive surfaces made-to-order or in limited capsules. Never equate couture visibility with volume readiness.",
+          "sources": [
+            "fdci-rimzim",
+            "fdci-arpita"
+          ]
+        },
+        {
+          "title": "Menswear, engineered for the event",
+          "story": "Combine Indian textile knowledge with movement and personal styling. Regional weather and event format matter more than a single national festive uniform.",
+          "products": "Soft bandhgalas; tonal embroidered overshirts; secure draped stoles; straight trousers under layered kurtas.",
+          "make": "Fit across body types and test long seated wear. Consider breathable linings and secure internal fasteners without replicating a designer’s proprietary mechanism.",
+          "commercial": "Merchandise by event and climate. Offer lighter wedding-guest options beside more elaborate groom pieces.",
+          "sources": [
+            "fdci-rawal"
+          ]
+        }
+      ],
+      "categories": [
+        [
+          "Womenswear",
+          "Build saree, blouse and occasion-skirt combinations. Balance craft visibility with weight, alteration access and repeat wear."
+        ],
+        [
+          "Menswear",
+          "Focus on tonal texture and comfortable layering; reserve velvet for appropriate winter markets and venues."
+        ],
+        [
+          "Fusion & western",
+          "Test occasion jackets over familiar separates. Keep dramatic drapes proportionate and fastening instructions clear."
+        ],
+        [
+          "Footwear",
+          "Pair embellished juttis with simpler padded alternatives; run flex, adhesion, grip and long-wear trials."
+        ],
+        [
+          "Textiles & trims",
+          "Book tissue, silk blends and artisan embroidery early. Confirm material origin, repairability and actual production capacity before scaling."
+        ]
+      ],
+      "plan": [
+        [
+          "January–March 2027",
+          "Revalidate against Indian runway and brand launches; approve regional assortment and supplier capacity."
+        ],
+        [
+          "April–May 2027",
+          "Finalise craft strike-offs, fit, wearer trials and cost; retain a fallback fabric for long-lead styles."
+        ],
+        [
+          "June–July 2027",
+          "Deliver early Rakhi and Onam capsules; stage later festival inventory by verified dates."
+        ],
+        [
+          "August–December 2027",
+          "Reorder proven shapes. Compare full-price sales, return reasons and repeat purchases by region and event."
+        ]
+      ],
+      "watch": [
+        "Recheck couture and textile signals in 2027 before bulk orders.",
+        "Track whether buyers choose lighter sets at equal prices; there is no sell-through dataset behind this forecast.",
+        "Test one reflective surface first; discontinue unsafe, heavy or unrepairable options."
+      ],
+      "sources": [
+        "fdci-rawal",
+        "fdci-arpita",
+        "fdci-rimzim",
+        "fdci-aisha",
+        "pv-aw27"
+      ]
+    },
+    "Summer 28": {
+      "title": "An adaptable summer wardrobe",
+      "basis": "Long-range scenario · low confidence; not observed 2028 runway evidence",
+      "focus": "Explore fewer, more useful pieces: breathable modular sets, repair-friendly construction and identifiable local craft. These are conditional development scenarios to revisit when 2027–28 signals arrive.",
+      "palette": [
+        [
+          "#EAE0CC",
+          "Loom neutral"
+        ],
+        [
+          "#8C9F82",
+          "Dry sage"
+        ],
+        [
+          "#AA5C3E",
+          "Clay earth"
+        ],
+        [
+          "#344A73",
+          "Deep indigo"
+        ],
+        [
+          "#D8B6AA",
+          "Muted shell"
+        ]
+      ],
+      "themes": [
+        {
+          "title": "Adaptable summer sets",
+          "story": "Scenario: versatility becomes a stronger reason to buy if shoppers want fewer occasion-specific pieces. Airy and adjustable 2027 runway ideas are an early design input only.",
+          "products": "Shirt-and-trouser sets; adjustable wrap kurtas; removable sleeve layers; compact travel capsules.",
+          "make": "Prototype two ways to wear each piece without excess hardware. Fit-test adjustability at both ends of the size range.",
+          "commercial": "Run a small paid pilot before committing capacity. Compare conversion and repeat wear feedback with fixed styles.",
+          "sources": [
+            "hermes-ss27",
+            "pv-ss27"
+          ]
+        },
+        {
+          "title": "Repair is part of the product",
+          "story": "Scenario: dependable aftercare helps distinguish premium craft. It depends on service economics and customer adoption, neither of which is established for 2028.",
+          "products": "Replaceable buttons and ties; spare trim kits; accessible seams; detachable occasion panels.",
+          "make": "Document repair steps and stock compatible components. Test that removable trims still survive normal wear.",
+          "commercial": "Cost the service separately before promising it. Measure repair use, lead time and margin impact in a pilot.",
+          "sources": [
+            "fdci-rimzim",
+            "te-2026"
+          ]
+        },
+        {
+          "title": "Craft with a clear origin",
+          "story": "Scenario: customers reward specific provenance over broad craft language. Local making is an identity cue, not automatic proof of lower impact.",
+          "products": "Cluster-attributed handloom shirts; small-batch indigo sets; restrained crochet and embroidery accents.",
+          "make": "Record fibre composition, supplier and process; check batch consistency and substantiate any environmental claim.",
+          "commercial": "Test product descriptions that explain maker and technique. Validate willingness to pay rather than assuming a premium.",
+          "sources": [
+            "anokhi",
+            "fdci-margn",
+            "te-2026"
+          ]
+        },
+        {
+          "title": "Soft structure for daily dressing",
+          "story": "Scenario: summer tailoring stays relaxed while becoming more purposeful. Build recognisable shapes with better finishing instead of adding novelty to every style.",
+          "products": "Unstructured overshirts; fluid sarees; straight-leg trousers; breathable waistcoats.",
+          "make": "Check drape, collar recovery, seam stability and opacity. Build wear trials into development before range expansion.",
+          "commercial": "Retain a familiar core and trial one silhouette change at a time. Use actual return reasons to set revisions.",
+          "sources": [
+            "pv-ss27",
+            "fdci-rawal"
+          ]
+        }
+      ],
+      "categories": [
+        [
+          "Womenswear",
+          "Scenario focus: flexible kurta sets, light everyday sarees and detachable occasion layers. Confirm appetite through 2027 customer tests."
+        ],
+        [
+          "Menswear",
+          "Scenario focus: unstructured layers and purposeful adjustment; keep dependable straight silhouettes as the comparison group."
+        ],
+        [
+          "Fusion & western",
+          "Scenario focus: wardrobe-compatible sets with a small craft signature, rather than speculative microtrends."
+        ],
+        [
+          "Footwear",
+          "Explore repairable components and comfortable lasts only with supplier trials; no 2028 sneaker adoption claim is made."
+        ],
+        [
+          "Textiles & trims",
+          "Trial traceable blends, repair components and lighter constructions. Availability, certifications and wash performance must precede volume booking."
+        ]
+      ],
+      "plan": [
+        [
+          "April–September 2027",
+          "Recheck SS28 trade and runway inputs as they become available; revise or reject these scenarios."
+        ],
+        [
+          "October–December 2027",
+          "Run customer pilots, aftercare costing and fit trials; lock only validated materials and silhouettes."
+        ],
+        [
+          "January–February 2028",
+          "Approve production against verified quality, demand and festival calendar."
+        ],
+        [
+          "March–July 2028",
+          "Track sales and returns against the pilot baseline; update scenarios with measured evidence."
+        ]
+      ],
+      "watch": [
+        "A scenario advances only after repeated brand signals and customer testing.",
+        "If modular details raise defects or returns, simplify the construction.",
+        "Review SS28 collections when published; this report does not describe shows that have not happened."
+      ],
+      "sources": [
+        "hermes-ss27",
+        "pv-ss27",
+        "fdci-rimzim",
+        "fdci-margn",
+        "anokhi",
+        "te-2026",
+        "fdci-rawal"
+      ]
+    },
+    "Festive 28": {
+      "title": "Celebration, built to keep",
+      "basis": "Long-range scenario · low confidence; review before any commercial commitment",
+      "focus": "Explore occasionwear whose value comes from reconfiguration, provenance and aftercare. This is an original Forecut planning scenario, not a claim about confirmed 2028 consumer preferences or designer collections.",
+      "palette": [
+        [
+          "#683047",
+          "Aubergine wine"
+        ],
+        [
+          "#204C40",
+          "Forest shade"
+        ],
+        [
+          "#BAA375",
+          "Aged gold"
+        ],
+        [
+          "#E8DDCA",
+          "Parchment"
+        ],
+        [
+          "#53627B",
+          "Smoky blue"
+        ]
+      ],
+      "themes": [
+        {
+          "title": "The occasion wardrobe, recomposed",
+          "story": "Scenario: an existing saree, skirt or kurta gains new life through a fresh layer. Current modular and lighter-occasion inputs support prototyping, not a prediction of guaranteed uptake.",
+          "products": "Detachable draped panels; separate capes; reversible occasion jackets; mixable saree blouses.",
+          "make": "Make attachment points discreet and stress-test them. Check fit when parts are used independently.",
+          "commercial": "Pilot a wardrobe-refresh capsule beside complete looks. Compare attachment sales with unsold component stock.",
+          "sources": [
+            "fdci-aisha",
+            "fdci-rawal"
+          ]
+        },
+        {
+          "title": "Heirloom surfaces, modern placement",
+          "story": "Scenario: restrained craft placement makes premium pieces easier to wear again. Heritage should be credited rather than reduced to a generic luxury claim.",
+          "products": "Narrow woven borders; tonal Bandhani; placed Kantha-inspired handwork through the appropriate maker partnership.",
+          "make": "Approve stitch density and motif placement on actual size sets. Build traceability and artisan payment into sourcing briefs.",
+          "commercial": "Test one craft family across a limited range. Validate lead times and gross margin after handwork and finishing costs.",
+          "sources": [
+            "fdci-arpita",
+            "pv-aw27"
+          ]
+        },
+        {
+          "title": "Repairable occasion shine",
+          "story": "Scenario: aftercare becomes part of the premium proposition. Reflective couture offers a visual reference but creates particular durability and storage challenges.",
+          "products": "Replaceable decorative panels; removable brooches; controlled metallic accents; spare embellished patches.",
+          "make": "Test abrasion, humidity exposure, trim replacement and packing. Supply a realistic care card and repair route.",
+          "commercial": "Keep experimental materials in made-to-order or limited runs. Expand only after repair and defect costs are understood.",
+          "sources": [
+            "fdci-rimzim",
+            "te-2026"
+          ]
+        },
+        {
+          "title": "Local making, contemporary shape",
+          "story": "Scenario: recognisable local techniques pair with contemporary separates. The opportunity depends on supply reliability and demonstrated customer interest.",
+          "products": "Light craft jackets; textured straight kurtas; draped skirts with pockets; simple occasion footwear.",
+          "make": "Obtain material and process records. Fit-test for movement and avoid unsupported recycled, regenerative or biodegradable claims.",
+          "commercial": "Use pre-orders or small pilots to learn about demand. Revisit the range after 2027 and 2028 Indian shows.",
+          "sources": [
+            "fdci-margn",
+            "fdci-rawal",
+            "te-2026"
+          ]
+        }
+      ],
+      "categories": [
+        [
+          "Womenswear",
+          "Explore reconfigurable saree and skirt outfits and placed craft. Avoid extending today’s trend curve automatically into 2028."
+        ],
+        [
+          "Menswear",
+          "Explore contemporary jackets, draped accessories and comfortable occasion trousers; test regional temperature needs."
+        ],
+        [
+          "Fusion & western",
+          "Explore component-led occasion capsules that work with existing wardrobe basics. Validate mix-and-match fit and styling clarity."
+        ],
+        [
+          "Footwear",
+          "Explore repair-friendly occasion flats and removable decorative elements where safe; wear and snag testing come first."
+        ],
+        [
+          "Textiles & trims",
+          "Prioritise verifiable origin and repeatable quality. Keep novel material development conditional on testing and commercial supply."
+        ]
+      ],
+      "plan": [
+        [
+          "July–December 2027",
+          "Check Indian couture, festive retail and trade-fair developments; replace unsupported scenarios."
+        ],
+        [
+          "January–March 2028",
+          "Validate target customers, price tolerance and suppliers; approve initial prototypes."
+        ],
+        [
+          "April–July 2028",
+          "Run wear, repair and quality tests; lock only proven options and verified festival delivery windows."
+        ],
+        [
+          "August–December 2028",
+          "Monitor sell-through and returns by event and region; record which hypotheses actually performed."
+        ]
+      ],
+      "watch": [
+        "Do not use 2026 couture as proof of 2028 mass-market adoption.",
+        "Stop material experiments when safe care or repair cannot be offered.",
+        "Replace this scenario with direct 2028 evidence as it becomes available; next planned research checkpoint: July 2027."
+      ],
+      "sources": [
+        "fdci-aisha",
+        "fdci-arpita",
+        "fdci-rimzim",
+        "fdci-rawal",
+        "fdci-margn",
+        "pv-aw27",
+        "te-2026"
+      ]
+    }
+  }
+}
