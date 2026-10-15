@@ -1,0 +1,47 @@
+{
+  "Festive 26": {
+    "file": "output/pdf/Forecut-India-Festive-26-Complete-Report.pdf",
+    "pages": 123,
+    "details": 103,
+    "bytes": 4969937,
+    "images": 104,
+    "reviewed": "2026-10-15",
+    "hero": "img/india-season-art/festive-26.webp"
+  },
+  "Summer 27": {
+    "file": "output/pdf/Forecut-India-Summer-27-Complete-Report.pdf",
+    "pages": 121,
+    "details": 101,
+    "bytes": 4619942,
+    "images": 102,
+    "reviewed": "2026-10-15",
+    "hero": "img/india-season-art/summer-27.webp"
+  },
+  "Festive 27": {
+    "file": "output/pdf/Forecut-India-Festive-27-Complete-Report.pdf",
+    "pages": 130,
+    "details": 111,
+    "bytes": 4987604,
+    "images": 112,
+    "reviewed": "2026-10-15",
+    "hero": "img/india-season-art/festive-27.webp"
+  },
+  "Summer 28": {
+    "file": "output/pdf/Forecut-India-Summer-28-Complete-Report.pdf",
+    "pages": 128,
+    "details": 109,
+    "bytes": 4645651,
+    "images": 110,
+    "reviewed": "2026-10-15",
+    "hero": "img/india-season-art/summer-28.webp"
+  },
+  "Festive 28": {
+    "file": "output/pdf/Forecut-India-Festive-28-Complete-Report.pdf",
+    "pages": 125,
+    "details": 106,
+    "bytes": 4611943,
+    "images": 107,
+    "reviewed": "2026-10-15",
+    "hero": "img/india-season-art/festive-28.webp"
+  }
+}

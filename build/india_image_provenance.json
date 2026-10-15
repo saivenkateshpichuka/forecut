@@ -1,0 +1,13 @@
+{
+  "tool": "Built-in image_gen",
+  "generated": "2026-10-15",
+  "usage": "Original Forecut conceptual forecast illustrations; not documented runway photographs.",
+  "prompt_set": {
+    "common": "Premium photorealistic Indian fashion forecast editorial, landscape 3:2. Three original full-length outfits on invisible mannequins in a warm ivory architectural studio, plausible tailoring, natural textile texture, soft daylight. No text, logos, watermarks, designer imitation or claims of runway provenance.",
+    "Festive 26": "Emerald pre-draped saree, wine cape lehenga, indigo brocade Nehru jacket over ivory kurta and trousers.",
+    "Summer 27": "Sage linen kurta and ivory trousers, dusty rose organza cape with opaque occasion skirt and blouse, indigo block-print shirt with cream trousers.",
+    "Festive 27": "Ivory pocketed occasion skirt and mulberry separate blouse, botanical tonal textured bandhgala, night-blue saree with antique-gold woven border.",
+    "Summer 28": "Dry-sage wrap kurta, clay unstructured overshirt with indigo trousers, parchment saree with removable vest. Conditional future concept.",
+    "Festive 28": "Aubergine draped skirt with detachable cape, forest reversible waistcoat over parchment kurta, smoky-blue saree and decorative jacket. Conditional future concept."
+  }
+}

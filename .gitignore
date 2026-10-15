@@ -1,2 +1,5 @@
 __pycache__/
 build/_names.json
+
+# Local PDF rendering previews
+tmp/pdfs/

@@ -233,5 +233,8 @@ if pick:
 import panels; out = panels.add(out)
 import india_editorial
 out = india_editorial.add(out, I, descs, ORIGINAL_INDIA, IMGS)
+if os.path.exists('india_pdf_manifest.json'):
+    import india_downloads
+    out = india_downloads.add(out)
 open(path, 'w').write(out)
 print('india', total, counts)

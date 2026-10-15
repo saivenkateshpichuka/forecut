@@ -123,3 +123,28 @@ python3 keep_check.py
 shared sitemap/assets. The normal complete build remains unchanged. Node.js
 is needed by the India inline-script validation. Do not publish local member
 preview fixtures; they only simulate an authenticated UI during testing.
+
+### Complete India PDF downloads
+
+`india_pdfs.py` produces one illustrated report per season in `output/pdf/`,
+including every active detail, themed strategy, palettes, category guidance,
+calendar and sources. `india_pdf_manifest.json` records completeness, page
+counts, size and cover imagery. `india_downloads.py` adds the corresponding
+buttons while retaining the existing member gates for later seasons.
+
+After changing India content, run from `build/` with Python 3.12+:
+
+```sh
+STATIC=.. python3 gen_india.py
+python3 india_pdfs.py
+STATIC=.. python3 gen_india.py
+ONLY=india.html python3 seo.py
+python3 test_india.py
+```
+
+PDF builds need reportlab, Pillow and pypdf. Set `FORECUT_PDF_FONTS` to a
+folder containing LiberationSans-Regular.ttf, LiberationSans-Bold.ttf and
+LiberationSans-Italic.ttf when outside the bundled workspace runtime.
+Seasonal concept-art assets live in `img/india-season-art/`; their AI origin
+is disclosed in both the website and PDFs. Keep the existing reference
+images when adding or refreshing seasonal art.

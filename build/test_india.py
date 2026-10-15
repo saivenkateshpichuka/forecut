@@ -29,3 +29,23 @@ for attrs,script in re.findall(r'<script([^>]*)>(.*?)</script>',h,re.S):
  with tempfile.NamedTemporaryFile(suffix='.js',mode='w') as f:
   f.write(script);f.flush();subprocess.run([node,'--check',f.name],check=True,capture_output=True)
 print('India checks passed: 103 original details preserved; 4 reports; 16 new ideas; scripts valid; member controls retained.')
+
+# Whole-season downloads: every active detail and an image for every detail.
+manifest_path=Path('india_pdf_manifest.json')
+if manifest_path.exists():
+ from pypdf import PdfReader
+ manifest=json.loads(manifest_path.read_text())
+ assert set(manifest)==set(I.CODES)
+ assert h.count('class="season-pdf"')==9
+ assert h.count('class="season-cover"')==5
+ for i,code in enumerate(I.CODES):
+  m=manifest[code];pdf=Path('..')/m['file'];assert pdf.exists()
+  reader=PdfReader(pdf);assert len(reader.pages)==m['pages']
+  expected=[x for x in I.D if x[5][i]!='-'];assert len(expected)==m['details']
+  txt='\n'.join(p.extract_text() or '' for p in reader.pages)
+  def ascii_text(s):return s.replace('₹','INR ').replace('→',' > ').replace('·',' | ').replace('–','-').replace('—','-').replace('\u2011','-').replace('’',"'").replace('“','"').replace('”','"')
+  assert all(ascii_text(x[2]) in txt for x in expected)
+  assert m['images']>=len(expected)+1
+  assert pdf.stat().st_size==m['bytes'] and m['bytes']<10*1048576
+  assert (Path('..')/m['hero']).exists()
+ print('Complete PDF checks passed for all five seasons: active details, images, page counts, sizes and cover assets.')
