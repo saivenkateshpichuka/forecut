@@ -131,4 +131,6 @@ BRANDS = [
   ['Embellished wedding juttis', 'Kolhapuri chappals', 'Potli bags'], 'Fizzy Goblet new arrivals', 'https://www.fizzygoblet.com/collections/new-arrival', 'Oct 2026'),
  ('Gully Labs', 'Sneaker startup', 'Brand focus', 'Hand-lasted sneakers drawing on Indian street culture.',
   ['Handcrafted leather sneakers'], 'SNKRSCART, homegrown sneaker brands 2026', 'https://www.snkrscart.com/blogs/india-homegrown-sneaker-brands-2026', '2026'),
+ ('péro', 'Designer label', 'Dream Dress-Up, S/S 27 (with Barbie)', 'Opened Lakmē Fashion Week x FDCI in Delhi: relaxed silhouettes with black-and-white stripes in mashru, jersey and hand knits, checks from West Bengal, block printing, crochet, lace, bows and a mini koodai basket bag in recycled plastic wire.',
+  ['Block print'], 'ELLE India, In Conversation With Aneeth Arora', 'https://elle.in/fashion/in-conversation-with-aneeth-arora-12672767', '14 Oct 2026'),
 ]
