@@ -1,0 +1,37 @@
+{
+  "Festive 26": {
+    "file": "output/pdf/Forecut-India-Festive-26-Season-Report-v2.pdf",
+    "pages": 40,
+    "details": 20,
+    "images": 21,
+    "bytes": 1430764
+  },
+  "Summer 27": {
+    "file": "output/pdf/Forecut-India-Summer-27-Season-Report-v2.pdf",
+    "pages": 41,
+    "details": 20,
+    "images": 21,
+    "bytes": 1139923
+  },
+  "Festive 27": {
+    "file": "output/pdf/Forecut-India-Festive-27-Season-Report-v2.pdf",
+    "pages": 40,
+    "details": 20,
+    "images": 21,
+    "bytes": 1248764
+  },
+  "Summer 28": {
+    "file": "output/pdf/Forecut-India-Summer-28-Season-Report-v2.pdf",
+    "pages": 41,
+    "details": 20,
+    "images": 21,
+    "bytes": 1124503
+  },
+  "Festive 28": {
+    "file": "output/pdf/Forecut-India-Festive-28-Season-Report-v2.pdf",
+    "pages": 40,
+    "details": 20,
+    "images": 21,
+    "bytes": 1425263
+  }
+}

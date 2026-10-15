@@ -238,3 +238,7 @@ if os.path.exists('india_pdf_manifest.json'):
     out = india_downloads.add(out)
 open(path, 'w').write(out)
 print('india', total, counts)
+
+if STATIC:
+    import india_season_pages
+    india_season_pages.build(out)

@@ -1,0 +1,3558 @@
+{
+  "reviewed": "2026-10-15",
+  "sources": {
+    "fdci-rawal": {
+      "id": "fdci-rawal",
+      "title": "FDCI · Kunal Rawal, India Couture Week 2026",
+      "date": "2026-07-28",
+      "url": "https://fdci.org/chikankari-meets-raffia-french-knots-elevate-chattai-kunal-rawal-style/",
+      "note": "Designer interview: functional linings, wearable drapes and tonal craft in menswear. An occasionwear input, not measured retail demand."
+    },
+    "fdci-arpita": {
+      "id": "fdci-arpita",
+      "title": "FDCI · Arpita Mehta, India Couture Week 2026",
+      "date": "2026-07-28",
+      "url": "https://fdci.org/patola-kantha-and-bandhini-get-a-new-vocab/",
+      "note": "Pastel Bandhani on fluid bases and reinterpretations of Patola and Kantha. Supports craft experimentation, not a mass-market adoption claim."
+    },
+    "fdci-rimzim": {
+      "id": "fdci-rimzim",
+      "title": "FDCI · Rimzim Dadu, India Couture Week 2026",
+      "date": "2026-07-28",
+      "url": "https://fdci.org/craft-must-have-a-newer-design-language/",
+      "note": "Mother-of-pearl and metal-cord couture, with an emphasis on aftercare. A premium experimental signal rather than a volume direction."
+    },
+    "fdci-aisha": {
+      "id": "fdci-aisha",
+      "title": "FDCI · Aisha Rao, Preyasi",
+      "date": "2026-07-31",
+      "url": "https://fdci.org/dearly-beloved-lehenga-you-can-be-upcycled/",
+      "note": "Textile appliqué, lighter occasion silhouettes and practical pockets provide a useful wedding-guest development reference."
+    },
+    "fdci-margn": {
+      "id": "fdci-margn",
+      "title": "FDCI · Margn, Circular Design Challenge",
+      "date": "2026-10-13",
+      "url": "https://fdci.org/farmers-son-from-coal-mines-wins-circular-design-challenge/",
+      "note": "Hand knitting and repurposed materials illustrate small-scale circular design. Commercial consistency and supply still need checking."
+    },
+    "elle-pero": {
+      "id": "elle-pero",
+      "title": "ELLE India · In conversation with Aneeth Arora",
+      "date": "2026-10-14",
+      "url": "https://elle.in/fashion/in-conversation-with-aneeth-arora-12672767",
+      "note": "Designer interview offers a journal perspective on péro SS27 and playful craft. Treat as brand intent, not evidence of sales."
+    },
+    "dior-ss27": {
+      "id": "dior-ss27",
+      "title": "Dior · Summer 2027 show",
+      "date": "SS27 collection",
+      "url": "https://www.dior.com/en_gb/fashion/womens-fashion/ready-to-wear-shows/summer-2027-show",
+      "note": "Sheer and opaque contrasts, light fabrics and floral volume inform occasionwear experimentation. Translate for Indian coverage and climate."
+    },
+    "hermes-ss27": {
+      "id": "hermes-ss27",
+      "title": "Hermès · Women’s spring-summer 2027",
+      "date": "SS27 collection",
+      "url": "https://www.hermes.com/us/en/content/402900-women-spring-summer-runway-show/",
+      "note": "Airy layering and adjustable silk drapes suggest movement-led summer construction; luxury runway evidence does not establish Indian demand."
+    },
+    "pv-ss27": {
+      "id": "pv-ss27",
+      "title": "Première Vision · SS27 fabric decoding",
+      "date": "2026-02-13",
+      "url": "https://www.premierevision.com/articles/e620fe9e-3407-f111-8333-000d3a2973d4/spring-summer-27-decodings-fabrics",
+      "note": "Public trade coverage supports light natural blends, fluid shirting, textured weaves and sheer layers. Supplier availability must be verified."
+    },
+    "pv-aw27": {
+      "id": "pv-aw27",
+      "title": "Première Vision · AW27–28 season overview",
+      "date": "September 2026 edition",
+      "url": "https://paris.premierevision.com/en/content/details-de-la-saison-ah-27-28-pv-paris-septembre-2026",
+      "note": "Public textile-fair overview puts material development at the centre. Used as a long-lead input, not as a reproduced proprietary forecast."
+    },
+    "anokhi": {
+      "id": "anokhi",
+      "title": "ANOKHI · Summer 2026, Kambaya",
+      "date": "Summer 2026 collection",
+      "url": "https://www.anokhi.com/whatsnew/",
+      "note": "Indian brand reference for mud-resist, indigo and restrained handmade detailing. A prior-season retail offer, not a 2027 collection."
+    },
+    "te-2026": {
+      "id": "te-2026",
+      "title": "Textile Exchange · Materials Benchmark Insights and Trends 2026",
+      "date": "2026 report",
+      "url": "https://textileexchange.org/knowledge-center/reports/materials-benchmark-insights-and-trends-2026/",
+      "note": "Materials benchmarking highlights the need to distinguish sourcing commitments from actual scale. Circular-material claims require traceable supplier evidence."
+    },
+    "nicobar-price": {
+      "id": "nicobar-price",
+      "title": "Nicobar | Classic Shirt - Black",
+      "url": "https://www.nicobar.com/products/classic-shirt-black-1",
+      "note": "Official product page: 100% linen shirt MRP INR 5,750; free shipping above INR 1,000. Current benchmark only; verify availability and terms at purchase.",
+      "date": "Reviewed 15 October 2026"
+    },
+    "aachho-offer": {
+      "id": "aachho-offer",
+      "title": "Aachho | Preyasi collection retail snapshot",
+      "url": "https://www.aachho.com/collections/preyasi",
+      "note": "Observed listing: Helia Smocked Cotton Dress INR 1,954 against displayed INR 6,513, labeled 70% off. Aferdita Tier Cotton Dress INR 1,614 against INR 6,456, labeled 75% off. Sizes, stock and terms can change.",
+      "date": "Reviewed 15 October 2026"
+    },
+    "jaypore-price": {
+      "id": "jaypore-price",
+      "title": "Jaypore | Silk saree category guide",
+      "url": "https://www.jaypore.com/c/women-silk-saree",
+      "note": "Official category guide lists Chanderi silk from INR 2,800 and cotton silk from INR 2,400. These are guide starting points, not verified individual SKU quotations.",
+      "date": "Reviewed 15 October 2026"
+    },
+    "jayanti": {
+      "id": "jayanti",
+      "title": "FDCI | Best couture becomes an heirloom: Jayanti Reddy",
+      "url": "https://fdci.org/best-couture-becomes-an-heirloom-jayanti-reddy/",
+      "note": "ICW 2026 interview covers balancing lighter bases, tailoring and placed embroidery.",
+      "date": "2026-07-31"
+    },
+    "pv-tech": {
+      "id": "pv-tech",
+      "title": "Premiere Vision | Innovation & Technology, September 2026",
+      "url": "https://paris.premierevision.com/content/la-thematique-innovation-technology-septembre-2026",
+      "note": "Public innovation programme connects textile and production development with practical commercial challenges.",
+      "date": "September 2026"
+    },
+    "techtextil": {
+      "id": "techtextil",
+      "title": "Messe Frankfurt | Innovation Awards 2026",
+      "url": "https://texpertisenetwork.messefrankfurt.com/frankfurt/en/about/press-releases/technical-textiles/techtextil-and-texprocess-2026-innovation-awards.html",
+      "note": "Official awards register includes AeoniQ Fil by AMANN, textile inspection and automated-production developments. An innovation award is not proof of Indian supplier availability.",
+      "date": "2026-04"
+    },
+    "lenzing-rd": {
+      "id": "lenzing-rd",
+      "title": "Lenzing | Research and development, 2025 annual report",
+      "url": "https://reports.lenzing.com/annual-and-sustainability-report/2025/management-report/research-and-development.html",
+      "note": "Manufacturer report discusses cellulose-fibre R&D, demonstration work and scale-up. Treat production and end-of-life claims as supplier-specific.",
+      "date": "Published 2026"
+    },
+    "hyosung": {
+      "id": "hyosung",
+      "title": "Hyosung TNC | Bio BDO and material platform",
+      "url": "https://www.hyosungtnc.com/en/etc/bio",
+      "note": "Manufacturer background for renewable-feedstock inputs used in spandex chemistry. Confirm product-level composition, certification and supply before adoption.",
+      "date": "Reviewed 15 October 2026"
+    }
+  },
+  "seasons": {
+    "Festive 26": {
+      "code": "Festive 26",
+      "slug": "festive-26",
+      "file": "india-festive-26.html",
+      "hero": "img/india-season-art/festive-26.webp",
+      "window": "Oct 2026 – Feb 2027 · Dussehra, Diwali, wedding season",
+      "title": "Festive made easy",
+      "focus": "Festive made easy: pre-draped sarees, kurta co-ords, cape and light organza lehengas, velvet and brocade menswear, Kolhapuris.",
+      "basis": "Current-season editorial assessment",
+      "palette": [
+        [
+          "#0f6b4f",
+          "Emerald"
+        ],
+        [
+          "#1f4e9c",
+          "Sapphire"
+        ],
+        [
+          "#6e1f33",
+          "Deep wine"
+        ],
+        [
+          "#d8c08a",
+          "Champagne gold"
+        ],
+        [
+          "#9fae8f",
+          "Sage"
+        ]
+      ],
+      "plan": [
+        [
+          "October–November 2026",
+          "Deliver proven occasionwear; track size availability, fit returns and replenishment."
+        ],
+        [
+          "December 2026–February 2027",
+          "Reorder only demonstrated winners and stage winter wedding layers by region."
+        ]
+      ],
+      "watch": [
+        "Validate garment weight, alteration access and full-price sales against your own trading data."
+      ],
+      "themes": [
+        {
+          "title": "Handloom quiet luxury",
+          "story": "Forecut proposes a restrained festive capsule in which cloth, weave and fit carry the value. Treat maker attribution and reliable finishing as part of the product story.",
+          "products": "Chanderi, Maheshwari, khadi and tussar in calm colours, with little embellishment and beautiful cloth.",
+          "make": "Build a calm-colour handloom capsule: kurta sets, sarees and men's kurtas. Swap heavy embroidery for tone-on-tone work at the neckline and cuffs. Tell the weave and cluster story on the label and product page.",
+          "commercial": "Shoppers want pieces that feel special but can be worn again. Handloom also carries a clear sustainability story, and the government-backed khadi push keeps it visible.",
+          "sources": [
+            "jayanti"
+          ]
+        },
+        {
+          "title": "Indigo, blue and white",
+          "story": "Use an indigo-to-ivory story as an original Forecut range-building direction. Compare tonal surface work with a single metallic accent; validate customer response before extending the palette.",
+          "products": "Indigo kurta sets, blue-and-ivory sarees, a restrained Nehru jacket and a coordinated occasion accessory.",
+          "make": "Add indigo to every category: kurtas, denim, sarees and footwear. Pair indigo with ivory and champagne gold for festive. Try one denim-meets-handloom fusion piece.",
+          "commercial": "Blue is easy to wear across age groups and works for both festive and everyday. Indigo also links to India's dyeing heritage, so it suits handloom and denim alike.",
+          "sources": [
+            "fdci-rawal"
+          ]
+        },
+        {
+          "title": "Festive made easy",
+          "story": "Translate occasion dressing into coordinated separates and lighter layers. Prioritise secure drapes, comfortable linings and practical movement, with every closure tested on the intended wearer.",
+          "products": "Pre-draped sarees, embroidered co-ords, kaftans and light lehengas that look festive without the effort.",
+          "make": "Offer the hero festive look in a pre-draped or co-ord version. Add capes and organza dupattas as add-ons to sell up. Show three ways to wear each piece across wedding functions.",
+          "commercial": "Busy schedules and many functions per wedding mean shoppers want looks they can put on in minutes and wear more than once.",
+          "sources": [
+            "fdci-rawal",
+            "fdci-aisha"
+          ]
+        },
+        {
+          "title": "Indian craft, contemporary placement",
+          "story": "Place craft where it is visible and comfortable: a border, cuff, yoke or accessory. Develop this as an original Forecut styling direction with maker credit, cost transparency and aftercare.",
+          "products": "Artisan-made footwear, small-scale mirror or kantha accents and carefully placed bandhani or block-printed panels.",
+          "make": "Source one GI-tagged hero product and credit the craft cluster. Add mirror or kantha accents to everyday basics. Pair Kolhapuris and juttis with western looks in imagery.",
+          "commercial": "The Kolhapuri debate made Indian shoppers proud of the original crafts. GI-tagged and artisan-made products now carry real brand value.",
+          "sources": [
+            "fdci-arpita"
+          ]
+        }
+      ],
+      "details": [
+        {
+          "id": "festive-26-1",
+          "name": "Pre-draped saree gowns",
+          "category": "Women's Ethnic",
+          "area": "Garment",
+          "image": "img/pre-draped-saree-gowns.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Develop",
+          "brief": "Ready-to-wear sarees with stitched pleats and a fixed pallu, worn in minutes.",
+          "season_action": "For the winter wedding and festive edit, develop pre-draped saree gowns in the emerald and sapphire palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Sample the drape on two heights; test pleat retention, walking clearance and blouse coverage. Stabilise the pallu attachment without pulling the body cloth.",
+          "commercial": "Offer the drape with an adjustable blouse option and document the wearing method; approve a wash-care sample before repeat orders.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": []
+        },
+        {
+          "id": "festive-26-2",
+          "name": "Cape lehengas",
+          "category": "Women's Ethnic",
+          "area": "Layer",
+          "image": "img/cape-lehengas.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Develop",
+          "brief": "Lehengas with a cape-style dupatta or overlay.",
+          "season_action": "For the winter wedding and festive edit, develop cape lehengas in the emerald and sapphire palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Measure finished hem sweep and garment weight. Grade the waist adjustment, reinforce zip ends and keep decorative work clear of the sitting zone.",
+          "commercial": "Sell the skirt as a separate with two compatible tops. Check fit across sizes before committing to a deep colour run.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": []
+        },
+        {
+          "id": "festive-26-3",
+          "name": "Embroidered kurta co-ord sets",
+          "category": "Women's Ethnic",
+          "area": "Garment",
+          "image": "img/embroidered-kurta-co-ord-sets.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Develop",
+          "brief": "Matching kurta and trousers with coordinated embroidery.",
+          "season_action": "For the winter wedding and festive edit, develop embroidered kurta co-ord sets in the emerald and sapphire palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Balance front and back lengths after washing; reinforce side slits and pockets. Test arm movement, neckline recovery and opacity in daylight.",
+          "commercial": "Develop one proven block in the season palette before adding decoration; review fit returns and repeat demand before extending colours.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": []
+        },
+        {
+          "id": "festive-26-4",
+          "name": "Organza dupattas with embroidered borders",
+          "category": "Women's Ethnic",
+          "area": "Trim",
+          "image": "img/organza-dupattas-with-embroidered-borders.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Sheer dupattas framed with an embroidered edge.",
+          "season_action": "For the winter wedding and festive edit, develop organza dupattas with embroidered borders in the emerald and sapphire palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Check block balance and movement on the target wearer. Test seams, pockets and closures after washing, and record finished measurements for grading.",
+          "commercial": "Keep a repeatable base block with one seasonal fabric story. Test the full outfit and separates at the planned ticket before scaling quantities.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": []
+        },
+        {
+          "id": "festive-26-5",
+          "name": "Tone-on-tone bandhgalas",
+          "category": "Men's Ethnic",
+          "area": "Embellishment",
+          "image": "img/tone-on-tone-bandhgalas.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Develop",
+          "brief": "Bandhgala (Jodhpuri) suits with tonal embroidery instead of heavy work.",
+          "season_action": "For the winter wedding and festive edit, develop tone-on-tone bandhgalas in the emerald and sapphire palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Grade collar stand and shoulder balance carefully. Test seated comfort, pocket access and lining movement; fuse a trial panel before production.",
+          "commercial": "Use a shared block with separately costed fabric and embellishment upgrades; offer a coordinated lower rather than multiplying jacket styles.",
+          "material": "Cotton silk, linen, raw silk, brocade, velvet and jacquard, with fabric-covered or metal buttons.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": []
+        },
+        {
+          "id": "festive-26-6",
+          "name": "Velvet bandhgalas",
+          "category": "Men's Ethnic",
+          "area": "Fabric",
+          "image": "img/velvet-bandhgalas.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Develop",
+          "brief": "Velvet bandhgalas in bottle green, navy and burgundy for winter weddings.",
+          "season_action": "For the winter wedding and festive edit, develop velvet bandhgalas in the emerald and sapphire palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Grade collar stand and shoulder balance carefully. Test seated comfort, pocket access and lining movement; fuse a trial panel before production.",
+          "commercial": "Use a shared block with separately costed fabric and embellishment upgrades; offer a coordinated lower rather than multiplying jacket styles.",
+          "material": "Cotton silk, linen, raw silk, brocade, velvet and jacquard, with fabric-covered or metal buttons.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": []
+        },
+        {
+          "id": "festive-26-7",
+          "name": "Ivory and pastel sherwanis",
+          "category": "Men's Ethnic",
+          "area": "Colour",
+          "image": "img/ivory-and-pastel-sherwanis.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Ivory, mint and powder shades for day weddings.",
+          "season_action": "For the winter wedding and festive edit, develop ivory and pastel sherwanis in the emerald and sapphire palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Grade collar stand and shoulder balance carefully. Test seated comfort, pocket access and lining movement; fuse a trial panel before production.",
+          "commercial": "Use a shared block with separately costed fabric and embellishment upgrades; offer a coordinated lower rather than multiplying jacket styles.",
+          "material": "Cotton silk, linen, raw silk, brocade, velvet and jacquard, with fabric-covered or metal buttons.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": []
+        },
+        {
+          "id": "festive-26-8",
+          "name": "Jackets over lehengas",
+          "category": "Indo-Western",
+          "area": "Layer",
+          "image": "img/jackets-over-lehengas.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Develop",
+          "brief": "Cropped or denim jackets layered over lehengas.",
+          "season_action": "For the winter wedding and festive edit, develop jackets over lehengas in the emerald and sapphire palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Measure finished hem sweep and garment weight. Grade the waist adjustment, reinforce zip ends and keep decorative work clear of the sitting zone.",
+          "commercial": "Sell the skirt as a separate with two compatible tops. Check fit across sizes before committing to a deep colour run.",
+          "material": "Cotton, linen, Chanderi, denim and modal blends.",
+          "price": [
+            "1,999–4,499",
+            "5,000–12,000",
+            "20,000+"
+          ],
+          "sources": []
+        },
+        {
+          "id": "festive-26-9",
+          "name": "Embellished wedding juttis",
+          "category": "Indian Footwear",
+          "area": "Embellishment",
+          "image": "img/embellished-wedding-juttis.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Juttis with zari, beads and mirror work for weddings.",
+          "season_action": "For the winter wedding and festive edit, develop embellished wedding juttis in the emerald and sapphire palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Trial the last on the target customer, test heel rubbing and sole grip, then run flex and abrasion checks. Validate the attachment of all raised decoration.",
+          "commercial": "Begin with a controlled size run and collect fit feedback. Cost sole, footbed and upper separately; retain an aftercare route for components.",
+          "material": "Vegetable-tanned leather, suede, fabric uppers with embroidery, leather or TPR soles.",
+          "price": [
+            "799–1,799",
+            "2,000–4,500",
+            "7,500+"
+          ],
+          "sources": []
+        },
+        {
+          "id": "festive-26-10",
+          "name": "Pointed juttis with bandhgalas",
+          "category": "Indian Footwear",
+          "area": "Toe",
+          "image": "img/pointed-juttis-with-bandhgalas.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Pointed juttis as the correct shoe for bandhgalas.",
+          "season_action": "For the winter wedding and festive edit, develop pointed juttis with bandhgalas in the emerald and sapphire palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Grade collar stand and shoulder balance carefully. Test seated comfort, pocket access and lining movement; fuse a trial panel before production.",
+          "commercial": "Use a shared block with separately costed fabric and embellishment upgrades; offer a coordinated lower rather than multiplying jacket styles.",
+          "material": "Vegetable-tanned leather, suede, fabric uppers with embroidery, leather or TPR soles.",
+          "price": [
+            "799–1,799",
+            "2,000–4,500",
+            "7,500+"
+          ],
+          "sources": []
+        },
+        {
+          "id": "festive-26-11",
+          "name": "Banarasi brocade",
+          "category": "Fabrics & Weaves",
+          "area": "Fabric",
+          "image": "img/banarasi-brocade.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Rich woven brocade for weddings and Nehru jackets.",
+          "season_action": "For the winter wedding and festive edit, develop banarasi brocade in the emerald and sapphire palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a physical swatch for handle, opacity and drape. Record GSM, width, shrinkage, colour fastness and batch variation; sample seams before bulk cutting.",
+          "commercial": "Reserve material after the trial garment passes wear and care checks. Obtain a current per-metre quotation and confirm minimums, lead time and maker attribution.",
+          "material": "See the weave notes; source from the named craft clusters.",
+          "price": [
+            "Price by metre and composition",
+            "Obtain supplier quotation",
+            "Cost craft separately"
+          ],
+          "sources": []
+        },
+        {
+          "id": "festive-26-12",
+          "name": "Tissue",
+          "category": "Fabrics & Weaves",
+          "area": "Fabric",
+          "image": "img/tissue.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Develop",
+          "brief": "Metallic sheen for evening functions.",
+          "season_action": "For the winter wedding and festive edit, develop tissue in the emerald and sapphire palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a physical swatch for handle, opacity and drape. Record GSM, width, shrinkage, colour fastness and batch variation; sample seams before bulk cutting.",
+          "commercial": "Reserve material after the trial garment passes wear and care checks. Obtain a current per-metre quotation and confirm minimums, lead time and maker attribution.",
+          "material": "See the weave notes; source from the named craft clusters.",
+          "price": [
+            "Price by metre and composition",
+            "Obtain supplier quotation",
+            "Cost craft separately"
+          ],
+          "sources": []
+        },
+        {
+          "id": "festive-26-13",
+          "name": "Mirror work",
+          "category": "Embroidery & Surface",
+          "area": "Embellishment",
+          "image": "img/mirror-work.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Develop",
+          "brief": "Mirror work on garments, dupattas, bags and shoes.",
+          "season_action": "For the winter wedding and festive edit, develop mirror work in the emerald and sapphire palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a stitched strike-off showing coverage, backing and edge finish. Test snagging, flex, perspiration and cleaning; record the labour minutes per panel.",
+          "commercial": "Concentrate the technique on one visible zone and cost it by coverage. Credit the maker and keep a plain companion product for range balance.",
+          "material": "Hand or machine embroidery threads, zari, mirrors, sequins and block-print dyes.",
+          "price": [
+            "Price by coverage",
+            "Confirm labour hours",
+            "Trial before commitment"
+          ],
+          "sources": []
+        },
+        {
+          "id": "festive-26-14",
+          "name": "Zardozi",
+          "category": "Embroidery & Surface",
+          "area": "Embellishment",
+          "image": "img/zardozi.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Metal-thread embroidery for weddings.",
+          "season_action": "For the winter wedding and festive edit, develop zardozi in the emerald and sapphire palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a stitched strike-off showing coverage, backing and edge finish. Test snagging, flex, perspiration and cleaning; record the labour minutes per panel.",
+          "commercial": "Concentrate the technique on one visible zone and cost it by coverage. Credit the maker and keep a plain companion product for range balance.",
+          "material": "Hand or machine embroidery threads, zari, mirrors, sequins and block-print dyes.",
+          "price": [
+            "Price by coverage",
+            "Confirm labour hours",
+            "Trial before commitment"
+          ],
+          "sources": []
+        },
+        {
+          "id": "festive-26-15",
+          "name": "Potli bags",
+          "category": "Trims & Accessories",
+          "area": "Accessory",
+          "image": "img/potli-bags.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Drawstring pouch bags for festive looks.",
+          "season_action": "For the winter wedding and festive edit, develop potli bags in the emerald and sapphire palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Measure attachment strength and colour transfer against pale cloth. Remove sharp edges; keep the trim accessible for replacement and repair.",
+          "commercial": "Coordinate this accent with one hero garment, with a separate accessory price. Check labour time and reject rates before introducing more variants.",
+          "material": "Tassels, piping, metal or fabric buttons, borders, belts and bags.",
+          "price": [
+            "499–1,499",
+            "1,800–4,000",
+            "6,000+"
+          ],
+          "sources": []
+        },
+        {
+          "id": "festive-26-16",
+          "name": "Latkans and tassels",
+          "category": "Trims & Accessories",
+          "area": "Trim",
+          "image": "img/latkans-and-tassels.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Decorative tassels on blouses, dupattas and drawstrings.",
+          "season_action": "For the winter wedding and festive edit, develop latkans and tassels in the emerald and sapphire palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Measure attachment strength and colour transfer against pale cloth. Remove sharp edges; keep the trim accessible for replacement and repair.",
+          "commercial": "Coordinate this accent with one hero garment, with a separate accessory price. Check labour time and reject rates before introducing more variants.",
+          "material": "Tassels, piping, metal or fabric buttons, borders, belts and bags.",
+          "price": [
+            "499–1,499",
+            "1,800–4,000",
+            "6,000+"
+          ],
+          "sources": []
+        },
+        {
+          "id": "concealed-pleat-saree",
+          "name": "Concealed-pleat occasion saree",
+          "category": "Women's Ethnic",
+          "area": "Construction",
+          "image": "img/india-season-details/festive-26/concealed-pleat-saree.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Develop",
+          "brief": "Build a reliable pre-pleated waist with a secure internal fastening and an independent pallu.",
+          "season_action": "Festive made easy: pre-draped sarees, kurta co-ords, cape and light organza lehengas, velvet and brocade menswear, Kolhapuris.",
+          "construction": "Trial seated fit, waist adjustment and pallu security.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Silk or silk blend with a narrow woven border.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": []
+        },
+        {
+          "id": "tonal-velvet-bandhgala",
+          "name": "Tonal velvet evening bandhgala",
+          "category": "Men's Ethnic",
+          "area": "Construction",
+          "image": "img/india-season-details/festive-26/tonal-velvet-bandhgala.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Develop",
+          "brief": "Keep the statement in the surface and proportion, with tonal detailing and a light internal build.",
+          "season_action": "Festive made easy: pre-draped sarees, kurta co-ords, cape and light organza lehengas, velvet and brocade menswear, Kolhapuris.",
+          "construction": "Compare collar recovery, pile marking and long seated wear.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Cotton or silk-mix velvet with a comfortable lining.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": []
+        },
+        {
+          "id": "champagne-cape-lehenga",
+          "name": "Light champagne cape lehenga",
+          "category": "Women's Ethnic",
+          "area": "Construction",
+          "image": "img/india-season-details/festive-26/champagne-cape-lehenga.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Develop",
+          "brief": "Reduce bulk in the skirt and make the cape useful as a separate occasion layer.",
+          "season_action": "Festive made easy: pre-draped sarees, kurta co-ords, cape and light organza lehengas, velvet and brocade menswear, Kolhapuris.",
+          "construction": "Check transparency, fastening access and movement.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Light organza over an opaque cotton-silk or silk-blend base.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": []
+        },
+        {
+          "id": "occasion-accessory-set",
+          "name": "Coordinated occasion accessory set",
+          "category": "Trims & Accessories",
+          "area": "Construction",
+          "image": "img/india-season-details/festive-26/occasion-accessory-set.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Develop",
+          "brief": "Use a controlled material story across a potli and padded occasion shoes.",
+          "season_action": "Festive made easy: pre-draped sarees, kurta co-ords, cape and light organza lehengas, velvet and brocade menswear, Kolhapuris.",
+          "construction": "Test heel rubbing, drawcord strength and trim snagging.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Embroidered fabric, soft leather and smooth internal finishes.",
+          "price": [
+            "499–1,499",
+            "1,800–4,000",
+            "6,000+"
+          ],
+          "sources": []
+        }
+      ],
+      "stories": [
+        {
+          "brand": "Kunal Rawal",
+          "collection": "India Couture Week 2026",
+          "observed": "Functional linings, contemporary drapes and tonal craft appear in the designer’s account of occasion dressing.",
+          "story": "Comfort is part of the luxury proposition: an occasion garment must work through movement, sitting and a long celebration.",
+          "translate": "Develop an original lightweight layer, fit it in motion and make the construction benefit visible in product information. Do not copy a proprietary fastening.",
+          "source": "fdci-rawal"
+        },
+        {
+          "brand": "Arpita Mehta",
+          "collection": "India Couture Week 2026",
+          "observed": "The FDCI interview describes nuanced Bandhani, fluid fabric bases and reinterpretations of familiar textile techniques.",
+          "story": "A familiar craft can feel contemporary through scale, placement and restrained colour rather than more surface coverage.",
+          "translate": "Test a single craft on one hero piece and simpler matching coordinates. Build the artisan schedule into the delivery plan.",
+          "source": "fdci-arpita"
+        },
+        {
+          "brand": "Jayanti Reddy",
+          "collection": "India Couture Week 2026",
+          "observed": "The FDCI interview discusses lighter base fabrics, strategic embroidery and the value of tailoring.",
+          "story": "An heirloom proposition can depend on balance and wearability as much as ornament.",
+          "translate": "Place craft where it matters visually, retain alteration allowance and document care so the piece can be worn again.",
+          "source": "jayanti"
+        }
+      ],
+      "innovations": [
+        {
+          "title": "Light construction with controlled coverage",
+          "maturity": "Ready to prototype",
+          "signal": "Public SS27 fabric and runway inputs favour lightness and fluid layers.",
+          "use": "Cotton-silk inners, half-lined kurtas and light occasion overlays.",
+          "test": "Compare opacity, seam slippage, shrinkage and perspiration marking on actual garment samples.",
+          "source": "pv-ss27"
+        },
+        {
+          "title": "Craft capacity as a product innovation",
+          "maturity": "Operational development",
+          "signal": "Indian designer interviews emphasise material development and maker timelines.",
+          "use": "One repeatable placed-craft code, documented across a small range.",
+          "test": "Approve stitch standards, labour hours, batch tolerances and payment terms with the maker before the production calendar is fixed.",
+          "source": "fdci-arpita"
+        },
+        {
+          "title": "Repairable ornament and removable components",
+          "maturity": "Design-system prototype",
+          "signal": "Current couture aftercare and material experimentation provide a useful premium reference.",
+          "use": "Replaceable trims, independent capes and spare embellishment kits.",
+          "test": "Cost repair labour; test attachment security and safe storage. Avoid promising a service without capacity.",
+          "source": "fdci-rimzim"
+        }
+      ],
+      "offers": [
+        {
+          "title": "Occasion complete",
+          "action": "Offer garment, footwear and potli as transparent separately priced choices; compare bundle attachment with full-price singles."
+        },
+        {
+          "title": "Fit appointment",
+          "action": "Test an included alteration appointment on selected premium pieces; price the labour before making the offer."
+        },
+        {
+          "title": "Wedding-function edit",
+          "action": "Style one hero piece for two functions and offer the second layer as an add-on instead of discounting the whole look."
+        }
+      ],
+      "benchmarks": [
+        {
+          "brand": "Nicobar",
+          "product": "Classic Shirt - Black",
+          "price": "INR 5,750 MRP",
+          "offer": "Free shipping above INR 1,000 on the inspected page; terms apply.",
+          "source": "nicobar-price"
+        },
+        {
+          "brand": "Aachho",
+          "product": "Helia Smocked Cotton Dress",
+          "price": "INR 1,954; displayed original INR 6,513",
+          "offer": "Listing labeled 70% off at review. Sizes and stock can change; this is not a future-season offer.",
+          "source": "aachho-offer"
+        }
+      ],
+      "price_rows": [
+        {
+          "category": "Women's Ethnic",
+          "value": "2,499–4,999",
+          "mid": "6,000–18,000",
+          "premium": "25,000+"
+        },
+        {
+          "category": "Men's Ethnic",
+          "value": "1,499–3,999",
+          "mid": "4,500–12,000",
+          "premium": "18,000+"
+        },
+        {
+          "category": "Indo-Western",
+          "value": "1,999–4,499",
+          "mid": "5,000–12,000",
+          "premium": "20,000+"
+        },
+        {
+          "category": "Western Wear (India)",
+          "value": "999–2,499",
+          "mid": "3,000–7,000",
+          "premium": "10,000+"
+        },
+        {
+          "category": "Indian Footwear",
+          "value": "799–1,799",
+          "mid": "2,000–4,500",
+          "premium": "7,500+"
+        },
+        {
+          "category": "Fabrics & Weaves",
+          "value": "Price by metre and composition",
+          "mid": "Obtain supplier quotation",
+          "premium": "Cost craft separately"
+        },
+        {
+          "category": "Embroidery & Surface",
+          "value": "Price by coverage",
+          "mid": "Confirm labour hours",
+          "premium": "Trial before commitment"
+        },
+        {
+          "category": "Trims & Accessories",
+          "value": "499–1,499",
+          "mid": "1,800–4,000",
+          "premium": "6,000+"
+        }
+      ],
+      "price_note": "Original Forecut indicative India retail planning bands, not designer quotations or guaranteed future prices. Fabric and handwork require separate supplier costing.",
+      "offer_note": "Offer ideas below are proposed merchandising tests for your brand. They are not active Forecut or designer discounts.",
+      "archive_pdf": "output/pdf/Forecut-India-Festive-26-Complete-Report.pdf"
+    },
+    "Summer 27": {
+      "code": "Summer 27",
+      "slug": "summer-27",
+      "file": "india-summer-27.html",
+      "hero": "img/india-season-art/summer-27.webp",
+      "window": "Mar – Jul 2027 · Holi, Eid, summer weddings",
+      "title": "Air, craft and ease",
+      "focus": "Build around breathable separates, fluid drapes and light craft. Reserve sheer, playful and experimental surfaces for small capsules rather than making them the whole range.",
+      "basis": "Near-term forecast · medium directional confidence; product demand unmeasured",
+      "palette": [
+        [
+          "#F1E9D8",
+          "Unbleached chalk"
+        ],
+        [
+          "#A9B89C",
+          "Leaf mist"
+        ],
+        [
+          "#D6A2A7",
+          "Rose clay"
+        ],
+        [
+          "#314779",
+          "Inky blue"
+        ],
+        [
+          "#B75C42",
+          "Warm terracotta"
+        ]
+      ],
+      "plan": [
+        [
+          "October–November 2026",
+          "Set customer, occasion and price architecture; source fabric and make first silhouettes."
+        ],
+        [
+          "December 2026",
+          "Approve washed fit samples, colour fastness, opacity and costing; book craft capacity."
+        ],
+        [
+          "January–February 2027",
+          "Complete pilot production, product photography and size checks; phase deliveries by climate and occasion."
+        ],
+        [
+          "March–July 2027",
+          "Review actual full-price sales, returns and replenishment weekly; do not confuse social engagement with purchase."
+        ]
+      ],
+      "watch": [
+        "Confirm Holi and Eid drop timing separately; lunar dates can shift.",
+        "Look for repeated lighter construction across Indian SS27 shows, not one standout look.",
+        "Stop a sheer or handwork option if opacity, care or quality complaints exceed your own benchmark."
+      ],
+      "themes": [
+        {
+          "title": "Cloth before decoration",
+          "story": "Summer comfort is the starting point. Develop tactile cotton, linen and fine woven sets whose value comes from handle, proportion and finish.",
+          "products": "Straight kurta with relaxed trousers; linen overshirt; handloom shirt dress; lightweight everyday saree.",
+          "make": "Compare unlined and half-lined samples. Test shrinkage, opacity, seam slippage and hand feel after laundering. Avoid heavy fusible panels that defeat airflow.",
+          "commercial": "Protect easy-care core styles; introduce higher-cost handloom in a tightly edited premium capsule. Validate supplier lead times before range sign-off.",
+          "sources": [
+            "pv-ss27",
+            "anokhi"
+          ]
+        },
+        {
+          "title": "Light, with coverage",
+          "story": "Sheer runway layers become wearable when opacity is designed into the garment. The Indian opportunity is a light overlay with an intentional inner, not an exposed look copied from a show.",
+          "products": "Organza over cotton-silk; airy cape over a day lehenga; fluid dupatta; sleeveless inner with a loose shirt.",
+          "make": "Specify inner length, armhole coverage and attachment points. Check snagging, perspiration marks and movement in daylight.",
+          "commercial": "Offer the inner as part of the product; keep the outer usable with existing wardrobe pieces. Test colour and size demand before widening.",
+          "sources": [
+            "dior-ss27",
+            "hermes-ss27"
+          ]
+        },
+        {
+          "title": "Playful craft, controlled scale",
+          "story": "Use handwork as a recognisable small detail, with clear maker attribution. Current designer and brand references support experimentation without establishing a universal trend.",
+          "products": "Contrast hand-stitched pockets; crochet-edge shirts; indigo printed co-ords; small patchwork panels.",
+          "make": "Keep high-labour detailing away from seams and alteration points. Approve print registration, wash fastness and repeatable stitch quality.",
+          "commercial": "Create one recognisable craft code across apparel and a small accessory. Replenish the simpler version if the test performs.",
+          "sources": [
+            "elle-pero",
+            "fdci-margn",
+            "anokhi"
+          ]
+        },
+        {
+          "title": "Occasionwear that moves",
+          "story": "Bring festive dressing into summer through less bulk and more flexible styling. Practical menswear construction is a relevant Indian lead signal.",
+          "products": "Light embroidered kurta sets; draped skirt separates; a soft Nehru layer; rewearable wedding-guest lehenga.",
+          "make": "Use lighter linings, practical pockets and secure drape fastenings. Fit seated, walking and with raised arms; check trim abrasion.",
+          "commercial": "Sell separates with two styling options. Keep ornate pieces in depth-limited occasion drops and compare returns against simpler sets.",
+          "sources": [
+            "fdci-rawal",
+            "fdci-aisha"
+          ]
+        }
+      ],
+      "details": [
+        {
+          "id": "summer-27-1",
+          "name": "Pastel handloom sarees",
+          "category": "Women's Ethnic",
+          "area": "Colour",
+          "image": "img/pastel-handloom-sarees.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Dusty rose, powder blue and lavender on handloom bases.",
+          "season_action": "For the summer occasion and travel edit, develop pastel handloom sarees in the unbleached chalk and leaf mist palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Sample the drape on two heights; test pleat retention, walking clearance and blouse coverage. Stabilise the pallu attachment without pulling the body cloth.",
+          "commercial": "Offer the drape with an adjustable blouse option and document the wearing method; approve a wash-care sample before repeat orders.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "pv-ss27",
+            "anokhi"
+          ]
+        },
+        {
+          "id": "summer-27-2",
+          "name": "Light organza lehengas",
+          "category": "Women's Ethnic",
+          "area": "Fabric",
+          "image": "img/light-organza-lehengas.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Airy organza lehengas for sangeet and day functions.",
+          "season_action": "For the summer occasion and travel edit, develop light organza lehengas in the unbleached chalk and leaf mist palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Measure finished hem sweep and garment weight. Grade the waist adjustment, reinforce zip ends and keep decorative work clear of the sitting zone.",
+          "commercial": "Sell the skirt as a separate with two compatible tops. Check fit across sizes before committing to a deep colour run.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "dior-ss27",
+            "hermes-ss27"
+          ]
+        },
+        {
+          "id": "summer-27-3",
+          "name": "Angrakha wrap kurtas",
+          "category": "Women's Ethnic",
+          "area": "Closure",
+          "image": "img/angrakha-wrap-kurtas.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Develop",
+          "brief": "Overlapping wrap fronts tied at the side.",
+          "season_action": "For the summer occasion and travel edit, develop angrakha wrap kurtas in the unbleached chalk and leaf mist palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Balance front and back lengths after washing; reinforce side slits and pockets. Test arm movement, neckline recovery and opacity in daylight.",
+          "commercial": "Develop one proven block in the season palette before adding decoration; review fit returns and repeat demand before extending colours.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "elle-pero",
+            "fdci-margn",
+            "anokhi"
+          ]
+        },
+        {
+          "id": "summer-27-4",
+          "name": "Collared shirt blouses",
+          "category": "Women's Ethnic",
+          "area": "Collar",
+          "image": "img/collared-shirt-blouses.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Develop",
+          "brief": "Crisp collared blouses for a tailored saree look.",
+          "season_action": "For the summer occasion and travel edit, develop collared shirt blouses in the unbleached chalk and leaf mist palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Fit across bust and torso lengths; line contact areas and test closure strain. Verify strap placement and upper-body movement on the intended size range.",
+          "commercial": "Build a size-led fit trial and offer a complementary lower. Keep one simple base fabric so alterations remain practical.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "fdci-rawal",
+            "fdci-aisha"
+          ]
+        },
+        {
+          "id": "summer-27-5",
+          "name": "Linen kurta sets",
+          "category": "Men's Ethnic",
+          "area": "Fabric",
+          "image": "img/linen-kurta-sets.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Breathable linen and cotton-silk for relaxed celebrations.",
+          "season_action": "For the summer occasion and travel edit, develop linen kurta sets in the unbleached chalk and leaf mist palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Balance front and back lengths after washing; reinforce side slits and pockets. Test arm movement, neckline recovery and opacity in daylight.",
+          "commercial": "Develop one proven block in the season palette before adding decoration; review fit returns and repeat demand before extending colours.",
+          "material": "Cotton silk, linen, raw silk, brocade, velvet and jacquard, with fabric-covered or metal buttons.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": [
+            "pv-ss27",
+            "anokhi"
+          ]
+        },
+        {
+          "id": "summer-27-6",
+          "name": "Straight kurta with band collar",
+          "category": "Men's Ethnic",
+          "area": "Collar",
+          "image": "img/straight-kurta-with-band-collar.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Straight kurtas with a Nehru (band) collar and churidar or straight trousers.",
+          "season_action": "For the summer occasion and travel edit, develop straight kurta with band collar in the unbleached chalk and leaf mist palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Balance front and back lengths after washing; reinforce side slits and pockets. Test arm movement, neckline recovery and opacity in daylight.",
+          "commercial": "Develop one proven block in the season palette before adding decoration; review fit returns and repeat demand before extending colours.",
+          "material": "Cotton silk, linen, raw silk, brocade, velvet and jacquard, with fabric-covered or metal buttons.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": [
+            "dior-ss27",
+            "hermes-ss27"
+          ]
+        },
+        {
+          "id": "summer-27-7",
+          "name": "Short kurtas with jeans",
+          "category": "Men's Ethnic",
+          "area": "Length",
+          "image": "img/short-kurtas-with-jeans.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Develop",
+          "brief": "Hip-length kurtas worn with denim for everyday wear.",
+          "season_action": "For the summer occasion and travel edit, develop short kurtas with jeans in the unbleached chalk and leaf mist palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Balance front and back lengths after washing; reinforce side slits and pockets. Test arm movement, neckline recovery and opacity in daylight.",
+          "commercial": "Develop one proven block in the season palette before adding decoration; review fit returns and repeat demand before extending colours.",
+          "material": "Cotton silk, linen, raw silk, brocade, velvet and jacquard, with fabric-covered or metal buttons.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": [
+            "elle-pero",
+            "fdci-margn",
+            "anokhi"
+          ]
+        },
+        {
+          "id": "summer-27-8",
+          "name": "Printed fusion kaftans",
+          "category": "Indo-Western",
+          "area": "Garment",
+          "image": "img/printed-fusion-kaftans.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Kaftans with Indian print and embroidery for festive brunches.",
+          "season_action": "For the summer occasion and travel edit, develop printed fusion kaftans in the unbleached chalk and leaf mist palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a full-repeat strike-off and shade tolerance. Check wet and dry rubbing, wash shrinkage and pattern matching at major seams.",
+          "commercial": "Choose a small repeat for replenishment and a larger placement for limited drops. Confirm printing or weaving capacity before launch dates.",
+          "material": "Cotton, linen, Chanderi, denim and modal blends.",
+          "price": [
+            "1,999–4,499",
+            "5,000–12,000",
+            "20,000+"
+          ],
+          "sources": [
+            "fdci-rawal",
+            "fdci-aisha"
+          ]
+        },
+        {
+          "id": "summer-27-9",
+          "name": "Kurta-shirt hybrids",
+          "category": "Indo-Western",
+          "area": "Garment",
+          "image": "img/kurta-shirt-hybrids.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Develop",
+          "brief": "Gender-fluid shirts with kurta length and band collars.",
+          "season_action": "For the summer occasion and travel edit, develop kurta-shirt hybrids in the unbleached chalk and leaf mist palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Balance front and back lengths after washing; reinforce side slits and pockets. Test arm movement, neckline recovery and opacity in daylight.",
+          "commercial": "Develop one proven block in the season palette before adding decoration; review fit returns and repeat demand before extending colours.",
+          "material": "Cotton, linen, Chanderi, denim and modal blends.",
+          "price": [
+            "1,999–4,499",
+            "5,000–12,000",
+            "20,000+"
+          ],
+          "sources": [
+            "pv-ss27",
+            "anokhi"
+          ]
+        },
+        {
+          "id": "summer-27-10",
+          "name": "Breezy resort dresses",
+          "category": "Western Wear (India)",
+          "area": "Garment",
+          "image": "img/breezy-resort-dresses.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Develop",
+          "brief": "Easy, resort-style dresses for city daytime, as shown by Verandah.",
+          "season_action": "For the summer occasion and travel edit, develop breezy resort dresses in the unbleached chalk and leaf mist palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Check block balance and movement on the target wearer. Test seams, pockets and closures after washing, and record finished measurements for grading.",
+          "commercial": "Keep a repeatable base block with one seasonal fabric story. Test the full outfit and separates at the planned ticket before scaling quantities.",
+          "material": "Cotton jersey, denim, twill, poplin and stretch blends suited to Indian heat.",
+          "price": [
+            "999–2,499",
+            "3,000–7,000",
+            "10,000+"
+          ],
+          "sources": [
+            "dior-ss27",
+            "hermes-ss27"
+          ]
+        },
+        {
+          "id": "summer-27-11",
+          "name": "Monochrome co-ords",
+          "category": "Western Wear (India)",
+          "area": "Garment",
+          "image": "img/monochrome-co-ords.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Matching tops and trousers in one colour.",
+          "season_action": "For the summer occasion and travel edit, develop monochrome co-ords in the unbleached chalk and leaf mist palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Check block balance and movement on the target wearer. Test seams, pockets and closures after washing, and record finished measurements for grading.",
+          "commercial": "Keep a repeatable base block with one seasonal fabric story. Test the full outfit and separates at the planned ticket before scaling quantities.",
+          "material": "Cotton jersey, denim, twill, poplin and stretch blends suited to Indian heat.",
+          "price": [
+            "999–2,499",
+            "3,000–7,000",
+            "10,000+"
+          ],
+          "sources": [
+            "elle-pero",
+            "fdci-margn",
+            "anokhi"
+          ]
+        },
+        {
+          "id": "summer-27-12",
+          "name": "Kolhapuri chappals",
+          "category": "Indian Footwear",
+          "area": "Style",
+          "image": "img/kolhapuri-chappals.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "GI-tagged Kolhapuris, back in focus after Prada's Spring/Summer 2026 show.",
+          "season_action": "For the summer occasion and travel edit, develop kolhapuri chappals in the unbleached chalk and leaf mist palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Trial the last on the target customer, test heel rubbing and sole grip, then run flex and abrasion checks. Validate the attachment of all raised decoration.",
+          "commercial": "Begin with a controlled size run and collect fit feedback. Cost sole, footbed and upper separately; retain an aftercare route for components.",
+          "material": "Vegetable-tanned leather, suede, fabric uppers with embroidery, leather or TPR soles.",
+          "price": [
+            "799–1,799",
+            "2,000–4,500",
+            "7,500+"
+          ],
+          "sources": [
+            "fdci-rawal",
+            "fdci-aisha"
+          ]
+        },
+        {
+          "id": "summer-27-13",
+          "name": "Linen",
+          "category": "Fabrics & Weaves",
+          "area": "Fabric",
+          "image": "img/linen.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Breathable linen for summer kurtas and co-ords.",
+          "season_action": "For the summer occasion and travel edit, develop linen in the unbleached chalk and leaf mist palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a physical swatch for handle, opacity and drape. Record GSM, width, shrinkage, colour fastness and batch variation; sample seams before bulk cutting.",
+          "commercial": "Reserve material after the trial garment passes wear and care checks. Obtain a current per-metre quotation and confirm minimums, lead time and maker attribution.",
+          "material": "See the weave notes; source from the named craft clusters.",
+          "price": [
+            "Price by metre and composition",
+            "Obtain supplier quotation",
+            "Cost craft separately"
+          ],
+          "sources": [
+            "pv-ss27",
+            "anokhi"
+          ]
+        },
+        {
+          "id": "summer-27-14",
+          "name": "Cotton silk",
+          "category": "Fabrics & Weaves",
+          "area": "Fabric",
+          "image": "img/cotton-silk.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Comfortable, breathable everyday ethnic fabric.",
+          "season_action": "For the summer occasion and travel edit, develop cotton silk in the unbleached chalk and leaf mist palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a physical swatch for handle, opacity and drape. Record GSM, width, shrinkage, colour fastness and batch variation; sample seams before bulk cutting.",
+          "commercial": "Reserve material after the trial garment passes wear and care checks. Obtain a current per-metre quotation and confirm minimums, lead time and maker attribution.",
+          "material": "See the weave notes; source from the named craft clusters.",
+          "price": [
+            "Price by metre and composition",
+            "Obtain supplier quotation",
+            "Cost craft separately"
+          ],
+          "sources": [
+            "dior-ss27",
+            "hermes-ss27"
+          ]
+        },
+        {
+          "id": "summer-27-15",
+          "name": "Chikankari",
+          "category": "Embroidery & Surface",
+          "area": "Embellishment",
+          "image": "img/chikankari.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Lucknow white-on-white embroidery for summer and festive.",
+          "season_action": "For the summer occasion and travel edit, develop chikankari in the unbleached chalk and leaf mist palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a stitched strike-off showing coverage, backing and edge finish. Test snagging, flex, perspiration and cleaning; record the labour minutes per panel.",
+          "commercial": "Concentrate the technique on one visible zone and cost it by coverage. Credit the maker and keep a plain companion product for range balance.",
+          "material": "Hand or machine embroidery threads, zari, mirrors, sequins and block-print dyes.",
+          "price": [
+            "Price by coverage",
+            "Confirm labour hours",
+            "Trial before commitment"
+          ],
+          "sources": [
+            "elle-pero",
+            "fdci-margn",
+            "anokhi"
+          ]
+        },
+        {
+          "id": "summer-27-16",
+          "name": "Block print",
+          "category": "Embroidery & Surface",
+          "area": "Print",
+          "image": "img/block-print.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Hand block prints from Bagru and Sanganer.",
+          "season_action": "For the summer occasion and travel edit, develop block print in the unbleached chalk and leaf mist palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a full-repeat strike-off and shade tolerance. Check wet and dry rubbing, wash shrinkage and pattern matching at major seams.",
+          "commercial": "Choose a small repeat for replenishment and a larger placement for limited drops. Confirm printing or weaving capacity before launch dates.",
+          "material": "Hand or machine embroidery threads, zari, mirrors, sequins and block-print dyes.",
+          "price": [
+            "Price by coverage",
+            "Confirm labour hours",
+            "Trial before commitment"
+          ],
+          "sources": [
+            "fdci-rawal",
+            "fdci-aisha"
+          ]
+        },
+        {
+          "id": "airy-inner-kurta",
+          "name": "Airy kurta with an opacity-tested inner",
+          "category": "Women's Ethnic",
+          "area": "Construction",
+          "image": "img/india-season-details/summer-27/airy-inner-kurta.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Develop",
+          "brief": "Separate light outer cloth from the coverage layer so the silhouette stays easy.",
+          "season_action": "Build around breathable separates, fluid drapes and light craft. Reserve sheer, playful and experimental surfaces for small capsules rather than making them the whole range.",
+          "construction": "Test daylight opacity, washed fit and side-seam stability.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Cotton voile or fine cotton with a breathable opaque inner.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "pv-ss27",
+            "dior-ss27"
+          ]
+        },
+        {
+          "id": "covered-organza-layer",
+          "name": "Covered organza summer layer",
+          "category": "Indo-Western",
+          "area": "Construction",
+          "image": "img/india-season-details/summer-27/covered-organza-layer.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Develop",
+          "brief": "Pair a sheer loose shirt with an intentional opaque inner and familiar trousers.",
+          "season_action": "Build around breathable separates, fluid drapes and light craft. Reserve sheer, playful and experimental surfaces for small capsules rather than making them the whole range.",
+          "construction": "Approve inner coverage and check seam slippage.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Soft organza outer; cotton or cotton-silk inner.",
+          "price": [
+            "1,999–4,499",
+            "5,000–12,000",
+            "20,000+"
+          ],
+          "sources": [
+            "pv-ss27",
+            "dior-ss27"
+          ]
+        },
+        {
+          "id": "indigo-linen-overshirt",
+          "name": "Short indigo linen overshirt",
+          "category": "Men's Ethnic",
+          "area": "Construction",
+          "image": "img/india-season-details/summer-27/indigo-linen-overshirt.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Develop",
+          "brief": "Use a shorter overshirt over light trousers with a practical pocket proportion.",
+          "season_action": "Build around breathable separates, fluid drapes and light craft. Reserve sheer, playful and experimental surfaces for small capsules rather than making them the whole range.",
+          "construction": "Check shrinkage, pocket sag and collar stability.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Linen or linen-cotton, washed before fit approval.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": [
+            "pv-ss27",
+            "dior-ss27"
+          ]
+        },
+        {
+          "id": "crochet-edge-shirt",
+          "name": "Restrained crochet-edge cotton shirt",
+          "category": "Embroidery & Surface",
+          "area": "Construction",
+          "image": "img/india-season-details/summer-27/crochet-edge-shirt.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Develop",
+          "brief": "Concentrate handwork at a small repeatable edge rather than all-over coverage.",
+          "season_action": "Build around breathable separates, fluid drapes and light craft. Reserve sheer, playful and experimental surfaces for small capsules rather than making them the whole range.",
+          "construction": "Test edge recovery, snagging and wash colourfastness.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Light cotton shirting and compatible crochet yarn.",
+          "price": [
+            "Price by coverage",
+            "Confirm labour hours",
+            "Trial before commitment"
+          ],
+          "sources": [
+            "pv-ss27",
+            "dior-ss27"
+          ]
+        }
+      ],
+      "stories": [
+        {
+          "brand": "péro / Aneeth Arora",
+          "collection": "Dream Dress-Up | Spring/Summer 2027",
+          "observed": "The designer’s ELLE interview describes a playful craft vocabulary using stripes, crochet and different Indian textile techniques.",
+          "story": "Playfulness comes from a coherent collection world and personal expression, not a single mandatory colour.",
+          "translate": "Create one original craft signature across a small summer group. Keep labour-intensive decoration selective and retain easy-wear proportions.",
+          "source": "elle-pero"
+        },
+        {
+          "brand": "Dior",
+          "collection": "Summer 2027",
+          "observed": "Official show notes describe lightness, fabric contrasts and floral volume.",
+          "story": "A collection can build emotional impact through movement and changing opacity.",
+          "translate": "For Indian day functions, develop a covered inner with a lightweight outer. Validate coverage, colour and proportion with the intended customer.",
+          "source": "dior-ss27"
+        },
+        {
+          "brand": "Hermès",
+          "collection": "Women’s Spring/Summer 2027",
+          "observed": "Official show notes highlight airy layers and adjustable drape.",
+          "story": "Construction can express lightness when movement and material work together.",
+          "translate": "Test a controllable drape or adjustable garment with clear styling instructions; compare its fit and return feedback against a fixed version.",
+          "source": "hermes-ss27"
+        }
+      ],
+      "innovations": [
+        {
+          "title": "Light construction with controlled coverage",
+          "maturity": "Ready to prototype",
+          "signal": "Public SS27 fabric and runway inputs favour lightness and fluid layers.",
+          "use": "Cotton-silk inners, half-lined kurtas and light occasion overlays.",
+          "test": "Compare opacity, seam slippage, shrinkage and perspiration marking on actual garment samples.",
+          "source": "pv-ss27"
+        },
+        {
+          "title": "Next-generation cellulose material trials",
+          "maturity": "Supplier verification required",
+          "signal": "Lenzing’s published R&D report discusses new cellulose processes and demonstration work.",
+          "use": "Trial fluid shirting, soft tailoring and light blended separates.",
+          "test": "Request the exact fibre specification, minimums and supply date; verify laundering, pilling and strength before any bulk order.",
+          "source": "lenzing-rd"
+        },
+        {
+          "title": "Digital fabric quality control",
+          "maturity": "Factory pilot",
+          "signal": "The 2026 official awards include AI-based textile inspection and production technologies.",
+          "use": "Pilot defect detection on a limited woven or printed fabric programme.",
+          "test": "Measure missed defects and false rejects against your current inspection method before expanding.",
+          "source": "techtextil"
+        }
+      ],
+      "offers": [
+        {
+          "title": "Summer separates set",
+          "action": "Test an honest set saving against the sum of independently purchasable pieces; keep terms and size mixing clear."
+        },
+        {
+          "title": "Coverage included",
+          "action": "Include the designed inner with a sheer outer so the advertised outfit price reflects a wearable product."
+        },
+        {
+          "title": "Travel capsule",
+          "action": "Group three compatible pieces; compare conversion and returns with a standard matching set before scaling."
+        }
+      ],
+      "benchmarks": [
+        {
+          "brand": "Nicobar",
+          "product": "Classic Shirt - Black",
+          "price": "INR 5,750 MRP",
+          "offer": "Free shipping above INR 1,000 on the inspected page; terms apply.",
+          "source": "nicobar-price"
+        },
+        {
+          "brand": "Aachho",
+          "product": "Helia Smocked Cotton Dress",
+          "price": "INR 1,954; displayed original INR 6,513",
+          "offer": "Listing labeled 70% off at review. Sizes and stock can change; this is not a future-season offer.",
+          "source": "aachho-offer"
+        }
+      ],
+      "price_rows": [
+        {
+          "category": "Women's Ethnic",
+          "value": "2,499–4,999",
+          "mid": "6,000–18,000",
+          "premium": "25,000+"
+        },
+        {
+          "category": "Men's Ethnic",
+          "value": "1,499–3,999",
+          "mid": "4,500–12,000",
+          "premium": "18,000+"
+        },
+        {
+          "category": "Indo-Western",
+          "value": "1,999–4,499",
+          "mid": "5,000–12,000",
+          "premium": "20,000+"
+        },
+        {
+          "category": "Western Wear (India)",
+          "value": "999–2,499",
+          "mid": "3,000–7,000",
+          "premium": "10,000+"
+        },
+        {
+          "category": "Indian Footwear",
+          "value": "799–1,799",
+          "mid": "2,000–4,500",
+          "premium": "7,500+"
+        },
+        {
+          "category": "Fabrics & Weaves",
+          "value": "Price by metre and composition",
+          "mid": "Obtain supplier quotation",
+          "premium": "Cost craft separately"
+        },
+        {
+          "category": "Embroidery & Surface",
+          "value": "Price by coverage",
+          "mid": "Confirm labour hours",
+          "premium": "Trial before commitment"
+        },
+        {
+          "category": "Trims & Accessories",
+          "value": "499–1,499",
+          "mid": "1,800–4,000",
+          "premium": "6,000+"
+        }
+      ],
+      "price_note": "Original Forecut indicative India retail planning bands, not designer quotations or guaranteed future prices. Fabric and handwork require separate supplier costing.",
+      "offer_note": "Offer ideas below are proposed merchandising tests for your brand. They are not active Forecut or designer discounts.",
+      "archive_pdf": "output/pdf/Forecut-India-Summer-27-Complete-Report.pdf"
+    },
+    "Festive 27": {
+      "code": "Festive 27",
+      "slug": "festive-27",
+      "file": "india-festive-27.html",
+      "hero": "img/india-season-art/festive-27.webp",
+      "window": "Aug – Dec 2027 · Rakhi, Onam, Navratri, Diwali",
+      "title": "Craft with a second life",
+      "focus": "Plan festive capsules around lighter embellishment, adaptable separates and rich textile character. Treat sculptural metallic work as an experimental premium edge rather than a volume assumption.",
+      "basis": "Forward forecast · medium-low directional confidence; recheck against 2027 Indian shows",
+      "palette": [
+        [
+          "#175E4A",
+          "Deep botanical"
+        ],
+        [
+          "#743047",
+          "Mulberry"
+        ],
+        [
+          "#C6AE7A",
+          "Soft antique gold"
+        ],
+        [
+          "#263D6C",
+          "Night blue"
+        ],
+        [
+          "#EDE2CF",
+          "Warm ivory"
+        ]
+      ],
+      "plan": [
+        [
+          "January–March 2027",
+          "Revalidate against Indian runway and brand launches; approve regional assortment and supplier capacity."
+        ],
+        [
+          "April–May 2027",
+          "Finalise craft strike-offs, fit, wearer trials and cost; retain a fallback fabric for long-lead styles."
+        ],
+        [
+          "June–July 2027",
+          "Deliver early Rakhi and Onam capsules; stage later festival inventory by verified dates."
+        ],
+        [
+          "August–December 2027",
+          "Reorder proven shapes. Compare full-price sales, return reasons and repeat purchases by region and event."
+        ]
+      ],
+      "watch": [
+        "Recheck couture and textile signals in 2027 before bulk orders.",
+        "Track whether buyers choose lighter sets at equal prices; there is no sell-through dataset behind this forecast.",
+        "Test one reflective surface first; discontinue unsafe, heavy or unrepairable options."
+      ],
+      "themes": [
+        {
+          "title": "Textile becomes the occasion",
+          "story": "Use the weave and placement of craft to create festive identity. The 2026 couture inputs support fresh treatments of familiar techniques, not a claim that every heritage craft is accelerating.",
+          "products": "Tonal brocade jackets; fine Bandhani drapes; textured silk kurta sets; narrow-border sarees.",
+          "make": "Approve handloom yardage early. Align motif placement across sizes and price embroidery by actual labour hours.",
+          "commercial": "Pair one statement textile with simpler coordinates. Separate cloth-led premium options from entry-price print interpretations.",
+          "sources": [
+            "fdci-arpita",
+            "fdci-rawal",
+            "pv-aw27"
+          ]
+        },
+        {
+          "title": "Rewear the celebration",
+          "story": "Design wedding-guest pieces to be useful after the event. Lighter construction and modular styling are Forecut development recommendations anchored in current Indian occasionwear practice.",
+          "products": "Lehenga with a wearable separate blouse; detachable cape; reversible waistcoat; light occasion skirt with pockets.",
+          "make": "Make fastenings accessible, include alteration allowance and test pocket distortion. Photograph both dressed-up and everyday combinations.",
+          "commercial": "Use bundles and separate purchasing to improve outfit flexibility. Test attach rates before multiplying accessory SKUs.",
+          "sources": [
+            "fdci-aisha",
+            "fdci-rawal"
+          ]
+        },
+        {
+          "title": "Light as ornament",
+          "story": "Material reflection can deliver impact with fewer all-over trims. Reflective couture is a premium signal with substantial weight, repair and sourcing risks.",
+          "products": "Small pearl-effect borders; metallic-cord accents; controlled tissue panels; a statement brooch.",
+          "make": "Sample skin contact, sharp edges, tarnishing and storage. Offer repair guidance and keep non-washable components removable where possible.",
+          "commercial": "Keep fragile or expensive surfaces made-to-order or in limited capsules. Never equate couture visibility with volume readiness.",
+          "sources": [
+            "fdci-rimzim",
+            "fdci-arpita"
+          ]
+        },
+        {
+          "title": "Menswear, engineered for the event",
+          "story": "Combine Indian textile knowledge with movement and personal styling. Regional weather and event format matter more than a single national festive uniform.",
+          "products": "Soft bandhgalas; tonal embroidered overshirts; secure draped stoles; straight trousers under layered kurtas.",
+          "make": "Fit across body types and test long seated wear. Consider breathable linings and secure internal fasteners without replicating a designer’s proprietary mechanism.",
+          "commercial": "Merchandise by event and climate. Offer lighter wedding-guest options beside more elaborate groom pieces.",
+          "sources": [
+            "fdci-rawal"
+          ]
+        }
+      ],
+      "details": [
+        {
+          "id": "festive-27-1",
+          "name": "Tissue sarees in champagne gold",
+          "category": "Women's Ethnic",
+          "area": "Fabric",
+          "image": "img/tissue-sarees-in-champagne-gold.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Metallic tissue as the base colour, not just the border.",
+          "season_action": "For the craft-led festive edit, develop tissue sarees in champagne gold in the deep botanical and mulberry palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Sample the drape on two heights; test pleat retention, walking clearance and blouse coverage. Stabilise the pallu attachment without pulling the body cloth.",
+          "commercial": "Offer the drape with an adjustable blouse option and document the wearing method; approve a wash-care sample before repeat orders.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "fdci-arpita",
+            "fdci-rawal",
+            "pv-aw27"
+          ]
+        },
+        {
+          "id": "festive-27-2",
+          "name": "Corset saree blouses",
+          "category": "Women's Ethnic",
+          "area": "Bodice",
+          "image": "img/corset-saree-blouses.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Structured corset blouses as a modern alternative.",
+          "season_action": "For the craft-led festive edit, develop corset saree blouses in the deep botanical and mulberry palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Sample the drape on two heights; test pleat retention, walking clearance and blouse coverage. Stabilise the pallu attachment without pulling the body cloth.",
+          "commercial": "Offer the drape with an adjustable blouse option and document the wearing method; approve a wash-care sample before repeat orders.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "fdci-aisha",
+            "fdci-rawal"
+          ]
+        },
+        {
+          "id": "festive-27-3",
+          "name": "Festive kaftan kurtas",
+          "category": "Women's Ethnic",
+          "area": "Shape",
+          "image": "img/festive-kaftan-kurtas.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Kaftans with Indian prints and embroidery, worn to festive events.",
+          "season_action": "For the craft-led festive edit, develop festive kaftan kurtas in the deep botanical and mulberry palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Balance front and back lengths after washing; reinforce side slits and pockets. Test arm movement, neckline recovery and opacity in daylight.",
+          "commercial": "Develop one proven block in the season palette before adding decoration; review fit returns and repeat demand before extending colours.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "fdci-rimzim",
+            "fdci-arpita"
+          ]
+        },
+        {
+          "id": "festive-27-4",
+          "name": "Fit-and-flare Anarkalis",
+          "category": "Women's Ethnic",
+          "area": "Shape",
+          "image": "img/fit-and-flare-anarkalis.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Flattering, comfortable Anarkalis that suit most occasions.",
+          "season_action": "For the craft-led festive edit, develop fit-and-flare anarkalis in the deep botanical and mulberry palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Balance front and back lengths after washing; reinforce side slits and pockets. Test arm movement, neckline recovery and opacity in daylight.",
+          "commercial": "Develop one proven block in the season palette before adding decoration; review fit returns and repeat demand before extending colours.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "fdci-rawal"
+          ]
+        },
+        {
+          "id": "festive-27-5",
+          "name": "Brocade and Chanderi Nehru jackets",
+          "category": "Men's Ethnic",
+          "area": "Fabric",
+          "image": "img/brocade-and-chanderi-nehru-jackets.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Nehru jackets over kurtas or shirts, in brocade, Chanderi or jacquard.",
+          "season_action": "For the craft-led festive edit, develop brocade and chanderi nehru jackets in the deep botanical and mulberry palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Grade collar stand and shoulder balance carefully. Test seated comfort, pocket access and lining movement; fuse a trial panel before production.",
+          "commercial": "Use a shared block with separately costed fabric and embellishment upgrades; offer a coordinated lower rather than multiplying jacket styles.",
+          "material": "Cotton silk, linen, raw silk, brocade, velvet and jacquard, with fabric-covered or metal buttons.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": [
+            "fdci-arpita",
+            "fdci-rawal",
+            "pv-aw27"
+          ]
+        },
+        {
+          "id": "festive-27-6",
+          "name": "Neckline and cuff embroidery",
+          "category": "Men's Ethnic",
+          "area": "Embellishment",
+          "image": "img/neckline-and-cuff-embroidery.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Subtle embroidery placed only at the neckline and cuffs.",
+          "season_action": "For the craft-led festive edit, develop neckline and cuff embroidery in the deep botanical and mulberry palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a stitched strike-off showing coverage, backing and edge finish. Test snagging, flex, perspiration and cleaning; record the labour minutes per panel.",
+          "commercial": "Concentrate the technique on one visible zone and cost it by coverage. Credit the maker and keep a plain companion product for range balance.",
+          "material": "Cotton silk, linen, raw silk, brocade, velvet and jacquard, with fabric-covered or metal buttons.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": [
+            "fdci-aisha",
+            "fdci-rawal"
+          ]
+        },
+        {
+          "id": "festive-27-7",
+          "name": "Tussar and Kanjeevaram menswear",
+          "category": "Men's Ethnic",
+          "area": "Fabric",
+          "image": "img/tussar-and-kanjeevaram-menswear.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Develop",
+          "brief": "Silks usually reserved for women, cut for men by Vivek Karunakaran.",
+          "season_action": "For the craft-led festive edit, develop tussar and kanjeevaram menswear in the deep botanical and mulberry palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a physical swatch for handle, opacity and drape. Record GSM, width, shrinkage, colour fastness and batch variation; sample seams before bulk cutting.",
+          "commercial": "Reserve material after the trial garment passes wear and care checks. Obtain a current per-metre quotation and confirm minimums, lead time and maker attribution.",
+          "material": "Cotton silk, linen, raw silk, brocade, velvet and jacquard, with fabric-covered or metal buttons.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": [
+            "fdci-rimzim",
+            "fdci-arpita"
+          ]
+        },
+        {
+          "id": "festive-27-8",
+          "name": "Indo-western blazer sets",
+          "category": "Indo-Western",
+          "area": "Garment",
+          "image": "img/indo-western-blazer-sets.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Develop",
+          "brief": "Bandhgala-collar blazers with matching trousers.",
+          "season_action": "For the craft-led festive edit, develop indo-western blazer sets in the deep botanical and mulberry palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Grade collar stand and shoulder balance carefully. Test seated comfort, pocket access and lining movement; fuse a trial panel before production.",
+          "commercial": "Use a shared block with separately costed fabric and embellishment upgrades; offer a coordinated lower rather than multiplying jacket styles.",
+          "material": "Cotton, linen, Chanderi, denim and modal blends.",
+          "price": [
+            "1,999–4,499",
+            "5,000–12,000",
+            "20,000+"
+          ],
+          "sources": [
+            "fdci-rawal"
+          ]
+        },
+        {
+          "id": "festive-27-9",
+          "name": "Draped dhoti skirts",
+          "category": "Indo-Western",
+          "area": "Shape",
+          "image": "img/draped-dhoti-skirts.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Develop",
+          "brief": "Dhoti-inspired draped skirts with crop tops or shirts.",
+          "season_action": "For the craft-led festive edit, develop draped dhoti skirts in the deep botanical and mulberry palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Measure finished hem sweep and garment weight. Grade the waist adjustment, reinforce zip ends and keep decorative work clear of the sitting zone.",
+          "commercial": "Sell the skirt as a separate with two compatible tops. Check fit across sizes before committing to a deep colour run.",
+          "material": "Cotton, linen, Chanderi, denim and modal blends.",
+          "price": [
+            "1,999–4,499",
+            "5,000–12,000",
+            "20,000+"
+          ],
+          "sources": [
+            "fdci-arpita",
+            "fdci-rawal",
+            "pv-aw27"
+          ]
+        },
+        {
+          "id": "festive-27-10",
+          "name": "Mojaris with kurta sets",
+          "category": "Indian Footwear",
+          "area": "Style",
+          "image": "img/mojaris-with-kurta-sets.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Classic mojaris for festive kurta looks.",
+          "season_action": "For the craft-led festive edit, develop mojaris with kurta sets in the deep botanical and mulberry palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Balance front and back lengths after washing; reinforce side slits and pockets. Test arm movement, neckline recovery and opacity in daylight.",
+          "commercial": "Develop one proven block in the season palette before adding decoration; review fit returns and repeat demand before extending colours.",
+          "material": "Vegetable-tanned leather, suede, fabric uppers with embroidery, leather or TPR soles.",
+          "price": [
+            "799–1,799",
+            "2,000–4,500",
+            "7,500+"
+          ],
+          "sources": [
+            "fdci-aisha",
+            "fdci-rawal"
+          ]
+        },
+        {
+          "id": "festive-27-11",
+          "name": "Mirror-work flats",
+          "category": "Indian Footwear",
+          "area": "Embellishment",
+          "image": "img/mirror-work-flats.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Mirror embellishment moving onto shoes.",
+          "season_action": "For the craft-led festive edit, develop mirror-work flats in the deep botanical and mulberry palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Trial the last on the target customer, test heel rubbing and sole grip, then run flex and abrasion checks. Validate the attachment of all raised decoration.",
+          "commercial": "Begin with a controlled size run and collect fit feedback. Cost sole, footbed and upper separately; retain an aftercare route for components.",
+          "material": "Vegetable-tanned leather, suede, fabric uppers with embroidery, leather or TPR soles.",
+          "price": [
+            "799–1,799",
+            "2,000–4,500",
+            "7,500+"
+          ],
+          "sources": [
+            "fdci-rimzim",
+            "fdci-arpita"
+          ]
+        },
+        {
+          "id": "festive-27-12",
+          "name": "Kanjeevaram silk",
+          "category": "Fabrics & Weaves",
+          "area": "Fabric",
+          "image": "img/kanjeevaram-silk.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Heavy South Indian silk for weddings, now also in menswear.",
+          "season_action": "For the craft-led festive edit, develop kanjeevaram silk in the deep botanical and mulberry palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a physical swatch for handle, opacity and drape. Record GSM, width, shrinkage, colour fastness and batch variation; sample seams before bulk cutting.",
+          "commercial": "Reserve material after the trial garment passes wear and care checks. Obtain a current per-metre quotation and confirm minimums, lead time and maker attribution.",
+          "material": "See the weave notes; source from the named craft clusters.",
+          "price": [
+            "Price by metre and composition",
+            "Obtain supplier quotation",
+            "Cost craft separately"
+          ],
+          "sources": [
+            "fdci-rawal"
+          ]
+        },
+        {
+          "id": "festive-27-13",
+          "name": "Tussar silk",
+          "category": "Fabrics & Weaves",
+          "area": "Fabric",
+          "image": "img/tussar-silk.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Textured, natural-gold wild silk.",
+          "season_action": "For the craft-led festive edit, develop tussar silk in the deep botanical and mulberry palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a physical swatch for handle, opacity and drape. Record GSM, width, shrinkage, colour fastness and batch variation; sample seams before bulk cutting.",
+          "commercial": "Reserve material after the trial garment passes wear and care checks. Obtain a current per-metre quotation and confirm minimums, lead time and maker attribution.",
+          "material": "See the weave notes; source from the named craft clusters.",
+          "price": [
+            "Price by metre and composition",
+            "Obtain supplier quotation",
+            "Cost craft separately"
+          ],
+          "sources": [
+            "fdci-arpita",
+            "fdci-rawal",
+            "pv-aw27"
+          ]
+        },
+        {
+          "id": "festive-27-14",
+          "name": "Bandhani",
+          "category": "Embroidery & Surface",
+          "area": "Pattern",
+          "image": "img/bandhani.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Tie-dye dots from Gujarat and Rajasthan.",
+          "season_action": "For the craft-led festive edit, develop bandhani in the deep botanical and mulberry palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a full-repeat strike-off and shade tolerance. Check wet and dry rubbing, wash shrinkage and pattern matching at major seams.",
+          "commercial": "Choose a small repeat for replenishment and a larger placement for limited drops. Confirm printing or weaving capacity before launch dates.",
+          "material": "Hand or machine embroidery threads, zari, mirrors, sequins and block-print dyes.",
+          "price": [
+            "Price by coverage",
+            "Confirm labour hours",
+            "Trial before commitment"
+          ],
+          "sources": [
+            "fdci-aisha",
+            "fdci-rawal"
+          ]
+        },
+        {
+          "id": "festive-27-15",
+          "name": "Gota patti",
+          "category": "Embroidery & Surface",
+          "area": "Trim",
+          "image": "img/gota-patti.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Rajasthani ribbon appliqué in gold and silver.",
+          "season_action": "For the craft-led festive edit, develop gota patti in the deep botanical and mulberry palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a stitched strike-off showing coverage, backing and edge finish. Test snagging, flex, perspiration and cleaning; record the labour minutes per panel.",
+          "commercial": "Concentrate the technique on one visible zone and cost it by coverage. Credit the maker and keep a plain companion product for range balance.",
+          "material": "Hand or machine embroidery threads, zari, mirrors, sequins and block-print dyes.",
+          "price": [
+            "Price by coverage",
+            "Confirm labour hours",
+            "Trial before commitment"
+          ],
+          "sources": [
+            "fdci-rimzim",
+            "fdci-arpita"
+          ]
+        },
+        {
+          "id": "festive-27-16",
+          "name": "Statement brooches",
+          "category": "Trims & Accessories",
+          "area": "Accessory",
+          "image": "img/statement-brooches.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Core",
+          "brief": "Brooches on bandhgalas, kurtas and saree pallus.",
+          "season_action": "For the craft-led festive edit, develop statement brooches in the deep botanical and mulberry palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Measure attachment strength and colour transfer against pale cloth. Remove sharp edges; keep the trim accessible for replacement and repair.",
+          "commercial": "Coordinate this accent with one hero garment, with a separate accessory price. Check labour time and reject rates before introducing more variants.",
+          "material": "Tassels, piping, metal or fabric buttons, borders, belts and bags.",
+          "price": [
+            "499–1,499",
+            "1,800–4,000",
+            "6,000+"
+          ],
+          "sources": [
+            "fdci-rawal"
+          ]
+        },
+        {
+          "id": "pocketed-occasion-skirt",
+          "name": "Pocketed wedding-guest skirt",
+          "category": "Women's Ethnic",
+          "area": "Construction",
+          "image": "img/india-season-details/festive-27/pocketed-occasion-skirt.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Develop",
+          "brief": "Offer supported side pockets and a blouse that can leave the occasion outfit.",
+          "season_action": "Plan festive capsules around lighter embellishment, adaptable separates and rich textile character. Treat sculptural metallic work as an experimental premium edge rather than a volume assumption.",
+          "construction": "Check pocket distortion and the skirt’s movement when loaded.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Light silk blend with a carefully balanced lining.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "fdci-rawal",
+            "fdci-arpita"
+          ]
+        },
+        {
+          "id": "breathable-brocade-layer",
+          "name": "Soft botanical brocade layer",
+          "category": "Men's Ethnic",
+          "area": "Construction",
+          "image": "img/india-season-details/festive-27/breathable-brocade-layer.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Develop",
+          "brief": "Let tonal weave supply the occasion identity while keeping the internal build light.",
+          "season_action": "Plan festive capsules around lighter embellishment, adaptable separates and rich textile character. Treat sculptural metallic work as an experimental premium edge rather than a volume assumption.",
+          "construction": "Fit seated and check abrasion at armholes and neck.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Tonal brocade or textured jacquard with breathable lining.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": [
+            "fdci-rawal",
+            "fdci-arpita"
+          ]
+        },
+        {
+          "id": "secure-occasion-stole",
+          "name": "Securely draped occasion stole",
+          "category": "Men's Ethnic",
+          "area": "Construction",
+          "image": "img/india-season-details/festive-27/secure-occasion-stole.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Develop",
+          "brief": "Develop an original unobtrusive fastening so the drape moves with its wearer.",
+          "season_action": "Plan festive capsules around lighter embellishment, adaptable separates and rich textile character. Treat sculptural metallic work as an experimental premium edge rather than a volume assumption.",
+          "construction": "Stress-test closures and supply clear wearing instructions.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Fluid silk blend or fine woven cloth with a narrow border.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": [
+            "fdci-rawal",
+            "fdci-arpita"
+          ]
+        },
+        {
+          "id": "narrow-border-saree",
+          "name": "Fluid narrow-border evening saree",
+          "category": "Women's Ethnic",
+          "area": "Construction",
+          "image": "img/india-season-details/festive-27/narrow-border-saree.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Develop",
+          "brief": "Control the border width and cloth weight to keep the drape useful after a celebration.",
+          "season_action": "Plan festive capsules around lighter embellishment, adaptable separates and rich textile character. Treat sculptural metallic work as an experimental premium edge rather than a volume assumption.",
+          "construction": "Approve pallu balance, snag resistance and care guidance.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Fine silk or silk blend with a light woven border.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "fdci-rawal",
+            "fdci-arpita"
+          ]
+        }
+      ],
+      "stories": [
+        {
+          "brand": "Aisha Rao",
+          "collection": "India Couture Week 2026",
+          "observed": "FDCI coverage connects textile appliqué with lighter occasion dressing and practical construction.",
+          "story": "Craft need not require a heavy silhouette; functional details can sit inside an expressive collection.",
+          "translate": "Build a wedding-guest separate with supported pockets, controlled volume and a top that works independently.",
+          "source": "fdci-aisha"
+        },
+        {
+          "brand": "Rimzim Dadu",
+          "collection": "India Couture Week 2026",
+          "observed": "The designer discusses mother-of-pearl and metal-cord experimentation alongside repair and aftercare.",
+          "story": "Material research creates a recognisable identity, while servicing helps protect the value of a complex garment.",
+          "translate": "Treat reflective components as an R&D capsule. Sample weight, snagging, skin contact, storage and component replacement before selling.",
+          "source": "fdci-rimzim"
+        },
+        {
+          "brand": "Arpita Mehta",
+          "collection": "India Couture Week 2026",
+          "observed": "The FDCI interview describes nuanced Bandhani, fluid fabric bases and reinterpretations of familiar textile techniques.",
+          "story": "A familiar craft can feel contemporary through scale, placement and restrained colour rather than more surface coverage.",
+          "translate": "Test a single craft on one hero piece and simpler matching coordinates. Build the artisan schedule into the delivery plan.",
+          "source": "fdci-arpita"
+        }
+      ],
+      "innovations": [
+        {
+          "title": "Repairable ornament and removable components",
+          "maturity": "Design-system prototype",
+          "signal": "Current couture aftercare and material experimentation provide a useful premium reference.",
+          "use": "Replaceable trims, independent capes and spare embellishment kits.",
+          "test": "Cost repair labour; test attachment security and safe storage. Avoid promising a service without capacity.",
+          "source": "fdci-rimzim"
+        },
+        {
+          "title": "Cellulose sewing-thread development",
+          "maturity": "Innovation watch / mill trial",
+          "signal": "The official 2026 innovation-awards register includes AeoniQ Fil by AMANN.",
+          "use": "Explore compatible thread choices for cellulose-led garments.",
+          "test": "Check seam strength, abrasion, wash stability and end-of-life compatibility with a technical supplier. An award is not a ready-made recycling solution.",
+          "source": "techtextil"
+        },
+        {
+          "title": "Craft capacity as a product innovation",
+          "maturity": "Operational development",
+          "signal": "Indian designer interviews emphasise material development and maker timelines.",
+          "use": "One repeatable placed-craft code, documented across a small range.",
+          "test": "Approve stitch standards, labour hours, batch tolerances and payment terms with the maker before the production calendar is fixed.",
+          "source": "fdci-arpita"
+        }
+      ],
+      "offers": [
+        {
+          "title": "Wedding-guest wardrobe",
+          "action": "Offer a separately priced blouse, skirt and cape; trial a bundle only if all components have independent use."
+        },
+        {
+          "title": "Craft appointment",
+          "action": "Explain cloth and maker details in a premium appointment; avoid a generic percentage discount that hides handwork costs."
+        },
+        {
+          "title": "Aftercare add-on",
+          "action": "Offer a costed repair or trim-refresh service only where a supplier and service window have been confirmed."
+        }
+      ],
+      "benchmarks": [
+        {
+          "brand": "Nicobar",
+          "product": "Classic Shirt - Black",
+          "price": "INR 5,750 MRP",
+          "offer": "Free shipping above INR 1,000 on the inspected page; terms apply.",
+          "source": "nicobar-price"
+        }
+      ],
+      "price_rows": [
+        {
+          "category": "Women's Ethnic",
+          "value": "2,499–4,999",
+          "mid": "6,000–18,000",
+          "premium": "25,000+"
+        },
+        {
+          "category": "Men's Ethnic",
+          "value": "1,499–3,999",
+          "mid": "4,500–12,000",
+          "premium": "18,000+"
+        },
+        {
+          "category": "Indo-Western",
+          "value": "1,999–4,499",
+          "mid": "5,000–12,000",
+          "premium": "20,000+"
+        },
+        {
+          "category": "Western Wear (India)",
+          "value": "999–2,499",
+          "mid": "3,000–7,000",
+          "premium": "10,000+"
+        },
+        {
+          "category": "Indian Footwear",
+          "value": "799–1,799",
+          "mid": "2,000–4,500",
+          "premium": "7,500+"
+        },
+        {
+          "category": "Fabrics & Weaves",
+          "value": "Price by metre and composition",
+          "mid": "Obtain supplier quotation",
+          "premium": "Cost craft separately"
+        },
+        {
+          "category": "Embroidery & Surface",
+          "value": "Price by coverage",
+          "mid": "Confirm labour hours",
+          "premium": "Trial before commitment"
+        },
+        {
+          "category": "Trims & Accessories",
+          "value": "499–1,499",
+          "mid": "1,800–4,000",
+          "premium": "6,000+"
+        }
+      ],
+      "price_note": "Original Forecut indicative India retail planning bands, not designer quotations or guaranteed future prices. Fabric and handwork require separate supplier costing.",
+      "offer_note": "Offer ideas below are proposed merchandising tests for your brand. They are not active Forecut or designer discounts.",
+      "archive_pdf": "output/pdf/Forecut-India-Festive-27-Complete-Report.pdf"
+    },
+    "Summer 28": {
+      "code": "Summer 28",
+      "slug": "summer-28",
+      "file": "india-summer-28.html",
+      "hero": "img/india-season-art/summer-28.webp",
+      "window": "Mar – Jul 2028 · Holi, Eid, summer weddings (long-range)",
+      "title": "An adaptable summer wardrobe",
+      "focus": "Explore fewer, more useful pieces: breathable modular sets, repair-friendly construction and identifiable local craft. These are conditional development scenarios to revisit when 2027–28 signals arrive.",
+      "basis": "Long-range scenario · low confidence; not observed 2028 runway evidence",
+      "palette": [
+        [
+          "#EAE0CC",
+          "Loom neutral"
+        ],
+        [
+          "#8C9F82",
+          "Dry sage"
+        ],
+        [
+          "#AA5C3E",
+          "Clay earth"
+        ],
+        [
+          "#344A73",
+          "Deep indigo"
+        ],
+        [
+          "#D8B6AA",
+          "Muted shell"
+        ]
+      ],
+      "plan": [
+        [
+          "April–September 2027",
+          "Recheck SS28 trade and runway inputs as they become available; revise or reject these scenarios."
+        ],
+        [
+          "October–December 2027",
+          "Run customer pilots, aftercare costing and fit trials; lock only validated materials and silhouettes."
+        ],
+        [
+          "January–February 2028",
+          "Approve production against verified quality, demand and festival calendar."
+        ],
+        [
+          "March–July 2028",
+          "Track sales and returns against the pilot baseline; update scenarios with measured evidence."
+        ]
+      ],
+      "watch": [
+        "A scenario advances only after repeated brand signals and customer testing.",
+        "If modular details raise defects or returns, simplify the construction.",
+        "Review SS28 collections when published; this report does not describe shows that have not happened."
+      ],
+      "themes": [
+        {
+          "title": "Adaptable summer sets",
+          "story": "Scenario: versatility becomes a stronger reason to buy if shoppers want fewer occasion-specific pieces. Airy and adjustable 2027 runway ideas are an early design input only.",
+          "products": "Shirt-and-trouser sets; adjustable wrap kurtas; removable sleeve layers; compact travel capsules.",
+          "make": "Prototype two ways to wear each piece without excess hardware. Fit-test adjustability at both ends of the size range.",
+          "commercial": "Run a small paid pilot before committing capacity. Compare conversion and repeat wear feedback with fixed styles.",
+          "sources": [
+            "hermes-ss27",
+            "pv-ss27"
+          ]
+        },
+        {
+          "title": "Repair is part of the product",
+          "story": "Scenario: dependable aftercare helps distinguish premium craft. It depends on service economics and customer adoption, neither of which is established for 2028.",
+          "products": "Replaceable buttons and ties; spare trim kits; accessible seams; detachable occasion panels.",
+          "make": "Document repair steps and stock compatible components. Test that removable trims still survive normal wear.",
+          "commercial": "Cost the service separately before promising it. Measure repair use, lead time and margin impact in a pilot.",
+          "sources": [
+            "fdci-rimzim",
+            "te-2026"
+          ]
+        },
+        {
+          "title": "Craft with a clear origin",
+          "story": "Scenario: customers reward specific provenance over broad craft language. Local making is an identity cue, not automatic proof of lower impact.",
+          "products": "Cluster-attributed handloom shirts; small-batch indigo sets; restrained crochet and embroidery accents.",
+          "make": "Record fibre composition, supplier and process; check batch consistency and substantiate any environmental claim.",
+          "commercial": "Test product descriptions that explain maker and technique. Validate willingness to pay rather than assuming a premium.",
+          "sources": [
+            "anokhi",
+            "fdci-margn",
+            "te-2026"
+          ]
+        },
+        {
+          "title": "Soft structure for daily dressing",
+          "story": "Scenario: summer tailoring stays relaxed while becoming more purposeful. Build recognisable shapes with better finishing instead of adding novelty to every style.",
+          "products": "Unstructured overshirts; fluid sarees; straight-leg trousers; breathable waistcoats.",
+          "make": "Check drape, collar recovery, seam stability and opacity. Build wear trials into development before range expansion.",
+          "commercial": "Retain a familiar core and trial one silhouette change at a time. Use actual return reasons to set revisions.",
+          "sources": [
+            "pv-ss27",
+            "fdci-rawal"
+          ]
+        }
+      ],
+      "details": [
+        {
+          "id": "summer-28-1",
+          "name": "Office-ready fluid sarees",
+          "category": "Women's Ethnic",
+          "area": "Style",
+          "image": "img/office-ready-fluid-sarees.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Light printed sarees styled for work, as shown by Satya Paul.",
+          "season_action": "For the long-range summer edit, develop office-ready fluid sarees in the loom neutral and dry sage palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Sample the drape on two heights; test pleat retention, walking clearance and blouse coverage. Stabilise the pallu attachment without pulling the body cloth.",
+          "commercial": "Offer the drape with an adjustable blouse option and document the wearing method; approve a wash-care sample before repeat orders.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "hermes-ss27",
+            "pv-ss27"
+          ]
+        },
+        {
+          "id": "summer-28-2",
+          "name": "Straight kurtas with palazzos",
+          "category": "Women's Ethnic",
+          "area": "Shape",
+          "image": "img/straight-kurtas-with-palazzos.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Straight-cut suits with wide palazzos for comfort.",
+          "season_action": "For the long-range summer edit, develop straight kurtas with palazzos in the loom neutral and dry sage palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Balance front and back lengths after washing; reinforce side slits and pockets. Test arm movement, neckline recovery and opacity in daylight.",
+          "commercial": "Develop one proven block in the season palette before adding decoration; review fit returns and repeat demand before extending colours.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "fdci-rimzim",
+            "te-2026"
+          ]
+        },
+        {
+          "id": "summer-28-3",
+          "name": "Sarees with belts and jackets",
+          "category": "Women's Ethnic",
+          "area": "Layer",
+          "image": "img/sarees-with-belts-and-jackets.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Waist belts and cropped jackets over sarees for a modern drape.",
+          "season_action": "For the long-range summer edit, develop sarees with belts and jackets in the loom neutral and dry sage palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Sample the drape on two heights; test pleat retention, walking clearance and blouse coverage. Stabilise the pallu attachment without pulling the body cloth.",
+          "commercial": "Offer the drape with an adjustable blouse option and document the wearing method; approve a wash-care sample before repeat orders.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "anokhi",
+            "fdci-margn",
+            "te-2026"
+          ]
+        },
+        {
+          "id": "summer-28-4",
+          "name": "Asymmetric-hem kurtas",
+          "category": "Men's Ethnic",
+          "area": "Hem",
+          "image": "img/asymmetric-hem-kurtas.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Angled or layered hems for a modern kurta.",
+          "season_action": "For the long-range summer edit, develop asymmetric-hem kurtas in the loom neutral and dry sage palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Balance front and back lengths after washing; reinforce side slits and pockets. Test arm movement, neckline recovery and opacity in daylight.",
+          "commercial": "Develop one proven block in the season palette before adding decoration; review fit returns and repeat demand before extending colours.",
+          "material": "Cotton silk, linen, raw silk, brocade, velvet and jacquard, with fabric-covered or metal buttons.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": [
+            "pv-ss27",
+            "fdci-rawal"
+          ]
+        },
+        {
+          "id": "summer-28-5",
+          "name": "Pathani suits",
+          "category": "Men's Ethnic",
+          "area": "Garment",
+          "image": "img/pathani-suits.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Collared Pathani kurtas with salwar, in solid tones.",
+          "season_action": "For the long-range summer edit, develop pathani suits in the loom neutral and dry sage palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Balance front and back lengths after washing; reinforce side slits and pockets. Test arm movement, neckline recovery and opacity in daylight.",
+          "commercial": "Develop one proven block in the season palette before adding decoration; review fit returns and repeat demand before extending colours.",
+          "material": "Cotton silk, linen, raw silk, brocade, velvet and jacquard, with fabric-covered or metal buttons.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": [
+            "hermes-ss27",
+            "pv-ss27"
+          ]
+        },
+        {
+          "id": "summer-28-6",
+          "name": "Chanderi with denim",
+          "category": "Indo-Western",
+          "area": "Fabric",
+          "image": "img/chanderi-with-denim.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Silk Chanderi paired with denim, as shown by Saim.",
+          "season_action": "For the long-range summer edit, develop chanderi with denim in the loom neutral and dry sage palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a physical swatch for handle, opacity and drape. Record GSM, width, shrinkage, colour fastness and batch variation; sample seams before bulk cutting.",
+          "commercial": "Reserve material after the trial garment passes wear and care checks. Obtain a current per-metre quotation and confirm minimums, lead time and maker attribution.",
+          "material": "Cotton, linen, Chanderi, denim and modal blends.",
+          "price": [
+            "1,999–4,499",
+            "5,000–12,000",
+            "20,000+"
+          ],
+          "sources": [
+            "fdci-rimzim",
+            "te-2026"
+          ]
+        },
+        {
+          "id": "summer-28-7",
+          "name": "Indigo denim with handloom",
+          "category": "Indo-Western",
+          "area": "Fabric",
+          "image": "img/indigo-denim-with-handloom.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Indigo denim teamed with handloom pieces.",
+          "season_action": "For the long-range summer edit, develop indigo denim with handloom in the loom neutral and dry sage palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a physical swatch for handle, opacity and drape. Record GSM, width, shrinkage, colour fastness and batch variation; sample seams before bulk cutting.",
+          "commercial": "Reserve material after the trial garment passes wear and care checks. Obtain a current per-metre quotation and confirm minimums, lead time and maker attribution.",
+          "material": "Cotton, linen, Chanderi, denim and modal blends.",
+          "price": [
+            "1,999–4,499",
+            "5,000–12,000",
+            "20,000+"
+          ],
+          "sources": [
+            "anokhi",
+            "fdci-margn",
+            "te-2026"
+          ]
+        },
+        {
+          "id": "summer-28-8",
+          "name": "Quiet-luxury basics",
+          "category": "Western Wear (India)",
+          "area": "Style",
+          "image": "img/quiet-luxury-basics.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Crisp shirts, neutral trousers and clean sneakers.",
+          "season_action": "For the long-range summer edit, develop quiet-luxury basics in the loom neutral and dry sage palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Check block balance and movement on the target wearer. Test seams, pockets and closures after washing, and record finished measurements for grading.",
+          "commercial": "Keep a repeatable base block with one seasonal fabric story. Test the full outfit and separates at the planned ticket before scaling quantities.",
+          "material": "Cotton jersey, denim, twill, poplin and stretch blends suited to Indian heat.",
+          "price": [
+            "999–2,499",
+            "3,000–7,000",
+            "10,000+"
+          ],
+          "sources": [
+            "pv-ss27",
+            "fdci-rawal"
+          ]
+        },
+        {
+          "id": "summer-28-9",
+          "name": "Cargo and utility pants",
+          "category": "Western Wear (India)",
+          "area": "Pocket",
+          "image": "img/cargo-and-utility-pants.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Cargo pants and workwear jackets with street details.",
+          "season_action": "For the long-range summer edit, develop cargo and utility pants in the loom neutral and dry sage palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Check block balance and movement on the target wearer. Test seams, pockets and closures after washing, and record finished measurements for grading.",
+          "commercial": "Keep a repeatable base block with one seasonal fabric story. Test the full outfit and separates at the planned ticket before scaling quantities.",
+          "material": "Cotton jersey, denim, twill, poplin and stretch blends suited to Indian heat.",
+          "price": [
+            "999–2,499",
+            "3,000–7,000",
+            "10,000+"
+          ],
+          "sources": [
+            "hermes-ss27",
+            "pv-ss27"
+          ]
+        },
+        {
+          "id": "summer-28-10",
+          "name": "Handcrafted leather sneakers",
+          "category": "Indian Footwear",
+          "area": "Material",
+          "image": "img/handcrafted-leather-sneakers.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Full-grain leather sneakers made in India.",
+          "season_action": "For the long-range summer edit, develop handcrafted leather sneakers in the loom neutral and dry sage palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Trial the last on the target customer, test heel rubbing and sole grip, then run flex and abrasion checks. Validate the attachment of all raised decoration.",
+          "commercial": "Begin with a controlled size run and collect fit feedback. Cost sole, footbed and upper separately; retain an aftercare route for components.",
+          "material": "Vegetable-tanned leather, suede, fabric uppers with embroidery, leather or TPR soles.",
+          "price": [
+            "799–1,799",
+            "2,000–4,500",
+            "7,500+"
+          ],
+          "sources": [
+            "fdci-rimzim",
+            "te-2026"
+          ]
+        },
+        {
+          "id": "summer-28-11",
+          "name": "Wide lasts for Indian feet",
+          "category": "Indian Footwear",
+          "area": "Construction",
+          "image": "img/wide-lasts-for-indian-feet.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Broader lasts shaped for Indian foot widths.",
+          "season_action": "For the long-range summer edit, develop wide lasts for indian feet in the loom neutral and dry sage palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Trial the last on the target customer, test heel rubbing and sole grip, then run flex and abrasion checks. Validate the attachment of all raised decoration.",
+          "commercial": "Begin with a controlled size run and collect fit feedback. Cost sole, footbed and upper separately; retain an aftercare route for components.",
+          "material": "Vegetable-tanned leather, suede, fabric uppers with embroidery, leather or TPR soles.",
+          "price": [
+            "799–1,799",
+            "2,000–4,500",
+            "7,500+"
+          ],
+          "sources": [
+            "anokhi",
+            "fdci-margn",
+            "te-2026"
+          ]
+        },
+        {
+          "id": "summer-28-12",
+          "name": "Handspun khadi",
+          "category": "Fabrics & Weaves",
+          "area": "Fabric",
+          "image": "img/handspun-khadi.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Khadi in silk, wool, linen and cotton, shown at the Navdhara Khadi showcase.",
+          "season_action": "For the long-range summer edit, develop handspun khadi in the loom neutral and dry sage palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a physical swatch for handle, opacity and drape. Record GSM, width, shrinkage, colour fastness and batch variation; sample seams before bulk cutting.",
+          "commercial": "Reserve material after the trial garment passes wear and care checks. Obtain a current per-metre quotation and confirm minimums, lead time and maker attribution.",
+          "material": "See the weave notes; source from the named craft clusters.",
+          "price": [
+            "Price by metre and composition",
+            "Obtain supplier quotation",
+            "Cost craft separately"
+          ],
+          "sources": [
+            "pv-ss27",
+            "fdci-rawal"
+          ]
+        },
+        {
+          "id": "summer-28-13",
+          "name": "Jamdani",
+          "category": "Fabrics & Weaves",
+          "area": "Fabric",
+          "image": "img/jamdani.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Hand-woven motifs on fine cotton.",
+          "season_action": "For the long-range summer edit, develop jamdani in the loom neutral and dry sage palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a physical swatch for handle, opacity and drape. Record GSM, width, shrinkage, colour fastness and batch variation; sample seams before bulk cutting.",
+          "commercial": "Reserve material after the trial garment passes wear and care checks. Obtain a current per-metre quotation and confirm minimums, lead time and maker attribution.",
+          "material": "See the weave notes; source from the named craft clusters.",
+          "price": [
+            "Price by metre and composition",
+            "Obtain supplier quotation",
+            "Cost craft separately"
+          ],
+          "sources": [
+            "hermes-ss27",
+            "pv-ss27"
+          ]
+        },
+        {
+          "id": "summer-28-14",
+          "name": "Maheshwari",
+          "category": "Fabrics & Weaves",
+          "area": "Fabric",
+          "image": "img/maheshwari.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Fine cotton-silk handloom with reversible borders.",
+          "season_action": "For the long-range summer edit, develop maheshwari in the loom neutral and dry sage palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a physical swatch for handle, opacity and drape. Record GSM, width, shrinkage, colour fastness and batch variation; sample seams before bulk cutting.",
+          "commercial": "Reserve material after the trial garment passes wear and care checks. Obtain a current per-metre quotation and confirm minimums, lead time and maker attribution.",
+          "material": "See the weave notes; source from the named craft clusters.",
+          "price": [
+            "Price by metre and composition",
+            "Obtain supplier quotation",
+            "Cost craft separately"
+          ],
+          "sources": [
+            "fdci-rimzim",
+            "te-2026"
+          ]
+        },
+        {
+          "id": "summer-28-15",
+          "name": "Ikat",
+          "category": "Embroidery & Surface",
+          "area": "Pattern",
+          "image": "img/ikat.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Resist-dyed yarns woven into blurred patterns.",
+          "season_action": "For the long-range summer edit, develop ikat in the loom neutral and dry sage palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a full-repeat strike-off and shade tolerance. Check wet and dry rubbing, wash shrinkage and pattern matching at major seams.",
+          "commercial": "Choose a small repeat for replenishment and a larger placement for limited drops. Confirm printing or weaving capacity before launch dates.",
+          "material": "Hand or machine embroidery threads, zari, mirrors, sequins and block-print dyes.",
+          "price": [
+            "Price by coverage",
+            "Confirm labour hours",
+            "Trial before commitment"
+          ],
+          "sources": [
+            "anokhi",
+            "fdci-margn",
+            "te-2026"
+          ]
+        },
+        {
+          "id": "summer-28-16",
+          "name": "Potli and fabric-covered buttons",
+          "category": "Trims & Accessories",
+          "area": "Hardware",
+          "image": "img/potli-and-fabric-covered-buttons.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Small round buttons as a crafted finish.",
+          "season_action": "For the long-range summer edit, develop potli and fabric-covered buttons in the loom neutral and dry sage palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Measure attachment strength and colour transfer against pale cloth. Remove sharp edges; keep the trim accessible for replacement and repair.",
+          "commercial": "Coordinate this accent with one hero garment, with a separate accessory price. Check labour time and reject rates before introducing more variants.",
+          "material": "Tassels, piping, metal or fabric buttons, borders, belts and bags.",
+          "price": [
+            "499–1,499",
+            "1,800–4,000",
+            "6,000+"
+          ],
+          "sources": [
+            "pv-ss27",
+            "fdci-rawal"
+          ]
+        },
+        {
+          "id": "adjustable-wrap-kurta",
+          "name": "Adjustable summer wrap kurta",
+          "category": "Women's Ethnic",
+          "area": "Construction",
+          "image": "img/india-season-details/summer-28/adjustable-wrap-kurta.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Watch",
+          "brief": "Scenario: two secure ties create useful fit adjustment without excess hardware.",
+          "season_action": "Explore fewer, more useful pieces: breathable modular sets, repair-friendly construction and identifiable local craft. These are conditional development scenarios to revisit when 2027–28 signals arrive.",
+          "construction": "Fit both ends of the size range and compare returns in a paid pilot.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Fine cotton, cotton-linen or another verified light base.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "hermes-ss27",
+            "pv-ss27"
+          ]
+        },
+        {
+          "id": "modular-travel-set",
+          "name": "Modular light travel separates",
+          "category": "Indo-Western",
+          "area": "Construction",
+          "image": "img/india-season-details/summer-28/modular-travel-set.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Watch",
+          "brief": "Scenario: one inner and one loose outer give multiple useful combinations.",
+          "season_action": "Explore fewer, more useful pieces: breathable modular sets, repair-friendly construction and identifiable local craft. These are conditional development scenarios to revisit when 2027–28 signals arrive.",
+          "construction": "Test components independently and check whether adjustment complicates use.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Light, stable woven cloth with compatible care across components.",
+          "price": [
+            "1,999–4,499",
+            "5,000–12,000",
+            "20,000+"
+          ],
+          "sources": [
+            "hermes-ss27",
+            "pv-ss27"
+          ]
+        },
+        {
+          "id": "vest-and-fluid-saree",
+          "name": "Fluid saree with an independent soft vest",
+          "category": "Women's Ethnic",
+          "area": "Construction",
+          "image": "img/india-season-details/summer-28/vest-and-fluid-saree.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Watch",
+          "brief": "Scenario: a short soft layer adds wardrobe versatility to a light saree.",
+          "season_action": "Explore fewer, more useful pieces: breathable modular sets, repair-friendly construction and identifiable local craft. These are conditional development scenarios to revisit when 2027–28 signals arrive.",
+          "construction": "Check arm mobility, drape grip and styling comprehension.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Fine cotton-silk or another opacity-tested fluid base.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "hermes-ss27",
+            "pv-ss27"
+          ]
+        },
+        {
+          "id": "serviceable-summer-flats",
+          "name": "Serviceable summer leather flats",
+          "category": "Indian Footwear",
+          "area": "Construction",
+          "image": "img/india-season-details/summer-28/serviceable-summer-flats.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Watch",
+          "brief": "Scenario: comfortable proportions and repair access matter more than novelty trim.",
+          "season_action": "Explore fewer, more useful pieces: breathable modular sets, repair-friendly construction and identifiable local craft. These are conditional development scenarios to revisit when 2027–28 signals arrive.",
+          "construction": "Run flex, adhesion, grip and wear tests before a commercial service claim.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Supplier-verified leather and a flexible replaceable component system.",
+          "price": [
+            "799–1,799",
+            "2,000–4,500",
+            "7,500+"
+          ],
+          "sources": [
+            "hermes-ss27",
+            "pv-ss27"
+          ]
+        }
+      ],
+      "stories": [
+        {
+          "brand": "Hermès",
+          "collection": "Women’s Spring/Summer 2027",
+          "observed": "Official show notes highlight airy layers and adjustable drape.",
+          "story": "Construction can express lightness when movement and material work together.",
+          "translate": "Test a controllable drape or adjustable garment with clear styling instructions; compare its fit and return feedback against a fixed version.",
+          "source": "hermes-ss27"
+        },
+        {
+          "brand": "Margn",
+          "collection": "Circular Design Challenge 2026 presentation",
+          "observed": "FDCI coverage connects hand knitting with repurposed material experimentation.",
+          "story": "A small studio can use resource choices and maker knowledge as part of its design identity.",
+          "translate": "Start with a limited, traceable batch. Confirm material consistency, quality and repair options before promising scalable circularity.",
+          "source": "fdci-margn"
+        },
+        {
+          "brand": "péro / Aneeth Arora",
+          "collection": "Dream Dress-Up | Spring/Summer 2027",
+          "observed": "The designer’s ELLE interview describes a playful craft vocabulary using stripes, crochet and different Indian textile techniques.",
+          "story": "Playfulness comes from a coherent collection world and personal expression, not a single mandatory colour.",
+          "translate": "Create one original craft signature across a small summer group. Keep labour-intensive decoration selective and retain easy-wear proportions.",
+          "source": "elle-pero"
+        }
+      ],
+      "innovations": [
+        {
+          "title": "Next-generation cellulose material trials",
+          "maturity": "Supplier verification required",
+          "signal": "Lenzing’s published R&D report discusses new cellulose processes and demonstration work.",
+          "use": "Trial fluid shirting, soft tailoring and light blended separates.",
+          "test": "Request the exact fibre specification, minimums and supply date; verify laundering, pilling and strength before any bulk order.",
+          "source": "lenzing-rd"
+        },
+        {
+          "title": "Renewable-feedstock stretch chemistry",
+          "maturity": "Material supplier enquiry",
+          "signal": "Hyosung’s public bio-material platform describes feedstocks used in spandex-related chemistry.",
+          "use": "Investigate selected stretch linings or comfort components where performance is needed.",
+          "test": "Verify product-level renewable content, certifications, recovery, ageing and supply. Bio-based does not mean biodegradable.",
+          "source": "hyosung"
+        },
+        {
+          "title": "Digital fabric quality control",
+          "maturity": "Factory pilot",
+          "signal": "The 2026 official awards include AI-based textile inspection and production technologies.",
+          "use": "Pilot defect detection on a limited woven or printed fabric programme.",
+          "test": "Measure missed defects and false rejects against your current inspection method before expanding.",
+          "source": "techtextil"
+        }
+      ],
+      "offers": [
+        {
+          "title": "Pilot pre-order",
+          "action": "Scenario: take a limited, clearly dated pre-order only after a working sample, production capacity and refund terms exist."
+        },
+        {
+          "title": "Wardrobe-compatible set",
+          "action": "Scenario: test mixable components with separate size selection rather than adding unused modular parts."
+        },
+        {
+          "title": "Care kit",
+          "action": "Scenario: trial a small compatible spare-trim kit and measure whether customers use it."
+        }
+      ],
+      "benchmarks": [
+        {
+          "brand": "Nicobar",
+          "product": "Classic Shirt - Black",
+          "price": "INR 5,750 MRP",
+          "offer": "Free shipping above INR 1,000 on the inspected page; terms apply.",
+          "source": "nicobar-price"
+        }
+      ],
+      "price_rows": [
+        {
+          "category": "Women's Ethnic",
+          "value": "2,499–4,999",
+          "mid": "6,000–18,000",
+          "premium": "25,000+"
+        },
+        {
+          "category": "Men's Ethnic",
+          "value": "1,499–3,999",
+          "mid": "4,500–12,000",
+          "premium": "18,000+"
+        },
+        {
+          "category": "Indo-Western",
+          "value": "1,999–4,499",
+          "mid": "5,000–12,000",
+          "premium": "20,000+"
+        },
+        {
+          "category": "Western Wear (India)",
+          "value": "999–2,499",
+          "mid": "3,000–7,000",
+          "premium": "10,000+"
+        },
+        {
+          "category": "Indian Footwear",
+          "value": "799–1,799",
+          "mid": "2,000–4,500",
+          "premium": "7,500+"
+        },
+        {
+          "category": "Fabrics & Weaves",
+          "value": "Price by metre and composition",
+          "mid": "Obtain supplier quotation",
+          "premium": "Cost craft separately"
+        },
+        {
+          "category": "Embroidery & Surface",
+          "value": "Price by coverage",
+          "mid": "Confirm labour hours",
+          "premium": "Trial before commitment"
+        },
+        {
+          "category": "Trims & Accessories",
+          "value": "499–1,499",
+          "mid": "1,800–4,000",
+          "premium": "6,000+"
+        }
+      ],
+      "price_note": "Original Forecut indicative India retail planning bands, not designer quotations or guaranteed future prices. Fabric and handwork require separate supplier costing.",
+      "offer_note": "Offer ideas below are proposed merchandising tests for your brand. They are not active Forecut or designer discounts.",
+      "archive_pdf": "output/pdf/Forecut-India-Summer-28-Complete-Report.pdf"
+    },
+    "Festive 28": {
+      "code": "Festive 28",
+      "slug": "festive-28",
+      "file": "india-festive-28.html",
+      "hero": "img/india-season-art/festive-28.webp",
+      "window": "Aug – Dec 2028 · Navratri, Diwali, wedding season (long-range)",
+      "title": "Celebration, built to keep",
+      "focus": "Explore occasionwear whose value comes from reconfiguration, provenance and aftercare. This is an original Forecut planning scenario, not a claim about confirmed 2028 consumer preferences or designer collections.",
+      "basis": "Long-range scenario · low confidence; review before any commercial commitment",
+      "palette": [
+        [
+          "#683047",
+          "Aubergine wine"
+        ],
+        [
+          "#204C40",
+          "Forest shade"
+        ],
+        [
+          "#BAA375",
+          "Aged gold"
+        ],
+        [
+          "#E8DDCA",
+          "Parchment"
+        ],
+        [
+          "#53627B",
+          "Smoky blue"
+        ]
+      ],
+      "plan": [
+        [
+          "July–December 2027",
+          "Check Indian couture, festive retail and trade-fair developments; replace unsupported scenarios."
+        ],
+        [
+          "January–March 2028",
+          "Validate target customers, price tolerance and suppliers; approve initial prototypes."
+        ],
+        [
+          "April–July 2028",
+          "Run wear, repair and quality tests; lock only proven options and verified festival delivery windows."
+        ],
+        [
+          "August–December 2028",
+          "Monitor sell-through and returns by event and region; record which hypotheses actually performed."
+        ]
+      ],
+      "watch": [
+        "Do not use 2026 couture as proof of 2028 mass-market adoption.",
+        "Stop material experiments when safe care or repair cannot be offered.",
+        "Replace this scenario with direct 2028 evidence as it becomes available; next planned research checkpoint: July 2027."
+      ],
+      "themes": [
+        {
+          "title": "The occasion wardrobe, recomposed",
+          "story": "Scenario: an existing saree, skirt or kurta gains new life through a fresh layer. Current modular and lighter-occasion inputs support prototyping, not a prediction of guaranteed uptake.",
+          "products": "Detachable draped panels; separate capes; reversible occasion jackets; mixable saree blouses.",
+          "make": "Make attachment points discreet and stress-test them. Check fit when parts are used independently.",
+          "commercial": "Pilot a wardrobe-refresh capsule beside complete looks. Compare attachment sales with unsold component stock.",
+          "sources": [
+            "fdci-aisha",
+            "fdci-rawal"
+          ]
+        },
+        {
+          "title": "Heirloom surfaces, modern placement",
+          "story": "Scenario: restrained craft placement makes premium pieces easier to wear again. Heritage should be credited rather than reduced to a generic luxury claim.",
+          "products": "Narrow woven borders; tonal Bandhani; placed Kantha-inspired handwork through the appropriate maker partnership.",
+          "make": "Approve stitch density and motif placement on actual size sets. Build traceability and artisan payment into sourcing briefs.",
+          "commercial": "Test one craft family across a limited range. Validate lead times and gross margin after handwork and finishing costs.",
+          "sources": [
+            "fdci-arpita",
+            "pv-aw27"
+          ]
+        },
+        {
+          "title": "Repairable occasion shine",
+          "story": "Scenario: aftercare becomes part of the premium proposition. Reflective couture offers a visual reference but creates particular durability and storage challenges.",
+          "products": "Replaceable decorative panels; removable brooches; controlled metallic accents; spare embellished patches.",
+          "make": "Test abrasion, humidity exposure, trim replacement and packing. Supply a realistic care card and repair route.",
+          "commercial": "Keep experimental materials in made-to-order or limited runs. Expand only after repair and defect costs are understood.",
+          "sources": [
+            "fdci-rimzim",
+            "te-2026"
+          ]
+        },
+        {
+          "title": "Local making, contemporary shape",
+          "story": "Scenario: recognisable local techniques pair with contemporary separates. The opportunity depends on supply reliability and demonstrated customer interest.",
+          "products": "Light craft jackets; textured straight kurtas; draped skirts with pockets; simple occasion footwear.",
+          "make": "Obtain material and process records. Fit-test for movement and avoid unsupported recycled, regenerative or biodegradable claims.",
+          "commercial": "Use pre-orders or small pilots to learn about demand. Revisit the range after 2027 and 2028 Indian shows.",
+          "sources": [
+            "fdci-margn",
+            "fdci-rawal",
+            "te-2026"
+          ]
+        }
+      ],
+      "details": [
+        {
+          "id": "festive-28-1",
+          "name": "Ombré and dual-tone lehengas",
+          "category": "Women's Ethnic",
+          "area": "Colour",
+          "image": "img/ombré-and-dual-tone-lehengas.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Skirts shading from a deep base into a lighter hem.",
+          "season_action": "For the long-range occasion edit, develop ombré and dual-tone lehengas in the aubergine wine and forest shade palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Measure finished hem sweep and garment weight. Grade the waist adjustment, reinforce zip ends and keep decorative work clear of the sitting zone.",
+          "commercial": "Sell the skirt as a separate with two compatible tops. Check fit across sizes before committing to a deep colour run.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "fdci-aisha",
+            "fdci-rawal"
+          ]
+        },
+        {
+          "id": "festive-28-2",
+          "name": "Fish-cut lehenga skirts",
+          "category": "Women's Ethnic",
+          "area": "Shape",
+          "image": "img/fish-cut-lehenga-skirts.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Fitted through the hip, flaring at the knee for a longer line.",
+          "season_action": "For the long-range occasion edit, develop fish-cut lehenga skirts in the aubergine wine and forest shade palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Measure finished hem sweep and garment weight. Grade the waist adjustment, reinforce zip ends and keep decorative work clear of the sitting zone.",
+          "commercial": "Sell the skirt as a separate with two compatible tops. Check fit across sizes before committing to a deep colour run.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "fdci-arpita",
+            "pv-aw27"
+          ]
+        },
+        {
+          "id": "festive-28-3",
+          "name": "Crop-top lehenga sets",
+          "category": "Women's Ethnic",
+          "area": "Shape",
+          "image": "img/crop-top-lehenga-sets.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Shorter blouses with high-waisted skirts.",
+          "season_action": "For the long-range occasion edit, develop crop-top lehenga sets in the aubergine wine and forest shade palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Measure finished hem sweep and garment weight. Grade the waist adjustment, reinforce zip ends and keep decorative work clear of the sitting zone.",
+          "commercial": "Sell the skirt as a separate with two compatible tops. Check fit across sizes before committing to a deep colour run.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "fdci-rimzim",
+            "te-2026"
+          ]
+        },
+        {
+          "id": "festive-28-4",
+          "name": "Off-shoulder blouses",
+          "category": "Women's Ethnic",
+          "area": "Neckline",
+          "image": "img/off-shoulder-blouses.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Off-shoulder blouses for sarees and lehengas.",
+          "season_action": "For the long-range occasion edit, develop off-shoulder blouses in the aubergine wine and forest shade palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Fit across bust and torso lengths; line contact areas and test closure strain. Verify strap placement and upper-body movement on the intended size range.",
+          "commercial": "Build a size-led fit trial and offer a complementary lower. Keep one simple base fabric so alterations remain practical.",
+          "material": "Cotton silk, Chanderi, georgette, organza and raw silk, with gota, zari or tone-on-tone trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "fdci-margn",
+            "fdci-rawal",
+            "te-2026"
+          ]
+        },
+        {
+          "id": "festive-28-5",
+          "name": "Contrast-piped Nehru jackets",
+          "category": "Men's Ethnic",
+          "area": "Trim",
+          "image": "img/contrast-piped-nehru-jackets.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Contrast piping on the collar and edges.",
+          "season_action": "For the long-range occasion edit, develop contrast-piped nehru jackets in the aubergine wine and forest shade palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Grade collar stand and shoulder balance carefully. Test seated comfort, pocket access and lining movement; fuse a trial panel before production.",
+          "commercial": "Use a shared block with separately costed fabric and embellishment upgrades; offer a coordinated lower rather than multiplying jacket styles.",
+          "material": "Cotton silk, linen, raw silk, brocade, velvet and jacquard, with fabric-covered or metal buttons.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": [
+            "fdci-aisha",
+            "fdci-rawal"
+          ]
+        },
+        {
+          "id": "festive-28-6",
+          "name": "Collar brooches on bandhgalas",
+          "category": "Men's Ethnic",
+          "area": "Accessory",
+          "image": "img/collar-brooches-on-bandhgalas.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "A brooch or decorative button at the bandhgala collar.",
+          "season_action": "For the long-range occasion edit, develop collar brooches on bandhgalas in the aubergine wine and forest shade palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Grade collar stand and shoulder balance carefully. Test seated comfort, pocket access and lining movement; fuse a trial panel before production.",
+          "commercial": "Use a shared block with separately costed fabric and embellishment upgrades; offer a coordinated lower rather than multiplying jacket styles.",
+          "material": "Cotton silk, linen, raw silk, brocade, velvet and jacquard, with fabric-covered or metal buttons.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": [
+            "fdci-arpita",
+            "pv-aw27"
+          ]
+        },
+        {
+          "id": "festive-28-7",
+          "name": "Fluid draped menswear",
+          "category": "Men's Ethnic",
+          "area": "Shape",
+          "image": "img/fluid-draped-menswear.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Relaxed drapes and soft tailoring, as shown by AK|OK.",
+          "season_action": "For the long-range occasion edit, develop fluid draped menswear in the aubergine wine and forest shade palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Check block balance and movement on the target wearer. Test seams, pockets and closures after washing, and record finished measurements for grading.",
+          "commercial": "Keep a repeatable base block with one seasonal fabric story. Test the full outfit and separates at the planned ticket before scaling quantities.",
+          "material": "Cotton silk, linen, raw silk, brocade, velvet and jacquard, with fabric-covered or metal buttons.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": [
+            "fdci-rimzim",
+            "te-2026"
+          ]
+        },
+        {
+          "id": "festive-28-8",
+          "name": "Sarees with sneakers",
+          "category": "Indo-Western",
+          "area": "Styling",
+          "image": "img/sarees-with-sneakers.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Sarees worn with clean sneakers for day events.",
+          "season_action": "For the long-range occasion edit, develop sarees with sneakers in the aubergine wine and forest shade palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Sample the drape on two heights; test pleat retention, walking clearance and blouse coverage. Stabilise the pallu attachment without pulling the body cloth.",
+          "commercial": "Offer the drape with an adjustable blouse option and document the wearing method; approve a wash-care sample before repeat orders.",
+          "material": "Cotton, linen, Chanderi, denim and modal blends.",
+          "price": [
+            "1,999–4,499",
+            "5,000–12,000",
+            "20,000+"
+          ],
+          "sources": [
+            "fdci-margn",
+            "fdci-rawal",
+            "te-2026"
+          ]
+        },
+        {
+          "id": "festive-28-9",
+          "name": "Embroidered denim jackets",
+          "category": "Indo-Western",
+          "area": "Embellishment",
+          "image": "img/embroidered-denim-jackets.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Denim jackets with Indian embroidery.",
+          "season_action": "For the long-range occasion edit, develop embroidered denim jackets in the aubergine wine and forest shade palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Grade collar stand and shoulder balance carefully. Test seated comfort, pocket access and lining movement; fuse a trial panel before production.",
+          "commercial": "Use a shared block with separately costed fabric and embellishment upgrades; offer a coordinated lower rather than multiplying jacket styles.",
+          "material": "Cotton, linen, Chanderi, denim and modal blends.",
+          "price": [
+            "1,999–4,499",
+            "5,000–12,000",
+            "20,000+"
+          ],
+          "sources": [
+            "fdci-aisha",
+            "fdci-rawal"
+          ]
+        },
+        {
+          "id": "festive-28-10",
+          "name": "Block-heel juttis",
+          "category": "Indian Footwear",
+          "area": "Heel",
+          "image": "img/block-heel-juttis.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Juttis on a low block heel for comfort at long events.",
+          "season_action": "For the long-range occasion edit, develop block-heel juttis in the aubergine wine and forest shade palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Trial the last on the target customer, test heel rubbing and sole grip, then run flex and abrasion checks. Validate the attachment of all raised decoration.",
+          "commercial": "Begin with a controlled size run and collect fit feedback. Cost sole, footbed and upper separately; retain an aftercare route for components.",
+          "material": "Vegetable-tanned leather, suede, fabric uppers with embroidery, leather or TPR soles.",
+          "price": [
+            "799–1,799",
+            "2,000–4,500",
+            "7,500+"
+          ],
+          "sources": [
+            "fdci-arpita",
+            "pv-aw27"
+          ]
+        },
+        {
+          "id": "festive-28-11",
+          "name": "Kantha-embroidered sneakers",
+          "category": "Indian Footwear",
+          "area": "Embellishment",
+          "image": "img/kantha-embroidered-sneakers.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Suede sneakers with kantha embroidery.",
+          "season_action": "For the long-range occasion edit, develop kantha-embroidered sneakers in the aubergine wine and forest shade palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Trial the last on the target customer, test heel rubbing and sole grip, then run flex and abrasion checks. Validate the attachment of all raised decoration.",
+          "commercial": "Begin with a controlled size run and collect fit feedback. Cost sole, footbed and upper separately; retain an aftercare route for components.",
+          "material": "Vegetable-tanned leather, suede, fabric uppers with embroidery, leather or TPR soles.",
+          "price": [
+            "799–1,799",
+            "2,000–4,500",
+            "7,500+"
+          ],
+          "sources": [
+            "fdci-rimzim",
+            "te-2026"
+          ]
+        },
+        {
+          "id": "festive-28-12",
+          "name": "Reworked vintage Banarasi",
+          "category": "Fabrics & Weaves",
+          "area": "Fabric",
+          "image": "img/reworked-vintage-banarasi.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Vintage Banarasi cut into structured eveningwear, as by Amit Aggarwal.",
+          "season_action": "For the long-range occasion edit, develop reworked vintage banarasi in the aubergine wine and forest shade palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a physical swatch for handle, opacity and drape. Record GSM, width, shrinkage, colour fastness and batch variation; sample seams before bulk cutting.",
+          "commercial": "Reserve material after the trial garment passes wear and care checks. Obtain a current per-metre quotation and confirm minimums, lead time and maker attribution.",
+          "material": "See the weave notes; source from the named craft clusters.",
+          "price": [
+            "Price by metre and composition",
+            "Obtain supplier quotation",
+            "Cost craft separately"
+          ],
+          "sources": [
+            "fdci-margn",
+            "fdci-rawal",
+            "te-2026"
+          ]
+        },
+        {
+          "id": "festive-28-13",
+          "name": "Bhagalpur silk",
+          "category": "Fabrics & Weaves",
+          "area": "Fabric",
+          "image": "img/bhagalpur-silk.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Bihar silk used for structured gowns.",
+          "season_action": "For the long-range occasion edit, develop bhagalpur silk in the aubergine wine and forest shade palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a physical swatch for handle, opacity and drape. Record GSM, width, shrinkage, colour fastness and batch variation; sample seams before bulk cutting.",
+          "commercial": "Reserve material after the trial garment passes wear and care checks. Obtain a current per-metre quotation and confirm minimums, lead time and maker attribution.",
+          "material": "See the weave notes; source from the named craft clusters.",
+          "price": [
+            "Price by metre and composition",
+            "Obtain supplier quotation",
+            "Cost craft separately"
+          ],
+          "sources": [
+            "fdci-aisha",
+            "fdci-rawal"
+          ]
+        },
+        {
+          "id": "festive-28-14",
+          "name": "Kantha",
+          "category": "Embroidery & Surface",
+          "area": "Embellishment",
+          "image": "img/kantha.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Running-stitch embroidery from Bengal.",
+          "season_action": "For the long-range occasion edit, develop kantha in the aubergine wine and forest shade palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a stitched strike-off showing coverage, backing and edge finish. Test snagging, flex, perspiration and cleaning; record the labour minutes per panel.",
+          "commercial": "Concentrate the technique on one visible zone and cost it by coverage. Credit the maker and keep a plain companion product for range balance.",
+          "material": "Hand or machine embroidery threads, zari, mirrors, sequins and block-print dyes.",
+          "price": [
+            "Price by coverage",
+            "Confirm labour hours",
+            "Trial before commitment"
+          ],
+          "sources": [
+            "fdci-arpita",
+            "pv-aw27"
+          ]
+        },
+        {
+          "id": "festive-28-15",
+          "name": "Tone-on-tone embroidery",
+          "category": "Embroidery & Surface",
+          "area": "Embellishment",
+          "image": "img/tone-on-tone-embroidery.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Embroidery in the fabric colour for quiet luxury.",
+          "season_action": "For the long-range occasion edit, develop tone-on-tone embroidery in the aubergine wine and forest shade palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a stitched strike-off showing coverage, backing and edge finish. Test snagging, flex, perspiration and cleaning; record the labour minutes per panel.",
+          "commercial": "Concentrate the technique on one visible zone and cost it by coverage. Credit the maker and keep a plain companion product for range balance.",
+          "material": "Hand or machine embroidery threads, zari, mirrors, sequins and block-print dyes.",
+          "price": [
+            "Price by coverage",
+            "Confirm labour hours",
+            "Trial before commitment"
+          ],
+          "sources": [
+            "fdci-rimzim",
+            "te-2026"
+          ]
+        },
+        {
+          "id": "festive-28-16",
+          "name": "Scalloped and cutwork borders",
+          "category": "Trims & Accessories",
+          "area": "Edge",
+          "image": "img/scalloped-and-cutwork-borders.webp",
+          "image_kind": "Forecut design reference",
+          "status": "Watch",
+          "brief": "Scalloped edges on sarees, dupattas and sleeves.",
+          "season_action": "For the long-range occasion edit, develop scalloped and cutwork borders in the aubergine wine and forest shade palette. Compare one restrained everyday version with one occasion sample; validate weight, fit and cost before extending the range.",
+          "construction": "Approve a stitched strike-off showing coverage, backing and edge finish. Test snagging, flex, perspiration and cleaning; record the labour minutes per panel.",
+          "commercial": "Concentrate the technique on one visible zone and cost it by coverage. Credit the maker and keep a plain companion product for range balance.",
+          "material": "Tassels, piping, metal or fabric buttons, borders, belts and bags.",
+          "price": [
+            "499–1,499",
+            "1,800–4,000",
+            "6,000+"
+          ],
+          "sources": [
+            "fdci-margn",
+            "fdci-rawal",
+            "te-2026"
+          ]
+        },
+        {
+          "id": "reconfigurable-cape-skirt",
+          "name": "Reconfigurable draped skirt and cape",
+          "category": "Women's Ethnic",
+          "area": "Construction",
+          "image": "img/india-season-details/festive-28/reconfigurable-cape-skirt.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Watch",
+          "brief": "Scenario: an independent cape refreshes an already useful skirt-and-blouse combination.",
+          "season_action": "Explore occasionwear whose value comes from reconfiguration, provenance and aftercare. This is an original Forecut planning scenario, not a claim about confirmed 2028 consumer preferences or designer collections.",
+          "construction": "Test attachments, independent fit and component stock risk.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Light occasion weave with restrained placed craft.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "fdci-aisha",
+            "fdci-arpita"
+          ]
+        },
+        {
+          "id": "reversible-occasion-waistcoat",
+          "name": "Reversible light occasion waistcoat",
+          "category": "Men's Ethnic",
+          "area": "Construction",
+          "image": "img/india-season-details/festive-28/reversible-occasion-waistcoat.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Watch",
+          "brief": "Scenario: two genuinely usable faces support repeat styling.",
+          "season_action": "Explore occasionwear whose value comes from reconfiguration, provenance and aftercare. This is an original Forecut planning scenario, not a claim about confirmed 2028 consumer preferences or designer collections.",
+          "construction": "Check seam bulk, label placement and equal quality on both faces.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Stable reversible weave or compatible light layers.",
+          "price": [
+            "1,499–3,999",
+            "4,500–12,000",
+            "18,000+"
+          ],
+          "sources": [
+            "fdci-aisha",
+            "fdci-arpita"
+          ]
+        },
+        {
+          "id": "occasion-jacket-blouse",
+          "name": "Independent occasion blouse and jacket",
+          "category": "Women's Ethnic",
+          "area": "Construction",
+          "image": "img/india-season-details/festive-28/occasion-jacket-blouse.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Watch",
+          "brief": "Scenario: sell a coherent blouse-and-jacket pair that also works separately.",
+          "season_action": "Explore occasionwear whose value comes from reconfiguration, provenance and aftercare. This is an original Forecut planning scenario, not a claim about confirmed 2028 consumer preferences or designer collections.",
+          "construction": "Validate fit without the outer jacket and the cost of separate sizing.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Light structured silk blend and controlled narrow trims.",
+          "price": [
+            "2,499–4,999",
+            "6,000–18,000",
+            "25,000+"
+          ],
+          "sources": [
+            "fdci-aisha",
+            "fdci-arpita"
+          ]
+        },
+        {
+          "id": "removable-embroidery-panel",
+          "name": "Removable placed-embroidery system",
+          "category": "Embroidery & Surface",
+          "area": "Construction",
+          "image": "img/india-season-details/festive-28/removable-embroidery-panel.webp",
+          "image_kind": "New AI-generated Forecut concept",
+          "status": "Watch",
+          "brief": "Scenario: make delicate surface decoration accessible for storage and servicing.",
+          "season_action": "Explore occasionwear whose value comes from reconfiguration, provenance and aftercare. This is an original Forecut planning scenario, not a claim about confirmed 2028 consumer preferences or designer collections.",
+          "construction": "Test snagging, replacement time and aftercare economics.",
+          "commercial": "Pilot this specific product with the intended customer before expanding depth; cost the proposed feature separately.",
+          "material": "Documented textile panel, secure loops and matching spare trims.",
+          "price": [
+            "Price by coverage",
+            "Confirm labour hours",
+            "Trial before commitment"
+          ],
+          "sources": [
+            "fdci-aisha",
+            "fdci-arpita"
+          ]
+        }
+      ],
+      "stories": [
+        {
+          "brand": "Jayanti Reddy",
+          "collection": "India Couture Week 2026",
+          "observed": "The FDCI interview discusses lighter base fabrics, strategic embroidery and the value of tailoring.",
+          "story": "An heirloom proposition can depend on balance and wearability as much as ornament.",
+          "translate": "Place craft where it matters visually, retain alteration allowance and document care so the piece can be worn again.",
+          "source": "jayanti"
+        },
+        {
+          "brand": "Rimzim Dadu",
+          "collection": "India Couture Week 2026",
+          "observed": "The designer discusses mother-of-pearl and metal-cord experimentation alongside repair and aftercare.",
+          "story": "Material research creates a recognisable identity, while servicing helps protect the value of a complex garment.",
+          "translate": "Treat reflective components as an R&D capsule. Sample weight, snagging, skin contact, storage and component replacement before selling.",
+          "source": "fdci-rimzim"
+        },
+        {
+          "brand": "Kunal Rawal",
+          "collection": "India Couture Week 2026",
+          "observed": "Functional linings, contemporary drapes and tonal craft appear in the designer’s account of occasion dressing.",
+          "story": "Comfort is part of the luxury proposition: an occasion garment must work through movement, sitting and a long celebration.",
+          "translate": "Develop an original lightweight layer, fit it in motion and make the construction benefit visible in product information. Do not copy a proprietary fastening.",
+          "source": "fdci-rawal"
+        }
+      ],
+      "innovations": [
+        {
+          "title": "Cellulose sewing-thread development",
+          "maturity": "Innovation watch / mill trial",
+          "signal": "The official 2026 innovation-awards register includes AeoniQ Fil by AMANN.",
+          "use": "Explore compatible thread choices for cellulose-led garments.",
+          "test": "Check seam strength, abrasion, wash stability and end-of-life compatibility with a technical supplier. An award is not a ready-made recycling solution.",
+          "source": "techtextil"
+        },
+        {
+          "title": "Repairable ornament and removable components",
+          "maturity": "Design-system prototype",
+          "signal": "Current couture aftercare and material experimentation provide a useful premium reference.",
+          "use": "Replaceable trims, independent capes and spare embellishment kits.",
+          "test": "Cost repair labour; test attachment security and safe storage. Avoid promising a service without capacity.",
+          "source": "fdci-rimzim"
+        },
+        {
+          "title": "Renewable-feedstock stretch chemistry",
+          "maturity": "Material supplier enquiry",
+          "signal": "Hyosung’s public bio-material platform describes feedstocks used in spandex-related chemistry.",
+          "use": "Investigate selected stretch linings or comfort components where performance is needed.",
+          "test": "Verify product-level renewable content, certifications, recovery, ageing and supply. Bio-based does not mean biodegradable.",
+          "source": "hyosung"
+        }
+      ],
+      "offers": [
+        {
+          "title": "Refresh an existing look",
+          "action": "Scenario: sell an independently useful jacket or cape beside complete looks; measure add-on inventory risk."
+        },
+        {
+          "title": "Costed repair promise",
+          "action": "Scenario: offer a documented service at a stated cost and turnaround, after the service route has been tested."
+        },
+        {
+          "title": "Small premium drop",
+          "action": "Scenario: use a small validated release or appointment model for experimental materials rather than a blanket discount."
+        }
+      ],
+      "benchmarks": [
+        {
+          "brand": "Nicobar",
+          "product": "Classic Shirt - Black",
+          "price": "INR 5,750 MRP",
+          "offer": "Free shipping above INR 1,000 on the inspected page; terms apply.",
+          "source": "nicobar-price"
+        }
+      ],
+      "price_rows": [
+        {
+          "category": "Women's Ethnic",
+          "value": "2,499–4,999",
+          "mid": "6,000–18,000",
+          "premium": "25,000+"
+        },
+        {
+          "category": "Men's Ethnic",
+          "value": "1,499–3,999",
+          "mid": "4,500–12,000",
+          "premium": "18,000+"
+        },
+        {
+          "category": "Indo-Western",
+          "value": "1,999–4,499",
+          "mid": "5,000–12,000",
+          "premium": "20,000+"
+        },
+        {
+          "category": "Western Wear (India)",
+          "value": "999–2,499",
+          "mid": "3,000–7,000",
+          "premium": "10,000+"
+        },
+        {
+          "category": "Indian Footwear",
+          "value": "799–1,799",
+          "mid": "2,000–4,500",
+          "premium": "7,500+"
+        },
+        {
+          "category": "Fabrics & Weaves",
+          "value": "Price by metre and composition",
+          "mid": "Obtain supplier quotation",
+          "premium": "Cost craft separately"
+        },
+        {
+          "category": "Embroidery & Surface",
+          "value": "Price by coverage",
+          "mid": "Confirm labour hours",
+          "premium": "Trial before commitment"
+        },
+        {
+          "category": "Trims & Accessories",
+          "value": "499–1,499",
+          "mid": "1,800–4,000",
+          "premium": "6,000+"
+        }
+      ],
+      "price_note": "Original Forecut indicative India retail planning bands, not designer quotations or guaranteed future prices. Fabric and handwork require separate supplier costing.",
+      "offer_note": "Offer ideas below are proposed merchandising tests for your brand. They are not active Forecut or designer discounts.",
+      "archive_pdf": "output/pdf/Forecut-India-Festive-28-Complete-Report.pdf"
+    }
+  }
+}

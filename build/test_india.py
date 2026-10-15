@@ -16,7 +16,7 @@ for c,r in S.RESEARCH['seasons'].items():
  i=I.CODES.index(c)
  assert sum(x[5][i]!='-' for x in I.D)>=100 and sum(x[5][i]=='e' for x in I.D)>0
  if i>=3:assert 'scenario' in r['basis'].lower()
-h=Path('../india.html').read_text()
+h=Path('../india-reference-library.html').read_text()
 assert h.count('class="sec ir-report"')==4 and h.count('class="ir-theme"')==16
 assert 'src="/auth.js"' in h and h.count('data-lock aria-disabled="true"')==4
 assert '%%DATA%%' not in h and '%%ORIGINAL' not in h

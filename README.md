@@ -26,3 +26,11 @@ Details (global and India), Journal articles, Brand Watch entries, photos and se
 
 ## Flat sketch images
 Upload `flat-<slug>.png` (or `flat-<slug>-<season>.png`) to images/. They are padded to 1000×1000 on white (never cropped), replace the code-drawn sketch on cards without a photo, and appear as a "Flat sketch" toggle next to photos in the detail viewer. Prompts: season-prompts/ss27-flat-sketch-prompts.csv.
+
+### Independent India season reports
+
+`build/india_season_reports.json` owns the five curated season edits, with 20 unique development details each, pricing, proposed merchandising offers, documented collection stories, innovation validation and sources. The previous full detail catalogue is preserved in `india-reference-library.html` and the original `Complete-Report.pdf` files. Do not delete either edition.
+
+In `build/`, run `STATIC=.. python3 gen_india.py` to produce the season hub, five dedicated pages and reference archive. Run `python3 india_season_pdfs.py` after changes to report content or images, then regenerate the pages to refresh PDF page counts. Run `seo.py` normally, or set `ONLY` to the changed filenames and `SITEMAP=1` for focused metadata and sitemap updates. Run both `test_india.py` and `test_india_season_pages.py` using Python 3.12 with ReportLab, Pillow and pypdf; Node must be on PATH for script checks. PDF fonts use the same `FORECUT_PDF_FONTS` override as the extended PDF builder.
+
+Generated concept prompts and asset provenance are recorded in `build/india_detail_image_provenance.json`. Reference images illustrate design vocabulary; generated images are original concepts. Neither is future runway evidence. 2028 content is conditional. Retailer snapshots are dated and separate from Forecut's proposed future price bands and offers.

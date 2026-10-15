@@ -28,7 +28,7 @@ INK='#1F3D33';CREAM='#F5F0E8';RUST='#B4532A';MUTED='#6E6259';LINE='#DDD4C7'
 STATUS={'e':'Emerging','r':'Rising','p':'Peaking','f':'Fading','-':'Not tracked'}
 SCOL={'e':'#B4532A','r':'#2D7853','p':'#A06E27','f':'#877184','-':'#8A877E'}
 MODEL=json.loads((ROOT/'build/india.json').read_text())
-page=(ROOT/'india.html').read_text()
+page=(ROOT/('india-reference-library.html' if (ROOT/'india-reference-library.html').exists() else 'india.html')).read_text()
 def extract(prefix):return json.JSONDecoder().raw_decode(page.split(prefix,1)[1].lstrip())[0]
 BASE_DESCS=extract('var DESC = ');FUTURE=extract('var DATA=')
 SRC={s['id']:s for s in S.RESEARCH['sources']}

@@ -49,6 +49,9 @@ for k in SEAS:
     m = META[k]
     pages[f'{k}.html'] = (f"{m['code']} Fashion Trend Forecast ({m['title']}) · Garments, Footwear & Details | Forecut",
         f"{m['code']} trend forecast: {m['intro']} Every detail marked emerging, rising, peaking or fading, with themes, colours and downloadable cards."[:300], f'{k}.html')
+for _code, _report in json.load(open('india_season_reports.json'))['seasons'].items():
+    pages[_report['file']] = (_code + ' India Fashion Forecast | Forecut', _report['focus'] + ' Design details, prices, designer stories and illustrated PDF.', _report['file'])
+pages['india-reference-library.html'] = ('India Extended Reference Library | Forecut', 'Archived India season detail library and complete illustrated reference reports.', 'india-reference-library.html')
 org = {"@context": "https://schema.org", "@graph": [
   {"@type": "Organization", "@id": BASE + "#org", "name": "Forecut", "url": BASE, "logo": BASE + "favicon-192.png", "email": "hello@forecut.in", "sameAs": SO.SAME_AS,
    "description": "India's detail-level fashion trend forecasting platform, combining expert research with data.", "slogan": "Know the next detail before it trends.", "foundingDate": "2026", "contactPoint": {"@type": "ContactPoint", "email": "hello@forecut.in", "contactType": "customer support", "areaServed": "IN", "availableLanguage": "en"}, "areaServed": "IN"},
@@ -87,7 +90,7 @@ def block(fn, title, desc, path):
     _si, _sw, _sh = share_img(fn)
     E = lambda x: x.replace('&', '&amp;').replace('"', '&quot;').replace('<', '&lt;')
     b = ['<!--seo-->', f'<meta name="description" content="{E(desc)}">', f'<link rel="canonical" href="{url}">',
-         ('<meta name="robots" content="noindex,follow">' if fn == 'account.html' else '<meta name="robots" content="index,follow">'), '<meta name="theme-color" content="#1f3d33">',
+         ('<meta name="robots" content="noindex,follow">' if fn in ('account.html','india-reference-library.html') else '<meta name="robots" content="index,follow">'), '<meta name="theme-color" content="#1f3d33">',
          '<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96"><link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest">',
          '<meta property="og:type" content="website">', '<meta property="og:site_name" content="Forecut">', '<meta property="og:locale" content="en_IN">',
          f'<meta property="og:title" content="{E(title)}">', f'<meta property="og:description" content="{E(desc)}">', f'<meta property="og:url" content="{url}">',
@@ -137,7 +140,7 @@ for fn, (title, desc, path) in pages.items():
     _nav = NAV.replace('data-m="' + tab_for(fn) + '"', 'data-m="' + tab_for(fn) + '" aria-current="page"') if tab_for(fn) else NAV
     h = h.replace('</body>', _nav + '</body>', 1) if '</body>' in h else h + _nav
     open(p, 'w').write(h)
-if not os.environ.get('ONLY'):
+if not os.environ.get('ONLY') or os.environ.get('SITEMAP'):
     today = datetime.date.today().isoformat()
     pri = {'index.html': '1.0', 'india.html': '0.9', 'journal.html': '0.8', 'couture.html': '0.8', 'fabrics.html': '0.8', 'colour.html': '0.8', 'about.html': '0.5', 'contact.html': '0.4', 'terms.html': '0.2', 'privacy.html': '0.2'}
     def page_images(fn):
@@ -155,7 +158,7 @@ if not os.environ.get('ONLY'):
     def esc(x): return x.replace('&', '&amp;').replace('<', '&lt;').replace('"', '&quot;')
     def imgxml(fn): return ''.join(f'<image:image><image:loc>{BASE}{src}</image:loc><image:title>{esc(cap)}</image:title></image:image>' for src, cap in page_images(fn))
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' + ''.join(
-        f'  <url><loc>{BASE}{v[2]}</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>{pri.get(k, "0.8")}</priority>{imgxml(k)}</url>\n' for k, v in pages.items() if k != 'account.html') + '</urlset>\n'
+        f'  <url><loc>{BASE}{v[2]}</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>{pri.get(k, "0.8")}</priority>{imgxml(k)}</url>\n' for k, v in pages.items() if k not in ('account.html','india-reference-library.html')) + '</urlset>\n'
     open(os.path.join(R, 'sitemap.xml'), 'w').write(sm)
     open(os.path.join(R, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\nDisallow: /build/\nDisallow: /images/\n\nSitemap: {BASE}sitemap.xml\n')
     open(os.path.join(R, 'favicon.svg'), 'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/><path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="#b4532a" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>')
