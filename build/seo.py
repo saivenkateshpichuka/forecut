@@ -80,7 +80,7 @@ NAV = '<nav class="fctab" aria-label="App navigation"><a href="/" data-m="home">
 REPORT_FILES = set()
 def tab_for(fn):
     if fn == 'index.html': return 'home'
-    if fn == 'india.html': return 'india'
+    if fn in ('india.html','india-festive-26.html','india-summer-27.html','india-festive-27.html','india-summer-28.html','india-festive-28.html','india-reference-library.html'): return 'india'
     if fn[:4] in ('aw26', 'ss27', 'aw27', 'ss28', 'aw28'): return 'seasons'
     if fn == 'account.html': return 'saved'
     if fn == 'reports.html' or fn.startswith(('core-item', 'capsule', 'india-')): return 'reports'
