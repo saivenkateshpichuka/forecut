@@ -1045,6 +1045,8 @@ var Flats = (function () {
     if (ps) cz += mir(ps);
     if (has('psquare') || t === 'blazer') { cz += '<path d="M134 88 L154 85 L154.4 88.5 L134.4 91.5 Z" ' + S.fs() + '/>'; if (has('psquare')) { cz += '<path d="M137 88 L141 78 L145 86 L149 79 L152 85.5 Z" ' + S.fs(c.tint) + '/>'; hl.chest = [[130, 70, 30, 26]]; } }
 
+    if (has('lapelflower')) { var fcx = 146, fcy = 64, fl = ''; for (var pk2 = 0; pk2 < 7; pk2++) { var pa = pk2 * Math.PI * 2 / 7; fl += '<ellipse cx="' + F(fcx + Math.cos(pa) * 7) + '" cy="' + F(fcy + Math.sin(pa) * 7) + '" rx="6" ry="4" transform="rotate(' + F(pa * 180 / Math.PI) + ' ' + F(fcx + Math.cos(pa) * 7) + ' ' + F(fcy + Math.sin(pa) * 7) + ')" ' + S.fs(c.tint) + '/>'; } cz += fl + '<circle cx="' + fcx + '" cy="' + fcy + '" r="4" ' + S.fs() + '/><path d="M' + (fcx - 3) + ' ' + (fcy + 2) + ' q2 3 1 6 M' + (fcx + 1) + ' ' + (fcy + 3) + ' q1 3 0 6" ' + S.s + ' stroke-width=".6"/>'; hl.lapel = [[128, 46, 38, 38]]; }
+    if (has('asymcollar')) { cz += '<path d="M118 30 L104 31 Q92 52 84 84 Q98 70 120 40 Z" ' + S.f() + '/><path d="M114 34 L105 35 Q95 54 89 76" ' + S.t + '/>'; hl.collar = [[78, 22, 70, 68]]; }
     // epaulettes, storm flap
     if (has('epaulette')) cz += mir('<path d="M146 33 L167 40 L166 45 L145 38 Z" ' + S.fs() + '/>' + btn(150, 36.5, c, 1.6));
     if (has('stormflap')) { cz += '<path d="M106 34 L72 44 L76 88 Q92 94 110 88 Z" ' + S.f() + '/><path d="M104 38 L76 47 L79 85 Q93 90 107 85" ' + S.t + '/>' + btn(102, 82, c, 2.2); hl.stormflap = [[66, 28, 50, 70]]; }
@@ -1211,7 +1213,10 @@ var Flats = (function () {
     if (has('fray')) { var fr2 = ''; for (var fx2 = lg.ix + 1; fx2 < lg.ox; fx2 += 2.6) fr2 += 'M' + F(fx2) + ' ' + L + ' l' + (((fx2 * 7) % 3) - 1.5) * .4 + ' ' + (3 + (fx2 * 3) % 4) + ' '; out += mir('<path d="' + fr2 + '" ' + S.s + ' stroke-width=".6"/>'); }
     if (has('selvedge')) out += mir('<path d="M' + F(lg.ox - 3) + ' ' + (L - 14) + ' V' + (L - 1) + '" fill="none" stroke="' + c.accent + '" stroke-width="1.6"/>');
     if (o.belt === 'double') { [top - 1, top + 8].forEach(function (yy) { out += '<path d="M79 ' + yy + ' H161 V' + (yy + 5) + ' H79 Z" ' + S.fs(c.tint) + '/><rect x="110" y="' + (yy - 2) + '" width="9" height="9" rx="1.5" fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width="1.2"/>'; }); hl.waist = [[72, top - 8, 96, 26]]; }
-    if (o.belt && o.belt !== 'double') {
+    if (has('overlay')) { var oy = wb + 104; out += '<path d="M80 ' + (wb - 2) + ' H160 Q170 ' + F(wb + 50) + ' 176 ' + oy + ' Q120 ' + (oy + 10) + ' 64 ' + oy + ' Q70 ' + F(wb + 50) + ' 80 ' + (wb - 2) + ' Z" fill="' + c.tint + '" fill-opacity=".55" stroke="' + c.ink + '" stroke-width="1.6" stroke-linejoin="round"/><path d="M66 ' + (oy - 5) + ' Q120 ' + (oy + 5) + ' 174 ' + (oy - 5) + '" ' + S.t + '/><path d="M104 ' + (wb + 6) + ' Q100 ' + F(wb + 60) + ' 92 ' + (oy + 2) + ' M136 ' + (wb + 6) + ' Q140 ' + F(wb + 60) + ' 148 ' + (oy + 2) + '" ' + S.s + ' stroke-width=".6" opacity=".7"/>'; hl.overlay = [[58, wb - 8, 124, oy - wb + 22]]; }
+    if (o.belt === 'big') { var bb = top + 1; out += '<path d="M79 ' + (bb - 2) + ' H161 V' + (bb + 13) + ' H79 Z" ' + S.f(c.tint) + '/><circle cx="120" cy="' + (bb + 5.5) + '" r="15" fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width="1.6"/><circle cx="120" cy="' + (bb + 5.5) + '" r="9" fill="' + c.tint + '" stroke="' + c.ink + '" stroke-width="1"/><path d="M120 ' + (bb - 3) + ' V' + (bb + 14) + '" ' + S.s + ' stroke-width="1.4"/>'; hl.waist = [[70, bb - 16, 100, 38]]; }
+    if (o.belt === 'scarf') { var sb2 = top + 1; out += '<path d="M79 ' + sb2 + ' Q120 ' + (sb2 - 3) + ' 161 ' + sb2 + ' V' + (sb2 + 10) + ' Q120 ' + (sb2 + 7) + ' 79 ' + (sb2 + 10) + ' Z" ' + S.f(c.tint) + '/><path d="M82 ' + (sb2 + 3) + ' Q120 ' + sb2 + ' 158 ' + (sb2 + 3) + ' M82 ' + (sb2 + 7) + ' Q120 ' + (sb2 + 4) + ' 158 ' + (sb2 + 7) + '" ' + S.s + ' stroke-width=".5" opacity=".7"/><path d="M140 ' + (sb2 + 6) + ' Q146 ' + (sb2 + 26) + ' 140 ' + (sb2 + 46) + ' L150 ' + (sb2 + 48) + ' Q154 ' + (sb2 + 26) + ' 146 ' + (sb2 + 6) + ' Z M146 ' + (sb2 + 6) + ' Q158 ' + (sb2 + 22) + ' 160 ' + (sb2 + 38) + ' L168 ' + (sb2 + 34) + ' Q160 ' + (sb2 + 18) + ' 150 ' + (sb2 + 4) + ' Z" ' + S.fs(c.tint) + '/><ellipse cx="145" cy="' + (sb2 + 5) + '" rx="7" ry="6" ' + S.f(c.tint) + '/>'; hl.waist = [[72, sb2 - 8, 100, 60]]; }
+    if (o.belt && o.belt !== 'double' && o.belt !== 'big' && o.belt !== 'scarf') {
       var by = o.belt === 'low' ? wb + 8 : top + 1, bh = 10;
       if (o.belt === 'low') out += '<path d="M78 ' + (by - 2) + ' Q120 ' + (by + 10) + ' 162 ' + (by - 2) + ' L163 ' + (by + bh - 2) + ' Q120 ' + (by + bh + 10) + ' 77 ' + (by + bh - 2) + ' Z" ' + S.f(c.tint) + '/><rect x="110" y="' + (by + 1) + '" width="18" height="14" rx="3" fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width="1.4"/>';
       else out += '<path d="M79 ' + by + ' H161 V' + (by + bh) + ' H79 Z" ' + S.f(c.tint) + '/><rect x="113" y="' + (by - 2) + '" width="14" height="14" rx="2" fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width="1.4"/>';
@@ -1277,7 +1282,7 @@ var Flats = (function () {
     }
     if (s === 'pump' || s === 'flat' || s === 'mule' || s === 'sandal' || s === 'slide') {
       var toe = o.toe || 'round', heel = (s === 'flat' || s === 'slide') ? 'flat' : (o.heel || 'stiletto');
-      var h = { stiletto: 64, block: 52, lowblock: 38, kitten: 28, curved: 56, flat: 4 }[heel], G = 212;
+      var h = { stiletto: 64, block: 52, lowblock: 38, kitten: 28, curved: 56, flat: 4, wedge: 54 }[heel], G = 212;
       var sY = G - h, Sx = 62, Sp = [Sx, sY], K = [56, sY - (heel === 'flat' ? 22 : 30)], B = [158, G], A = [112, sY + (G - sY) * .18];
       var V = [202, G - 18], T = [138, Math.min(sY + (G - sY) * .38, heel === 'flat' ? 188 : 184)];
       if (o.strap === 'sling') K = [92, T[1] - 4 + (sY - T[1]) * .2];
@@ -1290,15 +1295,21 @@ var Flats = (function () {
       var hd = heel === 'curved' ? 'M' + (Sx - 4) + ' ' + (sY - 2) + ' L' + (Sx + 20) + ' ' + (sY + 6) + ' Q' + (Sx + 32) + ' ' + (sY + 28) + ' ' + (Sx + 14) + ' ' + (sY + 42) + ' Q' + (Sx + 6) + ' ' + (G - 8) + ' ' + (Sx + 12) + ' ' + G + ' L' + (Sx + 6) + ' ' + G + ' Q' + Sx + ' ' + (sY + 30) + ' ' + (Sx - 4) + ' ' + (sY - 2) + ' Z'
         : (heel === 'block' || heel === 'lowblock') ? 'M' + (Sx - 6) + ' ' + (sY - 2) + ' L' + (Sx + 22) + ' ' + (sY + 6) + ' L' + (Sx + 19) + ' ' + G + ' L' + (Sx - 1) + ' ' + G + ' Z'
         : heel === 'kitten' ? 'M' + (Sx - 3) + ' ' + (sY - 1) + ' L' + (Sx + 15) + ' ' + (sY + 4) + ' Q' + (Sx + 7) + ' ' + (sY + 14) + ' ' + (Sx + 8) + ' ' + G + ' L' + (Sx + 4) + ' ' + G + ' Q' + (Sx + 2) + ' ' + (sY + 12) + ' ' + (Sx - 3) + ' ' + (sY - 1) + ' Z'
+        : heel === 'wedge' ? 'M' + (Sx - 6) + ' ' + (sY - 2) + ' Q' + F(A[0]) + ' ' + F(A[1] + 4) + ' ' + (B[0] + 6) + ' ' + (G - 3) + ' L' + (B[0] + 6) + ' ' + G + ' L' + (Sx + 10) + ' ' + G + ' Q' + (Sx + 2) + ' ' + F((sY + G) / 2) + ' ' + (Sx - 6) + ' ' + (sY - 2) + ' Z'
         : heel === 'flat' ? 'M' + (Sx - 6) + ' ' + (sY - 3) + ' L' + (Sx + 16) + ' ' + (sY) + ' L' + (Sx + 16) + ' ' + G + ' L' + (Sx - 3) + ' ' + G + ' Z'
         : 'M' + (Sx - 4) + ' ' + (sY - 2) + ' L' + (Sx + 16) + ' ' + (sY + 5) + ' Q' + (Sx + 10) + ' ' + (sY + 30) + ' ' + (Sx + 9) + ' ' + G + ' L' + (Sx + 5) + ' ' + G + ' Q' + (Sx + 3) + ' ' + (sY + 30) + ' ' + (Sx - 4) + ' ' + (sY - 2) + ' Z';
-      if (s !== 'slide') out += '<path d="' + hd + '" ' + S.f(heel === 'curved' ? c.tint : c.fill) + '/>';
+      if (s !== 'slide') out += '<path d="' + hd + '" ' + S.f(heel === 'curved' || heel === 'wedge' ? c.tint : c.fill) + '/>' + (heel === 'wedge' ? '<path d="M' + (Sx + 6) + ' ' + (sY + 8) + ' Q' + F(A[0] - 4) + ' ' + F(A[1] + 14) + ' ' + (B[0] - 4) + ' ' + (G - 4) + '" ' + S.t + '/>' : '');
       if (s === 'sandal' || s === 'slide') {
         // footbed seen in profile
         var fb = 'M' + pt([Sp[0] - 6, Sp[1] - 4]) + ' Q' + pt([A[0], A[1] - 4]) + ' ' + pt([B[0], B[1] - 4]) + ' L214 ' + (G - 4) + ' Q224 ' + (G - 4) + ' 224 ' + G + ' L212 ' + G + ' L' + pt(B) + ' Q' + pt(A) + ' ' + pt(Sp) + ' Z';
         out += '<path d="' + fb + '" ' + S.f(c.tint) + '/>';
         var q55 = qpt(Sp, A, B, s === 'slide' ? .4 : .58), q75 = qpt(Sp, A, B, s === 'slide' ? .86 : .8);
-        if (s === 'sandal') {
+        if (s === 'sandal' && has('thong')) {
+          var td2 = strap('M' + pt([Sp[0] - 4, Sp[1] - 4]) + ' Q' + pt([Sp[0] - 8, Sp[1] - 22]) + ' ' + pt([Sp[0] - 2, Sp[1] - 34]), 3) + strap('M' + pt([Sp[0] - 2, Sp[1] - 34]) + ' Q' + pt([Sp[0] + 18, Sp[1] - 40]) + ' ' + pt([Sp[0] + 34, Sp[1] - 32]), 3);
+          td2 += strap('M' + pt([Sp[0] + 34, Sp[1] - 32]) + ' Q' + F(q75[0] - 10) + ' ' + F(q75[1] - 30) + ' 200 ' + (G - 12), 2.8) + strap('M200 ' + (G - 12) + ' L203 ' + (G - 4), 2.4);
+          td2 += '<circle cx="200" cy="' + (G - 12) + '" r="2.6" fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width="1"/>';
+          out += td2; hl.strap = [[Sp[0] - 16, Sp[1] - 52, 170, G - Sp[1] + 46]];
+        } else if (s === 'sandal') {
           var sd = '';
           sd += strap('M' + pt([Sp[0] - 4, Sp[1] - 4]) + ' Q' + pt([Sp[0] - 8, Sp[1] - 22]) + ' ' + pt([Sp[0] - 2, Sp[1] - 34]));
           sd += strap('M' + pt([Sp[0] - 2, Sp[1] - 34]) + ' Q' + pt([Sp[0] + 18, Sp[1] - 42]) + ' ' + pt([Sp[0] + 38, Sp[1] - 30]));
@@ -1330,6 +1341,8 @@ var Flats = (function () {
       if (o.hw === 'horsebit') { var hx = T[0] + 18, hy = T[1] + 7; out += '<g fill="none" stroke="' + (has('patent') ? c.fill : c.ink) + '" stroke-width="1.6"><circle cx="' + hx + '" cy="' + hy + '" r="4"/><circle cx="' + (hx + 22) + '" cy="' + (hy + 7) + '" r="4"/><path d="M' + (hx + 4) + ' ' + (hy + 1) + ' Q' + (hx + 12) + ' ' + (hy) + ' ' + (hx + 18) + ' ' + (hy + 6) + '"/></g>'; hl.vamp = [[hx - 12, hy - 12, 48, 30]]; }
       if (has('feather')) { var fx0 = T[0] + 20, fy0 = T[1] + 8; out += '<g ' + S.s + '><path d="M' + fx0 + ' ' + fy0 + ' Q' + (fx0 - 12) + ' ' + (fy0 - 30) + ' ' + (fx0 + 4) + ' ' + (fy0 - 44) + ' M' + (fx0 + 4) + ' ' + (fy0 + 2) + ' Q' + (fx0 + 6) + ' ' + (fy0 - 34) + ' ' + (fx0 + 26) + ' ' + (fy0 - 40) + ' M' + (fx0 + 8) + ' ' + (fy0 + 4) + ' Q' + (fx0 + 22) + ' ' + (fy0 - 20) + ' ' + (fx0 + 40) + ' ' + (fy0 - 20) + ' M' + (fx0 - 4) + ' ' + fy0 + ' Q' + (fx0 - 26) + ' ' + (fy0 - 20) + ' ' + (fx0 - 18) + ' ' + (fy0 - 40) + '"/>'; for (var fi = 0; fi < 9; fi++) { var fxx = fx0 - 18 + fi * 6, fyy = fy0 - 36 + Math.abs(fi - 4) * 3; out += '<path d="M' + fxx + ' ' + fyy + ' l-4 -5 M' + (fxx + 1) + ' ' + (fyy + 6) + ' l5 -4"/>'; } out += '</g>'; hl.vamp = [[fx0 - 34, fy0 - 54, 82, 66]]; }
       if (has('beads')) out += '<path d="' + body + '" fill="url(#p-beads)"/>';
+      if (has('multistrap')) { [.42, .64, .86].forEach(function (fr) { var q = lerp(K, T, fr); q = [q[0], q[1] + 4 + Math.sin(fr * Math.PI) * 6]; out += strap('M' + pt([q[0] - 4, q[1] + 2]) + ' Q' + F(q[0] + 2) + ' ' + F(q[1] - 12) + ' ' + F(q[0] + 14) + ' ' + F(q[1] - 14), 4.4) + '<rect x="' + F(q[0] + 11) + '" y="' + F(q[1] - 18) + '" width="6" height="7" rx="1.2" fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width="1"/>'; }); hl.strap = [[K[0] - 6, K[1] - 26, T[0] - K[0] + 34, T[1] - K[1] + 40]]; }
+      if (has('brooch')) { var bx = T[0] + 26, by2 = T[1] + 9, chn = ''; var cA = [bx - 9, by2 - 3], cB = [K[0] + 12, K[1] + 8]; for (var ck = 0; ck < 11; ck++) { var tq = ck / 10, cp = lerp(cA, cB, tq); chn += '<ellipse cx="' + F(cp[0]) + '" cy="' + F(cp[1] + Math.sin(tq * Math.PI) * 10) + '" rx="3.4" ry="2.1" fill="none" stroke="' + c.ink + '" stroke-width=".9"/>'; } out += chn + '<g fill="' + c.tint + '" stroke="' + c.ink + '" stroke-width=".9"><circle cx="' + bx + '" cy="' + by2 + '" r="7"/><circle cx="' + bx + '" cy="' + by2 + '" r="3.2" fill="' + c.fill + '"/></g>'; [0, 1, 2, 3, 4, 5].forEach(function (k) { var a = k * Math.PI / 3; out += '<circle cx="' + F(bx + Math.cos(a) * 9.5) + '" cy="' + F(by2 + Math.sin(a) * 9.5) + '" r="1.6" fill="' + c.fill + '" stroke="' + c.ink + '" stroke-width=".7"/>'; }); hl.vamp = [[K[0], K[1] - 6, bx - K[0] + 16, by2 - K[1] + 24]]; }
       if (s === 'flat') { out += '<path d="M' + F(T[0] - 2) + ' ' + F(T[1] - 1) + ' q-7 -7 -4 -10 q6 1 8 8 q5 -8 10 -6 q-1 7 -10 8" ' + S.fs() + '/>'; if (o.mj) { out += '<path d="M' + F(T[0] - 30) + ' ' + F(T[1] + 8) + ' Q' + F(T[0] - 22) + ' ' + F(T[1] - 10) + ' ' + F(T[0] + 6) + ' ' + F(T[1] - 2) + ' L' + F(T[0] + 6) + ' ' + F(T[1] + 4) + ' Q' + F(T[0] - 18) + ' ' + F(T[1] - 3) + ' ' + F(T[0] - 23) + ' ' + F(T[1] + 9) + ' Z" ' + S.fs() + '/>' + btn(T[0] + 2, T[1] + 1, c, 1.6); hl.strap = [[T[0] - 38, T[1] - 18, 52, 34]]; } }
       hl.toe = hl.toe || [[178, G - 30, 64, 38]];
       hl.heel = [[Sx - 14, sY - 10, 52, G - sY + 18]];
@@ -2092,7 +2105,23 @@ var Flats = (function () {
     'Flatform sneakers': { g: 'shoe', s: 'sneaker', chunky: true, hl: ['sole'] },
     'Sock-knit trainers': { g: 'shoe', s: 'sneaker', x: ['knitup', 'nolace'], chunky: true, hl: ['upper'] },
     'Hiking sandals': { g: 'shoe', s: 'sneaker', sandal: true, hl: ['strap'] },
-    'Satin ballet-trainers': { g: 'shoe', s: 'sneaker', ballet: true, x: ['leather'], hl: ['upper'] }
+    'Satin ballet-trainers': { g: 'shoe', s: 'sneaker', ballet: true, x: ['leather'], hl: ['upper'] },
+    /* Weekly details 2026-10-17 (SS27 runway coverage) */
+    'Skirt-overlay trousers': { g: 'trousers', leg: 'wide', x: ['satin', 'overlay'], hl: ['overlay'] },
+    'Double-layer sheer skirts': { g: 'skirt', s: 'midi', x: ['mesh', 'tiers'], hl: ['body'] },
+    'Saucer-buckle wide belts': { g: 'trousers', leg: 'straight', high: true, belt: 'big', hl: ['waist'] },
+    'Long satin boxer shorts': { g: 'trousers', leg: 'wide', len: 150, x: ['satin', 'drawcord'], hl: ['body'] },
+    'Broderie anglaise dresses': { g: 'dress', nk: 'square', sl: 'puff', sk: 'tiered', x: ['pointelle'], hl: ['body'] },
+    'Asymmetric-collar pinstripe shirts': T({ t: 'shirt', col: 'shirt', cl: 'placket', x: ['pin', 'asymcollar'], hl: ['collar'] }),
+    'Vintage poster-print tops': T({ t: 'tee', col: 'crew', hem: 'plain', x: ['floral', 'slogan'], hl: ['chest'] }),
+    'Satin tailored blazers': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'flap', x: ['gloss'], hl: ['body'] }),
+    'Sculpted wedge heels': { g: 'shoe', s: 'pump', heel: 'wedge', toe: 'pointed', hl: ['heel'] },
+    'Brooch-and-chain stilettos': { g: 'shoe', s: 'pump', toe: 'pointed', x: ['leather', 'brooch'], hl: ['vamp'] },
+    'Multi-strap ballet flats for men': { g: 'shoe', s: 'flat', x: ['leather', 'multistrap'], hl: ['strap'] },
+    'Skinny thong sandals': { g: 'shoe', s: 'sandal', heel: 'flat', x: ['thong'], hl: ['strap'] },
+    'Featherweight trench windbreakers': T({ t: 'coat', col: 'notch', cl: 'db', x: ['belt', 'taped'], hl: ['body'] }),
+    'Oversized lapel flower brooches': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'flap', x: ['lapelflower'], hl: ['lapel'] }),
+    'Scarf-tied waistbands': { g: 'trousers', leg: 'straight', pleats: 1, noloops: true, belt: 'scarf', hl: ['waist'] },
   };
   var LABEL = { knees: 'Knees', bodice: 'Bodice', front: 'Wrap front', chain: 'Chain trim', centre: 'Centre front', collar: 'Collar', cuffs: 'Cuffs', hem: 'Hem', shoulders: 'Shoulders', body: 'Whole piece', closure: 'Front closure', pockets: 'Pockets', waist: 'Waist', cape: 'Cape', stormflap: 'Storm flap', chest: 'Chest', yoke: 'Yoke', tie: 'Tie', sleeves: 'Sleeves', skirt: 'Skirt', sides: 'Side seams', neck: 'Neckline', legs: 'Legs', pleats: 'Pleats', fly: 'Fly', seams: 'Outseams', adjusters: 'Side adjusters', loop: 'Hammer loop', slit: 'Slit', strap: 'Strap', toe: 'Toe', heel: 'Heel', vamp: 'Vamp', upper: 'Upper', sole: 'Sole', shaft: 'Shaft', topline: 'Topline', laces: 'Lacing', sock: 'Sock' };
 

@@ -205,6 +205,14 @@ D = [
  ('Trims & Accessories', 'Accessories', 'Belts over sarees and kurtas', 'Accessory', 'Embellished or leather belts to define the waist.', 'rpppf', None),
  ('Trims & Accessories', 'Accessories', 'Mirror-work bags', 'Accessory', 'Bags with mirror embellishment.', 'rpff-', None),
  ('Trims & Accessories', 'Accessories', 'Statement brooches', 'Accessory', 'Brooches on bandhgalas, kurtas and saree pallus.', 'rpppf', None),
+ # Weekly details 2026-10-17 (Festive 2026 launches: Soch, Max Fashion, ELLE India October edit)
+ ('Fabrics & Weaves', 'Silks & metallics', 'Crushed tissue', 'Fabric', 'Crinkled metallic tissue with a soft, broken shine, used for festive suits and sarees, as shown in Soch Festive 2026.', 'r-p-r', None),
+ ('Embroidery & Surface', 'Prints & dyes', 'Tile-inspired layered prints', 'Pattern', 'Repeating tile and jaali motifs printed in overlapping layers on kurtas and sets, as shown in Soch Festive 2026.', 'errpp', None),
+ ("Women's Ethnic", 'Suits & kurtas', 'Kalidar-cut kurtas', 'Shape', 'Kurtas built from many flared panels (kalis) for swing without heavy gathers; seen in Max Fashion Festive 2026.', 'rrppp', 'Fit-and-flare Anarkalis'),
+ ("Women's Ethnic", 'Sarees', 'Foil-appliqué tulle sarees', 'Embellishment', 'Metallic foil or faux-leather pieces cut into shapes and stitched onto sheer tulle, as shown by Sameer Madan.', 'e-e-r', None),
+ ('Indo-Western', 'Evening fusion', 'Zari-embroidered denim eveningwear', 'Embellishment', 'Denim and Tencel lifted to evening with zari embroidery, as shown by Spacelines.', 'e-r-r', 'Embroidered denim'),
+ ('Indo-Western', 'Wardrobe systems', 'Modular organza occasion separates', 'Construction', 'Occasion pieces in organza, silk and washed denim that mix and re-pair across events, as shown by Nachiket Barve.', 'errpp', None),
+ ('Trims & Accessories', 'Trims', 'Enamel clasps and closures', 'Hardware', 'Small enamelled clasps used as a crafted closure on kurtas and accessories, as shown by AMPM.', 'e-r-r', None),
 ]
 
 # Season guide shown on the India page. 'open': visible now; locked seasons release at official launch.

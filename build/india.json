@@ -832,6 +832,62 @@
 "life": "rpppf"
 },
 {
+"cat": "Fabrics & Weaves",
+"sub": "Silks & metallics",
+"name": "Crushed tissue",
+"area": "Fabric",
+"note": "Crinkled metallic tissue with a soft, broken shine, used for festive suits and sarees, as shown in Soch Festive 2026.",
+"life": "r-p-r"
+},
+{
+"cat": "Embroidery & Surface",
+"sub": "Prints & dyes",
+"name": "Tile-inspired layered prints",
+"area": "Pattern",
+"note": "Repeating tile and jaali motifs printed in overlapping layers on kurtas and sets, as shown in Soch Festive 2026.",
+"life": "errpp"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Suits & kurtas",
+"name": "Kalidar-cut kurtas",
+"area": "Shape",
+"note": "Kurtas built from many flared panels (kalis) for swing without heavy gathers; seen in Max Fashion Festive 2026.",
+"life": "rrppp"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Sarees",
+"name": "Foil-appliqué tulle sarees",
+"area": "Embellishment",
+"note": "Metallic foil or faux-leather pieces cut into shapes and stitched onto sheer tulle, as shown by Sameer Madan.",
+"life": "e-e-r"
+},
+{
+"cat": "Indo-Western",
+"sub": "Evening fusion",
+"name": "Zari-embroidered denim eveningwear",
+"area": "Embellishment",
+"note": "Denim and Tencel lifted to evening with zari embroidery, as shown by Spacelines.",
+"life": "e-r-r"
+},
+{
+"cat": "Indo-Western",
+"sub": "Wardrobe systems",
+"name": "Modular organza occasion separates",
+"area": "Construction",
+"note": "Occasion pieces in organza, silk and washed denim that mix and re-pair across events, as shown by Nachiket Barve.",
+"life": "errpp"
+},
+{
+"cat": "Trims & Accessories",
+"sub": "Trims",
+"name": "Enamel clasps and closures",
+"area": "Hardware",
+"note": "Small enamelled clasps used as a crafted closure on kurtas and accessories, as shown by AMPM.",
+"life": "e-r-r"
+},
+{
 "cat": "Women's Ethnic",
 "sub": "Suits & kurtas",
 "name": "Airy kurta separates with opacity-tested inners",
