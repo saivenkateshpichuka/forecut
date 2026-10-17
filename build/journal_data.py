@@ -80,7 +80,7 @@ ARTICLES = [
     'Swap heavy embroidery for tone-on-tone work at the neckline and cuffs.',
     'Tell the weave and the cluster story on the label and the product page.',
   ]),
-  ('cta', 'Track every weave and its status in the <a href="india.html#materials-fabrics--weaves">India Forecast fabrics section</a>.'),
+  ('cta', 'Track every weave and its status in the <a href="india-festive-26.html#detail-studio">India Forecast fabrics section</a>.'),
  ]},
 {
  'slug': 'indian-footwear-trends-kolhapuri-juttis-sneakers',
@@ -116,7 +116,7 @@ ARTICLES = [
     'Pair Kolhapuris and juttis with western looks in your imagery, not only with ethnic wear.',
     'Test a small run of embroidered or handcrafted sneakers and a wider-fit option.',
   ]),
-  ('cta', 'See all footwear details and their timing in the <a href="india.html#footwear-indian-footwear">India footwear forecast</a>.'),
+  ('cta', 'See all footwear details and their timing in the <a href="india-festive-26.html#detail-studio">India footwear forecast</a>.'),
  ]},
 {
  'slug': 'gen-z-fusion-fashion-india',

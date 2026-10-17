@@ -39,7 +39,7 @@ BODY = f'''<div class="acc" id="acc">
   <div class="tabs" role="tablist"><button type="button" role="tab" id="t-in" aria-selected="true">Sign in</button><button type="button" role="tab" id="t-up" aria-selected="false">Sign up</button></div>
   <button class="gbtn" type="button" id="gbtn">{G}<span>Continue with Google</span></button>
   <div class="or">or</div>
-  <form class="f" id="form" novalidate>
+  <span id="signup" style="display:block;position:relative;top:-80px"></span><form class="f" id="form" novalidate>
    <div id="nmw" hidden><label for="nm">Full name</label><input id="nm" autocomplete="name" placeholder="Your name"></div>
    <label for="em">Email</label><input id="em" type="email" autocomplete="email" placeholder="you@brand.com" required>
    <label for="pw">Password</label><input id="pw" type="password" autocomplete="current-password" placeholder="At least 6 characters" required>
