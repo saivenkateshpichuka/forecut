@@ -28,3 +28,10 @@ jobs:
         with: { path: _site }
       - id: deployment
         uses: actions/deploy-pages@v4
+      - name: Tell Bing, Yandex and other IndexNow engines about updated pages
+        continue-on-error: true
+        run: |
+          sleep 20
+          URLS=$(grep -o '<loc>[^<]*</loc>' sitemap.xml | sed 's/<[^>]*>//g' | head -9000 | python3 -c 'import sys,json; print(json.dumps([l.strip() for l in sys.stdin if l.strip()]))')
+          curl -s -o /dev/null -w "IndexNow: %{http_code}\n" -X POST https://api.indexnow.org/indexnow -H 'Content-Type: application/json; charset=utf-8' \
+            -d "{\"host\":\"forecut.in\",\"key\":\"71e5decd3dfc4ec99fbea80c11f7f087\",\"keyLocation\":\"https://forecut.in/71e5decd3dfc4ec99fbea80c11f7f087.txt\",\"urlList\":$URLS}"

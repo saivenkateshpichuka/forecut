@@ -414,7 +414,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
 .story::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(14,11,9,.78) 0%,rgba(14,11,9,.45) 45%,rgba(14,11,9,.05) 75%),linear-gradient(0deg,rgba(14,11,9,.55),transparent 55%);z-index:-1}
 .story .st{padding:clamp(22px,4vw,48px);max-width:720px}
 .story .eb{color:#ffd9c2!important}
-.story h1{color:#fff!important;font-size:clamp(40px,6.4vw,84px)!important;line-height:1!important;margin:10px 0 14px!important;text-shadow:0 2px 24px rgba(0,0,0,.35)}
+.story .sth{font-family:var(--display);font-weight:700;letter-spacing:-.025em;max-width:none}.story h1,.story .sth{color:#fff!important;font-size:clamp(40px,6.4vw,84px)!important;line-height:1!important;margin:10px 0 14px!important;text-shadow:0 2px 24px rgba(0,0,0,.35)}
 .story p{color:rgba(255,255,255,.92)!important;font-size:clamp(16px,1.6vw,19px);max-width:56ch;margin:0}
 .story .stt{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.story .stt span{font:600 12px var(--body);letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.16);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,.28);padding:6px 11px;border-radius:99px}
 .story~.hero2 .htext>.eb,.story~.hero2 .htext>h1,.story~.hero2 .htext>.intro{display:none}

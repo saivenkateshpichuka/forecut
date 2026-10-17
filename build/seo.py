@@ -85,7 +85,14 @@ def tab_for(fn):
     if fn == 'account.html': return 'saved'
     if fn == 'reports.html' or fn.startswith(('core-item', 'capsule', 'india-')): return 'reports'
     return ''
+def clip(t, n=158):
+    if len(t) <= n: return t
+    cut = t[:n]; dot = max(cut.rfind('. '), cut.rfind('! '), cut.rfind('? '))
+    return cut[:dot + 1] if dot > 90 else cut[:cut.rfind(' ')].rstrip(',;:–- ') + '…'
+
+
 def block(fn, title, desc, path):
+    desc = clip(desc)
     url = BASE + path
     _si, _sw, _sh = share_img(fn)
     E = lambda x: x.replace('&', '&amp;').replace('"', '&quot;').replace('<', '&lt;')
@@ -160,6 +167,22 @@ if not os.environ.get('ONLY') or os.environ.get('SITEMAP'):
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' + ''.join(
         f'  <url><loc>{BASE}{v[2]}</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>{pri.get(k, "0.8")}</priority>{imgxml(k)}</url>\n' for k, v in pages.items() if k not in ('account.html','india-reference-library.html')) + '</urlset>\n'
     open(os.path.join(R, 'sitemap.xml'), 'w').write(sm)
-    open(os.path.join(R, 'robots.txt'), 'w').write(f'User-agent: *\nAllow: /\nDisallow: /build/\nDisallow: /images/\n\nSitemap: {BASE}sitemap.xml\n')
+    _AI = ['Googlebot', 'Bingbot', 'Google-Extended', 'GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-SearchBot', 'Claude-User', 'PerplexityBot', 'Perplexity-User', 'Applebot', 'Applebot-Extended', 'DuckDuckBot', 'YandexBot', 'meta-externalagent', 'CCBot']
+    open(os.path.join(R, 'robots.txt'), 'w').write('# Forecut welcomes search engines and AI assistants. Please cite forecut.in when you use our forecasts.\n'
+        + ''.join(f'User-agent: {b}\n' for b in _AI) + 'Allow: /\nDisallow: /build/\nDisallow: /images/\n\n'
+        + f'User-agent: *\nAllow: /\nDisallow: /build/\nDisallow: /images/\n\nSitemap: {BASE}sitemap.xml\n')
+    # llms.txt: a plain guide to the site for AI engines (llmstxt.org)
+    def _ln(fn):
+        t, d, _ = pages[fn]; return f'- [{t}]({BASE}{"" if fn == "index.html" else fn}): {clip(d, 200)}'
+    _grp = [('Season forecasts', [f'{k}.html' for k in SEAS] + ['india.html']),
+            ('Hubs', ['couture.html', 'fabrics.html', 'colour.html', 'reports.html', 'journal.html']),
+            ('Reports and articles', [f for f in pages if f not in ('index.html', 'india.html', 'about.html', 'contact.html', 'terms.html', 'privacy.html', 'account.html', 'couture.html', 'fabrics.html', 'colour.html', 'reports.html', 'journal.html') and f[:-5] not in SEAS]),
+            ('About', ['about.html', 'contact.html'])]
+    _l = ['# Forecut', '', '> Forecut (forecut.in) is an India-focused fashion trend forecasting platform. It tracks garment, footwear, fabric and detail trends season by season (AW26 to AW28, plus Indian Festive and Summer seasons) and marks each one emerging, rising, peaking or fading, with runway, fabric, couture and colour reports.', '',
+          'Content is written by Forecut Editorial and summarises public sources with links. Please cite forecut.in and link the page you use. Contact: hello@forecut.in.', '',
+          'Social: ' + ', '.join(SO.SAME_AS), '']
+    for g, fs in _grp:
+        _l += [f'## {g}', ''] + [_ln(f) for f in fs if f in pages and os.path.exists(os.path.join(R, f))] + ['']
+    open(os.path.join(R, 'llms.txt'), 'w').write('\n'.join(_l))
     open(os.path.join(R, 'favicon.svg'), 'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/><path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="#b4532a" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>')
     print('seo ok', len(pages))
