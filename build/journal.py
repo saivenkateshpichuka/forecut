@@ -59,10 +59,10 @@ for a in J.ARTICLES:
     others = [x for x in J.ARTICLES if x is not a][:3]
     body = (f'<p class="eb"><a href="journal.html" style="color:inherit;text-decoration:none">Journal</a></p><article>'
             f'<span class="jtag">{E(a["tag"])}</span><h1 style="margin-top:12px">{E(a["title"])}</h1>'
-            f'<p class="lead">{E(a["desc"])}</p><p class="jmeta">By Forecut Editorial · {J.DATE_TXT} · {a["read"]} min read</p>'
+            f'<p class="lead">{E(a["desc"])}</p><p class="jmeta">By Forecut Editorial · {a.get("date_txt", J.DATE_TXT)} · {a["read"]} min read</p>'
             f'<div class="jhero"><img src="img/{a["hero"]}.webp" alt="{E(a["title"])}" width="800" height="800"></div>' + CR.cap(a["hero"])
             + ''.join(block(b) for b in a['body']) +
-            '<p class="byline">Written by the Forecut editorial team. Sources include public coverage of Lakmé Fashion Week x FDCI 2026 (Harper\'s Bazaar India, Free Press Journal), Aza Fashions and Lashkaraa trend guides, Pearl Academy Gen Z reports, Global Indian and Outlook Business. Statuses are Forecut\'s forecast and will be refined as new data arrives.</p></article>'
+            '<p class="byline">Written by the Forecut editorial team. Sources include public coverage of Lakmé Fashion Week x FDCI 2026 (Harper\'s Bazaar India, Free Press Journal), Aza Fashions and Lashkaraa trend guides, Pearl Academy Gen Z reports, Global Indian and Outlook Business. Statuses are Forecut\'s forecast and will be refined as new data arrives.' + (f' Sources for this article: {E(a["sources"])}.' if a.get('sources') else '') + '</p></article>'
             f'<section class="more"><h3>More from the Journal</h3><div class="jgrid">{"".join(card(x) for x in others)}</div></section>')
     open(f'../{a["slug"]}.html', 'w').write(head(a['title'] + ' · Forecut Journal') + body + FOOT)
 idx = ('<p class="eb">Journal</p><h1>The Forecut Journal</h1><p class="lead">Analysis and practical guides on Indian and global fashion trends: what is emerging, rising, peaking and fading, why it matters, and what to do about it.</p>'
