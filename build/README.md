@@ -73,6 +73,7 @@ Everything needed to rebuild the Forecut website. The published pages are genera
 - gen_india.py builds ../india.html (STATIC=..) from season_tpl.txt, so it shares the viewer, descriptions, download cards and photo support. Details without a sketch show a "photo coming soon" pattern until a photo is uploaded.
 - india_prompts.py writes ../india-image-prompts.csv (same file-name rules as the main report). Photos go in images/ like the rest.
 - Homepage source is forecut_home.txt; build_home.py writes ../index.html. GitHub Pages is the live site (forecut.in); Claude artifacts are backups.
+- Homepage visual blocks (season cards, region cards, featured construction detail, colour palettes) are in home_blocks.py. Season pages accept filters in the link (ss27.html?dept=womenswear&st=r&q=collar) and region pages accept #s-<season> (region-africa.html#s-aw27); the homepage forecast explorer uses both.
 - Each month also refresh India: move lifecycles on, add new Indian runway/retail/festive signals, keep 10+ details per India category.
 
 ## SEO (added Oct 2026)

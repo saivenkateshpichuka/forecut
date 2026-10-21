@@ -60,13 +60,16 @@ jsec = f'''  <section id="journal" aria-labelledby="jlh">
 '''
 import reports_data as RD
 rs = [('global-trend-report.html', 'Global Trend Report', 'collarless-tailored-jackets-photo', 'Global Trend Report'), ('fashion-brand-competition-2026.html', 'Brand competition 2026: who is growing', 'band-collar-shirts-photo', 'Market Data'), ('fashion-marketing-trends-2026.html', 'Fashion marketing trends 2026', 'mesh-running-sneakers-photo', 'Marketing Trends'), ('india-brand-watch.html', 'India market: Brand Watch', 'tissue-sarees-in-champagne-gold', 'India market')]
-rc = ''.join(f'<a class="jc" href="{u}"><span class="ph"><img src="img/{im}.webp" alt="" loading="lazy" width="800" height="800"></span><small>{k}</small><b>{t}</b></a>' for u, t, im, k in rs)
+_pv = {'global-trend-report.html': 'Worldwide outlook AW26 to AW28: rising, emerging and fading details.', 'fashion-brand-competition-2026.html': 'Inditex, Shein, Uniqlo, H&M, Trent and ABFRL growth compared.', 'fashion-marketing-trends-2026.html': 'Nine marketing trends, from quick commerce to AI search, and what to do.', 'india-brand-watch.html': 'How Indian brands are bringing festive 2026 trends to market.'}
+rc = ''.join(f'<a class="rcv" href="{u}"><span class="ph"><span class="brand">Forecut</span><img src="img/{im}.webp" alt="" loading="lazy" width="800" height="800"><span class="tt">{t}</span></span><span class="bd"><small>{k}</small><span class="pv">{_pv.get(u, '')}</span></span></a>' for u, t, im, k in rs)
 rsec = f'''  <section id="reports" aria-labelledby="rph">
     <div class="sechead"><div><span class="mono eyebrow">Reports</span><h2 id="rph">Ready-to-use trend reports.</h2></div><p>Item-by-item updates, design capsules with flat sketches, colour and sourcing guides. <a href="reports.html">All reports →</a></p></div>
-    <div class="jrow r4">{rc}</div>
+    <div class="rcov">{rc}</div>
   </section>
 '''
-h = h.replace('<!--GALLERY-->', gal + rsec + jsec)
+h = h.replace('<!--LOOKBOOK-->', gal).replace('<!--REPORTS-->', rsec).replace('<!--JOURNAL-->', jsec)
+import home_blocks as _HB
+for _k, _v in _HB.blocks(M, SEAS, islug).items(): h = h.replace(f'<!--{_k}-->', _v)
 # hero stack + live ticker from India data
 import india_data as _I
 _CL = {'e': ('emerge', 'Emerging'), 'r': ('rise', 'Rising'), 'p': ('peak', 'Peaking'), 'f': ('fade', 'Fading')}

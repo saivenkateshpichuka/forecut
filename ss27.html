@@ -724,6 +724,14 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
     });
   });
   input.addEventListener('input', function () { q = input.value.trim().toLowerCase(); apply(); });
+  // filters from links, e.g. ss27.html?dept=womenswear&st=r&q=collar (homepage forecast explorer)
+  try {
+    var P = new URLSearchParams(location.search), hit = false;
+    var pd = P.get('dept'); if (pd) deptBtns.forEach(function (b) { if (b.getAttribute('data-dept') === pd) { b.click(); hit = true; } });
+    (P.get('st') || '').split(',').forEach(function (k) { stBtns.forEach(function (b) { if (k && b.getAttribute('data-st') === k) { b.click(); hit = true; } }); });
+    var pq = P.get('q'); if (pq) { input.value = pq; q = pq.trim().toLowerCase(); apply(); hit = true; }
+    if (hit) { var t = document.querySelector('.tools'); if (t) setTimeout(function () { t.scrollIntoView(); }, 60); }
+  } catch (e) {}
 })();
 </script>
 <script>

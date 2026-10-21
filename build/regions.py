@@ -37,7 +37,7 @@ RCSS = """<style>
 .show{background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:16px 18px}.show b{font:700 18px "DM Sans",sans-serif}.show small{display:block;font:600 13px "DM Sans",sans-serif;color:var(--chalk);margin:2px 0 8px}.show p{margin:0;font-size:15px;line-height:1.55}
 @media (max-width:760px){.tg{grid-template-columns:1fr 1fr}.rgrid{grid-template-columns:1fr}}
 </style>"""
-RJS = """<script>(function(){document.querySelectorAll('.stabs').forEach(function(g){var bs=g.querySelectorAll('button');bs.forEach(function(b){b.onclick=function(){bs.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});g.parentNode.querySelectorAll('.spanel').forEach(function(p){p.hidden=p.id!==b.dataset.s})}})})})();</script>"""
+RJS = """<script>(function(){document.querySelectorAll('.stabs').forEach(function(g){var bs=g.querySelectorAll('button');bs.forEach(function(b){b.onclick=function(){bs.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false')});g.parentNode.querySelectorAll('.spanel').forEach(function(p){p.hidden=p.id!==b.dataset.s})}})});var h=location.hash.match(/^#s-([a-z0-9]+)$/);if(h){var b=document.querySelector('.stabs button[data-s$="-'+h[1]+'"]');if(b){b.click();var t=document.getElementById('seasons');if(t)t.scrollIntoView();}}})();</script>"""
 
 
 def islug(x): return ''.join(ch.lower() if ch.isalnum() else '-' for ch in x).strip('-').replace('--', '-').replace('--', '-')
