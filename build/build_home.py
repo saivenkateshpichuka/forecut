@@ -27,9 +27,10 @@ keys = list(lanes); subord = []
 [subord.append(x[1]) for x in I.D if x[1] not in subord]
 ik = sorted([k for k in keys if k[0] == 'india'], key=lambda k: subord.index(k[1]) if k[1] in subord else 99); gk = [k for k in keys if k[0] != 'india']
 mixed = []
-for n in range(max(len(ik), len(gk))):
+for n in range(max(len(ik), (len(gk) + 1) // 2)):
+    if 2 * n < len(gk): mixed.append(gk[2 * n])
+    if 2 * n + 1 < len(gk): mixed.append(gk[2 * n + 1])
     if n < len(ik): mixed.append(ik[n])
-    if n < len(gk): mixed.append(gk[n])
 lanes = OrderedDict((k, lanes[k]) for k in mixed)
 order, seen_cat = [], set()
 while len(order) < 9 and any(lanes.values()):
@@ -43,7 +44,7 @@ if order:
         f'<a href="{info[x][2]}.html"{" class=\"big\"" if n == 0 else ""}><img src="img/{x}.webp" alt="{info[x][0]}" loading="lazy" width="800" height="800">'
         f'<span class="cap"><span class="tag" style="--k:var(--{KC[info[x][3]]})"><i></i>{info[x][3]}</span><b>{info[x][0]}</b><small>{'India' if info[x][2] == 'india' else info[x][2].upper()} · {info[x][1]}</small></span></a>'
         for n, x in enumerate(order))
-    more = ''.join(f'<a href="{s}.html">{s.upper()} →</a>' for s in SEAS) + '<a href="india.html">India →</a>'
+    more = ''.join(f'<a href="{s}.html">{s.upper()} →</a>' for s in SEAS) + '<a href="regions.html">Regions →</a><a href="india.html">India →</a>'
     gal = f'''  <section id="lookbook" aria-labelledby="lh">
     <div class="sechead"><div><span class="mono eyebrow">The detail edit</span><h2 id="lh">This season, up close.</h2></div><p>A few of the details we're tracking now. Open any season to see every detail, with notes and downloadable cards.</p></div>
     <div class="gal">{cards}</div>
@@ -53,12 +54,12 @@ if order:
 import journal_data as JD
 jc = ''.join(f'<a class="jc" href="{a["slug"]}.html"><span class="ph"><img src="img/{a["hero"]}.webp" alt="" loading="lazy" width="800" height="800"></span><small>{a["tag"]} · {a["read"]} min read</small><b>{a["title"]}</b></a>' for a in JD.ARTICLES[:3])
 jsec = f'''  <section id="journal" aria-labelledby="jlh">
-    <div class="sechead"><div><span class="mono eyebrow">The Journal</span><h2 id="jlh">Read the analysis.</h2></div><p>Practical guides on what India will wear next, and how to act on it. <a href="journal.html">All articles →</a></p></div>
+    <div class="sechead"><div><span class="mono eyebrow">The Journal</span><h2 id="jlh">Read the analysis.</h2></div><p>Practical guides on what the world will wear next, region by region, and how to act on it. <a href="journal.html">All articles →</a></p></div>
     <div class="jrow">{jc}</div>
   </section>
 '''
 import reports_data as RD
-rs = [('reports.html', 'All reports', 'pre-draped-saree-gowns', 'Hub'), ('core-item-sarees.html', 'Core Item Update: Sarees', 'pre-draped-saree-gowns', 'Core Item Update'), ('capsule-festive-made-easy.html', 'Design Capsule: Festive made easy', 'cape-lehengas', 'Design Capsule'), ('india-colour-forecast.html', 'India Colour Forecast 2026–27', 'fit-and-flare-anarkalis', 'Colour Forecast'), ('india-brand-watch.html', 'Brand Watch: what Indian labels are launching', 'tissue-sarees-in-champagne-gold', 'Brand Watch')][1:]
+rs = [('global-trend-report.html', 'Global Trend Report', 'collarless-tailored-jackets-photo', 'Global Trend Report'), ('fashion-brand-competition-2026.html', 'Brand competition 2026: who is growing', 'band-collar-shirts-photo', 'Market Data'), ('fashion-marketing-trends-2026.html', 'Fashion marketing trends 2026', 'mesh-running-sneakers-photo', 'Marketing Trends'), ('india-brand-watch.html', 'India market: Brand Watch', 'tissue-sarees-in-champagne-gold', 'India market')]
 rc = ''.join(f'<a class="jc" href="{u}"><span class="ph"><img src="img/{im}.webp" alt="" loading="lazy" width="800" height="800"></span><small>{k}</small><b>{t}</b></a>' for u, t, im, k in rs)
 rsec = f'''  <section id="reports" aria-labelledby="rph">
     <div class="sechead"><div><span class="mono eyebrow">Reports</span><h2 id="rph">Ready-to-use trend reports.</h2></div><p>Item-by-item updates, design capsules with flat sketches, colour and sourcing guides. <a href="reports.html">All reports →</a></p></div>
@@ -70,13 +71,27 @@ h = h.replace('<!--GALLERY-->', gal + rsec + jsec)
 import india_data as _I
 _CL = {'e': ('emerge', 'Emerging'), 'r': ('rise', 'Rising'), 'p': ('peak', 'Peaking'), 'f': ('fade', 'Fading')}
 _hero = [x for x in _I.D if islug(x[2]) in imgs and x[5][0] in 'er']
-_pick = []
-for want in ['Pre-draped saree gowns', 'Kolhapuri chappals', 'Cape lehengas', 'Embroidered kurta co-ord sets']:
-    _pick += [x for x in _hero if x[2] == want]
-hs = ''.join(f'<a class="hc" data-p="{i}" href="india.html"><img src="img/{islug(x[2])}.webp" alt="{x[2]}" width="800" height="800"{" fetchpriority=\"high\"" if i == 0 else " loading=\"lazy\""}><span class="pill {_CL[x[5][0]][0]}">{_CL[x[5][0]][1]}</span><span class="hcb"><b>{x[2]}</b><small>{x[1]} · Festive 26</small></span></a>' for i, x in enumerate(_pick))
+# global hero stack: SS27 global trends + one India market trend, and a mixed global ticker
+def _gimg(name):
+    sl = islug(name)
+    for c in (sl + '-photo', sl + '-ss27-photo', sl):
+        if _os0.path.exists(f'../img/{c}.webp'): return c
+    return None
+import os as _os0
+_G = {it['name']: it for _k, _its in M.items() for it in _its}
+_gl = []
+for want in ['Peplum blouses', 'Collarless tailored jackets', 'Band-collar shirts']:
+    it = _G.get(want); im = _gimg(want) if it else None
+    if it and im: _gl.append((want, im, it['life'][1], 'SS27 · Global', 'ss27.html'))
+for want in ['Cape lehengas']:
+    x = next((x for x in _hero if x[2] == want), None)
+    if x: _gl.append((x[2], islug(x[2]), x[5][0], 'Festive 26 · India', 'india.html'))
+hs = ''.join(f'<a class="hc" data-p="{i}" href="{u}"><img src="img/{im}.webp" alt="{n}" width="800" height="800"{" fetchpriority=\"high\"" if i == 0 else " loading=\"lazy\""}><span class="pill {_CL[st][0]}">{_CL[st][1]}</span><span class="hcb"><b>{n}</b><small>{lab}</small></span></a>' for i, (n, im, st, lab, u) in enumerate(_gl))
 h = h.replace('<!--HEROSTACK-->', hs)
-_tk = [x for x in _I.D if x[5][0] in 'erp'][:24]
-tk = ''.join(f'<span>{x[2]} <span class="pill {_CL[x[5][0]][0]}">{_CL[x[5][0]][1]}</span></span>' for x in _tk)
+_gt = [(it['name'], it['life'][1]) for _k, _its in M.items() for it in _its if it['life'][1] in 'er'][:18]
+_it = [(x[2], x[5][0]) for x in _I.D if x[5][0] in 'er'][:6]
+_mix = [v for pair in zip(_gt[::3], _gt[1::3], _gt[2::3], _it + [None] * 6) for v in pair if v]
+tk = ''.join(f'<span>{n} <span class="pill {_CL[st][0]}">{_CL[st][1]}</span></span>' for n, st in _mix)
 h = h.replace('<!--TICKER-->', tk + tk)
 # live tracker from the global season data
 import datetime as _dt, os as _os
@@ -101,6 +116,6 @@ h = h.replace('https://forecut.in/account.html', 'account.html').replace('https:
 h = h.replace('https://forecut.in/india.html', 'india.html').replace('https://forecut.in/about.html', 'about.html').replace('https://forecut.in/contact.html', 'contact.html').replace('https://forecut.in/terms.html', 'terms.html').replace('https://forecut.in/privacy.html', 'privacy.html').replace(' target="_blank" rel="noopener"', '')
 if not h.lstrip().lower().startswith('<!doctype'):
     h = ('<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-         + h.replace('<title>Forecut</title>', '<title>Forecut · Fashion trend forecasting for India</title></head><body>', 1) + '\n</body></html>')
+         + h.replace('<title>Forecut</title>', '<title>Forecut · Global fashion trend forecasting</title></head><body>', 1) + '\n</body></html>')
 open('../index.html', 'w').write(h)
 print('home ok')

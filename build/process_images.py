@@ -16,6 +16,8 @@ import hubs_data as HD
 hubs_v = {c for h in HD.HUBS for c in h['hero'] + [x for a in h['articles'] for x in a['img']] + [x for a in h.get('ateliers', []) for x in a['img']] + h.get('extra_imgs', []) if c.startswith('hub-')}
 import journal_data as JDX
 hubs_v |= {a['hero_new'] for a in JDX.ARTICLES if a.get('hero_new')}
+import regions_data as _RG
+hubs_v |= set(_RG.IMAGES)
 themes_v |= hubs_v  # hub images: 16:10 like theme tiles
 flats_v = {'flat-' + b for b in base} | {'flat-' + b + '-' + s for b in base for s in seasons}
 valid = base | {b + '-' + s for b in base for s in seasons} | heroes | themes_v | flats_v

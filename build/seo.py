@@ -4,12 +4,12 @@ import social as SO
 R = '..'; BASE = 'https://forecut.in/'
 S = json.load(open('seasons.json')); META = S['meta']; SEAS = S['seasons'] if 'seasons' in S else list(META)
 pages = {
- 'index.html': ('Forecut · Fashion Trend Forecast for India | Garments, Footwear, Fabrics & Details',
-   'Forecut is detail-level fashion trend forecasting for India: what\'s emerging, rising, peaking and fading in ethnic and western wear, footwear, fabrics, embroidery and trims, with ₹ price guides. Free during early access.', ''),
- 'india.html': ('India Fashion Trend Forecast 2026–28 · Sarees, Lehengas, Kurtas, Juttis | Forecut',
+ 'index.html': ('Forecut · Global Fashion Trend Forecasting | SS, Pre-Fall, AW & Resort by Region',
+   'Forecut is global, detail-level fashion trend forecasting: what\'s emerging, rising, peaking and fading across SS, Pre-Fall, AW and Resort, read for Asia, Europe, the Americas, Africa and Oceania.', ''),
+ 'india.html': ('India Market Fashion Forecast 2026–28 · Sarees, Lehengas, Kurtas, Juttis | Forecut',
    'India fashion trends for Festive 2026, Summer 2027 and Festive 2027: sarees, lehengas, kurtas, bandhgalas, juttis, Kolhapuris, handloom fabrics, chikankari, mirror work and trims, with ₹ price guides.', 'india.html'),
 }
-for fn, t, d in [('about.html', 'About Forecut · Fashion Trend Forecasting for India', 'Forecut is an independent, detail-level fashion trend forecasting platform built for the Indian market.'),
+for fn, t, d in [('about.html', 'About Forecut · Global Fashion Trend Forecasting', 'Forecut is an independent, detail-level global fashion trend forecasting platform for designers, brands and manufacturers in every region.'),
                  ('contact.html', 'Contact Forecut', 'Contact Forecut at hello@forecut.in for questions, feedback, partnerships and enterprise enquiries.'),
                  ('terms.html', 'Terms & Conditions · Forecut', 'Terms and conditions for using the Forecut fashion trend forecasting website.'),
                  ('privacy.html', 'Privacy Policy · Forecut', 'How Forecut collects, uses and protects information, in line with Indian data protection law.')]:
@@ -30,18 +30,20 @@ for _h in HD.HUBS:
     for a in _h['articles']:
         pages[a['slug'] + '.html'] = (a['title'] + ' | Forecut ' + _h['eb'], a['desc'], a['slug'] + '.html')
         ARTS[a['slug'] + '.html'] = dict(a, hero=_pick(a['img']), date=HD.DATE)
+import regions_data as RG
+for _f, (_t, _d) in RG.PAGES.items(): pages[_f] = (_t, _d, _f)
 OVR = {
- 'index.html': ('Forecut | Fashion Trend Forecasting for India 2026–2028',
-   "Forecut is India's detail-level trend forecasting platform, combining expert research with data to show what's emerging, rising, peaking and fading, and when to act."),
- 'india.html': ('India Fashion Forecast 2026–28 | Forecut',
+ 'index.html': ('Forecut | Global Fashion Trend Forecasting by Region 2026–2028',
+   "Forecut is a global, detail-level fashion trend forecasting platform: SS, Pre-Fall, AW and Resort read for six regions, showing what's emerging, rising, peaking and fading, and when to act."),
+ 'india.html': ('India Market Fashion Forecast 2026–28 | Forecut Asia',
    'Season-by-season forecasts for Indian fashion, Festive 26 to Festive 28: sarees, lehengas, kurtas, menswear, footwear, fabrics and crafts, with rupee price guides.'),
  'reports.html': ('Trend Reports | Forecut',
-   'Ready-to-use trend reports for Indian fashion: core item updates, design capsules, colour forecasts with Pantone TCX, sourcing guides and brand watch, with PDF downloads.'),
+   'Ready-to-use global trend reports: core item updates, design capsules, colour forecasts with Pantone TCX, sourcing guides, brand watch and India market reports, with PDF downloads.'),
  'journal.html': ('Journal | Forecut',
-   'Expert analysis of Indian and global fashion trends: festive and wedding wear, handloom, footwear, Gen Z fusion and colour, with practical next steps for brands.'),
+   'Expert analysis of global fashion trends by region: runway directions, regional markets, fabrics, footwear, colour and India festive wear, with practical next steps for brands.'),
  'about.html': ('About Us | Forecut',
-   'Forecut is an independent fashion trend forecasting company for India, combining expert research with AI and data to help brands, designers and manufacturers plan ahead.'),
- 'contact.html': ('Contact | Forecut', 'Contact Forecut at hello@forecut.in for questions, partnerships and enterprise enquiries about fashion trend forecasting for India.'),
+   'Forecut is an independent global fashion trend forecasting company, combining expert research with AI and data to help brands, designers and manufacturers in every region plan ahead.'),
+ 'contact.html': ('Contact | Forecut', 'Contact Forecut at hello@forecut.in for questions, partnerships and enterprise enquiries about global fashion trend forecasting.'),
  'terms.html': ('Terms & Conditions | Forecut', 'Terms and conditions for using the Forecut fashion trend forecasting website and reports.'),
  'privacy.html': ('Privacy Policy | Forecut', 'How Forecut collects, uses and protects information, including analytics and advertising cookies.'),
 }
@@ -54,7 +56,7 @@ for _code, _report in json.load(open('india_season_reports.json'))['seasons'].it
 pages['india-reference-library.html'] = ('India Extended Reference Library | Forecut', 'Archived India season detail library and complete illustrated reference reports.', 'india-reference-library.html')
 org = {"@context": "https://schema.org", "@graph": [
   {"@type": "Organization", "@id": BASE + "#org", "name": "Forecut", "url": BASE, "logo": BASE + "favicon-192.png", "email": "hello@forecut.in", "sameAs": SO.SAME_AS,
-   "description": "India's detail-level fashion trend forecasting platform, combining expert research with data.", "slogan": "Know the next detail before it trends.", "foundingDate": "2026", "contactPoint": {"@type": "ContactPoint", "email": "hello@forecut.in", "contactType": "customer support", "areaServed": "IN", "availableLanguage": "en"}, "areaServed": "IN"},
+   "description": "Global, detail-level fashion trend forecasting platform for designers, brands and manufacturers, with regional forecasts for Asia, Europe, the Americas, Africa and Oceania.", "slogan": "Know the next detail before it trends.", "foundingDate": "2026", "contactPoint": {"@type": "ContactPoint", "email": "hello@forecut.in", "contactType": "customer support", "areaServed": "Worldwide", "availableLanguage": "en"}, "areaServed": "Worldwide"},
   {"@type": "WebSite", "@id": BASE + "#site", "name": "Forecut", "alternateName": ["Forecut India", "forecut.in"], "url": BASE, "publisher": {"@id": BASE + "#org"}, "inLanguage": "en-IN"}]}
 for _fn, (_t, _d) in OVR.items():
     if _fn in pages: pages[_fn] = (_t, _d, pages[_fn][2])
@@ -76,11 +78,11 @@ def share_img(fn):
     if m: return m.group(1), 800, 800
     return 'og-image.png', 1200, 630
 TAB = '<style>.fctab{display:none}@media (max-width:760px){body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))!important}\n.fctab{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb,#fffcf7 92%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid #e3d9cc;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}\n.fctab a{display:grid;justify-items:center;gap:2px;text-decoration:none;color:#6e6259;font:600 10.5px "DM Sans",system-ui,sans-serif;padding:4px 0;border-radius:10px}\n.fctab svg{width:22px;height:22px}.fctab a[aria-current="page"]{color:#1f3d33}.fctab a[aria-current="page"] svg{transform:translateY(-1px)}\n.fctab a[aria-current="page"]::after{content:"";width:18px;height:3px;border-radius:3px;background:#b4532a;margin-top:1px}\n.scrim:not([hidden])~.fctab,body:has(.scrim:not([hidden])) .fctab,body:has(#tscrim:not([hidden])) .fctab{display:none}}\n@media (max-width:760px) and (prefers-color-scheme:dark){.fctab{background:color-mix(in srgb,#1e1a17 92%,transparent);border-color:#352d27}.fctab a{color:#b3a698}.fctab a[aria-current="page"]{color:#f2ebe2}}\n@media print{.fctab{display:none!important}}</style>'
-NAV = '<nav class="fctab" aria-label="App navigation"><a href="/" data-m="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</a><a href="/india.html" data-m="india"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M5.5 6.5c3.5 2.5 9.5 2.5 13 0M5.5 17.5c3.5-2.5 9.5-2.5 13 0"/></svg>India</a><a href="/aw26.html" data-m="seasons"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Seasons</a><a href="/reports.html" data-m="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg>Reports</a><a href="/account.html#saved" data-m="saved"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.3-9-8.6C1.6 8.2 3.6 5 6.8 5c1.9 0 3.2 1 4.2 2.3C12 6 13.3 5 15.2 5c3.2 0 5.2 3.2 3.8 6.4C17 15.7 12 20 12 20z"/></svg>Saved</a></nav>'
+NAV = '<nav class="fctab" aria-label="App navigation"><a href="/" data-m="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</a><a href="/regions.html" data-m="regions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M5.5 6.5c3.5 2.5 9.5 2.5 13 0M5.5 17.5c3.5-2.5 9.5-2.5 13 0"/></svg>Regions</a><a href="/aw26.html" data-m="seasons"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Seasons</a><a href="/reports.html" data-m="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg>Reports</a><a href="/account.html#saved" data-m="saved"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.3-9-8.6C1.6 8.2 3.6 5 6.8 5c1.9 0 3.2 1 4.2 2.3C12 6 13.3 5 15.2 5c3.2 0 5.2 3.2 3.8 6.4C17 15.7 12 20 12 20z"/></svg>Saved</a></nav>'
 REPORT_FILES = set()
 def tab_for(fn):
     if fn == 'index.html': return 'home'
-    if fn in ('india.html','india-festive-26.html','india-summer-27.html','india-festive-27.html','india-summer-28.html','india-festive-28.html','india-reference-library.html'): return 'india'
+    if fn in ('india.html','india-festive-26.html','india-summer-27.html','india-festive-27.html','india-summer-28.html','india-festive-28.html','india-reference-library.html','regions.html','resort-27.html','pre-fall-27.html') or fn.startswith('region-'): return 'regions'
     if fn[:4] in ('aw26', 'ss27', 'aw27', 'ss28', 'aw28'): return 'seasons'
     if fn == 'account.html': return 'saved'
     if fn == 'reports.html' or fn.startswith(('core-item', 'capsule', 'india-')): return 'reports'
@@ -178,7 +180,7 @@ if not os.environ.get('ONLY') or os.environ.get('SITEMAP'):
             ('Hubs', ['couture.html', 'fabrics.html', 'colour.html', 'reports.html', 'journal.html']),
             ('Reports and articles', [f for f in pages if f not in ('index.html', 'india.html', 'about.html', 'contact.html', 'terms.html', 'privacy.html', 'account.html', 'couture.html', 'fabrics.html', 'colour.html', 'reports.html', 'journal.html') and f[:-5] not in SEAS]),
             ('About', ['about.html', 'contact.html'])]
-    _l = ['# Forecut', '', '> Forecut (forecut.in) is an India-focused fashion trend forecasting platform. It tracks garment, footwear, fabric and detail trends season by season (AW26 to AW28, plus Indian Festive and Summer seasons) and marks each one emerging, rising, peaking or fading, with runway, fabric, couture and colour reports.', '',
+    _l = ['# Forecut', '', '> Forecut (forecut.in) is a global fashion trend forecasting platform. It tracks garment, footwear, fabric and detail trends across the international seasons (Spring/Summer, Pre-Fall, Autumn/Winter, Resort/Cruise; AW26 to AW28), reads them for six regions (Asia, Europe, North America, South America, Africa, Oceania) with local timing and market preferences, and includes India market seasons and marks each one emerging, rising, peaking or fading, with runway, fabric, couture and colour reports.', '',
           'Content is written by Forecut Editorial and summarises public sources with links. Please cite forecut.in and link the page you use. Contact: hello@forecut.in.', '',
           'Social: ' + ', '.join(SO.SAME_AS), '']
     for g, fs in _grp:

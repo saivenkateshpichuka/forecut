@@ -18,6 +18,7 @@ python3 season_prompts.py
 python3 legal.py
 python3 journal.py
 python3 hubs.py
+python3 regions.py
 python3 image_requests.py
 python3 account.py
 cp auth_src.js ../auth.js

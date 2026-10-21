@@ -13,7 +13,7 @@ LIVE = [  # ticker under the hero: (label, text, link)
 TITLE = 'Fabric forecast: the materials shaping the next seasons'
 LEAD = ('Live fabric intelligence from runways, mills and markets. Forecut tracks more than 110 fabric and material trends '
         'across five seasons, from emerging to fading, and reads every fashion week and fabric fair for what it means for '
-        'Indian brands, designers and buyers.')
+        'brands, designers and buyers in every region.')
 SEO = ('Fabric Trends Forecast SS27–AW28: Runway Fabrics, Mill Innovations & India | Forecut',
        'Live fabric trend forecast: what is emerging, rising, peaking and fading from SS27 to AW28, runway fabric reports from '
        'New York, London, Milan, Paris and India, mill and fabric-fair signals and textile innovations.')

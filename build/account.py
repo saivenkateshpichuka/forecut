@@ -53,7 +53,7 @@ BODY = f'''<div class="acc" id="acc">
   <div class="row"><div class="av" id="av"></div><div><b id="mn"></b><small id="mm"></small></div></div>
   <div class="plan"><span class="tg">Early access</span><b style="font:700 16px DM Sans,sans-serif;display:block">Full access, complimentary</b><p>Every season is unlocked for you, including AW27, SS28, AW28 and India Summer 27 to Festive 28, plus the India forecast, reports and PDF downloads. Early members keep the launch price.</p></div>
   <p class="msg" id="vmsg"></p>
-  <div class="qk"><a href="india.html">India forecast</a><a href="aw26.html">AW26</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a></div>
+  <div class="qk"><a href="regions.html">Regions</a><a href="india.html">India</a><a href="aw26.html">AW26</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a></div>
   <button class="go" type="button" id="out" style="background:transparent;color:var(--ink);border:1px solid var(--grid)">Sign out</button>
  </div>
 </div>

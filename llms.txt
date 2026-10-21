@@ -1,6 +1,6 @@
 # Forecut
 
-> Forecut (forecut.in) is an India-focused fashion trend forecasting platform. It tracks garment, footwear, fabric and detail trends season by season (AW26 to AW28, plus Indian Festive and Summer seasons) and marks each one emerging, rising, peaking or fading, with runway, fabric, couture and colour reports.
+> Forecut (forecut.in) is a global fashion trend forecasting platform. It tracks garment, footwear, fabric and detail trends across the international seasons (Spring/Summer, Pre-Fall, Autumn/Winter, Resort/Cruise; AW26 to AW28), reads them for six regions (Asia, Europe, North America, South America, Africa, Oceania) with local timing and market preferences, and includes India market seasons and marks each one emerging, rising, peaking or fading, with runway, fabric, couture and colour reports.
 
 Content is written by Forecut Editorial and summarises public sources with links. Please cite forecut.in and link the page you use. Contact: hello@forecut.in.
 
@@ -13,15 +13,15 @@ Social: https://www.instagram.com/forecut.in/, https://www.linkedin.com/company/
 - [AW27 Fashion Trend Forecast | Forecut](https://forecut.in/aw27.html): AW27 trend forecast: Early outlook. SS27 signals carried into winter: waisted outerwear, handcraft on knits, quiet structure and warmer earth tones, with luminous blue deepening for the cold season.
 - [SS28 Fashion Trend Forecast | Forecut](https://forecut.in/ss28.html): SS28 trend forecast: Long-range outlook. Structured clarity and easy movement: fewer, better pieces with performance comfort for commuting, anchored by a warm earth orange.
 - [AW28 Fashion Trend Forecast | Forecut](https://forecut.in/aw28.html): AW28 trend forecast: Long-range outlook. Functional tailoring and technical wool for winter, hidden closures and hybrid boots, with radiant earth deepening into rust and brick.
-- [India Fashion Forecast 2026–28 | Forecut](https://forecut.in/india.html): Season-by-season forecasts for Indian fashion, Festive 26 to Festive 28: sarees, lehengas, kurtas, menswear, footwear, fabrics and crafts, with rupee price guides.
+- [India Market Fashion Forecast 2026–28 | Forecut Asia](https://forecut.in/india.html): Season-by-season forecasts for Indian fashion, Festive 26 to Festive 28: sarees, lehengas, kurtas, menswear, footwear, fabrics and crafts, with rupee price guides.
 
 ## Hubs
 
 - [Haute Couture Worldwide: Couture Weeks, Houses, Techniques & Indian Couture | Forecut](https://forecut.in/couture.html): Explore couture worldwide: Paris haute couture, Indian bridal couture, couture capitals, the couture calendar, gowns, bespoke menswear, kids occasion wear, techniques, news and articles.
 - [Fabric Trends Forecast SS27–AW28: Runway Fabrics, Mill Innovations & India | Forecut](https://forecut.in/fabrics.html): Live fabric trend forecast: what is emerging, rising, peaking and fading from SS27 to AW28, runway fabric reports from New York, London, Milan, Paris and India, mill and fabric-fair signals and…
 - [Colour Trends & Forecasts with Pantone TCX | Forecut](https://forecut.in/colour.html): Season colour palettes from AW26 to AW28 and India Festive & Summer, each with HEX and nearest Pantone TCX codes, plus colour guides for designers.
-- [Trend Reports | Forecut](https://forecut.in/reports.html): Ready-to-use trend reports for Indian fashion: core item updates, design capsules, colour forecasts with Pantone TCX, sourcing guides and brand watch, with PDF downloads.
-- [Journal | Forecut](https://forecut.in/journal.html): Expert analysis of Indian and global fashion trends: festive and wedding wear, handloom, footwear, Gen Z fusion and colour, with practical next steps for brands.
+- [Trend Reports | Forecut](https://forecut.in/reports.html): Ready-to-use global trend reports: core item updates, design capsules, colour forecasts with Pantone TCX, sourcing guides, brand watch and India market reports, with PDF downloads.
+- [Journal | Forecut](https://forecut.in/journal.html): Expert analysis of global fashion trends by region: runway directions, regional markets, fabrics, footwear, colour and India festive wear, with practical next steps for brands.
 
 ## Reports and articles
 
@@ -96,6 +96,15 @@ Social: https://www.instagram.com/forecut.in/, https://www.linkedin.com/company/
 - [The colours of Indian celebrations | Forecut Colour](https://forecut.in/colour-indian-festive-colours.html): How colour works across Indian weddings and festivals, and how modern palettes are evolving.
 - [Designing colour for Indian skin tones | Forecut Colour](https://forecut.in/colour-skin-tones.html): Undertones, contrast and how to present colour so it flatters a wide range of customers.
 - [Building a colour story for your collection | Forecut Colour](https://forecut.in/colour-building-a-colour-story.html): A step-by-step method from inspiration to a production-ready palette with TCX codes.
+- [Global Fashion Forecast by Region: Asia, Europe, Americas, Africa, Oceania | Forecut](https://forecut.in/regions.html): Global fashion trend forecasting by region: seasonal trends, climate, market preferences and fashion weeks for Asia, Europe, North America, South America, Africa and Oceania.
+- [Resort / Cruise 2027 Trend Report | Forecut](https://forecut.in/resort-27.html): Resort 2027 trends from the Cruise shows (Chanel, Dior, Gucci, Louis Vuitton) and Australian Fashion Week, with regional timing for each market.
+- [Pre-Fall 2027 Trend Outlook | Forecut](https://forecut.in/pre-fall-27.html): Pre-Fall 2027 outlook: the transitional trends that bridge SS27 and AW27, with in-store timing by region.
+- [Asia Fashion Trend Forecast: Seasons, Markets & Fashion Weeks | Forecut](https://forecut.in/region-asia.html): Asia fashion forecast: regional season directions, climate, market preferences, fashion weeks and the global trends to lead with, SS27 to AW28.
+- [Europe Fashion Trend Forecast: Seasons, Markets & Fashion Weeks | Forecut](https://forecut.in/region-europe.html): Europe fashion forecast: regional season directions, climate, market preferences, fashion weeks and the global trends to lead with, SS27 to AW28.
+- [North America Fashion Trend Forecast: Seasons, Markets & Fashion Weeks | Forecut](https://forecut.in/region-north-america.html): North America fashion forecast: regional season directions, climate, market preferences, fashion weeks and the global trends to lead with, SS27 to AW28.
+- [South America Fashion Trend Forecast: Seasons, Markets & Fashion Weeks | Forecut](https://forecut.in/region-south-america.html): South America fashion forecast: regional season directions, climate, market preferences, fashion weeks and the global trends to lead with, SS27 to AW28.
+- [Africa Fashion Trend Forecast: Seasons, Markets & Fashion Weeks | Forecut](https://forecut.in/region-africa.html): Africa fashion forecast: regional season directions, climate, market preferences, fashion weeks and the global trends to lead with, SS27 to AW28.
+- [Oceania Fashion Trend Forecast: Seasons, Markets & Fashion Weeks | Forecut](https://forecut.in/region-oceania.html): Oceania fashion forecast: regional season directions, climate, market preferences, fashion weeks and the global trends to lead with, SS27 to AW28.
 - [Festive 26 India Fashion Forecast | Forecut](https://forecut.in/india-festive-26.html): Festive made easy: pre-draped sarees, kurta co-ords, cape and light organza lehengas, velvet and brocade menswear, Kolhapuris. Design details, prices, designer stories and illustrated PDF.
 - [Summer 27 India Fashion Forecast | Forecut](https://forecut.in/india-summer-27.html): Build around breathable separates, fluid drapes and light craft. Reserve sheer, playful and experimental surfaces for small capsules rather than making them the whole range.
 - [Festive 27 India Fashion Forecast | Forecut](https://forecut.in/india-festive-27.html): Plan festive capsules around lighter embellishment, adaptable separates and rich textile character. Treat sculptural metallic work as an experimental premium edge rather than a volume assumption.
@@ -105,5 +114,5 @@ Social: https://www.instagram.com/forecut.in/, https://www.linkedin.com/company/
 
 ## About
 
-- [About Us | Forecut](https://forecut.in/about.html): Forecut is an independent fashion trend forecasting company for India, combining expert research with AI and data to help brands, designers and manufacturers plan ahead.
-- [Contact | Forecut](https://forecut.in/contact.html): Contact Forecut at hello@forecut.in for questions, partnerships and enterprise enquiries about fashion trend forecasting for India.
+- [About Us | Forecut](https://forecut.in/about.html): Forecut is an independent global fashion trend forecasting company, combining expert research with AI and data to help brands, designers and manufacturers in every region plan ahead.
+- [Contact | Forecut](https://forecut.in/contact.html): Contact Forecut at hello@forecut.in for questions, partnerships and enterprise enquiries about global fashion trend forecasting.

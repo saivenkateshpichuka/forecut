@@ -13,8 +13,8 @@ def pdf_link(code):
  m=PDFS.get(code)
  return '<a class="button accent" href="'+E(m['file'] if m else '#',quote=True)+'" download>Download season PDF'+(' · '+str(m['pages'])+' pages' if m else '')+' ↓</a>'
 def head(title):return '<!doctype html><html lang="en-IN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+E(title)+'</title><link rel="stylesheet" href="fonts/fonts.css"><style>'+CSS+'</style></head><body>'
-def nav(code=None):return '<header class="bar"><a class="back" href="/">Forecut.</a><nav class="seasons" aria-label="India seasons"><a href="india.html"'+(' aria-current="page"' if code is None else '')+'>India</a>'+''.join('<a href="'+r['file']+'"'+(' aria-current="page"' if c==code else '')+'>'+E(c)+'</a>' for c,r in SEASONS.items())+'</nav></header>'
-def footer():return '<footer class="footer"><a href="india.html">India seasons</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a><a href="about.html">About Forecut</a><a href="contact.html">Contact</a><p>© 2026 Forecut · Original editorial forecasts for Indian collection planning.</p></footer>'
+def nav(code=None):return '<header class="bar"><a class="back" href="/">Forecut.</a><nav class="seasons" aria-label="India seasons"><a href="region-asia.html">Asia region</a><a href="india.html"'+(' aria-current="page"' if code is None else '')+'>India</a>'+''.join('<a href="'+r['file']+'"'+(' aria-current="page"' if c==code else '')+'>'+E(c)+'</a>' for c,r in SEASONS.items())+'</nav></header>'
+def footer():return '<footer class="footer"><a href="india.html">India seasons</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a><a href="about.html">About Forecut</a><a href="contact.html">Contact</a><p>© 2026 Forecut · Global fashion forecasting. India market forecasts are part of the <a href=\"region-asia.html\">Asia region</a>.</p></footer>'
 def sources_for(r):
  ids=set()
  for s in r['stories']:ids.add(s['source'])

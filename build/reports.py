@@ -256,7 +256,7 @@ for kind, d in [('Global Trend Report', 'Forecut\'s worldwide outlook: what is r
     ps = [p for p in PAGES if p[3] == kind]
     hub += f'<section class="sec"><h2>{E(kind)}{"s" if len(ps) > 1 else ""}</h2>' + (f'<p class="sub">{E(d)}</p>' if d else '') + f'<div class="rgrid">{"".join(rcard(p) for p in ps)}</div></section>'
 page('reports.html', 'Forecut Reports · Indian fashion trend reports', hub)
-PAGES.insert(0, ('reports.html', 'Forecut Reports', 'Indian fashion trend reports: core item updates, design capsules, colour forecast and textile and craft sourcing guide.', 'Hub', 'pre-draped-saree-gowns'))
+PAGES.insert(0, ('reports.html', 'Forecut Reports', 'Global fashion trend reports, market data and marketing trends, plus India market reports: core item updates, design capsules, colour forecast and textile and craft sourcing guide.', 'Hub', 'pre-draped-saree-gowns'))
 json.dump([[p[0], p[1], p[2]] for p in PAGES], open('reports_index.json', 'w'), ensure_ascii=False, indent=0)
 print('reports ok', len(PAGES))
 

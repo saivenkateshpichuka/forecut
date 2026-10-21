@@ -83,7 +83,14 @@ for si, s in enumerate(SEASONS):
               + '</div>')
     LOCKED = [z.lower() for z in SITE.get('locked', [])]
     snav = ''.join(f'<a href="{URLS.get(x, "#")}"{" aria-current=\"page\"" if x == s else ""}{(" class=\"lockt\" data-stage=\"" + E(META[x]["stage"]) + "\"") if x in LOCKED else ""}>{META[x]["code"]}<small>{(LOCKSVG + "Opens at launch") if x in LOCKED else E(META[x]["stage"])}</small></a>' for x in SEASONS)
-    snav = f'<a href="{"india.html" if STATIC else "https://forecut.in/india.html"}">India<small>Festive &amp; wedding</small></a>' + snav
+    _ex = {'aw26': ('resort-27.html', 'Resort 27', 'Cruise · Nov–Jan'), 'ss27': ('pre-fall-27.html', 'Pre-Fall 27', 'Outlook · May–Jul')}
+    for _k, (_u, _c, _t) in _ex.items():
+        _a = f'>{META[_k]["code"]}<small>'
+        _i = snav.find(_a)
+        if _i > -1:
+            _j = snav.find('</a>', _i) + 4
+            snav = snav[:_j] + f'<a href="{_u if STATIC else "https://forecut.in/" + _u}">{_c}<small>{_t}</small></a>' + snav[_j:]
+    snav = f'<a href="{"regions.html" if STATIC else "https://forecut.in/regions.html"}">Regions<small>6 regions · India</small></a>' + snav
     themes = ''.join(f'<article class="theme" tabindex="0" role="button" aria-haspopup="dialog" data-i="{ti}"><div class="tart" data-pat="{p}" data-bg="{bg}" data-fg="{fg}" data-flat="{E(fl)}" data-title="{E(t)}"{(chr(32) + 'data-full="img/theme-' + s + '-' + islug(t) + '.webp"') if ('theme-' + s + '-' + islug(t)) in IMGS else ""}></div><div class="tbody"><h3>{E(t)}</h3><p>{E(d)}</p><ul class="kw">{"".join(f"<li>{E(k)}</li>" for k in kw)}</ul><span class="more">Explore theme →</span></div></article>' for ti, (t, d, p, bg, fg, fl, kw) in enumerate(m['themes']))
     from theme_data import T as TDATA
     tdj = []

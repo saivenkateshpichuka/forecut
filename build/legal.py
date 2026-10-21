@@ -32,28 +32,29 @@ footer a{{color:var(--muted)}} footer .fl{{display:flex;gap:16px;flex-wrap:wrap}
 :focus-visible{{outline:2px solid var(--chalk);outline-offset:3px}}
 </style></head><body><div class="wrap">
 <nav><a class="logo" href="/"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/><path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="#b4532a" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Forecut</a>
-<div class="links"><a href="/">Home</a><a href="india.html">India forecast</a><a href="aw26.html">Seasons</a><a href="couture.html">Couture</a><a href="fabrics.html">Fabrics</a><a href="colour.html">Colour</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a></div></nav>
+<div class="links"><a href="/">Home</a><a href="regions.html">Regions</a><a href="aw26.html">Seasons</a><a href="couture.html">Couture</a><a href="fabrics.html">Fabrics</a><a href="colour.html">Colour</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a></div></nav>
 '''
 FOOT = '''<footer><span>© 2026 Forecut · <a href="mailto:hello@forecut.in">hello@forecut.in</a></span>
 <span class="fl"><a href="couture.html">Couture</a><a href="fabrics.html">Fabrics</a><a href="colour.html">Colour</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="terms.html">Terms &amp; Conditions</a><a href="privacy.html">Privacy Policy</a></span></footer>
 </div></body></html>
 '''
 P = {}
-P['about.html'] = ('About Forecut · Fashion Trend Forecasting for India', '''
+P['about.html'] = ('About Forecut · Global Fashion Trend Forecasting', '''
 <div class="eb">About</div><h1>Forecasting fashion, one detail at a time.</h1>
-<p class="lead">Forecut is a detail-level fashion trend forecasting platform built for the Indian market. We help designers, brands and manufacturers decide which details to develop next, and when.</p>
+<p class="lead">Forecut is a global, detail-level fashion trend forecasting platform. We help designers, brands and manufacturers in any country decide which details to develop next, when, and for which market.</p>
 <h2>Why Forecut exists</h2>
-<p>Most trend reports describe a mood. The people who make clothes need specifics: which collar, which trim, which fabric, and when it will peak. Indian businesses also plan around their own calendar of festivals, weddings and summer, which global reports rarely reflect.</p>
-<p>Forecut brings both together. We track garments, footwear, fabrics, embroidery, trims and colours down to individual construction details, and mark each one as emerging, rising, peaking or fading across India's festive windows and the global seasons through 2028.</p>
+<p>Most trend reports describe a mood. The people who make clothes need specifics: which collar, which trim, which fabric, and when it will peak. And every market sells on its own calendar and climate: a trend lands in Sydney six months after Paris, sells lighter in Lagos and Jakarta, and peaks around Diwali, Ramadan, Lunar New Year or Black Friday.</p>
+<p>Forecut brings both together. We track garments, footwear, fabrics, embroidery, trims and colours down to individual construction details, mark each one as emerging, rising, peaking or fading across the international seasons (Spring/Summer, Pre-Fall, Autumn/Winter and Resort) through 2028, and read each season for six regions.</p>
 <h2>What we offer</h2>
-<ul><li><b>India forecast:</b> ethnic and western wear, footwear, handloom weaves, embroidery and trims, planned around the Indian calendar.</li>
-<li><b>Global seasons:</b> detail-level reports from AW26 to AW28, with themes, colours of the year and price guides in rupees.</li>
+<ul><li><b>Global seasons:</b> detail-level reports from AW26 to AW28, plus Resort and Pre-Fall, with themes and colours of the year.</li>
+<li><b>Regional forecasts:</b> Asia, Europe, North America, South America, Africa and Oceania, with local timing, climate, market preferences and fashion weeks.</li>
+<li><b>India market forecast:</b> ethnic and western wear, handloom, embroidery and trims around the Indian festive calendar, as part of the Asia region.</li>
 <li><b>Practical detail cards:</b> design notes, fabric and trim guidance, and downloadable cards for teams.</li>
 <li><b>Monthly updates:</b> forecasts are reviewed and refreshed every month.</li></ul>
 <h2>How we work</h2>
 <p>We review public runway coverage, trade and retail reporting, street style and search interest, then use AI-assisted analysis to identify and track specific details. Every forecast is curated and written in our own words. Brands and designers are named only where public sources report them.</p>
 <h2>Where we are</h2>
-<p>Forecut is an independent platform made in India. It is currently in an early-access testing phase, with full access available at no cost. Your feedback directly shapes the launch.</p>
+<p>Forecut is an independent, global platform, made in India. It is currently in an early-access testing phase, with full access available at no cost. Your feedback directly shapes the launch.</p>
 <div class="box"><b>Get in touch</b><br>Questions, feedback or partnership ideas: <a href="mailto:hello@forecut.in">hello@forecut.in</a></div>''')
 P['contact.html'] = ('Contact Forecut', '''
 <div class="eb">Contact</div><h1>Get in touch.</h1>

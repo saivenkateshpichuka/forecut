@@ -384,7 +384,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
       Forecut
     </a>
     <div class="navlinks" id="navlinks">
-      <a href="https://forecut.in/india.html">India</a>
+      <a href="https://forecut.in/regions.html">Regions</a>
       <a href="#seasons">Seasons</a>
       <a href="https://forecut.in/couture.html">Couture</a>
       <a href="https://forecut.in/fabrics.html">Fabrics</a>
@@ -399,11 +399,11 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
 
   <header class="hero hx" id="top">
     <div class="hxt">
-      <span class="hxlive"><i></i>Live forecast · Festive &amp; wedding 2026</span>
+      <span class="hxlive"><i></i>Live forecast · SS27 runways &amp; Resort 27</span>
       <h1>Know the next <span class="rot" aria-live="polite"><span class="rw">collar</span></span><br>before it trends.</h1>
-      <p class="lede">Detail-level trend forecasting for Indian brands, designers and manufacturers: garments, footwear, fabrics, embroidery and trims, ready to sketch, spec and sample, with prices in rupees.</p>
+      <p class="lede">Global, detail-level trend forecasting for designers, brands and manufacturers in every region: garments, footwear, fabrics, embroidery and trims across Spring/Summer, Pre-Fall, Autumn/Winter and Resort, read for Asia, Europe, the Americas, Africa and Oceania.</p>
       <div class="cta">
-        <a class="btn" href="https://forecut.in/india.html">Explore the India forecast</a>
+        <a class="btn" href="https://forecut.in/regions.html">Explore by region</a>
         <a class="btn ghost" href="https://forecut.in/reports.html">See the reports</a>
       </div>
       <p class="beta"><b>Free during early access.</b> <a href="https://forecut.in/account.html#signup">Create a free account</a> · Feedback: <a href="mailto:hello@forecut.in?subject=Forecut%20feedback">hello@forecut.in</a></p>
@@ -412,21 +412,17 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
   </header>
   <div class="ticker" aria-hidden="true"><div class="tk"><!--TICKER--></div></div>
 
-  <section id="india" aria-labelledby="ih">
+  <section id="regions" aria-labelledby="ih">
     <div class="india">
       <div class="itext">
-        <span class="mono eyebrow">India forecast 2026–28</span>
-        <h2 id="ih">Made for the Indian market.</h2>
-        <p>Sarees, lehengas, kurtas, bandhgalas, juttis and Kolhapuris, handloom weaves, chikankari, mirror work and gota, plus the western wear Gen Z India is buying. Planned around the Indian calendar, from Diwali and wedding season to summer and the next festive.</p>
-        <div class="istats"><div><b>103</b><span>India details</span></div><div><b>8</b><span>Categories</span></div><div><b>3</b><span>Festive windows</span></div><div><b>₹</b><span>Price guides</span></div></div>
-        <a class="btn" href="https://forecut.in/india.html">Open the India forecast →</a>
+        <span class="mono eyebrow">Global forecast · 6 regions</span>
+        <h2 id="ih">One forecast. Six regional readings.</h2>
+        <p>Every trend is tracked against the international seasons, then read for each region's climate, calendar and buyers: when it reaches stores, which version sells, and which markets lead. India, China, the Gulf, Brazil, Nigeria, Australia and more.</p>
+        <div class="istats"><div><b>6</b><span>Regions</span></div><div><b>20</b><span>Key markets</span></div><div><b>4</b><span>Season types</span></div><div><b>N + S</b><span>Hemispheres</span></div></div>
+        <a class="btn" href="https://forecut.in/regions.html">Explore the regions →</a>
       </div>
       <ul class="ithemes">
-        <li><b>Handloom quiet luxury</b><span>Chanderi, Maheshwari, khadi, tussar</span></li>
-        <li><b>Indigo, blue and white</b><span>The lead colour story at Lakmé Fashion Week 2026</span></li>
-        <li><b>Festive made easy</b><span>Pre-draped sarees, co-ords, cape lehengas</span></li>
-        <li><b>Indian craft goes global</b><span>Kolhapuris, mirror work, Rabari, kantha</span></li>
-        <li><b>Gen Z fusion</b><span>Kurtas with jeans, sarees with sneakers</span></li>
+        <li><b><a href="https://forecut.in/region-asia.html" style="color:inherit">Asia</a></b><span>China, Japan &amp; South Korea, India, Southeast Asia, Middle East (GCC)</span></li><li><b><a href="https://forecut.in/region-europe.html" style="color:inherit">Europe</a></b><span>France, Italy &amp; UK, Nordics, Southern Europe</span></li><li><b><a href="https://forecut.in/region-north-america.html" style="color:inherit">North America</a></b><span>United States, Canada, Mexico</span></li><li><b><a href="https://forecut.in/region-south-america.html" style="color:inherit">South America</a></b><span>Brazil, Argentina &amp; Chile, Colombia &amp; Andean</span></li><li><b><a href="https://forecut.in/region-africa.html" style="color:inherit">Africa</a></b><span>Nigeria &amp; West Africa, South Africa, North Africa, East Africa</span></li><li><b><a href="https://forecut.in/region-oceania.html" style="color:inherit">Oceania</a></b><span>Australia, New Zealand</span></li>
       </ul>
     </div>
   </section>
@@ -435,7 +431,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
   <section id="seasons" aria-labelledby="sh">
     <div class="sechead">
       <div><span class="mono eyebrow">Global seasons</span><h2 id="sh">What the world is wearing, season by season.</h2></div>
-      <p>Global runway and retail signals that reach Indian stores next: the current season, next season, and long-range outlooks through 2028.</p>
+      <p>Global runway and retail signals: the current season, next season and long-range outlooks through 2028, plus <a href="https://forecut.in/resort-27.html">Resort 27</a> and <a href="https://forecut.in/pre-fall-27.html">Pre-Fall 27</a>.</p>
     </div>
     <div class="tabs" role="tablist" aria-label="Seasons">
       <button class="tab" role="tab" id="t-aw26" aria-controls="p-aw26" aria-selected="true">AW26<small>In stores now</small></button>
@@ -696,7 +692,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
       <div><span class="mono eyebrow">How it works</span><h2 id="mh">From market signal to sample-ready insight.</h2></div>
     </div>
     <div class="method">
-      <div><h3>Signal collection</h3><p>We monitor runway coverage, street style, search interest and retail launches across India and global markets every week.</p></div>
+      <div><h3>Signal collection</h3><p>We monitor runway coverage, street style, search interest and retail launches across Europe, the Americas, Asia, Africa and Oceania every week.</p></div>
       <div><h3>Detail-level analysis</h3><p>AI-assisted analysis identifies construction details, trims and materials, and classifies each as emerging, rising, peaking or fading.</p></div>
       <div><h3>Actionable reports</h3><p>Monthly detail cards with design notes, fabric guidance and pairing recommendations help your team sketch, specify and sample faster.</p></div>
     </div>
@@ -707,7 +703,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
       <div><span class="mono eyebrow">Who it serves</span><h2 id="wh">Built for the people behind every collection.</h2></div>
     </div>
     <div class="who2">
-      <div class="wcard"><b>Fashion designers</b><span>Identify the details worth developing next, and the ones to retire.</span></div><div class="wcard"><b>D2C and retail brands</b><span>Plan drops around the Indian festive and wedding calendar with confidence.</span></div><div class="wcard"><b>Manufacturers and exporters</b><span>Anticipate buyer requests and sample the right construction early.</span></div><div class="wcard"><b>Sourcing and merchandising</b><span>Align fabrics, trims and price points with the season ahead.</span></div><div class="wcard"><b>3D and digital product teams</b><span>Build accurate digital samples from detail-level references.</span></div><div class="wcard"><b>Fashion students and educators</b><span>Learn how trends move, season by season, with real examples.</span></div>
+      <div class="wcard"><b>Fashion designers</b><span>Identify the details worth developing next, and the ones to retire.</span></div><div class="wcard"><b>D2C and retail brands</b><span>Plan drops around each market's own calendar, from Black Friday to Lunar New Year, Ramadan and Diwali.</span></div><div class="wcard"><b>Manufacturers and exporters</b><span>Anticipate buyer requests and sample the right construction early.</span></div><div class="wcard"><b>Sourcing and merchandising</b><span>Align fabrics, trims and price points with the season ahead.</span></div><div class="wcard"><b>3D and digital product teams</b><span>Build accurate digital samples from detail-level references.</span></div><div class="wcard"><b>Fashion students and educators</b><span>Learn how trends move, season by season, with real examples.</span></div>
     </div>
   </section>
 
@@ -716,21 +712,21 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
       <div><span class="mono eyebrow">Plans from launch</span><h2 id="ph">Complimentary today. Plans at launch.</h2></div>
       <p>Forecut is in early access, with full access at no cost. Subscription plans begin at launch, and early-access members retain the launch price shown below.</p>
     </div>
-    <div class="testing"><div><b>Early-access programme · complimentary</b><span>During early access, the complete platform is open: every season, the India forecast, detailed analysis and downloadable detail cards. Your feedback directly informs the launch release.</span></div><a class="btn" href="mailto:hello@forecut.in?subject=Forecut%20feedback">Send feedback</a></div>
+    <div class="testing"><div><b>Early-access programme · complimentary</b><span>During early access, the complete platform is open: every season, all six regional forecasts (including India), detailed analysis and downloadable detail cards. Your feedback directly informs the launch release.</span></div><a class="btn" href="mailto:hello@forecut.in?subject=Forecut%20feedback">Send feedback</a></div>
     <div class="plans">
       <div class="plan">
         <span class="offer">Free</span>
         <h3>Explorer</h3>
         <div class="price">₹0</div>
         <ul><li>One visit to the current season report</li><li>Browse every category and detail</li><li>The Journal and one sample report</li><li>No card needed</li></ul>
-        <a class="btn ghost" href="https://forecut.in/india.html">Explore free now</a>
+        <a class="btn ghost" href="https://forecut.in/regions.html">Explore free now</a>
       </div>
       <div class="plan feat">
         <span class="offer">Launch offer</span>
         <h3>Individual</h3>
         <div class="price">₹1,499 <small>/ year</small></div>
         <p class="per">Per user · one login</p>
-        <ul><li>All seasons: global AW26 to AW28 and India Festive 26 to Festive 28</li><li>Every report: Core Item Updates, Design Capsules, Colour Forecast, Sourcing Guide and Brand Watch</li><li>PDF downloads of every report, and detail cards as PNG or PDF</li><li>Pantone TCX references on every palette</li><li>Monthly trend updates</li></ul>
+        <ul><li>All seasons: global AW26 to AW28, Resort and Pre-Fall, six regional forecasts and India Festive 26 to Festive 28</li><li>Every report: Core Item Updates, Design Capsules, Colour Forecast, Sourcing Guide and Brand Watch</li><li>PDF downloads of every report, and detail cards as PNG or PDF</li><li>Pantone TCX references on every palette</li><li>Monthly trend updates</li></ul>
         <a class="btn" href="#waitlist">Reserve the launch price</a>
       </div>
       <div class="plan">
@@ -771,7 +767,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
     <span>© 2026 Forecut</span>
     <span class="flinks"><a href="https://forecut.in/couture.html">Couture</a> · <a href="https://forecut.in/fabrics.html">Fabrics</a> · <a href="https://forecut.in/colour.html">Colour</a> · <a href="https://forecut.in/reports.html">Reports</a> · <a href="https://forecut.in/journal.html">Journal</a> · <a href="https://forecut.in/about.html">About</a> · <a href="https://forecut.in/contact.html">Contact</a> · <a href="https://forecut.in/terms.html">Terms &amp; Conditions</a> · <a href="https://forecut.in/privacy.html">Privacy Policy</a></span>
     <span><a href="mailto:hello@forecut.in">hello@forecut.in</a></span>
-    <span>Detail-level fashion forecasting · Made in India</span>
+    <span>Global detail-level fashion forecasting · Made in India</span>
   </footer>
 </div>
 
