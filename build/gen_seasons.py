@@ -25,6 +25,14 @@ SITE = json.load(open('site.json')) if os.path.exists('site.json') else {'name':
 if STATIC and SITE.get('static_url'): SITE = dict(SITE, url=SITE['static_url'])
 engine = open('flats.js').read().replace("if (typeof module !== 'undefined') module.exports = Flats;\n", '')
 codes = [META[s]['code'] for s in SEASONS]
+import subprocess as _sp, datetime as _dtm
+def _gitdate(*fs):
+    try:
+        d = _sp.run(['git', 'log', '-1', '--format=%cs', '--', *fs], capture_output=True, text=True).stdout.strip()
+        return _dtm.date.fromisoformat(d).strftime('%-d %b %Y') if d else None
+    except Exception: return None
+RESEARCHED = _gitdate('details.json', 'regions_data.py', 'india_data.py', 'reports_data.py') or _dtm.date.today().strftime('%-d %b %Y')
+REFRESHED = _dtm.date.today().strftime('%-d %b %Y')
 short = {'Womenswear': 'Women', 'Menswear': 'Men', 'Footwear': 'Shoes'}
 for si, s in enumerate(SEASONS):
     m = META[s]
@@ -107,7 +115,8 @@ for si, s in enumerate(SEASONS):
                  f'<div class="cfield"><span class="mono">Colour of the year · {E(c["by"])} {c["year"]}</span><div><h2>{E(c["name"])}</h2><span class="code">{E(c["code"])} · {c["hex"]} approx.</span></div></div>'
                  f'<div class="cart" data-flat="{E(c["flat"])}" data-hex="{c["hex"]}"{deep} role="img" aria-label="{E(c["flat"])} shown in {E(c["name"])}"></div>'
                  f'<div class="cinfo"><p>{E(c["text"])}</p><div class="pairs"><b>Pairs with</b>{pairs}</div></div></article>')
-    basis = ('res', 'Based on published runway and trade research') if m['basis'] == 'research' else ('proj', 'Forecut projection · updates as runway coverage arrives')
+    basis = (('res', 'Observed · in stores and on runways now') if si == 0 else ('res', 'Forecast · based on published runway and trade research')) if m['basis'] == 'research' else ('proj', 'Projection · long-range, updates as runway coverage arrives')
+    basis = (basis[0], basis[1] + f'</p><p class="rdates">Last researched {RESEARCHED} · Data refreshed {REFRESHED} · <a href="method.html">How we forecast</a>')
     rep = {
         '%%ENGINE%%': engine, '%%SECS%%': ''.join(secs), '%%NAV%%': ''.join(nav), '%%SEASONNAV%%': snav,
         '%%THEMES%%': themes, '%%THEMEDATA%%': json.dumps(tdj, ensure_ascii=False).replace('</', '<\\/'), '%%PALETTE%%': pal, '%%COTY%%': coty, '%%HOME%%': HOME,

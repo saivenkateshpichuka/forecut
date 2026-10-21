@@ -22,12 +22,12 @@ RCSS = """<style>
 .ctab2{border:1px solid var(--grid);border-radius:12px;overflow:auto;background:var(--paper-2)}.ctab2 table{border-collapse:collapse;width:100%;min-width:720px;font:14.5px/1.45 "DM Sans",sans-serif}
 .ctab2 th,.ctab2 td{text-align:left;padding:12px 14px;border-top:1px solid var(--grid);vertical-align:top}.ctab2 th{font:700 11.5px "DM Sans",sans-serif;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);background:var(--paper);border-top:0}
 .ctab2 td b{display:block}.glance{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
-.dirb{background:var(--mat,#1f3d33);color:#f5f0e8;border-radius:12px;padding:16px 20px;margin:0 0 16px}.dirb b{display:block;font:700 11.5px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
+.dirb{background:#1f3d33;color:#f5f0e8;border-radius:12px;padding:16px 20px;margin:0 0 16px}.dirb b{display:block;font:700 11.5px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px}
 .dirb li{color:#f5f0e8}.dirb ul{margin:0;padding-left:18px;font-size:15.5px;line-height:1.6}.when{font:600 14px "DM Sans",sans-serif;margin:0 0 12px}.when span{color:var(--chalk)}
 .tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}.tc{text-decoration:none;color:inherit;background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;overflow:hidden}
 .tc .ph{aspect-ratio:1;background:var(--grid);overflow:hidden}.tc .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 20%;display:block}.tc .in{padding:10px 12px 12px}
 .tc b{display:block;font:600 14.5px/1.3 "DM Sans",sans-serif}.tc small{font:12px "DM Sans",sans-serif;color:var(--muted)}.pill2{display:inline-block;font:700 10.5px "DM Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;color:#fff;border-radius:99px;padding:2px 8px;margin-top:6px}
-.pe{background:#2f7d5b}.pr{background:#c8691c}.pp{background:#b4532a}.pf{background:#8a8178}
+.pe{background:#c2410c}.pr{background:#047a45}.pp{background:#f0b000;color:#3d2600!important}.pf{background:#6d4fc2}
 .stabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 0 14px}.stabs::-webkit-scrollbar{display:none}
 .stabs button{all:unset;cursor:pointer;flex:none;font:600 14px "DM Sans",sans-serif;border:1px solid var(--grid);border-radius:10px;padding:9px 14px;background:var(--paper-2);text-align:center}
 .stabs button small{display:block;font:500 11.5px "DM Sans",sans-serif;color:var(--muted)}.stabs button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}.stabs button[aria-pressed="true"] small{color:var(--paper)}
@@ -127,8 +127,31 @@ def season_tabs(r, default='ss27'):
     return f'<div class="stabs" role="group" aria-label="Season">{tabs}</div>{panels}'
 
 
+def lifecycle(r):
+    seen, rows = set(), []
+    for code in ('ss27', 'aw27', 'aw26'):
+        for t in trends_for(r, code, 6):
+            if t[3]['name'] in seen or len(rows) >= 10: continue
+            seen.add(t[3]['name']); rows.append(t)
+    PC = {'e': 'em', 'r': 'ri', 'p': 'pk', 'f': 'fd'}
+    body = ''.join('<tr><th scope="row">' + E(x['name']) + f'<small>{E(c)}</small></th>' + ''.join(
+        f'<td><span class="lp {PC[ch]}">{STN[ch]}</span></td>' if ch in STN else '<td class="na">–</td>' for ch in x['life']) + '</tr>' for _, d, c, x, st, p in rows)
+    return ('<div class="lwrap"><table class="ltab"><thead><tr><th scope="col">Detail</th>' + ''.join(f'<th scope="col">{c.upper()}</th>' for c in CODES) + '</tr></thead><tbody>' + body + '</tbody></table></div>'
+            + f'<p class="sub" style="margin-top:10px">Picked for {E(r["name"])}\'s climate and buyers. Stages follow the international seasons; for when each season reaches stores locally, see the season tabs above.</p>')
+
+
+LCSS = '''<style>.lwrap{overflow-x:auto;border:1px solid var(--grid);border-radius:12px;background:var(--paper-2)}
+.ltab{width:100%;border-collapse:collapse;min-width:640px;font:500 14px "DM Sans",sans-serif}
+.ltab th,.ltab td{padding:10px 12px;border-bottom:1px solid var(--grid);text-align:left}
+.ltab thead th{font:600 11.5px "DM Sans",sans-serif;letter-spacing:.06em;color:var(--muted)}
+.ltab tbody th small{display:block;font-weight:500;color:var(--muted);font-size:12px}
+.lp{display:inline-block;font:700 11px "DM Sans",sans-serif;letter-spacing:.04em;text-transform:uppercase;padding:4px 8px;border-radius:99px}
+.lp.em{background:#ffe1d3;color:#8a2c00}.lp.ri{background:#d6f5e4;color:#04603a}.lp.pk{background:#fff0c7;color:#6b4a00}.lp.fd{background:#ebe3ff;color:#4b2a9e}
+.ltab .na{color:var(--muted)}</style>'''
+
+
 def region_page(r):
-    jumps = [('seasons', 'Season forecast'), ('markets', 'Markets'), ('climate', 'Climate & influences'), ('news', 'Runway & news'), ('more', 'Other regions')]
+    jumps = [('seasons', 'Season forecast'), ('lifecycle', 'Lifecycle'), ('markets', 'Markets'), ('climate', 'Climate & influences'), ('news', 'Runway & news'), ('more', 'Other regions')]
     mk = '<div class="g3 mkt">' + ''.join(
         f'<div class="mini"><b style="font-size:19px">{E(m["name"])}</b><dl><dt>Climate</dt><dd>{E(m["climate"])}</dd><dt>Key moments</dt><dd>{E(m["moments"])}</dd><dt>Buyers want</dt><dd>{E(m["prefs"])}</dd><dt>Fashion week</dt><dd>{E(m["week"])}</dd></dl>'
         + (f'<a class="go" href="{m["link"][0]}">{E(m["link"][1])}</a>' if m.get('link') else '') + '</div>' for m in r['markets']) + '</div>'
@@ -140,6 +163,7 @@ def region_page(r):
     other = '<div class="other">' + ''.join(f'<a href="region-{x["slug"]}.html">{E(x["name"])}</a>' for x in RD.REGIONS if x is not r) + '<a href="regions.html">All regions →</a></div>'
     body = (RCSS + top(f'{r["name"]} fashion forecast', 'Regions · ' + r['name'], r['lead'], r['img'], jumps) + glance
             + f'<section class="sec" id="seasons"><h2>Season by season in {E(r["name"])}</h2><p class="sub">International seasons (SS, Pre-Fall, AW, Resort) with {E(r["name"])}\'s own in-store timing, Forecut\'s regional direction, and the global trends that suit this market.</p>{season_tabs(r)}</section>'
+            + f'<section class="sec" id="lifecycle"><h2>Trend lifecycle in {E(r["name"])}</h2><p class="sub">How the trends that suit this region move from AW26 to AW28.</p>{lifecycle(r)}</section>' + LCSS
             + f'<section class="sec" id="markets"><h2>Key markets</h2><p class="sub">Climate, buying moments and preferences that shape how trends sell.</p>{mk}</section>'
             + f'<section class="sec" id="climate"><h2>Climate & influences</h2><p class="sub">{E(r["climate"])}</p><ul class="infl">{"".join(f"<li>{E(x)}</li>" for x in r["influences"])}</ul></section>'
             + f'<section class="sec" id="news"><h2>Runway & news from {E(r["name"])}</h2><p class="sub">The latest fashion weeks and collections, summarised with links to the original coverage.</p>{news(r["news"])}</section>'

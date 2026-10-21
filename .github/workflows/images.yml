@@ -31,6 +31,7 @@ jobs:
           python regions.py
           python image_requests.py
           python seo.py
+          python search.py && ONLY=search.html python seo.py
       - name: Commit
         run: |
           git config user.name "forecut-bot"

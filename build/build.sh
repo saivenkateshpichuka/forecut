@@ -24,3 +24,4 @@ python3 account.py
 cp auth_src.js ../auth.js
 python3 reports.py
 python3 seo.py
+python3 search.py && ONLY=search.html python3 seo.py

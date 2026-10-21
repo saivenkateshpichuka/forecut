@@ -23,7 +23,7 @@ for (cat, sub, name, area, note, life, sk) in I.D:
 def render_flats(names):
     eng = open('flats.js').read().replace("if (typeof module !== 'undefined') module.exports = Flats;\n", '')
     js = eng + '\nvar XS = ' + json.dumps(extra) + ';\nObject.keys(XS).forEach(function(k){ var v = XS[k]; Flats.SPEC[k] = typeof v === "string" ? Flats.SPEC[v.slice(1)] : v; });\n' \
-        + 'var C={ink:"#13241d",fill:"#ffffff",tint:"#dbe3de",accent:"#b4532a",accent2:"#b4532a",muted:"#53655d"}; var out={};' \
+        + 'var C={ink:"#13241d",fill:"#ffffff",tint:"#dbe3de",accent:"#a9481f",accent2:"#a9481f",muted:"#53655d"}; var out={};' \
         + 'JSON.parse(process.argv[2]).forEach(function(n){ var r=null; try{ r=Flats.render(n,C,{clean:true}); }catch(e){} out[n]= r ? r.svg : ""; }); process.stdout.write(JSON.stringify(out));'
     with tempfile.NamedTemporaryFile('w', suffix='.js', delete=False) as f: f.write(js); p = f.name
     try: return json.loads(subprocess.run(['node', p, json.dumps(names)], capture_output=True, text=True, check=True).stdout)
@@ -114,11 +114,17 @@ CSS = '''<style>
 .thumbs{display:flex;gap:6px;margin-top:4px}.thumbs .ph{width:56px;height:70px;border-radius:5px;overflow:hidden;background:var(--grid)}.thumbs img{width:100%;height:100%;object-fit:cover}
 .gtab td:first-child{font-weight:700}
 .rgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:22px 18px}
-.rc{text-decoration:none;color:inherit;display:grid;gap:8px;align-content:start}
-.rc .ph{aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:var(--grid)}
+.rc{text-decoration:none;color:inherit;display:grid;grid-template-rows:auto 1fr;align-content:start;background:var(--paper-2);border:1px solid var(--grid);border-radius:6px 14px 14px 6px;overflow:hidden;box-shadow:inset 5px 0 0 0 #1f3d33,0 10px 24px -18px rgba(0,0,0,.4);transition:transform .25s}
+.rc:hover{transform:translateY(-3px)}
+.rc .ph{position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--grid)}
+.rc .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 45%,rgba(10,8,6,.8))}
+.rc .ph i{position:absolute;left:12px;top:12px;z-index:1;font:700 10.5px "DM Sans",sans-serif;font-style:normal;letter-spacing:.14em;text-transform:uppercase;color:#fff;background:#1f3d33;padding:5px 8px;border-radius:4px}
+.rc .ph em{position:absolute;left:14px;right:14px;bottom:12px;z-index:1;color:#fff;font:700 19px/1.2 "DM Sans",sans-serif;font-style:normal}
 .rc img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}.rc:hover img{transform:scale(1.04)}
-.rc b{font:700 19px/1.25 "DM Sans",sans-serif;letter-spacing:-.01em}.rc small{font:700 11.5px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--chalk)}
+.rc .cb{display:grid;gap:4px;padding:12px 14px 14px 18px}
+.rc small{font:700 11.5px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--chalk)}
 .rc span{font-family:"Source Serif 4",Georgia,serif;font-size:15px;color:var(--muted);line-height:1.5}
+@media (prefers-reduced-motion:reduce){.rc,.rc img{transition:none}}
 .note{font-size:14px!important;color:var(--muted)!important}
 .bws{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:18px}
 .bw{background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:18px 20px;display:grid;gap:8px;align-content:start}
@@ -127,7 +133,7 @@ CSS = '''<style>
 .bchips{display:grid;gap:8px;margin:4px 0}.bchip{display:flex;align-items:center;gap:10px}.bchip .bph{width:46px;height:56px;border-radius:5px;overflow:hidden;background:var(--grid);flex:none}.bchip img{width:100%;height:100%;object-fit:cover}
 .bchip>span{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font:600 14px "DM Sans",sans-serif}
 @media print{.bws{grid-template-columns:repeat(3,1fr)!important}.bw{break-inside:avoid}}
-.dlpdf{display:inline-flex;align-items:center;gap:8px;margin-top:6px;font:700 14px "DM Sans",sans-serif;background:#b4532a;color:#fff!important;text-decoration:none;padding:11px 18px;border-radius:2px}
+.dlpdf{display:inline-flex;align-items:center;gap:8px;margin-top:6px;font:700 14px "DM Sans",sans-serif;background:#a9481f;color:#fff!important;text-decoration:none;padding:11px 18px;border-radius:2px}
 .dlpdf:hover{background:#9a4522}
 @page{size:A4 landscape;margin:12mm 12mm 16mm}
 @media print{body{padding:0!important;background:#fff!important;font-size:14px}nav,footer,.dlpdf,.more{display:none!important}.wrap.r{max-width:none}
@@ -250,7 +256,7 @@ PAGES.append(('india-brand-watch.html', 'Brand Watch: what Indian labels are lau
 exec(open('reports_world.py').read())
 
 # ---------- Hub ----------
-def rcard(p): return f'<a class="rc" href="{p[0]}"><div class="ph"><img src="img/{p[4]}.webp" alt="" loading="lazy" width="800" height="800"></div><small>{E(p[3])}</small><b>{E(p[1])}</b><span>{E(p[2])}</span></a>'
+def rcard(p): return f'<a class="rc" href="{p[0]}"><div class="ph"><i>Forecut</i><img src="img/{p[4]}.webp" alt="" loading="lazy" width="800" height="800"><em>{E(p[1])}</em></div><div class="cb"><small>{E(p[3])}</small><span>{E(p[2])}</span></div></a>'
 hub = '<p class="kicker" style="margin-top:40px">Reports</p><h1>Forecut Reports</h1><p class="lead">Ready-to-use fashion reports: the global trend outlook, market and competition data, marketing trends, industry controversies, Indian brand watch, item-by-item updates, design capsules, colour and sourcing guides.</p>'
 for kind, d in [('Global Trend Report', 'Forecut\'s worldwide outlook: what is rising, emerging and fading, season by season.'), ('Market Data', 'Sales, growth and store counts for the biggest global and Indian fashion players.'), ('Marketing Trends', 'How fashion brands reach and convert customers now.'), ('Industry Watch', 'The controversies and debates shaping fashion, and the lessons for brands.'), ('Brand Watch', 'What India\'s startups, D2C labels and retailers are launching, mapped to Forecut details.'), ('Core Item Update', 'What to invest in, test, maintain and reduce, item by item.'), ('Design Capsule', 'Mood, colour, key pieces with flat sketches, and prices for each theme.'), ('Colour Forecast', ''), ('Sourcing Guide', '')]:
     ps = [p for p in PAGES if p[3] == kind]

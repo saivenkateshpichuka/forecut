@@ -2,7 +2,7 @@
 import re
 FONT = '<link rel="preload" href="fonts/dm-sans.woff" as="font" type="font/woff" crossorigin><link rel="stylesheet" href="fonts/fonts.css">'
 LIGHT = ('--paper:#f5f0e8; --paper-2:#fffcf7; --grid:#e3d9cc; --ink:#1c1714; --muted:#6e6259;\n'
-         '  --mat:#1f3d33; --mat-ink:#f5f0e8; --chalk:#b4532a; --chalk-soft:#f3e1d6;\n'
+         '  --mat:#1f3d33; --mat-ink:#f5f0e8; --chalk:#a9481f; --chalk-soft:#f3e1d6;\n'
          '  --rise:#2e7d55; --peak:#a8701f; --fade:#8a6f86;')
 DARK = ('--paper:#14110f; --paper-2:#1e1a17; --grid:#352d27; --ink:#f2ebe2; --muted:#b3a698;\n'
         '  --mat:#e8dccb; --mat-ink:#1c1714; --chalk:#e08a5e; --chalk-soft:#3a2418;\n'

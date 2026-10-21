@@ -34,7 +34,7 @@
 .fctab{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb,#fffcf7 92%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid #e3d9cc;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}
 .fctab a{display:grid;justify-items:center;gap:2px;text-decoration:none;color:#6e6259;font:600 10.5px "DM Sans",system-ui,sans-serif;padding:4px 0;border-radius:10px}
 .fctab svg{width:22px;height:22px}.fctab a[aria-current="page"]{color:#1f3d33}.fctab a[aria-current="page"] svg{transform:translateY(-1px)}
-.fctab a[aria-current="page"]::after{content:"";width:18px;height:3px;border-radius:3px;background:#b4532a;margin-top:1px}
+.fctab a[aria-current="page"]::after{content:"";width:18px;height:3px;border-radius:3px;background:#a9481f;margin-top:1px}
 .scrim:not([hidden])~.fctab,body:has(.scrim:not([hidden])) .fctab,body:has(#tscrim:not([hidden])) .fctab{display:none}}
 @media (max-width:760px) and (prefers-color-scheme:dark){.fctab{background:color-mix(in srgb,#1e1a17 92%,transparent);border-color:#352d27}.fctab a{color:#b3a698}.fctab a[aria-current="page"]{color:#f2ebe2}}
 @media print{.fctab{display:none!important}}</style>

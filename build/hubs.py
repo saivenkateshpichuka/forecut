@@ -111,7 +111,7 @@ def weave_svg(kind):
             elif kind == 'jacq': up = ((x - 8) ** 2 + (y - 5) ** 2) % 7 < 3
             elif kind == 'leno': up = x % 3 == 0 or y % 3 == 0
             else: up = True
-            if up: cells.append(f'<rect x="{x * w}" y="{y * w}" width="{w - 1}" height="{w - 1}" fill="{c1 if kind != "satin" else "#b4532a"}"/>')
+            if up: cells.append(f'<rect x="{x * w}" y="{y * w}" width="{w - 1}" height="{w - 1}" fill="{c1 if kind != "satin" else "#a9481f"}"/>')
     if kind == 'pile':
         cells = [f'<path d="M{x * 12 + 6} 120 v-{40 + (x * 37) % 30}" stroke="#6e1f33" stroke-width="7" stroke-linecap="round"/>' for x in range(16)]
     bg = '#f5f0e8' if kind != 'satin' else '#d98d6b'
@@ -169,7 +169,7 @@ FCSS = """<style>
 @keyframes blink{50%{opacity:.25}}.upd{font:600 12.5px "DM Sans",sans-serif;color:var(--muted);letter-spacing:.04em}
 .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 18px}.kpi{background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:14px 16px}
 .kpi b{display:block;font:700 30px/1 "DM Sans",sans-serif}.kpi span{font:600 12.5px "DM Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase}
-.st-e{--c:#2f7d5b}.st-r{--c:#c8691c}.st-p{--c:#b4532a}.st-f{--c:#8a8178}.kpi b,.lane h3{color:var(--c)}
+.st-e{--c:#2f7d5b}.st-r{--c:#c8691c}.st-p{--c:#a9481f}.st-f{--c:#8a8178}.kpi b,.lane h3{color:var(--c)}
 .stabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;margin:0 0 14px}.stabs::-webkit-scrollbar{display:none}
 .stabs button{all:unset;cursor:pointer;flex:none;font:600 14px "DM Sans",sans-serif;border:1px solid var(--grid);border-radius:10px;padding:9px 14px;background:var(--paper-2);text-align:center}
 .stabs button small{display:block;font:500 11.5px "DM Sans",sans-serif;color:var(--muted)}.stabs button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}.stabs button[aria-pressed="true"] small{color:var(--paper)}
@@ -179,7 +179,7 @@ FCSS = """<style>
 .ft .th{width:48px;height:48px;border-radius:8px;overflow:hidden;background:var(--grid)}.ft .th img{width:100%;height:100%;object-fit:cover;object-position:50% 25%;display:block}
 .ft .th.no{display:grid;place-items:center;font:700 15px "DM Sans",sans-serif;color:var(--c);background:color-mix(in srgb,var(--c) 12%,transparent)}
 .ft b{display:block;font:600 14.5px/1.25 "DM Sans",sans-serif}.ft small{font:12px "DM Sans",sans-serif;color:var(--muted)}
-.lc{display:flex;gap:3px;margin-top:4px}.lc i{width:16px;height:5px;border-radius:3px;background:var(--grid)}.lc i.e{background:#2f7d5b}.lc i.r{background:#c8691c}.lc i.p{background:#b4532a}.lc i.f{background:#8a8178}.lc i.now{outline:1.5px solid var(--ink);outline-offset:1px}
+.lc{display:flex;gap:3px;margin-top:4px}.lc i{width:16px;height:5px;border-radius:3px;background:var(--grid)}.lc i.e{background:#2f7d5b}.lc i.r{background:#c8691c}.lc i.p{background:#a9481f}.lc i.f{background:#8a8178}.lc i.now{outline:1.5px solid var(--ink);outline-offset:1px}
 .ft.more{display:none}.lane.open .ft.more{display:grid}.lane .sa{all:unset;cursor:pointer;display:block;text-align:center;font:600 13px "DM Sans",sans-serif;color:var(--chalk);padding:8px 0 2px}
 .lane .none{font:14px "DM Sans",sans-serif;color:var(--muted);padding:6px 4px}.spanel[hidden]{display:none}
 .spanel .lead2{font-size:15.5px;color:var(--muted);margin:0 0 12px}.spanel .lead2 a{color:var(--ink);font-weight:600}

@@ -1,5 +1,5 @@
 """Make ../index.html (GitHub Pages homepage) from forecut_home.txt."""
-import json
+import json, os as _os0
 h = open('forecut_home.txt').read()
 # photo gallery from uploaded detail photos (GitHub site only)
 def islug(x): return ''.join(ch.lower() if ch.isalnum() else '-' for ch in x).strip('-').replace('--', '-').replace('--', '-')
@@ -41,7 +41,7 @@ KC = {'Emerging': 'chalk', 'Rising': 'rise', 'Peaking': 'peak', 'Fading': 'fade'
 gal = ''
 if order:
     cards = ''.join(
-        f'<a href="{info[x][2]}.html"{" class=\"big\"" if n == 0 else ""}><img src="img/{x}.webp" alt="{info[x][0]}" loading="lazy" width="800" height="800">'
+        f'<a href="{info[x][2]}.html"{" class=\"big\"" if n == 0 else ""}><img src="img/{x + "-photo" if _os0.path.exists(f"../img/{x}-photo.webp") else x}.webp" alt="{info[x][0]}" loading="lazy" width="800" height="800">'
         f'<span class="cap"><span class="tag" style="--k:var(--{KC[info[x][3]]})"><i></i>{info[x][3]}</span><b>{info[x][0]}</b><small>{'India' if info[x][2] == 'india' else info[x][2].upper()} · {info[x][1]}</small></span></a>'
         for n, x in enumerate(order))
     more = ''.join(f'<a href="{s}.html">{s.upper()} →</a>' for s in SEAS) + '<a href="regions.html">Regions →</a><a href="india.html">India →</a>'

@@ -1,4 +1,4 @@
-"""Write ../about.html, ../contact.html, ../terms.html, ../privacy.html (shared Forecut style)."""
+"""Write ../about.html, ../method.html, ../contact.html, ../terms.html, ../privacy.html (shared Forecut style)."""
 import html
 EFF = '11 October 2026'
 HEAD = '''<!doctype html>
@@ -7,7 +7,7 @@ HEAD = '''<!doctype html>
 
 <link rel="preload" href="fonts/dm-sans.woff" as="font" type="font/woff" crossorigin><link rel="stylesheet" href="fonts/fonts.css">
 <style>
-:root{{--paper:#f5f0e8;--paper-2:#fffcf7;--grid:#e3d9cc;--ink:#1c1714;--muted:#6e6259;--mat:#1f3d33;--mat-ink:#f5f0e8;--chalk:#b4532a;--chalk-soft:#f3e1d6}}
+:root{{--paper:#f5f0e8;--paper-2:#fffcf7;--grid:#e3d9cc;--ink:#1c1714;--muted:#6e6259;--mat:#1f3d33;--mat-ink:#f5f0e8;--chalk:#a9481f;--chalk-soft:#f3e1d6}}
 @media (prefers-color-scheme:dark){{:root:not([data-theme="light"]){{--paper:#14110f;--paper-2:#1e1a17;--grid:#352d27;--ink:#f2ebe2;--muted:#b3a698;--mat:#e8dccb;--mat-ink:#1c1714;--chalk:#e08a5e;--chalk-soft:#3a2418;color-scheme:dark}}}}
 :root[data-theme="dark"]{{--paper:#14110f;--paper-2:#1e1a17;--grid:#352d27;--ink:#f2ebe2;--muted:#b3a698;--mat:#e8dccb;--mat-ink:#1c1714;--chalk:#e08a5e;--chalk-soft:#3a2418;color-scheme:dark}}
 *{{box-sizing:border-box}}
@@ -31,11 +31,11 @@ footer{{margin-top:56px;padding-top:22px;border-top:1px solid var(--grid);displa
 footer a{{color:var(--muted)}} footer .fl{{display:flex;gap:16px;flex-wrap:wrap}}
 :focus-visible{{outline:2px solid var(--chalk);outline-offset:3px}}
 </style></head><body><div class="wrap">
-<nav><a class="logo" href="/"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/><path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="#b4532a" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Forecut</a>
-<div class="links"><a href="/">Home</a><a href="regions.html">Regions</a><a href="aw26.html">Seasons</a><a href="couture.html">Couture</a><a href="fabrics.html">Fabrics</a><a href="colour.html">Colour</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a></div></nav>
+<nav><a class="logo" href="/"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/><path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="#a9481f" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Forecut</a>
+<div class="links"><a href="/">Home</a><a href="regions.html">Regions</a><a href="aw26.html">Seasons</a><a href="couture.html">Couture</a><a href="fabrics.html">Fabrics</a><a href="colour.html">Colour</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a><a href="search.html" aria-label="Search Forecut">⌕ Search</a></div></nav>
 '''
 FOOT = '''<footer><span>© 2026 Forecut · <a href="mailto:hello@forecut.in">hello@forecut.in</a></span>
-<span class="fl"><a href="couture.html">Couture</a><a href="fabrics.html">Fabrics</a><a href="colour.html">Colour</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="terms.html">Terms &amp; Conditions</a><a href="privacy.html">Privacy Policy</a></span></footer>
+<span class="fl"><a href="couture.html">Couture</a><a href="fabrics.html">Fabrics</a><a href="colour.html">Colour</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a><a href="about.html">About</a><a href="method.html">Methodology</a><a href="contact.html">Contact</a><a href="terms.html">Terms &amp; Conditions</a><a href="privacy.html">Privacy Policy</a></span></footer>
 </div></body></html>
 '''
 P = {}
@@ -56,6 +56,32 @@ P['about.html'] = ('About Forecut · Global Fashion Trend Forecasting', '''
 <h2>Where we are</h2>
 <p>Forecut is an independent, global platform, made in India. It is currently in an early-access testing phase, with full access available at no cost. Your feedback directly shapes the launch.</p>
 <div class="box"><b>Get in touch</b><br>Questions, feedback or partnership ideas: <a href="mailto:hello@forecut.in">hello@forecut.in</a></div>''')
+P['method.html'] = ('How Forecut Forecasts · Methodology', '''
+<div class="eb">Methodology</div><h1>How we forecast.</h1>
+<p class="lead">What Forecut's labels mean, where the evidence comes from, and how often each forecast is checked and revised.</p>
+<h2>Three kinds of signal</h2>
+<ul><li><b>Observed:</b> what is in stores and on runways now (the current season, and Resort collections already shown). Based on published runway, retail and trade reporting.</li>
+<li><b>Forecast:</b> the next season, based on published runway and trade research for that season, read by Forecut for timing and adoption.</li>
+<li><b>Projection:</b> long-range seasons (one to two years ahead). Forecut's own projection of where current signals lead; updated as runway coverage arrives.</li></ul>
+<h2>Trend stages</h2>
+<p>Every detail carries one stage per season, and the same four names are used on every page:</p>
+<ul><li><b>Emerging:</b> early signals in a few collections or markets. Watch and test in small quantities.</li>
+<li><b>Rising:</b> spreading across designers, retailers and markets. Add it now.</li>
+<li><b>Peaking:</b> at full adoption. Use it in core styles; expect it to cool.</li>
+<li><b>Fading:</b> past its peak. Phase it out of new development. Fading details stay visible so you can see the full lifecycle.</li></ul>
+<h2>How stages are assigned and revised</h2>
+<p>We look for the same detail across several independent sources: runway reviews, trade and retail coverage, brand launches, fashion week schedules and search interest. A detail moves up a stage when it appears in more collections, more markets or more retail ranges; it moves down when coverage and new launches slow. Stages are reviewed monthly. News is checked daily and new details are added weekly. We never delete a detail: past stages are kept so you can follow its whole curve.</p>
+<h2>Regional readings</h2>
+<p>A global trend is not equally relevant everywhere. Each region page reads the international seasons for its own climate, calendar and buyers: southern-hemisphere markets sell a season roughly six months later; hot-climate markets get lighter versions and skip heavy winter pieces; and buying peaks around local moments such as Diwali, Ramadan, Lunar New Year, Black Friday or carnival.</p>
+<h2>Sources</h2>
+<p>Forecut uses public sources only: fashion week calendars and runway reviews, trade press, retailer and brand announcements, company results, and colour authorities. Source links are given on region pages, reports and articles. We do not copy paid forecasting services, and we write every forecast in our own words. Brands and designers are named only where public sources report them.</p>
+<h2>Images</h2>
+<p>Most images on Forecut are AI-generated illustrations made for Forecut to show a detail clearly. They are not runway, campaign or brand photographs. Real photographs are used only when they are free-licensed (for example from Unsplash, Pexels, Wikimedia Commons or The Met Open Access) and are credited where required.</p>
+<h2>Dates</h2>
+<p>Season pages show two dates: <b>last researched</b> (when the evidence behind the forecast was last reviewed) and <b>data refreshed</b> (when the page was last rebuilt).</p>
+<h2>Limits</h2>
+<p>Forecasts are informed opinions for planning, not guarantees. Check them against your own sales data, costings and customers. Price guides are indicative estimates.</p>
+<div class="box"><b>Questions about a forecast?</b><br>Write to <a href="mailto:hello@forecut.in">hello@forecut.in</a> and tell us which detail or page.</div>''')
 P['contact.html'] = ('Contact Forecut', '''
 <div class="eb">Contact</div><h1>Get in touch.</h1>
 <p class="lead">For questions, feedback, partnerships or enterprise enquiries, write to us at:</p>
