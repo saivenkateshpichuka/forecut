@@ -3,7 +3,7 @@ season-by-season regional directions. International season names (SS, Pre-Fall, 
 each region shows its own local in-store timing. Facts about shows are summarised from the linked sources;
 'Forecut direction' text is Forecut's own forecast. Add new items at the top; never delete old ones."""
 
-UPDATED = '21 Oct 2026'
+UPDATED = '22 Oct 2026'
 
 # International season calendar (northern-hemisphere industry standard)
 CALENDAR = [
@@ -39,10 +39,11 @@ REGIONS = [
     {'name': 'China', 'climate': 'Four seasons in the north and east; subtropical south.', 'moments': 'Lunar New Year, 618 and Double 11 (11.11) shopping festivals', 'prefs': 'Fast adoption of runway ideas, strong local designer brands, heritage motifs, live-commerce driven drops.', 'week': 'Shanghai Fashion Week (SS27 opened 8 Oct 2026, theme "Renewed Radiance")'},
     {'name': 'Japan & South Korea', 'climate': 'Four distinct seasons with humid summers.', 'moments': 'Spring and autumn wardrobe changes, year-end gifting, Chuseok', 'prefs': 'Precise tailoring, layering, quality basics, technical outerwear, K-celebrity influence.', 'week': 'Rakuten Fashion Week Tokyo (31 Aug–5 Sep 2026) · Seoul Fashion Week (1–6 Sep 2026)'},
     {'name': 'India', 'climate': 'Tropical and subtropical; monsoon Jun–Sep; short north-Indian winter.', 'moments': 'Diwali and festive (Sep–Nov), wedding seasons (Nov–Feb, Apr–May), summer', 'prefs': 'Occasion and ethnic wear, handloom and embroidery, fusion for Gen Z, value-led western wear.', 'week': 'Lakmē Fashion Week x FDCI (13–18 Oct 2026)', 'link': ('india.html', 'Open the full India forecast →')},
-    {'name': 'Southeast Asia', 'climate': 'Hot and humid all year; wet and dry seasons.', 'moments': 'Ramadan and Hari Raya, Lunar New Year, year-end sales', 'prefs': 'Breathable fabrics, modest options, bright colour, resort and occasion wear.', 'week': 'Jakarta Fashion Week'},
+    {'name': 'Southeast Asia', 'climate': 'Hot and humid all year; wet and dry seasons.', 'moments': 'Ramadan and Hari Raya, Lunar New Year, year-end sales', 'prefs': 'Breathable fabrics, modest options, bright colour, resort and occasion wear.', 'week': 'Jakarta Fashion Week 2027 (26 Oct–1 Nov 2026)'},
     {'name': 'Middle East (GCC)', 'climate': 'Very hot summers; mild "winter" season Oct–Mar is the main retail season.', 'moments': 'Ramadan and Eid, wedding season, winter tourism', 'prefs': 'Modest luxury, abayas and kaftans, eveningwear, high-end craft, international designer brands.', 'week': 'Dubai Fashion Week (22–26 Oct 2026, d3)'},
   ],
   'news': [
+    ('Oct 2026', 'Jakarta Fashion Week 2027 opens 26 October', 'Indonesia\'s main fashion week runs 26 October to 1 November 2026 in Jakarta, with a model search and BTN Fashion Lab linking designers with small businesses (UMKM) and local artisans.', [('Indonesia Travel', 'https://www.indonesia.travel/au-en/events/event-detail/jfw-2027')]),
     ('Oct 2026', 'Shanghai Fashion Week SS27: "Renewed Radiance"', 'Nearly 100 runway presentations and about 1,000 brands. HEMU opened with Dunhuang heritage techniques (yunjin and song brocade, kesi silk tapestry, embroidery); the season spotlights traditional Chinese motifs inspired by the Silk Road.', [('China Daily', 'https://www.chinadaily.com.cn/a/202609/23/WS6ab3e914e4b06d4aa055fd84.html'), ('CGTN', 'https://news.cgtn.com/news/2026-10-09/Spring-Summer-2027-Shanghai-Fashion-Week-kicks-off--1R6bkJ10QTK/p.html')]),
     ('Oct 2026', 'Dubai Fashion Week SS27 widens its map', 'Running 22–26 October at Dubai Design District, with designers from the UAE, Kuwait, India, Colombia, Vietnam, Ukraine, Azerbaijan, Jordan, France and Italy, and a buyers\' programme for regional and international stores.', [('Dubai PR Network', 'https://www.dubaiprnetwork.com/fashion-news/194513-dubai-fashion-week-announces-spring-summer-2027-edition-programme')]),
     ('Sep 2026', 'Seoul SS27: tailoring as a system', 'Kwaeja-inspired overlapping forms, cropped jackets and windbreakers, ballooning trousers; earth tones with sheer fabrics and metallic silver; technical fabrics and denim-effect patchwork.', [('METAL Magazine', 'https://metalmagazine.eu/en/post/seoul-fashion-week-ss-2027-our-favourite-collections')]),
