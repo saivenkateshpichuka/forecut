@@ -181,9 +181,12 @@ def hub():
               + ''.join(f'<tr><td><b><a href="region-{r["slug"]}.html">{E(r["name"])}</a></b></td><td>{E(local_window(r, "ss27"))}</td><td>{E(local_window(r, "aw27"))}</td><td>{E(local_window(r, "rs27"))}</td></tr>' for r in RD.REGIONS) + '</table></div>')
     m = S['meta']['ss27']
     th = ''.join(f'<div class="theme"><b>{E(t[0])}</b><p>{E(t[1])}</p></div>' for t in m['themes'][:6])
-    jumps = [('regions', 'Regions'), ('calendar', 'Season calendar'), ('timing', 'Regional timing'), ('global', 'Global SS27 trends'), ('collections', 'Resort & Pre-Fall')]
+    import home_blocks as HB
+    ln = '<div class="news">' + ''.join(f'<div class="nw"><time>{E(d)}<br><a href="region-{r["slug"]}.html#news">{E(r["name"])}</a></time><div><b>{E(t)}</b><p>{E(p)}</p><p class="src">Source: ' + ', '.join(f'<a href="{u}" rel="noopener" target="_blank">{E(n)}</a>' for n, u in src) + '</p></div></div>' for r, d, t, p, src in HB.latest_news(8)) + '</div>'
+    jumps = [('regions', 'Regions'), ('latest', 'Latest news'), ('calendar', 'Season calendar'), ('timing', 'Regional timing'), ('global', 'Global SS27 trends'), ('collections', 'Resort & Pre-Fall')]
     return (RCSS + top('Global fashion forecast, region by region', 'Regions', 'One global forecast, read for six regions. Forecut tracks the international seasons (Spring/Summer, Pre-Fall, Autumn/Winter and Resort) and shows how each trend lands in Asia, Europe, North America, South America, Africa and Oceania, with local timing, climate and market preferences.', ['hub-regions', 'hero-ss27'], jumps)
             + f'<section class="sec" id="regions"><h2>Six regions</h2><p class="sub">Pick a region for its season-by-season direction, key markets, climate and fashion weeks.</p><div class="rgrid">{cards}</div></section>'
+            + f'<section class="sec" id="latest"><h2>Latest news from the regions</h2><p class="sub">The newest fashion-week, collection and market news across all six regions, with links to the original coverage. Open a region for its full news list.</p>{ln}</section>'
             + f'<section class="sec" id="calendar"><h2>The international season calendar</h2><p class="sub">Forecut keeps the industry-standard season names. Southern-hemisphere and tropical markets sell the same trends on their own timing.</p>{cal}</section>'
             + f'<section class="sec" id="timing"><h2>When trends reach each region</h2><p class="sub">Local in-store windows for the next seasons.</p>{timing}</section>'
             + f'<section class="sec" id="global"><h2>Global SS27 directions</h2><p class="sub">The trends every region starts from. <a href="ss27.html">Open the full SS27 forecast →</a></p><div class="g3" style="gap:22px">{th}</div></section>'

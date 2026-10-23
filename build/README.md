@@ -150,3 +150,7 @@ LiberationSans-Italic.ttf when outside the bundled workspace runtime.
 Seasonal concept-art assets live in `img/india-season-art/`; their AI origin
 is disclosed in both the website and PDFs. Keep the existing reference
 images when adding or refreshing seasonal art.
+
+## Latest region news on the homepage and Regions hub (added 23 Oct 2026)
+- home_blocks.latest_news(n) merges every region's 'news' list in regions_data.py (newest month first, regions taking turns within a month).
+- The homepage shows the newest 4 under the region cards (<!--NEWSSTRIP--> in forecut_home.txt); regions.html shows the newest 8 in a "Latest news" section (#latest). Both refresh automatically when news is added and `build_home.py` / `regions.py` are run.

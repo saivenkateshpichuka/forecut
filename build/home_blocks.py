@@ -110,5 +110,28 @@ def colour_block():
 '''
 
 
+_MON = {m: i for i, m in enumerate(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], 1)}
+
+
+def latest_news(n=6):
+    """Newest region news across all six regions: (region, date, title, summary, sources).
+    Sorted by month (newest first); within a month, regions take turns so one region never fills the list."""
+    rows = []
+    for r in RG.REGIONS:
+        for i, (d, t, p, src) in enumerate(r.get('news', [])):
+            mo, _, yr = d.partition(' ')
+            rows.append(((int(yr or 0), _MON.get(mo[:3], 0)), i, r, d, t, p, src))
+    rows.sort(key=lambda x: (-x[0][0], -x[0][1], x[1]))
+    return [(r, d, t, p, src) for _, _, r, d, t, p, src in rows[:n]]
+
+
+def news_strip(n=4):
+    out = []
+    for r, d, t, p, src in latest_news(n):
+        out.append(f'<a class="hn" href="region-{r["slug"]}.html#news"><small>{E(r["name"])} · {E(d)}</small><b>{E(t)}</b><span>{E(p)}</span>'
+                   f'<em>Source: {E(", ".join(x[0] for x in src))}</em></a>')
+    return ''.join(out)
+
+
 def blocks(M, SEAS, islug):
-    return {'SEASONCARDS': season_cards(M, SEAS), 'REGIONCARDS': region_cards(), 'SPOTLIGHT': spotlight(M, SEAS, islug), 'COLOUR': colour_block()}
+    return {'SEASONCARDS': season_cards(M, SEAS), 'REGIONCARDS': region_cards(), 'SPOTLIGHT': spotlight(M, SEAS, islug), 'COLOUR': colour_block(), 'NEWSSTRIP': news_strip()}
