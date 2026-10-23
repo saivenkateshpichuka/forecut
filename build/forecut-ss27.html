@@ -4,7 +4,7 @@
 /* Layout: report header with season facts, sticky filter bar, then department > category > detail-card grids */
 :root{
   --paper:#f5f0e8; --paper-2:#fffcf7; --grid:#e3d9cc; --ink:#1c1714; --muted:#6e6259;
-  --mat:#1f3d33; --mat-ink:#f5f0e8; --chalk:#b4532a; --chalk-soft:#f3e1d6;
+  --mat:#1f3d33; --mat-ink:#f5f0e8; --chalk:#a9481f; --chalk-soft:#f3e1d6;
   --rise:#2e7d55; --peak:#a8701f; --fade:#8a6f86; --tint:#e6ddd1; --surface-img:#efe8de;
   --display:"DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --body:"DM Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
@@ -146,6 +146,9 @@ h1,h2,h3,h4{font-family:var(--display);margin:0;line-height:1.08;text-wrap:balan
 .hero2 h1{font-size:clamp(40px,6vw,72px);font-weight:800;letter-spacing:-.025em;margin-top:12px}
 .intro{color:var(--muted);font-size:17px;max-width:54ch;margin:14px 0 0}
 .basis{display:inline-flex;align-items:center;gap:8px;font:500 12px var(--mono);letter-spacing:.05em;text-transform:uppercase;margin:16px 0 0;padding:7px 11px;border-radius:999px}
+.srch{font:600 13px var(--body);color:var(--ink);text-decoration:none;border:1px solid var(--grid);border-radius:999px;padding:7px 12px;white-space:nowrap;background:var(--paper-2)}
+@media (prefers-color-scheme:light){.basis.res{color:#24683f!important}}
+.rdates{font:500 12.5px var(--body);color:var(--muted);margin:8px 0 0}.rdates a{color:inherit}
 .basis::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
 .basis.res{color:var(--rise);background:color-mix(in srgb,var(--rise) 12%,transparent)}
 .basis.proj{color:var(--peak);background:color-mix(in srgb,var(--peak) 14%,transparent)}
@@ -390,7 +393,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
 .dlg{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap}
 .dlgl{font:600 12px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-right:2px}
 .dlg .vbtn{padding:11px 18px;min-width:70px}
-#vdlpdf{background:#b4532a;color:#fff}
+#vdlpdf{background:#a9481f;color:#fff}
 .pinb{background:#e60023!important;color:#fff!important;text-decoration:none;display:inline-flex;align-items:center;gap:6px}.pinb svg{width:16px;height:16px}
 
 /* lifecycle chips: live + locked */
@@ -518,6 +521,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
       Forecut <small>← Home</small>
     </a>
     <nav class="seasons" aria-label="Seasons"><a href="https://forecut.in/regions.html">Regions<small>6 regions · India</small></a><a href="https://claude.ai/artifact/63DnMLg9Y4sqBMrSed8SrJ">AW26<small>In stores now</small></a><a href="https://forecut.in/resort-27.html">Resort 27<small>Cruise · Nov–Jan</small></a><a href="https://claude.ai/artifact/4kaD9mYgPYUff4KR7LGMPb" aria-current="page">SS27<small>Next season forecast</small></a><a href="https://forecut.in/pre-fall-27.html">Pre-Fall 27<small>Outlook · May–Jul</small></a><a href="https://claude.ai/artifact/AhTcWYMJCc1gNCuDJSAu8z" class="lockt" data-stage="Early outlook">AW27<small><svg class="lk" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="7" width="10" height="7" rx="1.6" fill="currentColor"/></svg>Opens at launch</small></a><a href="https://claude.ai/artifact/VbZ4af3QScHPqwM8LzyBiM" class="lockt" data-stage="Long-range outlook">SS28<small><svg class="lk" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="7" width="10" height="7" rx="1.6" fill="currentColor"/></svg>Opens at launch</small></a><a href="https://claude.ai/artifact/2CnmAmF88emYUCYLJwEwgx" class="lockt" data-stage="Long-range outlook">AW28<small><svg class="lk" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="7" width="10" height="7" rx="1.6" fill="currentColor"/></svg>Opens at launch</small></a></nav>
+    <a class="srch" href="search.html" aria-label="Search all Forecut forecasts">⌕ Search</a>
   </div>
 
 <section class="story" style="--bg:url(img/hero-ss27.webp)" aria-label="Season story"><div class="st"><span class="mono eb">Next season forecast · Feb – Jul 2027</span><p class="sth">Spring/Summer 2027</p><p>The waist returns and handcraft moves into everyday clothes. Shapes get defined again, sneakers step back for elegant shoes, and a bright luminous blue leads the palette.</p><div class="stt"><span>The waist returns</span><span>Handcraft</span><span>Undone</span><span>In motion</span><span>Elegant ease</span></div></div></section>
@@ -526,7 +530,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
       <span class="mono eb">Next season forecast · Feb – Jul 2027</span>
       <h1>Spring/Summer 2027</h1>
       <p class="intro">The waist returns and handcraft moves into everyday clothes. Shapes get defined again, sneakers step back for elegant shoes, and a bright luminous blue leads the palette.</p>
-      <p class="basis res">Based on published runway and trade research</p>
+      <p class="basis res">Forecast · based on published runway and trade research</p><p class="rdates">Last researched 23 Oct 2026 · Data refreshed 23 Oct 2026 · <a href="method.html">How we forecast</a></p>
       <div class="stats">
         <div><b>466</b><span>Details</span></div>
         <div><b>16</b><span>Categories</span></div>
@@ -680,6 +684,14 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
     });
   });
   input.addEventListener('input', function () { q = input.value.trim().toLowerCase(); apply(); });
+  // filters from links, e.g. ss27.html?dept=womenswear&st=r&q=collar (homepage forecast explorer)
+  try {
+    var P = new URLSearchParams(location.search), hit = false;
+    var pd = P.get('dept'); if (pd) deptBtns.forEach(function (b) { if (b.getAttribute('data-dept') === pd) { b.click(); hit = true; } });
+    (P.get('st') || '').split(',').forEach(function (k) { stBtns.forEach(function (b) { if (k && b.getAttribute('data-st') === k) { b.click(); hit = true; } }); });
+    var pq = P.get('q'); if (pq) { input.value = pq; q = pq.trim().toLowerCase(); apply(); hit = true; }
+    if (hit) { var t = document.querySelector('.tools'); if (t) setTimeout(function () { t.scrollIntoView(); }, 60); }
+  } catch (e) {}
 })();
 </script>
 <script>
@@ -2270,11 +2282,11 @@ var Flats = (function () {
       sv.setAttribute('aria-pressed', on ? 'true' : 'false'); sv.querySelector('span').textContent = on ? 'Saved' : 'Save';
       sv.onclick = function () { try { list = JSON.parse(localStorage.getItem(key) || '[]'); } catch (e) { list = []; }
         var i = list.findIndex(function (x) { return x.id === id; });
-        if (i > -1) list.splice(i, 1); else list.unshift({id: id, name: d.name, page: location.pathname, season: CUR_SEASON, cat: d.cat, st: d.st, img: vimg || ''});
+        if (i > -1) list.splice(i, 1); else list.unshift({id: id, name: d.name, page: location.pathname, season: CUR_SEASON, cat: d.cat, st: d.st, img: vph || vimg || ''});
         try { localStorage.setItem(key, JSON.stringify(list.slice(0, 300))); } catch (e) {}
         var now = i === -1; sv.setAttribute('aria-pressed', now ? 'true' : 'false'); sv.querySelector('span').textContent = now ? 'Saved' : 'Save'; }; })();
     (function () { var pn = document.getElementById('vpin'); if (!pn) return; var base = 'https://forecut.in/';
-      var media = vimg ? base + vimg : (document.querySelector('meta[property="og:image"]') || {}).content || base + 'og-image.png';
+      var media = (vph || vimg) ? base + (vph || vimg) : (document.querySelector('meta[property="og:image"]') || {}).content || base + 'og-image.png';
       var page = base + location.pathname.replace(/^\//, '');
       var desc = d.name + ' · ' + (ST[d.st] ? ST[d.st][1] : '') + ' trend · ' + d.cat + ' · Forecut fashion trend forecast';
       pn.href = 'https://www.pinterest.com/pin/create/button/?url=' + encodeURIComponent(page) + '&media=' + encodeURIComponent(media) + '&description=' + encodeURIComponent(desc); })();
@@ -2298,7 +2310,7 @@ var Flats = (function () {
   });
   (function thumbs() {
     var els = document.querySelectorAll('.thumb');
-    function draw(el) { if (el.getAttribute('data-done')) return; el.setAttribute('data-done', '1'); var card = el.closest('.d'), name = card.querySelector('h4').textContent, img = card.getAttribute('data-img');
+    function draw(el) { if (el.getAttribute('data-done')) return; el.setAttribute('data-done', '1'); var card = el.closest('.d'), name = card.querySelector('h4').textContent, img = card.getAttribute('data-photo') || card.getAttribute('data-img');
       if (img) { var im = new Image(); im.alt = ''; im.loading = 'lazy'; im.src = img; im.className = 'photo'; el.innerHTML = ''; el.appendChild(im); return; }
       var fimg = card.getAttribute('data-flatimg'); if (fimg) { var fm = new Image(); fm.alt = ''; fm.loading = 'lazy'; fm.src = fimg; fm.className = 'flatimg'; el.innerHTML = ''; el.appendChild(fm); return; }
       var r = Flats.render(name, colorsFor(name, FILE_C), {clean: true}); el.innerHTML = r ? r.svg : motif(name); }
@@ -2359,7 +2371,7 @@ var Flats = (function () {
     return new Blob(parts, {type: 'application/pdf'});
   }
   function makePng(d, asPdf) {
-    var C = {bg:'#f5f0e8', card:'#fffcf7', ink:'#1c1714', muted:'#6e6259', chalk:'#b4532a', mat:'#1f3d33', line:'#e3d9cc'};
+    var C = {bg:'#f5f0e8', card:'#fffcf7', ink:'#1c1714', muted:'#6e6259', chalk:'#a9481f', mat:'#1f3d33', line:'#e3d9cc'};
     var SC = {e:'#d9480f', r:'#1d7a4f', p:'#b7791f', f:'#8a6f86'};
     var rr0 = Flats.render(d.name, colorsFor(d.name, FILE_C), {width: 960}), svg = rr0 ? rr0.svg : motif(d.name, 960);
     var fonts = Promise.all(['600 64px "DM Sans"', '400 30px "DM Sans"', '600 30px "DM Sans"', '500 22px "DM Sans"'].map(function (f) { return document.fonts ? document.fonts.load(f).catch(function () {}) : null; }));
