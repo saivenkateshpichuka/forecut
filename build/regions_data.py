@@ -3,7 +3,7 @@ season-by-season regional directions. International season names (SS, Pre-Fall, 
 each region shows its own local in-store timing. Facts about shows are summarised from the linked sources;
 'Forecut direction' text is Forecut's own forecast. Add new items at the top; never delete old ones."""
 
-UPDATED = '22 Oct 2026'
+UPDATED = '23 Oct 2026'
 
 # International season calendar (northern-hemisphere industry standard)
 CALENDAR = [
@@ -43,6 +43,7 @@ REGIONS = [
     {'name': 'Middle East (GCC)', 'climate': 'Very hot summers; mild "winter" season Oct–Mar is the main retail season.', 'moments': 'Ramadan and Eid, wedding season, winter tourism', 'prefs': 'Modest luxury, abayas and kaftans, eveningwear, high-end craft, international designer brands.', 'week': 'Dubai Fashion Week (22–26 Oct 2026, d3)'},
   ],
   'news': [
+    ('Oct 2026', 'Dubai Fashion Week SS27 opens; Tarun Tahiliani to close', 'The SS27 edition opened on 22 October at Dubai Design District with Paris-based Ludovic de Saint Sernin and Kuwaiti designer Yousef Al Jasmi. The schedule includes Nafsika Skourti, Weinsanto, Lebanese label Lili Blanc and Emirati debut labels Onori and Kuni. Indian designer Tarun Tahiliani closes on 26 October and is opening a Jumeirah boutique, his first outside India.', [('The National', 'https://www.thenationalnews.com/lifestyle/fashion-beauty/2026/10/21/dubai-fashion-week-returns-with-ludovic-de-saint-sernin-tarun-tahiliani-and-regional-talent/'), ('Gulf News', 'https://gulfnews.com/lifestyle/fashion/tarun-tahiliani-weinsanto-nafsika-skourti-day-by-day-guide-to-dubai-fashion-week-1.500719365')]),
     ('Oct 2026', 'Jakarta Fashion Week 2027 opens 26 October', 'Indonesia\'s main fashion week runs 26 October to 1 November 2026 in Jakarta, with a model search and BTN Fashion Lab linking designers with small businesses (UMKM) and local artisans.', [('Indonesia Travel', 'https://www.indonesia.travel/au-en/events/event-detail/jfw-2027')]),
     ('Oct 2026', 'Shanghai Fashion Week SS27: "Renewed Radiance"', 'Nearly 100 runway presentations and about 1,000 brands. HEMU opened with Dunhuang heritage techniques (yunjin and song brocade, kesi silk tapestry, embroidery); the season spotlights traditional Chinese motifs inspired by the Silk Road.', [('China Daily', 'https://www.chinadaily.com.cn/a/202609/23/WS6ab3e914e4b06d4aa055fd84.html'), ('CGTN', 'https://news.cgtn.com/news/2026-10-09/Spring-Summer-2027-Shanghai-Fashion-Week-kicks-off--1R6bkJ10QTK/p.html')]),
     ('Oct 2026', 'Dubai Fashion Week SS27 widens its map', 'Running 22–26 October at Dubai Design District, with designers from the UAE, Kuwait, India, Colombia, Vietnam, Ukraine, Azerbaijan, Jordan, France and Italy, and a buyers\' programme for regional and international stores.', [('Dubai PR Network', 'https://www.dubaiprnetwork.com/fashion-news/194513-dubai-fashion-week-announces-spring-summer-2027-edition-programme')]),
@@ -66,6 +67,7 @@ REGIONS = [
     {'name': 'Southern Europe', 'climate': 'Mediterranean: hot, dry summers; mild winters.', 'moments': 'Summer travel season, Easter', 'prefs': 'Linen, resort wear, sandals, colour and print; strong local craft (Spain, Portugal, Greece).', 'week': 'Madrid and Lisbon fashion weeks'},
   ],
   'news': [
+    ('Oct 2026', 'Luxury Q3: Kering flat, LVMH fashion down', 'Kering\'s Q3 2026 revenue was €3.35bn, flat reported and down 1% comparable; Gucci fell 6% comparable, softest in Asia Pacific, mainland China and Japan, with North America most resilient. Saint Laurent, Bottega Veneta and Brioni grew, and Kering confirmed Anthony Vaccarello (Saint Laurent) and Seán McGirr (McQueen) have left. Earlier in October, LVMH reported fashion and leather goods down 5% organic in Q3, citing slower demand in China, with growth in the US, Europe and Japan.', [('Kering via GlobeNewswire', 'https://www.globenewswire.com/news-release/2026/10/22/3386683/0/en/kering-revenue-for-the-third-quarter-of-2026.html'), ('Luxury Tribune', 'https://www.luxurytribune.com/en/lvmh-fashion-and-leather-goods-sales-fall-in-the-third-quarter-of-2026')]),
     ('Oct 2026', 'Paris SS27: the featherlight season', 'Ultrafine ripstop nylon at Issey Miyake, sheer organza sets at Chanel, sheer fabrics with soft tailoring at Dior.', [('Monocle', 'https://monocle.com/fashion/paris-fashion-week-october-2026-review/')]),
     ('Sep 2026', 'Milan SS27: sheer meets gloss', 'Latex-effect rubber and PVC at Ferragamo, glossy nylon at MSGM, taffeta and crinkled nylon at Bottega Veneta.', [('nss magazine', 'https://www.nssmag.com/en/fashion/47050/5-trends-from-milan-fashion-week-ss27-women-s')]),
     ('Aug 2026', 'Copenhagen SS27: Nordic design meets ethical fashion', 'Collina Strada, Stine Goya and By Malene Birger led social coverage of a week built on heritage and sustainability.', [('Onclusive', 'https://onclusive.com/resources/blog/first-fashion-weeks-ss27/')]),
