@@ -748,4 +748,24 @@ for _a in COUTURE['articles']:
     if _a['slug'] in _CA: _a['img'] = [f"couture-{_CA[_a['slug']]}-2026"] + _a['img']
 COUTURE['hero'] = ['couture-hero-2026'] + COUTURE['hero']; COUTURE['hero_pos'] = '50% 45%'
 
+# --- Depth added Oct 2026 (AdSense "low value content"): extra sections inserted before each article's closing CTA/sources. Add only. ---
+import depth_couture as _D1, depth_fabrics as _D2, depth_innov_colour as _D3
+_MORE = {**_D1.MORE, **_D2.MORE, **_D3.MORE}
+import depth_faq as _DF
+for _k, _qs in _DF.FAQ.items():
+    _MORE[_k] = list(_MORE.get(_k, [])) + [('h2', 'Common questions')] + [('p', f'<b>{q}</b> {ans}') for q, ans in _qs]
+def _is_tail(b):
+    t = str(b[1])[:40]
+    return b[0] == 'cta' or 'Sources' in t or 'AW27 runways take place' in t
+for _h in (COUTURE, FABRICS, COLOUR):
+    for _a in _h['articles']:
+        _x = _MORE.get(_a['slug'])
+        if not _x or _a.get('_deep'): continue
+        _b = list(_a['body']); _i = len(_b)
+        while _i > 0 and _is_tail(_b[_i - 1]): _i -= 1
+        if _i <= 1: _i = len(_b)
+        _a['body'] = _b[:_i] + list(_x) + _b[_i:]
+        _a['_deep'] = True
+        _a['read'] = max(_a.get('read', 4), round(sum(len(' '.join(map(str, v)).split()) if isinstance(v, (list, tuple)) else len(str(v).split()) for _, v in _a['body']) / 220))
+
 HUBS = [COUTURE, FABRICS, COLOUR]

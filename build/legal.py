@@ -53,6 +53,16 @@ P['about.html'] = ('About Forecut · Global Fashion Trend Forecasting', '''
 <li><b>Monthly updates:</b> forecasts are reviewed and refreshed every month.</li></ul>
 <h2>How we work</h2>
 <p>We review public runway coverage, trade and retail reporting, street style and search interest, then use AI-assisted analysis to identify and track specific details. Every forecast is curated and written in our own words. Brands and designers are named only where public sources report them.</p>
+<h2>Editorial standards</h2>
+<ul><li><b>Public sources only.</b> We use fashion week schedules and reviews, trade press, company announcements and fair reports, and link to them on region pages, reports and articles.</li>
+<li><b>Our own words.</b> Every forecast and article is written by Forecut. We do not copy paid forecasting services.</li>
+<li><b>Clear labels.</b> Each season is marked as observed, forecast or projection, and every detail carries one of four stages: emerging, rising, peaking or fading.</li>
+<li><b>Nothing quietly removed.</b> When a trend fades we mark it as fading instead of deleting it, so the full lifecycle stays visible.</li>
+<li><b>Honest images.</b> Most images are AI-generated illustrations made for Forecut; real photographs are free-licensed and credited.</li>
+<li><b>Corrections.</b> If you spot an error, write to us and we will correct it.</li></ul>
+<p>Read the full <a href="method.html">methodology</a> for how stages are assigned and revised.</p>
+<h2>Who uses Forecut</h2>
+<p>Fashion designers, D2C and retail brands, manufacturers and exporters, sourcing and merchandising teams, 3D and digital product teams, and fashion students and educators. Most users work across more than one market, which is why Forecut reads every season for six regions and their key markets.</p>
 <h2>Where we are</h2>
 <p>Forecut is an independent, global platform, made in India. It is currently in an early-access testing phase, with full access available at no cost. Your feedback directly shapes the launch.</p>
 <div class="box"><b>Get in touch</b><br>Questions, feedback or partnership ideas: <a href="mailto:hello@forecut.in">hello@forecut.in</a></div>''')

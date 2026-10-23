@@ -95,13 +95,23 @@ def clip(t, n=158):
     return cut[:dot + 1] if dot > 90 else cut[:cut.rfind(' ')].rstrip(',;:–- ') + '…'
 
 
+NOINDEX = {'account.html', 'india-reference-library.html', 'search.html', '404.html', 'offline.html'}
+NOADS = NOINDEX | {'contact.html', 'terms.html', 'privacy.html'}
+ADS_OK = {}
+
+
+def content_words(h):
+    b = re.sub(r'<script.*?</script>|<style.*?</style>|<!--.*?-->|<nav.*?</nav>|<footer.*?</footer>', '', h, flags=re.S)
+    return len(re.sub(r'<[^>]+>', ' ', b).split())
+
+
 def block(fn, title, desc, path):
     desc = clip(desc)
     url = BASE + path
     _si, _sw, _sh = share_img(fn)
     E = lambda x: x.replace('&', '&amp;').replace('"', '&quot;').replace('<', '&lt;')
     b = ['<!--seo-->', f'<meta name="description" content="{E(desc)}">', f'<link rel="canonical" href="{url}">',
-         ('<meta name="robots" content="noindex,follow">' if fn in ('account.html','india-reference-library.html') else '<meta name="robots" content="index,follow">'), '<meta name="theme-color" content="#1f3d33">',
+         ('<meta name="robots" content="noindex,follow">' if fn in NOINDEX else '<meta name="robots" content="index,follow">'), '<meta name="theme-color" content="#1f3d33">',
          '<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96"><link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest">',
          '<meta property="og:type" content="website">', '<meta property="og:site_name" content="Forecut">', '<meta property="og:locale" content="en_IN">',
          f'<meta property="og:title" content="{E(title)}">', f'<meta property="og:description" content="{E(desc)}">', f'<meta property="og:url" content="{url}">',
@@ -111,11 +121,13 @@ def block(fn, title, desc, path):
     else: b.append('<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@type": "WebPage", "name": title, "description": desc, "url": url, "isPartOf": {"@id": BASE + "#site"}, "publisher": {"@id": BASE + "#org"}, "inLanguage": "en-IN",
         "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Forecut", "item": BASE}, {"@type": "ListItem", "position": 2, "name": title.split(' · ')[0].split(' (')[0], "item": url}]}}, ensure_ascii=False) + '</script>')
     if SITE.get('adsense'): b.append('<meta name="google-adsense-account" content="' + SITE['adsense'] + '">')
+    # ads only on substantial content pages (AdSense "low value content" rule); utility and thin pages carry no ad code
+    if SITE.get('adsense') and ADS_OK.get(fn): b.append(f'<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={SITE["adsense"]}" crossorigin="anonymous"></script>')
     if SITE.get('ga') or SITE.get('adsense'):
         b.append('<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag("js",new Date());' + (f'gtag("config","{SITE["ga"]}");' if SITE.get('ga') else '') +
                  '(function(){var done=0;function go(){if(done)return;done=1;' +
                  (f'var g=document.createElement("script");g.async=1;g.src="https://www.googletagmanager.com/gtag/js?id={SITE["ga"]}";document.head.appendChild(g);' if SITE.get('ga') else '') +
-                 (f'var a=document.createElement("script");a.async=1;a.crossOrigin="anonymous";a.src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client={SITE["adsense"]}";document.head.appendChild(a);' if SITE.get('adsense') else '') +
+                 '' +
                  '}["scroll","pointerdown","keydown","touchstart"].forEach(function(e){addEventListener(e,go,{once:true,passive:true});});addEventListener("load",function(){setTimeout(go,2500);});})();</script>')
 
     if fn in ARTS:
@@ -134,6 +146,8 @@ for fn, (title, desc, path) in pages.items():
     if not os.path.exists(p): continue
     h = open(p).read()
     h = re.sub(r'<!--seo-->.*?<!--/seo-->\n?', '', h, flags=re.S)
+    h = re.sub(r'<!--soc-->.*?<!--/soc-->|<!--socf-->.*?<!--/socf-->', '', h, flags=re.S)
+    ADS_OK[fn] = fn not in NOADS and content_words(h) >= 500
     h = re.sub(r'<title>.*?</title>', '<title>' + title.replace('&', '&amp;') + '</title>', h, count=1)
     h = h.replace('</title>', '</title>\n' + block(fn, title, desc, path), 1)
     _ff = open(os.path.join(R, 'fonts', 'fonts.css')).read().split('*/', 1)[1].strip().replace('url(', 'url(fonts/')

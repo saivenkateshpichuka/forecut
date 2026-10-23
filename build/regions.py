@@ -7,6 +7,7 @@ exec(_src.split('\nBUILD = {')[0], _ns)
 head, im, pick, news, NAVJS, FOOT, CSS = _ns['head'], _ns['im'], _ns['pick'], _ns['news'], _ns['NAVJS'], _ns['FOOT'], _ns['CSS']
 E = html.escape
 import regions_data as RD
+import market_guides as MG
 S = json.load(open('seasons.json'))
 D = json.load(open('details.json'))
 CODES = S['seasons']  # aw26 ss27 aw27 ss28 aw28
@@ -201,22 +202,22 @@ def resort():
     reg = ('<div class="ctab2"><table><tr><th>Region</th><th>Resort 27 in stores</th><th>Forecut direction</th></tr>'
            + ''.join(f'<tr><td><b><a href="region-{r["slug"]}.html">{E(r["name"])}</a></b></td><td>{E(local_window(r, "rs27"))}</td><td>{E("; ".join(r["dir"].get("rs27", [])))}</td></tr>' for r in RD.REGIONS) + '</table></div>')
     src = 'Sources: ' + ', '.join(f'<a href="{u}" rel="noopener" target="_blank">{E(n)}</a>' for n, u in R['src']) + '.'
-    jumps = [('shows', 'Cruise shows'), ('australia', 'Australian Fashion Week'), ('regions', 'By region')]
+    jumps = [('shows', 'Cruise shows'), ('australia', 'Australian Fashion Week'), ('guide', 'Guide'), ('regions', 'By region')]
     return (RCSS + top('Resort / Cruise 2027', 'Collections · Resort 27', 'Resort (also called Cruise) collections are shown in May and June and arrive in stores from November, for holidays, travel and warm-weather markets. For the southern hemisphere they land in peak summer.', ['hub-resort-27', 'theme-ss27-in-motion'], jumps)
             + f'<section class="sec" id="shows"><h2>The Cruise 2027 shows</h2><p class="sub">Four houses, four cities: spectacle on the runway, wearable clothes underneath.</p>{shows}</section>'
             + f'<section class="sec" id="australia"><h2>Australian Fashion Week: Resort 27</h2><p class="sub">Shown in Sydney in May 2026: the southern hemisphere\'s own resort calendar.</p><ul class="infl">{"".join(f"<li>{E(x)}</li>" for x in R["aus"])}</ul></section>'
-            + f'<section class="sec" id="regions"><h2>Resort 27 by region</h2>{reg}<p class="sub" style="margin-top:14px">{src}</p></section>')
+            + MG.RESORT + f'<section class="sec" id="regions"><h2>Resort 27 by region</h2>{reg}<p class="sub" style="margin-top:14px">{src}</p></section>')
 
 
 def prefall():
     reg = ('<div class="ctab2"><table><tr><th>Region</th><th>Pre-Fall 27 in stores</th></tr>'
            + ''.join(f'<tr><td><b><a href="region-{r["slug"]}.html">{E(r["name"])}</a></b></td><td>{E(local_window(r, "pf27"))}</td></tr>' for r in RD.REGIONS) + '</table></div>')
     g = RD.REGIONS[1]  # Europe as the reference market for the global bridge list
-    jumps = [('outlook', 'Outlook'), ('bridge', 'Bridge trends'), ('regions', 'By region')]
+    jumps = [('outlook', 'Outlook'), ('bridge', 'Bridge trends'), ('guide', 'Guide'), ('regions', 'By region')]
     return (RCSS + top('Pre-Fall 2027 outlook', 'Collections · Pre-Fall 27', 'Pre-Fall collections are shown in December and January and reach stores from May to July. They bridge summer and winter with transitional pieces. Pre-Fall 2027 shows have not happened yet, so this is a Forecut projection built from SS27 runway signals and the AW27 outlook; it will be updated when the shows take place.', ['hub-pre-fall-27', 'hero-aw26'], jumps)
             + '<section class="sec" id="outlook"><h2>The Pre-Fall 27 outlook</h2><ul class="infl"><li>Waisted jackets and belted outerwear as the bridge from the SS27 waist story to AW27 coats</li><li>Light layering: fine knits, shirt jackets, trench coats in technical cotton</li><li>Luminous Blue deepening towards navy and ink</li><li>Craft details moving from summer cottons onto knits</li></ul></section>'
             + f'<section class="sec" id="bridge"><h2>Bridge trends</h2><p class="sub">Trends present in SS27 that keep rising into AW27: the safest Pre-Fall bets.</p>{tcards(g, "pf27")}</section>'
-            + f'<section class="sec" id="regions"><h2>Pre-Fall 27 by region</h2>{reg}</section>')
+            + MG.PREFALL + f'<section class="sec" id="regions"><h2>Pre-Fall 27 by region</h2>{reg}</section>')
 
 
 OUT = {'regions.html': hub(), 'resort-27.html': resort(), 'pre-fall-27.html': prefall()}

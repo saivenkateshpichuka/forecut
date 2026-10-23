@@ -4,6 +4,7 @@ import html, json, math, subprocess, tempfile, os
 import india_data as I
 import pantone as PT
 import reports_data as R
+import report_guides as RG
 E = html.escape
 src = open('legal.py').read(); ns = {}; exec(src.split('\nP = ')[0], ns)
 HEAD, FOOT = ns['HEAD'], ns['FOOT']
@@ -171,6 +172,7 @@ for slug, title, keys, intro, how, hero in R.ITEMS:
             f'<section class="sec"><h2>Overview</h2><p>{E(intro)}</p><div class="summary">{summ}</div><p class="note">Invest: rising now. Test: emerging. Maintain: at its peak. Reduce: fading.</p></section>'
             f'<section class="sec"><h2>The details</h2><p class="sub">Each detail with its status for Festive 26, its trend curve and what it does next.</p><div class="dgrid">{tiles}</div></section>'
             f'<section class="sec howto"><h2>How to update your {E(title.lower())} range</h2><ul>' + ''.join(f'<li>{E(h)}</li>' for h in how) + '</ul></section>'
+            + RG.core(slug, title) +
             f'<p>See every {E(title.lower())} detail with design notes and downloadable cards in the <a href="india.html">India Forecast 2026–28</a>.</p>' + SRC)
     page(fn, t + ' · Forecut', body); PAGES.append((fn, t, intro[:155], 'Core Item Update', hero))
 
@@ -183,7 +185,8 @@ for t in I.THEMES:
     cads = ''
     for n in pieces:
         x = D[n]; svg = FL.get(n, '')
-        pair = f'<div class="pair"><div class="flat">{svg}<small>Forecut flat</small></div>{photo(n)}</div>' if svg else f'<div class="pair one">{photo(n)}</div>'
+        _ph = photo(n)  # owner's rule: show the photo; the flat sketch only when no photo exists
+        pair = f'<div class="pair one">{_ph}</div>' if (islug(n) in IMGS or not svg) else f'<div class="pair one"><div class="flat">{svg}<small>Forecut flat</small></div></div>'
         cads += (f'<article class="cad">{pair}'
                  f'<div class="dt"><div class="hd"><h3>{E(n)}</h3>{pill(x[5][0])}</div><p>{E(x[4])}</p>{timeline(x[5])}</div></article>')
     prices = ''.join(f'<tr><td>{E(a)}</td><td>₹{E(b)}</td><td>₹{E(c)}</td><td>₹{E(d)}</td></tr>' for a, b, c, d in t['prices'])
@@ -192,10 +195,11 @@ for t in I.THEMES:
     body = (cover('Design Capsule · India 2026–28', ti, t['d'] if 'd' in t else t['story'], hero) +
             f'<section class="sec"><h2>Mood and colour</h2><div class="mood"><div><div class="sw">{sw}</div><p class="note">Pantone TCX (cotton) codes are the nearest match to the screen colour; confirm against a physical Pantone book and lab dips before production.</p></div>'
             f'<div class="wh"><p><b>Why?</b> {E(t["why"])}</p><p><b>What?</b> {E(t["story"])}</p><p><b>Who\'s showing it?</b></p><ul>{brands}</ul></div></div></section>'
-            f'<section class="sec"><h2>Key pieces</h2><p class="sub">Forecut flat sketches with reference photos, ready to brief into design.</p><div class="cads">{cads}</div></section>'
+            f'<section class="sec"><h2>Key pieces</h2><p class="sub">The key pieces with reference photos, ready to brief into design.</p><div class="cads">{cads}</div></section>'
             f'<section class="sec"><h2>Price guide (India)</h2><div class="tw"><table class="ptab"><thead><tr><th>Key garment</th><th>Value</th><th>Mid</th><th>Premium</th></tr></thead><tbody>{prices}</tbody></table></div>'
             f'<p class="note">Cost to make: {E(t["cost"][0])}. {E(t["cost"][1])}</p></section>'
             f'<section class="sec howto"><h2>How to build the capsule</h2><ul>' + ''.join(f'<li>{E(a)}</li>' for a in t['actions']) + '</ul></section>'
+            + RG.capsule(slug) +
             f'<p class="note">Sources: {E(t["src"])}.</p>')
     page(fn, ti + ' · Forecut', body); PAGES.append((fn, ti, t['story'][:155], 'Design Capsule', hero))
 
