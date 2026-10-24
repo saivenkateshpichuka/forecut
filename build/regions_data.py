@@ -111,6 +111,7 @@ REGIONS = [
   ],
   'news': [
     ('Oct 2026', 'São Paulo Fashion Week N61', 'Ran 13–18 October with 26 shows, mainly at Pacubra in Ibirapuera Park, as part of SPFW\'s 30th-anniversary celebrations, with established labels, independents and new voices.', [('FashionUnited Brasil', 'https://fashionunited.com.br/news/fashion/spfw-n61-divulga-o-line-up-oficial/20260825570422'), ('O Tempo', 'https://www.otempo.com.br/moda-e-beleza/2026/8/26/spfw-n61-divulga-line-up-oficial-com-26-desfiles-em-sao-paulo-veja')]),
+    ('Apr 2026', 'Rio de Janeiro Fashion Week SS27: black minimalism to opulent maximalism', 'The revived Rio week (14–18 April 2026) showed five directions: black, architectural minimalism (Dendezeiro, Handred, Normando, Karoline Vitto); reworked structured suits (Aluf, Apartamento 03, Helo Rocha, Lucas Leao); crochet, lattice knits and open weaves for day-to-evening cover-ups (Angela Brito, Blue Man, Patricia Viera); one-shoulder swimsuits for more body types (Karoline Vitto, Lenny Niemeyer, Salinas); and heavily decorated maximalism built on Brazilian craft (Isabel Capeto, MISCI).', [('FashionUnited', 'https://fashionunited.com/news/fashion/rio-de-janeiro-fashion-week-ss27-trends-black-minimalism-to-opulent-maximalism/2026050872031')]),
   ],
   'dir': {
     'ss27': ['International SS27 trends reach local stores for spring/summer, Sep 2027–Feb 2028', 'Featherlight and sheer fabrics translated into beach and resort wear', 'Bold colour: Luminous Blue, marigold, berry reds', 'Crochet, raffia and cotton craft'],
@@ -149,6 +150,7 @@ REGIONS = [
     {'name': 'New Zealand', 'climate': 'Temperate, changeable weather.', 'moments': 'Christmas summer, winter (June–August)', 'prefs': 'Practical outerwear, merino knitwear, minimal design.', 'week': 'New Zealand Fashion Week'},
   ],
   'news': [
+    ('Oct 2026', 'Christchurch Spring Fashion Festival 2026', 'The second edition, curated by New Zealand Fashion Week, ran 15–18 October at Te Pae Christchurch Convention Centre: The New Guard showcase of contemporary New Zealand designers (curated by NZFW creative director Dan Ahwa), The Spring Edit with NZFW runway highlights from Caitlin Crisp, Kathryn Wilson, Juliette Hogan and Taylor, and a Fashion for a Cure fundraising runway with 22 designers including Trelise Cooper, Storm and Ruby.', [('NZ Fashion Week', 'https://www.nzfashionweek.com/christchurch'), ('FashioNZ', 'https://www.fashionz.co.nz/category/latest/')]),
     ('May 2026', 'Australian Fashion Week Resort 27', 'Five directions: bi-coastal utility (nylon, raincoat fabrics), ethereal sheers (silk organza), high shine (liquid sequin and georgette), "surfer perfect" (wraps, crochet, raffia, sunset prints) and berry reds.', [('Style Arcade', 'https://www.stylearcade.com/blog/australian-fashion-week-resort-27-trend-report')]),
   ],
   'dir': {
