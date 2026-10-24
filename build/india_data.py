@@ -213,6 +213,11 @@ D = [
  ('Indo-Western', 'Evening fusion', 'Zari-embroidered denim eveningwear', 'Embellishment', 'Denim and Tencel lifted to evening with zari embroidery, as shown by Spacelines.', 'e-r-r', 'Embroidered denim'),
  ('Indo-Western', 'Wardrobe systems', 'Modular organza occasion separates', 'Construction', 'Occasion pieces in organza, silk and washed denim that mix and re-pair across events, as shown by Nachiket Barve.', 'errpp', None),
  ('Trims & Accessories', 'Trims', 'Enamel clasps and closures', 'Hardware', 'Small enamelled clasps used as a crafted closure on kurtas and accessories, as shown by AMPM.', 'e-r-r', None),
+ # Weekly details 2026-10-24 (Lakmē Fashion Week x FDCI, Delhi, 13–18 Oct 2026; Outlook Luxe coverage)
+ ("Men's Ethnic", 'Occasion & wedding', 'Pre-draped doshalas', 'Drape', 'Ready-draped shawls (doshalas) fixed over the shoulder of a bandhgala and angrakha-style tunic, as in Tasva by Tarun Tahiliani at Lakmē x FDCI, Oct 2026. Easier for grooms and guests than a loose shawl.', 'e-r-p', None),
+ ('Embroidery & Surface', 'Embellishment', 'Glass-bead and zardozi layering', 'Embellishment', 'Zardozi, threadwork, sequins and glass beads layered into dimensional, colourful bridal surfaces, as in Anushree Reddy MAYA at Lakmē x FDCI, Oct 2026.', 'errpp', None),
+ ('Fabrics & Weaves', 'Everyday', 'Tencel and bamboo blend suiting', 'Fabric', 'Separates and menswear cut from cotton, wool, linen, Tencel and bamboo blends, as in Ashish N Soni with Arvind at Lakmē x FDCI, Oct 2026, with select looks sold at The Arvind Stores.', 'errpp', None),
+ ('Indo-Western', 'Evening fusion', 'Black-and-gold evening gowns', 'Colour', 'Black eveningwear lifted with gold embroidery and metallic finishes: Namrata Joshipura OBSIDIAN and Samant Chauhan\'s halter gown with gold florals and 3D ruffles at Lakmē x FDCI, Oct 2026.', 'e-r-p', None),
 ]
 
 # Season guide shown on the India page. 'open': visible now; locked seasons release at official launch.

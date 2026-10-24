@@ -65,6 +65,14 @@ P['about.html'] = ('About Forecut · Global Fashion Trend Forecasting', '''
 <p>Fashion designers, D2C and retail brands, manufacturers and exporters, sourcing and merchandising teams, 3D and digital product teams, and fashion students and educators. Most users work across more than one market, which is why Forecut reads every season for six regions and their key markets.</p>
 <h2>Where we are</h2>
 <p>Forecut is an independent, global platform, made in India. It is currently in an early-access testing phase, with full access available at no cost. Your feedback directly shapes the launch.</p>
+<h2>How to use Forecut in a range plan</h2>
+<p>Start with the season that matches your next drop, not the one in stores now. If you deliver in eight to ten months, open the next-season forecast and filter by your department. Shortlist details marked rising: they are spreading but not yet everywhere, so they still feel new when your range lands. Use peaking details in proven core styles, and treat emerging details as small tests, for example one colourway or one capsule. Then open your region page and check timing: a southern-hemisphere store sells the same idea about six months later, and a hot-climate market needs lighter fabric and shorter sleeves.</p>
+<h2>Reading one trend in different markets</h2>
+<p>The same detail rarely sells the same way everywhere. A sheer organza overlay reads as evening wear in Paris, as a modest layer over an opaque slip in Dubai or Jakarta, and as festive wear in Delhi. A wool overcoat sells from August in London but becomes a light trench in Lagos. That is why every Forecut detail sits next to six regional readings, and why region pages list local moments such as Diwali, Ramadan, Lunar New Year, Black Friday and carnival.</p>
+<h2>Common questions</h2>
+<p><b>Is Forecut only about India?</b> No. India is a featured market inside the Asia region, with its own festive and summer calendar, but the core forecast covers the international seasons for Asia, Europe, North America, South America, Africa and Oceania.</p>
+<p><b>How often does the forecast change?</b> News is checked daily, new details are added weekly, and stages are reviewed monthly. Old stages are kept, so you can see how a detail moved.</p>
+<p><b>Can I use the detail cards with my team?</b> Yes. Download cards are designed to be shared in briefs, tech packs and buying meetings. Please keep the Forecut credit on them.</p>
 <div class="box"><b>Get in touch</b><br>Questions, feedback or partnership ideas: <a href="mailto:hello@forecut.in">hello@forecut.in</a></div>''')
 P['method.html'] = ('How Forecut Forecasts · Methodology', '''
 <div class="eb">Methodology</div><h1>How we forecast.</h1>
@@ -91,6 +99,16 @@ P['method.html'] = ('How Forecut Forecasts · Methodology', '''
 <p>Season pages show two dates: <b>last researched</b> (when the evidence behind the forecast was last reviewed) and <b>data refreshed</b> (when the page was last rebuilt).</p>
 <h2>Limits</h2>
 <p>Forecasts are informed opinions for planning, not guarantees. Check them against your own sales data, costings and customers. Price guides are indicative estimates.</p>
+<h2>A worked example</h2>
+<p>Take a single detail such as a halter neckline. In one week it might appear in a São Paulo show, a Delhi gown and a US retailer's new range. One sighting is a signal; three independent sightings across different regions and price levels is evidence. We record each source, check whether the detail is new or a repeat of last season, and only then set a stage. If it shows up mainly on runways, it starts as emerging. Once high-street and online retailers carry it in several markets, it moves to rising. When it is in most ranges and discounting begins, it is peaking.</p>
+<h2>How to read a lifecycle</h2>
+<p>Every detail has one letter per season, read from left to right. A path such as emerging, rising, peaking tells you to build stock gradually. A detail that skips a season (shown as a gap) is seasonal: a summer fabric, for example, that returns each spring. A detail marked fading is not wrong to sell, but new development money is usually better spent elsewhere.</p>
+<h2>Regional weighting</h2>
+<p>We do not average the world. A trend seen only in Europe stays emerging globally even if it is peaking in Milan, and region pages note where adoption is ahead or behind. Climate also changes the reading: heavy pieces are scaled down for tropical markets, and southern-hemisphere stores are given a timing shift rather than a separate forecast.</p>
+<h2>Common questions</h2>
+<p><b>Do you use sales data?</b> Not from retailers' private systems. We use public results, launches and retail coverage. Combine our stages with your own sell-through data.</p>
+<p><b>Why are some brands named and others not?</b> We only name a brand when a public source reports that it showed or sold the detail.</p>
+<p><b>What happens when a forecast is wrong?</b> We revise the stage at the next monthly review and keep the earlier stage on record.</p>
 <div class="box"><b>Questions about a forecast?</b><br>Write to <a href="mailto:hello@forecut.in">hello@forecut.in</a> and tell us which detail or page.</div>''')
 P['contact.html'] = ('Contact Forecut', '''
 <div class="eb">Contact</div><h1>Get in touch.</h1>

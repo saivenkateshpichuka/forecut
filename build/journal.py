@@ -66,7 +66,7 @@ for a in J.ARTICLES:
             f'<section class="more"><h3>More from the Journal</h3><div class="jgrid">{"".join(card(x) for x in others)}</div></section>')
     open(f'../{a["slug"]}.html', 'w').write(head(a['title'] + ' · Forecut Journal') + body + FOOT)
 idx = ('<p class="eb">Journal</p><h1>The Forecut Journal</h1><p class="lead">Analysis and practical guides on Indian and global fashion trends: what is emerging, rising, peaking and fading, why it matters, and what to do about it.</p>'
-       f'<div class="jgrid">{"".join(card(x) for x in J.ARTICLES)}</div>')
+       f'<div class="jgrid">{"".join(card(x) for x in J.ARTICLES)}</div>' + getattr(J, 'INDEX_GUIDE', ''))
 open('../journal.html', 'w').write(head('Forecut Journal · Indian fashion trend analysis and guides') + idx + FOOT)
 nf = ('<p class="eb">Page not found</p><h1>This page has moved on.</h1><p class="lead">Like a fading trend, the page you were looking for is no longer here. Try one of these instead:</p>'
       '<ul><li><a href="/">Forecut home</a></li><li><a href="/india.html">India Forecast 2026–27</a></li><li><a href="/aw26.html">AW26 global season</a></li><li><a href="/journal.html">The Journal</a></li></ul>')

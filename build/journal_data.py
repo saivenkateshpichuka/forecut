@@ -318,3 +318,15 @@ ARTICLES = [
   ('cta', 'Start with the <a href="india.html">India Forecast 2026–27</a> or the <a href="aw26.html">AW26 global season</a>.'),
  ]},
 ]
+
+
+# Guide shown under the article grid on journal.html (added 2026-10-24 for content depth). Add only.
+INDEX_GUIDE = '''<section class="jguide"><h2>How to use the Journal</h2>
+<p>The Journal explains the thinking behind the forecast. Season pages tell you which details are emerging, rising, peaking or fading; Journal articles explain why, show where a trend comes from and suggest what to do about it. Each article links to the details and regions it discusses, so you can go from a story to a shortlist in a few clicks.</p>
+<p>Use the articles in three ways. For planning, read the market guides before a buying meeting: they summarise the season for one market or occasion, such as the Indian wedding season or Ramadan in the Gulf, and list the details worth testing. For design, read the craft and construction pieces: they explain how a detail is made, which fabrics and trims suit it, and how to adapt it for hot or cold climates. For context, read the show and research briefings: they collect what was seen at fashion weeks in Paris, Milan, New York, São Paulo, Lagos, Shanghai, Delhi and elsewhere, with links to the public coverage we used.</p>
+<h2>Reading a trend across regions</h2>
+<p>Many articles start from one market and then look outward. A handloom story from India may matter to a Copenhagen label looking for low-impact fabrics; a modest-luxury story from Dubai may help a London brand plan its Resort range. When an article names a region, open that region page to check local timing: southern-hemisphere stores sell the same idea about six months later, and tropical markets need lighter weights.</p>
+<h2>Common questions</h2>
+<p><b>How often are new articles published?</b> Usually several times a month, alongside the daily news checks and weekly detail updates.</p>
+<p><b>Are the articles sponsored?</b> No. Brands are named only where public sources report their collections, and we write every article in our own words.</p>
+<p><b>Can I quote an article?</b> Yes, with a link back to the original page on forecut.in.</p></section>'''
