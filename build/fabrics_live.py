@@ -2,7 +2,7 @@
 innovation radar, India signals, news and forecast-led articles. Facts are summarised from the linked sources;
 'Forecut read' lines are Forecut's own forecast view. Add new items at the top; never delete old ones."""
 
-UPDATED = '14 Oct 2026'
+UPDATED = '25 Oct 2026'
 
 LIVE = [  # ticker under the hero: (label, text, link)
     ('Live now', 'Lakmē Fashion Week, New Delhi, 13–18 Oct 2026: Ladakh pashmina showcase on 18 Oct', '#india'),
@@ -102,6 +102,10 @@ INDIA = [
 ]
 
 NEWS = [
+ ('October 2026', 'Functional Fabric Fair Portland puts bio-based materials first', 'The fall edition runs 26–28 October 2026 at the Oregon Convention Center, focused on bio-based materials for Fall/Winter 2027/28. A new Cellulose Forum covers hemp, linen, nettle, lyocell, modal and viscose, alongside Wool and Cotton forums; more than 340 sustainability-certified suppliers exhibit, 68 of them for the first time. Forecut read: supports our rising stages for lyocell, closed-loop fibres and European hemp in AW27.',
+  [('Fibre2Fashion', 'https://www.fibre2fashion.com/news/textile-fairs-news/functional-fabric-fair-2026-spotlights-bio-based-materials-in-portland-314238-newsdetails.htm')]),
+ ('October 2026', 'Pakistan cotton arrivals up 7.5% year on year', 'About 4.08 million bales had reached ginneries by 15 October 2026, 7.53% more than a year earlier (Pakistan Cotton Ginners Association). Sindh supplied 55% of arrivals and Punjab 40%; textile mills bought 86.7% of arrivals. Forecut read: steadier South Asian cotton supply helps price stability for cotton shirting, denim and kurta fabrics in SS27.',
+  [('ProPakistani', 'https://propakistani.pk/2026/10/19/sindh-stays-ahead-as-cotton-production-crosses-4-million-bales')]),
  ('October 2026', 'Lakmē Fashion Week returns to Delhi with a Ladakh pashmina showcase', 'Lakmē Fashion Week in partnership with FDCI runs 13–18 October 2026 at Taj Palace, New Delhi. On 18 October, "The Fifth Season: A Fashion Story from Ladakh" presents hand-woven Ladakhi pashmina and Himalayan wool from women-led enterprises Changra Ladakh and Charkha Ladakh.',
   [('Elle India', 'https://elle.in/fashion/lakm%C4%93-fashion-week-is-back-in-delhi-heres-what-to-watch-12613121'), ('Eastern Herald', 'https://easternherald.com/2026/10/13/the-department-of-industries-commerce-ut-ladakh-presents-the-fifth-season-a-fashion-story-from-ladakh-at-lakme-fashion-week-in-partnership-with-fashion-design-council-of-india-f/')]),
  ('October 2026', 'Paris SS27 closes on featherlight fabrics', 'Paris Fashion Week ended on 6 October with lightness as its common thread: ultrafine ripstop nylon at Issey Miyake, sheer organza sets at Chanel and translucent, weightless pieces across the shows.',

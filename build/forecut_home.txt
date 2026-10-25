@@ -532,7 +532,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
     <div class="navlinks" id="navlinks">
       <a href="#explore">Forecasts</a>
       <a href="https://forecut.in/regions.html">Regions</a>
-      <details class="ddn"><summary>Explore</summary><div><a href="https://forecut.in/couture.html">Couture</a><a href="https://forecut.in/fabrics.html">Fabrics</a><a href="https://forecut.in/colour.html">Colour</a><a href="method.html">Methodology</a></div></details>
+      <details class="ddn"><summary>Explore</summary><div><a href="https://forecut.in/couture.html">Couture</a><a href="https://forecut.in/fabrics.html">Fabrics</a><a href="https://forecut.in/colour.html">Colour</a><a href="https://forecut.in/celebrity-style.html">Celebrity style</a><a href="method.html">Methodology</a></div></details>
       <a href="https://forecut.in/reports.html">Reports</a>
       <a href="https://forecut.in/journal.html">Journal</a>
       <a href="search.html" aria-label="Search Forecut">⌕ Search</a>

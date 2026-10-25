@@ -155,3 +155,9 @@ images when adding or refreshing seasonal art.
 ## Latest region news on the homepage and Regions hub (added 23 Oct 2026)
 - home_blocks.latest_news(n) merges every region's 'news' list in regions_data.py (newest month first, regions taking turns within a month).
 - The homepage shows the newest 4 under the region cards (<!--NEWSSTRIP--> in forecut_home.txt); regions.html shows the newest 8 in a "Latest news" section (#latest). Both refresh automatically when news is added and `build_home.py` / `regions.py` are run.
+
+## Weekly scope: fashion, textiles and celebrity style (added 25 Oct 2026)
+The weekly update covers the whole fashion picture, not only runway details:
+- **Fashion:** runway and designer collections, retailer and brand launches, collaborations (details.json, india_data.py, regions_data.py news).
+- **Textiles:** fibre, yarn and mill news, fabric fairs (Première Vision, Milano Unica, Intertextile, Functional Fabric Fair, Texworld), cotton/wool/silk supply, recycling and textile innovation. Add sourced items to NEWS in fabrics_live.py (newest first; 'Forecut read' line at the end) and update RADAR/INDIA there where evidence supports it.
+- **Celebrity styling and looks:** red carpets, premieres, award shows, celebrity weddings and brand-ambassador appearances in all six regions. Add events to the TOP of EVENTS in celebrity_data.py (unique id, date, region, event, place, looks [(name, designer or '', what they wore)], Forecut read, existing detail names, sources) and refresh THIS_WEEK. celebrity.py builds ../celebrity-style.html. Never use celebrity, red-carpet or agency photos; the page shows Forecut's own detail images only. Credit a designer only when a source names one. keep_check.py guards event ids (never delete).

@@ -34,6 +34,8 @@ for _h in HD.HUBS:
         ARTS[a['slug'] + '.html'] = dict(a, hero=_pick(a['img']), date=HD.DATE)
 import regions_data as RG
 for _f, (_t, _d) in RG.PAGES.items(): pages[_f] = (_t, _d, _f)
+import celebrity_data as CEL
+pages[CEL.FILE] = (CEL.SEO[0], CEL.SEO[1], CEL.FILE)
 OVR = {
  'index.html': ('Forecut | Global Fashion Trend Forecasting by Region 2026–2028',
    "Forecut is a global, detail-level fashion trend forecasting platform: SS, Pre-Fall, AW and Resort read for six regions, showing what's emerging, rising, peaking and fading, and when to act."),
