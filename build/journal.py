@@ -54,8 +54,12 @@ def block(b):
                              + ''.join(f'<tr><td>{E(a)}</td><td>{E(v)}</td><td>{E(m)}</td><td>{E(p)}</td></tr>' for a, v, m, p in b[1]) + '</tbody></table></div><p class="meta">Indicative retail prices in India; actual prices vary by brand, fabric and work.</p>')
     if k == 'cta': return f'<div class="cta">{b[1]}</div>'
     raise ValueError(k)
+def card_image(a):
+    if a['slug'] == JV.SLUG:
+        return "<div class=\"ph\"><img src=\"img/lagos-crafted-studio-editorial-640.webp\" srcset=\"img/lagos-crafted-studio-editorial-640.webp 640w, img/lagos-crafted-studio-editorial-960.webp 960w, img/lagos-crafted-studio-editorial.webp 1536w\" sizes=\"(max-width: 600px) calc(100vw - 32px), (max-width: 892px) 50vw, 280px\" alt=\"AI-generated editorial illustration of indigo tailoring and woven cloth for the Lagos CRAFTED story\" loading=\"lazy\" decoding=\"async\" width=\"1536\" height=\"1024\"></div><small style=\"color:var(--muted);font-weight:500;letter-spacing:0;text-transform:none\">AI-generated editorial illustration</small>"
+    return img(a["hero"], a["title"], "ph")
 def card(a):
-    return f'<a class="jcard" href="{a["slug"]}.html">{img(a["hero"], a["title"], "ph")}<small>{E(a["tag"])} · {a["read"]} min read</small><b>{E(a["title"])}</b><span class="d">{E(a["desc"])}</span></a>'
+    return f'<a class="jcard" href="{a["slug"]}.html">{card_image(a)}<small>{E(a["tag"])} · {a["read"]} min read</small><b>{E(a["title"])}</b><span class="d">{E(a["desc"])}</span></a>'
 for a in J.ARTICLES:
     others = [x for x in J.ARTICLES if x is not a][:3]
     body = (f'<p class="eb"><a href="journal.html" style="color:inherit;text-decoration:none">Journal</a></p><article>'
