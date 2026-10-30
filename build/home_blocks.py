@@ -135,3 +135,72 @@ def news_strip(n=4):
 
 def blocks(M, SEAS, islug):
     return {'SEASONCARDS': season_cards(M, SEAS), 'REGIONCARDS': region_cards(), 'SPOTLIGHT': spotlight(M, SEAS, islug), 'COLOUR': colour_block(), 'NEWSSTRIP': news_strip()}
+
+
+# --- "This week at Forecut" (Oct 2026): newest details, latest Journal, Celebrity Style Watch and the coming calendar ---
+import datetime as _dt, json as _json, os as _os
+
+# (date, label, link) — public dates: FHCM calendar (fhcm.paris), festival calendars. Past dates drop off automatically.
+CALENDAR = [
+    (_dt.date(2026, 11, 8), 'Diwali', 'india.html'),
+    (_dt.date(2026, 11, 27), 'Black Friday', 'region-north-america.html'),
+    (_dt.date(2026, 12, 1), 'Pre-Fall 27 collections begin (Dec – Jan)', 'pre-fall-27.html'),
+    (_dt.date(2027, 1, 19), 'Paris Menswear AW27 (19–24 Jan)', 'region-europe.html'),
+    (_dt.date(2027, 1, 25), 'Paris Haute Couture SS27 (25–28 Jan)', 'couture.html'),
+    (_dt.date(2027, 2, 6), 'Lunar New Year', 'region-asia.html'),
+    (_dt.date(2027, 2, 7), 'Ramadan begins (expected)', 'region-asia.html'),
+    (_dt.date(2027, 3, 1), 'Paris Womenswear AW27 (1–9 Mar)', 'aw27.html'),
+]
+
+
+def today():
+    return _dt.date.today()
+
+
+def hero_tag():
+    nxt = next((c for c in CALENDAR if c[0] >= today()), None)
+    t = f'Live · updated {today().strftime("%-d %b")}'
+    return t + (f' · Next: {E(nxt[1].split(" (")[0])}, {nxt[0].strftime("%-d %b")}' if nxt else '')
+
+
+def this_week(M, SEAS, islug):
+    names = _json.load(open('new_this_month.json')) if _os.path.exists('new_this_month.json') else []
+    idx = {it['name']: (k, it) for k, v in M.items() for it in v}
+    cards = []
+    for n in names:
+        if n not in idx: continue
+        k, it = idx[n]
+        si = next((i for i, c in enumerate(it['life']) if c in ST), None)
+        if si is None: continue
+        st = it['life'][si]
+        sl = islug(n)
+        ph = next((c for c in (sl + '-photo', f'{sl}-{SEAS[si]}-photo', sl) if _os.path.exists(f'../img/{c}.webp')), None)
+        art = (f'<span class="nwi"><img src="img/{ph}.webp" alt="{E(n)}" loading="lazy" width="400" height="400"></span>' if ph
+               else f'<span class="nwi nwt {ST[st][0]}"><b>{E(it.get("area", ""))}</b></span>')
+        cards.append(f'<a class="nwc" href="{SEAS[si]}.html?q={sl.replace("-", "+")}#list">{art}<span class="nwb">'
+                     f'<span class="pill {ST[st][0]}">{SEAS[si].upper()} · {ST[st][1]}</span><b>{E(n)}</b>'
+                     f'<small>{E(k.replace("|", " · "))}</small><span class="nwn">{E(it.get("note", ""))}</span></span></a>')
+    import journal_data as _JD
+    a = _JD.ARTICLES[0]
+    hero = a.get('hero_new') if a.get('hero_new') and _os.path.exists(f"../img/{a['hero_new']}.webp") else a.get('hero')
+    cal = ''.join(f'<li><a href="{u}"><time datetime="{d.isoformat()}">{d.strftime("%-d %b")}</time><span>{E(t)}</span></a></li>'
+                  for d, t, u in [c for c in CALENDAR if c[0] >= today()][:5])
+    side = (f'<a class="twj" href="{a["slug"]}.html"><span class="twjp"><img src="img/{hero}.webp" alt="" loading="lazy" width="800" height="500"></span>'
+            f'<small>Latest Journal · {E(a["tag"])}</small><b>{E(a["title"])}</b></a>'
+            '<a class="twc" href="celebrity-style.html"><small>Weekly</small><b>Celebrity Style Watch</b><span>Red-carpet looks by region, who designed them, and the Forecut details they show.</span></a>'
+            f'<div class="twcal"><small>Coming up</small><ul>{cal}</ul></div>')
+    return (f'''  <section id="thisweek" aria-labelledby="twh">
+    <div class="sechead"><div><span class="mono eyebrow">This week at Forecut · updated {today().strftime("%-d %b %Y")}</span><h2 id="twh">What's new.</h2></div><p>The newest details added from runways, fashion weeks and retail, the latest analysis, and what's coming on the global calendar.</p></div>
+    <div class="twgrid"><div class="twmain"><div class="twlab"><b>{len(cards)} new details this month</b><a href="search.html">Search all details →</a></div><div class="nwrow" tabindex="0" aria-label="New details, scroll sideways">{"".join(cards[:10])}</div></div>
+    <aside class="twside">{side}</aside></div>
+  </section>
+''')
+
+
+_blocks0 = blocks
+
+
+def blocks(M, SEAS, islug):
+    b = _blocks0(M, SEAS, islug)
+    b.update({'THISWEEK': this_week(M, SEAS, islug), 'HEROTAG': hero_tag()})
+    return b
