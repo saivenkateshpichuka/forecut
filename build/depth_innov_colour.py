@@ -128,3 +128,27 @@ MORE = {
  ('ul', ['<b>Core:</b> navy and ecru.', '<b>Fashion:</b> luminous blue and clay pink.', '<b>Neutral:</b> stone and chocolate.', '<b>Accent (small quantities):</b> marigold for trims and accessories.']),
 ],
 }
+
+# --- Depth added 31 Oct 2026 (weekly content-depth pass): practical guidance appended to the thinnest pages. Add only. ---
+MORE['innovation-recycled-plastic-embellishment'] = MORE['innovation-recycled-plastic-embellishment'] + [
+ ('h2', 'How to use it in a collection'),
+ ('ul', ['<b>Start with placement, not all-over work.</b> A recycled-sequin yoke, cuff or hem border on an otherwise plain dress tests customer response at a fraction of the cost of a fully embellished gown.',
+         '<b>Choose the hero piece carefully.</b> Evening tops, occasion skirts and festive blouses sell on surface; they are the best place to tell the recycled story.',
+         '<b>Match the base fabric.</b> Lightweight embellishment suits sheer organza, tulle and georgette; heavier three-dimensional flowers need a stable base such as crepe, satin or a fused panel.',
+         '<b>Plan care instructions early.</b> Recycled PET sequins can behave differently under heat, so test pressing, steaming and dry cleaning before bulk.']),
+ ('h2', 'Reading it by region'),
+ ('p', 'In <b>India and the Gulf</b>, where festive and wedding wear relies on sequins, beads and mirror work, the opportunity is volume: a single karigar workshop can switch suppliers without changing technique. In <b>Europe</b>, buyers will ask for documentation first, so keep certificates and percentages ready. In <b>North America</b>, recycled embellishment works best in party and holiday capsules where shoppers already accept a premium. In <b>Africa</b>, Lagos and Johannesburg designers who already work with beadwork and fringe can use it as a craft-plus-circularity story. In <b>Oceania</b>, race-day and summer occasion wear are the natural testing ground.'),
+ ('h2', 'A simple test plan'),
+ ('p', 'Order a sampling quantity of recycled sequins or flowers in two of your core evening colours. Make one placement style and one heavier style, wear-test both for a full evening, wash or dry clean them as you would in store, and compare shine, colour and loss of pieces with your current material. If the results match, move one best-selling style across for the next season and tell customers exactly which part is recycled.'),
+]
+MORE['innovation-biodegradable-biopolyester'] = MORE['innovation-biodegradable-biopolyester'] + [
+ ('h2', 'Where it fits first'),
+ ('ul', ['<b>Linings and pocketing:</b> hidden components with simple performance needs are the lowest-risk trial.',
+         '<b>Short-life categories:</b> event merchandise, uniforms with take-back schemes and single-season promotional pieces.',
+         '<b>Blends you already struggle to recycle:</b> where a polyester component blocks recycling, a material designed for chemical recycling or controlled biodegradation can simplify end-of-life options.',
+         '<b>Not yet:</b> high-performance outerwear, swimwear and activewear where durability, chlorine or UV resistance and colour fastness must match conventional polyester.']),
+ ('h2', 'Reading it by region'),
+ ('p', 'The <b>European Union</b> is tightening rules on green claims, so a biodegradable fibre will only help if the test conditions and timeframe can be stated clearly. In <b>North America</b>, some states restrict "biodegradable" on product labels, so marketing should focus on what has been certified. In <b>South and Southeast Asia</b>, where most polyester garments are made, mills are the right partners for early trials because they can run the fibre on existing lines. In <b>Africa and South America</b>, where much end-of-life clothing ends up, a material that breaks down in real-world conditions would matter most, but evidence for that is still limited.'),
+ ('h2', 'What to ask before you commit'),
+ ('p', 'Ask the supplier for the certified test standard, the conditions (industrial compost, home compost, soil or marine), the time to break down and whether any additives or dyes change the result. Ask how the fabric performs after washing and in storage, because a fibre designed to break down must not degrade in a warehouse. Treat early pilots as learning projects and keep conventional or recycled polyester as the default until results are proven over a full season.'),
+]

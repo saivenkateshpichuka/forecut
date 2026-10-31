@@ -1409,6 +1409,20 @@ var Flats = (function () {
     'Suede equestrian jackets': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'flap', x: ['suede', 'belt'], hl: ['body'] }),
     'Low-rise bootcut jeans': { g: 'trousers', jeans: true, leg: 'wide', hl: ['legs'] },
     'Piped satin track jackets': T({ t: 'jacket', col: 'rib', cl: 'zip', hem: 'rib', cuff: 'rib', x: ['gloss', 'piping'], hl: ['body'] }),
+    /* Weekly details 2026-10-31 (Lagos FW 2026, JFW 2027, Derby Day, LV pre-SS27, Oct collaborations) */
+    'Beaded-fringe canvas dresses': { g: 'dress', nk: 'square', sl: 'none', sk: 'column', hem: 'fringe', x: ['beads'], hl: ['hem'] },
+    'Off-shoulder tweed sheath dresses': { g: 'dress', nk: 'slip', sl: 'none', sk: 'column', x: ['melange', 'brooch'], hl: ['neck'] },
+    'Striped patchwork shirt dresses': { g: 'dress', nk: 'v', sl: 'short', sk: 'aline', x: ['check'], hl: ['body'] },
+    'Sheer lattice capes': T({ t: 'coat', col: 'band', cl: 'wrap', x: ['cape', 'sheer'], hl: ['cape'] }),
+    'Floral-lined showerproof jackets': T({ t: 'jacket', col: 'shirt', cl: 'zip', pk: 'flap', x: ['quiltlines', 'floral'], hl: ['body'] }),
+    'Woven-stripe longline overlayers': T({ t: 'coat', len: 236, col: 'band', cl: 'wrap', x: ['stripes', 'woven'], hl: ['body'] }),
+    'Fringed minis with back trains': { g: 'skirt', s: 'mini', x: ['tiers', 'tassel'], hl: ['hem'] },
+    'Leather-yoke nylon puffers': T({ t: 'jacket', len: 196, fl: 8, col: 'funnel', cl: 'zip', hem: 'band', cuff: 'band', x: ['quiltlines', 'leather', 'westernyoke'], hl: ['yoke'] }),
+    'Fisherman-style raincoats': T({ t: 'coat', col: 'funnel', cl: 'zip', x: ['hood', 'stormflap', 'gloss'], hl: ['stormflap'] }),
+    'Generous 1980s double-breasted suits': T({ t: 'blazer', col: 'peak', cl: 'db', pk: 'flap', x: ['dark'], hl: ['body'] }),
+    'Skirts for men': { g: 'skirt', s: 'midi', x: ['wrap', 'dark'], hl: ['front'] },
+    'Raffia wedge sandals': { g: 'shoe', s: 'sandal', heel: 'wedge', x: ['woven'], hl: ['heel'] },
+    'Tonal suede low-profile sneakers': { g: 'shoe', s: 'sneaker', x: ['suede', 'slimsole'], hl: ['upper'] },
   };
   var LABEL = { knees: 'Knees', bodice: 'Bodice', front: 'Wrap front', chain: 'Chain trim', centre: 'Centre front', collar: 'Collar', cuffs: 'Cuffs', hem: 'Hem', shoulders: 'Shoulders', body: 'Whole piece', closure: 'Front closure', pockets: 'Pockets', waist: 'Waist', cape: 'Cape', stormflap: 'Storm flap', chest: 'Chest', yoke: 'Yoke', tie: 'Tie', sleeves: 'Sleeves', skirt: 'Skirt', sides: 'Side seams', neck: 'Neckline', legs: 'Legs', pleats: 'Pleats', fly: 'Fly', seams: 'Outseams', adjusters: 'Side adjusters', loop: 'Hammer loop', slit: 'Slit', strap: 'Strap', toe: 'Toe', heel: 'Heel', vamp: 'Vamp', upper: 'Upper', sole: 'Sole', shaft: 'Shaft', topline: 'Topline', laces: 'Lacing', sock: 'Sock' };
 

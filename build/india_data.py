@@ -218,6 +218,13 @@ D = [
  ('Embroidery & Surface', 'Embellishment', 'Glass-bead and zardozi layering', 'Embellishment', 'Zardozi, threadwork, sequins and glass beads layered into dimensional, colourful bridal surfaces, as in Anushree Reddy MAYA at Lakmē x FDCI, Oct 2026.', 'errpp', None),
  ('Fabrics & Weaves', 'Everyday', 'Tencel and bamboo blend suiting', 'Fabric', 'Separates and menswear cut from cotton, wool, linen, Tencel and bamboo blends, as in Ashish N Soni with Arvind at Lakmē x FDCI, Oct 2026, with select looks sold at The Arvind Stores.', 'errpp', None),
  ('Indo-Western', 'Evening fusion', 'Black-and-gold evening gowns', 'Colour', 'Black eveningwear lifted with gold embroidery and metallic finishes: Namrata Joshipura OBSIDIAN and Samant Chauhan\'s halter gown with gold florals and 3D ruffles at Lakmē x FDCI, Oct 2026.', 'e-r-p', None),
+ # Weekly details 2026-10-31 (Karwa Chauth at the Kapoors', Mumbai, 29 Oct; Abhinav Mishra Into the Wild 2026, Delhi, 24 Oct; Tarun Tahiliani at Dubai FW, 26 Oct)
+ ("Women's Ethnic", 'Sarees', 'Ombré silk sarees with contrast blouses', 'Colour', "Silk sarees shading from pastel pink to deep red with gold zari florals, worn with a contrast emerald silk blouse, as on Shilpa Shetty at the Kapoors' Karwa Chauth gathering, Mumbai, 29 Oct 2026.", 'rprpf', None),
+ ("Women's Ethnic", 'Suits & kurtas', 'Sheer organza jackets over anarkalis', 'Layer', "A sheer, gold-trimmed organza jacket worn open over a crushed-texture anarkali, as on Sonam Kapoor (crimson anarkali, rust-orange organza jacket) in Mumbai, 29 Oct 2026. An easy add-on that refreshes an existing anarkali.", 'erppf', None),
+ ("Women's Ethnic", 'Lehengas', 'Black mirror-work lehengas', 'Colour', "Black lehengas worked in mirrors, hand embroidery and metallic accents, with a bralette blouse and sheer sequinned dupatta, as worn by Kriti Sanon closing Abhinav Mishra's Into the Wild 2026, New Delhi, 24 Oct 2026.", 'rprpf', None),
+ ("Women's Ethnic", 'Sarees', 'Mirror-bordered tissue sarees', 'Trim', "Beige-gold tissue silk sarees edged with mirror-work borders and a matching high-neck blouse, as on Mira Rajput in Mumbai, 29 Oct 2026; a lighter way to wear mirror work for evening functions.", 'rpprf', None),
+ ("Men's Ethnic", 'Kurtas & sets', 'Floral kurtas with harem trousers', 'Print', "Deep-toned floral-print kurtas paired with relaxed harem trousers instead of churidars, as worn by Aamir Khan in Mumbai, 29 Oct 2026; a softer, comfortable festive set for men.", 'errpf', None),
+
 ]
 
 # Season guide shown on the India page. 'open': visible now; locked seasons release at official launch.

@@ -62,3 +62,16 @@ def capsule(slug):
     return (section('Range plan', paras=[E(plan)], items=['<b>Hero pieces (about 20%):</b> the strongest expression of the story, at higher prices.', '<b>Core pieces (about 60%):</b> easy-to-wear styles in the capsule colours.', '<b>Add-ons (about 20%):</b> accessories and layers that increase basket size.'])
             + section('Selling it in different regions', paras=['In India, time the capsule to the festive or summer window it suits. For South Asian communities abroad, link it to local festival dates and weddings. For international customers new to Indian fashion, lead with easy pieces such as shirts, jackets and scarves, and explain the craft.'])
             + section('Common questions', faq=faq))
+
+
+# --- Depth for world reports (31 Oct 2026). Inserted by reports_world.py before the closing note. Add only. ---
+WORLD = {
+'fashion-brand-competition-2026': section('How to use these numbers', paras=[
+    'Company results tell you where shoppers are spending, not what every brand should copy. Read them for direction: which price levels are growing, which formats are winning (stores, apps or delivery in under an hour) and which regions are carrying growth. Revenue growth shows momentum; store counts show where a retailer is betting its capital; profit margins show whether that growth is healthy.',
+    'Compare like with like. Financial years end in different months (Inditex in January, Uniqlo\'s parent in August, Indian retailers in March), currencies move and some companies report only sales while others report profit. Use the percentage change in each company\'s own currency as the fairest comparison, and treat exact rankings with caution.',
+    '<b>Reading it by region.</b> In <b>Asia</b>, value fashion and fast store roll-outs (Zudio in India, Uniqlo in China and Southeast Asia) are setting the pace, while quick-commerce delivery is reshaping how Indian shoppers buy basics. In <b>Europe</b>, large retailers are growing more slowly and investing in fewer, larger stores and stronger online returns policies. In <b>North America</b>, ultra-fast online players face rising tariff and customs costs on low-value parcels. In <b>South America</b>, <b>Africa</b> and <b>Oceania</b>, global chains compete with strong local and second-hand markets, and currency swings can change prices quickly.',
+    '<b>What smaller brands can take from it.</b> You do not need the scale of the leaders to learn from them. Watch the price points where they are growing and decide whether to sit just above them with better fabric and fit, or in a niche they do not serve (handloom, occasion wear, sizes or regional styles). Speed matters more than ever, so shorten sampling, hold a small reserve of fabric for reorders of best sellers, and make delivery promises you can keep.'],
+    faq=[('How often are these figures updated?', 'Forecut refreshes the tables when companies publish annual or important quarterly results, usually several times a year.'),
+         ('Why are Shein figures less detailed?', 'Shein is a private company, so its figures come from press coverage and filings rather than full public annual reports.'),
+         ('Should I use these numbers for investment decisions?', 'No. They are summarised for fashion planning and may be restated by the companies; they are not investment advice.')]),
+}

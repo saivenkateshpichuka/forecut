@@ -921,6 +921,46 @@
 },
 {
 "cat": "Women's Ethnic",
+"sub": "Sarees",
+"name": "Ombré silk sarees with contrast blouses",
+"area": "Colour",
+"note": "Silk sarees shading from pastel pink to deep red with gold zari florals, worn with a contrast emerald silk blouse, as on Shilpa Shetty at the Kapoors' Karwa Chauth gathering, Mumbai, 29 Oct 2026.",
+"life": "rprpf"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Suits & kurtas",
+"name": "Sheer organza jackets over anarkalis",
+"area": "Layer",
+"note": "A sheer, gold-trimmed organza jacket worn open over a crushed-texture anarkali, as on Sonam Kapoor (crimson anarkali, rust-orange organza jacket) in Mumbai, 29 Oct 2026. An easy add-on that refreshes an existing anarkali.",
+"life": "erppf"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Lehengas",
+"name": "Black mirror-work lehengas",
+"area": "Colour",
+"note": "Black lehengas worked in mirrors, hand embroidery and metallic accents, with a bralette blouse and sheer sequinned dupatta, as worn by Kriti Sanon closing Abhinav Mishra's Into the Wild 2026, New Delhi, 24 Oct 2026.",
+"life": "rprpf"
+},
+{
+"cat": "Women's Ethnic",
+"sub": "Sarees",
+"name": "Mirror-bordered tissue sarees",
+"area": "Trim",
+"note": "Beige-gold tissue silk sarees edged with mirror-work borders and a matching high-neck blouse, as on Mira Rajput in Mumbai, 29 Oct 2026; a lighter way to wear mirror work for evening functions.",
+"life": "rpprf"
+},
+{
+"cat": "Men's Ethnic",
+"sub": "Kurtas & sets",
+"name": "Floral kurtas with harem trousers",
+"area": "Print",
+"note": "Deep-toned floral-print kurtas paired with relaxed harem trousers instead of churidars, as worn by Aamir Khan in Mumbai, 29 Oct 2026; a softer, comfortable festive set for men.",
+"life": "errpf"
+},
+{
+"cat": "Women's Ethnic",
 "sub": "Suits & kurtas",
 "name": "Airy kurta separates with opacity-tested inners",
 "area": "Construction",

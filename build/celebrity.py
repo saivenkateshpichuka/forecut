@@ -59,6 +59,7 @@ body = ('<p class="eb">Celebrity Style Watch</p><h1>Celebrity style, read as tre
         + (f'<div class="chero"><img src="img/{hero}.webp" alt="Illustration of an evening gown on a dress form (Forecut image)" width="800" height="400"></div>'
            '<p class="cnote">Forecut illustration. We do not publish celebrity or red-carpet photographs; follow the source links to see the original looks.</p>' if hero else '')
         + '<div class="wk"><h2>This week in celebrity style</h2><ul>' + ''.join(f'<li>{E(x)}</li>' for x in C.THIS_WEEK) + '</ul></div>'
+        + ''.join(f'<div class="wk"><h2>Week of {E(w)}</h2><ul>' + ''.join(f'<li>{E(x)}</li>' for x in b) + '</ul></div>' for w, b in getattr(C, 'WEEKS', []))
         + '<div class="rf">' + ''.join(f'<a href="#r-{r}">{E(RN[r])}</a>' for r in regions) + '</div>'
         + ''.join(f'<div id="r-{r}"></div>' + ''.join(event(e) for e in C.EVENTS if e['region'] == r) for r in regions)
         + C.GUIDE)

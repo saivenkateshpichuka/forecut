@@ -167,3 +167,11 @@ FAQ = {
  ('Should I follow every trend colour?', 'No. Choose the trend colours that suit your customer and price point.'),
  ('How do I check colours across fabrics?', 'Lay out real swatches of all fabrics together under daylight and store lighting.')],
 }
+
+# --- Added 31 Oct 2026. Add only. ---
+FAQ['innovation-recycled-plastic-embellishment'] = FAQ['innovation-recycled-plastic-embellishment'] + [
+ ('Do recycled sequins cost more?', 'Usually a little at first, mainly because order quantities are smaller. Because embellishment is a small share of a garment\'s total cost, the difference per piece is often modest.'),
+ ('Can hand embroiderers use them?', 'Yes. Recycled sequins and beads are applied with the same needles, threads and tambour techniques as standard ones, so workshops do not need new skills.')]
+FAQ['innovation-biodegradable-biopolyester'] = FAQ['innovation-biodegradable-biopolyester'] + [
+ ('Is biopolyester the same as bio-based polyester?', 'No. Bio-based means made partly from plant sources; biodegradable means it can break down under defined conditions. A fibre can be one, both or neither, so check each claim separately.'),
+ ('When will it be widely available?', 'Forecut expects pilot volumes through 2027 and wider commercial use from about 2028, depending on price and test results.')]
