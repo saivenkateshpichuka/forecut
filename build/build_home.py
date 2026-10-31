@@ -68,7 +68,7 @@ rsec = f'''  <section id="reports" aria-labelledby="rph">
   </section>
 '''
 import landing as _LD
-h = h.replace('<!--HEROSIG-->', _LD.hero_visual()).replace('<!--HEROPROOF-->', _LD.hero_proof()).replace('<!--LAUNCH-->', _LD.launch_strip()).replace('<!--AUDIENCE-->', _LD.audience()).replace('<!--PRICING-->', _LD.pricing()).replace('<!--FAQ-->', _LD.faq()).replace('<!--FOUNDING-->', _LD.founding())
+h = h.replace('<!--HEROSIG-->', _LD.hero_visual()).replace('<!--HEROPROOF-->', _LD.hero_proof()).replace('<!--LAUNCH-->', _LD.launch_strip()).replace('<!--AUDIENCE-->', _LD.audience()).replace('<!--PRICING-->', _LD.pricing()).replace('<!--FAQ-->', _LD.faq()).replace('<!--FOUNDING-->', _LD.founding()).replace('<!--SALES-->', _LD.sales_section())
 h = h.replace('</style>', _LD.CSS + '</style>', 1)
 h = h.replace('<!--LOOKBOOK-->', gal).replace('<!--REPORTS-->', rsec).replace('<!--JOURNAL-->', jsec)
 import home_blocks as _HB

@@ -148,7 +148,7 @@ CALENDAR = [
     (_dt.date(2027, 1, 19), 'Paris Menswear AW27 (19–24 Jan)', 'region-europe.html'),
     (_dt.date(2027, 1, 25), 'Paris Haute Couture SS27 (25–28 Jan)', 'couture.html'),
     (_dt.date(2027, 2, 6), 'Lunar New Year', 'region-asia.html'),
-    (_dt.date(2027, 2, 7), 'Ramadan begins (expected)', 'region-asia.html'),
+    (_dt.date(2027, 2, 8), 'Ramadan begins (expected)', 'region-asia.html'),
     (_dt.date(2027, 3, 1), 'Paris Womenswear AW27 (1–9 Mar)', 'aw27.html'),
 ]
 
@@ -191,7 +191,7 @@ def this_week(M, SEAS, islug):
             f'<div class="twcal"><small>Coming up</small><ul>{cal}</ul></div>')
     return (f'''  <section id="thisweek" aria-labelledby="twh">
     <div class="sechead"><div><span class="mono eyebrow">This week at Forecut · updated {today().strftime("%-d %b %Y")}</span><h2 id="twh">What's new.</h2></div><p>The newest details added from runways, fashion weeks and retail, the latest analysis, and what's coming on the global calendar.</p></div>
-    <div class="twgrid"><div class="twmain"><div class="twlab"><b>{len(cards)} new details this month</b><a href="search.html">Search all details →</a></div><div class="nwrow" tabindex="0" aria-label="New details, scroll sideways">{"".join(cards[:10])}</div></div>
+    <div class="twgrid"><div class="twmain"><div class="twlab"><b>{len(cards)} new details this month</b><a href="search.html">Search all details →</a></div><div class="nwrow" tabindex="0" aria-label="New details, scroll sideways">{"".join(cards[:10])}</div>{__import__("landing").next_sales(8)}</div>
     <aside class="twside">{side}</aside></div>
   </section>
 ''')

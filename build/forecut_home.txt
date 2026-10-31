@@ -606,7 +606,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
   </section>
   <section id="seasons" aria-labelledby="sh">
     <div class="sechead">
-      <div><span class="mono eyebrow">Seasonal outlook</span><h2 id="sh">What the world is wearing, season by season.</h2></div>
+      <div><span class="mono eyebrow">Seasonal outlook</span><h2 id="sh">Seasonal forecasts, AW26 to AW28.</h2></div>
       <p>Each season is labelled by how sure we are: <b>observed</b> (in stores and on runways now), <b>forecast</b> (next season) or <b>projection</b> (long range).</p>
     </div>
     <div class="sgrid" tabindex="0" aria-label="Season forecasts, scroll sideways for more"><!--SEASONCARDS--></div>
@@ -813,6 +813,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
     <div class="hnh"><h3>Latest from the regions</h3><a href="regions.html#latest">All region news →</a></div>
     <div class="hnews"><!--NEWSSTRIP--></div>
   </section>
+<!--SALES-->
 
 <!--LOOKBOOK-->
 
@@ -1014,7 +1015,7 @@ function upd(){var u=url();L.textContent=R.options[R.selectedIndex].text.replace
 f.addEventListener('submit',function(e){e.preventDefault();location.href=url()[0];});})();</script>
 <script>(function(){var s=document.getElementById('fxsel');if(!s)return;
 var R={INR:[1,'₹'],USD:[95.1,'US$'],EUR:[107.0,'€'],GBP:[126.8,'£'],AED:[25.9,'AED ']};
-function show(c){document.querySelectorAll('.fx').forEach(function(e){var v=+e.getAttribute('data-inr');e.textContent=(c==='INR'||!v)?'':'≈ '+R[c][1]+Math.round(v/R[c][0]).toLocaleString('en')+(e.hasAttribute('data-once')?'':' / year');});}
+function show(c){document.querySelectorAll('.fx').forEach(function(e){var v=+e.getAttribute('data-inr');e.textContent=(c==='INR'||!v)?'':'≈ '+R[c][1]+Math.round(v/R[c][0]).toLocaleString('en')+(e.hasAttribute('data-once')?'':(e.hasAttribute('data-mo')?' / month':' / year'));});}
 var c=null;try{c=localStorage.getItem('fc-cur');}catch(e){}
 if(!c){var L=(navigator.language||'').toUpperCase();c=/-IN$/.test(L)?'INR':/-US$/.test(L)?'USD':/-GB$/.test(L)?'GBP':/-AE$/.test(L)?'AED':/-(DE|FR|IT|ES|NL|IE|PT|BE|AT|FI|GR)$/.test(L)?'EUR':'INR';}
 s.value=c;show(c);s.addEventListener('change',function(){show(s.value);try{localStorage.setItem('fc-cur',s.value);}catch(e){}});})();</script>

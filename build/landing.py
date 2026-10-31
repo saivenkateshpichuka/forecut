@@ -67,28 +67,28 @@ def hero_proof():
             '<li><b>TCX</b><span>Pantone code on every colour</span></li><li><b>₹0</b><span>to start</span></li></ul>')
 
 
+
+
 def launch_strip():
     days = (LAUNCH - dt.date.today()).days
-    return f'''  <section class="launch" aria-label="Launch">
-    <div class="lch"><span class="lchk">Launching {LAUNCH_TXT}</span>
-      <p><b>Everything is free until launch.</b> The first 100 subscribers become <b>Founding Members</b>: full access for <b>₹999</b> in year one, locked in on renewal.</p></div>
-    <div class="lcd" aria-live="polite"><b id="lcd">{max(days, 0)}</b><span>days to go</span></div>
-    <a class="btn tc" href="#pricing">Become a founding member</a>
+    return f"""  <section class="launch" aria-label="Free trial">
+    <div class="lch"><span class="lchk">Free trial · plans open {LAUNCH_TXT}</span>
+      <p><b>Sign in free to unlock the full trial:</b> every season, region, report and download until {LAUNCH_TXT}. The trial is for signed-in members.</p></div>
+    <div class="lcd" aria-live="polite"><b id="lcd">{max(days, 0)}</b><span>days of free trial left</span></div>
+    <a class="btn tc" href="account.html#signup">Sign in free</a>
   </section>
-'''
+"""
 
 
 AUD = [
     ('d2c', 'D2C brands', 'Plan your next drop with data, not guesswork.', 'Forecasts with Pantone TCX codes your production team can use today.',
-     ['Which styles and colours are Rising for your next drop', 'Colour stories with TCX codes for your dyeing unit', 'Regional timing for every market you sell in'], 'Individual or Enterprise', ('Sign in free', 'account.html#signup'), ('Get a free sample brief', 'mailto:hello@forecut.in?subject=Free%20sample%20brief')),
+     ['Which styles and colours are Rising for your next drop', 'Colour stories with TCX codes for your dyeing unit', 'Sale and occasion timing for every market you sell in'], 'Individual or Enterprise', ('Sign in free', 'account.html#signup'), ('See pricing', '#pricing')),
     ('exp', 'Exporters', 'Walk into every buyer meeting with what\'s next.', 'Core items, details and colours for SS27 and beyond, as downloadable PDFs.',
-     ['Core Item Updates and season reports to share with buyers', 'Details to sample early, with photos and construction notes', 'Region pages for each buyer market'], 'Enterprise or a custom brief', ('Book a 15-minute demo', 'mailto:hello@forecut.in?subject=Forecut%20demo'), ('Request a custom brief', '#briefs')),
+     ['Core Item Updates and season reports to share with buyers', 'Details to sample early, with photos and construction notes', 'Region pages for each buyer market'], 'Enterprise', ('Book a 15-minute demo', 'mailto:hello@forecut.in?subject=Forecut%20demo'), ('See pricing', '#pricing')),
     ('des', 'Designers', 'Your next collection, one season ahead.', 'Colours, crafts and silhouettes from AW26 to AW28, plus Festive and Summer for India.',
      ['Couture, fabric and colour guides', 'Lifecycle stage on every detail', 'Downloadable detail cards for your mood boards'], 'Individual', ('Sign in free', 'account.html#signup'), ('Explore SS27', 'ss27.html')),
     ('stu', 'Students', 'Professional trend research for your projects.', 'Free to start. A photo and a Pantone TCX code for every detail.',
-     ['Every season and region to research', 'Methodology you can cite', 'Student plan with a college ID'], 'Free or Student', ('Sign in free', 'account.html#signup'), ('See all details', 'search.html')),
-    ('ins', 'Institutes', 'A trend library for your whole department.', 'Student and faculty access, priced for institutes.',
-     ['Department-wide access for students and faculty', 'Guest lecture: how trend forecasting works', 'Free 30-day trial for your department'], 'Institute licence', ('Book a 15-minute demo', 'mailto:hello@forecut.in?subject=Institute%20licence'), ('See pricing', '#pricing')),
+     ['Every season and region to research', 'Methodology you can cite', 'Student plan with a college ID'], 'Student', ('Sign in free', 'account.html#signup'), ('See all details', 'search.html')),
 ]
 
 
@@ -97,82 +97,57 @@ def audience():
     panes = ''
     for i, (k, n, head, sub, gets, plan, c1, c2) in enumerate(AUD):
         panes += (f'<div class="apane" role="tabpanel" id="ap-{k}" aria-labelledby="au-{k}"{"" if i == 0 else " hidden"}>'
-                  f'<div><h3>{E(head)}</h3><p>{E(sub)}</p><a class="btn" href="{c1[1]}">{E(c1[0])}</a> <a class="btn ghost" href="{c2[1]}">{E(c2[0])}</a></div>'
+                  f'<div><h3>{E(head)}</h3><p>{E(sub)}</p><div class="acta"><a class="btn" href="{c1[1]}">{E(c1[0])}</a><a class="btn ghost" href="{c2[1]}">{E(c2[0])}</a></div></div>'
                   f'<div class="aget"><small>What you get</small><ul>{"".join(f"<li>{E(g)}</li>" for g in gets)}</ul><p class="arec">Best plan: <b>{E(plan)}</b></p></div></div>')
-    return f'''  <section id="foryou" aria-labelledby="fyh">
-    <div class="sechead"><div><span class="mono eyebrow">Built for the job you do</span><h2 id="fyh">From "I hope this works" to "I know where this is going."</h2></div></div>
+    return f"""  <section id="foryou" aria-labelledby="fyh">
+    <div class="sechead"><div><span class="mono eyebrow">Built for the job you do</span><h2 id="fyh">Choose your path.</h2></div>
+      <p>From "I hope this works" to "I know where this is going": pick what you do and see what Forecut gives you.</p></div>
     <div class="atabs" role="tablist" aria-label="Who are you?">{tabs}</div>
     {panes}
   </section>
-'''
+"""
 
 
 def pricing():
-    T = f'''  <section id="pricing" aria-labelledby="ph">
-    <div class="sechead"><div><span class="mono eyebrow">Pricing · plans open {LAUNCH_TXT}</span><h2 id="ph">Free to start. Full access for ₹1,499 a year.</h2></div>
-      <p>About ₹125 a month: less than a single sample run. Nothing is charged before {LAUNCH_TXT}; until then, everything is open.</p></div>
-    <div class="ptabs" role="tablist" aria-label="Plan type">
-      <button type="button" role="tab" id="pt-ind" aria-controls="pp-ind" aria-selected="true">For individuals</button>
-      <button type="button" role="tab" id="pt-team" aria-controls="pp-team" aria-selected="false" tabindex="-1">For teams &amp; institutes</button>
-      <button type="button" role="tab" id="pt-brief" aria-controls="pp-brief" aria-selected="false" tabindex="-1">Custom briefs</button>
-    </div>
+    return f"""  <section id="pricing" aria-labelledby="ph">
+    <div class="sechead"><div><span class="mono eyebrow">Pricing · plans open {LAUNCH_TXT}</span><h2 id="ph">Simple plans for every team.</h2></div>
+      <p>Sign in free for the full trial until {LAUNCH_TXT}. Nothing is charged before then.</p></div>
     <div class="fxbar"><label for="fxsel">Show approximate prices in</label><select id="fxsel"><option value="INR">₹ INR</option><option value="USD">US$ USD</option><option value="EUR">€ EUR</option><option value="GBP">£ GBP</option><option value="AED">AED</option></select><span>Rates of 20 Oct 2026, for guidance only</span></div>
-    <div class="pp" role="tabpanel" id="pp-ind" aria-labelledby="pt-ind">
-      <div class="billing" role="group" aria-label="Billing"><button type="button" data-b="y" aria-pressed="true">Yearly</button><button type="button" data-b="m" aria-pressed="false">Monthly</button></div>
-      <div class="plans3">
-        <div class="pl"><span class="plk">Free</span><h3>Free member</h3><div class="pr">₹0</div><span class="fx" data-inr="0"></span>
-          <ul><li>Browse every season, region and the Journal</li><li>A monthly allowance of full detail cards</li><li>Lifecycle tracker and colour pages</li><li>Ads keep it free</li></ul>
-          <a class="btn ghost" href="account.html#signup">Sign in free</a></div>
-        <div class="pl"><span class="plk">With college ID</span><h3>Student</h3><div class="pr"><small>from</small> ₹499<small> / year</small></div><span class="fx" data-inr="499"></span>
-          <ul><li>Everything in Individual for study</li><li>Every season, region and report</li><li>Cite-ready methodology</li><li>Verified with a college ID</li></ul>
-          <a class="btn ghost" href="account.html#signup">Sign in free</a></div>
-        <div class="pl feat"><span class="plk">Founding member · first 100</span><h3>Individual</h3>
-          <div class="pr y"><s>₹1,499</s> ₹999<small> / first year</small></div><div class="pr m" hidden>₹199<small> / month</small></div>
-          <span class="fx y" data-inr="999"></span><p class="plsub y">Then ₹1,499 a year, or keep ₹999 when you renew as a founding member.</p><p class="plsub m" hidden>Cancel any time. Yearly saves you more than 35%.</p>
-          <ul><li>Full access to every season (AW26 to AW28), Resort, Pre-Fall and all six regions</li><li>India Festive and Summer reports</li><li>PDF downloads and detail cards as PNG or PDF</li><li>Pantone TCX on every colour</li><li>Ad-free, with monthly updates</li></ul>
-          <a class="btn tc" href="#waitlist">Become a founding member</a></div>
-      </div>
-      <p class="fine">Single reports from ₹299 (Buy this report on any report page from launch).</p>
+    <div class="billing" role="group" aria-label="Billing"><button type="button" data-b="y" aria-pressed="true">Yearly</button><button type="button" data-b="m" aria-pressed="false">Monthly</button></div>
+    <div class="plans4">
+      <div class="pl"><span class="plk">Free</span><h3>Free member</h3><div class="pr">₹0</div><span class="fx" data-inr="0"></span>
+        <p class="plsub">Full free trial until {LAUNCH_TXT} when you sign in.</p>
+        <ul><li>Browse every season, region and the Journal</li><li>From launch: a monthly allowance of full detail cards</li><li>Lifecycle tracker and colour pages</li><li>Ads keep it free</li></ul>
+        <a class="btn ghost" href="account.html#signup">Sign in free</a></div>
+      <div class="pl"><span class="plk">With college ID</span><h3>Student</h3><div class="pr">₹999<small> / year</small></div><span class="fx" data-inr="999"></span>
+        <p class="plsub">For students with a valid college ID.</p>
+        <ul><li>Every season, region and report</li><li>Detail cards and PDF downloads</li><li>Cite-ready methodology</li><li>Ad-free</li></ul>
+        <a class="btn ghost" href="account.html#signup">Sign in free</a></div>
+      <div class="pl feat"><span class="plk">Full access</span><h3>Individual</h3>
+        <div class="pr y">₹2,999<small> / year</small></div><div class="pr m" hidden>₹499<small> / month</small></div>
+        <span class="fx y" data-inr="2999"></span><span class="fx m" data-inr="499" data-mo hidden></span>
+        <p class="plsub y">Save 50% compared with paying monthly.</p><p class="plsub m" hidden>Cancel any time.</p>
+        <ul><li>Every season (AW26 to AW28), Resort, Pre-Fall and all six regions</li><li>India Festive and Summer reports</li><li>PDF downloads and detail cards as PNG or PDF</li><li>Pantone TCX on every colour</li><li>Ad-free, with weekly updates</li></ul>
+        <a class="btn tc" href="account.html#signup">Get full access</a></div>
+      <div class="pl"><span class="plk">Teams</span><h3>Enterprise</h3><div class="pr">₹19,999<small> / year</small></div><span class="fx" data-inr="19999"></span>
+        <p class="plsub">For 10 users, one login each.</p>
+        <ul><li>Everything in Individual for 10 people</li><li>Team onboarding</li><li>Priority support from hello@forecut.in</li><li>Invoice billing</li></ul>
+        <a class="btn ghost" href="mailto:hello@forecut.in?subject=Forecut%20Enterprise">Book a 15-minute demo</a></div>
     </div>
-    <div class="pp" role="tabpanel" id="pp-team" aria-labelledby="pt-team" hidden>
-      <div class="plans2">
-        <div class="pl feat"><span class="plk">Launch offer</span><h3>Enterprise</h3><div class="pr"><s>₹15,000</s> ₹9,999<small> / year</small></div><span class="fx" data-inr="9999"></span>
-          <p class="plsub">For teams of 10 or more, one login each.</p>
-          <ul><li>Everything in Individual for the whole team</li><li>Add users as you grow</li><li>Team onboarding</li><li>Priority support from hello@forecut.in</li></ul>
-          <a class="btn tc" href="mailto:hello@forecut.in?subject=Forecut%20Enterprise">Book a 15-minute demo</a></div>
-        <div class="pl"><span class="plk">Forecut Campus</span><h3>Institute licence</h3><div class="pr"><small>from</small> ₹15,000<small> / year</small></div><span class="fx" data-inr="15000"></span>
-          <p class="plsub">Department-wide access for students and faculty.</p>
-          <ul><li>Unlimited student and faculty access</li><li>Free 30-day trial for your department</li><li>Guest lecture: how trend forecasting works</li><li>Student ambassador programme</li></ul>
-          <a class="btn ghost" href="mailto:hello@forecut.in?subject=Forecut%20institute%20licence">Book a 15-minute demo</a></div>
-      </div>
-    </div>
-    <div class="pp" role="tabpanel" id="pp-brief" aria-labelledby="pt-brief" hidden>
-      <div class="plans3" id="briefs">
-        <div class="pl"><span class="plk">Forecut Briefs</span><h3>Starter</h3><div class="pr">₹10,000</div><span class="fx" data-inr="10000" data-once></span>
-          <ul><li>One category, one season</li><li>10–12 key details</li><li>Colour story with TCX codes</li><li>8–10 page PDF, delivered in 5 working days</li></ul>
-          <a class="btn ghost" href="mailto:hello@forecut.in?subject=Starter%20brief">Request a custom brief</a></div>
-        <div class="pl feat"><span class="plk">Recommended</span><h3>Collection</h3><div class="pr">₹25,000</div><span class="fx" data-inr="25000" data-once></span>
-          <ul><li>Up to 3 categories</li><li>Details, colours, fabrics and craft directions</li><li>20–25 pages</li><li>One revision call</li></ul>
-          <a class="btn tc" href="mailto:hello@forecut.in?subject=Collection%20brief">Request a custom brief</a></div>
-        <div class="pl"><span class="plk">Season-long</span><h3>Season partner</h3><div class="pr">₹50,000</div><span class="fx" data-inr="50000" data-once></span>
-          <ul><li>Full season direction</li><li>Line-plan suggestions</li><li>Two review calls</li><li>Quarterly update</li></ul>
-          <a class="btn ghost" href="mailto:hello@forecut.in?subject=Season%20partner%20brief">Request a custom brief</a></div>
-      </div>
-      <p class="fine"><b>Free sample brief:</b> a 3-page mini brief for the first 10 qualified brands. <a href="mailto:hello@forecut.in?subject=Free%20sample%20brief">Get a free sample brief</a>.</p>
-    </div>
+    <div class="single"><div><b>Need just one report?</b> Buy any single report for <b>₹299</b> from launch.</div><a class="btn ghost" href="reports.html">Browse reports</a></div>
     <p class="fine">Prices are set in Indian rupees and start on {LAUNCH_TXT}; other currencies are approximate conversions. Secure payment by UPI and card at launch. Outside India? Write to <a href="mailto:hello@forecut.in?subject=Forecut%20pricing">hello@forecut.in</a> for pricing in your currency.</p>
   </section>
-'''
-    return T
+"""
 
 
 FAQ = [
-    ('When do paid plans start?', f'On {LAUNCH_TXT}. Until then, every season, region and report is open to everyone, free.'),
-    ('What is a Founding Member?', 'The first 100 people to subscribe get full Individual access for ₹999 in year one instead of ₹1,499, and keep ₹999 when they renew. It is a launch badge, not a separate plan.'),
-    ('What stays free after launch?', 'Browsing seasons, regions, the Journal and the lifecycle tracker, plus a monthly allowance of full detail cards when you sign in free.'),
-    ('Can I pay monthly?', 'Yes: ₹199 a month for Individual. Yearly is cheaper, and Founding Member pricing is yearly.'),
-    ('Is there a student price?', 'Yes, from ₹499 a year with a college ID. Institutes can licence Forecut for a whole department.'),
-    ('What is a custom brief?', 'A trend brief made for your category and season, with details, colours and TCX codes, delivered as a PDF. Starter, Collection and Season partner packages start at ₹10,000.'),
+    ('How does the free trial work?', f'Sign in free with Google or email to unlock every season, region, report and download until {LAUNCH_TXT}. Visitors who do not sign in can browse, with a small monthly limit on full detail cards and no downloads.'),
+    ('When do paid plans start?', f'On {LAUNCH_TXT}. Nothing is charged before then, and you will be asked before any payment.'),
+    ('What stays free after launch?', 'Browsing seasons, regions, the Journal and the lifecycle tracker, plus a monthly allowance of full detail cards for signed-in members.'),
+    ('Can I pay monthly?', 'Yes: ₹499 a month for Individual, or ₹2,999 a year, which saves 50%.'),
+    ('Is there a student price?', 'Yes: ₹999 a year with a valid college ID.'),
+    ('What does Enterprise include?', 'Everything in Individual for 10 users, one login each, for ₹19,999 a year, with team onboarding and invoice billing.'),
+    ('Can I buy a single report?', 'Yes: any single report for ₹299 from launch.'),
     ('Do you work with brands outside India?', 'Yes. Forecut reads every season for six regions and 20 markets. Prices are set in rupees; write to us for pricing in your currency.'),
     ('How do you make your forecasts?', 'Public runway, trade and retail research, AI-assisted and editor-reviewed, written in our own words. Read <a href="method.html">how we forecast</a>.'),
 ]
@@ -185,29 +160,59 @@ def faq():
 
 
 def founding():
-    return f'''  <section id="waitlist" aria-labelledby="jh">
+    return f"""  <section id="waitlist" aria-labelledby="jh">
     <div class="wait">
       <div>
-        <span class="mono eyebrow" style="color:#f3b48e">Founding members · first 100</span>
-        <h2 id="jh">Reserve ₹999 for your first year.</h2>
-        <p>Plans open on {LAUNCH_TXT}. Leave your email and we will send your Founding Member link before anyone else, plus <b>The Forecut Edit</b>: three trends moving each week, every Monday. No spam; unsubscribe any time.</p>
-        <ul class="wl"><li>Full access for ₹999 in year one</li><li>Keep ₹999 when you renew</li><li>Free until launch</li></ul>
+        <span class="mono eyebrow" style="color:#f3b48e">Launch updates</span>
+        <h2 id="jh">Be first to know when plans open.</h2>
+        <p>Plans open on {LAUNCH_TXT}. Leave your email for launch news and <b>The Forecut Edit</b>: three trends moving each week, every Monday. No spam; unsubscribe any time.</p>
+        <ul class="wl"><li>Free trial for signed-in members until launch</li><li>Weekly trend email</li><li>Sale and occasion alerts for your markets</li></ul>
       </div>
       <form id="wl" novalidate>
         <label for="email">Work email</label>
         <input id="email" name="email" type="email" placeholder="you@studio.com" autocomplete="email" required>
         <label for="role">I am a</label>
         <select id="role" name="role">
-          <option>D2C or retail brand</option><option>Exporter or manufacturer</option><option>Fashion designer</option><option>Student</option><option>Institute or faculty</option><option>Buyer or merchandiser</option><option>Press or creator</option><option>Other</option>
+          <option>D2C or retail brand</option><option>Exporter or manufacturer</option><option>Fashion designer</option><option>Student</option><option>Buyer or merchandiser</option><option>Press or creator</option><option>Other</option>
         </select>
         <label for="fb">What would make Forecut most useful for you? (optional)</label>
         <textarea id="fb" name="fb" rows="3" placeholder="Your category, markets, or the season you are planning"></textarea>
-        <button class="btn tc" type="submit">Become a founding member</button>
+        <button class="btn tc" type="submit">Get launch updates</button>
         <p class="formmsg" id="msg" role="status"></p>
       </form>
     </div>
   </section>
-'''
+"""
+
+
+import sales_data as SD
+KIND = {'sale': 'Sale', 'occasion': 'Occasion', 'fashion': 'Fashion week'}
+
+
+def next_sales(n=6):
+    rows = SD.upcoming(limit=n)
+    li = ''.join(f'<li><time>{E(SD.when(s, e, lab))}</time><span><b>{E(name)}</b><small>{E(mk)} · {KIND[k]}</small></span></li>' for s, e, name, k, note, mk, lab in rows)
+    return f'<div class="nsales"><div class="twlab"><b>Next sales &amp; occasions</b><a href="#sales">All markets →</a></div><ul>{li}</ul></div>'
+
+
+def sales_section():
+    cards = ''
+    for m in SD.MARKETS:
+        ev = [x for x in SD.upcoming(region=m['region']) if x[5] == m['name']][:4]
+        if not ev and not m['brands']: continue
+        evh = ''.join(f'<li class="k-{k}"><time>{E(SD.when(s, e, lab))}</time><span><b>{E(name)}</b><em class="nt">{E(note)}</em></span></li>' for s, e, name, k, note, mk, lab in ev)
+        br = ''.join(f'<li><b>{E(b)}</b> {E(t)} <a href="{u}" rel="noopener" target="_blank">{E(src)}</a></li>' for b, t, src, u in m['brands'][:2])
+        cards += (f'<article class="mk" data-r="{m["region"]}"><header><h3>{E(m["name"])}</h3><a href="region-{m["region"]}.html#sales">Region →</a></header>'
+                  f'<ul class="mkev">{evh}</ul>' + (f'<div class="mkbr"><small>Brands to watch</small><ul>{br}</ul></div>' if br else '') + '</article>')
+    return f"""  <section id="sales" aria-labelledby="slh">
+    <div class="sechead"><div><span class="mono eyebrow">Sales, occasions &amp; brands by market</span><h2 id="slh">When each market buys, and who is selling.</h2></div>
+      <p>The big sale dates and occasions coming up in each market, with brands making news. Plan drops and markdowns around them.</p></div>
+    <div class="mkf" role="group" aria-label="Filter markets by region"><button type="button" data-r="" aria-pressed="true">All markets</button><button type="button" data-r="asia" aria-pressed="false">Asia</button><button type="button" data-r="europe" aria-pressed="false">Europe</button><button type="button" data-r="north-america" aria-pressed="false">North America</button><button type="button" data-r="south-america" aria-pressed="false">South America</button><button type="button" data-r="africa" aria-pressed="false">Africa</button><button type="button" data-r="oceania" aria-pressed="false">Oceania</button></div>
+    <div class="mkgrid collapsed" id="mkgrid">{cards}</div>
+    <button type="button" class="btn ghost mkmore" id="mkmore">Show all markets</button>
+    <p class="fine">Dates are public calendar dates; Ramadan and Eid depend on moon sighting. Brand notes summarise the linked public sources.</p>
+  </section>
+"""
 
 
 JS = '''<script>(function(){
@@ -227,10 +232,38 @@ document.querySelectorAll('.billing button').forEach(function(b){b.addEventListe
  document.querySelectorAll('.pl .y').forEach(function(e){e.hidden=m;});document.querySelectorAll('.pl .m').forEach(function(e){e.hidden=!m;});});});
 /* links to #briefs open the briefs tab */
 document.querySelectorAll('a[href="#briefs"]').forEach(function(a){a.addEventListener('click',function(){var t=document.getElementById('pt-brief');if(t)t.click();});});
+/* sales markets: filter + show all */
+var mg=document.getElementById('mkgrid'),mm=document.getElementById('mkmore');
+if(mg){var mf=[].slice.call(document.querySelectorAll('.mkf button'));
+ mf.forEach(function(b){b.addEventListener('click',function(){var r=b.getAttribute('data-r');mf.forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+  [].forEach.call(mg.querySelectorAll('.mk'),function(c){c.hidden=!!r&&c.getAttribute('data-r')!==r;});mg.classList.toggle('collapsed',!r);if(mm)mm.hidden=!!r;});});
+ if(mm)mm.addEventListener('click',function(){mg.classList.remove('collapsed');mm.hidden=true;});}
 })();</script>'''
 
 
 CSS = '''
+.plans4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:1px solid var(--ink)}
+.plans4 .pl:last-child{border-right:0}
+.single{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:18px;padding:16px 20px;border:1px solid var(--grid);border-radius:4px;background:var(--paper-2);font-size:15.5px}
+.acta{display:flex;flex-wrap:wrap;gap:12px;margin-top:4px}
+.nsales{margin-top:22px;border-top:1px solid var(--grid);padding-top:16px}
+.nsales ul{list-style:none;margin:6px 0 0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px}
+.nsales li{display:grid;grid-template-columns:96px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--grid)}
+.nsales time{font:600 12.5px var(--mono);color:var(--chalk);padding-top:2px}.nsales b{display:block;font-size:15px}.nsales small{font-size:12.5px;color:var(--muted)}
+.mkgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid var(--ink)}
+.mk{padding:18px 20px 20px;border-right:1px solid var(--grid);border-bottom:1px solid var(--grid)}
+.mk:nth-child(3n){border-right:0}
+.mk header{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:8px}.mk h3{font:500 22px var(--serif)!important;margin:0}.mk header a{font-size:13px;color:var(--chalk)}
+.mkev{list-style:none;margin:0;padding:0}.mkev li{display:grid;grid-template-columns:86px 1fr;gap:10px;padding:8px 0;border-bottom:1px dashed var(--grid);font-size:13.5px;color:var(--muted)}
+.mkev time{font:600 12px var(--mono);color:var(--ink);padding-top:2px}.mkev b{display:block;color:var(--ink);font-size:14.5px}.mkev .nt{font-style:normal}
+.mkev li.k-sale time{color:#a9481f}.mkev li.k-fashion time{color:#4b2a9e}
+.mkbr{margin-top:12px}.mkbr small{font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--chalk)}
+.mkbr ul{margin:6px 0 0;padding-left:16px;font-size:13.5px;line-height:1.5;color:var(--muted)}.mkbr b{color:var(--ink)}.mkbr a{color:var(--muted);font-size:12px}
+.mkf{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}.mkf button{font:600 13.5px var(--body);border:1px solid var(--grid);background:var(--paper-2);color:var(--ink);padding:8px 14px;border-radius:999px;cursor:pointer}.mkf button[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.mkgrid.collapsed .mk:nth-child(n+7){display:none}.mk[hidden]{display:none!important}.mkmore{margin-top:16px}
+@media (max-width:1100px){.plans4{grid-template-columns:1fr 1fr}.plans4 .pl:nth-child(2n){border-right:0}.mkgrid{grid-template-columns:1fr 1fr}.mk:nth-child(3n){border-right:1px solid var(--grid)}.mk:nth-child(2n){border-right:0}}
+@media (max-width:760px){.mkgrid.collapsed .mk:nth-child(n+4){display:none}.nsales li:nth-child(n+5){display:none}.mkev .nt,.mkbr li:nth-child(n+2){display:none}.mkev li{padding:6px 0}
+ .plans4,.mkgrid{grid-template-columns:1fr}.pl,.mk{border-right:0!important}.nsales ul{grid-template-columns:1fr}}
 /* ===== Landing 2027: brand-book design (Source Serif 4 headlines, DM Sans body, thin lines, no gradients) ===== */
 :root{--serif:"Source Serif 4",Georgia,"Times New Roman",serif;--terracotta:#e08a5e;--marigold:#e8b860;--sand:#e8dccb;--coffee:#3a2418}
 h1,h2,.sechead h2,.hero h1,.hx h1{font-family:var(--serif)!important;font-weight:500!important;letter-spacing:-.015em!important}

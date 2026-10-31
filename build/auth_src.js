@@ -113,4 +113,33 @@ onAuthStateChanged(auth, (u) => {
   };
   addEventListener('appinstalled', () => { b.hidden = true; });
 })();
+// ---- free trial gate: the trial (full access until 1 January 2027) is for signed-in members ----
+(function () {
+  let member = false, known = false;
+  onAuthStateChanged(auth, (u) => { member = !!u; known = true; });
+  const LIMIT = 5, key = 'fc-views-' + new Date().toISOString().slice(0, 7);
+  const css = document.createElement('style');
+  css.textContent = '.fcg{position:fixed;inset:0;z-index:10000;background:rgba(28,23,20,.55);display:grid;place-items:center;padding:16px}.fcg>div{background:#f5f0e8;color:#1c1714;max-width:440px;width:100%;border-radius:6px;padding:26px 24px;font:15.5px/1.55 "DM Sans",system-ui,sans-serif}.fcg small{display:block;font:600 11px "DM Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:#a9481f;margin-bottom:6px}.fcg h3{font:500 26px/1.15 "Source Serif 4",Georgia,serif;margin:0 0 10px}.fcg p{margin:0 0 18px;color:#4a3f37}.fcg a{display:inline-block;background:#1c1714;color:#f5f0e8;text-decoration:none;font-weight:600;padding:12px 18px;border-radius:999px;margin-right:8px}.fcg button{all:unset;cursor:pointer;font-weight:600;padding:12px 6px;color:#6e6259}';
+  document.head.appendChild(css);
+  function gate(why) {
+    if (document.querySelector('.fcg')) return;
+    const g = document.createElement('div'); g.className = 'fcg'; g.setAttribute('role', 'dialog'); g.setAttribute('aria-modal', 'true');
+    g.innerHTML = '<div><small>Free trial · until 1 January 2027</small><h3></h3><p>Sign in free to unlock every season, region, report and download during the trial. It takes one tap with Google.</p><a href="/account.html?next=' + encodeURIComponent(location.pathname + location.search + location.hash) + '#signup">Sign in free</a><button type="button">Not now</button></div>';
+    g.querySelector('h3').textContent = why;
+    g.addEventListener('click', (e) => { if (e.target === g || e.target.tagName === 'BUTTON') g.remove(); });
+    document.body.appendChild(g); g.querySelector('a').focus();
+    try { if (window.gtag) gtag('event', 'trial_gate', { reason: why }); } catch (e) {}
+  }
+  document.addEventListener('click', (e) => {
+    if (member || !known) return;
+    const t = e.target.closest && e.target.closest('#vdl,#vdlpdf,a.dlpdf,a[href$=".pdf"],a[download],.dlg button,.vact .vbtn:not(.ghost):not(.savb):not(.pinb)');
+    if (t) { e.preventDefault(); e.stopImmediatePropagation(); gate('Downloads are part of the free trial.'); return; }
+    const d = e.target.closest && e.target.closest('.d, .lbk, .mv');
+    if (d && !e.target.closest('.scrim')) {
+      let n = 0; try { n = +localStorage.getItem(key) || 0; } catch (x) {}
+      if (n >= LIMIT) { e.preventDefault(); e.stopImmediatePropagation(); gate('You have explored ' + LIMIT + ' details this month.'); return; }
+      try { localStorage.setItem(key, String(n + 1)); } catch (x) {}
+    }
+  }, true);
+})();
 document.dispatchEvent(new Event('fcauth-ready'));

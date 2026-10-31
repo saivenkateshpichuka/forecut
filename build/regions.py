@@ -8,6 +8,7 @@ head, im, pick, news, NAVJS, FOOT, CSS = _ns['head'], _ns['im'], _ns['pick'], _n
 E = html.escape
 import regions_data as RD
 import market_guides as MG
+import region_extras as RX
 S = json.load(open('seasons.json'))
 D = json.load(open('details.json'))
 CODES = S['seasons']  # aw26 ss27 aw27 ss28 aw28
@@ -152,7 +153,7 @@ LCSS = '''<style>.lwrap{overflow-x:auto;border:1px solid var(--grid);border-radi
 
 
 def region_page(r):
-    jumps = [('seasons', 'Season forecast'), ('lifecycle', 'Lifecycle'), ('markets', 'Markets'), ('climate', 'Climate & influences'), ('news', 'Runway & news'), ('more', 'Other regions')]
+    jumps = [('seasons', 'Season forecast'), ('sales', 'Sales & occasions'), ('colour', 'Colour'), ('graph', 'Trend graph'), ('lifecycle', 'Lifecycle'), ('markets', 'Markets'), ('climate', 'Climate & influences'), ('news', 'Runway & news'), ('more', 'Other regions')]
     mk = '<div class="g3 mkt">' + ''.join(
         f'<div class="mini"><b style="font-size:19px">{E(m["name"])}</b><dl><dt>Climate</dt><dd>{E(m["climate"])}</dd><dt>Key moments</dt><dd>{E(m["moments"])}</dd><dt>Buyers want</dt><dd>{E(m["prefs"])}</dd><dt>Fashion week</dt><dd>{E(m["week"])}</dd></dl>'
         + (f'<a class="go" href="{m["link"][0]}">{E(m["link"][1])}</a>' if m.get('link') else '') + '</div>' for m in r['markets']) + '</div>'
@@ -164,6 +165,7 @@ def region_page(r):
     other = '<div class="other">' + ''.join(f'<a href="region-{x["slug"]}.html">{E(x["name"])}</a>' for x in RD.REGIONS if x is not r) + '<a href="regions.html">All regions →</a></div>'
     body = (RCSS + top(f'{r["name"]} fashion forecast', 'Regions · ' + r['name'], r['lead'], r['img'], jumps) + glance
             + f'<section class="sec" id="seasons"><h2>Season by season in {E(r["name"])}</h2><p class="sub">International seasons (SS, Pre-Fall, AW, Resort) with {E(r["name"])}\'s own in-store timing, Forecut\'s regional direction, and the global trends that suit this market.</p>{season_tabs(r)}</section>'
+            + RX.all_sections(r)
             + f'<section class="sec" id="lifecycle"><h2>Trend lifecycle in {E(r["name"])}</h2><p class="sub">How the trends that suit this region move from AW26 to AW28.</p>{lifecycle(r)}</section>' + LCSS
             + f'<section class="sec" id="markets"><h2>Key markets</h2><p class="sub">Climate, buying moments and preferences that shape how trends sell.</p>{mk}</section>'
             + f'<section class="sec" id="climate"><h2>Climate & influences</h2><p class="sub">{E(r["climate"])}</p><ul class="infl">{"".join(f"<li>{E(x)}</li>" for x in r["influences"])}</ul></section>'
@@ -172,9 +174,21 @@ def region_page(r):
     return body
 
 
+_USED = set()
+_EXTRA = ['hub-fabrics-runway-london', 'theme-ss27-reworked-denim', 'theme-aw27-winter-handcraft', 'hub-fabrics-runway-menswear', 'theme-ss27-handcraft', 'theme-ss27-in-motion', 'hub-fabrics-runway-paris', 'hub-fabrics-runway-newyork']
+
+
+def _uniq(cands):
+    for c in list(cands) + _EXTRA:
+        if c not in _USED and pick([c]):
+            _USED.add(c)
+            return [c] + list(cands)
+    return cands
+
+
 def hub():
     cards = ''.join(
-        f'<a class="rcard" href="region-{r["slug"]}.html">{im(r["img"], r["name"])}<div class="in"><h3>{E(r["name"])}<span class="hemi">{ {"north": "North", "south": "South", "mixed": "N + S"}[r["hemi"]]}</span></h3>'
+        f'<a class="rcard" href="region-{r["slug"]}.html">{im(_uniq(r["img"]), r["name"])}<div class="in"><h3>{E(r["name"])}<span class="hemi">{ {"north": "North", "south": "South", "mixed": "N + S"}[r["hemi"]]}</span></h3>'
         f'<p>{E(r["lead"])}</p><span class="mk">{E(" · ".join(m["name"] for m in r["markets"]))}</span></div></a>' for r in RD.REGIONS)
     cal = ('<div class="ctab2"><table><tr><th>Season</th><th>Shown</th><th>In stores (northern hemisphere)</th><th>Southern hemisphere</th><th>Tropical & seasonless markets</th></tr>'
            + ''.join(f'<tr><td><b>{E(n)}</b>{E(c)}</td><td>{E(sh)}</td><td>{E(nn)}</td><td>{E(so)}</td><td>{E(tr)}</td></tr>' for n, c, sh, nn, so, tr in RD.CALENDAR) + '</table></div>')
