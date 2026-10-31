@@ -118,7 +118,7 @@ footer a{color:var(--muted)} footer .fl{display:flex;gap:16px;flex-wrap:wrap}
  </div>
  <div id="mev" class="me" hidden>
   <div class="row"><div class="av" id="av"></div><div><b id="mn"></b><small id="mm"></small></div></div>
-  <div class="plan"><span class="tg">Early access</span><b style="font:700 16px DM Sans,sans-serif;display:block">Full access, complimentary</b><p>Every season is unlocked for you, including AW27, SS28, AW28 and India Summer 27 to Festive 28, plus the India forecast, reports and PDF downloads. Early members keep the launch price.</p></div>
+  <div class="plan"><span class="tg">Early access</span><b style="font:700 16px DM Sans,sans-serif;display:block">Full access, complimentary</b><p>Every season is unlocked for you until plans open on 1 January 2027, including AW27, SS28, AW28 and India Summer 27 to Festive 28, plus reports and PDF downloads. The first 100 subscribers become Founding Members: full access for ₹999 in year one, kept on renewal. <a href="index.html#pricing">See pricing</a>.</p></div>
   <p class="msg" id="vmsg"></p>
   <div class="qk"><a href="regions.html">Regions</a><a href="india.html">India</a><a href="aw26.html">AW26</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a></div>
   <button class="go" type="button" id="out" style="background:transparent;color:var(--ink);border:1px solid var(--grid)">Sign out</button>
@@ -146,7 +146,7 @@ ready(function () {
     mode = m; $('t-in').setAttribute('aria-selected', m === 'in'); $('t-up').setAttribute('aria-selected', m === 'up');
     $('nmw').hidden = m !== 'up'; $('go').textContent = m === 'up' ? 'Create account' : 'Sign in';
     $('ttl').textContent = m === 'up' ? 'Create your account' : 'Welcome back';
-    $('sub').textContent = m === 'up' ? 'Free during early access. Reserve the launch price.' : 'Sign in to your Forecut account.';
+    $('sub').textContent = m === 'up' ? 'Free until 1 January 2027. Founding Members get year one for ₹999.' : 'Sign in to your Forecut account.';
     $('pw').autocomplete = m === 'up' ? 'new-password' : 'current-password'; $('forgot').hidden = m === 'up'; say('');
   }
   function say(t, ok) { const e = $('msg'); e.textContent = t; e.className = 'msg' + (t ? (ok ? ' ok' : ' err') : ''); }

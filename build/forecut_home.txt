@@ -560,8 +560,8 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
       <a href="https://forecut.in/reports.html">Reports</a>
       <a href="https://forecut.in/journal.html">Journal</a>
       <a href="search.html" aria-label="Search Forecut">⌕ Search</a>
-      <a href="https://forecut.in/account.html">Sign in</a>
-      <a class="btn" href="https://forecut.in/account.html#signup">Get early access</a>
+      <a href="#pricing">Pricing</a>
+      <a class="btn" href="https://forecut.in/account.html#signup">Sign in free</a>
     </div>
     <button class="menu" type="button" aria-expanded="false" aria-controls="navlinks">Menu</button>
   </nav>
@@ -569,20 +569,21 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
   <header class="hero hx" id="top">
     <div class="hxt">
       <span class="hxlive"><i></i><!--HEROTAG--></span>
-      <h1>The future of fashion, down to every detail.</h1>
-      <p class="hxsub">Know the next <span class="rot" aria-live="polite"><span class="rw">collar</span></span> before it trends.</p>
-      <p class="lede">Global forecasts for garments, footwear, fabrics, colour and construction details. Track what is emerging, see how each region differs, and turn it into design decisions.</p>
+      <h1>Know what the world will wear next.</h1>
+      <p class="lede">Garments, details, colours and fabrics tracked from Emerging to Fading, read for your season, your region and your calendar, with Pantone TCX codes your team can use on Monday morning.</p>
       <div class="cta">
-        <a class="btn" href="#explore">Explore forecasts</a>
-        <a class="btn ghost" href="https://forecut.in/regions.html">Browse global regions</a>
+        <a class="btn" href="https://forecut.in/account.html#signup">Sign in free</a>
+        <a class="btn ghost" href="ss27.html">Explore SS27</a>
       </div>
-      <p class="beta"><b>Free during early access.</b> <a href="method.html">How we forecast</a> · <a href="https://forecut.in/account.html#signup">Create a free account</a> · Feedback: <a href="mailto:hello@forecut.in?subject=Forecut%20feedback">hello@forecut.in</a></p>
+      <!--HEROPROOF-->
     </div>
-    <div class="hxs" aria-label="Live detail forecasts"><!--HEROSTACK--></div>
+    <div class="hxs"><!--HEROSIG--></div>
   </header>
+<!--LAUNCH-->
   <div class="ticker" aria-hidden="true"><div class="tk"><!--TICKER--></div></div>
 
 <!--THISWEEK-->
+<!--AUDIENCE-->
 
   <section id="explore" aria-labelledby="xh">
     <div class="xp">
@@ -898,72 +899,12 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
     </div>
   </section>
 
-  <section aria-labelledby="wh">
-    <div class="sechead">
-      <div><span class="mono eyebrow">Who it serves</span><h2 id="wh">Built for the people behind every collection.</h2></div>
-    </div>
-    <div class="who2">
-      <div class="wcard"><b>Fashion designers</b><span>Identify the details worth developing next, and the ones to retire.</span></div><div class="wcard"><b>D2C and retail brands</b><span>Plan drops around each market's own calendar, from Black Friday to Lunar New Year, Ramadan and Diwali.</span></div><div class="wcard"><b>Manufacturers and exporters</b><span>Anticipate buyer requests and sample the right construction early.</span></div><div class="wcard"><b>Sourcing and merchandising</b><span>Align fabrics, trims and price points with the season ahead.</span></div><div class="wcard"><b>3D and digital product teams</b><span>Build accurate digital samples from detail-level references.</span></div><div class="wcard"><b>Fashion students and educators</b><span>Learn how trends move, season by season, with real examples.</span></div>
-    </div>
-  </section>
 
 <!--JOURNAL-->
-  <section id="pricing" aria-labelledby="ph">
-    <div class="sechead">
-      <div><span class="mono eyebrow">Plans from launch</span><h2 id="ph">Complimentary today. Plans at launch.</h2></div>
-      <p>Forecut is in early access, with full access at no cost. Subscription plans begin at launch, and early-access members retain the launch price shown below.</p>
-    </div>
-    <div class="testing"><div><b>Early-access programme · complimentary</b><span>During early access, the complete platform is open: every season, all six regional forecasts (including India), detailed analysis and downloadable detail cards. Your feedback directly informs the launch release.</span></div><a class="btn" href="mailto:hello@forecut.in?subject=Forecut%20feedback">Send feedback</a></div>
-    <div class="fxbar"><label for="fxsel">Show approximate prices in</label><select id="fxsel"><option value="INR">₹ INR</option><option value="USD">US$ USD</option><option value="EUR">€ EUR</option><option value="GBP">£ GBP</option><option value="AED">AED</option></select><span>Rates of 20 Oct 2026, for guidance only</span></div>
-    <div class="plans">
-      <div class="plan">
-        <span class="offer">Free · after launch</span>
-        <h3>Explorer</h3>
-        <div class="price">₹0</div><span class="fx" data-inr="0"></span>
-        <ul><li>One visit to the current season report</li><li>Browse every category and detail</li><li>The Journal and one sample report</li><li>No card needed</li></ul>
-        <a class="btn ghost" href="https://forecut.in/regions.html">Explore free now</a>
-      </div>
-      <div class="plan feat">
-        <span class="offer">Launch offer</span>
-        <h3>Individual</h3>
-        <div class="price">₹1,499 <small>/ year</small></div><span class="fx" data-inr="1499"></span>
-        <p class="per">Per user · one login</p>
-        <ul><li>All seasons: global AW26 to AW28, Resort and Pre-Fall, six regional forecasts and India Festive 26 to Festive 28</li><li>Every report: Core Item Updates, Design Capsules, Colour Forecast, Sourcing Guide and Brand Watch</li><li>PDF downloads of every report, and detail cards as PNG or PDF</li><li>Pantone TCX references on every palette</li><li>Monthly trend updates</li></ul>
-        <a class="btn" href="#waitlist">Reserve the launch price</a>
-      </div>
-      <div class="plan">
-        <span class="offer">Launch offer</span>
-        <h3>Enterprise</h3>
-        <div class="was"><s>₹15,000</s> <span>Save ₹5,001</span></div>
-        <div class="price">₹9,999 <small>/ year</small></div><span class="fx" data-inr="9999"></span>
-        <p class="per">Starts with 10 users · one login each</p>
-        <ul><li>Everything in Individual, for the whole team</li><li>Add more users as your team grows</li><li>Custom reports for your categories</li><li>Team onboarding</li></ul>
-        <a class="btn ghost" href="mailto:hello@forecut.in?subject=Forecut%20Enterprise">Talk to us</a>
-      </div>
-    </div>
-    <p class="fine">Plan limits (such as Explorer's one visit) apply only after launch; during early access everything is open. Prices are set in Indian rupees, from launch; other currencies are approximate conversions. Outside India? Write to <a href="mailto:hello@forecut.in?subject=Forecut%20pricing">hello@forecut.in</a> for pricing in your currency. Not charged during early access. Launch prices are for a limited time and may change for new members after launch.</p>
-  </section>
+<!--PRICING-->
+<!--FAQ-->
 
-  <section id="waitlist" aria-labelledby="jh">
-    <div class="wait">
-      <div>
-        <h2 id="jh">Get early access and shape Forecut.</h2>
-        <p>Forecut is free during early access. Leave your email to hear first when plans launch and to reserve the launch price, and tell us what you'd like to see. Or write to us at <a href="mailto:hello@forecut.in">hello@forecut.in</a>.</p>
-      </div>
-      <form id="wl" novalidate>
-        <label for="email">Work email</label>
-        <input id="email" name="email" type="email" placeholder="you@studio.com" autocomplete="email" required>
-        <label for="role">I am a</label>
-        <select id="role" name="role">
-          <option>Fashion designer</option><option>Brand founder</option><option>Manufacturer or exporter</option><option>3D or digital product</option><option>Student</option><option>Other</option>
-        </select>
-        <label for="fb">Your feedback (optional)</label>
-        <textarea id="fb" name="fb" rows="3" placeholder="What would make Forecut more useful for you?"></textarea>
-        <button class="btn" type="submit">Send to Forecut</button>
-        <p class="formmsg" id="msg" role="status"></p>
-      </form>
-    </div>
-  </section>
+<!--FOUNDING-->
 
   <footer>
     <span>© 2026 Forecut</span>
@@ -1049,7 +990,7 @@ document.getElementById('wl').addEventListener('submit', function (e) {
     return;
   }
   var body = 'Email: ' + email.value + '\nI am a: ' + document.getElementById('role').value + '\n\nFeedback:\n' + document.getElementById('fb').value;
-  window.location.href = 'mailto:hello@forecut.in?subject=' + encodeURIComponent('Forecut early access') + '&body=' + encodeURIComponent(body);
+  window.location.href = 'mailto:hello@forecut.in?subject=' + encodeURIComponent('Forecut founding member') + '&body=' + encodeURIComponent(body);
   msg.textContent = 'Opening your email app. If nothing happens, write to hello@forecut.in.';
 });
 </script>
@@ -1073,7 +1014,7 @@ function upd(){var u=url();L.textContent=R.options[R.selectedIndex].text.replace
 f.addEventListener('submit',function(e){e.preventDefault();location.href=url()[0];});})();</script>
 <script>(function(){var s=document.getElementById('fxsel');if(!s)return;
 var R={INR:[1,'₹'],USD:[95.1,'US$'],EUR:[107.0,'€'],GBP:[126.8,'£'],AED:[25.9,'AED ']};
-function show(c){document.querySelectorAll('.fx').forEach(function(e){var v=+e.getAttribute('data-inr');e.textContent=(c==='INR'||!v)?'':'≈ '+R[c][1]+Math.round(v/R[c][0]).toLocaleString('en')+' / year';});}
+function show(c){document.querySelectorAll('.fx').forEach(function(e){var v=+e.getAttribute('data-inr');e.textContent=(c==='INR'||!v)?'':'≈ '+R[c][1]+Math.round(v/R[c][0]).toLocaleString('en')+(e.hasAttribute('data-once')?'':' / year');});}
 var c=null;try{c=localStorage.getItem('fc-cur');}catch(e){}
 if(!c){var L=(navigator.language||'').toUpperCase();c=/-IN$/.test(L)?'INR':/-US$/.test(L)?'USD':/-GB$/.test(L)?'GBP':/-AE$/.test(L)?'AED':/-(DE|FR|IT|ES|NL|IE|PT|BE|AT|FI|GR)$/.test(L)?'EUR':'INR';}
 s.value=c;show(c);s.addEventListener('change',function(){show(s.value);try{localStorage.setItem('fc-cur',s.value);}catch(e){}});})();</script>

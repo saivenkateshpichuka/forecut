@@ -67,6 +67,9 @@ rsec = f'''  <section id="reports" aria-labelledby="rph">
     <div class="rcov">{rc}</div>
   </section>
 '''
+import landing as _LD
+h = h.replace('<!--HEROSIG-->', _LD.hero_visual()).replace('<!--HEROPROOF-->', _LD.hero_proof()).replace('<!--LAUNCH-->', _LD.launch_strip()).replace('<!--AUDIENCE-->', _LD.audience()).replace('<!--PRICING-->', _LD.pricing()).replace('<!--FAQ-->', _LD.faq()).replace('<!--FOUNDING-->', _LD.founding())
+h = h.replace('</style>', _LD.CSS + '</style>', 1)
 h = h.replace('<!--LOOKBOOK-->', gal).replace('<!--REPORTS-->', rsec).replace('<!--JOURNAL-->', jsec)
 import home_blocks as _HB
 for _k, _v in _HB.blocks(M, SEAS, islug).items(): h = h.replace(f'<!--{_k}-->', _v)
@@ -120,5 +123,6 @@ h = h.replace('https://forecut.in/india.html', 'india.html').replace('https://fo
 if not h.lstrip().lower().startswith('<!doctype'):
     h = ('<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
          + h.replace('<title>Forecut</title>', '<title>Forecut · Global fashion trend forecasting</title></head><body>', 1) + '\n</body></html>')
+i_ = h.rfind('</body>'); h = (h[:i_] + _LD.JS + h[i_:]) if i_ > -1 else h + _LD.JS
 open('../index.html', 'w').write(h)
 print('home ok')

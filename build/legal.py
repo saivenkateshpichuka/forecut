@@ -123,7 +123,7 @@ P['terms.html'] = ('Terms & Conditions · Forecut', f'''
 <h2>1. About the Service</h2>
 <p>Forecut provides fashion trend forecasts, analysis, sketches, images, descriptions and downloadable detail cards. The Service is currently in an early-access testing phase and is provided free of charge. Features and content may change, be added or be removed at any time.</p>
 <h2>2. Plans and pricing</h2>
-<p>Prices shown on the website are for subscription plans that will begin at launch. You will not be charged during the testing phase. Before any paid plan begins, we will publish its terms clearly, and nothing will be charged without your explicit agreement. Launch prices may change for new subscribers after launch.</p>
+<p>Prices shown on the website are for subscription plans that begin at launch on 1 January 2027. You will not be charged during the testing phase. Before any paid plan begins, we will publish its terms clearly, and nothing will be charged without your explicit agreement. Launch prices may change for new subscribers after launch.</p>
 <h2>3. Nature of forecasts</h2>
 <p>Forecasts are informed opinions based on public information and analysis. They are provided for general information and planning purposes only and are not guarantees of future trends, sales or commercial outcomes. You are responsible for your own design, sourcing, purchasing and business decisions. Price guides are indicative estimates, not quotations.</p>
 <h2>4. Acceptable use</h2>

@@ -38,7 +38,8 @@
 @media (max-width:760px) and (prefers-color-scheme:dark){.fctab{background:color-mix(in srgb,#1e1a17 92%,transparent);border-color:#352d27}.fctab a{color:#b3a698}.fctab a[aria-current="page"]{color:#f2ebe2}}
 @media print{.fctab{display:none!important}}</style>
 <style>.soc{display:inline-flex;gap:8px;align-items:center}.soc a{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;border:1px solid var(--grid,#e3d9cc);color:var(--ink,#1c1714);background:var(--paper-2,#fffcf7);text-decoration:none;transition:.2s}.soc a:hover{background:var(--ink,#1c1714);color:var(--paper,#f5f0e8);border-color:var(--ink,#1c1714)}.soc svg{width:17px;height:17px}footer .soc{margin:10px 0 0;display:flex}.foot .soc{margin:6px 0}.follow{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 20px;margin:44px 0 8px;padding:20px 22px;border-radius:14px;background:var(--mat,#1f3d33);color:var(--mat-ink,#f5f0e8)}.follow b{display:block;font:700 19px/1.3 "DM Sans",sans-serif}.follow span{font:15px/1.45 "DM Sans",sans-serif;opacity:.88}.follow .soc a{width:auto;height:40px;border-radius:99px;padding:0 15px;gap:8px;display:inline-flex;font:600 14px "DM Sans",sans-serif;background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.35);color:inherit}.follow .soc a:hover{background:#fff;color:#1f3d33}.follow .soc{flex-wrap:wrap}@media (max-width:600px){.follow .soc a span{display:none}.follow .soc a{width:44px;padding:0;justify-content:center}}</style>
-<!--/seo--></head><body>
+<!--/seo-->
+</head><body>
 <link rel="preload" href="fonts/dm-sans.woff" as="font" type="font/woff" crossorigin><style>@font-face{font-family:"DM Sans";src:url(fonts/dm-sans.woff) format("woff");font-weight:100 1000;font-style:normal;font-display:swap}
 @font-face{font-family:"DM Sans";src:url(fonts/dm-sans-italic.woff) format("woff");font-weight:100 1000;font-style:italic;font-display:swap}
 @font-face{font-family:"Source Serif 4";src:url(fonts/source-serif-4.woff) format("woff");font-weight:200 900;font-style:normal;font-display:swap}
@@ -588,6 +589,80 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
   .istats b{font-size:22px!important}.istats span{font-size:9.5px!important}
   .pricing .testing,#pricing .testing{padding:12px!important}
 }
+
+/* ===== Landing 2027: brand-book design (Source Serif 4 headlines, DM Sans body, thin lines, no gradients) ===== */
+:root{--serif:"Source Serif 4",Georgia,"Times New Roman",serif;--terracotta:#e08a5e;--marigold:#e8b860;--sand:#e8dccb;--coffee:#3a2418}
+h1,h2,.sechead h2,.hero h1,.hx h1{font-family:var(--serif)!important;font-weight:500!important;letter-spacing:-.015em!important}
+.btn.tc{background:var(--terracotta)!important;color:#1c1714!important}
+.btn.tc:hover{background:#d47a4c!important}
+.hero.hx{box-shadow:none!important}
+.hx h1{font-size:clamp(40px,5.4vw,72px)!important;line-height:1.02!important}
+.hx .lede{font-size:18px}
+.proof{list-style:none;margin:22px 0 0;padding:16px 0 0;border-top:1px solid var(--grid);display:grid;grid-template-columns:repeat(4,auto);gap:8px 24px;justify-content:start}
+.proof b{display:block;font:500 26px/1 var(--serif);color:var(--ink)}.proof span{font-size:12.5px;color:var(--muted)}
+.sigw{position:relative;max-width:420px;margin-left:auto;width:100%}
+.apane[hidden],.pp[hidden],.pl [hidden]{display:none!important}
+.fxbar select{width:auto!important}
+.sig{margin:0;display:none;background:var(--paper);border:1px solid var(--grid);border-radius:4px;overflow:hidden}
+.sig.on{display:block;animation:sigIn .6s ease both}
+@keyframes sigIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.hxs{height:auto!important;overflow:visible}
+.sig img{display:block;width:100%;height:auto!important;aspect-ratio:5/4;object-fit:cover}
+.sig figcaption{padding:14px 16px 16px;display:grid;gap:6px;border-top:1px solid var(--grid)}
+.sigk{font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--chalk)}
+.sig b{font:500 24px/1.15 var(--serif)}
+.lcv{width:100%;height:auto;color:var(--ink);font:600 9px var(--body);margin:2px 0}.lcv text{fill:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.lcv .now{fill:var(--terracotta);stroke:var(--paper);stroke-width:2}.lcv .nowt{fill:var(--ink);font-weight:700;text-transform:none}
+.chipc{display:flex;gap:10px;align-items:center;font-size:13.5px}.chipc i{width:34px;height:34px;border-radius:2px;border:1px solid var(--grid)}
+.chipc small{display:block;font:600 11px var(--mono);color:var(--muted)}
+.sigdots{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.sigdots button{width:26px;height:4px;border:0;padding:0;background:var(--grid);cursor:pointer}.sigdots button[aria-pressed="true"]{background:var(--ink)}
+.launch{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:20px 28px;align-items:center;margin-top:28px;padding:22px 26px;background:#1c1714;color:#f5f0e8;border-radius:4px}
+.launch p{margin:6px 0 0;color:#e8dccb;max-width:62ch}.launch b{color:#fff}
+.lchk{font:600 12px var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--terracotta)}
+.lcd{text-align:center;border-left:1px solid #3a3330;padding-left:26px}.lcd b{display:block;font:500 44px/1 var(--serif);color:#fff}.lcd span{font-size:12px;color:#c9bcaa;text-transform:uppercase;letter-spacing:.1em}
+.atabs,.ptabs{display:flex;gap:0;flex-wrap:wrap;border-bottom:1px solid var(--ink);margin-bottom:22px}
+.atabs button,.ptabs button{font:600 15px var(--body);background:none;border:0;border-bottom:3px solid transparent;margin-bottom:-2px;padding:12px 18px;color:var(--muted);cursor:pointer}
+.atabs button[aria-selected="true"],.ptabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--terracotta)}
+.apane{display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:start}
+.apane h3{font:500 clamp(26px,3vw,36px)/1.12 var(--serif);margin:0 0 10px}.apane p{color:var(--muted);font-size:17px;margin:0 0 18px;max-width:52ch}
+.aget{border-left:1px solid var(--grid);padding-left:26px}.aget small{font:600 11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--chalk)}
+.aget ul{margin:10px 0 14px;padding-left:18px;line-height:1.7}.arec{font-size:14.5px!important;color:var(--ink)!important}
+.billing{display:inline-flex;border:1px solid var(--ink);border-radius:999px;padding:3px;margin:0 0 18px}
+.billing button{font:600 13.5px var(--body);border:0;background:none;padding:7px 16px;border-radius:999px;cursor:pointer;color:var(--ink)}
+.billing button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.plans3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid var(--ink)}
+.plans2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0;border-top:1px solid var(--ink)}
+.pl{display:flex;flex-direction:column;gap:8px;padding:22px 22px 24px;border-right:1px solid var(--grid);border-bottom:1px solid var(--grid)}
+.plans3 .pl:last-child,.plans2 .pl:last-child{border-right:0}
+.pl.feat{background:var(--paper-2);box-shadow:inset 0 3px 0 var(--terracotta)}
+.plk{font:600 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--chalk)}
+.pl h3{font:500 26px var(--serif);margin:0}
+.pr{font:500 38px/1.1 var(--serif)}.pr small{font:500 14px var(--body);color:var(--muted)}.pr s{font-size:20px;color:var(--muted);margin-right:6px}
+.plsub{font-size:13.5px;color:var(--muted);margin:0}
+.pl ul{margin:6px 0 14px;padding-left:18px;font-size:14.5px;line-height:1.6;flex:1}
+.pl .btn{justify-content:center;margin-top:auto}
+#pricing .fine{font-size:13px;color:var(--muted);margin-top:14px}
+.faq{border-top:1px solid var(--ink)}
+.faq details{border-bottom:1px solid var(--grid);padding:0 4px}
+.faq summary{cursor:pointer;list-style:none;padding:18px 32px 18px 0;font:500 20px/1.3 var(--serif);position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:4px;top:14px;font:400 26px var(--body);color:var(--chalk)}
+.faq details[open] summary::after{content:"–"}
+.faq p{margin:0 0 18px;color:var(--muted);max-width:72ch;font-size:16px}
+.wait{background:#1c1714!important;border-radius:4px!important;box-shadow:none!important}
+.wait h2,.wait p,.wait li{color:#f5f0e8!important}.wait p{color:#e8dccb!important}
+.wl{margin:14px 0 0;padding-left:18px;line-height:1.8}
+.wait label{color:#e8dccb!important}
+.nwt,.nwt.emerge,.nwt.peak,.nwt.fade{background:var(--sand)!important}.nwt b{color:var(--coffee)!important}
+.scard,.rcv,.rc,.nwc,.twj,.twc,.twcal,.spot,.card,.palc,.xp{box-shadow:none!important}
+.scard:hover,.rcv:hover,.nwc:hover{transform:none!important}
+@media (max-width:980px){.apane{grid-template-columns:1fr}.aget{border-left:0;padding-left:0;border-top:1px solid var(--grid);padding-top:16px}}
+@media (max-width:900px){.plans3,.plans2{grid-template-columns:1fr}.pl{border-right:0}.launch{grid-template-columns:1fr auto}.launch .btn{grid-column:1/-1;justify-content:center}}
+@media (max-width:760px){.proof{grid-template-columns:repeat(2,auto)}.sigw{margin:0 auto;max-width:360px}.hxs{display:block!important;height:auto!important}
+ .atabs,.ptabs{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.atabs button,.ptabs button{white-space:nowrap;padding:10px 12px;font-size:14px}
+ .launch{padding:18px}.lcd{padding-left:16px}.lcd b{font-size:34px}.faq summary{font-size:17px}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sig{background:var(--paper-2)}}
 </style>
 
 <div class="wrap">
@@ -603,8 +678,8 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
       <a href="reports.html">Reports</a>
       <a href="journal.html">Journal</a>
       <a href="search.html" aria-label="Search Forecut">⌕ Search</a>
-      <a href="account.html">Sign in</a>
-      <a class="btn" href="account.html#signup">Get early access</a>
+      <a href="#pricing">Pricing</a>
+      <a class="btn" href="account.html#signup">Sign in free</a>
     </div>
     <button class="menu" type="button" aria-expanded="false" aria-controls="navlinks">Menu</button>
   </nav>
@@ -612,23 +687,35 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
   <header class="hero hx" id="top">
     <div class="hxt">
       <span class="hxlive"><i></i>Live · updated 31 Oct · Next: Diwali, 8 Nov</span>
-      <h1>The future of fashion, down to every detail.</h1>
-      <p class="hxsub">Know the next <span class="rot" aria-live="polite"><span class="rw">collar</span></span> before it trends.</p>
-      <p class="lede">Global forecasts for garments, footwear, fabrics, colour and construction details. Track what is emerging, see how each region differs, and turn it into design decisions.</p>
+      <h1>Know what the world will wear next.</h1>
+      <p class="lede">Garments, details, colours and fabrics tracked from Emerging to Fading, read for your season, your region and your calendar, with Pantone TCX codes your team can use on Monday morning.</p>
       <div class="cta">
-        <a class="btn" href="#explore">Explore forecasts</a>
-        <a class="btn ghost" href="https://forecut.in/regions.html">Browse global regions</a>
+        <a class="btn" href="account.html#signup">Sign in free</a>
+        <a class="btn ghost" href="ss27.html">Explore SS27</a>
       </div>
-      <p class="beta"><b>Free during early access.</b> <a href="method.html">How we forecast</a> · <a href="account.html#signup">Create a free account</a> · Feedback: <a href="mailto:hello@forecut.in?subject=Forecut%20feedback">hello@forecut.in</a></p>
+      <ul class="proof"><li><b>737</b><span>details tracked</span></li><li><b>6</b><span>regions, 20 markets</span></li><li><b>TCX</b><span>Pantone code on every colour</span></li><li><b>₹0</b><span>to start</span></li></ul>
     </div>
-    <div class="hxs" aria-label="Live detail forecasts"><a class="hc" data-p="0" href="ss27.html"><img src="img/peplum-blouses-photo.webp" alt="Peplum blouses" width="800" height="800" fetchpriority="high"><span class="pill emerge">Emerging</span><span class="hcb"><b>Peplum blouses</b><small>SS27 · Global</small></span></a><a class="hc" data-p="1" href="ss27.html"><img src="img/collarless-tailored-jackets-photo.webp" alt="Collarless tailored jackets" width="800" height="800" loading="lazy"><span class="pill emerge">Emerging</span><span class="hcb"><b>Collarless tailored jackets</b><small>SS27 · Global</small></span></a><a class="hc" data-p="2" href="ss27.html"><img src="img/band-collar-shirts-photo.webp" alt="Band-collar shirts" width="800" height="800" loading="lazy"><span class="pill emerge">Emerging</span><span class="hcb"><b>Band-collar shirts</b><small>SS27 · Global</small></span></a><a class="hc" data-p="3" href="india.html"><img src="img/cape-lehengas.webp" alt="Cape lehengas" width="800" height="800" loading="lazy"><span class="pill rise">Rising</span><span class="hcb"><b>Cape lehengas</b><small>Festive 26 · India</small></span></a></div>
+    <div class="hxs"><div class="sigw" aria-label="Forecast details"><figure class="sig on" data-i="0"><a href="ss27.html?q=peplum+blouses#list" aria-label="Peplum blouses: open in the SS27 forecast"><img src="img/peplum-blouses-photo.webp" alt="Peplum blouses, SS27 forecast detail" width="800" height="800" fetchpriority="high"></a><figcaption><span class="sigk">SS27 · Emerging</span><b>Peplum blouses</b><svg class="lcv" viewBox="0 0 300 92" role="img" aria-label="Lifecycle: Emerging now"><polyline points="10.0,73.8 16.0,73.6 22.0,73.4 28.0,73.1 34.0,72.7 40.0,72.1 46.0,71.3 52.0,70.2 58.0,68.7 64.0,66.9 70.0,64.5 76.0,61.7 82.0,58.4 88.0,54.5 94.0,50.2 100.0,45.4 106.0,40.5 112.0,35.5 118.0,30.6 124.0,26.1 130.0,22.2 136.0,19.1 142.0,17.0 148.0,16.1 154.0,16.3 160.0,17.6 166.0,20.1 172.0,23.4 178.0,27.6 184.0,32.2 190.0,37.1 196.0,42.2 202.0,47.0 208.0,51.6 214.0,55.8 220.0,59.5 226.0,62.7 232.0,65.4 238.0,67.5 244.0,69.3 250.0,70.6 256.0,71.6 262.0,72.3 268.0,72.9 274.0,73.3 280.0,73.5 286.0,73.7" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".55"/><line x1="54.8" x2="54.8" y1="8" y2="76" stroke="currentColor" stroke-dasharray="2 3" opacity=".35"/><circle cx="54.8" cy="69.6" r="6" class="now"/><text x="64" y="62" class="nowt">now</text><text x="55" y="90" text-anchor="middle">Emerging</text><text x="111" y="90" text-anchor="middle">Rising</text><text x="164" y="90" text-anchor="middle">Peaking</text><text x="234" y="90" text-anchor="middle">Fading</text></svg><span class="chipc"><i style="background:#2f6fe0"></i><span>Luminous blue<small>18-4039 TCX</small></span></span></figcaption></figure><figure class="sig" data-i="1"><a href="ss27.html?q=asymmetric+wrap+closures#list" aria-label="Asymmetric wrap closures: open in the SS27 forecast"><img src="img/asymmetric-wrap-closures-ss27-photo.webp" alt="Asymmetric wrap closures, SS27 forecast detail" width="800" height="800" loading="lazy"></a><figcaption><span class="sigk">SS27 · Rising</span><b>Asymmetric wrap closures</b><svg class="lcv" viewBox="0 0 300 92" role="img" aria-label="Lifecycle: Rising now"><polyline points="10.0,73.8 16.0,73.6 22.0,73.4 28.0,73.1 34.0,72.7 40.0,72.1 46.0,71.3 52.0,70.2 58.0,68.7 64.0,66.9 70.0,64.5 76.0,61.7 82.0,58.4 88.0,54.5 94.0,50.2 100.0,45.4 106.0,40.5 112.0,35.5 118.0,30.6 124.0,26.1 130.0,22.2 136.0,19.1 142.0,17.0 148.0,16.1 154.0,16.3 160.0,17.6 166.0,20.1 172.0,23.4 178.0,27.6 184.0,32.2 190.0,37.1 196.0,42.2 202.0,47.0 208.0,51.6 214.0,55.8 220.0,59.5 226.0,62.7 232.0,65.4 238.0,67.5 244.0,69.3 250.0,70.6 256.0,71.6 262.0,72.3 268.0,72.9 274.0,73.3 280.0,73.5 286.0,73.7" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".55"/><line x1="110.8" x2="110.8" y1="8" y2="76" stroke="currentColor" stroke-dasharray="2 3" opacity=".35"/><circle cx="110.8" cy="36.5" r="6" class="now"/><text x="120" y="28" class="nowt">now</text><text x="55" y="90" text-anchor="middle">Emerging</text><text x="111" y="90" text-anchor="middle">Rising</text><text x="164" y="90" text-anchor="middle">Peaking</text><text x="234" y="90" text-anchor="middle">Fading</text></svg><span class="chipc"><i style="background:#ef6fa7"></i><span>Pop pink<small>16-2126 TCX</small></span></span></figcaption></figure><figure class="sig" data-i="2"><a href="ss27.html?q=barrel+leg+cargo+jeans#list" aria-label="Barrel-leg cargo jeans: open in the SS27 forecast"><img src="img/barrel-leg-cargo-jeans-ss27-photo.webp" alt="Barrel-leg cargo jeans, SS27 forecast detail" width="800" height="800" loading="lazy"></a><figcaption><span class="sigk">SS27 · Rising</span><b>Barrel-leg cargo jeans</b><svg class="lcv" viewBox="0 0 300 92" role="img" aria-label="Lifecycle: Rising now"><polyline points="10.0,73.8 16.0,73.6 22.0,73.4 28.0,73.1 34.0,72.7 40.0,72.1 46.0,71.3 52.0,70.2 58.0,68.7 64.0,66.9 70.0,64.5 76.0,61.7 82.0,58.4 88.0,54.5 94.0,50.2 100.0,45.4 106.0,40.5 112.0,35.5 118.0,30.6 124.0,26.1 130.0,22.2 136.0,19.1 142.0,17.0 148.0,16.1 154.0,16.3 160.0,17.6 166.0,20.1 172.0,23.4 178.0,27.6 184.0,32.2 190.0,37.1 196.0,42.2 202.0,47.0 208.0,51.6 214.0,55.8 220.0,59.5 226.0,62.7 232.0,65.4 238.0,67.5 244.0,69.3 250.0,70.6 256.0,71.6 262.0,72.3 268.0,72.9 274.0,73.3 280.0,73.5 286.0,73.7" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".55"/><line x1="110.8" x2="110.8" y1="8" y2="76" stroke="currentColor" stroke-dasharray="2 3" opacity=".35"/><circle cx="110.8" cy="36.5" r="6" class="now"/><text x="120" y="28" class="nowt">now</text><text x="55" y="90" text-anchor="middle">Emerging</text><text x="111" y="90" text-anchor="middle">Rising</text><text x="164" y="90" text-anchor="middle">Peaking</text><text x="234" y="90" text-anchor="middle">Fading</text></svg><span class="chipc"><i style="background:#b57552"></i><span>Clay<small>17-1143 TCX</small></span></span></figcaption></figure><div class="sigdots"><button type="button" aria-label="Show detail 1" aria-pressed="true"></button><button type="button" aria-label="Show detail 2" aria-pressed="false"></button><button type="button" aria-label="Show detail 3" aria-pressed="false"></button></div></div></div>
   </header>
+  <section class="launch" aria-label="Launch">
+    <div class="lch"><span class="lchk">Launching 1 January 2027</span>
+      <p><b>Everything is free until launch.</b> The first 100 subscribers become <b>Founding Members</b>: full access for <b>₹999</b> in year one, locked in on renewal.</p></div>
+    <div class="lcd" aria-live="polite"><b id="lcd">62</b><span>days to go</span></div>
+    <a class="btn tc" href="#pricing">Become a founding member</a>
+  </section>
+
   <div class="ticker" aria-hidden="true"><div class="tk"><span>Belted wrap fronts <span class="pill rise">Rising</span></span><span>Patent trench with storm flaps <span class="pill rise">Rising</span></span><span>Cinched peplum jackets <span class="pill emerge">Emerging</span></span><span>Pre-draped saree gowns <span class="pill rise">Rising</span></span><span>Collarless cropped jackets <span class="pill rise">Rising</span></span><span>Double-belted waists <span class="pill emerge">Emerging</span></span><span>Lace-trimmed jacket edges <span class="pill rise">Rising</span></span><span>Office-ready fluid sarees <span class="pill emerge">Emerging</span></span><span>Seersucker and linen jackets <span class="pill rise">Rising</span></span><span>Raglan sleeve coats <span class="pill rise">Rising</span></span><span>Welt-pocket cocoon coats <span class="pill rise">Rising</span></span><span>Tissue sarees in champagne gold <span class="pill rise">Rising</span></span><span>Single-breasted car coats <span class="pill rise">Rising</span></span><span>Quilted liner jackets <span class="pill rise">Rising</span></span><span>Belted safari jackets <span class="pill rise">Rising</span></span><span>Pastel handloom sarees <span class="pill rise">Rising</span></span><span>Boxy cropped jackets <span class="pill rise">Rising</span></span><span>Stand-collar field coats <span class="pill emerge">Emerging</span></span><span>Detachable hoods <span class="pill rise">Rising</span></span><span>Sarees with belts and jackets <span class="pill rise">Rising</span></span><span>Hidden-placket overcoats <span class="pill rise">Rising</span></span><span>Asymmetric wrap closures <span class="pill rise">Rising</span></span><span>Shaped elbow seams <span class="pill rise">Rising</span></span><span>Cape lehengas <span class="pill rise">Rising</span></span><span>Belted wrap fronts <span class="pill rise">Rising</span></span><span>Patent trench with storm flaps <span class="pill rise">Rising</span></span><span>Cinched peplum jackets <span class="pill emerge">Emerging</span></span><span>Pre-draped saree gowns <span class="pill rise">Rising</span></span><span>Collarless cropped jackets <span class="pill rise">Rising</span></span><span>Double-belted waists <span class="pill emerge">Emerging</span></span><span>Lace-trimmed jacket edges <span class="pill rise">Rising</span></span><span>Office-ready fluid sarees <span class="pill emerge">Emerging</span></span><span>Seersucker and linen jackets <span class="pill rise">Rising</span></span><span>Raglan sleeve coats <span class="pill rise">Rising</span></span><span>Welt-pocket cocoon coats <span class="pill rise">Rising</span></span><span>Tissue sarees in champagne gold <span class="pill rise">Rising</span></span><span>Single-breasted car coats <span class="pill rise">Rising</span></span><span>Quilted liner jackets <span class="pill rise">Rising</span></span><span>Belted safari jackets <span class="pill rise">Rising</span></span><span>Pastel handloom sarees <span class="pill rise">Rising</span></span><span>Boxy cropped jackets <span class="pill rise">Rising</span></span><span>Stand-collar field coats <span class="pill emerge">Emerging</span></span><span>Detachable hoods <span class="pill rise">Rising</span></span><span>Sarees with belts and jackets <span class="pill rise">Rising</span></span><span>Hidden-placket overcoats <span class="pill rise">Rising</span></span><span>Asymmetric wrap closures <span class="pill rise">Rising</span></span><span>Shaped elbow seams <span class="pill rise">Rising</span></span><span>Cape lehengas <span class="pill rise">Rising</span></span></div></div>
 
   <section id="thisweek" aria-labelledby="twh">
     <div class="sechead"><div><span class="mono eyebrow">This week at Forecut · updated 31 Oct 2026</span><h2 id="twh">What's new.</h2></div><p>The newest details added from runways, fashion weeks and retail, the latest analysis, and what's coming on the global calendar.</p></div>
     <div class="twgrid"><div class="twmain"><div class="twlab"><b>27 new details this month</b><a href="search.html">Search all details →</a></div><div class="nwrow" tabindex="0" aria-label="New details, scroll sideways"><a class="nwc" href="ss27.html?q=beaded+fringe+canvas+dresses#list"><span class="nwi nwt emerge"><b>Embellishment</b></span><span class="nwb"><span class="pill emerge">SS27 · Emerging</span><b>Beaded-fringe canvas dresses</b><small>Womenswear · Dresses</small><span class="nwn">Structured canvas dresses finished with long beaded fringe; Hertunba opened Lagos Fashion Week 2026 Day 2 (29 Oct) with a black canvas dress and red beaded fringe.</span></span></a><a class="nwc" href="aw26.html?q=off+shoulder+tweed+sheath+dresses#list"><span class="nwi nwt emerge"><b>Neckline</b></span><span class="nwb"><span class="pill emerge">AW26 · Emerging</span><b>Off-shoulder tweed sheath dresses</b><small>Womenswear · Dresses</small><span class="nwn">Fitted midi sheaths in metallic tweed with an off-shoulder, sculpted neckline; Rebecca Vallance&#x27;s custom tweed dress for Helena Christensen at Victoria Derby Day, Melbourne (31 Oct 2026), in line with the VRC&#x27;s sleeveless midi sheath forecast for the carnival.</span></span></a><a class="nwc" href="ss27.html?q=striped+patchwork+shirt+dresses#list"><span class="nwi nwt emerge"><b>Panel</b></span><span class="nwb"><span class="pill emerge">SS27 · Emerging</span><b>Striped patchwork shirt dresses</b><small>Womenswear · Dresses</small><span class="nwn">Shirt dresses pieced from striped panels with an asymmetric hem; Ajanéé at Lagos Fashion Week 2026 Day 2 showed a pink-and-red striped patchwork version.</span></span></a><a class="nwc" href="ss27.html?q=sheer+lattice+capes#list"><span class="nwi nwt emerge"><b>Silhouette</b></span><span class="nwb"><span class="pill emerge">SS27 · Emerging</span><b>Sheer lattice capes</b><small>Womenswear · Coats &amp; Jackets</small><span class="nwn">Open lattice or sheer capes layered over co-ords and bustiers; shown by Hertunba at Lagos Fashion Week 2026 (29 Oct) over a black-and-white woven peplum set.</span></span></a><a class="nwc" href="aw26.html?q=floral+lined+showerproof+jackets#list"><span class="nwi nwt emerge"><b>Lining</b></span><span class="nwb"><span class="pill emerge">AW26 · Emerging</span><b>Floral-lined showerproof jackets</b><small>Womenswear · Coats &amp; Jackets</small><span class="nwn">Showerproof field and quilted jackets with printed floral linings and reversible liners; Barbour x FARM Rio &#x27;Tropical Greenhouse&#x27;, on sale 30 Oct 2026.</span></span></a><a class="nwc" href="ss27.html?q=woven+stripe+longline+overlayers#list"><span class="nwi nwt emerge"><b>Silhouette</b></span><span class="nwb"><span class="pill emerge">SS27 · Emerging</span><b>Woven-stripe longline overlayers</b><small>Womenswear · Coats &amp; Jackets</small><span class="nwn">Ankle-length open overlayers in hand-woven stripes running in several directions; DARRA reworked Javanese lurik, ikat and songket this way at Jakarta Fashion Week 2027 (27 Oct 2026).</span></span></a><a class="nwc" href="ss27.html?q=fringed+minis+with+back+trains#list"><span class="nwi nwt emerge"><b>Hem</b></span><span class="nwb"><span class="pill emerge">SS27 · Emerging</span><b>Fringed minis with back trains</b><small>Womenswear · Trousers &amp; Skirts</small><span class="nwn">Mini skirts cut in layered fringe with a longer train at the back; Oshobor showed an ombré blue version at Lagos Fashion Week 2026 Day 2.</span></span></a><a class="nwc" href="aw26.html?q=leather+yoke+nylon+puffers#list"><span class="nwi nwt emerge"><b>Yoke</b></span><span class="nwb"><span class="pill emerge">AW26 · Emerging</span><b>Leather-yoke nylon puffers</b><small>Menswear · Outerwear</small><span class="nwn">Nylon puffers with leather shoulder yokes; Louis Vuitton&#x27;s Men&#x27;s SS27 pre-collection &#x27;Whatever the Weather&#x27; (launched 29 Oct 2026) puts monogram leather on the shoulders.</span></span></a><a class="nwc" href="aw26.html?q=fisherman+style+raincoats#list"><span class="nwi nwt emerge"><b>Silhouette</b></span><span class="nwb"><span class="pill emerge">AW26 · Emerging</span><b>Fisherman-style raincoats</b><small>Menswear · Outerwear</small><span class="nwn">Long, roomy raincoats modelled on fishermen&#x27;s oilskins with storm flaps and hoods; part of Louis Vuitton&#x27;s weather-themed Men&#x27;s SS27 pre-collection (Oct 2026).</span></span></a><a class="nwc" href="aw26.html?q=generous+1980s+double+breasted+suits#list"><span class="nwi nwt emerge"><b>Silhouette</b></span><span class="nwb"><span class="pill emerge">AW26 · Emerging</span><b>Generous 1980s double-breasted suits</b><small>Menswear · Tailoring</small><span class="nwn">Roomy double-breasted suits with pleated, higher-waisted trousers in a late-80s/early-90s line; the VRC&#x27;s Melbourne Cup Carnival 2026 forecast names them for race-day menswear, alongside the return of the tie.</span></span></a></div></div>
     <aside class="twside"><a class="twj" href="brazil-summer-spfw-n61-beachwear-guide.html"><span class="twjp"><img src="img/breezy-resort-dresses.webp" alt="" loading="lazy" width="800" height="500"></span><small>Latest Journal · Regional market</small><b>Selling into Brazil: SPFW N61, beachwear exports and the southern summer</b></a><a class="twc" href="celebrity-style.html"><small>Weekly</small><b>Celebrity Style Watch</b><span>Red-carpet looks by region, who designed them, and the Forecut details they show.</span></a><div class="twcal"><small>Coming up</small><ul><li><a href="india.html"><time datetime="2026-11-08">8 Nov</time><span>Diwali</span></a></li><li><a href="region-north-america.html"><time datetime="2026-11-27">27 Nov</time><span>Black Friday</span></a></li><li><a href="pre-fall-27.html"><time datetime="2026-12-01">1 Dec</time><span>Pre-Fall 27 collections begin (Dec – Jan)</span></a></li><li><a href="region-europe.html"><time datetime="2027-01-19">19 Jan</time><span>Paris Menswear AW27 (19–24 Jan)</span></a></li><li><a href="couture.html"><time datetime="2027-01-25">25 Jan</time><span>Paris Haute Couture SS27 (25–28 Jan)</span></a></li></ul></div></aside></div>
+  </section>
+
+  <section id="foryou" aria-labelledby="fyh">
+    <div class="sechead"><div><span class="mono eyebrow">Built for the job you do</span><h2 id="fyh">From "I hope this works" to "I know where this is going."</h2></div></div>
+    <div class="atabs" role="tablist" aria-label="Who are you?"><button type="button" role="tab" id="au-d2c" aria-controls="ap-d2c" aria-selected="true">D2C brands</button><button type="button" role="tab" id="au-exp" aria-controls="ap-exp" aria-selected="false" tabindex="-1">Exporters</button><button type="button" role="tab" id="au-des" aria-controls="ap-des" aria-selected="false" tabindex="-1">Designers</button><button type="button" role="tab" id="au-stu" aria-controls="ap-stu" aria-selected="false" tabindex="-1">Students</button><button type="button" role="tab" id="au-ins" aria-controls="ap-ins" aria-selected="false" tabindex="-1">Institutes</button></div>
+    <div class="apane" role="tabpanel" id="ap-d2c" aria-labelledby="au-d2c"><div><h3>Plan your next drop with data, not guesswork.</h3><p>Forecasts with Pantone TCX codes your production team can use today.</p><a class="btn" href="account.html#signup">Sign in free</a> <a class="btn ghost" href="mailto:hello@forecut.in?subject=Free%20sample%20brief">Get a free sample brief</a></div><div class="aget"><small>What you get</small><ul><li>Which styles and colours are Rising for your next drop</li><li>Colour stories with TCX codes for your dyeing unit</li><li>Regional timing for every market you sell in</li></ul><p class="arec">Best plan: <b>Individual or Enterprise</b></p></div></div><div class="apane" role="tabpanel" id="ap-exp" aria-labelledby="au-exp" hidden><div><h3>Walk into every buyer meeting with what&#x27;s next.</h3><p>Core items, details and colours for SS27 and beyond, as downloadable PDFs.</p><a class="btn" href="mailto:hello@forecut.in?subject=Forecut%20demo">Book a 15-minute demo</a> <a class="btn ghost" href="#briefs">Request a custom brief</a></div><div class="aget"><small>What you get</small><ul><li>Core Item Updates and season reports to share with buyers</li><li>Details to sample early, with photos and construction notes</li><li>Region pages for each buyer market</li></ul><p class="arec">Best plan: <b>Enterprise or a custom brief</b></p></div></div><div class="apane" role="tabpanel" id="ap-des" aria-labelledby="au-des" hidden><div><h3>Your next collection, one season ahead.</h3><p>Colours, crafts and silhouettes from AW26 to AW28, plus Festive and Summer for India.</p><a class="btn" href="account.html#signup">Sign in free</a> <a class="btn ghost" href="ss27.html">Explore SS27</a></div><div class="aget"><small>What you get</small><ul><li>Couture, fabric and colour guides</li><li>Lifecycle stage on every detail</li><li>Downloadable detail cards for your mood boards</li></ul><p class="arec">Best plan: <b>Individual</b></p></div></div><div class="apane" role="tabpanel" id="ap-stu" aria-labelledby="au-stu" hidden><div><h3>Professional trend research for your projects.</h3><p>Free to start. A photo and a Pantone TCX code for every detail.</p><a class="btn" href="account.html#signup">Sign in free</a> <a class="btn ghost" href="search.html">See all details</a></div><div class="aget"><small>What you get</small><ul><li>Every season and region to research</li><li>Methodology you can cite</li><li>Student plan with a college ID</li></ul><p class="arec">Best plan: <b>Free or Student</b></p></div></div><div class="apane" role="tabpanel" id="ap-ins" aria-labelledby="au-ins" hidden><div><h3>A trend library for your whole department.</h3><p>Student and faculty access, priced for institutes.</p><a class="btn" href="mailto:hello@forecut.in?subject=Institute%20licence">Book a 15-minute demo</a> <a class="btn ghost" href="#pricing">See pricing</a></div><div class="aget"><small>What you get</small><ul><li>Department-wide access for students and faculty</li><li>Guest lecture: how trend forecasting works</li><li>Free 30-day trial for your department</li></ul><p class="arec">Best plan: <b>Institute licence</b></p></div></div>
   </section>
 
 
@@ -974,14 +1061,6 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
     </div>
   </section>
 
-  <section aria-labelledby="wh">
-    <div class="sechead">
-      <div><span class="mono eyebrow">Who it serves</span><h2 id="wh">Built for the people behind every collection.</h2></div>
-    </div>
-    <div class="who2">
-      <div class="wcard"><b>Fashion designers</b><span>Identify the details worth developing next, and the ones to retire.</span></div><div class="wcard"><b>D2C and retail brands</b><span>Plan drops around each market's own calendar, from Black Friday to Lunar New Year, Ramadan and Diwali.</span></div><div class="wcard"><b>Manufacturers and exporters</b><span>Anticipate buyer requests and sample the right construction early.</span></div><div class="wcard"><b>Sourcing and merchandising</b><span>Align fabrics, trims and price points with the season ahead.</span></div><div class="wcard"><b>3D and digital product teams</b><span>Build accurate digital samples from detail-level references.</span></div><div class="wcard"><b>Fashion students and educators</b><span>Learn how trends move, season by season, with real examples.</span></div>
-    </div>
-  </section>
 
   <section id="journal" aria-labelledby="jlh">
     <div class="sechead"><div><span class="mono eyebrow">The Journal</span><h2 id="jlh">Read the analysis.</h2></div><p>Practical guides on what the world will wear next, region by region, and how to act on it. <a href="journal.html">All articles →</a></p></div>
@@ -989,61 +1068,86 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
   </section>
 
   <section id="pricing" aria-labelledby="ph">
-    <div class="sechead">
-      <div><span class="mono eyebrow">Plans from launch</span><h2 id="ph">Complimentary today. Plans at launch.</h2></div>
-      <p>Forecut is in early access, with full access at no cost. Subscription plans begin at launch, and early-access members retain the launch price shown below.</p>
+    <div class="sechead"><div><span class="mono eyebrow">Pricing · plans open 1 January 2027</span><h2 id="ph">Free to start. Full access for ₹1,499 a year.</h2></div>
+      <p>About ₹125 a month: less than a single sample run. Nothing is charged before 1 January 2027; until then, everything is open.</p></div>
+    <div class="ptabs" role="tablist" aria-label="Plan type">
+      <button type="button" role="tab" id="pt-ind" aria-controls="pp-ind" aria-selected="true">For individuals</button>
+      <button type="button" role="tab" id="pt-team" aria-controls="pp-team" aria-selected="false" tabindex="-1">For teams &amp; institutes</button>
+      <button type="button" role="tab" id="pt-brief" aria-controls="pp-brief" aria-selected="false" tabindex="-1">Custom briefs</button>
     </div>
-    <div class="testing"><div><b>Early-access programme · complimentary</b><span>During early access, the complete platform is open: every season, all six regional forecasts (including India), detailed analysis and downloadable detail cards. Your feedback directly informs the launch release.</span></div><a class="btn" href="mailto:hello@forecut.in?subject=Forecut%20feedback">Send feedback</a></div>
     <div class="fxbar"><label for="fxsel">Show approximate prices in</label><select id="fxsel"><option value="INR">₹ INR</option><option value="USD">US$ USD</option><option value="EUR">€ EUR</option><option value="GBP">£ GBP</option><option value="AED">AED</option></select><span>Rates of 20 Oct 2026, for guidance only</span></div>
-    <div class="plans">
-      <div class="plan">
-        <span class="offer">Free · after launch</span>
-        <h3>Explorer</h3>
-        <div class="price">₹0</div><span class="fx" data-inr="0"></span>
-        <ul><li>One visit to the current season report</li><li>Browse every category and detail</li><li>The Journal and one sample report</li><li>No card needed</li></ul>
-        <a class="btn ghost" href="https://forecut.in/regions.html">Explore free now</a>
+    <div class="pp" role="tabpanel" id="pp-ind" aria-labelledby="pt-ind">
+      <div class="billing" role="group" aria-label="Billing"><button type="button" data-b="y" aria-pressed="true">Yearly</button><button type="button" data-b="m" aria-pressed="false">Monthly</button></div>
+      <div class="plans3">
+        <div class="pl"><span class="plk">Free</span><h3>Free member</h3><div class="pr">₹0</div><span class="fx" data-inr="0"></span>
+          <ul><li>Browse every season, region and the Journal</li><li>A monthly allowance of full detail cards</li><li>Lifecycle tracker and colour pages</li><li>Ads keep it free</li></ul>
+          <a class="btn ghost" href="account.html#signup">Sign in free</a></div>
+        <div class="pl"><span class="plk">With college ID</span><h3>Student</h3><div class="pr"><small>from</small> ₹499<small> / year</small></div><span class="fx" data-inr="499"></span>
+          <ul><li>Everything in Individual for study</li><li>Every season, region and report</li><li>Cite-ready methodology</li><li>Verified with a college ID</li></ul>
+          <a class="btn ghost" href="account.html#signup">Sign in free</a></div>
+        <div class="pl feat"><span class="plk">Founding member · first 100</span><h3>Individual</h3>
+          <div class="pr y"><s>₹1,499</s> ₹999<small> / first year</small></div><div class="pr m" hidden>₹199<small> / month</small></div>
+          <span class="fx y" data-inr="999"></span><p class="plsub y">Then ₹1,499 a year, or keep ₹999 when you renew as a founding member.</p><p class="plsub m" hidden>Cancel any time. Yearly saves you more than 35%.</p>
+          <ul><li>Full access to every season (AW26 to AW28), Resort, Pre-Fall and all six regions</li><li>India Festive and Summer reports</li><li>PDF downloads and detail cards as PNG or PDF</li><li>Pantone TCX on every colour</li><li>Ad-free, with monthly updates</li></ul>
+          <a class="btn tc" href="#waitlist">Become a founding member</a></div>
       </div>
-      <div class="plan feat">
-        <span class="offer">Launch offer</span>
-        <h3>Individual</h3>
-        <div class="price">₹1,499 <small>/ year</small></div><span class="fx" data-inr="1499"></span>
-        <p class="per">Per user · one login</p>
-        <ul><li>All seasons: global AW26 to AW28, Resort and Pre-Fall, six regional forecasts and India Festive 26 to Festive 28</li><li>Every report: Core Item Updates, Design Capsules, Colour Forecast, Sourcing Guide and Brand Watch</li><li>PDF downloads of every report, and detail cards as PNG or PDF</li><li>Pantone TCX references on every palette</li><li>Monthly trend updates</li></ul>
-        <a class="btn" href="#waitlist">Reserve the launch price</a>
-      </div>
-      <div class="plan">
-        <span class="offer">Launch offer</span>
-        <h3>Enterprise</h3>
-        <div class="was"><s>₹15,000</s> <span>Save ₹5,001</span></div>
-        <div class="price">₹9,999 <small>/ year</small></div><span class="fx" data-inr="9999"></span>
-        <p class="per">Starts with 10 users · one login each</p>
-        <ul><li>Everything in Individual, for the whole team</li><li>Add more users as your team grows</li><li>Custom reports for your categories</li><li>Team onboarding</li></ul>
-        <a class="btn ghost" href="mailto:hello@forecut.in?subject=Forecut%20Enterprise">Talk to us</a>
+      <p class="fine">Single reports from ₹299 (Buy this report on any report page from launch).</p>
+    </div>
+    <div class="pp" role="tabpanel" id="pp-team" aria-labelledby="pt-team" hidden>
+      <div class="plans2">
+        <div class="pl feat"><span class="plk">Launch offer</span><h3>Enterprise</h3><div class="pr"><s>₹15,000</s> ₹9,999<small> / year</small></div><span class="fx" data-inr="9999"></span>
+          <p class="plsub">For teams of 10 or more, one login each.</p>
+          <ul><li>Everything in Individual for the whole team</li><li>Add users as you grow</li><li>Team onboarding</li><li>Priority support from hello@forecut.in</li></ul>
+          <a class="btn tc" href="mailto:hello@forecut.in?subject=Forecut%20Enterprise">Book a 15-minute demo</a></div>
+        <div class="pl"><span class="plk">Forecut Campus</span><h3>Institute licence</h3><div class="pr"><small>from</small> ₹15,000<small> / year</small></div><span class="fx" data-inr="15000"></span>
+          <p class="plsub">Department-wide access for students and faculty.</p>
+          <ul><li>Unlimited student and faculty access</li><li>Free 30-day trial for your department</li><li>Guest lecture: how trend forecasting works</li><li>Student ambassador programme</li></ul>
+          <a class="btn ghost" href="mailto:hello@forecut.in?subject=Forecut%20institute%20licence">Book a 15-minute demo</a></div>
       </div>
     </div>
-    <p class="fine">Plan limits (such as Explorer's one visit) apply only after launch; during early access everything is open. Prices are set in Indian rupees, from launch; other currencies are approximate conversions. Outside India? Write to <a href="mailto:hello@forecut.in?subject=Forecut%20pricing">hello@forecut.in</a> for pricing in your currency. Not charged during early access. Launch prices are for a limited time and may change for new members after launch.</p>
+    <div class="pp" role="tabpanel" id="pp-brief" aria-labelledby="pt-brief" hidden>
+      <div class="plans3" id="briefs">
+        <div class="pl"><span class="plk">Forecut Briefs</span><h3>Starter</h3><div class="pr">₹10,000</div><span class="fx" data-inr="10000" data-once></span>
+          <ul><li>One category, one season</li><li>10–12 key details</li><li>Colour story with TCX codes</li><li>8–10 page PDF, delivered in 5 working days</li></ul>
+          <a class="btn ghost" href="mailto:hello@forecut.in?subject=Starter%20brief">Request a custom brief</a></div>
+        <div class="pl feat"><span class="plk">Recommended</span><h3>Collection</h3><div class="pr">₹25,000</div><span class="fx" data-inr="25000" data-once></span>
+          <ul><li>Up to 3 categories</li><li>Details, colours, fabrics and craft directions</li><li>20–25 pages</li><li>One revision call</li></ul>
+          <a class="btn tc" href="mailto:hello@forecut.in?subject=Collection%20brief">Request a custom brief</a></div>
+        <div class="pl"><span class="plk">Season-long</span><h3>Season partner</h3><div class="pr">₹50,000</div><span class="fx" data-inr="50000" data-once></span>
+          <ul><li>Full season direction</li><li>Line-plan suggestions</li><li>Two review calls</li><li>Quarterly update</li></ul>
+          <a class="btn ghost" href="mailto:hello@forecut.in?subject=Season%20partner%20brief">Request a custom brief</a></div>
+      </div>
+      <p class="fine"><b>Free sample brief:</b> a 3-page mini brief for the first 10 qualified brands. <a href="mailto:hello@forecut.in?subject=Free%20sample%20brief">Get a free sample brief</a>.</p>
+    </div>
+    <p class="fine">Prices are set in Indian rupees and start on 1 January 2027; other currencies are approximate conversions. Secure payment by UPI and card at launch. Outside India? Write to <a href="mailto:hello@forecut.in?subject=Forecut%20pricing">hello@forecut.in</a> for pricing in your currency.</p>
   </section>
+
+  <section id="faq" aria-labelledby="fqh"><div class="sechead"><div><span class="mono eyebrow">Questions</span><h2 id="fqh">Before you start.</h2></div><p>Anything else? <a href="mailto:hello@forecut.in">hello@forecut.in</a>. We reply within 24 hours.</p></div><div class="faq"><details><summary>When do paid plans start?</summary><p>On 1 January 2027. Until then, every season, region and report is open to everyone, free.</p></details><details><summary>What is a Founding Member?</summary><p>The first 100 people to subscribe get full Individual access for ₹999 in year one instead of ₹1,499, and keep ₹999 when they renew. It is a launch badge, not a separate plan.</p></details><details><summary>What stays free after launch?</summary><p>Browsing seasons, regions, the Journal and the lifecycle tracker, plus a monthly allowance of full detail cards when you sign in free.</p></details><details><summary>Can I pay monthly?</summary><p>Yes: ₹199 a month for Individual. Yearly is cheaper, and Founding Member pricing is yearly.</p></details><details><summary>Is there a student price?</summary><p>Yes, from ₹499 a year with a college ID. Institutes can licence Forecut for a whole department.</p></details><details><summary>What is a custom brief?</summary><p>A trend brief made for your category and season, with details, colours and TCX codes, delivered as a PDF. Starter, Collection and Season partner packages start at ₹10,000.</p></details><details><summary>Do you work with brands outside India?</summary><p>Yes. Forecut reads every season for six regions and 20 markets. Prices are set in rupees; write to us for pricing in your currency.</p></details><details><summary>How do you make your forecasts?</summary><p>Public runway, trade and retail research, AI-assisted and editor-reviewed, written in our own words. Read <a href="method.html">how we forecast</a>.</p></details></div></section>
+
 
   <section id="waitlist" aria-labelledby="jh">
     <div class="wait">
       <div>
-        <h2 id="jh">Get early access and shape Forecut.</h2>
-        <p>Forecut is free during early access. Leave your email to hear first when plans launch and to reserve the launch price, and tell us what you'd like to see. Or write to us at <a href="mailto:hello@forecut.in">hello@forecut.in</a>.</p>
+        <span class="mono eyebrow" style="color:#f3b48e">Founding members · first 100</span>
+        <h2 id="jh">Reserve ₹999 for your first year.</h2>
+        <p>Plans open on 1 January 2027. Leave your email and we will send your Founding Member link before anyone else, plus <b>The Forecut Edit</b>: three trends moving each week, every Monday. No spam; unsubscribe any time.</p>
+        <ul class="wl"><li>Full access for ₹999 in year one</li><li>Keep ₹999 when you renew</li><li>Free until launch</li></ul>
       </div>
       <form id="wl" novalidate>
         <label for="email">Work email</label>
         <input id="email" name="email" type="email" placeholder="you@studio.com" autocomplete="email" required>
         <label for="role">I am a</label>
         <select id="role" name="role">
-          <option>Fashion designer</option><option>Brand founder</option><option>Manufacturer or exporter</option><option>3D or digital product</option><option>Student</option><option>Other</option>
+          <option>D2C or retail brand</option><option>Exporter or manufacturer</option><option>Fashion designer</option><option>Student</option><option>Institute or faculty</option><option>Buyer or merchandiser</option><option>Press or creator</option><option>Other</option>
         </select>
-        <label for="fb">Your feedback (optional)</label>
-        <textarea id="fb" name="fb" rows="3" placeholder="What would make Forecut more useful for you?"></textarea>
-        <button class="btn" type="submit">Send to Forecut</button>
+        <label for="fb">What would make Forecut most useful for you? (optional)</label>
+        <textarea id="fb" name="fb" rows="3" placeholder="Your category, markets, or the season you are planning"></textarea>
+        <button class="btn tc" type="submit">Become a founding member</button>
         <p class="formmsg" id="msg" role="status"></p>
       </form>
     </div>
   </section>
+
 
   <!--soc--><div class="follow"><div><b>Follow Forecut</b><span>Weekly trend forecasts, runway reports and India market signals on Instagram, LinkedIn and Facebook.</span></div><span class="soc"><a href="https://www.instagram.com/forecut.in/" target="_blank" rel="noopener me" aria-label="Forecut on Instagram" title="Forecut on Instagram"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.3" cy="6.7" r="1.3" fill="currentColor"/></svg><span>Instagram</span></a><a href="https://www.linkedin.com/company/forecut/" target="_blank" rel="noopener me" aria-label="Forecut on LinkedIn" title="Forecut on LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9.5h4v11H3zm7 0h3.8v1.6h.1c.5-1 1.8-1.9 3.7-1.9 4 0 4.7 2.6 4.7 6v5.3h-4v-4.7c0-1.1 0-2.6-1.6-2.6s-1.8 1.2-1.8 2.5v4.8h-4z"/></svg><span>LinkedIn</span></a><a href="https://www.facebook.com/profile.php?id=61595477456582" target="_blank" rel="noopener me" aria-label="Forecut on Facebook" title="Forecut on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21z"/></svg><span>Facebook</span></a></span></div><!--/soc--><footer>
     <span>© 2026 Forecut</span>
@@ -1129,7 +1233,7 @@ document.getElementById('wl').addEventListener('submit', function (e) {
     return;
   }
   var body = 'Email: ' + email.value + '\nI am a: ' + document.getElementById('role').value + '\n\nFeedback:\n' + document.getElementById('fb').value;
-  window.location.href = 'mailto:hello@forecut.in?subject=' + encodeURIComponent('Forecut early access') + '&body=' + encodeURIComponent(body);
+  window.location.href = 'mailto:hello@forecut.in?subject=' + encodeURIComponent('Forecut founding member') + '&body=' + encodeURIComponent(body);
   msg.textContent = 'Opening your email app. If nothing happens, write to hello@forecut.in.';
 });
 </script>
@@ -1153,7 +1257,7 @@ function upd(){var u=url();L.textContent=R.options[R.selectedIndex].text.replace
 f.addEventListener('submit',function(e){e.preventDefault();location.href=url()[0];});})();</script>
 <script>(function(){var s=document.getElementById('fxsel');if(!s)return;
 var R={INR:[1,'₹'],USD:[95.1,'US$'],EUR:[107.0,'€'],GBP:[126.8,'£'],AED:[25.9,'AED ']};
-function show(c){document.querySelectorAll('.fx').forEach(function(e){var v=+e.getAttribute('data-inr');e.textContent=(c==='INR'||!v)?'':'≈ '+R[c][1]+Math.round(v/R[c][0]).toLocaleString('en')+' / year';});}
+function show(c){document.querySelectorAll('.fx').forEach(function(e){var v=+e.getAttribute('data-inr');e.textContent=(c==='INR'||!v)?'':'≈ '+R[c][1]+Math.round(v/R[c][0]).toLocaleString('en')+(e.hasAttribute('data-once')?'':' / year');});}
 var c=null;try{c=localStorage.getItem('fc-cur');}catch(e){}
 if(!c){var L=(navigator.language||'').toUpperCase();c=/-IN$/.test(L)?'INR':/-US$/.test(L)?'USD':/-GB$/.test(L)?'GBP':/-AE$/.test(L)?'AED':/-(DE|FR|IT|ES|NL|IE|PT|BE|AT|FI|GR)$/.test(L)?'EUR':'INR';}
 s.value=c;show(c);s.addEventListener('change',function(){show(s.value);try{localStorage.setItem('fc-cur',s.value);}catch(e){}});})();</script>
@@ -1175,4 +1279,21 @@ document.addEventListener('click',function(e){var a=e.target.closest&&e.target.c
  else if(a.closest('.spot'))ga('detail_open',{page:h});else if(a.classList.contains('svc'))ga('saved_open',{page:h});});
 })();</script>
 
-<nav class="fctab" aria-label="App navigation"><a href="/" data-m="home" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</a><a href="/regions.html" data-m="regions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M5.5 6.5c3.5 2.5 9.5 2.5 13 0M5.5 17.5c3.5-2.5 9.5-2.5 13 0"/></svg>Regions</a><a href="/aw26.html" data-m="seasons"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Seasons</a><a href="/reports.html" data-m="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg>Reports</a><a href="/account.html#saved" data-m="saved"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.3-9-8.6C1.6 8.2 3.6 5 6.8 5c1.9 0 3.2 1 4.2 2.3C12 6 13.3 5 15.2 5c3.2 0 5.2 3.2 3.8 6.4C17 15.7 12 20 12 20z"/></svg>Saved</a></nav></body></html>
+<script>(function(){
+/* hero signature rotation */
+var cs=[].slice.call(document.querySelectorAll('.sig')),ds=[].slice.call(document.querySelectorAll('.sigdots button')),i=0,red=matchMedia('(prefers-reduced-motion: reduce)').matches,tm;
+function show(n){i=n;cs.forEach(function(c,k){c.classList.toggle('on',k===n);});ds.forEach(function(d,k){d.setAttribute('aria-pressed',k===n?'true':'false');});}
+function run(){clearInterval(tm);if(!red&&cs.length>1)tm=setInterval(function(){show((i+1)%cs.length);},4500);}
+ds.forEach(function(d,k){d.addEventListener('click',function(){show(k);run();});});run();
+/* countdown */
+var el=document.getElementById('lcd');if(el){var L=new Date('2027-01-01T00:00:00+05:30').getTime();var d=Math.max(0,Math.ceil((L-Date.now())/864e5));el.textContent=d;if(d===0){var p=el.closest('.launch');if(p)p.querySelector('.lchk').textContent='Plans are open';el.parentNode.hidden=true;}}
+/* tabs (audience + pricing) */
+document.querySelectorAll('[role=tablist]').forEach(function(g){var ts=[].slice.call(g.querySelectorAll('[role=tab]'));if(!ts.length||!document.getElementById(ts[0].getAttribute('aria-controls')))return;
+ function sel(t){ts.forEach(function(x){var on=x===t;x.setAttribute('aria-selected',on?'true':'false');x.tabIndex=on?0:-1;var p=document.getElementById(x.getAttribute('aria-controls'));if(p)p.hidden=!on;});try{if(window.gtag)gtag('event','tab_select',{tab:t.id});}catch(e){}}
+ ts.forEach(function(t,k){t.addEventListener('click',function(){sel(t);});t.addEventListener('keydown',function(e){var d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(!d)return;var n=ts[(k+d+ts.length)%ts.length];sel(n);n.focus();});});});
+/* yearly / monthly */
+document.querySelectorAll('.billing button').forEach(function(b){b.addEventListener('click',function(){var m=b.getAttribute('data-b')==='m';document.querySelectorAll('.billing button').forEach(function(x){x.setAttribute('aria-pressed',x===b?'true':'false');});
+ document.querySelectorAll('.pl .y').forEach(function(e){e.hidden=m;});document.querySelectorAll('.pl .m').forEach(function(e){e.hidden=!m;});});});
+/* links to #briefs open the briefs tab */
+document.querySelectorAll('a[href="#briefs"]').forEach(function(a){a.addEventListener('click',function(){var t=document.getElementById('pt-brief');if(t)t.click();});});
+})();</script><nav class="fctab" aria-label="App navigation"><a href="/" data-m="home" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</a><a href="/regions.html" data-m="regions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M5.5 6.5c3.5 2.5 9.5 2.5 13 0M5.5 17.5c3.5-2.5 9.5-2.5 13 0"/></svg>Regions</a><a href="/aw26.html" data-m="seasons"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Seasons</a><a href="/reports.html" data-m="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg>Reports</a><a href="/account.html#saved" data-m="saved"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.3-9-8.6C1.6 8.2 3.6 5 6.8 5c1.9 0 3.2 1 4.2 2.3C12 6 13.3 5 15.2 5c3.2 0 5.2 3.2 3.8 6.4C17 15.7 12 20 12 20z"/></svg>Saved</a></nav></body></html>
