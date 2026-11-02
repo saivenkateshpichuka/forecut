@@ -63,7 +63,7 @@ rs = [('global-trend-report.html', 'Global Trend Report', 'collarless-tailored-j
 _pv = {'global-trend-report.html': 'Worldwide outlook AW26 to AW28: rising, emerging and fading details.', 'fashion-brand-competition-2026.html': 'Inditex, Shein, Uniqlo, H&M, Trent and ABFRL growth compared.', 'fashion-marketing-trends-2026.html': 'Nine marketing trends, from quick commerce to AI search, and what to do.', 'india-brand-watch.html': 'How Indian brands are bringing festive 2026 trends to market.'}
 rc = ''.join(f'<a class="rcv" href="{u}"><span class="ph"><span class="brand">Forecut</span><img src="img/{im}.webp" alt="" loading="lazy" width="800" height="800"><span class="tt">{t}</span></span><span class="bd"><small>{k}</small><span class="pv">{_pv.get(u, '')}</span></span></a>' for u, t, im, k in rs)
 rsec = f'''  <section id="reports" aria-labelledby="rph">
-    <div class="sechead"><div><span class="mono eyebrow">Reports</span><h2 id="rph">Ready-to-use trend reports.</h2></div><p>Item-by-item updates, design capsules with flat sketches, colour and sourcing guides. <a href="reports.html">All reports →</a></p></div>
+    <div class="sechead"><div><span class="mono eyebrow">Reports</span><h2 id="rph">Ready-to-use trend reports.</h2></div><p>Global outlook, market data, item-by-item updates, design capsules, colour and sourcing guides. <a href="reports.html">All reports →</a></p></div>
     <div class="rcov">{rc}</div>
   </section>
 '''

@@ -154,6 +154,7 @@ def cover(kicker, title, lead, img, extra=''):
             f'<p class="by">Forecut Editorial · {DATE_TXT}{extra}</p>{{PDFBTN}}</div><div class="ci"><img src="img/{img}.webp" alt="{E(title)}" width="800" height="800"></div></header>')
 SRC = '<p class="note">Statuses are Forecut\'s forecast for India: Festive 26 (Oct 2026 – Feb 2027), Summer 27 (Mar – Jul 2027), Festive 27 (Aug – Dec 2027), and long-range outlooks for Summer 28 (Mar – Jul 2028) and Festive 28 (Aug – Dec 2028). Sources: ' + E(I.META['sources']) + '</p>'
 PAGES = []  # (fn, title, desc, kind, img)
+EXTRA = {}  # fn -> small visual for the hub card (verdict counts, palettes)
 
 # ---------- Core Item Updates ----------
 for slug, title, keys, intro, how, hero in R.ITEMS:
@@ -174,6 +175,7 @@ for slug, title, keys, intro, how, hero in R.ITEMS:
             f'<section class="sec howto"><h2>How to update your {E(title.lower())} range</h2><ul>' + ''.join(f'<li>{E(h)}</li>' for h in how) + '</ul></section>'
             + RG.core(slug, title) +
             f'<p>See every {E(title.lower())} detail with design notes and downloadable cards in the <a href="india.html">India Forecast 2026–28</a>.</p>' + SRC)
+    EXTRA[fn] = '<span class="vbar">' + ''.join(f'<b class="{k}" style="flex:{max(cnt.get(k, 0), .0001)}" title="{k}: {cnt.get(k, 0)}"></b>' for k in ['Invest', 'Test', 'Maintain', 'Reduce']) + '</span><span class="vlab">' + ' · '.join(f'{k} {cnt.get(k, 0)}' for k in ['Invest', 'Test', 'Maintain', 'Reduce'] if cnt.get(k, 0)) + '</span>'
     page(fn, t + ' · Forecut', body); PAGES.append((fn, t, intro[:155], 'Core Item Update', hero))
 
 # ---------- Design Capsules ----------
@@ -201,6 +203,7 @@ for t in I.THEMES:
             f'<section class="sec howto"><h2>How to build the capsule</h2><ul>' + ''.join(f'<li>{E(a)}</li>' for a in t['actions']) + '</ul></section>'
             + RG.capsule(slug) +
             f'<p class="note">Sources: {E(t["src"])}.</p>')
+    EXTRA[fn] = '<span class="pstrip">' + ''.join(f'<i style="background:{h}" title="{E(n)}"></i>' for h, n in pal) + '</span>'
     page(fn, ti + ' · Forecut', body); PAGES.append((fn, ti, t['story'][:155], 'Design Capsule', hero))
 
 # ---------- Colour Forecast ----------
@@ -220,6 +223,7 @@ body = (cover('Colour Forecast · India 2026–28', 'India Colour Forecast 2026�
         f'<section class="sec"><h2>Key colours</h2><ul>{kc}</ul></section>' + grp +
         '<section class="sec howto"><h2>How to use the palette</h2><ul><li>Build festive capsules from one jewel tone plus champagne gold and ivory.</li><li>Use sage, ivory and dusty rose for handloom and day-function ranges.</li><li>Run indigo across every category, from denim to sarees and footwear, and warm it with rust.</li><li>Pantone TCX (cotton) codes are the nearest match to each screen colour. Confirm with a physical Pantone book and lab dips before bulk dyeing.</li></ul></section>' + SRC)
 page('india-colour-forecast.html', 'India Colour Forecast 2026–28 · Forecut', body)
+EXTRA['india-colour-forecast.html'] = '<span class="pstrip">' + ''.join(f'<i style="background:{c[0]}" title="{E(c[1])}"></i>' for c in R.COLOURS) + '</span>'
 PAGES.append(('india-colour-forecast.html', 'India Colour Forecast 2026–28', 'Nine colours for Indian fashion in 2026–28: emerald, sapphire, deep wine, champagne gold, sage, ivory, dusty rose, indigo and rust.', 'Colour Forecast', 'fit-and-flare-anarkalis'))
 
 # ---------- Textile & Craft Guide ----------
@@ -259,13 +263,7 @@ PAGES.append(('india-brand-watch.html', 'Brand Watch: what Indian labels are lau
 
 exec(open('reports_world.py').read())
 
-# ---------- Hub ----------
-def rcard(p): return f'<a class="rc" href="{p[0]}"><div class="ph"><i>Forecut</i><img src="img/{p[4]}.webp" alt="" loading="lazy" width="800" height="800"><em>{E(p[1])}</em></div><div class="cb"><small>{E(p[3])}</small><span>{E(p[2])}</span></div></a>'
-hub = '<p class="kicker" style="margin-top:40px">Reports</p><h1>Forecut Reports</h1><p class="lead">Ready-to-use fashion reports: the global trend outlook, market and competition data, marketing trends, industry controversies, Indian brand watch, item-by-item updates, design capsules, colour and sourcing guides.</p>'
-for kind, d in [('Global Trend Report', 'Forecut\'s worldwide outlook: what is rising, emerging and fading, season by season.'), ('Market Data', 'Sales, growth and store counts for the biggest global and Indian fashion players.'), ('Marketing Trends', 'How fashion brands reach and convert customers now.'), ('Industry Watch', 'The controversies and debates shaping fashion, and the lessons for brands.'), ('Brand Watch', 'What India\'s startups, D2C labels and retailers are launching, mapped to Forecut details.'), ('Core Item Update', 'What to invest in, test, maintain and reduce, item by item.'), ('Design Capsule', 'Mood, colour, key pieces with flat sketches, and prices for each theme.'), ('Colour Forecast', ''), ('Sourcing Guide', '')]:
-    ps = [p for p in PAGES if p[3] == kind]
-    hub += f'<section class="sec"><h2>{E(kind)}{"s" if len(ps) > 1 else ""}</h2>' + (f'<p class="sub">{E(d)}</p>' if d else '') + f'<div class="rgrid">{"".join(rcard(p) for p in ps)}</div></section>'
-page('reports.html', 'Forecut Reports · Indian fashion trend reports', hub)
+exec(open('reports_hub.py').read())
 PAGES.insert(0, ('reports.html', 'Forecut Reports', 'Global fashion trend reports, market data and marketing trends, plus India market reports: core item updates, design capsules, colour forecast and textile and craft sourcing guide.', 'Hub', 'pre-draped-saree-gowns'))
 json.dump([[p[0], p[1], p[2]] for p in PAGES], open('reports_index.json', 'w'), ensure_ascii=False, indent=0)
 print('reports ok', len(PAGES))
