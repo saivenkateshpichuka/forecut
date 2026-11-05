@@ -42,14 +42,15 @@ article h2{letter-spacing:-.02em!important;font:700 26px/1.25 "DM Sans",system-u
 def head(title):
     h = HEAD.format(title=E(title)).replace('</style></head>', '</style>' + CSS + '<style>' + CR.CSS + '</style></head>', 1)
     return h.replace('<div class="wrap">', '<div class="wrap j">', 1)
-def img(sl, alt, cls):
-    return f'<div class="{cls}"><img src="img/{sl}.webp" alt="{E(alt)}" loading="lazy" width="800" height="800"></div>'
+def img(sl, alt, cls, pos=''):
+    st = f' style="object-position:{pos}"' if pos else ''
+    return f'<div class="{cls}"><img src="img/{sl}.webp" alt="{E(alt)}" loading="lazy" width="800" height="800"{st}></div>'
 def block(b):
     k = b[0]
     if k == 'p': return f'<p>{b[1]}</p>'
     if k == 'h2': return f'<h2>{E(b[1])}</h2>'
     if k == 'ul': return '<ul>' + ''.join(f'<li>{x}</li>' for x in b[1]) + '</ul>'
-    if k == 'fig': return f'<figure class="jfig">{img(b[1], b[2], "ph")}<figcaption>{E(b[2])}</figcaption></figure>'
+    if k == 'fig': return f'<figure class="jfig">{img(b[1], b[2], "ph", b[3] if len(b) > 3 else "")}<figcaption>{E(b[2])}</figcaption></figure>'
     if k == 'prices': return ('<div class="tw"><table class="ptab"><thead><tr><th scope="col">Item</th><th scope="col">Value ₹</th><th scope="col">Mid ₹</th><th scope="col">Premium ₹</th></tr></thead><tbody>'
                              + ''.join(f'<tr><td>{E(a)}</td><td>{E(v)}</td><td>{E(m)}</td><td>{E(p)}</td></tr>' for a, v, m, p in b[1]) + '</tbody></table></div><p class="meta">Indicative retail prices in India; actual prices vary by brand, fabric and work.</p>')
     if k == 'cta': return f'<div class="cta">{b[1]}</div>'
@@ -65,7 +66,7 @@ for a in J.ARTICLES:
     body = (f'<p class="eb"><a href="journal.html" style="color:inherit;text-decoration:none">Journal</a></p><article>'
             f'<span class="jtag">{E(a["tag"])}</span><h1 style="margin-top:12px">{E(a["title"])}</h1>'
             f'<p class="lead">{E(a["desc"])}</p><p class="jmeta">By Forecut Editorial · {a.get("date_txt", J.DATE_TXT)} · {a["read"]} min read</p>'
-            f'<div class="jhero"><img src="img/{a["hero"]}.webp" alt="{E(a["title"])}" width="800" height="800"></div>' + CR.cap(a["hero"])
+            f'<div class="jhero"><img src="img/{a["hero"]}.webp" alt="{E(a["title"])}" width="800" height="800"{' style="object-position:' + a['hero_pos'] + '"' if a.get('hero_pos') and a['hero'] != a.get('hero_new') else ''}></div>' + CR.cap(a["hero"])
             + ''.join(block(b) for b in a['body']) +
             '<p class="byline">Written by the Forecut editorial team. Sources include public coverage of Lakmé Fashion Week x FDCI 2026 (Harper\'s Bazaar India, Free Press Journal), Aza Fashions and Lashkaraa trend guides, Pearl Academy Gen Z reports, Global Indian and Outlook Business. Statuses are Forecut\'s forecast and will be refined as new data arrives.' + (f' Sources for this article: {E(a["sources"])}.' if a.get('sources') else '') + '</p></article>'
             f'<section class="more"><h3>More from the Journal</h3><div class="jgrid">{"".join(card(x) for x in others)}</div></section>')

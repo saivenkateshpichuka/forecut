@@ -1,11 +1,75 @@
 """Forecut Journal articles. Each article: slug, title, desc, date, read, tag, hero (img slug), body (list of blocks).
-Blocks: ('p', html) ('h2', text) ('fig', img_slug, caption) ('ul', [html, ...]) ('prices', [(item, value, mid, premium), ...]) ('cta', html)
+Blocks: ('p', html) ('h2', text) ('fig', img_slug, caption[, css object-position]) ('ul', [html, ...]) ('prices', [(item, value, mid, premium), ...]) ('cta', html)
 Facts come from build/india_data.py (themes, sources) so articles and the forecast stay consistent."""
 
 DATE = '2026-10-11'
 DATE_TXT = '11 October 2026'
 
 ARTICLES = [
+{
+ 'slug': 'ss27-shoe-trends-global-buyers-guide',
+ 'title': 'SS27 shoe trends explained: square toes, bows, lace-ups and woven leather',
+ 'desc': 'The shoe ideas from the SS27 shows, how Forecut rates each one, and how to adapt them for buyers in Europe, the Americas, Asia, the Gulf, Africa and Oceania.',
+ 'tag': 'Footwear',
+ 'read': 6,
+ 'hero': 'two-tone-cap-toes',
+ 'hero_pos': 'center 88%',
+ 'date': '2026-11-05',
+ 'date_txt': '5 November 2026',
+ 'sources': "Who What Wear, 'Screenshot Now, Shop Later: The 8 Spring 2027 Shoe Trends That Will Surge in 6 Months' (Anna LaPlaca, 15 October 2026); Hypebae, 'Our Favorite Fashion Week Footwear From the SS27 Runways' (Simi Iluyomade, 6 October 2026); Out, '6 menswear trends from the spring/summer 2027 runway' (Martin Gregory Jerez, 1 September 2026); Forecut SS27 footwear detail tracking and regional market data",
+ 'hero_new': 'art-ss27-shoe-trends-global-buyers-guide',
+ 'img_kw': 'leather shoes workshop, woven leather shoes',
+ 'img_prompt': 'Realistic editorial photograph of a shoemaker\'s sample table in a bright workshop: a square-toe pump in cream leather with a black cap toe, a tan woven-leather mule, a pair of brown brogue lace-up shoes, a flat with a small satin bow and a thin-strap leather thong sandal arranged on a pale wooden workbench, wooden shoe lasts, leather offcuts and a measuring tape nearby, soft daylight from a side window, shallow depth of field, landscape 16:10, no people, no faces, no text, no logos, no brand names.',
+ 'body': [
+  ('p', "The SS27 shows in New York, London, Milan and Paris closed in early October, and the footwear story is clear: shoes are getting more decorated, more grown-up and more tailored. Who What Wear summed up the season as \"more opulent, maximalist, and, well, fun\", with academic lace-ups beginning to crowd out the plain ballet flat. This guide checks each SS27 shoe idea against Forecut's lifecycle tracking and explains how to adapt it by region."),
+  ('h2', 'Eight ideas from the SS27 runways'),
+  ('p', "Who What Wear named eight shoe trends from the season. Hypebae's round-up of favourite runway shoes, and Out's menswear report, add detail. Together they give this list:"),
+  ('ul', [
+   '<b>Embellishment</b>: crystal and floral appliqué and gemstones on heels and sandals, cited at Prada, Chanel, Carven and Dries Van Noten.',
+   '<b>Square toes</b>: square-toe pumps with a crisp, architectural line at Michael Kors, Altuzarra, Calvin Klein and Chanel.',
+   '<b>Bows</b>: on flats and heels at Miu Miu, Dior, Prada and Chanel.',
+   '<b>Contrast cap toes</b>: on pumps, slingbacks and flats at Chanel, Celine, Valentino and Max Mara.',
+   '<b>Derbies, oxfords and brogues</b>: menswear lace-ups for women at Altuzarra, Celine, Ralph Lauren, Bottega Veneta and Erdem.',
+   '<b>Exotic-effect finishes</b>: croc, snake, lizard and ostrich textures at Tory Burch, Ferragamo, Gucci and Dries Van Noten.',
+   '<b>Metallics</b>: silver, gold and iridescent finishes at Saint Laurent, Chanel and Chloé.',
+   '<b>Woven leather</b>: woven shoes at Bottega Veneta, Calvin Klein and Tory Burch.',
+  ]),
+  ('p', "Hypebae adds <b>sculptural heels</b>, such as Prada's curved heel on an open-toe sandal, and <b>Mary Janes</b>, which Marni showed in 1970s earth tones."),
+  ('fig', 'square-toes', 'Square toes: rising in SS27 in Forecut tracking, with the peak expected in AW27.', 'center 88%'),
+  ('h2', 'How Forecut rates each one'),
+  ('p', "A runway idea is not the same as a buying decision. Here is where each direction sits in Forecut's SS27 footwear data, which records whether a detail is emerging, rising, peaking or fading:"),
+  ('ul', [
+   '<b>Square toes</b> and <b>square-toe ankle boots</b> are rising, and we expect square toes to peak in AW27. This is a safe core shape. Note that <b>square-toe ballet flats</b> are already peaking, so put the newness into pumps rather than flats.',
+   '<b>Two-tone cap toes</b> and <b>cap-toe kitten slingbacks</b> are rising. A contrast toe updates an existing last without new tooling.',
+   '<b>Brogue perforations</b>, <b>plain derbies</b>, <b>wingtip brogues</b> and <b>lace-up court shoes</b> are all rising. The lace-up is the strongest story for women\'s flats.',
+   '<b>Bow-trim flats</b> are emerging in SS27 and rise from there. Test now, build depth later.',
+   '<b>Embellished flats</b> are rising, while <b>brooch-and-chain stilettos</b> are only emerging. Keep heavy embellishment to occasion edits.',
+   '<b>Woven leather mules</b> and <b>woven leather slides</b> are rising, and <b>woven leather flats</b> are emerging.',
+   '<b>Curved sculptural heels</b> and <b>Mary Jane flats</b> are rising; <b>sculpted wedge heels</b> are emerging.',
+   '<b>Ballet flats</b> are peaking in SS27 and turn to fading in AW27. Keep them as a carry-over, not a growth line.',
+  ]),
+  ('fig', 'wingtip-brogues', 'Wingtip brogues: rising in SS27 as menswear lace-ups move into women\'s ranges.', 'center 88%'),
+  ('h2', 'Menswear: open toes and the men\'s ballet flat'),
+  ('p', "Out called open-toed sandals \"the top trend of spring/summer 2027\" for men, listing flip-flops, T-straps, slides, huaraches, mules, espadrilles and gladiators. It singled out very thin thong sandals at Celine and ankle-length gladiators at Yohji Yamamoto. It also reported men's ballet flats, including multi-strap leather pairs at Dries Van Noten. Forecut tracks <b>skinny thong sandals</b>, <b>fisherman sandals</b> and <b>leather slides</b> as rising for SS27, and <b>multi-strap ballet flats for men</b> as emerging."),
+  ('h2', 'Adapting the trends by region'),
+  ('p', "The same runway shoe sells differently around the world. Forecut's regional data points to these adjustments:"),
+  ('ul', [
+   '<b>Europe</b>: France, Italy and the UK favour tailoring and quality materials, so lace-ups, cap toes and square-toe pumps fit best. Southern Europe\'s sandal and craft market suits woven leather.',
+   '<b>North America</b>: the US prefers wearable versions of runway ideas, sneakers and size range. Offer square toes and cap toes on comfortable block or kitten heels and in wide fittings.',
+   '<b>Asia</b>: China adopts runway ideas fast, so bows and embellishment can work early. Japan and South Korea favour precise design and quality basics, where a well-made derby or cap-toe flat fits. Southeast Asia\'s heat favours open and woven styles.',
+   '<b>Middle East (GCC)</b>: modest luxury and eveningwear make embellished, metallic and bow-trimmed heels and flats the strongest fit for the October–March season and Ramadan 2027.',
+   '<b>Africa and South America</b>: West African occasion dressing suits statement embellishment and metallics, while Brazil\'s colour-led market can take brighter versions of the season\'s shapes.',
+   '<b>Oceania and the southern hemisphere</b>: SS27 reaches stores from September 2027, a full season after Europe, so buyers there can watch northern sell-through before committing.',
+  ]),
+  ('fig', 'woven-leather-mules', 'Woven leather mules: rising in SS27 and the easiest warm-climate version of the woven story.', 'center 88%'),
+  ('h2', 'What to do now'),
+  ('ul', [
+   '<b>Brands</b>: build the core around square toes, cap toes and lace-ups; add bows and embellishment as smaller test buys.',
+   '<b>Manufacturers</b>: prepare square-toe and cap-toe lasts, perforation and broguing capacity, and woven-leather sampling. Exotic-effect looks can be made with embossed leathers rather than real exotic skins.',
+      '<b>Everyone</b>: plan the ballet flat as a fading carry-over after SS27.',
+  ]),
+  ('cta', 'Open every SS27 footwear detail, with lifecycles and flat sketches, in the <a href="ss27.html?dept=footwear">SS27 forecast</a>, or see local timing and buyer preferences for each market on <a href="regions.html">Forecut Regions</a>.'),
+ ]},
 {
  'slug': 'australia-spring-racing-summer-ss27-oceania-guide',
  'title': "Selling into Australia's summer: spring racing, Black Friday and the opposite season",
