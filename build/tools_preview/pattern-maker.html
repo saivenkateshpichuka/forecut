@@ -846,7 +846,7 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
   }
   /* ---------- view: zoom and pan ---------- */
   var view = $('#pm-view'), ZR = 1, last = null;
-  function fitZ(W, H) { var w = Math.max(200, view.clientWidth - 56), h = Math.max(200, view.clientHeight - 56); return Math.min(w / W, h / H); }
+  function fitZ(W, H) { var w = Math.max(200, view.offsetWidth - 72), h = Math.max(200, view.offsetHeight - 72); return Math.min(w / W, h / H); }
   function applyZoom() { if (!last) return; var z = fitZ(last.W, last.H) * ZR, sv = $('#pm-svg svg'); if (!sv) return; sv.style.width = (last.W * z).toFixed(0) + 'px'; sv.style.height = (last.H * z).toFixed(0) + 'px'; $('#pm-zl').textContent = Math.round(ZR * 100) + '%'; }
   function zoom(f, cx, cy) { var old = ZR; ZR = Math.max(.25, Math.min(8, ZR * f)); if (cx === undefined) { cx = view.clientWidth / 2; cy = view.clientHeight / 2; } var sx = (view.scrollLeft + cx) / (view.scrollWidth || 1), sy = (view.scrollTop + cy) / (view.scrollHeight || 1); applyZoom(); view.scrollLeft = sx * view.scrollWidth - cx; view.scrollTop = sy * view.scrollHeight - cy; }
   $('#pm-zin').onclick = function () { zoom(1.25); }; $('#pm-zout').onclick = function () { zoom(.8); }; $('#pm-zfit').onclick = function () { ZR = 1; applyZoom(); view.scrollTo(0, 0); };
@@ -856,7 +856,10 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
   window.addEventListener('pointermove', function (e) { if (!pan) return; view.scrollLeft = pan[2] - (e.clientX - pan[0]); view.scrollTop = pan[3] - (e.clientY - pan[1]); });
   window.addEventListener('pointerup', function () { pan = null; view.classList.remove('drag'); });
   document.addEventListener('keydown', function (e) { if (/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName) || app.hidden) return; if (e.key === '+' || e.key === '=') zoom(1.25); else if (e.key === '-') zoom(.8); else if (e.key === '0') $('#pm-zfit').click(); });
-  if (window.ResizeObserver) new ResizeObserver(function () { applyZoom(); }).observe(view);
+  /* refit when the stage itself changes size; deferred a frame and ignoring scrollbar-only changes so it never loops */
+  var vw = 0, vh = 0, raf = 0;
+  function onResize() { cancelAnimationFrame(raf); raf = requestAnimationFrame(function () { var w = view.offsetWidth, h = view.offsetHeight; if (Math.abs(w - vw) < 2 && Math.abs(h - vh) < 2) return; vw = w; vh = h; applyZoom(); }); }
+  if (window.ResizeObserver) new ResizeObserver(onResize).observe(view); else window.addEventListener('resize', onResize);
 
   function crumb() {
     var sz = S.size === 'custom' ? 'Custom' : S.size;
