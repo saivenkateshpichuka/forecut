@@ -39,39 +39,39 @@
   if (!S.m) resetMeas(); if (!Object.keys(S.o).length) resetOpts();
 
   /* ---------- controls ---------- */
+  function uinp(attr, val) { return '<span class="uin"><input type="number" step="any" min="0" inputmode="decimal" ' + attr + ' value="' + val + '"><i>' + S.unit + '</i></span>'; }
   function genderTabs() {
-    $('#pm-gtabs').innerHTML = Object.keys(PM.GENDER).map(function (g) { return '<button type="button" data-g="' + g + '" aria-pressed="' + (g === S.gender) + '">' + PM.GENDER[g] + '</button>'; }).join('');
-    $$('#pm-gtabs button').forEach(function (b) { b.onclick = function () { S.gender = b.dataset.g; if (PM.GARMENTS[S.gid].g.indexOf(S.gender) < 0) S.gid = Object.keys(PM.GARMENTS).filter(function (k) { return PM.GARMENTS[k].g.indexOf(S.gender) > -1; })[0]; S.detail = null; resetMeas(); resetOpts(); S.pc = {}; ui(); }; });
+    var short = { women: 'Women', men: 'Men', kids: 'Kids', unisex: 'Unisex' };
+    $('#pm-gtabs').innerHTML = Object.keys(PM.GENDER).map(function (g) { return '<button type="button" data-g="' + g + '" title="' + PM.GENDER[g] + '" aria-pressed="' + (g === S.gender) + '">' + short[g] + '</button>'; }).join('');
+    $$('#pm-gtabs button').forEach(function (b) { b.onclick = function () { S.gender = b.dataset.g; if (PM.GARMENTS[S.gid].g.indexOf(S.gender) < 0) S.gid = Object.keys(PM.GARMENTS).filter(function (k) { return PM.GARMENTS[k].g.indexOf(S.gender) > -1; })[0]; S.detail = null; resetMeas(); resetOpts(); S.pc = {}; ui(true); }; });
     var gs = Object.keys(PM.GARMENTS).filter(function (k) { return PM.GARMENTS[k].g.indexOf(S.gender) > -1; });
     $('#pm-garments').innerHTML = gs.map(function (k) { return '<button type="button" data-k="' + k + '" aria-pressed="' + (k === S.gid) + '">' + PM.GARMENTS[k].n + '</button>'; }).join('');
-    $$('#pm-garments button').forEach(function (b) { b.onclick = function () { S.gid = b.dataset.k; S.detail = null; resetOpts(); S.pc = {}; ui(); }; });
+    $$('#pm-garments button').forEach(function (b) { b.onclick = function () { S.gid = b.dataset.k; S.detail = null; resetOpts(); S.pc = {}; ui(true); }; });
   }
   function measForm() {
-    var c = chart(), h = '<div class="fg"><label>Size chart<select id="pm-size">' + Object.keys(c).map(function (s) { return '<option' + (s === S.size ? ' selected' : '') + '>' + s + '</option>'; }).join('') + '<option value="custom"' + (S.size === 'custom' ? ' selected' : '') + '>My measurements</option></select></label>'
-      + '<label>Units<select id="pm-unit">' + [['cm', 'Centimetres'], ['mm', 'Millimetres'], ['in', 'Inches']].map(function (u) { return '<option value="' + u[0] + '"' + (u[0] === S.unit ? ' selected' : '') + '>' + u[1] + '</option>'; }).join('') + '</select></label>';
-    measSet().forEach(function (k) { h += '<label>' + PM.LABELS[k] + ' (' + S.unit + ')<input type="number" step="any" min="0" data-m="' + k + '" value="' + U(S.m[k]) + '"></label>'; });
-    $('#pm-meas').innerHTML = h + '</div>';
+    var c = chart(), h = '<label class="row"><span>Size chart</span><select id="pm-size">' + Object.keys(c).map(function (s) { return '<option' + (s === S.size ? ' selected' : '') + '>' + s + '</option>'; }).join('') + '<option value="custom"' + (S.size === 'custom' ? ' selected' : '') + '>Custom</option></select></label>';
+    measSet().forEach(function (k) { h += '<label class="row" title="' + PM.LABELS[k] + '"><span>' + PM.LABELS[k] + '</span>' + uinp('data-m="' + k + '"', U(S.m[k])) + '</label>'; });
+    $('#pm-meas').innerHTML = h;
     $('#pm-size').onchange = function () { S.size = this.value; if (S.size !== 'custom') S.m = Object.assign({}, chart()[S.size]); ui(); };
-    $('#pm-unit').onchange = function () { S.unit = this.value; ui(); };
     $$('#pm-meas [data-m]').forEach(function (e) { e.oninput = function () { var v = parseFloat(e.value); if (v > 0) { S.m[e.dataset.m] = cm(v); S.size = 'custom'; $('#pm-size').value = 'custom'; draw(); } }; });
   }
   function optForm() {
-    var G = PM.GARMENTS[S.gid], h = '<div class="fg">';
+    var G = PM.GARMENTS[S.gid], h = '';
     G.o.forEach(function (k) {
       var d = OPT[k], v = S.o[k];
-      if (d.o) { var opts = d.o.filter(function (x) { return !ALLOW[k] || !ALLOW[k][S.gid] || ALLOW[k][S.gid].indexOf(x[0]) > -1; }); h += '<label>' + d.l + '<select data-o="' + k + '">' + opts.map(function (x) { return '<option value="' + x[0] + '"' + (String(x[0]) === String(v) ? ' selected' : '') + '>' + x[1] + '</option>'; }).join('') + '</select></label>'; }
-      else h += '<label>' + d.l + (d.L ? ' (' + S.unit + ')' : '') + '<input type="number" step="any" min="0" data-o="' + k + '" value="' + (d.L ? U(+v || 0) : (+v || 0)) + '"></label>';
+      if (d.o) { var opts = d.o.filter(function (x) { return !ALLOW[k] || !ALLOW[k][S.gid] || ALLOW[k][S.gid].indexOf(x[0]) > -1; }); h += '<label class="row wide"><span>' + d.l + '</span><select data-o="' + k + '">' + opts.map(function (x) { return '<option value="' + x[0] + '"' + (String(x[0]) === String(v) ? ' selected' : '') + '>' + x[1] + '</option>'; }).join('') + '</select></label>'; }
+      else h += '<label class="row"><span>' + d.l + '</span>' + (d.L ? uinp('data-o="' + k + '"', U(+v || 0)) : '<input type="number" step="1" min="0" data-o="' + k + '" value="' + (+v || 0) + '" style="text-align:right">') + '</label>';
     });
-    $('#pm-opts').innerHTML = h + '</div>';
+    $('#pm-opts').innerHTML = h;
     $$('#pm-opts [data-o]').forEach(function (e) { e.oninput = e.onchange = function () { var k = e.dataset.o, d = OPT[k]; S.o[k] = d.o ? e.value : d.L ? cm(parseFloat(e.value) || 0) : (parseFloat(e.value) || 0); draw(); }; });
   }
   function detailPicker() {
     var dl = $('#pm-dlist'); if (!dl.options.length) dl.innerHTML = DET.map(function (d) { return '<option value="' + d[0].replace(/"/g, '') + ' · ' + d[1] + '">'; }).join('');
     $('#pm-dcount').textContent = DET.length;
-    $('#pm-dsearch').onchange = function () { var v = this.value, d = DET.filter(function (x) { return x[0] + ' · ' + x[1] === v; })[0]; if (d) applyDetail(d); };
-    $('#pm-dnote').innerHTML = S.detail ? 'Loaded from Forecut detail: <b>' + S.detail + '</b>. Change any option below.' : '';
+    $('#pm-dsearch').onchange = function () { var v = this.value, d = DET.filter(function (x) { return x[0] + ' · ' + x[1] === v; })[0]; if (d) { applyDetail(d); this.value = ''; this.blur(); } };
+    $('#pm-dnote').innerHTML = S.detail ? 'From Forecut detail <b>' + S.detail + '</b>' : '';
   }
-  function applyDetail(d) { S.gender = d[2]; S.gid = d[3]; resetMeas(); resetOpts(); Object.keys(d[4]).forEach(function (k) { S.o[k] = d[4][k]; }); S.detail = d[0]; S.pc = {}; ui(); }
+  function applyDetail(d) { S.gender = d[2]; S.gid = d[3]; resetMeas(); resetOpts(); Object.keys(d[4]).forEach(function (k) { S.o[k] = d[4][k]; }); S.detail = d[0]; S.pc = {}; ui(true); }
 
   /* ---------- scene ---------- */
   var built = null;
@@ -113,38 +113,76 @@
 
   function pieceTable() {
     var r = built; if (!r) return;
-    $('#pm-pieces').innerHTML = '<table class="spec pt"><thead><tr><th>Use</th><th>Piece name (editable)</th><th>Cut</th><th>Seam (' + S.unit + ')</th><th>Hem (' + S.unit + ')</th></tr></thead><tbody>' + r.pieces.map(function (p) {
-      var st = S.pc[p.id] || {}, sa = st.sa !== undefined ? st.sa : S.sa, ha = st.hem !== undefined ? st.hem : (p.defHem !== undefined ? p.defHem : S.hemA), hasHem = p.edges.some(function (e) { return e.t === 'hem'; });
-      return '<tr><td><input type="checkbox" data-p="' + p.id + '" data-f="on"' + (st.on !== false ? ' checked' : '') + ' aria-label="Include ' + p.comp + '"></td><td><input type="text" data-p="' + p.id + '" data-f="name" value="' + (st.name || p.auto).replace(/"/g, '&quot;') + '"></td><td>' + p.cut + '</td>'
-        + '<td><input type="number" step="any" min="0" data-p="' + p.id + '" data-f="sa" value="' + U(sa) + '"></td><td>' + (hasHem ? '<input type="number" step="any" min="0" data-p="' + p.id + '" data-f="hem" value="' + U(ha) + '">' : '–') + '</td></tr>';
-    }).join('') + '</tbody></table>';
-    $$('#pm-pieces [data-p]').forEach(function (e) { e.oninput = e.onchange = function () { var st = S.pc[e.dataset.p] || (S.pc[e.dataset.p] = {}), f = e.dataset.f; if (f === 'on') st.on = e.checked; else if (f === 'name') st.name = e.value; else st[f] = cm(parseFloat(e.value) || 0); draw(true); }; });
+    $('#pm-pieces').innerHTML = r.pieces.map(function (p) {
+      var st = S.pc[p.id] || {}, on = st.on !== false, sa = st.sa !== undefined ? st.sa : S.sa, ha = st.hem !== undefined ? st.hem : (p.defHem !== undefined ? p.defHem : S.hemA), hasHem = p.edges.some(function (e) { return e.t === 'hem'; });
+      return '<div class="pcard' + (on ? '' : ' off') + '"><label class="t"><input type="checkbox" data-p="' + p.id + '" data-f="on"' + (on ? ' checked' : '') + ' aria-label="Include ' + p.comp + '"><b>' + p.comp + '</b><small>' + p.cut + '</small></label>'
+        + '<label class="nm"><span>Label on pattern</span><input type="text" data-p="' + p.id + '" data-f="name" value="' + (st.name || p.auto).replace(/"/g, '&quot;') + '"></label>'
+        + '<div class="a"><label>Seam' + uinp('data-p="' + p.id + '" data-f="sa"', U(sa)) + '</label>' + (hasHem ? '<label>Hem' + uinp('data-p="' + p.id + '" data-f="hem"', U(ha)) + '</label>' : '<label>Hem<input disabled value="–"></label>') + '</div></div>';
+    }).join('');
+    $$('#pm-pieces [data-p]').forEach(function (e) { e.oninput = e.onchange = function () { var st = S.pc[e.dataset.p] || (S.pc[e.dataset.p] = {}), f = e.dataset.f; if (f === 'on') { st.on = e.checked; e.closest('.pcard').classList.toggle('off', !e.checked); } else if (f === 'name') st.name = e.value; else st[f] = cm(parseFloat(e.value) || 0); draw(true); }; });
+  }
+  /* ---------- view: zoom and pan ---------- */
+  var view = $('#pm-view'), ZR = 1, last = null;
+  function fitZ(W, H) { var w = Math.max(200, view.clientWidth - 56), h = Math.max(200, view.clientHeight - 56); return Math.min(w / W, h / H); }
+  function applyZoom() { if (!last) return; var z = fitZ(last.W, last.H) * ZR, sv = $('#pm-svg svg'); if (!sv) return; sv.style.width = (last.W * z).toFixed(0) + 'px'; sv.style.height = (last.H * z).toFixed(0) + 'px'; $('#pm-zl').textContent = Math.round(ZR * 100) + '%'; }
+  function zoom(f, cx, cy) { var old = ZR; ZR = Math.max(.25, Math.min(8, ZR * f)); if (cx === undefined) { cx = view.clientWidth / 2; cy = view.clientHeight / 2; } var sx = (view.scrollLeft + cx) / (view.scrollWidth || 1), sy = (view.scrollTop + cy) / (view.scrollHeight || 1); applyZoom(); view.scrollLeft = sx * view.scrollWidth - cx; view.scrollTop = sy * view.scrollHeight - cy; }
+  $('#pm-zin').onclick = function () { zoom(1.25); }; $('#pm-zout').onclick = function () { zoom(.8); }; $('#pm-zfit').onclick = function () { ZR = 1; applyZoom(); view.scrollTo(0, 0); };
+  view.addEventListener('wheel', function (e) { if (!e.ctrlKey && !e.metaKey) return; e.preventDefault(); var r = view.getBoundingClientRect(); zoom(e.deltaY < 0 ? 1.12 : .89, e.clientX - r.left, e.clientY - r.top); }, { passive: false });
+  var pan = null;
+  view.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse' || e.button !== 0) return; pan = [e.clientX, e.clientY, view.scrollLeft, view.scrollTop]; view.classList.add('drag'); });
+  window.addEventListener('pointermove', function (e) { if (!pan) return; view.scrollLeft = pan[2] - (e.clientX - pan[0]); view.scrollTop = pan[3] - (e.clientY - pan[1]); });
+  window.addEventListener('pointerup', function () { pan = null; view.classList.remove('drag'); });
+  document.addEventListener('keydown', function (e) { if (/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName) || app.hidden) return; if (e.key === '+' || e.key === '=') zoom(1.25); else if (e.key === '-') zoom(.8); else if (e.key === '0') $('#pm-zfit').click(); });
+  if (window.ResizeObserver) new ResizeObserver(function () { applyZoom(); }).observe(view);
+
+  function crumb() {
+    var sz = S.size === 'custom' ? 'Custom' : S.size;
+    $('#pm-ttl').innerHTML = '<span>' + PM.GENDER[S.gender] + '</span><i>/</i><b>' + PM.GARMENTS[S.gid].n + '</b><i>/</i><span>' + sz + '</span>' + (S.detail ? '<i>/</i><span title="Forecut detail">' + S.detail + '</span>' : '');
+    $('#pm-gname').textContent = PM.GARMENTS[S.gid].n;
   }
   function draw(keepTable) {
-    var s = scene(false);
+    var s = scene(false); last = s;
     $('#pm-svg').innerHTML = X.svg(s.sc, s.W, s.H, S.unit, { screen: 1, grid: $('#pm-grid').checked ? grid(s.W, s.H) : '' });
-    var info = s.r.info, rows = Object.keys(info).map(function (k) { return '<div><span>' + k + '</span><b>' + (typeof info[k] === 'number' ? U(info[k]) + ' ' + S.unit : info[k]) + '</b></div>'; });
-    rows.push('<div><span>Sheet</span><b>' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + '</b></div>');
-    $('#pm-info').innerHTML = rows.join('');
+    applyZoom();
+    var info = s.r.info, num = function (v) { return typeof v === 'number' ? U(v) + ' ' + S.unit : v; }, checks = [], meas = [];
+    Object.keys(info).forEach(function (k) { (/minus|ease|lowered|check/i.test(k) ? checks : meas).push('<div><span>' + k + '</span><b>' + num(info[k]) + '</b></div>'); });
+    var on = s.r.pieces.filter(function (p) { return (S.pc[p.id] || {}).on !== false; }).length;
+    $('#pm-info').innerHTML = '<h5>Measurements</h5>' + meas.join('') + (checks.length ? '<h5>Seam and fit checks</h5>' + checks.join('') : '') + '<h5>Sheet</h5><div><span>Size</span><b>' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + '</b></div><div><span>Pieces on sheet</span><b>' + on + ' of ' + s.r.pieces.length + '</b></div>';
+    $('#pm-status').innerHTML = '<span><b>' + on + '</b> pieces</span><span>Sheet <b>' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + '</b></span><span>Seam <b>' + U(S.sa) + '</b> · Hem <b>' + U(S.hemA) + ' ' + S.unit + '</b></span><span class="ok">Ctrl + scroll to zoom · drag to pan</span>';
+    crumb();
     if (!keepTable) pieceTable();
     FC.save('pm2', S);
   }
-  function ui() { genderTabs(); detailPicker(); measForm(); optForm(); $('#pm-sa').value = U(S.sa); $('#pm-hemall').value = U(S.hemA); $('#pm-ttl').textContent = (S.detail ? S.detail + ' → ' : '') + PM.GARMENTS[S.gid].n; draw(); }
+  function units() { $$('#pm-units button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.u === S.unit); }); $$('.pl .u').forEach(function (i) { i.textContent = S.unit; }); }
+  function ui(fit) { genderTabs(); detailPicker(); measForm(); optForm(); units(); $('#pm-sa').value = U(S.sa); $('#pm-hemall').value = U(S.hemA); if (fit) ZR = 1; draw(); }
+  $$('#pm-units button').forEach(function (b) { b.onclick = function () { S.unit = b.dataset.u; ui(); }; });
   $('#pm-sa').oninput = function () { S.sa = cm(parseFloat(this.value) || 0); draw(); };
   $('#pm-hemall').oninput = function () { S.hemA = cm(parseFloat(this.value) || 0); draw(); };
-  $('#pm-apply').onclick = function () { Object.keys(S.pc).forEach(function (k) { delete S.pc[k].sa; delete S.pc[k].hem; }); draw(); };
-  $('#pm-nosa').onclick = function () { S.sa = 0; S.hemA = 0; Object.keys(S.pc).forEach(function (k) { delete S.pc[k].sa; delete S.pc[k].hem; }); ui(); };
+  $('#pm-apply').onclick = function () { Object.keys(S.pc).forEach(function (k) { delete S.pc[k].sa; delete S.pc[k].hem; }); draw(); toast('Allowances applied to every piece.'); };
+  $('#pm-nosa').onclick = function () { S.sa = 0; S.hemA = 0; Object.keys(S.pc).forEach(function (k) { delete S.pc[k].sa; delete S.pc[k].hem; }); ui(); toast('Net pattern: allowances removed.'); };
   $('#pm-resetnames').onclick = function () { Object.keys(S.pc).forEach(function (k) { delete S.pc[k].name; }); draw(); };
+  $('#pm-gridb').onclick = function () { var c = $('#pm-grid'); c.checked = !c.checked; this.setAttribute('aria-pressed', c.checked); draw(true); };
   $('#pm-grid').onchange = function () { draw(true); };
+  /* right panel tabs */
+  $$('.rt button').forEach(function (b) { b.onclick = function () { $$('.rt button').forEach(function (x) { x.setAttribute('aria-selected', x === b); }); $$('.pr [data-tp]').forEach(function (p) { p.hidden = p.dataset.tp !== b.dataset.t; }); }; });
+  /* export menu */
+  var menu = $('#pm-menu'), eb = $('#pm-exp');
+  function menuOpen(v) { menu.hidden = !v; eb.setAttribute('aria-expanded', v); if (v) menu.querySelector('button').focus(); }
+  eb.onclick = function (e) { e.stopPropagation(); menuOpen(menu.hidden); };
+  document.addEventListener('click', function (e) { if (!menu.hidden && !menu.contains(e.target)) menuOpen(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) { menuOpen(false); eb.focus(); } });
+  var tt = null;
+  function toast(t) { var m = $('#pm-msg'); m.textContent = t; m.hidden = false; clearTimeout(tt); tt = setTimeout(function () { m.hidden = true; }, 4500); }
   function fname(ext) { return 'forecut-' + (built ? built.label : 'pattern').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + String(S.size).toLowerCase() + '.' + ext; }
-  $('#pm-dl-svg').onclick = function () { var s = scene(true); FC.download(fname('svg'), X.svg(s.sc, s.W, s.H, S.unit, { title: s.title }), 'image/svg+xml'); };
-  $('#pm-dl-dxf').onclick = function () { var s = scene(true); FC.download(fname('dxf'), X.dxf(s.sc, s.W, s.H, S.unit === 'in' ? 'in' : 'mm'), 'application/dxf'); };
-  $('#pm-dl-png').onclick = function () { var s = scene(true); X.png(X.svg(s.sc, s.W, s.H, S.unit, { title: s.title }), s.W, s.H, function (b) { FC.download(fname('png'), b); }); };
-  $('#pm-dl-pdf').onclick = function () { var s = scene(true), r = X.pdf(s.sc, s.W, s.H, 'tiles', { title: s.title }); FC.download(fname('pdf'), r.blob); $('#pm-msg').textContent = 'PDF ready: ' + r.pages + ' A4 pages. Print at 100% / actual size.'; };
-  $('#pm-dl-pdf2').onclick = function () { var s = scene(true), r = X.pdf(s.sc, s.W, s.H, 'sheet', { title: s.title }); FC.download(fname('sheet.pdf'), r.blob); $('#pm-msg').textContent = 'Full-size PDF ready (' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + ') for a plotter or copy shop.'; };
+  function dl(f) { return function () { menuOpen(false); f(); }; }
+  $('#pm-dl-svg').onclick = dl(function () { var s = scene(true); FC.download(fname('svg'), X.svg(s.sc, s.W, s.H, S.unit, { title: s.title }), 'image/svg+xml'); toast('SVG downloaded at true scale.'); });
+  $('#pm-dl-dxf').onclick = dl(function () { var s = scene(true); FC.download(fname('dxf'), X.dxf(s.sc, s.W, s.H, S.unit === 'in' ? 'in' : 'mm'), 'application/dxf'); toast('DXF downloaded (' + (S.unit === 'in' ? 'inches' : 'millimetres') + ').'); });
+  $('#pm-dl-png').onclick = dl(function () { var s = scene(true); X.png(X.svg(s.sc, s.W, s.H, S.unit, { title: s.title }), s.W, s.H, function (b) { FC.download(fname('png'), b); }); toast('PNG downloaded.'); });
+  $('#pm-dl-pdf').onclick = dl(function () { var s = scene(true), r = X.pdf(s.sc, s.W, s.H, 'tiles', { title: s.title }); FC.download(fname('pdf'), r.blob); toast('PDF ready: ' + r.pages + ' A4 pages. Print at 100% / actual size.'); });
+  $('#pm-dl-pdf2').onclick = dl(function () { var s = scene(true), r = X.pdf(s.sc, s.W, s.H, 'sheet', { title: s.title }); FC.download(fname('sheet.pdf'), r.blob); toast('Full-size PDF ready (' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + ') for a plotter or copy shop.'); });
   window.PM_UI = { scene: scene, state: function () { return S; }, applyDetail: applyDetail };
   /* deep link from a Forecut detail: pattern-maker.html?detail=<name> */
   var qs = new URLSearchParams(location.search), qd = qs.get('detail');
   if (qd) { var d = DET.filter(function (x) { return x[0].toLowerCase() === qd.toLowerCase(); })[0]; if (d) { S.gender = d[2]; S.gid = d[3]; resetMeas(); resetOpts(); Object.keys(d[4]).forEach(function (k) { S.o[k] = d[4][k]; }); S.detail = d[0]; S.pc = {}; } }
-  ui();
+  ui(true);
 })();

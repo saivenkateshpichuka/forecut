@@ -107,7 +107,91 @@ details.fx{margin-top:12px;border-top:1px solid var(--grid);padding-top:8px}deta
 </style></head><body><div class="wrap">
 <nav><a class="logo" href="/"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/><path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="#a9481f" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Forecut</a>
 <div class="links"><a href="/">Home</a><a href="regions.html">Regions</a><a href="aw26.html">Seasons</a><a href="couture.html">Couture</a><a href="fabrics.html">Fabrics</a><a href="colour.html">Colour</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a><a href="search.html" aria-label="Search Forecut">⌕ Search</a></div></nav>
-<div class="eb">Members tool</div><div class="tl-h"><div><h1>Pattern maker</h1><p class="lead">Draft patterns for 12 garment types across womenswear, menswear, kidswear and unisex, or start from any of 131 Forecut details. Set measurements in cm, mm or inches, adjust seam allowances per piece, and download SVG, DXF, PNG or PDF.</p></div><div class="chiprow"><span>12 garments · 4 categories</span><span>131 linked Forecut details</span><span>cm · mm · inches</span><span>SVG · DXF · PNG · PDF</span><span>Forecut-branded files</span></div></div><div class="card" id="pm-gate"><h3>Sign in to use the pattern maker</h3><p style="margin:0 0 12px">The pattern maker is for registered Forecut members. Sign in or create a free account to draft and download patterns.</p><div class="btns"><a class="btn p" href="account.html?next=pattern-maker.html#signin">Sign in</a><a class="btn" href="account.html?next=pattern-maker.html#signup">Create a free account</a></div></div><div id="pm-app" hidden><div class="card"><h3>1 · Start from a Forecut detail <small style="font-weight:500;color:var(--muted)">(<span id="pm-dcount"></span> linked)</small></h3><input type="search" id="pm-dsearch" list="pm-dlist" placeholder="Type a detail, e.g. band collar, barrel-leg, camp collar, peplum, Anarkali"><datalist id="pm-dlist"></datalist><p class="hint" id="pm-dnote"></p></div><div class="card"><h3>2 · Category and garment</h3><div class="seg" id="pm-gtabs"></div><div class="seg gar" id="pm-garments"></div></div><div class="tool wide" style="margin-top:16px"><div class="noprint"><div class="card"><h3>3 · Measurements</h3><div id="pm-meas"></div></div><div class="card"><h3>4 · Style · <span id="pm-ttl" style="font-weight:500"></span></h3><div id="pm-opts"></div></div><div class="card"><h3>5 · Seam allowance</h3><div class="fg"><label>Seam allowance, all pieces<input type="number" step="any" min="0" id="pm-sa"></label><label>Hem allowance, all pieces<input type="number" step="any" min="0" id="pm-hemall"></label></div><div class="btns"><button type="button" id="pm-apply">Reset pieces to these values</button><button type="button" id="pm-nosa">Remove all allowances</button></div><p class="hint">Change a single piece in the pieces table. Fold edges never get an allowance.</p></div></div><div><div class="canvas" id="pm-svg"></div><label class="ck" style="margin:8px 0"><input type="checkbox" id="pm-grid" checked> Show grid (1 cm or 1 inch)</label><div class="info" id="pm-info"></div><details class="fx" style="margin-top:10px"><summary>How these patterns are drafted</summary><p>Blocks follow standard industry drafting practice. Bodices: front cut wider than back at the bust, underarm depth in proportion to back length, a side bust dart sized by cup with the front side seam lengthened to match, a front waist dart ending short of the bust point, and a back waist dart and shoulder dart (back shoulder drafted longer by the dart). Sleeves: cap height found from the armhole so the cap carries set-in ease (about 3 cm on fitted blocks, less on shirts, none on tees), with an elbow dart on fitted long sleeves. Skirts: back hip wider than front, darts numbered and sized from the hip-to-waist difference. Trousers: crotch depth plus ease, hip line a third of the way up, extensions as a share of each hip width by fit (trouser, slack or jean), width at crotch level checked against the thigh, and the back inseam walked 0.5 cm shorter than the front. The measurement panel shows the seam checks. Always test in calico before cutting good fabric.</p></details><div class="card" style="margin-top:14px"><h3>6 · Pieces</h3><div id="pm-pieces" class="tw"></div><div class="btns"><button type="button" id="pm-resetnames">Reset names to automatic</button></div></div><div class="card" style="margin-top:14px"><h3>7 · Download</h3><div class="btns"><button type="button" class="p" id="pm-dl-pdf">PDF · A4 tiles to print</button><button type="button" id="pm-dl-pdf2">PDF · full size (plotter)</button><button type="button" id="pm-dl-svg">SVG</button><button type="button" id="pm-dl-dxf">DXF (CAD)</button><button type="button" id="pm-dl-png">PNG</button></div><p class="hint" id="pm-msg">All files are true scale and carry the Forecut label. DXF uses millimetres (inches if you choose inches) with layers CUT, SEAM, MARK, GRAIN, TEXT and BRAND.</p></div></div></div></div><div class="prose"><h2>How the pattern maker works</h2><p><b>Start from a Forecut detail</b>, such as a band-collar kurta, Cuban camp collar shirt, barrel-leg jeans, peplum top or fit-and-flare Anarkali, and the matching garment and options load automatically. Or pick a category (womenswear, menswear, kidswear or unisex) and one of 12 garments: fitted bodice, kurta, shirt, T-shirt, hoodie, saree blouse, top, dress or frock, Nehru jacket or waistcoat, skirt, lehenga and trousers.</p><p><b>Measurements</b> start from a size chart for each category and can be changed to your own in centimetres, millimetres or inches. <b>Style options</b> cover fit ease, length, neckline, collar (band, shirt collar with band, camp, Peter Pan), sleeve (set-in, shirt with cuff, T-shirt, puff, bell, cap), pockets, yoke, hem, slits, flare, dropped shoulders, skirt type and leg shape.</p><p>Every piece is drafted from the measurements, so pieces that are sewn together fit together: sleeve heads are matched to the armhole, collars and bands to the neckline, and cuffs and waistbands to the wrist and waist. Each piece gets an automatic name, like “Men's shirt · Collar band”, which you can edit. Seam and hem allowances can be set for the whole pattern or for each piece, and fold edges never get an allowance.</p><h2>Downloads</h2><ul><li><b>PDF, A4 tiles:</b> print at 100% or actual size, check the 5 cm square, and tape the tiles together (A1, A2 across, then B1…). Blank tiles are skipped.</li><li><b>PDF, full size:</b> one page at true size for a plotter or copy shop.</li><li><b>DXF:</b> for Gerber, Lectra, Optitex, CLO, Illustrator or AutoCAD, with cutting lines, sewing lines, marks, grain lines and text on separate layers.</li><li><b>SVG and PNG:</b> for editing, sharing and tech packs.</li></ul><p>Every file carries the Forecut label on each piece and on the sheet.</p><h2>Before you cut</h2><p>These are block patterns for samples, learning and first toiles. They do not include grading across sizes, and every body and fabric behaves differently. Make a toile in calico or muslin, check the fit, and transfer any changes before cutting good fabric. Advanced pattern editing is planned for a later version.</p></div><footer><span>© 2026 Forecut · <a href="mailto:hello@forecut.in">hello@forecut.in</a></span>
+<style>
+.wrap{max-width:1680px!important}
+.pmh{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 24px;flex-wrap:wrap;margin:26px 0 14px}.pmh>div{display:grid;gap:6px}
+.pmh .eb{margin:0}.pmh h1{font-size:30px!important;line-height:1.1;margin:0}
+.pmh p{margin:0;max-width:620px;font:14px/1.5 "DM Sans",sans-serif;color:var(--muted)}
+.pmh .tag{font:600 12px "DM Sans",sans-serif;color:var(--muted);border:1px solid var(--grid);border-radius:4px;padding:5px 9px;white-space:nowrap}
+.gate{max-width:520px;margin:30px 0 60px;border:1px solid var(--grid);border-radius:8px;background:var(--paper-2);padding:24px 26px}
+.gate h3{font:700 18px "DM Sans",sans-serif;margin:0 0 6px}.gate p{margin:0 0 16px;color:var(--muted);font:15px/1.5 "DM Sans",sans-serif}
+.pmx{--pane:var(--paper-2);--line:var(--grid);--stage:#e7e2da;font:13px/1.4 "DM Sans",sans-serif;color:var(--ink);border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--pane);position:relative}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .pmx{--stage:#0d0b0a}}:root[data-theme="dark"] .pmx{--stage:#0d0b0a}
+.pbar svg,.ctl svg,.sec>summary svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.pmx button{font:inherit;color:inherit;cursor:pointer}
+.pmx input,.pmx select{font:13px "DM Sans",sans-serif;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:5px 7px;height:30px;width:100%;min-width:0;margin:0}
+.pmx input:focus-visible,.pmx select:focus-visible,.pmx button:focus-visible{outline:2px solid var(--chalk);outline-offset:1px}
+.pmx input[type=checkbox]{width:15px;height:15px;padding:0;accent-color:var(--chalk);flex:none}
+/* toolbar */
+.pbar{display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--pane);flex-wrap:wrap}
+.crumb{display:flex;align-items:center;gap:6px;font-weight:600;min-width:0;flex:1 1 260px;white-space:nowrap;overflow:hidden}
+.crumb span{color:var(--muted);font-weight:500}.crumb i{font-style:normal;color:var(--grid)}.crumb b{overflow:hidden;text-overflow:ellipsis}
+.srch{position:relative;display:flex;align-items:center;flex:0 1 340px;min-width:200px}.srch svg{position:absolute;left:9px;color:var(--muted)}
+.srch input{padding-left:30px;padding-right:44px}.srch small{position:absolute;right:9px;color:var(--muted);font-size:11.5px}
+.useg{display:inline-flex;border:1px solid var(--line);border-radius:4px;overflow:hidden;height:30px}
+.useg button{border:0;background:var(--paper);padding:0 11px;font-weight:600;color:var(--muted)}.useg button+button{border-left:1px solid var(--line)}
+.useg button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.xbtn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:4px;border:1px solid var(--line);background:var(--paper);font-weight:600}
+.xbtn:hover{border-color:var(--muted)}.xbtn.pri{background:var(--ink);border-color:var(--ink);color:var(--paper)}.xbtn.pri:hover{opacity:.9}
+.exp{position:relative}
+.menu{position:absolute;right:0;top:36px;z-index:20;width:290px;background:var(--paper-2);border:1px solid var(--line);border-radius:6px;box-shadow:0 12px 32px rgba(28,23,20,.16);padding:5px}
+.menu button{display:grid;grid-template-columns:52px 1fr;gap:2px 10px;align-items:center;width:100%;text-align:left;border:0;background:none;border-radius:4px;padding:8px 9px}
+.menu button:hover,.menu button:focus-visible{background:var(--paper)}
+.menu b{grid-row:span 2;font:700 11px "DM Sans",sans-serif;letter-spacing:.04em;border:1px solid var(--line);border-radius:3px;padding:3px 0;text-align:center;color:var(--muted)}
+.menu span{font-weight:600}.menu small{color:var(--muted);font-size:12px}.menu hr{border:0;border-top:1px solid var(--line);margin:4px 2px}
+/* body */
+.pbody{display:grid;grid-template-columns:300px minmax(0,1fr) 300px;height:clamp(620px,calc(100vh - 190px),1100px)}
+.pl,.pr{overflow:auto;background:var(--pane)}.pl{border-right:1px solid var(--line)}.pr{border-left:1px solid var(--line);display:flex;flex-direction:column}
+.sec{border-bottom:1px solid var(--line)}
+.sec>summary,.sec>.hd{display:flex;align-items:center;justify-content:space-between;gap:8px;list-style:none;cursor:pointer;padding:10px 14px;font:700 11px "DM Sans",sans-serif;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.sec>summary::-webkit-details-marker{display:none}.sec>summary svg{transition:transform .15s}.sec:not([open])>summary svg{transform:rotate(-90deg)}
+.sec>.bd{padding:0 14px 14px}
+.cats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-bottom:8px}
+.cats button{border:0;background:var(--paper);padding:6px 2px;font-size:12px;font-weight:600;color:var(--muted)}.cats button+button{border-left:1px solid var(--line)}
+.cats button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.glist{display:grid;gap:1px}
+.glist button{display:flex;justify-content:space-between;align-items:center;border:0;background:none;text-align:left;padding:6px 8px;border-radius:4px;font-weight:500}
+.glist button:hover{background:var(--paper)}.glist button[aria-pressed=true]{background:var(--chalk-soft);color:var(--ink);font-weight:700;box-shadow:inset 2px 0 0 var(--chalk)}
+.dnote{margin:8px 0 0;font-size:12px;color:var(--muted)}.dnote b{color:var(--ink)}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 108px;align-items:center;gap:8px;padding:3px 0;font:500 12.5px/1.3 "DM Sans",sans-serif;color:var(--ink)}
+.row>span:first-child{color:var(--muted)}
+.uin{position:relative;display:block}.uin input{padding-right:30px;text-align:right;font-variant-numeric:tabular-nums}.uin i{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-style:normal;font-size:11.5px;color:var(--muted);pointer-events:none}
+.row.wide{grid-template-columns:minmax(0,1fr) 150px}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.acts .xbtn{height:28px;font-size:12.5px;padding:0 10px}
+.hint2{font-size:12px;color:var(--muted);margin:8px 0 0}
+/* stage */
+.pc{display:flex;flex-direction:column;min-width:0;background:var(--stage)}
+.ctl{display:flex;align-items:center;gap:4px;padding:6px 8px;border-bottom:1px solid var(--line);background:var(--pane)}
+.ib{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:28px;min-width:28px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:none;color:var(--muted)}
+.ib:hover{background:var(--paper);color:var(--ink)}.ib[aria-pressed=true]{background:var(--paper);border-color:var(--line);color:var(--ink)}
+#pm-zl{min-width:52px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
+.ctl .sp{flex:1}.ctl .leg{display:flex;gap:12px;font-size:11.5px;color:var(--muted)}.leg i{display:inline-block;width:16px;height:0;border-top:1.5px solid #1c1714;vertical-align:middle;margin-right:5px}.leg i.s{border-top:1.5px dashed #6e6259}.leg i.f{border-top:2px dashed #a9481f}
+.view{flex:1;overflow:auto;position:relative;cursor:grab;padding:28px}.view.drag{cursor:grabbing}
+#pm-svg{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.08),0 8px 28px rgba(0,0,0,.08);margin:0 auto;width:max-content}
+#pm-svg svg{display:block;width:auto;height:auto;max-width:none;max-height:none}
+.sbar{display:flex;gap:16px;align-items:center;padding:5px 12px;border-top:1px solid var(--line);background:var(--pane);font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden}
+.sbar b{color:var(--ink);font-weight:600}.sbar .ok{margin-left:auto}
+/* right panel */
+.rt{display:flex;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--pane);z-index:1}
+.rt button{flex:1;border:0;background:none;padding:10px 0;font-weight:600;color:var(--muted);border-bottom:2px solid transparent}
+.rt button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--chalk)}
+.rp{padding:12px 14px}
+.pcs{display:grid;gap:8px}
+.pcard{border:1px solid var(--line);border-radius:6px;background:var(--paper);padding:8px 9px}
+.pcard.off{opacity:.55}
+.pcard .t{display:flex;gap:8px;align-items:center;cursor:pointer}.pcard .t b{font-weight:700;flex:1;min-width:0}.pcard .t small{font-size:11.5px;color:var(--muted);white-space:nowrap}
+.pcard .nm{display:grid;gap:2px;margin:7px 0 0 23px;font-size:11px;color:var(--muted);font-weight:600}.pcard .nm input{height:28px;font-size:12.5px}
+.pcard .a{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0 0 23px}.pcard .a label{display:grid;gap:2px;font-size:11px;color:var(--muted);font-weight:600}.pcard .a input{height:26px}
+.kv{display:grid}.kv div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:12.5px}.kv span{color:var(--muted)}.kv b{font-weight:600;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.kv h5{font:700 11px "DM Sans",sans-serif;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:14px 0 2px}.kv h5:first-child{margin-top:0}
+.notes h5{font:700 13px "DM Sans",sans-serif;margin:14px 0 4px}.notes h5:first-child{margin-top:0}.notes p,.notes li{font-size:12.5px;line-height:1.5;color:var(--muted);margin:0 0 6px}.notes ul{padding-left:16px;margin:0}
+.toast{position:absolute;left:50%;bottom:42px;transform:translateX(-50%);background:var(--ink);color:var(--paper);border-radius:6px;padding:8px 14px;font-size:12.5px;box-shadow:0 8px 24px rgba(0,0,0,.2);margin:0;max-width:90%;z-index:30}
+.pmdoc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:34px 0 10px;border-top:1px solid var(--grid);padding-top:22px}
+.pmdoc h2{font:700 15px "DM Sans",sans-serif;margin:0 0 8px}.pmdoc p,.pmdoc li{font:14px/1.55 "DM Sans",sans-serif;color:var(--muted);margin:0 0 8px}.pmdoc ul{padding-left:18px;margin:0}.pmdoc b{color:var(--ink)}
+@media (max-width:1180px){.pbody{grid-template-columns:270px minmax(0,1fr) 260px}}
+@media (max-width:980px){.pbody{grid-template-columns:1fr;height:auto}.pc{order:-1;height:68vh}.pl{border-right:0;border-top:1px solid var(--line)}.pr{border-left:0;border-top:1px solid var(--line)}
+ .srch{flex:1 1 100%;order:3}.crumb{flex:1 1 auto}.pmdoc{grid-template-columns:1fr}.ctl .leg{display:none}.view{padding:14px}.sbar .ok{display:none}}
+</style><div class="pmh"><div><div class="eb">Members tool</div><h1>Pattern maker</h1><p>Draft block patterns for 12 garments across womenswear, menswear, kidswear and unisex, or load one of 131 Forecut details. True-scale PDF, DXF, SVG and PNG.</p></div><span class="tag">For sampling · fit-test before production</span></div><div class="gate" id="pm-gate"><h3>Sign in to use the pattern maker</h3><p>The pattern maker is for registered Forecut members. Sign in or create a free account to draft and download patterns.</p><div class="btns"><a class="btn p" href="account.html?next=pattern-maker.html#signin">Sign in</a><a class="btn" href="account.html?next=pattern-maker.html#signup">Create a free account</a></div></div><div id="pm-app" class="pmx" hidden><div class="pbar"><div class="crumb" id="pm-ttl"></div><label class="srch" title="Load a Forecut detail"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><input type="search" id="pm-dsearch" list="pm-dlist" placeholder="Load a Forecut detail, e.g. camp collar" aria-label="Load a Forecut detail"><small id="pm-dcount"></small><datalist id="pm-dlist"></datalist></label><div class="useg" id="pm-units" role="group" aria-label="Units"><button type="button" data-u="cm">cm</button><button type="button" data-u="mm">mm</button><button type="button" data-u="in">in</button></div><div class="exp"><button type="button" class="xbtn pri" id="pm-exp" aria-haspopup="menu" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-4.5-4.5L12 15l4.5-4.5M5 19.5h14"/></svg>Export</button><div class="menu" id="pm-menu" role="menu" hidden><button type="button" role="menuitem" id="pm-dl-pdf"><b>PDF</b><span>A4 tiles for home printing</span><small>Print at 100%, check the 5 cm square, tape together</small></button><button type="button" role="menuitem" id="pm-dl-pdf2"><b>PDF</b><span>Full-size sheet</span><small>One page for a plotter or copy shop</small></button><hr><button type="button" role="menuitem" id="pm-dl-dxf"><b>DXF</b><span>CAD file</span><small>Layers: CUT, SEAM, MARK, GRAIN, TEXT, BRAND</small></button><button type="button" role="menuitem" id="pm-dl-svg"><b>SVG</b><span>Vector, true scale</span><small>For Illustrator, Inkscape and tech packs</small></button><button type="button" role="menuitem" id="pm-dl-png"><b>PNG</b><span>Image</span><small>For sharing and presentations</small></button></div></div></div><div class="pbody"><aside class="pl" aria-label="Pattern settings"><details class="sec" open><summary>Garment<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="bd"><div class="cats" id="pm-gtabs" role="group" aria-label="Category"></div><div class="glist" id="pm-garments"></div><p class="dnote" id="pm-dnote"></p></div></details><details class="sec" open><summary>Measurements<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="bd" id="pm-meas"></div></details><details class="sec" open><summary><span>Style · <span id="pm-gname" style="text-transform:none;letter-spacing:0"></span></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="bd" id="pm-opts"></div></details><details class="sec" open><summary>Seam allowance<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="bd"><label class="row"><span>Seams, all pieces</span><span class="uin"><input type="number" step="any" min="0" id="pm-sa"><i class="u"></i></span></label><label class="row"><span>Hems, all pieces</span><span class="uin"><input type="number" step="any" min="0" id="pm-hemall"><i class="u"></i></span></label><div class="acts"><button type="button" class="xbtn" id="pm-apply">Apply to all pieces</button><button type="button" class="xbtn" id="pm-nosa">Net pattern (no allowance)</button></div><p class="hint2">Set a single piece in Pieces. Fold edges never get an allowance.</p></div></details></aside><section class="pc" aria-label="Pattern sheet"><div class="ctl"><button type="button" class="ib" id="pm-zout" title="Zoom out" aria-label="Zoom out"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><span id="pm-zl">100%</span><button type="button" class="ib" id="pm-zin" title="Zoom in" aria-label="Zoom in"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12M12 6v12"/></svg></button><button type="button" class="ib" id="pm-zfit" title="Fit sheet (0)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>Fit</button><button type="button" class="ib" id="pm-gridb" aria-pressed="true" title="Grid"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM4 9.3h16M4 14.6h16M9.3 4v16M14.6 4v16"/></svg>Grid</button><input type="checkbox" id="pm-grid" checked hidden><span class="sp"></span><span class="leg"><span><i></i>Cut line</span><span><i class="s"></i>Sewing line</span><span><i class="f"></i>Fold</span></span></div><div class="view" id="pm-view"><div id="pm-svg"></div></div><div class="sbar" id="pm-status"></div></section><aside class="pr" aria-label="Pieces and checks"><div class="rt" role="tablist"><button type="button" role="tab" data-t="pieces" aria-selected="true">Pieces</button><button type="button" role="tab" data-t="checks" aria-selected="false">Checks</button><button type="button" role="tab" data-t="notes" aria-selected="false">Notes</button></div><div class="rp" data-tp="pieces"><div class="pcs" id="pm-pieces"></div><div class="acts"><button type="button" class="xbtn" id="pm-resetnames">Reset names</button></div></div><div class="rp" data-tp="checks" hidden><div class="kv" id="pm-info"></div></div><div class="rp notes" data-tp="notes" hidden><h5>How the blocks are drafted</h5><p>Bodices: front wider than back at the bust, underarm depth in proportion to back length, side bust dart sized by cup with the front side seam lengthened to match, front waist dart ending short of the bust point, back waist and shoulder darts.</p><p>Sleeves: cap height set from the armhole so the cap carries set-in ease (about 3 cm on fitted blocks, less on shirts, none on tees), elbow dart on fitted long sleeves.</p><p>Skirts: back hip wider than front; darts numbered and sized from the hip-to-waist difference.</p><p>Trousers: crotch depth plus ease, hip line a third of the way up, extensions by fit (trouser, slack, jean), crotch-level width checked against the thigh, back inseam walked 0.5 cm shorter than the front.</p><h5>Before production</h5><ul><li>Sew a toile in calico and correct the fit.</li><li>Sizes are drafted from the chart, not graded from an approved base size.</li><li>Add fabric shrinkage before cutting bulk.</li></ul></div></aside></div><p class="toast" id="pm-msg" role="status" hidden></p></div><div class="pmdoc"><div><h2>How it works</h2><p><b>Load a Forecut detail</b>, such as a band-collar kurta, Cuban camp collar shirt, barrel-leg jeans, peplum top or fit-and-flare Anarkali, and the matching garment and options load automatically. Or pick a category and one of 12 garments: fitted bodice, kurta, shirt, T-shirt, hoodie, saree blouse, top, dress or frock, Nehru jacket or waistcoat, skirt, lehenga and trousers.</p><p><b>Measurements</b> start from a size chart and can be changed to your own in centimetres, millimetres or inches. <b>Style</b> covers ease, length, neckline, collar, sleeve, pockets, yoke, hem, slits, flare, dropped shoulders, skirt type, leg shape and fit at the crotch.</p></div><div><h2>Pieces fit together</h2><p>Every piece is drafted from the same measurements: sleeve heads are matched to the armhole, collars and bands to the neckline, cuffs and waistbands to the wrist and waist. Each piece gets an automatic name, like “Men's shirt · Collar band”, which you can edit, and its own seam and hem allowance. Checks shows the seam lengths and fit figures.</p></div><div><h2>Downloads</h2><ul><li><b>PDF, A4 tiles:</b> print at 100%, check the 5 cm square, tape the tiles together. Blank tiles are skipped.</li><li><b>PDF, full size:</b> one page at true size for a plotter.</li><li><b>DXF:</b> for Gerber, Lectra, Optitex, CLO, Illustrator or AutoCAD, on separate layers.</li><li><b>SVG and PNG:</b> for editing, sharing and tech packs.</li></ul><p>These are block patterns for samples and first toiles. Make a toile, check the fit and correct it before cutting good fabric or going to production.</p></div></div><footer><span>© 2026 Forecut · <a href="mailto:hello@forecut.in">hello@forecut.in</a></span>
 <span class="fl"><a href="couture.html">Couture</a><a href="fabrics.html">Fabrics</a><a href="colour.html">Colour</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a><a href="celebrity-style.html">Celebrity style</a><a href="about.html">About</a><a href="method.html">Methodology</a><a href="contact.html">Contact</a><a href="terms.html">Terms &amp; Conditions</a><a href="privacy.html">Privacy Policy</a></span></footer>
 <script>window.FC_PREVIEW=true;</script><script>/* Forecut tools: shared helpers (nearest Pantone TCX by CIEDE2000, formatting, downloads, saved state). */
 var FC = window.FC || {};
@@ -678,39 +762,39 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
   if (!S.m) resetMeas(); if (!Object.keys(S.o).length) resetOpts();
 
   /* ---------- controls ---------- */
+  function uinp(attr, val) { return '<span class="uin"><input type="number" step="any" min="0" inputmode="decimal" ' + attr + ' value="' + val + '"><i>' + S.unit + '</i></span>'; }
   function genderTabs() {
-    $('#pm-gtabs').innerHTML = Object.keys(PM.GENDER).map(function (g) { return '<button type="button" data-g="' + g + '" aria-pressed="' + (g === S.gender) + '">' + PM.GENDER[g] + '</button>'; }).join('');
-    $$('#pm-gtabs button').forEach(function (b) { b.onclick = function () { S.gender = b.dataset.g; if (PM.GARMENTS[S.gid].g.indexOf(S.gender) < 0) S.gid = Object.keys(PM.GARMENTS).filter(function (k) { return PM.GARMENTS[k].g.indexOf(S.gender) > -1; })[0]; S.detail = null; resetMeas(); resetOpts(); S.pc = {}; ui(); }; });
+    var short = { women: 'Women', men: 'Men', kids: 'Kids', unisex: 'Unisex' };
+    $('#pm-gtabs').innerHTML = Object.keys(PM.GENDER).map(function (g) { return '<button type="button" data-g="' + g + '" title="' + PM.GENDER[g] + '" aria-pressed="' + (g === S.gender) + '">' + short[g] + '</button>'; }).join('');
+    $$('#pm-gtabs button').forEach(function (b) { b.onclick = function () { S.gender = b.dataset.g; if (PM.GARMENTS[S.gid].g.indexOf(S.gender) < 0) S.gid = Object.keys(PM.GARMENTS).filter(function (k) { return PM.GARMENTS[k].g.indexOf(S.gender) > -1; })[0]; S.detail = null; resetMeas(); resetOpts(); S.pc = {}; ui(true); }; });
     var gs = Object.keys(PM.GARMENTS).filter(function (k) { return PM.GARMENTS[k].g.indexOf(S.gender) > -1; });
     $('#pm-garments').innerHTML = gs.map(function (k) { return '<button type="button" data-k="' + k + '" aria-pressed="' + (k === S.gid) + '">' + PM.GARMENTS[k].n + '</button>'; }).join('');
-    $$('#pm-garments button').forEach(function (b) { b.onclick = function () { S.gid = b.dataset.k; S.detail = null; resetOpts(); S.pc = {}; ui(); }; });
+    $$('#pm-garments button').forEach(function (b) { b.onclick = function () { S.gid = b.dataset.k; S.detail = null; resetOpts(); S.pc = {}; ui(true); }; });
   }
   function measForm() {
-    var c = chart(), h = '<div class="fg"><label>Size chart<select id="pm-size">' + Object.keys(c).map(function (s) { return '<option' + (s === S.size ? ' selected' : '') + '>' + s + '</option>'; }).join('') + '<option value="custom"' + (S.size === 'custom' ? ' selected' : '') + '>My measurements</option></select></label>'
-      + '<label>Units<select id="pm-unit">' + [['cm', 'Centimetres'], ['mm', 'Millimetres'], ['in', 'Inches']].map(function (u) { return '<option value="' + u[0] + '"' + (u[0] === S.unit ? ' selected' : '') + '>' + u[1] + '</option>'; }).join('') + '</select></label>';
-    measSet().forEach(function (k) { h += '<label>' + PM.LABELS[k] + ' (' + S.unit + ')<input type="number" step="any" min="0" data-m="' + k + '" value="' + U(S.m[k]) + '"></label>'; });
-    $('#pm-meas').innerHTML = h + '</div>';
+    var c = chart(), h = '<label class="row"><span>Size chart</span><select id="pm-size">' + Object.keys(c).map(function (s) { return '<option' + (s === S.size ? ' selected' : '') + '>' + s + '</option>'; }).join('') + '<option value="custom"' + (S.size === 'custom' ? ' selected' : '') + '>Custom</option></select></label>';
+    measSet().forEach(function (k) { h += '<label class="row" title="' + PM.LABELS[k] + '"><span>' + PM.LABELS[k] + '</span>' + uinp('data-m="' + k + '"', U(S.m[k])) + '</label>'; });
+    $('#pm-meas').innerHTML = h;
     $('#pm-size').onchange = function () { S.size = this.value; if (S.size !== 'custom') S.m = Object.assign({}, chart()[S.size]); ui(); };
-    $('#pm-unit').onchange = function () { S.unit = this.value; ui(); };
     $$('#pm-meas [data-m]').forEach(function (e) { e.oninput = function () { var v = parseFloat(e.value); if (v > 0) { S.m[e.dataset.m] = cm(v); S.size = 'custom'; $('#pm-size').value = 'custom'; draw(); } }; });
   }
   function optForm() {
-    var G = PM.GARMENTS[S.gid], h = '<div class="fg">';
+    var G = PM.GARMENTS[S.gid], h = '';
     G.o.forEach(function (k) {
       var d = OPT[k], v = S.o[k];
-      if (d.o) { var opts = d.o.filter(function (x) { return !ALLOW[k] || !ALLOW[k][S.gid] || ALLOW[k][S.gid].indexOf(x[0]) > -1; }); h += '<label>' + d.l + '<select data-o="' + k + '">' + opts.map(function (x) { return '<option value="' + x[0] + '"' + (String(x[0]) === String(v) ? ' selected' : '') + '>' + x[1] + '</option>'; }).join('') + '</select></label>'; }
-      else h += '<label>' + d.l + (d.L ? ' (' + S.unit + ')' : '') + '<input type="number" step="any" min="0" data-o="' + k + '" value="' + (d.L ? U(+v || 0) : (+v || 0)) + '"></label>';
+      if (d.o) { var opts = d.o.filter(function (x) { return !ALLOW[k] || !ALLOW[k][S.gid] || ALLOW[k][S.gid].indexOf(x[0]) > -1; }); h += '<label class="row wide"><span>' + d.l + '</span><select data-o="' + k + '">' + opts.map(function (x) { return '<option value="' + x[0] + '"' + (String(x[0]) === String(v) ? ' selected' : '') + '>' + x[1] + '</option>'; }).join('') + '</select></label>'; }
+      else h += '<label class="row"><span>' + d.l + '</span>' + (d.L ? uinp('data-o="' + k + '"', U(+v || 0)) : '<input type="number" step="1" min="0" data-o="' + k + '" value="' + (+v || 0) + '" style="text-align:right">') + '</label>';
     });
-    $('#pm-opts').innerHTML = h + '</div>';
+    $('#pm-opts').innerHTML = h;
     $$('#pm-opts [data-o]').forEach(function (e) { e.oninput = e.onchange = function () { var k = e.dataset.o, d = OPT[k]; S.o[k] = d.o ? e.value : d.L ? cm(parseFloat(e.value) || 0) : (parseFloat(e.value) || 0); draw(); }; });
   }
   function detailPicker() {
     var dl = $('#pm-dlist'); if (!dl.options.length) dl.innerHTML = DET.map(function (d) { return '<option value="' + d[0].replace(/"/g, '') + ' · ' + d[1] + '">'; }).join('');
     $('#pm-dcount').textContent = DET.length;
-    $('#pm-dsearch').onchange = function () { var v = this.value, d = DET.filter(function (x) { return x[0] + ' · ' + x[1] === v; })[0]; if (d) applyDetail(d); };
-    $('#pm-dnote').innerHTML = S.detail ? 'Loaded from Forecut detail: <b>' + S.detail + '</b>. Change any option below.' : '';
+    $('#pm-dsearch').onchange = function () { var v = this.value, d = DET.filter(function (x) { return x[0] + ' · ' + x[1] === v; })[0]; if (d) { applyDetail(d); this.value = ''; this.blur(); } };
+    $('#pm-dnote').innerHTML = S.detail ? 'From Forecut detail <b>' + S.detail + '</b>' : '';
   }
-  function applyDetail(d) { S.gender = d[2]; S.gid = d[3]; resetMeas(); resetOpts(); Object.keys(d[4]).forEach(function (k) { S.o[k] = d[4][k]; }); S.detail = d[0]; S.pc = {}; ui(); }
+  function applyDetail(d) { S.gender = d[2]; S.gid = d[3]; resetMeas(); resetOpts(); Object.keys(d[4]).forEach(function (k) { S.o[k] = d[4][k]; }); S.detail = d[0]; S.pc = {}; ui(true); }
 
   /* ---------- scene ---------- */
   var built = null;
@@ -752,39 +836,77 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
 
   function pieceTable() {
     var r = built; if (!r) return;
-    $('#pm-pieces').innerHTML = '<table class="spec pt"><thead><tr><th>Use</th><th>Piece name (editable)</th><th>Cut</th><th>Seam (' + S.unit + ')</th><th>Hem (' + S.unit + ')</th></tr></thead><tbody>' + r.pieces.map(function (p) {
-      var st = S.pc[p.id] || {}, sa = st.sa !== undefined ? st.sa : S.sa, ha = st.hem !== undefined ? st.hem : (p.defHem !== undefined ? p.defHem : S.hemA), hasHem = p.edges.some(function (e) { return e.t === 'hem'; });
-      return '<tr><td><input type="checkbox" data-p="' + p.id + '" data-f="on"' + (st.on !== false ? ' checked' : '') + ' aria-label="Include ' + p.comp + '"></td><td><input type="text" data-p="' + p.id + '" data-f="name" value="' + (st.name || p.auto).replace(/"/g, '&quot;') + '"></td><td>' + p.cut + '</td>'
-        + '<td><input type="number" step="any" min="0" data-p="' + p.id + '" data-f="sa" value="' + U(sa) + '"></td><td>' + (hasHem ? '<input type="number" step="any" min="0" data-p="' + p.id + '" data-f="hem" value="' + U(ha) + '">' : '–') + '</td></tr>';
-    }).join('') + '</tbody></table>';
-    $$('#pm-pieces [data-p]').forEach(function (e) { e.oninput = e.onchange = function () { var st = S.pc[e.dataset.p] || (S.pc[e.dataset.p] = {}), f = e.dataset.f; if (f === 'on') st.on = e.checked; else if (f === 'name') st.name = e.value; else st[f] = cm(parseFloat(e.value) || 0); draw(true); }; });
+    $('#pm-pieces').innerHTML = r.pieces.map(function (p) {
+      var st = S.pc[p.id] || {}, on = st.on !== false, sa = st.sa !== undefined ? st.sa : S.sa, ha = st.hem !== undefined ? st.hem : (p.defHem !== undefined ? p.defHem : S.hemA), hasHem = p.edges.some(function (e) { return e.t === 'hem'; });
+      return '<div class="pcard' + (on ? '' : ' off') + '"><label class="t"><input type="checkbox" data-p="' + p.id + '" data-f="on"' + (on ? ' checked' : '') + ' aria-label="Include ' + p.comp + '"><b>' + p.comp + '</b><small>' + p.cut + '</small></label>'
+        + '<label class="nm"><span>Label on pattern</span><input type="text" data-p="' + p.id + '" data-f="name" value="' + (st.name || p.auto).replace(/"/g, '&quot;') + '"></label>'
+        + '<div class="a"><label>Seam' + uinp('data-p="' + p.id + '" data-f="sa"', U(sa)) + '</label>' + (hasHem ? '<label>Hem' + uinp('data-p="' + p.id + '" data-f="hem"', U(ha)) + '</label>' : '<label>Hem<input disabled value="–"></label>') + '</div></div>';
+    }).join('');
+    $$('#pm-pieces [data-p]').forEach(function (e) { e.oninput = e.onchange = function () { var st = S.pc[e.dataset.p] || (S.pc[e.dataset.p] = {}), f = e.dataset.f; if (f === 'on') { st.on = e.checked; e.closest('.pcard').classList.toggle('off', !e.checked); } else if (f === 'name') st.name = e.value; else st[f] = cm(parseFloat(e.value) || 0); draw(true); }; });
+  }
+  /* ---------- view: zoom and pan ---------- */
+  var view = $('#pm-view'), ZR = 1, last = null;
+  function fitZ(W, H) { var w = Math.max(200, view.clientWidth - 56), h = Math.max(200, view.clientHeight - 56); return Math.min(w / W, h / H); }
+  function applyZoom() { if (!last) return; var z = fitZ(last.W, last.H) * ZR, sv = $('#pm-svg svg'); if (!sv) return; sv.style.width = (last.W * z).toFixed(0) + 'px'; sv.style.height = (last.H * z).toFixed(0) + 'px'; $('#pm-zl').textContent = Math.round(ZR * 100) + '%'; }
+  function zoom(f, cx, cy) { var old = ZR; ZR = Math.max(.25, Math.min(8, ZR * f)); if (cx === undefined) { cx = view.clientWidth / 2; cy = view.clientHeight / 2; } var sx = (view.scrollLeft + cx) / (view.scrollWidth || 1), sy = (view.scrollTop + cy) / (view.scrollHeight || 1); applyZoom(); view.scrollLeft = sx * view.scrollWidth - cx; view.scrollTop = sy * view.scrollHeight - cy; }
+  $('#pm-zin').onclick = function () { zoom(1.25); }; $('#pm-zout').onclick = function () { zoom(.8); }; $('#pm-zfit').onclick = function () { ZR = 1; applyZoom(); view.scrollTo(0, 0); };
+  view.addEventListener('wheel', function (e) { if (!e.ctrlKey && !e.metaKey) return; e.preventDefault(); var r = view.getBoundingClientRect(); zoom(e.deltaY < 0 ? 1.12 : .89, e.clientX - r.left, e.clientY - r.top); }, { passive: false });
+  var pan = null;
+  view.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse' || e.button !== 0) return; pan = [e.clientX, e.clientY, view.scrollLeft, view.scrollTop]; view.classList.add('drag'); });
+  window.addEventListener('pointermove', function (e) { if (!pan) return; view.scrollLeft = pan[2] - (e.clientX - pan[0]); view.scrollTop = pan[3] - (e.clientY - pan[1]); });
+  window.addEventListener('pointerup', function () { pan = null; view.classList.remove('drag'); });
+  document.addEventListener('keydown', function (e) { if (/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName) || app.hidden) return; if (e.key === '+' || e.key === '=') zoom(1.25); else if (e.key === '-') zoom(.8); else if (e.key === '0') $('#pm-zfit').click(); });
+  if (window.ResizeObserver) new ResizeObserver(function () { applyZoom(); }).observe(view);
+
+  function crumb() {
+    var sz = S.size === 'custom' ? 'Custom' : S.size;
+    $('#pm-ttl').innerHTML = '<span>' + PM.GENDER[S.gender] + '</span><i>/</i><b>' + PM.GARMENTS[S.gid].n + '</b><i>/</i><span>' + sz + '</span>' + (S.detail ? '<i>/</i><span title="Forecut detail">' + S.detail + '</span>' : '');
+    $('#pm-gname').textContent = PM.GARMENTS[S.gid].n;
   }
   function draw(keepTable) {
-    var s = scene(false);
+    var s = scene(false); last = s;
     $('#pm-svg').innerHTML = X.svg(s.sc, s.W, s.H, S.unit, { screen: 1, grid: $('#pm-grid').checked ? grid(s.W, s.H) : '' });
-    var info = s.r.info, rows = Object.keys(info).map(function (k) { return '<div><span>' + k + '</span><b>' + (typeof info[k] === 'number' ? U(info[k]) + ' ' + S.unit : info[k]) + '</b></div>'; });
-    rows.push('<div><span>Sheet</span><b>' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + '</b></div>');
-    $('#pm-info').innerHTML = rows.join('');
+    applyZoom();
+    var info = s.r.info, num = function (v) { return typeof v === 'number' ? U(v) + ' ' + S.unit : v; }, checks = [], meas = [];
+    Object.keys(info).forEach(function (k) { (/minus|ease|lowered|check/i.test(k) ? checks : meas).push('<div><span>' + k + '</span><b>' + num(info[k]) + '</b></div>'); });
+    var on = s.r.pieces.filter(function (p) { return (S.pc[p.id] || {}).on !== false; }).length;
+    $('#pm-info').innerHTML = '<h5>Measurements</h5>' + meas.join('') + (checks.length ? '<h5>Seam and fit checks</h5>' + checks.join('') : '') + '<h5>Sheet</h5><div><span>Size</span><b>' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + '</b></div><div><span>Pieces on sheet</span><b>' + on + ' of ' + s.r.pieces.length + '</b></div>';
+    $('#pm-status').innerHTML = '<span><b>' + on + '</b> pieces</span><span>Sheet <b>' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + '</b></span><span>Seam <b>' + U(S.sa) + '</b> · Hem <b>' + U(S.hemA) + ' ' + S.unit + '</b></span><span class="ok">Ctrl + scroll to zoom · drag to pan</span>';
+    crumb();
     if (!keepTable) pieceTable();
     FC.save('pm2', S);
   }
-  function ui() { genderTabs(); detailPicker(); measForm(); optForm(); $('#pm-sa').value = U(S.sa); $('#pm-hemall').value = U(S.hemA); $('#pm-ttl').textContent = (S.detail ? S.detail + ' → ' : '') + PM.GARMENTS[S.gid].n; draw(); }
+  function units() { $$('#pm-units button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.u === S.unit); }); $$('.pl .u').forEach(function (i) { i.textContent = S.unit; }); }
+  function ui(fit) { genderTabs(); detailPicker(); measForm(); optForm(); units(); $('#pm-sa').value = U(S.sa); $('#pm-hemall').value = U(S.hemA); if (fit) ZR = 1; draw(); }
+  $$('#pm-units button').forEach(function (b) { b.onclick = function () { S.unit = b.dataset.u; ui(); }; });
   $('#pm-sa').oninput = function () { S.sa = cm(parseFloat(this.value) || 0); draw(); };
   $('#pm-hemall').oninput = function () { S.hemA = cm(parseFloat(this.value) || 0); draw(); };
-  $('#pm-apply').onclick = function () { Object.keys(S.pc).forEach(function (k) { delete S.pc[k].sa; delete S.pc[k].hem; }); draw(); };
-  $('#pm-nosa').onclick = function () { S.sa = 0; S.hemA = 0; Object.keys(S.pc).forEach(function (k) { delete S.pc[k].sa; delete S.pc[k].hem; }); ui(); };
+  $('#pm-apply').onclick = function () { Object.keys(S.pc).forEach(function (k) { delete S.pc[k].sa; delete S.pc[k].hem; }); draw(); toast('Allowances applied to every piece.'); };
+  $('#pm-nosa').onclick = function () { S.sa = 0; S.hemA = 0; Object.keys(S.pc).forEach(function (k) { delete S.pc[k].sa; delete S.pc[k].hem; }); ui(); toast('Net pattern: allowances removed.'); };
   $('#pm-resetnames').onclick = function () { Object.keys(S.pc).forEach(function (k) { delete S.pc[k].name; }); draw(); };
+  $('#pm-gridb').onclick = function () { var c = $('#pm-grid'); c.checked = !c.checked; this.setAttribute('aria-pressed', c.checked); draw(true); };
   $('#pm-grid').onchange = function () { draw(true); };
+  /* right panel tabs */
+  $$('.rt button').forEach(function (b) { b.onclick = function () { $$('.rt button').forEach(function (x) { x.setAttribute('aria-selected', x === b); }); $$('.pr [data-tp]').forEach(function (p) { p.hidden = p.dataset.tp !== b.dataset.t; }); }; });
+  /* export menu */
+  var menu = $('#pm-menu'), eb = $('#pm-exp');
+  function menuOpen(v) { menu.hidden = !v; eb.setAttribute('aria-expanded', v); if (v) menu.querySelector('button').focus(); }
+  eb.onclick = function (e) { e.stopPropagation(); menuOpen(menu.hidden); };
+  document.addEventListener('click', function (e) { if (!menu.hidden && !menu.contains(e.target)) menuOpen(false); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) { menuOpen(false); eb.focus(); } });
+  var tt = null;
+  function toast(t) { var m = $('#pm-msg'); m.textContent = t; m.hidden = false; clearTimeout(tt); tt = setTimeout(function () { m.hidden = true; }, 4500); }
   function fname(ext) { return 'forecut-' + (built ? built.label : 'pattern').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + String(S.size).toLowerCase() + '.' + ext; }
-  $('#pm-dl-svg').onclick = function () { var s = scene(true); FC.download(fname('svg'), X.svg(s.sc, s.W, s.H, S.unit, { title: s.title }), 'image/svg+xml'); };
-  $('#pm-dl-dxf').onclick = function () { var s = scene(true); FC.download(fname('dxf'), X.dxf(s.sc, s.W, s.H, S.unit === 'in' ? 'in' : 'mm'), 'application/dxf'); };
-  $('#pm-dl-png').onclick = function () { var s = scene(true); X.png(X.svg(s.sc, s.W, s.H, S.unit, { title: s.title }), s.W, s.H, function (b) { FC.download(fname('png'), b); }); };
-  $('#pm-dl-pdf').onclick = function () { var s = scene(true), r = X.pdf(s.sc, s.W, s.H, 'tiles', { title: s.title }); FC.download(fname('pdf'), r.blob); $('#pm-msg').textContent = 'PDF ready: ' + r.pages + ' A4 pages. Print at 100% / actual size.'; };
-  $('#pm-dl-pdf2').onclick = function () { var s = scene(true), r = X.pdf(s.sc, s.W, s.H, 'sheet', { title: s.title }); FC.download(fname('sheet.pdf'), r.blob); $('#pm-msg').textContent = 'Full-size PDF ready (' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + ') for a plotter or copy shop.'; };
+  function dl(f) { return function () { menuOpen(false); f(); }; }
+  $('#pm-dl-svg').onclick = dl(function () { var s = scene(true); FC.download(fname('svg'), X.svg(s.sc, s.W, s.H, S.unit, { title: s.title }), 'image/svg+xml'); toast('SVG downloaded at true scale.'); });
+  $('#pm-dl-dxf').onclick = dl(function () { var s = scene(true); FC.download(fname('dxf'), X.dxf(s.sc, s.W, s.H, S.unit === 'in' ? 'in' : 'mm'), 'application/dxf'); toast('DXF downloaded (' + (S.unit === 'in' ? 'inches' : 'millimetres') + ').'); });
+  $('#pm-dl-png').onclick = dl(function () { var s = scene(true); X.png(X.svg(s.sc, s.W, s.H, S.unit, { title: s.title }), s.W, s.H, function (b) { FC.download(fname('png'), b); }); toast('PNG downloaded.'); });
+  $('#pm-dl-pdf').onclick = dl(function () { var s = scene(true), r = X.pdf(s.sc, s.W, s.H, 'tiles', { title: s.title }); FC.download(fname('pdf'), r.blob); toast('PDF ready: ' + r.pages + ' A4 pages. Print at 100% / actual size.'); });
+  $('#pm-dl-pdf2').onclick = dl(function () { var s = scene(true), r = X.pdf(s.sc, s.W, s.H, 'sheet', { title: s.title }); FC.download(fname('sheet.pdf'), r.blob); toast('Full-size PDF ready (' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + ') for a plotter or copy shop.'); });
   window.PM_UI = { scene: scene, state: function () { return S; }, applyDetail: applyDetail };
   /* deep link from a Forecut detail: pattern-maker.html?detail=<name> */
   var qs = new URLSearchParams(location.search), qd = qs.get('detail');
   if (qd) { var d = DET.filter(function (x) { return x[0].toLowerCase() === qd.toLowerCase(); })[0]; if (d) { S.gender = d[2]; S.gid = d[3]; resetMeas(); resetOpts(); Object.keys(d[4]).forEach(function (k) { S.o[k] = d[4][k]; }); S.detail = d[0]; S.pc = {}; } }
-  ui();
+  ui(true);
 })();
 </script><script type="module" src="auth.js"></script></div></body></html>
