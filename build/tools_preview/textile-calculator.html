@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en-IN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Textile Calculator · Fabric Consumption, GSM, Yarn Count, Costing · Forecut</title>
+
+<link rel="preload" href="fonts/dm-sans.woff" as="font" type="font/woff" crossorigin><link rel="stylesheet" href="fonts/fonts.css">
+<style>
+:root{--paper:#f5f0e8;--paper-2:#fffcf7;--grid:#e3d9cc;--ink:#1c1714;--muted:#6e6259;--mat:#1f3d33;--mat-ink:#f5f0e8;--chalk:#a9481f;--chalk-soft:#f3e1d6}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#14110f;--paper-2:#1e1a17;--grid:#352d27;--ink:#f2ebe2;--muted:#b3a698;--mat:#e8dccb;--mat-ink:#1c1714;--chalk:#e08a5e;--chalk-soft:#3a2418;color-scheme:dark}}
+:root[data-theme="dark"]{--paper:#14110f;--paper-2:#1e1a17;--grid:#352d27;--ink:#f2ebe2;--muted:#b3a698;--mat:#e8dccb;--mat-ink:#1c1714;--chalk:#e08a5e;--chalk-soft:#3a2418;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font:16.5px/1.7 "DM Sans",system-ui,-apple-system,"Segoe UI",sans-serif;padding:0 16px 56px;-webkit-font-smoothing:antialiased}
+.wrap{max-width:780px;margin:0 auto}
+nav{display:flex;justify-content:space-between;align-items:center;gap:12px;padding-block:20px;flex-wrap:wrap}
+.logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;font:600 22px "DM Sans",system-ui,sans-serif}
+.logo svg{width:28px;height:28px}
+nav .links{display:flex;gap:18px;flex-wrap:wrap;font-size:14.5px}
+nav .links a{color:var(--muted);text-decoration:none} nav .links a:hover{color:var(--ink)}
+.eb{font:600 12px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--chalk);margin:40px 0 8px}
+h1{letter-spacing:-.03em!important;font:700 clamp(34px,6vw,52px)/1.08 "DM Sans",system-ui,sans-serif;letter-spacing:-.015em;margin:0 0 14px}
+h2{font:700 20px/1.3 "DM Sans",sans-serif;margin:34px 0 8px}
+p,li{color:var(--ink);font-family:"Source Serif 4",Georgia,serif;font-size:17.5px} nav,footer,.eb,.meta{font-family:"DM Sans",sans-serif} .lead{font-size:18.5px;color:var(--muted)}
+ul{padding-left:20px} li{margin:5px 0}
+a{color:var(--ink)}
+.meta{font-size:14px;color:var(--muted)}
+.box{background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:22px 24px;margin:22px 0}
+.mail{display:inline-block;font:600 clamp(22px,4.5vw,30px) "DM Sans",sans-serif;color:var(--mat);text-decoration:none;border-bottom:2px solid var(--chalk);word-break:break-all}
+footer{margin-top:56px;padding-top:22px;border-top:1px solid var(--grid);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font-size:14px;color:var(--muted)}
+footer a{color:var(--muted)} footer .fl{display:flex;gap:16px;flex-wrap:wrap}
+:focus-visible{outline:2px solid var(--chalk);outline-offset:3px}
+</style><style>
+.wrap{max-width:1120px!important}
+[hidden]{display:none!important}
+.tl-h{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:end;margin:10px 0 24px}
+.tl-h .lead{margin:0}
+.chiprow{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.chiprow span{font:600 12.5px "DM Sans",sans-serif;border:1px solid var(--grid);background:var(--paper-2);border-radius:999px;padding:6px 12px;color:var(--muted)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid var(--grid);margin:0 0 18px}
+.tabs button{font:600 15px "DM Sans",sans-serif;background:none;border:0;border-bottom:3px solid transparent;color:var(--muted);padding:10px 14px;cursor:pointer}
+.tabs button[aria-selected=true]{color:var(--ink);border-color:var(--chalk)}
+.tool{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:start}
+.tool.wide{grid-template-columns:340px minmax(0,1fr)}
+.card{background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:18px 20px}
+.card h3{font:700 17px "DM Sans",sans-serif;margin:0 0 12px}
+.card+.card{margin-top:16px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
+.fg .full{grid-column:1/-1}
+label{display:grid;gap:5px;font:600 13px "DM Sans",sans-serif;color:var(--muted)}
+input,select{font:16px "DM Sans",sans-serif;color:var(--ink);background:var(--paper);border:1px solid var(--grid);border-radius:8px;padding:9px 10px;width:100%;min-width:0}
+input[type=color]{padding:2px;height:40px}
+input[type=checkbox]{width:auto;accent-color:#a9481f}
+label.ck{display:flex;align-items:center;gap:8px;color:var(--ink);font-weight:500}
+.res{display:grid;gap:10px}
+.big{display:flex;justify-content:space-between;align-items:baseline;gap:10px;border-bottom:1px solid var(--grid);padding:10px 0}
+.big:last-child{border-bottom:0}
+.big span{font:600 14px "DM Sans",sans-serif;color:var(--muted)}
+.big b{font:500 30px/1.1 "Source Serif 4",Georgia,serif;color:var(--ink);text-align:right}
+.big small{display:block;font:600 13px "DM Sans",sans-serif;color:var(--muted);text-align:right}
+.hint{font:13.5px/1.5 "DM Sans",sans-serif;color:var(--muted);margin:10px 0 0}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.btns button,.btn{font:700 14.5px "DM Sans",sans-serif;border-radius:3px;padding:11px 16px;cursor:pointer;border:1px solid var(--ink);background:none;color:var(--ink);text-decoration:none;display:inline-block}
+.btns button.p,.btn.p{background:#E08A5E;border-color:#E08A5E;color:#1c1714}
+.kbar{display:flex;height:14px;border-radius:99px;overflow:hidden;gap:2px;margin-top:8px}
+.kkey{display:flex;flex-wrap:wrap;gap:12px;font:600 12.5px "DM Sans",sans-serif;color:var(--muted);margin-top:8px}.kkey i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px}
+.yc{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.info{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px 18px;margin-top:12px}
+.info div{display:flex;justify-content:space-between;gap:8px;border-bottom:1px solid var(--grid);padding:6px 0;font:14px "DM Sans",sans-serif}.info span{color:var(--muted)}
+.canvas{background:#fff;border:1px solid var(--grid);border-radius:10px;padding:8px}
+.canvas svg{display:block;width:100%;height:auto;max-height:78vh;margin:0 auto}
+.sare{background:#fff;border:1px solid var(--grid);border-radius:10px;padding:10px;overflow-x:auto}
+.sare svg{display:block;width:100%;height:auto;min-width:760px}
+.zoom svg{min-width:0;width:100%;height:340px}
+.sw{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}.sw button{width:22px;height:22px;border-radius:5px;border:1px solid rgba(0,0,0,.18);cursor:pointer;padding:0}
+.cl{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+table.spec{width:100%;border-collapse:collapse;font:14px "DM Sans",sans-serif}
+table.spec td{border-bottom:1px solid var(--grid);padding:7px 6px;vertical-align:middle}
+table.spec td i{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid rgba(0,0,0,.15);margin-right:8px;vertical-align:-2px}
+details.fs{border:1px solid var(--grid);border-radius:10px;background:var(--paper-2);padding:0 16px;margin:10px 0}
+details.fs summary{cursor:pointer;font:700 15px "DM Sans",sans-serif;padding:13px 0}
+.prose{max-width:780px}
+.hubg{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin:10px 0 26px}
+.hubg a{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:var(--paper-2);border:1px solid var(--grid);border-radius:14px;overflow:hidden;transition:transform .2s,border-color .2s}
+.hubg a:hover{transform:translateY(-3px);border-color:var(--chalk)}
+.hubg img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
+.hubg .b{padding:16px 18px 18px;display:grid;gap:8px}.hubg small{font:700 11px "DM Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--chalk)}
+.hubg b{font:700 20px "DM Sans",sans-serif}.hubg span{font:15px/1.5 "Source Serif 4",Georgia,serif;color:var(--muted)}.hubg em{font:700 14px "DM Sans",sans-serif;font-style:normal;color:var(--chalk)}
+.tile{display:none}
+@media (max-width:860px){.tl-h,.tool,.tool.wide,.hubg{grid-template-columns:1fr}.yc{grid-template-columns:1fr 1fr}.fg{grid-template-columns:1fr 1fr}}
+@media print{body{padding:0}nav,footer,.tabs,.noprint,.prose,.tl-h,details.fs,.fctab{display:none!important}.card{border:0;padding:0}
+ #p-tiles .tile{display:block;page-break-after:always}#p-tiles .tile p{font:10px "DM Sans",sans-serif;margin:2mm 0 0}
+ body.pt .wrap>*:not(#p-tiles){display:none!important}}
+@page{size:A4;margin:10mm}
+</style></head><body><div class="wrap">
+<nav><a class="logo" href="/"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/><path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="#a9481f" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Forecut</a>
+<div class="links"><a href="/">Home</a><a href="regions.html">Regions</a><a href="aw26.html">Seasons</a><a href="couture.html">Couture</a><a href="fabrics.html">Fabrics</a><a href="colour.html">Colour</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a><a href="search.html" aria-label="Search Forecut">⌕ Search</a></div></nav>
+<div class="eb">Free tool</div><div class="tl-h"><div><h1>Textile calculator</h1><p class="lead">Fabric needed per garment and per order, GSM and weight, yarn count, shrinkage and costing up to MRP, in one place.</p></div><div class="chiprow"><span>Metres and yards</span><span>₹ costing</span><span>Exact conversions</span><span>Nothing is uploaded</span></div></div><div id="tc"><div class="tabs noprint" role="tablist"><button data-tab="cons" role="tab">Fabric needed</button><button data-tab="gsm" role="tab">GSM &amp; weight</button><button data-tab="yarn" role="tab">Yarn count</button><button data-tab="shrink" role="tab">Shrinkage</button><button data-tab="cost" role="tab">Costing &amp; MRP</button></div><section data-pane="cons" class="tool"><div class="card"><h3>Garment and fabric</h3><div class="fg"><label class="full">Garment<select id="c-g"></select></label><label>Fabric width<select id="c-w"><option value="91">36&quot; (91 cm)</option><option value="112" selected>44&quot; (112 cm)</option><option value="114">45&quot; (114 cm)</option><option value="137">54&quot; (137 cm)</option><option value="147">58&quot; (147 cm)</option><option value="152">60&quot; (152 cm)</option></select></label><label>Size<select id="c-s"><option value="XS">XS</option><option value="S">S</option><option value="M" selected>M</option><option value="L">L</option><option value="XL">XL</option><option value="XXL">XXL</option><option value="3XL">3XL</option></select></label><label>Pieces to make<input type="number" id="c-q" value="50" step="1" min="1" inputmode="decimal"></label><label>Fabric price (₹ per metre, optional)<input type="number" id="c-p" value="" step="1" min="0" inputmode="decimal"></label><label>Shrinkage allowance %<input type="number" id="c-sh" value="3" step="0.5" min="0" inputmode="decimal"></label><label>Cutting wastage %<input type="number" id="c-wa" value="5" step="0.5" min="0" inputmode="decimal"></label><label class="full">Your own consumption per piece (m), optional<input type="number" id="c-own" step="0.05" min="0" placeholder="Leave empty to use the typical figure"></label></div><p class="hint" id="c-note"></p></div><div class="card res"><h3>You need</h3><div class="big"><span>Per piece</span><b><span id="c-per" style="font:inherit;color:inherit">–</span><small id="c-peryd"></small></b></div><div class="big"><span>For the whole order</span><b><span id="c-tot" style="font:inherit;color:inherit">–</span><small id="c-totyd"></small></b></div><div class="big"><span>Typical base consumption</span><b><span id="c-base" style="font:inherit;color:inherit">–</span></b></div><p class="hint" id="c-cost"></p><p class="hint">Typical figures are industry rules of thumb for the style shown. Confirm with your cutting master or a CAD marker before ordering bulk, especially for prints, stripes or checks that need matching.</p></div></section><section data-pane="gsm" class="tool" hidden><div><div class="card"><h3>GSM from a swatch</h3><div class="fg"><label>Swatch weight (g)<input type="number" id="g-g" value="1.8" step="0.01" min="0" inputmode="decimal"></label><label>Swatch<select id="g-shape"><option value="circle" selected>GSM cutter circle (100 cm²)</option><option value="rect">Rectangle I cut myself</option></select></label><div class="fg full" id="g-ab"><label>Length (cm)<input type="number" id="g-a" value="10" step="0.1" min="0" inputmode="decimal"></label><label>Width (cm)<input type="number" id="g-b" value="10" step="0.1" min="0" inputmode="decimal"></label></div></div><div class="big"><span>Fabric weight</span><b><span id="g-out" style="font:inherit;color:inherit">–</span><small id="g-oz"></small></b></div><p class="hint">Weigh a dry, conditioned swatch on a scale reading to 0.01 g. GSM = grams ÷ area in m².</p></div><div class="card"><h3>oz/yd² to GSM</h3><label>Ounces per square yard (e.g. denim 12 oz)<input type="number" id="o-oz" value="12" step="0.1" min="0" inputmode="decimal"></label><div class="big"><span>Equals</span><b><span id="o-out" style="font:inherit;color:inherit">–</span></b></div></div></div><div class="card"><h3>Weight and price of a roll or order</h3><div class="fg"><label>GSM<input type="number" id="w-gsm" value="180" step="1" min="0" inputmode="decimal"></label><label>Width<select id="w-w"><option value="91">36&quot; (91 cm)</option><option value="112">44&quot; (112 cm)</option><option value="114">45&quot; (114 cm)</option><option value="137">54&quot; (137 cm)</option><option value="147" selected>58&quot; (147 cm)</option><option value="152">60&quot; (152 cm)</option></select></label><label>Length (m)<input type="number" id="w-l" value="100" step="1" min="0" inputmode="decimal"></label><span></span><label>Price per kg (₹, optional)<input type="number" id="w-pk" value="" step="1" min="0" inputmode="decimal"></label><label>Price per metre (₹, optional)<input type="number" id="w-pm" value="" step="1" min="0" inputmode="decimal"></label></div><div class="big"><span>Total weight</span><b><span id="w-kg" style="font:inherit;color:inherit">–</span></b></div><div class="big"><span>Metres in one kg</span><b><span id="w-mpk" style="font:inherit;color:inherit">–</span></b></div><p class="hint" id="w-conv"></p><p class="hint">Weight per metre = GSM × width (m) ÷ 1000 kg. Knits are often sold by the kilo, wovens by the metre: this converts between them.</p></div></section><section data-pane="yarn" hidden><div class="card"><h3>Yarn count converter</h3><p class="hint" style="margin:0 0 12px">Type in any box; the others update. Ne and Nm are indirect (higher = finer); tex, denier and dtex are direct (higher = heavier).</p><div class="yc"><label>Ne (English cotton)<input type="number" id="y-ne" value="40" step="0.1" min="0" inputmode="decimal"></label><label>Nm (metric)<input type="number" id="y-nm" value="67.7" step="0.1" min="0" inputmode="decimal"></label><label>Tex<input type="number" id="y-tex" value="14.76" step="0.01" min="0" inputmode="decimal"></label><label>Denier<input type="number" id="y-den" value="132.86" step="0.01" min="0" inputmode="decimal"></label><label>dtex<input type="number" id="y-dtex" value="147.6" step="0.1" min="0" inputmode="decimal"></label></div></div><div class="card woven"><h3>Woven fabric GSM from construction</h3><div class="fg" style="grid-template-columns:repeat(3,1fr)"><label>Ends per inch (EPI)<input type="number" id="f-epi" value="132" step="1" min="0" inputmode="decimal"></label><label>Picks per inch (PPI)<input type="number" id="f-ppi" value="72" step="1" min="0" inputmode="decimal"></label><span></span><label>Warp count (Ne)<input type="number" id="f-wa" value="40" step="0.5" min="0" inputmode="decimal"></label><label>Weft count (Ne)<input type="number" id="f-we" value="40" step="0.5" min="0" inputmode="decimal"></label><span></span><label>Warp crimp %<input type="number" id="f-cw" value="8" step="0.5" min="0" inputmode="decimal"></label><label>Weft crimp %<input type="number" id="f-cf" value="6" step="0.5" min="0" inputmode="decimal"></label></div><div class="big"><span>Estimated fabric weight</span><b><span id="f-out" style="font:inherit;color:inherit">–</span><small id="f-split"></small></b></div><p class="hint">Greige estimate: g/m² = threads per inch × 39.37 × tex ÷ 1000 × (1 + crimp), for warp and weft. Finishing, sizing and washing change the final GSM.</p></div></section><section data-pane="shrink" class="tool" hidden><div class="card"><h3>Shrinkage from a wash test</h3><div class="fg"><label>Marked length before washing (cm)<input type="number" id="s-b" value="50" step="0.1" min="0" inputmode="decimal"></label><label>Length after washing and drying (cm)<input type="number" id="s-a" value="48.5" step="0.1" min="0" inputmode="decimal"></label></div><div class="big"><span>Shrinkage</span><b><span id="s-out" style="font:inherit;color:inherit">–</span></b></div><p class="hint" id="s-verdict"></p><p class="hint">Mark 50 × 50 cm on the fabric, wash and dry it as the customer will, measure again. Test warp and weft separately.</p></div><div class="card"><h3>Allow for it when cutting</h3><div class="fg"><label>Finished length you need (cm)<input type="number" id="s-f" value="110" step="0.5" min="0" inputmode="decimal"></label><label>Expected shrinkage %<input type="number" id="s-p" value="3" step="0.5" min="0" inputmode="decimal"></label></div><div class="big"><span>Cut length</span><b><span id="s-cut" style="font:inherit;color:inherit">–</span></b></div><p class="hint">Cut length = finished length ÷ (1 − shrinkage).</p></div></section><section data-pane="cost" class="tool" hidden><div class="card"><h3>Cost of one garment</h3><div class="fg"><label>Fabric consumption (m)<input type="number" id="k-c" value="2.5" step="0.05" min="0" inputmode="decimal"></label><label>Fabric price (₹ per m)<input type="number" id="k-p" value="180" step="1" min="0" inputmode="decimal"></label><label>Trims and labels (₹)<input type="number" id="k-t" value="60" step="1" min="0" inputmode="decimal"></label><label>Cutting, making and finishing (₹)<input type="number" id="k-cmt" value="220" step="1" min="0" inputmode="decimal"></label><label>Packing (₹)<input type="number" id="k-pk" value="25" step="1" min="0" inputmode="decimal"></label><label>Overheads and rejects %<input type="number" id="k-oh" value="10" step="0.5" min="0" inputmode="decimal"></label><label>Your margin on cost %<input type="number" id="k-m" value="60" step="1" min="0" inputmode="decimal"></label><label>Retailer or marketplace margin %<input type="number" id="k-r" value="40" step="1" min="0" inputmode="decimal"></label><label>GST %<input type="number" id="k-g" value="5" step="0.5" min="0" inputmode="decimal"></label></div><div class="btns"><button type="button" id="k-from">Use the fabric figure from “Fabric needed”</button></div></div><div class="card res"><h3>Price build-up</h3><div class="big"><span>Fabric cost</span><b><span id="k-fab" style="font:inherit;color:inherit">–</span></b></div><div class="big"><span>Total cost</span><b><span id="k-cost" style="font:inherit;color:inherit">–</span></b></div><div class="big"><span>Your selling price</span><b><span id="k-ws" style="font:inherit;color:inherit">–</span></b></div><div class="big"><span>Retail price before tax</span><b><span id="k-rt" style="font:inherit;color:inherit">–</span></b></div><div class="big"><span>Suggested MRP (incl. GST)</span><b><span id="k-mrp" style="font:inherit;color:inherit">–</span></b></div><div class="kbar" id="k-bar"></div><div class="kkey" id="k-key"></div><p class="hint">GST on garments depends on the sale value and can change; check the current rate for your price band. MRP is rounded to end in 9.</p></div></section></div><div class="prose"><h2>How to use the textile calculator</h2><p><b>Fabric needed</b> starts from typical consumption for a size M garment at 44 and 58 inch widths, then adjusts for the width you choose, the size, shrinkage and cutting wastage, and multiplies by the number of pieces. If your pattern master has already laid a marker, type your own consumption per piece and the calculator applies only shrinkage, wastage and quantity. Add a price per metre to see the fabric cost per piece and for the order.</p><p><b>GSM and weight</b> works out grams per square metre from a swatch, converts ounces per square yard (common for denim) to GSM, and turns a GSM, width and length into the weight of a roll or an order. It also converts between price per kilo and price per metre, which helps when a knit mill quotes by the kilo and your costing is by the metre.</p><p><b>Yarn count</b> converts between Ne, Nm, tex, denier and dtex using the standard formulas: tex = 590.5 ÷ Ne, Nm = 1000 ÷ tex, denier = 9 × tex and dtex = 10 × tex. The woven estimate gives a greige fabric weight from ends and picks per inch, yarn counts and crimp.</p><p><b>Shrinkage</b> turns a wash test into a percentage and tells you how much longer to cut. <b>Costing and MRP</b> adds fabric, trims, making, packing and overheads, then your margin, the retailer's margin and GST, to suggest a retail price.</p><h2>Good to know</h2><ul><li>Wider fabric is usually cheaper per garment even when the price per metre is higher: compare the fabric cost per piece, not the price per metre.</li><li>Directional prints, one-way pile (velvet, corduroy) and stripes or checks that must match can add 10–20% to consumption.</li><li>Order a little extra for shade variation between rolls, and cut a whole order from the same dye lot where you can.</li></ul><p>Related: the <a href="fabrics.html">Fabrics hub</a> for weaves, knits and GSM ranges, and the <a href="india-textile-craft-guide.html">India textile and craft sourcing guide</a>.</p></div><footer><span>© 2026 Forecut · <a href="mailto:hello@forecut.in">hello@forecut.in</a></span>
+<span class="fl"><a href="couture.html">Couture</a><a href="fabrics.html">Fabrics</a><a href="colour.html">Colour</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a><a href="celebrity-style.html">Celebrity style</a><a href="about.html">About</a><a href="method.html">Methodology</a><a href="contact.html">Contact</a><a href="terms.html">Terms &amp; Conditions</a><a href="privacy.html">Privacy Policy</a></span></footer>
+<script>/* Forecut tools: shared helpers (nearest Pantone TCX by CIEDE2000, formatting, downloads, saved state). */
+var FC = window.FC || {};
+FC.$ = function (s, r) { return (r || document).querySelector(s); };
+FC.$$ = function (s, r) { return [].slice.call((r || document).querySelectorAll(s)); };
+FC.num = function (el) { var v = parseFloat(String(el.value).replace(',', '.')); return isFinite(v) ? v : 0; };
+FC.fmt = function (v, d) { if (!isFinite(v)) return '–'; return v.toLocaleString('en-IN', { minimumFractionDigits: d === undefined ? 2 : d, maximumFractionDigits: d === undefined ? 2 : d }); };
+FC.inr = function (v) { return isFinite(v) ? '₹' + v.toLocaleString('en-IN', { maximumFractionDigits: 0 }) : '–'; };
+FC.save = function (k, v) { try { localStorage.setItem('fc-tool-' + k, JSON.stringify(v)); } catch (e) { } };
+FC.load = function (k) { try { return JSON.parse(localStorage.getItem('fc-tool-' + k) || 'null'); } catch (e) { return null; } };
+FC.download = function (name, data, type) {
+  var b = data instanceof Blob ? data : new Blob([data], { type: type || 'text/plain' });
+  var a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+};
+FC.svgToPng = function (svg, w, h, name, bg) {
+  var s = new XMLSerializer().serializeToString(svg);
+  var img = new Image(); img.onload = function () {
+    var c = document.createElement('canvas'); c.width = w; c.height = h; var x = c.getContext('2d');
+    if (bg) { x.fillStyle = bg; x.fillRect(0, 0, w, h); } x.drawImage(img, 0, 0, w, h);
+    c.toBlob(function (b) { FC.download(name, b); }, 'image/png');
+  };
+  img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(s);
+};
+/* tabs: buttons [data-tab] inside .tabs, panels [data-pane] */
+FC.tabs = function (root) {
+  var bs = FC.$$('[data-tab]', root), ps = FC.$$('[data-pane]', root);
+  function show(id, push) {
+    bs.forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === id ? 'true' : 'false'); });
+    ps.forEach(function (p) { p.hidden = p.dataset.pane !== id; });
+    if (push) { try { history.replaceState(null, '', '#' + id); } catch (e) { } }
+  }
+  bs.forEach(function (b) { b.addEventListener('click', function () { show(b.dataset.tab, true); }); });
+  var h = location.hash.slice(1); show(bs.some(function (b) { return b.dataset.tab === h; }) ? h : bs[0].dataset.tab);
+};
+/* Pantone TCX nearest match (same method as the site's Python: CIEDE2000 against public screen approximations) */
+FC._tcx = null;
+FC.tcx = function (cb) {
+  if (FC._tcx) return cb(FC._tcx);
+  fetch('/tcx.json').then(function (r) { return r.json(); }).then(function (d) {
+    FC._tcx = Object.keys(d).map(function (k) { return [k, d[k][0], FC.lab(d[k][1])]; }); cb(FC._tcx);
+  }).catch(function () { cb([]); });
+};
+FC.lab = function (h) {
+  h = h.replace('#', ''); var c = [0, 2, 4].map(function (i) { var v = parseInt(h.substr(i, 2), 16) / 255; return v > .04045 ? Math.pow((v + .055) / 1.055, 2.4) : v / 12.92; });
+  var x = (c[0] * .4124 + c[1] * .3576 + c[2] * .1805) / .95047, y = c[0] * .2126 + c[1] * .7152 + c[2] * .0722, z = (c[0] * .0193 + c[1] * .1192 + c[2] * .9505) / 1.08883;
+  function f(t) { return t > .008856 ? Math.cbrt(t) : 7.787 * t + 16 / 116; }
+  return [116 * f(y) - 16, 500 * (f(x) - f(y)), 200 * (f(y) - f(z))];
+};
+FC.de = function (A, B) {
+  var r = Math.PI / 180, L1 = A[0], a1 = A[1], b1 = A[2], L2 = B[0], a2 = B[1], b2 = B[2];
+  var C1 = Math.hypot(a1, b1), C2 = Math.hypot(a2, b2), Cb = (C1 + C2) / 2, G = .5 * (1 - Math.sqrt(Math.pow(Cb, 7) / (Math.pow(Cb, 7) + Math.pow(25, 7))));
+  var a1p = (1 + G) * a1, a2p = (1 + G) * a2, C1p = Math.hypot(a1p, b1), C2p = Math.hypot(a2p, b2);
+  var h1p = (Math.atan2(b1, a1p) / r + 360) % 360, h2p = (Math.atan2(b2, a2p) / r + 360) % 360, dL = L2 - L1, dC = C2p - C1p, dh;
+  if (C1p * C2p === 0) dh = 0; else { dh = h2p - h1p; if (dh > 180) dh -= 360; else if (dh < -180) dh += 360; }
+  var dH = 2 * Math.sqrt(C1p * C2p) * Math.sin(dh * r / 2), Lp = (L1 + L2) / 2, Cp = (C1p + C2p) / 2, hp;
+  if (C1p * C2p === 0) hp = h1p + h2p; else if (Math.abs(h1p - h2p) <= 180) hp = (h1p + h2p) / 2; else hp = (h1p + h2p < 360) ? (h1p + h2p + 360) / 2 : (h1p + h2p - 360) / 2;
+  var T = 1 - .17 * Math.cos((hp - 30) * r) + .24 * Math.cos(2 * hp * r) + .32 * Math.cos((3 * hp + 6) * r) - .2 * Math.cos((4 * hp - 63) * r);
+  var SL = 1 + .015 * Math.pow(Lp - 50, 2) / Math.sqrt(20 + Math.pow(Lp - 50, 2)), SC = 1 + .045 * Cp, SH = 1 + .015 * Cp * T;
+  var RT = -2 * Math.sqrt(Math.pow(Cp, 7) / (Math.pow(Cp, 7) + Math.pow(25, 7))) * Math.sin(60 * Math.exp(-Math.pow((hp - 275) / 25, 2)) * r);
+  return Math.sqrt(Math.pow(dL / SL, 2) + Math.pow(dC / SC, 2) + Math.pow(dH / SH, 2) + RT * (dC / SC) * (dH / SH));
+};
+FC.nearest = function (hex, list) {
+  var t = FC.lab(hex), best = null, bd = 1e9;
+  list.forEach(function (e) { var d = FC.de(t, e[2]); if (d < bd) { bd = d; best = e; } });
+  return best ? { code: best[0] + ' TCX', name: best[1].replace(/-/g, ' ').replace(/\b\w/g, function (m) { return m.toUpperCase(); }), de: Math.round(bd * 10) / 10 } : null;
+};
+window.FC = FC;
+window.FC_GARMENTS=[["Men's shirt, full sleeve", 2.5, 1.75, 0, "Typical for a regular-fit shirt with a collar and cuffs, size M."], ["Men's shirt, half sleeve", 2.0, 1.5, 0, "Regular fit, size M."], ["Women's kurta, knee length", 2.5, 1.75, 0, "Straight or A-line kurta with 3/4 sleeves, size M."], ["Women's kurta, calf length / Anarkali", 3.5, 2.6, 0, "Longer kurtas and gentle flares; full Anarkalis with many panels can need 5 m or more."], ["Men's kurta, full sleeve", 2.75, 2.0, 0, "Knee-length kurta, size M."], ["Trousers / pants", 2.3, 1.25, 0, "At 44\" both legs rarely fit across one width, so two lengths are usually needed."], ["Palazzo pants", 2.4, 1.8, 0, "Wide-leg palazzo, ankle length."], ["Salwar / churidar", 2.5, 2.0, 0, "Churidars are often cut on the bias, which uses more fabric."], ["Saree blouse", 0.8, 0.6, 0, "Standard blouse piece; long sleeves or a peplum need about 1\u20131.2 m."], ["Lehenga skirt, kalidar", 4.5, 3.5, 0, "Flare is the big variable: a very full lehenga can need 6\u20138 m."], ["A-line dress, knee length", 2.2, 1.6, 0, "Sleeveless or cap sleeve, size M."], ["Nehru jacket / waistcoat", 1.6, 1.25, 0, "Outer fabric only; add the same again for lining."], ["Blazer (outer fabric)", 2.4, 1.6, 0, "Single-breasted, size M; lining and interlining extra."], ["Dupatta / stole", 2.5, 2.5, 1, "A dupatta is a fixed length (about 2.25\u20132.5 m); width sets its breadth."]];/* Forecut textile calculator */
+(function () {
+  var $ = FC.$, $$ = FC.$$, n = FC.num;
+  FC.tabs($('#tc'));
+  function bind(pane, fn) { $$('input,select', pane).forEach(function (e) { e.addEventListener('input', fn); e.addEventListener('change', fn); }); fn(); }
+
+  /* 1. Fabric consumption: typical size-M estimates at 44"/112 cm and 58"/147 cm width */
+  var G = window.FC_GARMENTS, SIZE = { XS: .9, S: .95, M: 1, L: 1.06, XL: 1.12, XXL: 1.2, '3XL': 1.28 };
+  var gs = $('#c-g'); G.forEach(function (g, i) { var o = document.createElement('option'); o.value = i; o.textContent = g[0]; gs.appendChild(o); });
+  function cons(g, wcm) {
+    var a = g[1], b = g[2]; if (g[3]) return a;               // fixed-length piece (dupatta)
+    if (wcm >= 147) return b * Math.pow(147 / wcm, .5);
+    if (wcm >= 112) return a + (b - a) * (wcm - 112) / 35;    // between 44" and 58"
+    return a * Math.pow(112 / wcm, .85);                       // narrower than 44"
+  }
+  bind($('[data-pane=cons]'), function () {
+    var g = G[+gs.value], w = n($('#c-w')), sz = SIZE[$('#c-s').value], q = Math.max(1, n($('#c-q'))), sh = n($('#c-sh')) / 100, ws = n($('#c-wa')) / 100, pr = n($('#c-p'));
+    var own = n($('#c-own')), base = own > 0 ? own : cons(g, w) * (g[3] ? 1 : sz);
+    var per = base / (1 - Math.min(sh, .5)) * (1 + ws), tot = per * q;
+    $('#c-note').textContent = g[4];
+    $('#c-per').textContent = FC.fmt(per) + ' m'; $('#c-peryd').textContent = FC.fmt(per * 1.0936) + ' yd';
+    $('#c-tot').textContent = FC.fmt(tot, 1) + ' m'; $('#c-totyd').textContent = FC.fmt(tot * 1.0936, 1) + ' yd';
+    $('#c-base').textContent = FC.fmt(base) + ' m';
+    $('#c-cost').textContent = pr > 0 ? FC.inr(per * pr) + ' a piece · ' + FC.inr(tot * pr) + ' in all' : 'Add a price per metre to see the fabric cost';
+  });
+
+  /* 2. GSM & weight */
+  bind($('[data-pane=gsm]'), function () {
+    var g = n($('#g-g')), sh = $('#g-shape').value, a = sh === 'circle' ? 100 : n($('#g-a')) * n($('#g-b'));
+    var gsm = a > 0 ? g / (a / 10000) : 0; $('#g-out').textContent = gsm ? FC.fmt(gsm, 0) + ' GSM' : '–';
+    $('#g-oz').textContent = gsm ? FC.fmt(gsm / 33.906) + ' oz/yd²' : '';
+    $('#g-ab').hidden = sh === 'circle';
+    var G2 = n($('#w-gsm')), W = n($('#w-w')) / 100, L = n($('#w-l')), pk = n($('#w-pk')), pm = n($('#w-pm'));
+    var kgm = G2 * W / 1000;
+    $('#w-kg').textContent = kgm ? FC.fmt(kgm * L, 2) + ' kg' : '–';
+    $('#w-mpk').textContent = kgm ? FC.fmt(1 / kgm, 2) + ' m per kg' : '–';
+    $('#w-conv').textContent = kgm ? (pk ? FC.inr(pk * kgm) + ' per metre (from ₹' + pk + '/kg)' : '') + (pk && pm ? ' · ' : '') + (pm ? FC.inr(pm / kgm) + ' per kg (from ₹' + pm + '/m)' : '') : '';
+    var oz = n($('#o-oz')); $('#o-out').textContent = oz ? FC.fmt(oz * 33.906, 0) + ' GSM' : '–';
+  });
+
+  /* 3. Yarn count */
+  var Y = ['ne', 'nm', 'tex', 'den', 'dtex'];
+  function fromTex(t) { return { ne: 590.5 / t, nm: 1000 / t, tex: t, den: 9 * t, dtex: 10 * t }; }
+  function toTex(k, v) { return { ne: 590.5 / v, nm: 1000 / v, tex: v, den: v / 9, dtex: v / 10 }[k]; }
+  Y.forEach(function (k) {
+    $('#y-' + k).addEventListener('input', function () {
+      var v = n(this); if (!(v > 0)) return; var r = fromTex(toTex(k, v));
+      Y.forEach(function (j) { if (j !== k) $('#y-' + j).value = +r[j].toFixed(j === 'ne' || j === 'nm' ? 1 : 2); });
+    });
+  });
+  bind($('[data-pane=yarn] .woven'), function () {
+    var epi = n($('#f-epi')), ppi = n($('#f-ppi')), wa = n($('#f-wa')), we = n($('#f-we')), cw = n($('#f-cw')) / 100, cf = n($('#f-cf')) / 100;
+    if (!(wa > 0 && we > 0)) { $('#f-out').textContent = '–'; return; }
+    var gw = epi * 39.37 * (590.5 / wa) / 1000 * (1 + cw), gf = ppi * 39.37 * (590.5 / we) / 1000 * (1 + cf);
+    $('#f-out').textContent = FC.fmt(gw + gf, 0) + ' GSM'; $('#f-split').textContent = 'Warp ' + FC.fmt(gw, 0) + ' + weft ' + FC.fmt(gf, 0) + ' g/m², before finishing';
+  });
+
+  /* 4. Shrinkage */
+  bind($('[data-pane=shrink]'), function () {
+    var b = n($('#s-b')), a = n($('#s-a')), s = b > 0 ? (b - a) / b * 100 : 0;
+    $('#s-out').textContent = b > 0 && a > 0 ? FC.fmt(s, 1) + '%' : '–';
+    $('#s-verdict').textContent = b > 0 && a > 0 ? (s <= 3 ? 'Within the 3% most buyers accept for wovens.' : s <= 5 ? 'Typical for untreated cotton and knits; allow for it when cutting.' : 'High: consider pre-shrinking (sanforising or washing) before cutting.') : '';
+    var f = n($('#s-f')), p = n($('#s-p')) / 100; $('#s-cut').textContent = f > 0 && p < 1 ? FC.fmt(f / (1 - p), 1) + ' cm to cut' : '–';
+  });
+
+  /* 5. Costing */
+  bind($('[data-pane=cost]'), function () {
+    var fab = n($('#k-c')) * n($('#k-p')), tr = n($('#k-t')), cmt = n($('#k-cmt')), pk = n($('#k-pk')), oh = n($('#k-oh')) / 100;
+    var cost = (fab + tr + cmt + pk) * (1 + oh), ws = cost * (1 + n($('#k-m')) / 100), rt = ws * (1 + n($('#k-r')) / 100), gst = n($('#k-g')) / 100, mrp = rt * (1 + gst);
+    $('#k-fab').textContent = FC.inr(fab); $('#k-cost').textContent = FC.inr(cost); $('#k-ws').textContent = FC.inr(ws); $('#k-rt').textContent = FC.inr(rt); $('#k-mrp').textContent = FC.inr(Math.ceil(mrp / 10) * 10 - 1);
+    var tot = fab + tr + cmt + pk || 1, parts = [['Fabric', fab, '#1f3d33'], ['Trims', tr, '#a9481f'], ['CMT', cmt, '#d99a00'], ['Packing', pk, '#6d4fc2']];
+    $('#k-bar').innerHTML = parts.map(function (p) { return '<i style="flex:' + Math.max(p[1], .0001) + ';background:' + p[2] + '" title="' + p[0] + '"></i>'; }).join('');
+    $('#k-key').innerHTML = parts.map(function (p) { return '<span><i style="background:' + p[2] + '"></i>' + p[0] + ' ' + Math.round(p[1] / tot * 100) + '%</span>'; }).join('');
+  });
+  $('#k-from').addEventListener('click', function () {
+    var t = $('#c-per').textContent.match(/[\d.,]+/), p = n($('#c-p'));
+    if (t) $('#k-c').value = parseFloat(t[0].replace(/,/g, '')); if (p) $('#k-p').value = p; $('#k-c').dispatchEvent(new Event('input'));
+  });
+})();
+</script></div></body></html>

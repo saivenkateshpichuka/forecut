@@ -1,5 +1,5 @@
-"""Write the free Forecut tools: ../tools.html (hub), ../textile-calculator.html, ../pattern-blocks.html, ../saree-designer.html,
-plus ../tcx.json (Pantone TCX screen approximations used for nearest-colour matching in the browser).
+"""PREVIEW ONLY (not part of build.sh, not deployed): writes tools_preview/tools.html (hub), textile-calculator.html and pattern-blocks.html
+for review. To publish later: point OUT at ".." and add this script to build.sh after legal.py.
 Everything runs in the browser; nothing is sent anywhere. Shared header/footer come from legal.py."""
 import html, json, shutil, os
 import reports_data as R
@@ -8,6 +8,8 @@ ns = {}
 exec(src[:src.index('P = {}')], ns)
 HEAD, FOOT = ns['HEAD'], ns['FOOT']
 E = html.escape
+OUT = 'tools_preview/'
+os.makedirs(OUT, exist_ok=True)
 JS = lambda n: open(os.path.join('tools_js', n)).read()
 
 CSS = '''<style>
@@ -59,7 +61,7 @@ table.spec td i{display:inline-block;width:14px;height:14px;border-radius:3px;bo
 details.fs{border:1px solid var(--grid);border-radius:10px;background:var(--paper-2);padding:0 16px;margin:10px 0}
 details.fs summary{cursor:pointer;font:700 15px "DM Sans",sans-serif;padding:13px 0}
 .prose{max-width:780px}
-.hubg{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:10px 0 26px}
+.hubg{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin:10px 0 26px}
 .hubg a{display:flex;flex-direction:column;text-decoration:none;color:inherit;background:var(--paper-2);border:1px solid var(--grid);border-radius:14px;overflow:hidden;transition:transform .2s,border-color .2s}
 .hubg a:hover{transform:translateY(-3px);border-color:var(--chalk)}
 .hubg img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}
@@ -75,7 +77,7 @@ details.fs summary{cursor:pointer;font:700 15px "DM Sans",sans-serif;padding:13p
 
 
 def page(fn, title, body, js=''):
-    open('../' + fn, 'w').write(HEAD.format(title=E(title)).replace('</style>', '</style>' + CSS, 1) + body + FOOT.replace('</div></body>', (('<script>' + JS('common.js') + js + '</script>') if js else '') + '</div></body>'))
+    open(OUT + fn, 'w').write(HEAD.format(title=E(title)).replace('</style>', '</style>' + CSS, 1) + body + FOOT.replace('</div></body>', (('<script>' + JS('common.js') + js + '</script>') if js else '') + '</div></body>'))
 
 
 def num(id_, lab, val, step='any', mn='0', extra=''):
@@ -94,9 +96,7 @@ def big(lab, id_, sub=''):
 TOOLS = [('textile-calculator.html', 'Textile calculator', 'Fabric, GSM, yarn & costing',
           'Fabric needed per garment and per order, GSM from a swatch, weight and price per kg or metre, yarn count, shrinkage and garment costing up to MRP.', 'hub-fabrics-art-forecast'),
          ('pattern-blocks.html', 'Pattern block maker', 'Kurta, sleeve & skirt blocks',
-          'Enter measurements and get printable kurta (front, back, sleeve) and straight or A-line skirt blocks at true scale, with seam allowance and tiled A4 printing.', 'couture-bespoke-tailoring-2026'),
-         ('saree-designer.html', 'Saree layout designer', 'Body, border, pallu & blouse',
-          'Plan a saree to scale: lengths, border style, body motifs, pallu and blouse piece, with colours from the Forecut palette and the nearest Pantone TCX for each.', 'bhagalpur-silk')]
+          'Enter measurements and get printable kurta (front, back, sleeve) and straight or A-line skirt blocks at true scale, with seam allowance and tiled A4 printing.', 'couture-bespoke-tailoring-2026')]
 hub = ('<div class="eb">Free tools</div><div class="tl-h"><div><h1>Design and production tools</h1>'
        '<p class="lead">Quick, practical calculators and planners for designers, students, D2C brands and production teams. They are free, need no sign-in, and run entirely in your browser: nothing you type is sent to us.</p></div>'
        '<div class="chiprow"><span>Free</span><span>No sign-in</span><span>Works on phone</span><span>Metric and imperial</span><span>Download SVG, PNG or print</span></div></div>'
@@ -104,11 +104,10 @@ hub = ('<div class="eb">Free tools</div><div class="tl-h"><div><h1>Design and pr
        '<div class="prose"><h2>What each tool is for</h2>'
        '<p><b>The textile calculator</b> answers the questions that come up every day between a design team and a fabric supplier: how many metres to order for a run of kurtas, what a 180 GSM fabric weighs per metre, what a price per kilo means per metre, how a 40s cotton compares with a 150 denier polyester, how much to allow for shrinkage, and what a garment must sell for once fabric, trims, making, margins and GST are added.</p>'
        '<p><b>The pattern block maker</b> drafts simple blocks from your own measurements: a kurta or tunic front and back with a sleeve whose cap is matched to the armhole, and a straight or A-line skirt with darts. Blocks are drawn at true scale in centimetres, so you can download them as SVG for a plotter or print them on A4 sheets and tape them together. They are starting points for a first toile, not finished production patterns.</p>'
-       '<p><b>The saree layout designer</b> lets you plan a saree before it goes to the loom or the printer: total length and width, blouse piece, body, pallu and border widths, border style, body motifs and pallu design, all drawn in proportion. Colours can come from the Forecut India colour forecast, and the spec sheet lists each colour with its hex value and nearest Pantone TCX reference.</p>'
-       '<h2>How accurate are they?</h2>'
-       '<p>Formulas such as GSM, yarn count and weight conversions are exact. Fabric consumption figures are typical industry estimates for a size M garment and change with style, fabric direction, prints that need matching and how tightly a marker is laid, so treat them as a planning figure and confirm with your cutting master or CAD marker before ordering bulk. Pattern blocks use standard, simplified drafting and should always be tested in calico or muslin first. Pantone matches are screen approximations; confirm colours against a physical TCX book or lab dip.</p>'
+              '<h2>How accurate are they?</h2>'
+       '<p>Formulas such as GSM, yarn count and weight conversions are exact. Fabric consumption figures are typical industry estimates for a size M garment and change with style, fabric direction, prints that need matching and how tightly a marker is laid, so treat them as a planning figure and confirm with your cutting master or CAD marker before ordering bulk. Pattern blocks use standard, simplified drafting and should always be tested in calico or muslin first.</p>'
        '<p>Ideas for another tool? Write to <a href="mailto:hello@forecut.in">hello@forecut.in</a>.</p></div>')
-page('tools.html', 'Free Fashion Design Tools · Textile Calculator, Pattern Blocks, Saree Designer · Forecut', hub)
+page('tools.html', 'Free Fashion Design Tools · Textile Calculator & Pattern Blocks · Forecut', hub)
 
 # ------------------------------------------------------------------ textile calculator
 GARMENTS = [  # name, metres at 44"/112 cm, metres at 58"/147 cm, fixed length?, note
@@ -205,56 +204,4 @@ pb = ('<div class="eb">Free tool</div><div class="tl-h"><div><h1>Pattern block m
       '<h2>Limits</h2><p>These are simplified blocks for learning, quick samples and first toiles. They do not include grading, facings, plackets, pockets or collars, and every body is different. For production, a pattern maker should true the seams, add notches and grade the pattern across sizes. See also our guides on <a href="fabrics.html">fabrics</a> and <a href="couture.html">couture construction</a>.</p></div>')
 page('pattern-blocks.html', 'Pattern Block Maker · Kurta, Sleeve & Skirt Patterns from Your Measurements · Forecut', pb, JS('pattern.js'))
 
-# ------------------------------------------------------------------ saree designer
-PALETTE = [(c[0], c[1]) for c in R.COLOURS] + [('#C9A54A', 'Gold zari'), ('#BFC1C2', 'Silver zari'), ('#F3ECDC', 'Ivory'), ('#1C1714', 'Black'), ('#B5522B', 'Rust'), ('#2F6FE0', 'Royal blue')]
-C = {c[1]: c[0] for c in R.COLOURS}
-def cf(name, dflt): return C.get(name, dflt)
-PRESETS = [
-    {'n': 'Temple border silk', 'v': {'len': 630, 'wid': 114, 'bl': 80, 'pl': 90, 'bw': 14, 'bs': 'temple', 'zl': True, 'bp': 'butta', 'mk': 'flower', 'sp': 14, 'ms': 4, 'ps': 'motifs', 'fr': True, 'bob': True,
-                                       'cbd': cf('Emerald', '#0f6b4f'), 'cb': cf('Deep wine', '#6e1f33'), 'cp': cf('Deep wine', '#6e1f33'), 'cm': '#C9A54A', 'ca': '#C9A54A', 'cbl': cf('Deep wine', '#6e1f33')}},
-    {'n': 'Brocade jaal', 'v': {'len': 630, 'wid': 114, 'bl': 80, 'pl': 100, 'bw': 10, 'bs': 'stripes', 'zl': True, 'bp': 'jaal', 'mk': 'paisley', 'sp': 10, 'ms': 4, 'ps': 'motifs', 'fr': False, 'bob': True,
-                                'cbd': cf('Deep wine', '#6e1f33'), 'cb': '#C9A54A', 'cp': '#C9A54A', 'cm': '#C9A54A', 'ca': cf('Deep wine', '#6e1f33'), 'cbl': cf('Deep wine', '#6e1f33')}},
-    {'n': 'Handloom stripe, light', 'v': {'len': 550, 'wid': 112, 'bl': 0, 'pl': 70, 'bw': 4, 'bs': 'plain', 'zl': True, 'bp': 'zari', 'mk': 'dot', 'sp': 6, 'ms': 2, 'ps': 'stripes', 'fr': True, 'bob': False,
-                                          'cbd': '#F3ECDC', 'cb': '#C9A54A', 'cp': '#F3ECDC', 'cm': '#C9A54A', 'ca': '#B5522B', 'cbl': '#F3ECDC'}},
-    {'n': 'Checks with two-colour border', 'v': {'len': 630, 'wid': 114, 'bl': 80, 'pl': 80, 'bw': 9, 'bs': 'gj', 'zl': False, 'bp': 'checks', 'mk': 'dot', 'sp': 8, 'ms': 3, 'ps': 'plain', 'fr': True, 'bob': True,
-                                                 'cbd': '#B5522B', 'cb': cf('Sapphire', '#1f4e9c'), 'cp': cf('Sapphire', '#1f4e9c'), 'cm': '#F3ECDC', 'ca': '#C9A54A', 'cbl': cf('Sapphire', '#1f4e9c')}},
-    {'n': 'Nine-yard (nauvari) plain', 'v': {'len': 820, 'wid': 114, 'bl': 0, 'pl': 100, 'bw': 8, 'bs': 'zigzag', 'zl': True, 'bp': 'plain', 'mk': 'dot', 'sp': 8, 'ms': 2, 'ps': 'temple', 'fr': False, 'bob': False,
-                                             'cbd': cf('Emerald', '#0f6b4f'), 'cb': '#B5522B', 'cp': '#B5522B', 'cm': '#C9A54A', 'ca': '#C9A54A', 'cbl': '#B5522B'}},
-]
-
-
-def col(id_, lab):
-    return f'<label>{lab}<input type="color" id="s-{id_}"><span class="sw" data-for="s-{id_}"></span></label>'
-
-
-sd = ('<div class="eb">Free tool</div><div class="tl-h"><div><h1>Saree layout designer</h1><p class="lead">Plan a saree to scale: blouse piece, body, pallu and borders, motifs and colours, with a spec sheet you can share with a weaver or printer.</p></div>'
-      '<div class="chiprow"><span>True proportions</span><span>Forecut India palette</span><span>Nearest Pantone TCX</span><span>SVG, PNG and print</span></div></div>'
-      '<div class="sare" id="s-out" style="margin:0 0 18px"></div><div class="tool wide" id="sd"><div class="noprint">'
-      '<div class="card"><h3>Start from</h3><label>Style<select id="s-preset"></select></label><p class="hint">Pick a starting layout, then change anything. Your last design is remembered on this device.</p></div>'
-      '<details class="fs" open><summary>Size and sections</summary><div class="fg" style="padding-bottom:14px">' + sel('s-len', 'Total length', [('550', '5.5 m (6 yards), no blouse'), ('630', '6.3 m with blouse piece'), ('600', '6.0 m'), ('820', '8.2 m (nine-yard)')], '630') +
-      sel('s-wid', 'Width', [('112', '44" (112 cm)'), ('114', '45" (114 cm)'), ('117', '46" (117 cm)'), ('120', '47" (120 cm)')], '114') +
-      num('s-bl', 'Blouse piece (cm, 0 = none)', 80, '5') + num('s-pl', 'Pallu length (cm)', 90, '5') + num('s-bw', 'Border width (cm)', 12, '0.5') + '<label class="ck"><input type="checkbox" id="s-bob"> Border on blouse piece</label></div></details>'
-      '<details class="fs" open><summary>Border, body and pallu</summary><div class="fg" style="padding-bottom:14px">'
-      + sel('s-bs', 'Border style', [('plain', 'Plain band'), ('temple', 'Temple (triangles)'), ('zigzag', 'Zigzag'), ('stripes', 'Zari lines'), ('gj', 'Two-colour (ganga-jamuna)')]) + '<label class="ck"><input type="checkbox" id="s-zl"> Zari edge lines</label>'
-      + sel('s-bp', 'Body pattern', [('plain', 'Plain'), ('butta', 'Butta (scattered motifs)'), ('stripes', 'Stripes'), ('checks', 'Checks'), ('jaal', 'Jaal (lattice)'), ('zari', 'Zari dots')]) + sel('s-mk', 'Motif', [('flower', 'Flower'), ('paisley', 'Paisley (mango)'), ('dot', 'Dot'), ('diamond', 'Diamond')])
-      + num('s-sp', 'Repeat size (cm)', 12, '0.5') + num('s-ms', 'Motif size (cm)', 4, '0.5') + sel('s-ps', 'Pallu', [('plain', 'Plain'), ('stripes', 'Stripes'), ('motifs', 'Motif rows'), ('temple', 'Temple edge')]) + '<label class="ck"><input type="checkbox" id="s-fr"> Tassels on the pallu end</label></div></details>'
-      '<details class="fs" open><summary>Colours</summary><div class="cl" style="padding-bottom:14px">' + col('cbd', 'Body') + col('cb', 'Border') + col('cp', 'Pallu') + col('cm', 'Motif / zari') + col('ca', 'Accent') + col('cbl', 'Blouse') + '</div>'
-      '<p class="hint" style="margin:-4px 0 14px">Swatches are the Forecut India Colour Forecast 2026–28 plus zari and neutrals.</p></details></div>'
-      '<div><div class="card"><h3>Pallu and border close-up</h3><div class="sare zoom" id="s-zoom"></div></div>'
-      '<div class="btns noprint"><button type="button" class="p" id="s-png">Download PNG</button><button type="button" id="s-svg">Download SVG</button><button type="button" id="s-prt">Print spec sheet</button></div>'
-      '<div class="tool" style="margin-top:16px"><div class="card"><h3>Dimensions</h3><table class="spec"><tbody id="s-dims"></tbody></table></div>'
-      '<div class="card"><h3>Colours</h3><table class="spec"><tbody id="s-cols"></tbody></table><p class="hint">Nearest Pantone TCX by CIEDE2000 from screen approximations. Confirm with a physical TCX book or a lab dip.</p></div></div>'
-      '<div class="card" style="margin-top:16px"><h3>Design notes</h3><p id="s-notes" style="margin:0;font-size:16px"></p></div></div></div>'
-      '<div class="prose"><h2>How to use the saree layout designer</h2>'
-      '<p>A saree is planned along its length. From the inner end it usually runs: the <b>blouse piece</b> (if woven in, about 80 cm to 1 m), the <b>body</b> that is pleated and tucked, and the <b>pallu</b>, the decorated end that falls over the shoulder, typically 70 cm to 1.2 m. <b>Borders</b> run along both long edges, from a fine 1 cm zari line to 15 cm or more on heavy silks. Standard sarees are 5.5 m without a blouse piece or about 6.3 m with one, and 44 to 47 inches wide; the nine-yard (nauvari) drape needs about 8.2 m.</p>'
-      '<p>Choose a starting style, then set the length, width and sections. Pick a border style (plain, temple triangles, zigzag, zari lines or a two-colour ganga-jamuna border), a body pattern (butta, stripes, checks, jaal lattice or zari dots) with its repeat and motif size, and a pallu design. The layout is drawn in true proportion, with a close-up of the pallu and border below it.</p>'
-      '<h2>Colours and the spec sheet</h2><p>Each colour field has quick swatches from the <a href="india-colour-forecast.html">Forecut India Colour Forecast 2026–28</a>, plus gold and silver zari and neutrals, or you can pick any colour. The spec sheet lists every section in centimetres and inches, every colour with its hex value and nearest Pantone TCX reference, and a written description of the border, body and pallu, ready to send to a weaver, printer or sampling unit. Download the layout as PNG or SVG, or print the spec sheet.</p>'
-      '<h2>Design tips</h2><ul><li>Keep motif size in proportion to the repeat: a motif about a third of the repeat reads as scattered butta; larger motifs feel dense and heavy.</li>'
-      '<li>Wide contrast borders and a heavy pallu suit festive and wedding sarees; for daily and office wear, a narrow border and a light body sit closer to current trends. See the <a href="core-item-sarees.html">saree core item update</a>.</li>'
-      '<li>Repeat the border colour in the blouse, or pick the accent colour for a modern contrast.</li></ul>'
-      '<p>This is a planning layout, not a loom file: jacquard or dobby designs, print repeats and colour separations still need to be prepared by your weaver or print studio.</p></div>')
-page('saree-designer.html', 'Saree Layout Designer · Plan Border, Body, Pallu & Colours · Forecut', sd,
-     'window.FC_SAREE_PRESETS=' + json.dumps(PRESETS) + ';window.FC_SAREE_PALETTE=' + json.dumps(PALETTE) + ';' + JS('saree.js'))
-
-shutil.copy('pantone_fhi.json', '../tcx.json')
-print('tools ok', 4)
+print('tools preview ok', 3)

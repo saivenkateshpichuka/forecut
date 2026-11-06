@@ -20,7 +20,7 @@ for fn, t, d in [('tools.html', 'Free Fashion Design Tools · Textile Calculator
                  ('textile-calculator.html', 'Textile Calculator · Fabric Consumption, GSM, Yarn Count, Costing · Forecut', 'Free textile calculator: fabric needed per garment and order, GSM from a swatch, weight and price per kg or metre, yarn count (Ne, Nm, tex, denier), shrinkage and garment costing to MRP.'),
                  ('pattern-blocks.html', 'Pattern Block Maker · Kurta, Sleeve & Skirt Patterns from Your Measurements · Forecut', 'Free pattern block maker: kurta front, back and sleeve, and straight or A-line skirt blocks drafted from your measurements at true scale, with seam allowance, SVG download and tiled A4 printing.'),
                  ('saree-designer.html', 'Saree Layout Designer · Plan Border, Body, Pallu & Colours · Forecut', 'Free saree layout designer: plan blouse piece, body, pallu and borders to scale, choose motifs and colours from the Forecut India palette, and get a spec sheet with nearest Pantone TCX codes.')]:
-    pages[fn] = (t, d, fn)
+    if os.path.exists(os.path.join(R, fn)): pages[fn] = (t, d, fn)  # tools are published only once their pages exist in the site root
 import journal_data as JD
 pages['journal.html'] = ('Forecut Journal · Indian Fashion Trend Analysis & Guides', 'Analysis and practical guides on Indian and global fashion trends: festive and wedding wear, handloom, footwear, Gen Z fusion and colour, with rupee price bands.', 'journal.html')
 ARTS = {}
@@ -162,7 +162,8 @@ for fn, (title, desc, path) in pages.items():
     h = h.replace('<link rel="stylesheet" href="fonts/fonts.css">', '<style>' + _ff + '</style>')
     if '<html lang="en">' in h: h = h.replace('<html lang="en">', '<html lang="en-IN">', 1)
     h = re.sub(r'<nav class="fctab".*?</nav>', '', h, flags=re.S)
-    if 'tools.html">Tools</a>' not in h.split('</nav>')[0]:
+    h = re.sub(r'<a href="(?:https://forecut\.in/)?tools\.html">Tools</a>', '', h)
+    if os.path.exists(os.path.join(R, 'tools.html')):
         if '<a href="reports.html">Reports</a>' in h: h = h.replace('<a href="reports.html">Reports</a>', '<a href="reports.html">Reports</a><a href="tools.html">Tools</a>', 1)
         else: h = h.replace('<a href="https://forecut.in/reports.html">Reports</a>', '<a href="https://forecut.in/reports.html">Reports</a><a href="https://forecut.in/tools.html">Tools</a>', 1)
     h = re.sub(r'<!--soc-->.*?<!--/soc-->|<!--socf-->.*?<!--/socf-->', '', h, flags=re.S)
