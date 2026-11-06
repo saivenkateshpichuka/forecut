@@ -45,9 +45,51 @@ def _curve(stage):
             f'<circle cx="{x:.1f}" cy="{y(x):.1f}" r="6" class="now"/><text x="{x + 9:.0f}" y="{y(x) - 8:.0f}" class="nowt">now</text>{lab}</svg>')
 
 
+HERO_N = 8  # slides in the hero carousel (owner, Nov 2026: "keep more and daily update new")
+try:
+    _S27 = json.load(open('seasons.json'))['meta']['ss27']['palette']
+except Exception:
+    _S27 = [[hx, cn] for _, _, hx, cn in HERO]
+
+
+def _photo(n):
+    s = _sl(n)
+    return next((c for c in (f'{s}-ss27-photo', f'{s}-photo') if os.path.exists(f'../img/{c}.webp')), None)
+
+
+def hero_pool(day=None):
+    """Today's hero slides: newest details with a photo first, then a daily-rotating pick of SS27
+    Emerging/Rising details with photos. Changes every day the site is rebuilt (the daily update)."""
+    import random
+    day = day or dt.date.today()
+    try:
+        newest = json.load(open('new_this_month.json'))
+    except Exception:
+        newest = []
+    pool, seen = [], set()
+    for n in newest:
+        it = G.get(n)
+        if it and it['life'][1] in 'erp' and _photo(n) and n not in seen:
+            pool.append(n); seen.add(n)
+    fresh = pool[:3]
+    rest = [it['name'] for v in M.values() for it in v if it['life'][1] in 'er' and it['name'] not in seen and _photo(it['name'])]
+    recent = [it['name'] for v in M.values() for it in v[-12:] if it['name'] in set(rest)]  # newest additions per category
+    rnd = random.Random(day.toordinal())
+    k_new = min(len(recent), (HERO_N - len(fresh)) // 2)
+    pick = rnd.sample(recent, k_new) if k_new else []
+    left = [n for n in rest if n not in pick]
+    pick += rnd.sample(left, min(len(left), HERO_N - len(fresh) - len(pick))) if left else []
+    names = fresh + pick
+    if not names:
+        names = [n for n, *_ in HERO]
+    pal = _S27[:5] or [[hx, cn] for _, _, hx, cn in HERO]
+    off = day.toordinal() % len(pal)
+    return [(n, [_sl(n) + '-ss27-photo', _sl(n) + '-photo'] + next((h[1] for h in HERO if h[0] == n), []), pal[(off + k) % len(pal)][0], pal[(off + k) % len(pal)][1]) for k, n in enumerate(names)]
+
+
 def hero_visual():
     cards = []
-    for i, (n, imgs, hx, cname) in enumerate(HERO):
+    for i, (n, imgs, hx, cname) in enumerate(hero_pool()):
         it = G.get(n)
         im = next((c for c in imgs if os.path.exists(f'../img/{c}.webp')), None)
         if not it or not im:
@@ -59,14 +101,12 @@ def hero_visual():
                      f'<figcaption><span class="sigk">SS27 · {E(ST[st][1])}</span><b>{E(n)}</b>{_curve(st)}'
                      f'<span class="chipc"><i style="background:{hx}"></i><span>{E(cname)}<small>{E(code)}</small></span></span></figcaption></figure>')
     dots = ''.join(f'<button type="button" aria-label="Show detail {k + 1}"{" aria-pressed=\"true\"" if k == 0 else " aria-pressed=\"false\""}></button>' for k in range(len(cards)))
-    return f'<div class="sigw" aria-label="Forecast details">{"".join(cards)}<div class="sigdots">{dots}</div></div>'
+    return f'<div class="sigw" aria-label="Forecast details, refreshed daily">{"".join(cards)}<div class="sigdots">{dots}</div></div>'
 
 
 def hero_proof():
-    return (f'<ul class="proof"><li><b>{N_DETAILS:,}</b><span>details tracked</span></li><li><b>6</b><span>regions, 20 markets</span></li>'
-            '<li><b>TCX</b><span>Pantone code on every colour</span></li><li><b>₹0</b><span>to start</span></li></ul>')
-
-
+    # Stats row (details tracked / regions / TCX / price) removed at the owner's request, Nov 2026.
+    return ''
 
 
 def launch_strip():
