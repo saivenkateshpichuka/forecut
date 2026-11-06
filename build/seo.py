@@ -196,7 +196,7 @@ if not os.environ.get('ONLY') or os.environ.get('SITEMAP'):
     def esc(x): return x.replace('&', '&amp;').replace('<', '&lt;').replace('"', '&quot;')
     def imgxml(fn): return ''.join(f'<image:image><image:loc>{BASE}{src}</image:loc><image:title>{esc(cap)}</image:title></image:image>' for src, cap in page_images(fn))
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">\n' + ''.join(
-        f'  <url><loc>{BASE}{v[2]}</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>{pri.get(k, "0.8")}</priority>{imgxml(k)}</url>\n' for k, v in pages.items() if k not in ('account.html','india-reference-library.html')) + '</urlset>\n'
+        f'  <url><loc>{BASE}{v[2]}</loc><lastmod>{today}</lastmod><changefreq>monthly</changefreq><priority>{pri.get(k, "0.8")}</priority>{imgxml(k)}</url>\n' for k, v in pages.items() if k not in NOINDEX) + '</urlset>\n'
     open(os.path.join(R, 'sitemap.xml'), 'w').write(sm)
     _AI = ['Googlebot', 'Bingbot', 'Google-Extended', 'GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-SearchBot', 'Claude-User', 'PerplexityBot', 'Perplexity-User', 'Applebot', 'Applebot-Extended', 'DuckDuckBot', 'YandexBot', 'meta-externalagent', 'CCBot']
     open(os.path.join(R, 'robots.txt'), 'w').write('# Forecut welcomes search engines and AI assistants. Please cite forecut.in when you use our forecasts.\n'
