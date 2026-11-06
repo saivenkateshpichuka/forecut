@@ -108,90 +108,125 @@ details.fx{margin-top:12px;border-top:1px solid var(--grid);padding-top:8px}deta
 <nav><a class="logo" href="/"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/><path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="#a9481f" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Forecut</a>
 <div class="links"><a href="/">Home</a><a href="regions.html">Regions</a><a href="aw26.html">Seasons</a><a href="couture.html">Couture</a><a href="fabrics.html">Fabrics</a><a href="colour.html">Colour</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a><a href="search.html" aria-label="Search Forecut">⌕ Search</a></div></nav>
 <style>
-.wrap{max-width:1680px!important}
+.wrap{max-width:1720px!important}
 .pmh{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 24px;flex-wrap:wrap;margin:26px 0 14px}.pmh>div{display:grid;gap:6px}
 .pmh .eb{margin:0}.pmh h1{font-size:30px!important;line-height:1.1;margin:0}
-.pmh p{margin:0;max-width:620px;font:14px/1.5 "DM Sans",sans-serif;color:var(--muted)}
+.pmh p{margin:0;max-width:660px;font:14px/1.5 "DM Sans",sans-serif;color:var(--muted)}
 .pmh .tag{font:600 12px "DM Sans",sans-serif;color:var(--muted);border:1px solid var(--grid);border-radius:4px;padding:5px 9px;white-space:nowrap}
 .gate{max-width:520px;margin:30px 0 60px;border:1px solid var(--grid);border-radius:8px;background:var(--paper-2);padding:24px 26px}
 .gate h3{font:700 18px "DM Sans",sans-serif;margin:0 0 6px}.gate p{margin:0 0 16px;color:var(--muted);font:15px/1.5 "DM Sans",sans-serif}
-.pmx{--pane:var(--paper-2);--line:var(--grid);--stage:#e7e2da;font:13px/1.4 "DM Sans",sans-serif;color:var(--ink);border:1px solid var(--line);border-radius:8px;overflow:hidden;background:var(--pane);position:relative}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .pmx{--stage:#0d0b0a}}:root[data-theme="dark"] .pmx{--stage:#0d0b0a}
-.pbar svg,.ctl svg,.sec>summary svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+/* ---- workspace: fixed industrial CAD palette, independent of the site theme ---- */
+.pmx{--bg:#1b1d20;--p1:#212428;--p2:#2a2e33;--p3:#33383e;--ln:#3a3f46;--tx:#e8e6e1;--mu:#9da3aa;--dim:#6f757c;--ac:#e08a5e;--ac2:#f0a37b;--ok:#6fbf8e;--wa:#e3b341;--stage:#2b2f34;--paper:#fbfaf7;
+  font:12.5px/1.4 "DM Sans",sans-serif;color:var(--tx);background:var(--p1);border:1px solid #121315;border-radius:8px;overflow:hidden;position:relative;color-scheme:dark}
+.pmx .ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
 .pmx button{font:inherit;color:inherit;cursor:pointer}
-.pmx input,.pmx select{font:13px "DM Sans",sans-serif;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:5px 7px;height:30px;width:100%;min-width:0;margin:0}
-.pmx input:focus-visible,.pmx select:focus-visible,.pmx button:focus-visible{outline:2px solid var(--chalk);outline-offset:1px}
-.pmx input[type=checkbox]{width:15px;height:15px;padding:0;accent-color:var(--chalk);flex:none}
+.pmx input,.pmx select{font:12.5px "DM Sans",sans-serif;color:var(--tx);background:#16181b;border:1px solid var(--ln);border-radius:3px;padding:4px 7px;height:28px;width:100%;min-width:0;margin:0}
+.pmx input:hover,.pmx select:hover{border-color:#4b5159}.pmx input:focus,.pmx select:focus{outline:0;border-color:var(--ac);box-shadow:0 0 0 2px rgba(224,138,94,.22)}
+.pmx button:focus-visible{outline:2px solid var(--ac);outline-offset:1px}
+.pmx input[type=checkbox]{width:14px;height:14px;padding:0;accent-color:var(--ac);flex:none}
+.pmx select option{background:#16181b;color:var(--tx)}
 /* toolbar */
-.pbar{display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid var(--line);background:var(--pane);flex-wrap:wrap}
-.crumb{display:flex;align-items:center;gap:6px;font-weight:600;min-width:0;flex:1 1 260px;white-space:nowrap;overflow:hidden}
-.crumb span{color:var(--muted);font-weight:500}.crumb i{font-style:normal;color:var(--grid)}.crumb b{overflow:hidden;text-overflow:ellipsis}
-.srch{position:relative;display:flex;align-items:center;flex:0 1 340px;min-width:200px}.srch svg{position:absolute;left:9px;color:var(--muted)}
-.srch input{padding-left:30px;padding-right:44px}.srch small{position:absolute;right:9px;color:var(--muted);font-size:11.5px}
-.useg{display:inline-flex;border:1px solid var(--line);border-radius:4px;overflow:hidden;height:30px}
-.useg button{border:0;background:var(--paper);padding:0 11px;font-weight:600;color:var(--muted)}.useg button+button{border-left:1px solid var(--line)}
-.useg button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
-.xbtn{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 12px;border-radius:4px;border:1px solid var(--line);background:var(--paper);font-weight:600}
-.xbtn:hover{border-color:var(--muted)}.xbtn.pri{background:var(--ink);border-color:var(--ink);color:var(--paper)}.xbtn.pri:hover{opacity:.9}
+.pbar{display:flex;align-items:center;gap:8px;padding:6px 8px;background:var(--bg);border-bottom:1px solid #121315;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:8px;padding:0 10px 0 4px;border-right:1px solid var(--ln);font-weight:700;letter-spacing:.02em;white-space:nowrap}.brand i{width:8px;height:8px;border-radius:2px;background:var(--ac)}
+.crumb{display:flex;align-items:center;gap:6px;min-width:0;flex:1 1 240px;white-space:nowrap;overflow:hidden;color:var(--mu)}.crumb b{color:var(--tx);overflow:hidden;text-overflow:ellipsis}.crumb i{font-style:normal;color:var(--dim)}
+.crumb code{font:600 11px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ac2);background:rgba(224,138,94,.1);border:1px solid rgba(224,138,94,.3);border-radius:3px;padding:2px 6px}
+.srch{position:relative;display:flex;align-items:center;flex:0 1 320px;min-width:190px}.srch .ic{position:absolute;left:8px;color:var(--mu)}
+.srch input{padding-left:28px;padding-right:40px}.srch small{position:absolute;right:8px;color:var(--dim);font-size:11px}
+.useg{display:inline-flex;border:1px solid var(--ln);border-radius:3px;overflow:hidden;height:28px}
+.useg button{border:0;background:#16181b;padding:0 10px;font-weight:600;color:var(--mu)}.useg button+button{border-left:1px solid var(--ln)}.useg button[aria-pressed=true]{background:var(--p3);color:var(--tx)}
+.xbtn{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px;border-radius:3px;border:1px solid var(--ln);background:var(--p2);font-weight:600;white-space:nowrap}
+.xbtn:hover{background:var(--p3)}.xbtn.pri{background:var(--ac);border-color:var(--ac);color:#1b1d20}.xbtn.pri:hover{background:var(--ac2)}
+.qa{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:3px;border:1px solid rgba(111,191,142,.35);background:rgba(111,191,142,.1);color:var(--ok);font-weight:700;white-space:nowrap}
+.qa.w{border-color:rgba(227,179,65,.4);background:rgba(227,179,65,.1);color:var(--wa)}
 .exp{position:relative}
-.menu{position:absolute;right:0;top:36px;z-index:20;width:290px;background:var(--paper-2);border:1px solid var(--line);border-radius:6px;box-shadow:0 12px 32px rgba(28,23,20,.16);padding:5px}
-.menu button{display:grid;grid-template-columns:52px 1fr;gap:2px 10px;align-items:center;width:100%;text-align:left;border:0;background:none;border-radius:4px;padding:8px 9px}
-.menu button:hover,.menu button:focus-visible{background:var(--paper)}
-.menu b{grid-row:span 2;font:700 11px "DM Sans",sans-serif;letter-spacing:.04em;border:1px solid var(--line);border-radius:3px;padding:3px 0;text-align:center;color:var(--muted)}
-.menu span{font-weight:600}.menu small{color:var(--muted);font-size:12px}.menu hr{border:0;border-top:1px solid var(--line);margin:4px 2px}
-/* body */
-.pbody{display:grid;grid-template-columns:300px minmax(0,1fr) 300px;height:clamp(620px,calc(100vh - 190px),1100px)}
-.pl,.pr{overflow:auto;background:var(--pane)}.pl{border-right:1px solid var(--line)}.pr{border-left:1px solid var(--line);display:flex;flex-direction:column}
-.sec{border-bottom:1px solid var(--line)}
-.sec>summary,.sec>.hd{display:flex;align-items:center;justify-content:space-between;gap:8px;list-style:none;cursor:pointer;padding:10px 14px;font:700 11px "DM Sans",sans-serif;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
-.sec>summary::-webkit-details-marker{display:none}.sec>summary svg{transition:transform .15s}.sec:not([open])>summary svg{transform:rotate(-90deg)}
-.sec>.bd{padding:0 14px 14px}
-.cats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:4px;overflow:hidden;margin-bottom:8px}
-.cats button{border:0;background:var(--paper);padding:6px 2px;font-size:12px;font-weight:600;color:var(--muted)}.cats button+button{border-left:1px solid var(--line)}
-.cats button[aria-pressed=true]{background:var(--ink);color:var(--paper)}
+.menu{position:absolute;right:0;top:34px;z-index:20;width:300px;background:var(--p2);border:1px solid var(--ln);border-radius:5px;box-shadow:0 14px 36px rgba(0,0,0,.45);padding:5px}
+.menu button{display:grid;grid-template-columns:46px 1fr;gap:1px 10px;align-items:center;width:100%;text-align:left;border:0;background:none;border-radius:3px;padding:7px 8px}
+.menu button:hover,.menu button:focus-visible{background:var(--p3)}
+.menu b{grid-row:span 2;font:700 10.5px ui-monospace,Menlo,monospace;border:1px solid var(--ln);border-radius:3px;padding:3px 0;text-align:center;color:var(--ac2)}
+.menu span{font-weight:600}.menu small{color:var(--mu);font-size:11.5px}.menu hr{border:0;border-top:1px solid var(--ln);margin:4px 2px}
+/* layout */
+.pbody{display:grid;grid-template-columns:300px minmax(0,1fr) 320px;height:clamp(640px,calc(100vh - 170px),1150px)}
+.pl,.pr{overflow:auto;background:var(--p1);scrollbar-width:thin;scrollbar-color:#3a3f46 transparent}.pl{border-right:1px solid #121315}.pr{border-left:1px solid #121315}
+.sec{border-bottom:1px solid var(--ln)}
+.sec>summary{display:flex;align-items:center;justify-content:space-between;gap:8px;list-style:none;cursor:pointer;padding:9px 12px;font:700 10.5px "DM Sans",sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--mu);background:var(--bg)}
+.sec>summary::-webkit-details-marker{display:none}.sec>summary .ic{transition:transform .15s;width:14px;height:14px}.sec:not([open])>summary .ic{transform:rotate(-90deg)}
+.sec>summary em{font-style:normal;text-transform:none;letter-spacing:0;color:var(--tx);font-weight:600;font-size:12px}
+.sec>.bd{padding:10px 12px 12px}
+.cats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--ln);border-radius:3px;overflow:hidden;margin-bottom:8px}
+.cats button{border:0;background:#16181b;padding:5px 2px;font-size:12px;font-weight:600;color:var(--mu)}.cats button+button{border-left:1px solid var(--ln)}.cats button[aria-pressed=true]{background:var(--p3);color:var(--tx);box-shadow:inset 0 -2px 0 var(--ac)}
 .glist{display:grid;gap:1px}
-.glist button{display:flex;justify-content:space-between;align-items:center;border:0;background:none;text-align:left;padding:6px 8px;border-radius:4px;font-weight:500}
-.glist button:hover{background:var(--paper)}.glist button[aria-pressed=true]{background:var(--chalk-soft);color:var(--ink);font-weight:700;box-shadow:inset 2px 0 0 var(--chalk)}
-.dnote{margin:8px 0 0;font-size:12px;color:var(--muted)}.dnote b{color:var(--ink)}
-.row{display:grid;grid-template-columns:minmax(0,1fr) 108px;align-items:center;gap:8px;padding:3px 0;font:500 12.5px/1.3 "DM Sans",sans-serif;color:var(--ink)}
-.row>span:first-child{color:var(--muted)}
-.uin{position:relative;display:block}.uin input{padding-right:30px;text-align:right;font-variant-numeric:tabular-nums}.uin i{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-style:normal;font-size:11.5px;color:var(--muted);pointer-events:none}
-.row.wide{grid-template-columns:minmax(0,1fr) 150px}
-.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.acts .xbtn{height:28px;font-size:12.5px;padding:0 10px}
-.hint2{font-size:12px;color:var(--muted);margin:8px 0 0}
+.glist button{display:flex;justify-content:space-between;gap:6px;border:0;background:none;text-align:left;padding:5px 8px;border-radius:3px;color:var(--mu)}
+.glist button:hover{background:var(--p2);color:var(--tx)}.glist button[aria-pressed=true]{background:var(--p3);color:var(--tx);font-weight:700;box-shadow:inset 2px 0 0 var(--ac)}
+.glist button small{color:var(--dim);font:600 10.5px ui-monospace,Menlo,monospace}
+.dnote{margin:8px 0 0;font-size:11.5px;color:var(--mu)}.dnote b{color:var(--ac2)}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 104px;align-items:center;gap:8px;padding:2px 0;border-radius:3px}
+.row>span:first-child{color:var(--mu);overflow:hidden;text-overflow:ellipsis}
+.row.on>span:first-child{color:var(--ac2)}.row.wide{grid-template-columns:minmax(0,1fr) 150px}
+.uin{position:relative;display:block}.uin input{padding-right:28px;text-align:right;font-variant-numeric:tabular-nums}.uin i{position:absolute;right:7px;top:50%;transform:translateY(-50%);font-style:normal;font-size:10.5px;color:var(--dim);pointer-events:none}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.acts .xbtn{height:26px;font-size:12px;padding:0 9px}
+.hint2{font-size:11.5px;color:var(--dim);margin:8px 0 0}
+/* body diagram */
+.fig{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:center;background:#16181b;border:1px solid var(--ln);border-radius:4px;padding:8px;margin-bottom:10px}
+.fig svg{width:118px;height:auto;display:block}
+.fig .bd0{fill:#2a2e33;stroke:#5d636b;stroke-width:.9}.fig .gd{stroke:#4a5057;stroke-width:.6;stroke-dasharray:2 2;fill:none}
+.fig .ms{fill:none;stroke:transparent;stroke-width:7;cursor:pointer}.fig .mv{fill:none;stroke:#59606a;stroke-width:1.1;pointer-events:none}.fig .mv.v{stroke-dasharray:3 2}
+.fig g.on .mv{stroke:var(--ac);stroke-width:2.2}.fig g.on circle{fill:var(--ac)}.fig circle{fill:#59606a}
+.fig p{margin:0;font-size:11.5px;line-height:1.45;color:var(--mu)}.fig p b{display:block;color:var(--tx);font-size:12.5px;margin-bottom:3px}
 /* stage */
 .pc{display:flex;flex-direction:column;min-width:0;background:var(--stage)}
-.ctl{display:flex;align-items:center;gap:4px;padding:6px 8px;border-bottom:1px solid var(--line);background:var(--pane)}
-.ib{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:28px;min-width:28px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:none;color:var(--muted)}
-.ib:hover{background:var(--paper);color:var(--ink)}.ib[aria-pressed=true]{background:var(--paper);border-color:var(--line);color:var(--ink)}
-#pm-zl{min-width:52px;text-align:center;font-weight:600;font-variant-numeric:tabular-nums;color:var(--ink)}
-.ctl .sp{flex:1}.ctl .leg{display:flex;gap:12px;font-size:11.5px;color:var(--muted)}.leg i{display:inline-block;width:16px;height:0;border-top:1.5px solid #1c1714;vertical-align:middle;margin-right:5px}.leg i.s{border-top:1.5px dashed #6e6259}.leg i.f{border-top:2px dashed #a9481f}
-.view{flex:1;overflow:auto;position:relative;cursor:grab;padding:28px}.view.drag{cursor:grabbing}
-#pm-svg{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.08),0 8px 28px rgba(0,0,0,.08);margin:0 auto;width:max-content}
-#pm-svg svg{display:block;width:auto;height:auto;max-width:none;max-height:none}
-.sbar{display:flex;gap:16px;align-items:center;padding:5px 12px;border-top:1px solid var(--line);background:var(--pane);font-size:11.5px;color:var(--muted);white-space:nowrap;overflow:hidden}
-.sbar b{color:var(--ink);font-weight:600}.sbar .ok{margin-left:auto}
-/* right panel */
-.rt{display:flex;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--pane);z-index:1}
-.rt button{flex:1;border:0;background:none;padding:10px 0;font-weight:600;color:var(--muted);border-bottom:2px solid transparent}
-.rt button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--chalk)}
-.rp{padding:12px 14px}
-.pcs{display:grid;gap:8px}
-.pcard{border:1px solid var(--line);border-radius:6px;background:var(--paper);padding:8px 9px}
-.pcard.off{opacity:.55}
-.pcard .t{display:flex;gap:8px;align-items:center;cursor:pointer}.pcard .t b{font-weight:700;flex:1;min-width:0}.pcard .t small{font-size:11.5px;color:var(--muted);white-space:nowrap}
-.pcard .nm{display:grid;gap:2px;margin:7px 0 0 23px;font-size:11px;color:var(--muted);font-weight:600}.pcard .nm input{height:28px;font-size:12.5px}
-.pcard .a{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:6px 0 0 23px}.pcard .a label{display:grid;gap:2px;font-size:11px;color:var(--muted);font-weight:600}.pcard .a input{height:26px}
-.kv{display:grid}.kv div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-size:12.5px}.kv span{color:var(--muted)}.kv b{font-weight:600;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
-.kv h5{font:700 11px "DM Sans",sans-serif;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin:14px 0 2px}.kv h5:first-child{margin-top:0}
-.notes h5{font:700 13px "DM Sans",sans-serif;margin:14px 0 4px}.notes h5:first-child{margin-top:0}.notes p,.notes li{font-size:12.5px;line-height:1.5;color:var(--muted);margin:0 0 6px}.notes ul{padding-left:16px;margin:0}
-.toast{position:absolute;left:50%;bottom:42px;transform:translateX(-50%);background:var(--ink);color:var(--paper);border-radius:6px;padding:8px 14px;font-size:12.5px;box-shadow:0 8px 24px rgba(0,0,0,.2);margin:0;max-width:90%;z-index:30}
+.ctl{display:flex;align-items:center;gap:3px;padding:4px 6px;border-bottom:1px solid #121315;background:var(--p1);flex-wrap:wrap}
+.ib{display:inline-flex;align-items:center;justify-content:center;gap:5px;height:26px;min-width:26px;padding:0 7px;border:1px solid transparent;border-radius:3px;background:none;color:var(--mu);white-space:nowrap}
+.ib:hover{background:var(--p2);color:var(--tx)}.ib[aria-pressed=true]{background:var(--p3);border-color:var(--ln);color:var(--tx)}
+.ctl .sep{width:1px;height:18px;background:var(--ln);margin:0 4px}
+#pm-zl{min-width:48px;text-align:center;font:600 12px ui-monospace,Menlo,monospace;color:var(--tx)}
+.ctl .sp{flex:1}.leg{display:flex;gap:12px;font-size:11px;color:var(--mu);padding-right:4px}.leg i{display:inline-block;width:18px;height:0;border-top:2px solid #e8e6e1;vertical-align:middle;margin-right:5px}.leg i.s{border-top:1.5px dashed #9da3aa}.leg i.f{border-top:2px dashed var(--ac)}.leg i.g{border-top:1.5px solid #6fbf8e}
+.stg{flex:1;min-height:0;display:grid;grid-template-columns:22px minmax(0,1fr);grid-template-rows:22px minmax(0,1fr)}
+.rc{background:var(--p1);border-right:1px solid #121315;border-bottom:1px solid #121315;font:600 9px ui-monospace,Menlo,monospace;color:var(--dim);display:flex;align-items:center;justify-content:center}
+.rul{background:var(--p1);display:block;width:100%;height:100%}#pm-rx{border-bottom:1px solid #121315}#pm-ry{border-right:1px solid #121315}
+.view{overflow:auto;position:relative;cursor:crosshair;padding:30px;background-color:var(--stage);background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:24px 24px;scrollbar-width:thin;scrollbar-color:#4a5057 transparent}
+.view.drag{cursor:grabbing}
+#pm-svg{background:var(--paper);box-shadow:0 0 0 1px rgba(0,0,0,.5),0 12px 40px rgba(0,0,0,.45);margin:0 auto;width:max-content}
+#pm-svg svg{display:block;max-width:none;max-height:none}
+#pm-svg path[data-l=CUT]{vector-effect:non-scaling-stroke;stroke-width:1.6px}
+#pm-svg path[data-l=SEAM]{vector-effect:non-scaling-stroke;stroke-width:1px;stroke-dasharray:6 4}
+#pm-svg path[data-l=MARK]{vector-effect:non-scaling-stroke;stroke-width:1.1px}
+#pm-svg path[data-l=GRAIN]{vector-effect:non-scaling-stroke;stroke-width:1.3px}
+#pm-svg path[data-l=TILE]{vector-effect:non-scaling-stroke;stroke-width:1.2px;stroke-dasharray:7 5}
+#pm-svg path[stroke="#a9481f"][data-l=MARK]{stroke-width:2px;stroke-dasharray:9 5}
+.sbar{display:flex;gap:14px;align-items:center;padding:4px 10px;border-top:1px solid #121315;background:var(--bg);font:11px ui-monospace,Menlo,monospace;color:var(--mu);white-space:nowrap;overflow:hidden}
+.sbar b{color:var(--tx);font-weight:600}.sbar .xy{margin-left:auto;color:var(--ac2);min-width:150px;text-align:right}
+/* right */
+.gv{padding:10px 12px;border-bottom:1px solid var(--ln)}
+.gv h4{display:flex;justify-content:space-between;margin:0 0 7px;font:700 10.5px "DM Sans",sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--mu)}.gv h4 span{letter-spacing:0;text-transform:none;font-weight:500;color:var(--dim)}
+#pm-flat{background:var(--paper);border-radius:4px;aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#pm-flat svg{width:100%;height:100%;display:block}
+#pm-flat .fl{fill:#fff;stroke:none}#pm-flat .st{fill:none;stroke:#1b1d20;stroke-width:1.15px;vector-effect:non-scaling-stroke;stroke-linejoin:round;stroke-linecap:round}#pm-flat .th{stroke-width:.7px;stroke:#5b6168}
+#pm-flat circle{fill:#fff;stroke:#1b1d20;stroke-width:.9px;vector-effect:non-scaling-stroke}#pm-flat text{font-family:"DM Sans",sans-serif;font-weight:700;fill:#6f757c;letter-spacing:.08em}
+.pmx p,.pmx li,.pmx dd,.pmx dt{font-family:"DM Sans",sans-serif}
+.rt{display:flex;background:var(--bg);border-bottom:1px solid var(--ln);position:sticky;top:0;z-index:2}
+.rt button{flex:1;border:0;background:none;padding:9px 0;font-weight:600;color:var(--mu);border-bottom:2px solid transparent}.rt button:hover{color:var(--tx)}
+.rt button[aria-selected=true]{color:var(--tx);border-bottom-color:var(--ac)}
+.rp{padding:10px 12px}
+.pcs{display:grid;gap:6px}
+.pcard{border:1px solid var(--ln);border-radius:4px;background:var(--p2);padding:7px 8px}.pcard.off{opacity:.5}
+.pcard .t{display:flex;gap:8px;align-items:center;cursor:pointer}.pcard .t code{font:700 10.5px ui-monospace,Menlo,monospace;color:var(--ac2);min-width:22px}.pcard .t b{font-weight:700;flex:1;min-width:0}.pcard .t small{font-size:11px;color:var(--mu);white-space:nowrap}
+.pcard .nm{display:grid;gap:2px;margin:6px 0 0 22px;font-size:10.5px;color:var(--dim);font-weight:600}
+.pcard .a{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:5px 0 0 22px}.pcard .a label{display:grid;gap:2px;font-size:10.5px;color:var(--dim);font-weight:600}.pcard .a input{height:26px}
+.ck{display:grid;gap:6px}
+.ckr{display:grid;grid-template-columns:18px 1fr auto;gap:2px 8px;align-items:start;padding:7px 8px;border:1px solid var(--ln);border-radius:4px;background:var(--p2)}
+.ckr .ic{width:15px;height:15px;margin-top:1px}.ckr.ok .ic{color:var(--ok)}.ckr.w .ic{color:var(--wa)}
+.ckr b{font-weight:600}.ckr span{grid-column:2/4;color:var(--mu);font-size:11.5px}.ckr em{font-style:normal;font:600 11.5px ui-monospace,Menlo,monospace;color:var(--tx)}
+.kv{display:grid;margin-top:12px}.kv div{display:flex;justify-content:space-between;gap:10px;padding:6px 0;border-bottom:1px solid var(--ln)}.kv span{color:var(--mu)}.kv b{font:600 11.5px ui-monospace,Menlo,monospace;text-align:right;white-space:nowrap}
+.rp h5{font:700 10.5px "DM Sans",sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--mu);margin:14px 0 6px}.rp h5:first-child{margin-top:2px}
+.about p,.about li{font-size:12px;line-height:1.5;color:var(--mu);margin:0 0 6px}.about ul{padding-left:16px;margin:0}.about b{color:var(--tx)}
+.spec{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:12px;margin:0}.spec dt{color:var(--dim)}.spec dd{margin:0;color:var(--tx)}
+.toast{position:absolute;left:50%;bottom:36px;transform:translateX(-50%);background:#f4f1ea;color:#1b1d20;border-radius:4px;padding:8px 14px;font-size:12.5px;font-weight:600;box-shadow:0 10px 28px rgba(0,0,0,.4);margin:0;max-width:90%;z-index:30}
 .pmdoc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:34px 0 10px;border-top:1px solid var(--grid);padding-top:22px}
 .pmdoc h2{font:700 15px "DM Sans",sans-serif;margin:0 0 8px}.pmdoc p,.pmdoc li{font:14px/1.55 "DM Sans",sans-serif;color:var(--muted);margin:0 0 8px}.pmdoc ul{padding-left:18px;margin:0}.pmdoc b{color:var(--ink)}
-@media (max-width:1180px){.pbody{grid-template-columns:270px minmax(0,1fr) 260px}}
-@media (max-width:980px){.pbody{grid-template-columns:1fr;height:auto}.pc{order:-1;height:68vh}.pl{border-right:0;border-top:1px solid var(--line)}.pr{border-left:0;border-top:1px solid var(--line)}
- .srch{flex:1 1 100%;order:3}.crumb{flex:1 1 auto}.pmdoc{grid-template-columns:1fr}.ctl .leg{display:none}.view{padding:14px}.sbar .ok{display:none}}
-</style><div class="pmh"><div><div class="eb">Members tool</div><h1>Pattern maker</h1><p>Draft block patterns for 12 garments across womenswear, menswear, kidswear and unisex, or load one of 131 Forecut details. True-scale PDF, DXF, SVG and PNG.</p></div><span class="tag">For sampling · fit-test before production</span></div><div class="gate" id="pm-gate"><h3>Sign in to use the pattern maker</h3><p>The pattern maker is for registered Forecut members. Sign in or create a free account to draft and download patterns.</p><div class="btns"><a class="btn p" href="account.html?next=pattern-maker.html#signin">Sign in</a><a class="btn" href="account.html?next=pattern-maker.html#signup">Create a free account</a></div></div><div id="pm-app" class="pmx" hidden><div class="pbar"><div class="crumb" id="pm-ttl"></div><label class="srch" title="Load a Forecut detail"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><input type="search" id="pm-dsearch" list="pm-dlist" placeholder="Load a Forecut detail, e.g. camp collar" aria-label="Load a Forecut detail"><small id="pm-dcount"></small><datalist id="pm-dlist"></datalist></label><div class="useg" id="pm-units" role="group" aria-label="Units"><button type="button" data-u="cm">cm</button><button type="button" data-u="mm">mm</button><button type="button" data-u="in">in</button></div><div class="exp"><button type="button" class="xbtn pri" id="pm-exp" aria-haspopup="menu" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-4.5-4.5L12 15l4.5-4.5M5 19.5h14"/></svg>Export</button><div class="menu" id="pm-menu" role="menu" hidden><button type="button" role="menuitem" id="pm-dl-pdf"><b>PDF</b><span>A4 tiles for home printing</span><small>Print at 100%, check the 5 cm square, tape together</small></button><button type="button" role="menuitem" id="pm-dl-pdf2"><b>PDF</b><span>Full-size sheet</span><small>One page for a plotter or copy shop</small></button><hr><button type="button" role="menuitem" id="pm-dl-dxf"><b>DXF</b><span>CAD file</span><small>Layers: CUT, SEAM, MARK, GRAIN, TEXT, BRAND</small></button><button type="button" role="menuitem" id="pm-dl-svg"><b>SVG</b><span>Vector, true scale</span><small>For Illustrator, Inkscape and tech packs</small></button><button type="button" role="menuitem" id="pm-dl-png"><b>PNG</b><span>Image</span><small>For sharing and presentations</small></button></div></div></div><div class="pbody"><aside class="pl" aria-label="Pattern settings"><details class="sec" open><summary>Garment<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="bd"><div class="cats" id="pm-gtabs" role="group" aria-label="Category"></div><div class="glist" id="pm-garments"></div><p class="dnote" id="pm-dnote"></p></div></details><details class="sec" open><summary>Measurements<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="bd" id="pm-meas"></div></details><details class="sec" open><summary><span>Style · <span id="pm-gname" style="text-transform:none;letter-spacing:0"></span></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="bd" id="pm-opts"></div></details><details class="sec" open><summary>Seam allowance<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="bd"><label class="row"><span>Seams, all pieces</span><span class="uin"><input type="number" step="any" min="0" id="pm-sa"><i class="u"></i></span></label><label class="row"><span>Hems, all pieces</span><span class="uin"><input type="number" step="any" min="0" id="pm-hemall"><i class="u"></i></span></label><div class="acts"><button type="button" class="xbtn" id="pm-apply">Apply to all pieces</button><button type="button" class="xbtn" id="pm-nosa">Net pattern (no allowance)</button></div><p class="hint2">Set a single piece in Pieces. Fold edges never get an allowance.</p></div></details></aside><section class="pc" aria-label="Pattern sheet"><div class="ctl"><button type="button" class="ib" id="pm-zout" title="Zoom out" aria-label="Zoom out"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><span id="pm-zl">100%</span><button type="button" class="ib" id="pm-zin" title="Zoom in" aria-label="Zoom in"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12M12 6v12"/></svg></button><button type="button" class="ib" id="pm-zfit" title="Fit sheet (0)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>Fit</button><button type="button" class="ib" id="pm-gridb" aria-pressed="true" title="Grid"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM4 9.3h16M4 14.6h16M9.3 4v16M14.6 4v16"/></svg>Grid</button><input type="checkbox" id="pm-grid" checked hidden><span class="sp"></span><span class="leg"><span><i></i>Cut line</span><span><i class="s"></i>Sewing line</span><span><i class="f"></i>Fold</span></span></div><div class="view" id="pm-view"><div id="pm-svg"></div></div><div class="sbar" id="pm-status"></div></section><aside class="pr" aria-label="Pieces and checks"><div class="rt" role="tablist"><button type="button" role="tab" data-t="pieces" aria-selected="true">Pieces</button><button type="button" role="tab" data-t="checks" aria-selected="false">Checks</button><button type="button" role="tab" data-t="notes" aria-selected="false">Notes</button></div><div class="rp" data-tp="pieces"><div class="pcs" id="pm-pieces"></div><div class="acts"><button type="button" class="xbtn" id="pm-resetnames">Reset names</button></div></div><div class="rp" data-tp="checks" hidden><div class="kv" id="pm-info"></div></div><div class="rp notes" data-tp="notes" hidden><h5>How the blocks are drafted</h5><p>Bodices: front wider than back at the bust, underarm depth in proportion to back length, side bust dart sized by cup with the front side seam lengthened to match, front waist dart ending short of the bust point, back waist and shoulder darts.</p><p>Sleeves: cap height set from the armhole so the cap carries set-in ease (about 3 cm on fitted blocks, less on shirts, none on tees), elbow dart on fitted long sleeves.</p><p>Skirts: back hip wider than front; darts numbered and sized from the hip-to-waist difference.</p><p>Trousers: crotch depth plus ease, hip line a third of the way up, extensions by fit (trouser, slack, jean), crotch-level width checked against the thigh, back inseam walked 0.5 cm shorter than the front.</p><h5>Before production</h5><ul><li>Sew a toile in calico and correct the fit.</li><li>Sizes are drafted from the chart, not graded from an approved base size.</li><li>Add fabric shrinkage before cutting bulk.</li></ul></div></aside></div><p class="toast" id="pm-msg" role="status" hidden></p></div><div class="pmdoc"><div><h2>How it works</h2><p><b>Load a Forecut detail</b>, such as a band-collar kurta, Cuban camp collar shirt, barrel-leg jeans, peplum top or fit-and-flare Anarkali, and the matching garment and options load automatically. Or pick a category and one of 12 garments: fitted bodice, kurta, shirt, T-shirt, hoodie, saree blouse, top, dress or frock, Nehru jacket or waistcoat, skirt, lehenga and trousers.</p><p><b>Measurements</b> start from a size chart and can be changed to your own in centimetres, millimetres or inches. <b>Style</b> covers ease, length, neckline, collar, sleeve, pockets, yoke, hem, slits, flare, dropped shoulders, skirt type, leg shape and fit at the crotch.</p></div><div><h2>Pieces fit together</h2><p>Every piece is drafted from the same measurements: sleeve heads are matched to the armhole, collars and bands to the neckline, cuffs and waistbands to the wrist and waist. Each piece gets an automatic name, like “Men's shirt · Collar band”, which you can edit, and its own seam and hem allowance. Checks shows the seam lengths and fit figures.</p></div><div><h2>Downloads</h2><ul><li><b>PDF, A4 tiles:</b> print at 100%, check the 5 cm square, tape the tiles together. Blank tiles are skipped.</li><li><b>PDF, full size:</b> one page at true size for a plotter.</li><li><b>DXF:</b> for Gerber, Lectra, Optitex, CLO, Illustrator or AutoCAD, on separate layers.</li><li><b>SVG and PNG:</b> for editing, sharing and tech packs.</li></ul><p>These are block patterns for samples and first toiles. Make a toile, check the fit and correct it before cutting good fabric or going to production.</p></div></div><footer><span>© 2026 Forecut · <a href="mailto:hello@forecut.in">hello@forecut.in</a></span>
+@media (max-width:1240px){.pbody{grid-template-columns:270px minmax(0,1fr) 280px}.leg{display:none}}
+@media (max-width:980px){.pbody{grid-template-columns:1fr;height:auto}.pc{order:-1;height:70vh}.pl{border-right:0;border-top:1px solid #121315}.pr{border-left:0;border-top:1px solid #121315}
+ .srch{flex:1 1 100%;order:5}.brand{display:none}.crumb{flex:1 1 auto}.pmdoc{grid-template-columns:1fr}.view{padding:14px}.sbar .xy{display:none}}
+</style><div class="pmh"><div><div class="eb">Members tool</div><h1>Pattern maker</h1><p>Draft block patterns for 12 garments across womenswear, menswear, kidswear and unisex, or load one of 131 Forecut details. Every pattern is checked automatically and exports at true scale to PDF, DXF, SVG and PNG.</p></div><span class="tag">For sampling · fit-test before production</span></div><div class="gate" id="pm-gate"><h3>Sign in to use the pattern maker</h3><p>The pattern maker is for registered Forecut members. Sign in or create a free account to draft and download patterns.</p><div class="btns"><a class="btn p" href="account.html?next=pattern-maker.html#signin">Sign in</a><a class="btn" href="account.html?next=pattern-maker.html#signup">Create a free account</a></div></div><div id="pm-app" class="pmx" hidden><div class="pbar"><span class="brand"><i></i>FORECUT PATTERN</span><div class="crumb" id="pm-ttl"></div><label class="srch" title="Load a Forecut detail"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><input type="search" id="pm-dsearch" list="pm-dlist" placeholder="Load a Forecut detail…" aria-label="Load a Forecut detail"><small id="pm-dcount"></small><datalist id="pm-dlist"></datalist></label><button type="button" class="qa" id="pm-qa" title="Pattern checks"></button><div class="useg" id="pm-units" role="group" aria-label="Units"><button type="button" data-u="cm">cm</button><button type="button" data-u="mm">mm</button><button type="button" data-u="in">in</button></div><div class="exp"><button type="button" class="xbtn pri" id="pm-exp" aria-haspopup="menu" aria-expanded="false"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-4.5-4.5L12 15l4.5-4.5M5 19.5h14"/></svg>Export</button><div class="menu" id="pm-menu" role="menu" hidden><button type="button" role="menuitem" id="pm-dl-pdf"><b>PDF</b><span>A4 tiles for home printing</span><small id="pm-tilecount">Print at 100%, check the 5 cm square, tape together</small></button><button type="button" role="menuitem" id="pm-dl-pdf2"><b>PDF</b><span>Full-size sheet</span><small>One page for a plotter or copy shop</small></button><hr><button type="button" role="menuitem" id="pm-dl-dxf"><b>DXF</b><span>CAD file</span><small>Layers: CUT, SEAM, MARK, GRAIN, TEXT, BRAND</small></button><button type="button" role="menuitem" id="pm-dl-svg"><b>SVG</b><span>Vector, true scale</span><small>For Illustrator, Inkscape and tech packs</small></button><button type="button" role="menuitem" id="pm-dl-png"><b>PNG</b><span>Image</span><small>For sharing and presentations</small></button></div></div></div><div class="pbody"><aside class="pl" aria-label="Pattern settings"><details class="sec" open><summary>Garment<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="bd"><div class="cats" id="pm-gtabs" role="group" aria-label="Category"></div><div class="glist" id="pm-garments"></div><p class="dnote" id="pm-dnote"></p></div></details><details class="sec" open><summary>Measurements<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="bd"><div class="fig" id="pm-fig"></div><div id="pm-meas"></div></div></details><details class="sec" open><summary><span>Style <em id="pm-gname"></em></span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="bd" id="pm-opts"></div></details><details class="sec" open><summary>Seam allowance<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="bd"><label class="row"><span>Seams, all pieces</span><span class="uin"><input type="number" step="any" min="0" id="pm-sa"><i class="u"></i></span></label><label class="row"><span>Hems, all pieces</span><span class="uin"><input type="number" step="any" min="0" id="pm-hemall"><i class="u"></i></span></label><div class="acts"><button type="button" class="xbtn" id="pm-apply">Apply to all pieces</button><button type="button" class="xbtn" id="pm-nosa">Net pattern</button></div><p class="hint2">Set a single piece in Pieces. Fold edges never get an allowance.</p></div></details></aside><section class="pc" aria-label="Pattern sheet"><div class="ctl"><button type="button" class="ib" id="pm-zout" title="Zoom out (−)" aria-label="Zoom out"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg></button><span id="pm-zl">100%</span><button type="button" class="ib" id="pm-zin" title="Zoom in (+)" aria-label="Zoom in"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12M12 6v12"/></svg></button><button type="button" class="ib" id="pm-zfit" title="Fit sheet (0)"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg>Fit</button><span class="sep"></span><button type="button" class="ib" id="pm-gridb" aria-pressed="true" title="Grid"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM4 9.3h16M4 14.6h16M9.3 4v16M14.6 4v16"/></svg>Grid</button><input type="checkbox" id="pm-grid" checked hidden><button type="button" class="ib" id="pm-tilesb" aria-pressed="false" title="Show how the pattern splits into A4 pages"><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3h7v9H4zM13 3h7v9h-7zM4 14h7v7H4zM13 14h7v7h-7z"/></svg>A4 pages</button><span class="sp"></span><span class="leg"><span><i></i>Cut</span><span><i class="s"></i>Sew</span><span><i class="f"></i>Fold</span><span><i class="g"></i>Grain</span></span></div><div class="stg"><div class="rc" id="pm-ru"></div><canvas class="rul" id="pm-rx" aria-hidden="true"></canvas><canvas class="rul" id="pm-ry" aria-hidden="true"></canvas><div class="view" id="pm-view"><div id="pm-svg"></div></div></div><div class="sbar" id="pm-status"></div></section><aside class="pr" aria-label="Garment, pieces and checks"><div class="gv"><h4>Garment preview <span>front · back, from your pattern</span></h4><div id="pm-flat"></div></div><div class="rt" role="tablist"><button type="button" role="tab" data-t="pieces" aria-selected="true">Pieces</button><button type="button" role="tab" data-t="checks" aria-selected="false">Checks</button><button type="button" role="tab" data-t="about" aria-selected="false">About</button></div><div class="rp" data-tp="pieces"><div class="pcs" id="pm-pieces"></div><div class="acts"><button type="button" class="xbtn" id="pm-resetnames">Reset labels</button></div></div><div class="rp" data-tp="checks" hidden><h5>Automatic pattern checks</h5><div class="ck" id="pm-checks"></div><h5>Measurements of this pattern</h5><div class="kv" id="pm-info" style="margin-top:0"></div></div><div class="rp about" data-tp="about" hidden><h5>This pattern</h5><dl class="spec" id="pm-spec"></dl><h5>Drafting method</h5><p>Blocks are drafted with established industry block methods, as taught in fashion schools and set out in standard references such as H. Joseph-Armstrong, <i>Patternmaking for Fashion Design</i>. Forecut's own code calculates each piece from your measurements.</p><ul><li><b>Bodice:</b> front wider than back at the bust, bust dart sized by cup with the side seam lengthened to match, back waist and shoulder darts.</li><li><b>Sleeve:</b> cap height set from the armhole so the cap carries the right ease for the sleeve type; elbow dart on fitted long sleeves.</li><li><b>Skirt:</b> back hip wider than front; darts from the hip-to-waist difference.</li><li><b>Trousers:</b> crotch depth plus ease, extensions by fit, crotch width checked against the thigh, back inseam walked 0.5 cm shorter.</li></ul><h5>Size charts</h5><p>Forecut base charts: average body measurements for each category (women XS–XXL, men S–3XL, kids 2–12 years). For the best fit, enter your own measurements.</p><h5>Accuracy</h5><p>Pieces are drawn as vectors at true scale. After printing, the 5 cm square on the sheet must measure exactly 5 cm. If it does not, set the printer to 100% / actual size.</p><h5>Before production</h5><ul><li>Sew a toile in calico and correct the fit.</li><li>Sizes are drafted from the chart, not graded from an approved base size.</li><li>Add fabric shrinkage before cutting bulk.</li></ul></div></aside></div><p class="toast" id="pm-msg" role="status" hidden></p></div><div class="pmdoc"><div><h2>How it works</h2><p><b>Load a Forecut detail</b>, such as a band-collar kurta, Cuban camp collar shirt, barrel-leg jeans, peplum top or fit-and-flare Anarkali, and the matching garment and options load automatically. Or pick a category and one of 12 garments: fitted bodice, kurta, shirt, T-shirt, hoodie, saree blouse, top, dress or frock, Nehru jacket or waistcoat, skirt, lehenga and trousers.</p><p><b>Measurements</b> start from a size chart and can be changed to your own in centimetres, millimetres or inches; the body diagram shows where to take each one.</p></div><div><h2>Checked as you draft</h2><p>Every piece is drafted from the same measurements, so pieces that are sewn together fit together: sleeve heads to the armhole, collars and bands to the neckline, cuffs and waistbands to the wrist and waist. The checks panel tests matching seams, sleeve cap ease and crotch width every time you change something. The garment preview is assembled from your actual pattern pieces.</p></div><div><h2>Downloads</h2><ul><li><b>PDF, A4 tiles:</b> print at 100%, check the 5 cm square, tape the tiles together. Preview the pages before you print. Blank tiles are skipped.</li><li><b>PDF, full size:</b> one page at true size for a plotter.</li><li><b>DXF:</b> for Gerber, Lectra, Optitex, CLO, Illustrator or AutoCAD, on separate layers.</li><li><b>SVG and PNG:</b> for editing, sharing and tech packs.</li></ul><p>These are block patterns for samples and first toiles. Make a toile, check the fit and correct it before cutting good fabric or going to production.</p></div></div><footer><span>© 2026 Forecut · <a href="mailto:hello@forecut.in">hello@forecut.in</a></span>
 <span class="fl"><a href="couture.html">Couture</a><a href="fabrics.html">Fabrics</a><a href="colour.html">Colour</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a><a href="celebrity-style.html">Celebrity style</a><a href="about.html">About</a><a href="method.html">Methodology</a><a href="contact.html">Contact</a><a href="terms.html">Terms &amp; Conditions</a><a href="privacy.html">Privacy Policy</a></span></footer>
 <script>window.FC_PREVIEW=true;</script><script>/* Forecut tools: shared helpers (nearest Pantone TCX by CIEDE2000, formatting, downloads, saved state). */
 var FC = window.FC || {};
@@ -649,11 +684,18 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
   X.svg = function (sc, W, H, unit, opts) {
     opts = opts || {}; var f = unit === 'in' ? 1 / 2.54 : unit === 'mm' ? 10 : 1, u = unit === 'in' ? 'in' : unit === 'mm' ? 'mm' : 'cm', b = '';
     sc.forEach(function (o) {
-      if (o.k === 'poly') b += '<path d="M' + o.p.map(function (q) { return n(q[0]) + ' ' + n(q[1]); }).join('L') + (o.c ? 'Z' : '') + '" fill="' + (o.fill || 'none') + '" stroke="' + (o.col || '#1c1714') + '" stroke-width="' + n(o.w || .06) + '"' + (o.d ? ' stroke-dasharray="' + o.d.join(' ') + '"' : '') + ' stroke-linejoin="round" stroke-linecap="round"' + (o.op ? ' opacity="' + o.op + '"' : '') + '/>';
+      if (o.k === 'poly') b += '<path d="M' + o.p.map(function (q) { return n(q[0]) + ' ' + n(q[1]); }).join('L') + (o.c ? 'Z' : '') + '" fill="' + (o.fill || 'none') + '" stroke="' + (o.col || '#1c1714') + '" stroke-width="' + n(o.w || .06) + '"' + (o.d ? ' stroke-dasharray="' + o.d.join(' ') + '"' : '') + ' stroke-linejoin="round" stroke-linecap="round"' + (opts.screen && o.L ? ' data-l="' + o.L + '"' : '') + (o.op ? ' opacity="' + o.op + '"' : '') + '/>';
       else b += '<text x="' + n(o.x) + '" y="' + n(o.y) + '" font-size="' + n(o.s) + '" font-family="DM Sans, Helvetica, Arial, sans-serif"' + (o.b ? ' font-weight="700"' : '') + ' fill="' + (o.col || '#1c1714') + '"' + (o.a ? ' text-anchor="' + o.a + '"' : '') + (o.r ? ' transform="rotate(' + o.r + ' ' + n(o.x) + ' ' + n(o.y) + ')"' : '') + (o.op ? ' opacity="' + o.op + '"' : '') + '>' + esc(o.t) + '</text>';
     });
     var dim = opts.screen ? '' : ' width="' + n(W * f) + u + '" height="' + n(H * f) + u + '"';
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + n(W) + ' ' + n(H) + '"' + dim + '><title>' + esc(opts.title || 'Forecut pattern') + '</title><desc>Pattern generated by Forecut pattern maker, forecut.in. 1 unit = 1 cm.</desc><rect width="' + n(W) + '" height="' + n(H) + '" fill="#ffffff"/>' + (opts.grid || '') + b + '</svg>';
+  };
+  /* ---------- A4 tiling (shared by the PDF and the on-screen print preview) ---------- */
+  X.tiles = function (sc, W, H) {
+    var M = 1.0, cw = 21 - 2 * M, ch = 29.7 - 2 * M - .8, cols = Math.ceil(W / cw), rows = Math.ceil(H / ch), list = [], boxes = sc.filter(function (o) { return o.L !== 'BRAND' && o.L !== 'GRID'; }).map(function (o) { return X.bbox([o]); });
+    for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) { var tx = c * cw, ty = r * ch, hit = boxes.some(function (b) { return b[0] < tx + cw && b[2] > tx && b[1] < ty + ch && b[3] > ty; });
+      list.push({ id: String.fromCharCode(65 + r) + (c + 1), x: tx, y: ty, blank: !hit }); }
+    return { cw: cw, ch: ch, rows: rows, cols: cols, list: list, pages: list.filter(function (t) { return !t.blank; }).length };
   };
   /* ---------- PDF ---------- */
   function pdfStr(s) { return '(' + String(s).replace(/[·•]/g, '-').replace(/[–—]/g, '-').replace(/×/g, 'x').replace(/[“”]/g, '"').replace(/[‘’]/g, "'").replace(/[^\x20-\x7e]/g, '').replace(/([\\()])/g, '\\$1') + ')'; }
@@ -674,15 +716,14 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
     if (mode === 'sheet') {
       var pw = W + 2 * M, ph = H + 2 * M + .8; pages.push({ w: pw * k, h: ph * k, c: draw(0, 0, pw, ph, [W, H]) + foot(ph, 'full sheet') });
     } else {
-      var A4w = 21, A4h = 29.7, cw = A4w - 2 * M, ch = A4h - 2 * M - .8, cols = Math.ceil(W / cw), rows = Math.ceil(H / ch);
-      for (var r = 0; r < rows; r++) for (var c = 0; c < cols; c++) {
-        var tx = c * cw, ty = r * ch, hit = sc.some(function (o) { if (o.L === 'BRAND' || o.L === 'GRID') return false; var b = X.bbox([o]); return b[0] < tx + cw && b[2] > tx && b[1] < ty + ch && b[3] > ty; });
-        if (!hit) continue;
-        var lab = String.fromCharCode(65 + r) + (c + 1), s = draw(tx, ty, A4w, A4h, [cw, ch]);
+      var A4w = 21, A4h = 29.7, TL = X.tiles(sc, W, H), cw = TL.cw, ch = TL.ch, rows = TL.rows, cols = TL.cols;
+      TL.list.forEach(function (t) {
+        if (t.blank) return;
+        var tx = t.x, ty = t.y, lab = t.id, s = draw(tx, ty, A4w, A4h, [cw, ch]);
         s += '0.66 0.28 0.12 RG 0.5 w [3 3] 0 d ' + n(M * k) + ' ' + n((A4h - M - ch) * k) + ' ' + n(cw * k) + ' ' + n(ch * k) + ' re S [] 0 d\n';
         s += 'BT /F2 14 Tf 0.66 0.28 0.12 rg ' + n((M + .3) * k) + ' ' + n((A4h - M - .7) * k) + ' Td ' + pdfStr(lab) + ' Tj ET\n';
         pages.push({ w: A4w * k, h: A4h * k, c: s + foot(A4h, 'tile ' + lab + ' (rows A-' + String.fromCharCode(64 + rows) + ', columns 1-' + cols + ')') });
-      }
+      });
     }
     var objs = [], o = function (s) { objs.push(s); return objs.length; };
     o('<< /Type /Catalog /Pages 2 0 R >>'); o('PAGES'); o('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>'); o('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
@@ -721,9 +762,189 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
     img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgStr.replace(/ width="[^"]*" height="[^"]*"/, ''));
   };
 })();
+/* Forecut pattern maker: supporting views.
+   - V.figure(): how-to-measure body diagram (original drawing), one overlay per measurement
+   - V.flat(): front/back garment drawing assembled from the drafted pattern pieces
+   - V.checks(): automatic pass/warn checks on the drafted pattern
+   - V.ruler(): canvas rulers for the pattern stage */
+(function () {
+  var V = window.PMV = {}, PM = window.PM;
+  function f2(v) { return (Math.round(v * 100) / 100).toString(); }
+  function P(pts, close) { return 'M' + pts.map(function (q) { return f2(q[0]) + ' ' + f2(q[1]); }).join('L') + (close ? 'Z' : ''); }
+  function plen(p) { var s = 0; for (var i = 1; i < p.length; i++) s += Math.hypot(p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1]); return s; }
+
+  /* ---------- body diagram ---------- */
+  V.HOW = {
+    bust: 'Around the fullest part of the bust or chest, tape level under the arms and across the shoulder blades.',
+    waist: 'Around the natural waist, the narrowest part of the torso. Snug, not tight.',
+    hip: 'Around the fullest part of the hips and seat, feet together.',
+    shoulder: 'Across the back, from one shoulder tip (the bone at the edge of the shoulder) to the other.',
+    nape: 'At the back: from the neck bone at the base of the neck straight down to the natural waist.',
+    neck: 'Around the base of the neck, over the neck bone at the back and just above the collarbone at the front.',
+    bicep: 'Around the fullest part of the upper arm, arm relaxed.',
+    wrist: 'Around the wrist, over the wrist bone.',
+    sleeve: 'From the shoulder tip, over a slightly bent elbow, down to the wrist bone.',
+    wh: 'At the side, from the natural waist down to the fullest part of the hip.',
+    rise: 'Sit on a firm, flat chair. At the side, measure from the natural waist down to the chair seat.',
+    knee_l: 'At the side, from the natural waist to the middle of the knee.',
+    outseam: 'At the side, from the natural waist to the floor, without shoes.',
+    thigh: 'Around the fullest part of the upper thigh, just below the crotch.',
+    knee: 'Around the knee, leg straight.',
+    ankle: 'Around the ankle, over the ankle bone.',
+    head: 'Around the head, across the forehead and the fullest part of the back of the head.'
+  };
+  var HALF = [[74, 33], [73, 43], [62, 47], [52, 52], [47, 62], [44, 88], [42, 112], [39, 140], [37, 152], [35, 163], [39, 170], [44, 161], [45, 151], [48, 124], [51, 98], [57, 73], [57, 86], [61, 104], [62, 113], [57, 128], [54, 142], [55, 160], [58, 190], [61, 222], [61, 250], [65, 280], [62, 292], [77, 293], [73, 280], [74, 250], [75, 222], [77, 190], [80, 167]];
+  function smooth(pts) { // closed Catmull-Rom -> cubic Bezier
+    var n = pts.length, d = 'M' + pts[0].join(' ');
+    for (var i = 0; i < n; i++) { var p0 = pts[(i - 1 + n) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
+      d += 'C' + f2(p1[0] + (p2[0] - p0[0]) / 6) + ' ' + f2(p1[1] + (p2[1] - p0[1]) / 6) + ' ' + f2(p2[0] - (p3[0] - p1[0]) / 6) + ' ' + f2(p2[1] - (p3[1] - p1[1]) / 6) + ' ' + p2.join(' '); }
+    return d + 'Z';
+  }
+  var BODY = smooth(HALF.concat(HALF.slice(0, -1).reverse().map(function (q) { return [160 - q[0], q[1]]; })));
+  var M = { // overlay path, guide lines, vertical?
+    head: ['M68 21 Q80 29 92 21'], neck: ['M73 40 Q80 45 87 40'], shoulder: ['M52 49 Q80 43 108 49'], bust: ['M57 86 Q80 93 103 86'], waist: ['M62 113 Q80 118 98 113'], hip: ['M54 142 Q80 148 106 142'],
+    nape: ['M80 41 L80 113', '', 1], bicep: ['M45 80 L56 82'], wrist: ['M38 150 L45 151'], sleeve: ['M52 52 L43 112 L38 151', '', 1],
+    wh: ['M134 113 L134 142', 'M100 113 H136 M107 142 H136', 1], rise: ['M140 113 L140 167', 'M100 113 H142 M81 167 H142', 1], knee_l: ['M146 113 L146 222', 'M100 113 H148 M100 222 H148', 1],
+    outseam: ['M152 113 L152 293', 'M100 113 H154 M99 293 H154', 1], thigh: ['M56 172 Q67 176 79 172'], knee: ['M61 222 L75 222'], ankle: ['M65 279 L73 279']
+  };
+  V.figure = function (keys, on) {
+    var g = '';
+    keys.forEach(function (k) { var m = M[k]; if (!m) return; var a = m[0].match(/-?[\d.]+/g).map(Number), e = a.slice(-2);
+      g += '<g data-k="' + k + '"' + (k === on ? ' class="on"' : '') + '>' + (m[1] ? '<path class="gd" d="' + m[1] + '"/>' : '') + '<path class="mv' + (m[2] ? ' v' : '') + '" d="' + m[0] + '"/><circle cx="' + a[0] + '" cy="' + a[1] + '" r="1.6"/><circle cx="' + e[0] + '" cy="' + e[1] + '" r="1.6"/><path class="ms" d="' + m[0] + '"><title>' + PM.LABELS[k] + '</title></path></g>'; });
+    return '<svg viewBox="28 6 132 292" role="img" aria-label="Where to take each measurement"><ellipse class="bd0" cx="80" cy="21" rx="10.5" ry="13"/><path class="bd0" d="' + BODY + '"/>' + g + '</svg>';
+  };
+
+  /* ---------- garment drawing from the pattern ---------- */
+  function by(r, id) { return r.pieces.filter(function (p) { return p.id === id; })[0]; }
+  function mir(p) { return p.map(function (q) { return [-q[0], q[1]]; }); }
+  function mv(p, dx, dy) { return p.map(function (q) { return [q[0] + dx, q[1] + dy]; }); }
+  function bez(a, c, b, n) { n = n || 12; var o = []; for (var i = 0; i <= n; i++) { var t = i / n, u = 1 - t; o.push([u * u * a[0] + 2 * u * t * c[0] + t * t * b[0], u * u * a[1] + 2 * u * t * c[1] + t * t * b[1]]); } return o; }
+  function Dr() { this.it = []; this.pts = []; } // painter's order: later items cover earlier ones
+  Dr.prototype.fill = function (p) { if (p.length) { this.it.push('<path class="fl" d="' + P(p, 1) + '"/>'); this.pts = this.pts.concat(p); } return this; };
+  Dr.prototype.line = function (p, cls) { if (p.length > 1) { this.it.push('<path class="' + ('st ' + (cls || '')).trim() + '" d="' + P(p) + '"/>'); this.pts = this.pts.concat(p); } return this; };
+  Dr.prototype.shape = function (p, cls) { this.fill(p); this.it.push('<path class="' + ('st ' + (cls || '')).trim() + '" d="' + P(p, 1) + '"/>'); return this; };
+  Dr.prototype.dot = function (c, r) { this.it.push('<circle cx="' + f2(c[0]) + '" cy="' + f2(c[1]) + '" r="' + r + '"/>'); };
+  Dr.prototype.svg = function () { return this.it.join(''); };
+  // a pattern half placed at CF x=0: fill both halves, stroke everything except a centre fold
+  function half(D, pc, opts) {
+    opts = opts || {}; var out = PM.outline(pc), dx = opts.dx || 0, dy = opts.dy || 0, H = mv(out, dx, dy), Mi = mir(H), open = pc.edges[0].t !== 'fold';
+    D.fill(Mi); pc.edges.forEach(function (e, i) { if (i === 0 && !open) return; D.line(mir(mv(e.p, dx, dy))); });
+    D.fill(H); pc.edges.forEach(function (e, i) { if (i === 0 && !open) return; D.line(mv(e.p, dx, dy)); });
+    pc.marks.forEach(function (k) { if (k.t === 'dart') { var q = mv(k.p, dx, dy); D.line(q, 'th'); D.line(mir(q), 'th'); } if (k.t === 'button') D.dot([k.c[0] + dx, k.c[1] + dy], .55); });
+  }
+  function sleeves(D, pc, sl, r, o, back) {
+    if (!sl) return; var arm = pc.edges[3].p, ua = arm[0], sp = arm[arm.length - 1], bbx = PM.outline(sl), ys = bbx.map(function (q) { return q[1]; }), Ls = Math.max.apply(null, ys) - Math.min.apply(null, ys);
+    var hemW = plen(sl.edges[2].p) / 2, CH = r.info['Sleeve cap height'] || 10, Lv = Math.max(4, Ls - CH * .3), th = (+o.drop || r.pieces.some(function (p) { return p.comp === 'Rib cuff'; }) ? 40 : o.sleeve === 'tee' ? 42 : o.sleeve === 'shirt' ? 27 : Ls < 25 ? 38 : 24) * Math.PI / 180, d = [Math.sin(th), Math.cos(th)], n = [-Math.cos(th), Math.sin(th)];
+    var cuff = r.pieces.filter(function (p) { return p.id === 'cuff'; })[0], cH = cuff ? Math.min(7, PM.outline(cuff).reduce(function (a, q) { return Math.max(a, q[1]); }, 0) / 2) : 0;
+    var ob = [sp[0] + d[0] * Lv, sp[1] + d[1] * Lv], ib = [ob[0] + n[0] * hemW, ob[1] + n[1] * hemW];
+    var puff = o.sleeve === 'puff', outer = puff ? bez(sp, [sp[0] + d[0] * Lv * .5 + 3.5 * Math.cos(th), sp[1] + d[1] * Lv * .5 - 3.5 * Math.sin(th)], ob) : [sp, ob], inner = puff ? bez(ib, [ua[0] + (ib[0] - ua[0]) * .5 - 2, ua[1] + (ib[1] - ua[1]) * .5 + 1], ua) : [ib, ua];
+    [1, -1].forEach(function (sg) { function S(p) { return sg > 0 ? p : mir(p); }
+      D.shape(S(outer.concat([ib]).concat(inner.slice(1))));
+      if (cH) { var o2 = [ob[0] - d[0] * cH, ob[1] - d[1] * cH], i2 = [ib[0] - d[0] * cH, ib[1] - d[1] * cH]; D.shape(S([o2, ob, ib, i2])); if (cuff && cuff.comp === 'Cuff' && !back) D.dot(S([[ob[0] + (ib[0] - ob[0]) * .2 - d[0] * cH / 2, ob[1] + (ib[1] - ob[1]) * .2 - d[1] * cH / 2]])[0], .45); }
+      if (puff) for (var g = 1; g <= 3; g++) { var t = g / 4, a = [sp[0] + (ua[0] - sp[0]) * t, sp[1] + (ua[1] - sp[1]) * t]; D.line(S([a, [a[0] + d[0] * 2.2, a[1] + d[1] * 2.2]]), 'th'); }
+    });
+  }
+  function neckline(D, pc, r, o, back, yoke) {
+    var nk = yoke ? yoke.edges[1].p.slice().reverse() : pc.edges[5] ? pc.edges[5].p : null; if (!nk) return; var hp = nk[0], cf = nk[nk.length - 1], has = function (id) { return !!by(r, id); }, band = by(r, 'band'), col = by(r, 'collar');
+    var sym = function (p, cls) { D.shape(mir(p), cls); D.shape(p, cls); };
+    if (band) { var h = col ? 3.2 : 3.6, up = nk.map(function (q, i) { var t = i / (nk.length - 1); return [q[0], q[1] - h * (1 - t * .15)]; }); sym(nk.concat(up.reverse())); }
+    if (col && col.comp === 'Collar') { if (!back) sym([[hp[0] + .2, hp[1] - 3.2], [hp[0] + 2.6, 2], [Math.max(3, cf[0] + 3.5), cf[1] + 3.8], [Math.max(.3, cf[0] + .4), cf[1] - 1.2]]); else D.shape([[-hp[0] - .4, -3.4], [hp[0] + .4, -3.4], [hp[0] + 1.2, 2.4], [-hp[0] - 1.2, 2.4]]); }
+    if (col && col.comp === 'Camp collar') { if (!back) sym([[hp[0] - .2, hp[1] - 1.2], [hp[0] + 3.2, 3.2], [4, cf[1] + 5.5], [.3, cf[1] + 1]]); else D.shape([[-hp[0] - .5, -1.4], [hp[0] + .5, -1.4], [hp[0] + 2.5, 5.5], [-hp[0] - 2.5, 5.5]]); }
+    if (col && col.comp === 'Peter Pan collar') { var c = [0, cf[1] * .35], out = nk.map(function (q) { var v = [q[0] - c[0], q[1] - c[1]], l = Math.hypot(v[0], v[1]) || 1; return [q[0] + v[0] / l * 6, q[1] + v[1] / l * 6]; }); if (!back) sym(nk.concat(out.reverse())); else D.shape(mir(nk).reverse().concat(nk).concat(out.slice().reverse()).concat(mir(out))); }
+    if (has('neckrib')) { var rib = nk.map(function (q) { return [q[0] * .97, q[1] + 1.8]; }); sym(nk.concat(rib.reverse())); }
+    if (has('hood')) { var hx = hp[0]; if (back) D.shape([[-hx - .5, 0]].concat(bez([-hx - .5, 0], [-hx - 6, -26], [0, -30])).concat(bez([0, -30], [hx + 6, -26], [hx + .5, 0]).slice(1)));
+      else sym(bez([hx + .8, 1], [hx + 4.5, -14], [0, -27]).concat(bez([0, -23], [hx - 1, -12], [hx - 2, 0.6]))); }
+  }
+  function torsoView(D, r, o, gid, back) {
+    var pc = by(r, back ? 'back' : 'front'); if (!pc) return; var yoke = back ? by(r, 'yoke') : null, sl = by(r, 'sleeve');
+    sleeves(D, yoke ? { edges: [0, 0, 0, { p: [pc.edges[3].p[0], yoke.edges[3].p[0]] }] } : pc, sl, r, o, back);
+    var out = PM.outline(pc), side = pc.edges[2].p, hemPt = side[0], Lh = Math.max.apply(null, out.map(function (q) { return q[1]; })), wx = Math.abs(hemPt[0]);
+    if (gid === 'dress' && by(r, 'skirt')) { var sk = by(r, 'skirt'), Hs = Math.max.apply(null, PM.outline(sk).map(function (q) { return q[1]; })), y0 = Lh;
+      [1, -1].forEach(function (sg) { var p = [[0, y0], [wx, y0], [wx * 1.75, y0 + Hs - 1.5]].concat(bez([wx * 1.75, y0 + Hs - 1.5], [wx * .9, y0 + Hs + .8], [0, y0 + Hs])); D.shape(sg > 0 ? p : mir(p)); for (var g = 1; g < 5; g++) { var x = wx * g / 5; D.line(sg > 0 ? [[x, y0], [x * 1.75, y0 + Hs * .9]] : mir([[x, y0], [x * 1.75, y0 + Hs * .9]]), 'th'); } }); }
+    if (gid === 'top' && by(r, 'peplum')) [1, -1].forEach(function (sg) { var p = [[0, Lh], [wx, Lh], [wx * 1.5, Lh + 17]].concat(bez([wx * 1.5, Lh + 17], [wx * .8, Lh + 18.5], [0, Lh + 18])); D.shape(sg > 0 ? p : mir(p)); D.line(sg > 0 ? [[wx * .5, Lh], [wx * .78, Lh + 17]] : mir([[wx * .5, Lh], [wx * .78, Lh + 17]]), 'th'); });
+    if (yoke) { half(D, pc); half(D, yoke); } else half(D, pc);
+    var hb = by(r, 'hemband'); if (hb) [1, -1].forEach(function (sg) { var p = [[0, Lh], [wx, Lh], [wx * .93, Lh + 6.5], [0, Lh + 6.5]]; D.shape(sg > 0 ? p : mir(p)); });
+    neckline(D, pc, r, o, back, yoke);
+    if (!back) {
+      var pk = by(r, 'pocket'), n = +o.pockets || (pk ? 1 : 0), ua = pc.edges[3].p[0];
+      if (pk && pk.comp === 'Kangaroo pocket') { var ko = PM.outline(pk), kh = Math.max.apply(null, ko.map(function (q) { return q[1]; })), ky = Lh - kh - 1.5; D.shape(mv(ko, 0, ky)); D.shape(mir(mv(ko, 0, ky))); }
+      else if (pk) { var po = PM.outline(pk), pw = Math.max.apply(null, po.map(function (q) { return q[0]; })); [1, -1].slice(0, Math.min(2, n)).forEach(function (sg) { var q = mv(po, wx * .3, ua[1] - 2); D.shape(sg > 0 ? q : mir(q)); }); }
+      var welt = by(r, 'welt'); if (welt) [1, -1].slice(0, Math.min(2, n || 2)).forEach(function (sg) { var y = Lh * .72; D.line(sg > 0 ? [[wx * .3, y], [wx * .3 + 12, y - 1.2]] : mir([[wx * .3, y], [wx * .3 + 12, y - 1.2]])); });
+    }
+  }
+  function skirtView(D, r, o, m, back) {
+    var pc = by(r, back ? 'sk-back' : 'sk-front'), wb = by(r, 'waistband'), ws;
+    if (pc) { half(D, pc); ws = Math.abs(pc.edges[1].p[pc.edges[1].p.length - 1][0]); }
+    else { var wq = (m.waist + 2.5) / 4, L = +o.slen2 || 65, ty = o.skirt || 'panels', fr = +o.circle || 1, hw = ty === 'circle' ? wq + L * (fr >= 1 ? 1 : fr >= .5 ? .62 : .36) : ty === 'gathered' ? wq * 2.1 : wq + L * .7; ws = wq;
+      [1, -1].forEach(function (sg) { var p = [[0, 0], [wq, 0], [hw, L - 2]].concat(bez([hw, L - 2], [hw * .5, L + 1.5], [0, L])); D.shape(sg > 0 ? p : mir(p)); var k = ty === 'panels' ? Math.min(4, Math.round((+o.panels || 8) / 3)) : 3;
+        for (var g = 1; g <= k; g++) { var t = g / (k + 1), a = [[wq * t, 0], [hw * t, L - .5]]; if (ty !== 'panels' || g < k + 1) D.line(sg > 0 ? a : mir(a), ty === 'panels' ? '' : 'th'); } if (ty === 'gathered') for (var z = 1; z < 7; z++) D.line(sg > 0 ? [[wq * z / 7, 0], [wq * z / 7 * 1.1, 3]] : mir([[wq * z / 7, 0], [wq * z / 7 * 1.1, 3]]), 'th'); }); }
+    if (wb) D.shape([[-ws, -4], [ws, -4], [ws, 0], [-ws, 0]]);
+  }
+  function trouserView(D, r, o, back) {
+    var pc = by(r, back ? 'tr-back' : 'tr-front'); if (!pc) return; var E = pc.edges, ctop = E[0].p[E[0].p.length - 1], stop = E[0].p[0], hw = E[1].p[3][0], cpt = E[1].p[E[1].p.length - 1], cy = cpt[1], cext = cpt[0] - hw, crease = pc.grain[0][0], k = hw / (hw + cext);
+    function m1(q) { return [hw - q[0], q[1]]; } function m2(q) { return [hw / 2 - (q[0] - crease) * k, q[1]]; }
+    var leg = [m1(stop), [0, ctop[1]], [0, cy]].concat(E[2].p.map(m2)).concat(E[3].p.map(m2)).concat(E[4].p.map(function (q) { return q[1] > cy ? m2(q) : m1(q); }));
+    D.shape(mir(leg)); D.shape(leg);
+    pc.marks.forEach(function (mk) { if (mk.t === 'dart') { var q = mk.p.map(m1); D.line(q, 'th'); D.line(mir(q), 'th'); } });
+    var top = ctop[1], ws = hw - stop[0];
+    if (o.wtype !== 'elastic' && by(r, 'waistband')) D.shape([[-ws, top - 4], [ws, top - 4], [ws, top], [-ws, top]]);
+    else for (var g = -5; g <= 5; g++) D.line([[g * ws / 6, top], [g * ws / 6 + .3, top + 2.6]], 'th');
+    if (!back && o.wtype !== 'elastic') D.line([[0, top + 1]].concat(bez([3.4, top + 1], [3.4, cy * .72], [0, cy * .86]).slice(0)), 'th');
+    if (back && o.wtype !== 'elastic') [1, -1].forEach(function (sg) { var a = [[hw * .3, top + 7], [hw * .3 + 11, top + 7]]; D.line(sg > 0 ? a : mir(a)); });
+    if (+o.cargo) { var x1 = hw - 1.5, y1 = cy + 9; D.shape([[x1 - 13, y1], [x1, y1], [x1, y1 + 15], [x1 - 13, y1 + 15]]); D.line([[x1 - 13, y1 + 4], [x1, y1 + 4]], 'th'); }
+    var cf = by(r, 'cuff'); if (cf) { var lo = Math.max.apply(null, leg.map(function (q) { return q[1]; })), a = m2(E[3].p[0]), b = m2(E[3].p[E[3].p.length - 1]); [1, -1].forEach(function (sg) { var p = [[a[0], lo], [b[0], lo], [b[0] - .4, lo + 7], [a[0] + .4, lo + 7]]; D.shape(sg > 0 ? p : mir(p)); }); }
+  }
+  V.flat = function (r, o, gid, m) {
+    var F = new Dr(), Bk = new Dr();
+    if (gid === 'trousers') { trouserView(F, r, o, false); trouserView(Bk, r, o, true); }
+    else if (gid === 'skirt' || gid === 'lehenga') { skirtView(F, r, o, m, false); skirtView(Bk, r, o, m, true); }
+    else { torsoView(F, r, o, gid, false); torsoView(Bk, r, o, gid, true); }
+    function bb(p) { var a = [1e9, 1e9, -1e9, -1e9]; p.forEach(function (q) { a[0] = Math.min(a[0], q[0]); a[1] = Math.min(a[1], q[1]); a[2] = Math.max(a[2], q[0]); a[3] = Math.max(a[3], q[1]); }); return a; }
+    var bf = bb(F.pts), bk = bb(Bk.pts), gap = Math.max(6, (bf[2] - bf[0]) * .16), dx = bf[2] - bk[0] + gap, H = Math.max(bf[3], bk[3]) - Math.min(bf[1], bk[1]), W = bf[2] - bf[0] + gap + (bk[2] - bk[0]), pad = Math.max(W, H) * .07, y0 = Math.min(bf[1], bk[1]);
+    var lab = H * .065;
+    return '<svg viewBox="' + f2(bf[0] - pad) + ' ' + f2(y0 - pad) + ' ' + f2(W + pad * 2) + ' ' + f2(H + pad * 2 + lab * 1.8) + '" role="img" aria-label="Garment preview, front and back">'
+      + '<g>' + F.svg() + '</g><g transform="translate(' + f2(dx) + ' 0)">' + Bk.svg() + '</g>'
+      + '<text x="' + f2((bf[0] + bf[2]) / 2) + '" y="' + f2(y0 + H + pad * .6 + lab) + '" text-anchor="middle" font-size="' + f2(lab) + '">FRONT</text><text x="' + f2(dx + (bk[0] + bk[2]) / 2) + '" y="' + f2(y0 + H + pad * .6 + lab) + '" text-anchor="middle" font-size="' + f2(lab) + '">BACK</text></svg>';
+  };
+
+  /* ---------- automatic checks ---------- */
+  V.checks = function (r, S, U, gid) {
+    var I = r.info, u = ' ' + S.unit, c = [], G = PM.GARMENTS[gid], o = S.o;
+    function add(ok, t, v, why) { c.push({ ok: ok, t: t, v: v, why: why }); }
+    var gap = 0; r.pieces.forEach(function (p) { for (var i = 0; i < p.edges.length; i++) { var a = p.edges[i].p, b = p.edges[(i + 1) % p.edges.length].p; gap = Math.max(gap, Math.hypot(a[a.length - 1][0] - b[0][0], a[a.length - 1][1] - b[0][1])); } });
+    add(gap < .05, 'All piece outlines are closed', r.pieces.length + ' pieces', 'Every cutting line joins up, so the pieces cut and plot cleanly.');
+    if (I['Side seams, front minus back (darts closed)'] !== undefined) { var sd = I['Side seams, front minus back (darts closed)']; add(Math.abs(sd) <= .5, 'Front and back side seams match', (sd >= 0 ? '+' : '') + U(sd) + u, 'With darts closed, the side seams must be the same length (within 0.5 cm).'); }
+    if (I['Sleeve cap ease'] !== undefined) { var ce = I['Sleeve cap ease'], sty = o.sleeve || G.d.sleeve, rg = sty === 'tee' || +o.drop || gid === 'hoodie' ? [-.6, .6] : sty === 'shirt' ? [.8, 2.2] : sty === 'puff' ? [3, 99] : G.d.fit === 'fitted' ? [2.4, 4.2] : [1.4, 3.5];
+      add(ce >= rg[0] && ce <= rg[1], 'Sleeve cap fits the armhole', U(ce) + u + ' ease', sty === 'puff' ? 'Extra cap length is gathered between the notches.' : 'Target ' + U(rg[0]) + ' to ' + U(rg[1]) + u + ' of ease for this sleeve type, eased in between the notches.'); }
+    if (I['Crotch-level width, front + back (thigh + fit ease)'] !== undefined) { var need = S.m.thigh + ({ trouser: 9, slack: 5.7, jean: 3.2 }[o.pfit] || 9) * (S.gender === 'kids' ? .6 : 1) - .05, have = I['Crotch-level width, front + back (thigh + fit ease)'];
+      add(have >= need, 'Room through the thigh', U(have - S.m.thigh) + u + ' over thigh', 'Width at crotch level must exceed the thigh by the minimum for a ' + (o.pfit || 'trouser') + ' fit.'); }
+    if (I['Inseam back minus front'] !== undefined) { var iv = I['Inseam back minus front']; add(iv <= .05 && iv >= -1.2, 'Inseams walked', U(iv) + u, 'The back inseam is a little shorter than the front and is stretched to fit in sewing.'); }
+    if (gid === 'skirt' && (o.skirt === 'straight' || o.skirt === 'aline')) { var tot = 0, dar = 0; r.pieces.forEach(function (p) { if (!/^sk-/.test(p.id)) return; tot += PM.plen(p.edges[1].p) * 2; p.marks.forEach(function (k) { if (k.t === 'dart') dar += Math.hypot(k.p[2][0] - k.p[0][0], k.p[2][1] - k.p[0][1]) * 2; }); });
+      var fin = tot - dar, want = S.m.waist + 2.5; add(Math.abs(fin - want) <= 1.5, 'Skirt waist fits the waistband', U(fin) + u, 'Waist seam with darts closed should equal waist + ease (' + U(want) + u + ').'); }
+    return c;
+  };
+
+  /* ---------- rulers ---------- */
+  V.ruler = function (cv, horiz, o0, ppc, unit, mark) { // o0: screen px of sheet origin along the axis, ppc: px per cm
+    var dpr = window.devicePixelRatio || 1, w = cv.clientWidth, h = cv.clientHeight; if (!w || !h) return;
+    if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+    var x = cv.getContext('2d'); x.setTransform(dpr, 0, 0, dpr, 0, 0); x.clearRect(0, 0, w, h); x.fillStyle = '#212428'; x.fillRect(0, 0, w, h);
+    var uc = unit === 'in' ? 2.54 : unit === 'mm' ? .1 : 1, ppu = ppc * uc, steps = unit === 'in' ? [1 / 16, 1 / 8, 1 / 4, 1 / 2, 1, 2, 6, 12, 24] : [1, 2, 5, 10, 20, 50, 100, 200, 500, 1000].map(function (s) { return unit === 'mm' ? s : s / 10; });
+    var minor = steps.filter(function (s) { return s * ppu >= 6; })[0] || steps[steps.length - 1], major = steps.filter(function (s) { return s * ppu >= 54 && s >= minor; })[0] || steps[steps.length - 1];
+    var L = horiz ? w : h, v0 = Math.floor((0 - o0) / ppu / minor) * minor, v1 = (L - o0) / ppu;
+    x.strokeStyle = '#596069'; x.fillStyle = '#9da3aa'; x.font = '9px ui-monospace,Menlo,monospace'; x.lineWidth = 1; x.beginPath();
+    for (var v = v0; v <= v1; v += minor) { var p = Math.round(o0 + v * ppu) + .5, isM = Math.abs(v / major - Math.round(v / major)) < 1e-6, half = !isM && Math.abs(v / (major / 2) - Math.round(v / (major / 2))) < 1e-6, len = isM ? 12 : half ? 7 : 4;
+      if (horiz) { x.moveTo(p, h); x.lineTo(p, h - len); } else { x.moveTo(w, p); x.lineTo(w - len, p); }
+      if (isM) { var t = String(+v.toFixed(3)); if (horiz) x.fillText(t, p + 3, 9); else { x.save(); x.translate(9, p + 3); x.rotate(-Math.PI / 2); x.textAlign = 'right'; x.fillText(t, 0, 0); x.restore(); } } }
+    x.stroke();
+    if (mark !== null && mark !== undefined) { x.strokeStyle = '#e08a5e'; x.beginPath(); if (horiz) { x.moveTo(mark + .5, 0); x.lineTo(mark + .5, h); } else { x.moveTo(0, mark + .5); x.lineTo(w, mark + .5); } x.stroke(); }
+  };
+})();
 /* Forecut pattern maker: interface, state, scene building and downloads. Needs pm_engine.js and pm_export.js. */
 (function () {
-  var $ = FC.$, $$ = FC.$$, PM = window.PM, X = window.PMX, DET = window.PM_DETAILS || [];
+  var $ = FC.$, $$ = FC.$$, PM = window.PM, X = window.PMX, V = window.PMV, DET = window.PM_DETAILS || [];
+  var GC = { bodice: 'BOD', kurta: 'KUR', shirt: 'SHT', tshirt: 'TEE', hoodie: 'HOD', blouse: 'BLS', top: 'TOP', dress: 'DRS', jacket: 'JKT', skirt: 'SKT', lehenga: 'LEH', trousers: 'TRS' }, VER = '1.2';
+  function code() { return 'FC-' + { women: 'W', men: 'M', kids: 'K', unisex: 'U' }[S.gender] + '-' + GC[S.gid] + '-' + (S.size === 'custom' ? 'CUS' : S.size); }
   var UF = { cm: 1, mm: 10, in: 1 / 2.54 };
   var OPT = {
     ease: { l: 'Ease at chest', L: 1 }, len: { l: 'Length from shoulder (0 = standard)', L: 1 }, shape: { l: 'Side seam', o: [['straight', 'Straight'], ['shaped', 'Shaped at waist']] },
@@ -768,15 +989,23 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
     $('#pm-gtabs').innerHTML = Object.keys(PM.GENDER).map(function (g) { return '<button type="button" data-g="' + g + '" title="' + PM.GENDER[g] + '" aria-pressed="' + (g === S.gender) + '">' + short[g] + '</button>'; }).join('');
     $$('#pm-gtabs button').forEach(function (b) { b.onclick = function () { S.gender = b.dataset.g; if (PM.GARMENTS[S.gid].g.indexOf(S.gender) < 0) S.gid = Object.keys(PM.GARMENTS).filter(function (k) { return PM.GARMENTS[k].g.indexOf(S.gender) > -1; })[0]; S.detail = null; resetMeas(); resetOpts(); S.pc = {}; ui(true); }; });
     var gs = Object.keys(PM.GARMENTS).filter(function (k) { return PM.GARMENTS[k].g.indexOf(S.gender) > -1; });
-    $('#pm-garments').innerHTML = gs.map(function (k) { return '<button type="button" data-k="' + k + '" aria-pressed="' + (k === S.gid) + '">' + PM.GARMENTS[k].n + '</button>'; }).join('');
+    $('#pm-garments').innerHTML = gs.map(function (k) { return '<button type="button" data-k="' + k + '" aria-pressed="' + (k === S.gid) + '"><span>' + PM.GARMENTS[k].n + '</span><small>' + GC[k] + '</small></button>'; }).join('');
     $$('#pm-garments button').forEach(function (b) { b.onclick = function () { S.gid = b.dataset.k; S.detail = null; resetOpts(); S.pc = {}; ui(true); }; });
   }
   function measForm() {
     var c = chart(), h = '<label class="row"><span>Size chart</span><select id="pm-size">' + Object.keys(c).map(function (s) { return '<option' + (s === S.size ? ' selected' : '') + '>' + s + '</option>'; }).join('') + '<option value="custom"' + (S.size === 'custom' ? ' selected' : '') + '>Custom</option></select></label>';
     measSet().forEach(function (k) { h += '<label class="row" title="' + PM.LABELS[k] + '"><span>' + PM.LABELS[k] + '</span>' + uinp('data-m="' + k + '"', U(S.m[k])) + '</label>'; });
     $('#pm-meas').innerHTML = h;
+    var keys = measSet(); figure(keys, keys.indexOf(FK) > -1 ? FK : keys[0]);
+    $$('#pm-meas [data-m]').forEach(function (e) { var row = e.closest('.row'), k = e.dataset.m; row.onmouseenter = function () { figure(keys, k); }; e.onfocus = function () { figure(keys, k); }; });
     $('#pm-size').onchange = function () { S.size = this.value; if (S.size !== 'custom') S.m = Object.assign({}, chart()[S.size]); ui(); };
     $$('#pm-meas [data-m]').forEach(function (e) { e.oninput = function () { var v = parseFloat(e.value); if (v > 0) { S.m[e.dataset.m] = cm(v); S.size = 'custom'; $('#pm-size').value = 'custom'; draw(); } }; });
+  }
+  var FK = null;
+  function figure(keys, k) {
+    FK = k; $('#pm-fig').innerHTML = V.figure(keys, k) + '<p><b>' + PM.LABELS[k] + '</b>' + (V.HOW[k] || '') + '</p>';
+    $$('#pm-meas .row').forEach(function (r) { var i = r.querySelector('[data-m]'); r.classList.toggle('on', !!i && i.dataset.m === k); });
+    $$('#pm-fig g[data-k]').forEach(function (g) { g.onmouseenter = function () { figure(keys, g.dataset.k); }; g.onclick = function () { var i = $('#pm-meas [data-m="' + g.dataset.k + '"]'); if (i) { i.focus(); i.select(); } }; });
   }
   function optForm() {
     var G = PM.GARMENTS[S.gid], h = '';
@@ -801,8 +1030,9 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
   function scene(forExport) {
     var r = PM.build(S.gid, S.gender, S.m, S.o), sc = [], x = 2, y = 2, rowH = 0, maxW = 165, sizeLab = (S.size === 'custom' ? 'custom size' : 'size ' + S.size) + ' · ' + PM.GENDER[S.gender], title = r.label;
     built = r;
+    var onList = r.pieces.filter(function (p) { return (S.pc[p.id] || {}).on !== false; }), NP = onList.length, cd = code();
     r.pieces.forEach(function (p) {
-      var st = S.pc[p.id] || (S.pc[p.id] = {}), on = st.on !== false; if (!on) return;
+      var st = S.pc[p.id] || (S.pc[p.id] = {}), on = st.on !== false; if (!on) return; var pn = onList.indexOf(p) + 1;
       var sa = st.sa !== undefined ? st.sa : S.sa, ha = st.hem !== undefined ? st.hem : (p.defHem !== undefined ? p.defHem : S.hemA), name = st.name || p.auto;
       var outl = PM.outline(p), cut = PM.cutline(p, sa, ha), bb = X.bbox([{ k: 'poly', p: cut }]), w = bb[2] - bb[0], h = bb[3] - bb[1];
       if (x + w > maxW && x > 2) { x = 2; y += rowH + 4; rowH = 0; }
@@ -820,34 +1050,35 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
         if (k.t === 'text') sc.push({ k: 'text', x: k.c[0] + dx, y: k.c[1] + dy, s: .8, t: k.s, a: 'middle', col: '#6e6259', L: 'TEXT' });
       });
       if (p.grain) { var g0 = T(p.grain[0]), g1 = T(p.grain[1]), ang = Math.atan2(g1[1] - g0[1], g1[0] - g0[0]); sc.push({ k: 'poly', p: [g0, g1], w: .08, col: '#1f3d33', L: 'GRAIN' });
+        var gl = Math.hypot(g1[0] - g0[0], g1[1] - g0[1]); if (gl > 9) { var gd = ang * 180 / Math.PI, gx = g0[0] + (g1[0] - g0[0]) * .22 - Math.sin(ang) * .45, gy = g0[1] + (g1[1] - g0[1]) * .22 + Math.cos(ang) * .45; sc.push({ k: 'text', x: gx, y: gy, s: .62, t: 'GRAINLINE', col: '#1f3d33', r: gd > 90 || gd < -90 ? gd + 180 : gd, L: 'TEXT' }); }
         [[g1, ang], [g0, ang + Math.PI]].forEach(function (z) { sc.push({ k: 'poly', p: [[z[0][0] - Math.cos(z[1] - .35) * 1, z[0][1] - Math.sin(z[1] - .35) * 1], z[0], [z[0][0] - Math.cos(z[1] + .35) * 1, z[0][1] - Math.sin(z[1] + .35) * 1]], w: .08, col: '#1f3d33', L: 'GRAIN' }); }); }
       var fs = Math.max(.45, Math.min(1.5, Math.min(w, h) / 14, (w - 2) / (Math.max(name.length, 18) * .58))), tw = Math.max(name.length, 26) * fs * .56, lx = Math.max(bb[0] + dx + 1, Math.min((p.grain ? (p.grain[0][0] + p.grain[1][0]) / 2 : (bb[0] + bb[2]) / 2) + dx + .6, bb[2] + dx - tw - .6)), ly = (p.grain ? (p.grain[0][1] + p.grain[1][1]) / 2 : (bb[1] + bb[3]) / 2) + dy - fs;
-      [[name, fs, 1], [p.cut + (p.notes ? ' · ' + p.notes : ''), fs * .62], [sizeLab + ' · SA ' + U(sa) + ' ' + S.unit + (ha !== sa ? ', hem ' + U(ha) + ' ' + S.unit : ''), fs * .55], ['FORECUT · forecut.in', fs * .55, 1, '#a9481f']].forEach(function (t, i) { sc.push({ k: 'text', x: lx, y: ly + i * fs * 1.05, s: t[1], t: t[0], b: t[2], col: t[3] || '#1c1714', L: i === 3 ? 'BRAND' : 'TEXT' }); });
+      [[name, fs, 1], ['Piece ' + pn + ' of ' + NP + ' · ' + p.cut + (p.notes ? ' · ' + p.notes : ''), fs * .62], [cd + ' · ' + sizeLab + ' · SA ' + U(sa) + ' ' + S.unit + (ha !== sa ? ', hem ' + U(ha) + ' ' + S.unit : ''), fs * .55], ['FORECUT · forecut.in', fs * .55, 1, '#a9481f']].forEach(function (t, i) { sc.push({ k: 'text', x: lx, y: ly + i * fs * 1.05, s: t[1], t: t[0], b: t[2], col: t[3] || '#1c1714', L: i === 3 ? 'BRAND' : 'TEXT' }); });
       sc.push({ k: 'text', x: (bb[0] + bb[2]) / 2 + dx, y: (bb[1] + bb[3]) / 2 + dy + fs * 3.6, s: Math.min(4, w / 6), t: 'FORECUT', b: 1, col: '#a9481f', op: .12, a: 'middle', r: -30, L: 'BRAND' });
       x += w + 4; rowH = Math.max(rowH, h);
     });
     var W = Math.max(30, Math.min(maxW + 4, sc.length ? X.bbox(sc.filter(function (o) { return o.L !== 'BRAND'; }))[2] + 2 : 30)), H = y + rowH + 9;
     sc.push({ k: 'poly', p: [[1, H - 6.5], [6, H - 6.5], [6, H - 1.5], [1, H - 1.5]], c: 1, w: .06, L: 'MARK' }, { k: 'text', x: 3.5, y: H - 3.7, s: .7, t: '5 cm square', a: 'middle', L: 'TEXT' });
-    sc.push({ k: 'text', x: 7.5, y: H - 4.6, s: 1.2, t: title + ' · ' + sizeLab, b: 1, L: 'TEXT' }, { k: 'text', x: 7.5, y: H - 3, s: .75, t: 'Pattern by FORECUT · forecut.in · ' + new Date().toISOString().slice(0, 10) + ' · test in calico before cutting good fabric', col: '#a9481f', L: 'BRAND' });
+    sc.push({ k: 'text', x: 7.5, y: H - 4.6, s: 1.2, t: title + ' · ' + sizeLab + ' · ' + cd + ' · ' + NP + ' pieces', b: 1, L: 'TEXT' }, { k: 'text', x: 7.5, y: H - 3, s: .75, t: 'Pattern by FORECUT · forecut.in · engine ' + VER + ' · ' + new Date().toISOString().slice(0, 10) + ' · print at 100%, check the 5 cm square · test in calico before cutting good fabric', col: '#a9481f', L: 'BRAND' });
     return { sc: sc, W: W, H: H, title: title + ' - ' + sizeLab, r: r };
   }
   function pip(pt, poly) { var c = false; for (var i = 0, j = poly.length - 1; i < poly.length; j = i++) { var a = poly[i], b = poly[j]; if ((a[1] > pt[1]) !== (b[1] > pt[1]) && pt[0] < (b[0] - a[0]) * (pt[1] - a[1]) / (b[1] - a[1]) + a[0]) c = !c; } return c; }
   function grid(W, H) { var st = S.unit === 'in' ? 2.54 : 1, g = '<g stroke="#ece4d8" stroke-width=".03">'; for (var x = 0, i = 0; x <= W; x += st, i++) g += '<path d="M' + x.toFixed(2) + ' 0V' + H + '"' + (i % 5 ? '' : ' stroke="#d9cdbd" stroke-width=".06"') + '/>'; for (var y = 0, j = 0; y <= H; y += st, j++) g += '<path d="M0 ' + y.toFixed(2) + 'H' + W + '"' + (j % 5 ? '' : ' stroke="#d9cdbd" stroke-width=".06"') + '/>'; return g + '</g>'; }
 
   function pieceTable() {
-    var r = built; if (!r) return;
+    var r = built; if (!r) return; var nOn = 0;
     $('#pm-pieces').innerHTML = r.pieces.map(function (p) {
       var st = S.pc[p.id] || {}, on = st.on !== false, sa = st.sa !== undefined ? st.sa : S.sa, ha = st.hem !== undefined ? st.hem : (p.defHem !== undefined ? p.defHem : S.hemA), hasHem = p.edges.some(function (e) { return e.t === 'hem'; });
-      return '<div class="pcard' + (on ? '' : ' off') + '"><label class="t"><input type="checkbox" data-p="' + p.id + '" data-f="on"' + (on ? ' checked' : '') + ' aria-label="Include ' + p.comp + '"><b>' + p.comp + '</b><small>' + p.cut + '</small></label>'
+      return '<div class="pcard' + (on ? '' : ' off') + '"><label class="t"><input type="checkbox" data-p="' + p.id + '" data-f="on"' + (on ? ' checked' : '') + ' aria-label="Include ' + p.comp + '"><code>' + (on ? String(++nOn).padStart(2, '0') : '––') + '</code><b>' + p.comp + '</b><small>' + p.cut + '</small></label>'
         + '<label class="nm"><span>Label on pattern</span><input type="text" data-p="' + p.id + '" data-f="name" value="' + (st.name || p.auto).replace(/"/g, '&quot;') + '"></label>'
         + '<div class="a"><label>Seam' + uinp('data-p="' + p.id + '" data-f="sa"', U(sa)) + '</label>' + (hasHem ? '<label>Hem' + uinp('data-p="' + p.id + '" data-f="hem"', U(ha)) + '</label>' : '<label>Hem<input disabled value="–"></label>') + '</div></div>';
     }).join('');
-    $$('#pm-pieces [data-p]').forEach(function (e) { e.oninput = e.onchange = function () { var st = S.pc[e.dataset.p] || (S.pc[e.dataset.p] = {}), f = e.dataset.f; if (f === 'on') { st.on = e.checked; e.closest('.pcard').classList.toggle('off', !e.checked); } else if (f === 'name') st.name = e.value; else st[f] = cm(parseFloat(e.value) || 0); draw(true); }; });
+    $$('#pm-pieces [data-p]').forEach(function (e) { e.oninput = e.onchange = function () { var st = S.pc[e.dataset.p] || (S.pc[e.dataset.p] = {}), f = e.dataset.f; if (f === 'on') { st.on = e.checked; draw(); return; } else if (f === 'name') st.name = e.value; else st[f] = cm(parseFloat(e.value) || 0); draw(true); }; });
   }
   /* ---------- view: zoom and pan ---------- */
   var view = $('#pm-view'), ZR = 1, last = null;
   function fitZ(W, H) { var w = Math.max(200, view.offsetWidth - 72), h = Math.max(200, view.offsetHeight - 72); return Math.min(w / W, h / H); }
-  function applyZoom() { if (!last) return; var z = fitZ(last.W, last.H) * ZR, sv = $('#pm-svg svg'); if (!sv) return; sv.style.width = (last.W * z).toFixed(0) + 'px'; sv.style.height = (last.H * z).toFixed(0) + 'px'; $('#pm-zl').textContent = Math.round(ZR * 100) + '%'; }
+  function applyZoom() { if (!last) return; var z = fitZ(last.W, last.H) * ZR, sv = $('#pm-svg svg'); if (!sv) return; sv.style.width = (last.W * z).toFixed(0) + 'px'; sv.style.height = (last.H * z).toFixed(0) + 'px'; $('#pm-zl').textContent = Math.round(ZR * 100) + '%'; if (typeof rulers === 'function') requestAnimationFrame(rulers); }
   function zoom(f, cx, cy) { var old = ZR; ZR = Math.max(.25, Math.min(8, ZR * f)); if (cx === undefined) { cx = view.clientWidth / 2; cy = view.clientHeight / 2; } var sx = (view.scrollLeft + cx) / (view.scrollWidth || 1), sy = (view.scrollTop + cy) / (view.scrollHeight || 1); applyZoom(); view.scrollLeft = sx * view.scrollWidth - cx; view.scrollTop = sy * view.scrollHeight - cy; }
   $('#pm-zin').onclick = function () { zoom(1.25); }; $('#pm-zout').onclick = function () { zoom(.8); }; $('#pm-zfit').onclick = function () { ZR = 1; applyZoom(); view.scrollTo(0, 0); };
   view.addEventListener('wheel', function (e) { if (!e.ctrlKey && !e.metaKey) return; e.preventDefault(); var r = view.getBoundingClientRect(); zoom(e.deltaY < 0 ? 1.12 : .89, e.clientX - r.left, e.clientY - r.top); }, { passive: false });
@@ -863,22 +1094,52 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
 
   function crumb() {
     var sz = S.size === 'custom' ? 'Custom' : S.size;
-    $('#pm-ttl').innerHTML = '<span>' + PM.GENDER[S.gender] + '</span><i>/</i><b>' + PM.GARMENTS[S.gid].n + '</b><i>/</i><span>' + sz + '</span>' + (S.detail ? '<i>/</i><span title="Forecut detail">' + S.detail + '</span>' : '');
+    $('#pm-ttl').innerHTML = '<span>' + PM.GENDER[S.gender] + '</span><i>/</i><b>' + PM.GARMENTS[S.gid].n + '</b><i>/</i><span>' + sz + '</span><code title="Style code, printed on every piece">' + code() + '</code>' + (S.detail ? '<i>/</i><span title="Forecut detail">' + S.detail + '</span>' : '');
     $('#pm-gname').textContent = PM.GARMENTS[S.gid].n;
   }
+  /* rulers and cursor read-out, in the current unit, from the sheet's top-left corner */
+  var mouse = null;
+  function rulers() {
+    var sv = $('#pm-svg svg'); if (!sv || !last) return; var vr = $('#pm-rx').getBoundingClientRect(), hr = $('#pm-ry').getBoundingClientRect(), sr = sv.getBoundingClientRect(), ppc = sr.width / last.W;
+    V.ruler($('#pm-rx'), true, sr.left - vr.left, ppc, S.unit, mouse ? mouse[0] - vr.left : null);
+    V.ruler($('#pm-ry'), false, sr.top - hr.top, ppc, S.unit, mouse ? mouse[1] - hr.top : null);
+    $('#pm-ru').textContent = S.unit;
+    var xy = $('#pm-xy'); if (xy) xy.textContent = mouse ? 'X ' + U((mouse[0] - sr.left) / ppc) + '  Y ' + U((mouse[1] - sr.top) / ppc) + ' ' + S.unit : '';
+  }
+  view.addEventListener('scroll', function () { requestAnimationFrame(rulers); });
+  view.addEventListener('mousemove', function (e) { mouse = [e.clientX, e.clientY]; requestAnimationFrame(rulers); });
+  view.addEventListener('mouseleave', function () { mouse = null; requestAnimationFrame(rulers); });
+  /* A4 page preview, drawn from the same tiling the PDF export uses */
+  var TILES = false;
+  function tilesSvg(sc, W, H) {
+    var T = X.tiles(sc, W, H), g = '';
+    T.list.forEach(function (t) { var x = t.x, y = t.y, w = T.cw, h = T.ch;
+      g += '<path d="M' + x + ' ' + y + 'h' + w + 'v' + h + 'h-' + w + 'Z" fill="' + (t.blank ? '#1b1d20' : '#e08a5e') + '" fill-opacity="' + (t.blank ? .07 : .035) + '" stroke="' + (t.blank ? '#9da3aa' : '#a9481f') + '" stroke-width=".05" data-l="TILE"/>'
+        + '<text x="' + (x + .6) + '" y="' + (y + 1.9) + '" font-size="1.5" font-weight="700" font-family="DM Sans,sans-serif" fill="' + (t.blank ? '#9da3aa' : '#a9481f') + '">' + t.id + '</text>' + (t.blank ? '<text x="' + (x + .6) + '" y="' + (y + 3.1) + '" font-size=".9" font-family="DM Sans,sans-serif" fill="#9da3aa">not printed</text>' : ''); });
+    return { g: g, T: T };
+  }
   function draw(keepTable) {
-    var s = scene(false); last = s;
-    $('#pm-svg').innerHTML = X.svg(s.sc, s.W, s.H, S.unit, { screen: 1, grid: $('#pm-grid').checked ? grid(s.W, s.H) : '' });
+    var s = scene(false); last = s; var tl = null, svg = X.svg(s.sc, s.W, s.H, S.unit, { screen: 1, grid: $('#pm-grid').checked ? grid(s.W, s.H) : '' });
+    if (TILES) { tl = tilesSvg(s.sc, s.W, s.H); svg = svg.replace('</svg>', tl.g + '</svg>'); }
+    $('#pm-svg').innerHTML = svg;
     applyZoom();
-    var info = s.r.info, num = function (v) { return typeof v === 'number' ? U(v) + ' ' + S.unit : v; }, checks = [], meas = [];
-    Object.keys(info).forEach(function (k) { (/minus|ease|lowered|check/i.test(k) ? checks : meas).push('<div><span>' + k + '</span><b>' + num(info[k]) + '</b></div>'); });
+    var T = tl ? tl.T : X.tiles(s.sc, s.W, s.H); $('#pm-tilecount').textContent = T.pages + ' A4 pages (' + T.rows + ' rows × ' + T.cols + ' columns, blanks skipped). Print at 100%.';
+    var info = s.r.info, num = function (v) { return typeof v === 'number' ? U(v) + ' ' + S.unit : v; };
+    $('#pm-info').innerHTML = Object.keys(info).map(function (k) { return '<div><span>' + k + '</span><b>' + num(info[k]) + '</b></div>'; }).join('') + '<div><span>Sheet</span><b>' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + '</b></div>';
+    var ck = V.checks(s.r, S, U, S.gid), ok = ck.filter(function (c) { return c.ok; }).length;
+    $('#pm-checks').innerHTML = ck.map(function (c) { return '<div class="ckr ' + (c.ok ? 'ok' : 'w') + '">' + IC(c.ok ? 'check' : 'warn') + '<b>' + c.t + '</b><em>' + c.v + '</em><span>' + c.why + '</span></div>'; }).join('');
+    var qa = $('#pm-qa'); qa.className = 'qa' + (ok === ck.length ? '' : ' w'); qa.innerHTML = IC(ok === ck.length ? 'check' : 'warn') + (ok === ck.length ? ck.length + '/' + ck.length + ' checks passed' : (ck.length - ok) + ' check' + (ck.length - ok > 1 ? 's' : '') + ' to review');
     var on = s.r.pieces.filter(function (p) { return (S.pc[p.id] || {}).on !== false; }).length;
-    $('#pm-info').innerHTML = '<h5>Measurements</h5>' + meas.join('') + (checks.length ? '<h5>Seam and fit checks</h5>' + checks.join('') : '') + '<h5>Sheet</h5><div><span>Size</span><b>' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + '</b></div><div><span>Pieces on sheet</span><b>' + on + ' of ' + s.r.pieces.length + '</b></div>';
-    $('#pm-status').innerHTML = '<span><b>' + on + '</b> pieces</span><span>Sheet <b>' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + '</b></span><span>Seam <b>' + U(S.sa) + '</b> · Hem <b>' + U(S.hemA) + ' ' + S.unit + '</b></span><span class="ok">Ctrl + scroll to zoom · drag to pan</span>';
+    $('#pm-spec').innerHTML = [['Style code', code()], ['Garment', PM.GENDER[S.gender] + ' · ' + PM.GARMENTS[S.gid].n], ['Size', S.size === 'custom' ? 'Custom measurements' : S.size + ' (Forecut base chart)'], ['Pieces', on + ' of ' + s.r.pieces.length], ['Allowances', 'seam ' + U(S.sa) + ', hem ' + U(S.hemA) + ' ' + S.unit + (S.sa ? '' : ' (net pattern)')], ['Checks', ok + ' of ' + ck.length + ' passed'], ['Engine', 'Forecut pattern engine ' + VER]].map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; }).join('');
+    try { $('#pm-flat').innerHTML = V.flat(s.r, S.o, S.gid, S.m); } catch (e) { $('#pm-flat').innerHTML = ''; }
+    $('#pm-status').innerHTML = '<span><b>' + on + '</b> pieces</span><span>Sheet <b>' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + '</b></span><span><b>' + T.pages + '</b> A4 pages</span><span>SA <b>' + U(S.sa) + '</b> · Hem <b>' + U(S.hemA) + '</b></span><span class="xy" id="pm-xy"></span>';
     crumb();
     if (!keepTable) pieceTable();
+    requestAnimationFrame(rulers);
     FC.save('pm2', S);
   }
+  var ICONS = { check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>', warn: '<path d="M12 4 2.5 20h19zM12 10v4.5M12 17.5v.01"/>' };
+  function IC(k) { return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">' + ICONS[k] + '</svg>'; }
   function units() { $$('#pm-units button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.u === S.unit); }); $$('.pl .u').forEach(function (i) { i.textContent = S.unit; }); }
   function ui(fit) { genderTabs(); detailPicker(); measForm(); optForm(); units(); $('#pm-sa').value = U(S.sa); $('#pm-hemall').value = U(S.hemA); if (fit) ZR = 1; draw(); }
   $$('#pm-units button').forEach(function (b) { b.onclick = function () { S.unit = b.dataset.u; ui(); }; });
@@ -889,6 +1150,8 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
   $('#pm-resetnames').onclick = function () { Object.keys(S.pc).forEach(function (k) { delete S.pc[k].name; }); draw(); };
   $('#pm-gridb').onclick = function () { var c = $('#pm-grid'); c.checked = !c.checked; this.setAttribute('aria-pressed', c.checked); draw(true); };
   $('#pm-grid').onchange = function () { draw(true); };
+  $('#pm-tilesb').onclick = function () { TILES = !TILES; this.setAttribute('aria-pressed', TILES); draw(true); if (TILES) toast($('#pm-tilecount').textContent); };
+  $('#pm-qa').onclick = function () { $('.rt button[data-t=checks]').click(); };
   /* right panel tabs */
   $$('.rt button').forEach(function (b) { b.onclick = function () { $$('.rt button').forEach(function (x) { x.setAttribute('aria-selected', x === b); }); $$('.pr [data-tp]').forEach(function (p) { p.hidden = p.dataset.tp !== b.dataset.t; }); }; });
   /* export menu */
