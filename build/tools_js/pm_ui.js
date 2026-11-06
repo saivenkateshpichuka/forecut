@@ -15,6 +15,7 @@
     skirt: { l: 'Skirt', o: [['straight', 'Straight / pencil'], ['aline', 'A-line'], ['circle', 'Circle'], ['gathered', 'Gathered'], ['panels', 'Panelled (kalis)']] }, slen2: { l: 'Skirt length', L: 1 },
     circle: { l: 'Circle', o: [['0.25', 'Quarter'], ['0.5', 'Half'], ['1', 'Full']] }, panels: { l: 'Panels', n: 1 }, hemc: { l: 'Hem circumference', L: 1 },
     leg: { l: 'Leg', o: [['straight', 'Straight'], ['tapered', 'Tapered'], ['wide', 'Wide-leg'], ['palazzo', 'Palazzo'], ['barrel', 'Barrel'], ['jogger', 'Jogger'], ['shorts', 'Shorts']] },
+    pfit: { l: 'Fit at crotch', o: [['trouser', 'Trouser (hangs straight)'], ['slack', 'Slack (closer, cups slightly)'], ['jean', 'Jean (contoured)']] },
     wtype: { l: 'Waist', o: [['fitted', 'Waistband with darts'], ['elastic', 'Elastic / drawstring casing']] }, tlen: { l: 'Length, waist to hem (0 = full length)', L: 1 }, cargo: { l: 'Cargo pocket', o: [['0', 'No'], ['1', 'Yes']] }
   };
   var ALLOW = { collar: { kurta: ['none', 'band'], shirt: ['shirt', 'band', 'camp'], top: ['none', 'band', 'peterpan'], dress: ['none', 'band', 'peterpan'], jacket: ['band', 'none'] },
@@ -122,7 +123,7 @@
   function draw(keepTable) {
     var s = scene(false);
     $('#pm-svg').innerHTML = X.svg(s.sc, s.W, s.H, S.unit, { screen: 1, grid: $('#pm-grid').checked ? grid(s.W, s.H) : '' });
-    var info = s.r.info, rows = Object.keys(info).map(function (k) { return '<div><span>' + k + '</span><b>' + U(info[k]) + ' ' + S.unit + '</b></div>'; });
+    var info = s.r.info, rows = Object.keys(info).map(function (k) { return '<div><span>' + k + '</span><b>' + (typeof info[k] === 'number' ? U(info[k]) + ' ' + S.unit : info[k]) + '</b></div>'; });
     rows.push('<div><span>Sheet</span><b>' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + '</b></div>');
     $('#pm-info').innerHTML = rows.join('');
     if (!keepTable) pieceTable();
