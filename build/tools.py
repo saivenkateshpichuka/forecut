@@ -68,7 +68,18 @@ details.fs summary{cursor:pointer;font:700 15px "DM Sans",sans-serif;padding:13p
 .hubg .b{padding:16px 18px 18px;display:grid;gap:8px}.hubg small{font:700 11px "DM Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--chalk)}
 .hubg b{font:700 20px "DM Sans",sans-serif}.hubg span{font:15px/1.5 "Source Serif 4",Georgia,serif;color:var(--muted)}.hubg em{font:700 14px "DM Sans",sans-serif;font-style:normal;color:var(--chalk)}
 .tile{display:none}
-@media (max-width:860px){.tl-h,.tool,.tool.wide,.hubg{grid-template-columns:1fr}.yc{grid-template-columns:1fr 1fr}.fg{grid-template-columns:1fr 1fr}}
+.cl{display:grid;grid-template-columns:250px minmax(0,1fr);gap:24px;align-items:start;margin-bottom:30px}
+.cl aside{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:12px}
+.cl aside input{margin-bottom:8px}
+.clg{margin:10px 0 4px}.clg b{display:block;font:700 11px "DM Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--chalk);margin:0 0 4px}
+.clg a{display:block;font:500 14px/1.35 "DM Sans",sans-serif;color:var(--ink);text-decoration:none;padding:6px 8px;border-radius:6px}
+.clg a:hover{background:var(--paper)}.clg a[aria-current=true]{background:var(--ink);color:var(--paper)}
+.clm{display:none;margin-bottom:12px}
+.clh small{font:700 11px "DM Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--chalk)}.clh h2{margin:4px 0 6px;font-size:26px}.clh p{margin:0 0 16px;color:var(--muted);font-size:16px}
+.iu{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:6px}.iu .un{font-size:14px}
+details.fx{margin-top:12px;border-top:1px solid var(--grid);padding-top:8px}details.fx summary{cursor:pointer;font:700 13.5px "DM Sans",sans-serif;color:var(--chalk)}details.fx p{font:14px/1.55 "DM Sans",sans-serif;color:var(--muted);margin:6px 0 0}
+.res .big b{font-size:22px}
+@media (max-width:860px){.cl{grid-template-columns:1fr}.cl aside{display:none}.clm{display:grid}.tl-h,.tool,.tool.wide,.hubg{grid-template-columns:1fr}.yc{grid-template-columns:1fr 1fr}.fg{grid-template-columns:1fr 1fr}}
 @media print{body{padding:0}nav,footer,.tabs,.noprint,.prose,.tl-h,details.fs,.fctab{display:none!important}.card{border:0;padding:0}
  #p-tiles .tile{display:block;page-break-after:always}#p-tiles .tile p{font:10px "DM Sans",sans-serif;margin:2mm 0 0}
  body.pt .wrap>*:not(#p-tiles){display:none!important}}
@@ -94,7 +105,7 @@ def big(lab, id_, sub=''):
 
 # ------------------------------------------------------------------ hub
 TOOLS = [('textile-calculator.html', 'Textile calculator', 'Fabric, GSM, yarn & costing',
-          'Fabric needed per garment and per order, GSM from a swatch, weight and price per kg or metre, yarn count, shrinkage and garment costing up to MRP.', 'hub-fabrics-art-forecast'),
+          '27 calculators: yarn counts in 15 systems, ply, twist and strength, reed, warp and weft, GSM and cover factor, knitting, consumption, markers, thread, SMV, dyeing, regain, costing and units.', 'hub-fabrics-art-forecast'),
          ('pattern-blocks.html', 'Pattern block maker', 'Kurta, sleeve & skirt blocks',
           'Enter measurements and get printable kurta (front, back, sleeve) and straight or A-line skirt blocks at true scale, with seam allowance and tiled A4 printing.', 'couture-bespoke-tailoring-2026')]
 hub = ('<div class="eb">Free tools</div><div class="tl-h"><div><h1>Design and production tools</h1>'
@@ -127,56 +138,24 @@ GARMENTS = [  # name, metres at 44"/112 cm, metres at 58"/147 cm, fixed length?,
     ('Dupatta / stole', 2.5, 2.5, 1, 'A dupatta is a fixed length (about 2.25–2.5 m); width sets its breadth.'),
 ]
 WIDTHS = [('91', '36" (91 cm)'), ('112', '44" (112 cm)'), ('114', '45" (114 cm)'), ('137', '54" (137 cm)'), ('147', '58" (147 cm)'), ('152', '60" (152 cm)')]
-tc = ('<div class="eb">Free tool</div><div class="tl-h"><div><h1>Textile calculator</h1><p class="lead">Fabric needed per garment and per order, GSM and weight, yarn count, shrinkage and costing up to MRP, in one place.</p></div>'
-      '<div class="chiprow"><span>Metres and yards</span><span>₹ costing</span><span>Exact conversions</span><span>Nothing is uploaded</span></div></div>'
-      '<div id="tc"><div class="tabs noprint" role="tablist"><button data-tab="cons" role="tab">Fabric needed</button><button data-tab="gsm" role="tab">GSM &amp; weight</button><button data-tab="yarn" role="tab">Yarn count</button><button data-tab="shrink" role="tab">Shrinkage</button><button data-tab="cost" role="tab">Costing &amp; MRP</button></div>'
-      # consumption
-      '<section data-pane="cons" class="tool"><div class="card"><h3>Garment and fabric</h3><div class="fg">'
-      '<label class="full">Garment<select id="c-g"></select></label>'
-      + sel('c-w', 'Fabric width', WIDTHS, '112') + sel('c-s', 'Size', [(s, s) for s in ['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL']], 'M')
-      + num('c-q', 'Pieces to make', 50, '1', '1') + num('c-p', 'Fabric price (₹ per metre, optional)', '', '1')
-      + num('c-sh', 'Shrinkage allowance %', 3, '0.5') + num('c-wa', 'Cutting wastage %', 5, '0.5')
-      + '<label class="full">Your own consumption per piece (m), optional<input type="number" id="c-own" step="0.05" min="0" placeholder="Leave empty to use the typical figure"></label>'
-      '</div><p class="hint" id="c-note"></p></div>'
-      '<div class="card res"><h3>You need</h3>' + big('Per piece', 'c-per', 'c-peryd') + big('For the whole order', 'c-tot', 'c-totyd') + big('Typical base consumption', 'c-base') +
-      '<p class="hint" id="c-cost"></p><p class="hint">Typical figures are industry rules of thumb for the style shown. Confirm with your cutting master or a CAD marker before ordering bulk, especially for prints, stripes or checks that need matching.</p></div></section>'
-      # gsm
-      '<section data-pane="gsm" class="tool" hidden><div><div class="card"><h3>GSM from a swatch</h3><div class="fg">'
-      + num('g-g', 'Swatch weight (g)', 1.8, '0.01') + sel('g-shape', 'Swatch', [('circle', 'GSM cutter circle (100 cm²)'), ('rect', 'Rectangle I cut myself')], 'circle') +
-      '<div class="fg full" id="g-ab">' + num('g-a', 'Length (cm)', 10, '0.1') + num('g-b', 'Width (cm)', 10, '0.1') + '</div></div>'
-      + big('Fabric weight', 'g-out', 'g-oz') + '<p class="hint">Weigh a dry, conditioned swatch on a scale reading to 0.01 g. GSM = grams ÷ area in m².</p></div>'
-      '<div class="card"><h3>oz/yd² to GSM</h3>' + num('o-oz', 'Ounces per square yard (e.g. denim 12 oz)', 12, '0.1') + big('Equals', 'o-out') + '</div></div>'
-      '<div class="card"><h3>Weight and price of a roll or order</h3><div class="fg">' + num('w-gsm', 'GSM', 180, '1') + sel('w-w', 'Width', WIDTHS, '147') +
-      num('w-l', 'Length (m)', 100, '1') + '<span></span>' + num('w-pk', 'Price per kg (₹, optional)', '', '1') + num('w-pm', 'Price per metre (₹, optional)', '', '1') + '</div>'
-      + big('Total weight', 'w-kg') + big('Metres in one kg', 'w-mpk') + '<p class="hint" id="w-conv"></p><p class="hint">Weight per metre = GSM × width (m) ÷ 1000 kg. Knits are often sold by the kilo, wovens by the metre: this converts between them.</p></div></section>'
-      # yarn
-      '<section data-pane="yarn" hidden><div class="card"><h3>Yarn count converter</h3><p class="hint" style="margin:0 0 12px">Type in any box; the others update. Ne and Nm are indirect (higher = finer); tex, denier and dtex are direct (higher = heavier).</p><div class="yc">'
-      + num('y-ne', 'Ne (English cotton)', 40, '0.1') + num('y-nm', 'Nm (metric)', 67.7, '0.1') + num('y-tex', 'Tex', 14.76, '0.01') + num('y-den', 'Denier', 132.86, '0.01') + num('y-dtex', 'dtex', 147.6, '0.1') +
-      '</div></div><div class="card woven"><h3>Woven fabric GSM from construction</h3><div class="fg" style="grid-template-columns:repeat(3,1fr)">'
-      + num('f-epi', 'Ends per inch (EPI)', 132, '1') + num('f-ppi', 'Picks per inch (PPI)', 72, '1') + '<span></span>' + num('f-wa', 'Warp count (Ne)', 40, '0.5') + num('f-we', 'Weft count (Ne)', 40, '0.5') + '<span></span>' + num('f-cw', 'Warp crimp %', 8, '0.5') + num('f-cf', 'Weft crimp %', 6, '0.5') +
-      '</div>' + big('Estimated fabric weight', 'f-out', 'f-split') + '<p class="hint">Greige estimate: g/m² = threads per inch × 39.37 × tex ÷ 1000 × (1 + crimp), for warp and weft. Finishing, sizing and washing change the final GSM.</p></div></section>'
-      # shrinkage
-      '<section data-pane="shrink" class="tool" hidden><div class="card"><h3>Shrinkage from a wash test</h3><div class="fg">' + num('s-b', 'Marked length before washing (cm)', 50, '0.1') + num('s-a', 'Length after washing and drying (cm)', 48.5, '0.1') + '</div>'
-      + big('Shrinkage', 's-out') + '<p class="hint" id="s-verdict"></p><p class="hint">Mark 50 × 50 cm on the fabric, wash and dry it as the customer will, measure again. Test warp and weft separately.</p></div>'
-      '<div class="card"><h3>Allow for it when cutting</h3><div class="fg">' + num('s-f', 'Finished length you need (cm)', 110, '0.5') + num('s-p', 'Expected shrinkage %', 3, '0.5') + '</div>' + big('Cut length', 's-cut') + '<p class="hint">Cut length = finished length ÷ (1 − shrinkage).</p></div></section>'
-      # costing
-      '<section data-pane="cost" class="tool" hidden><div class="card"><h3>Cost of one garment</h3><div class="fg">' + num('k-c', 'Fabric consumption (m)', 2.5, '0.05') + num('k-p', 'Fabric price (₹ per m)', 180, '1') +
-      num('k-t', 'Trims and labels (₹)', 60, '1') + num('k-cmt', 'Cutting, making and finishing (₹)', 220, '1') + num('k-pk', 'Packing (₹)', 25, '1') + num('k-oh', 'Overheads and rejects %', 10, '0.5') +
-      num('k-m', 'Your margin on cost %', 60, '1') + num('k-r', 'Retailer or marketplace margin %', 40, '1') + num('k-g', 'GST %', 5, '0.5') + '</div>'
-      '<div class="btns"><button type="button" id="k-from">Use the fabric figure from “Fabric needed”</button></div></div>'
-      '<div class="card res"><h3>Price build-up</h3>' + big('Fabric cost', 'k-fab') + big('Total cost', 'k-cost') + big('Your selling price', 'k-ws') + big('Retail price before tax', 'k-rt') + big('Suggested MRP (incl. GST)', 'k-mrp') +
-      '<div class="kbar" id="k-bar"></div><div class="kkey" id="k-key"></div><p class="hint">GST on garments depends on the sale value and can change; check the current rate for your price band. MRP is rounded to end in 9.</p></div></section></div>'
-      '<div class="prose"><h2>How to use the textile calculator</h2>'
-      '<p><b>Fabric needed</b> starts from typical consumption for a size M garment at 44 and 58 inch widths, then adjusts for the width you choose, the size, shrinkage and cutting wastage, and multiplies by the number of pieces. If your pattern master has already laid a marker, type your own consumption per piece and the calculator applies only shrinkage, wastage and quantity. Add a price per metre to see the fabric cost per piece and for the order.</p>'
-      '<p><b>GSM and weight</b> works out grams per square metre from a swatch, converts ounces per square yard (common for denim) to GSM, and turns a GSM, width and length into the weight of a roll or an order. It also converts between price per kilo and price per metre, which helps when a knit mill quotes by the kilo and your costing is by the metre.</p>'
-      '<p><b>Yarn count</b> converts between Ne, Nm, tex, denier and dtex using the standard formulas: tex = 590.5 ÷ Ne, Nm = 1000 ÷ tex, denier = 9 × tex and dtex = 10 × tex. The woven estimate gives a greige fabric weight from ends and picks per inch, yarn counts and crimp.</p>'
-      '<p><b>Shrinkage</b> turns a wash test into a percentage and tells you how much longer to cut. <b>Costing and MRP</b> adds fabric, trims, making, packing and overheads, then your margin, the retailer\'s margin and GST, to suggest a retail price.</p>'
-      '<h2>Good to know</h2><ul><li>Wider fabric is usually cheaper per garment even when the price per metre is higher: compare the fabric cost per piece, not the price per metre.</li>'
-      '<li>Directional prints, one-way pile (velvet, corduroy) and stripes or checks that must match can add 10–20% to consumption.</li>'
-      '<li>Order a little extra for shade variation between rolls, and cut a whole order from the same dye lot where you can.</li></ul>'
+CATS = [('Yarn', 'count systems, ply, length and weight, twist, strength, diameter and sett, blend price'), ('Weaving', 'reed and ends, warp and weft, GSM from construction, cover factor, loom-to-finished, loom production'),
+        ('Knitting', 'knit GSM and tightness, circular machine needles, width and output'), ('Garment', 'woven and knit consumption, marker efficiency, sewing thread, shrinkage, SMV, costing to MRP'),
+        ('Dyeing & processing', 'dye recipe and liquor, padding pick-up, moisture regain and invoice weight'), ('Units', 'every length, weight, area, GSM, density, twist, force, volume, price and temperature unit')]
+tc = ('<div class="eb">Free tool</div><div class="tl-h"><div><h1>Textile calculator</h1><p class="lead">27 calculators for yarn, weaving, knitting, garments, dyeing and units. Enter values in any unit, metric or imperial, and in any yarn count system.</p></div>'
+      '<div class="chiprow"><span>15 yarn count systems</span><span>Metric and imperial</span><span>Formula shown for each</span><span>Nothing is uploaded</span></div></div>'
+      '<div class="cl"><aside class="noprint"><input type="search" id="cl-q" placeholder="Search calculators" aria-label="Search calculators"><nav id="cl-list" aria-label="Calculators"></nav></aside>'
+      '<div><label class="clm noprint">Calculator<select id="cl-sel"></select></label><div id="cl-pane"></div></div></div>'
+      '<div class="prose"><h2>What is in the textile calculator</h2><ul>' + ''.join(f'<li><b>{E(c)}:</b> {E(d)}.</li>' for c, d in CATS) + '</ul>'
+      '<h2>Units and yarn counts</h2>'
+      '<p>Every length, width, weight, area, density and price box has its own unit menu, so you can mix units freely: a reed width in inches, a cloth length in metres and a yarn price per pound all work together. Yarn counts can be entered in any of 15 systems, from English cotton (Ne), metric (Nm), tex, dtex and denier to worsted, linen lea, American woollen run and cut, Yorkshire skein, spun silk, raw silk drams and jute. Internally every count is converted to tex, the weight in grams of 1000 metres, which keeps mixed-system calculations exact.</p>'
+      '<h2>Where the formulas come from</h2>'
+      '<p>The yarn, warp, weft, reed, mixing and cloth-structure calculations follow the classic rules set out in E. A. Posselt\'s <i>Textile Calculations</i> (1906), restated in modern units. For example, 12,600 yards of 30s cotton weigh 8 oz, and a 20s and a 60s twisted together make a 15s. Knitting, garment, sewing-thread, SMV, dyeing and regain calculations use the standard formulas taught in textile and apparel courses today. Each calculator shows its formula, so you can check the working.</p>'
+      '<h2>Good to know</h2><ul><li>Formulas and unit conversions are exact. Consumption, thread ratios, packing factors and typical ranges are rules of thumb: confirm with your marker, your mill or a lab test before ordering bulk.</li>'
+      '<li>Wider fabric is often cheaper per garment even when the price per metre is higher: compare the fabric cost per piece.</li>'
+      '<li>GST on garments depends on the price band and can change; check the current rate.</li></ul>'
       '<p>Related: the <a href="fabrics.html">Fabrics hub</a> for weaves, knits and GSM ranges, and the <a href="india-textile-craft-guide.html">India textile and craft sourcing guide</a>.</p></div>')
-page('textile-calculator.html', 'Textile Calculator · Fabric Consumption, GSM, Yarn Count, Costing · Forecut', tc,
-     'window.FC_GARMENTS=' + json.dumps(GARMENTS) + ';' + JS('textile.js'))
+page('textile-calculator.html', 'Textile Calculator · Yarn Count, GSM, Warp & Weft, Knitting, Garment Costing, Units · Forecut', tc,
+     'window.FC_GARMENTS=' + json.dumps(GARMENTS) + ';' + JS('calcs.js'))
 
 # ------------------------------------------------------------------ pattern blocks
 pb = ('<div class="eb">Free tool</div><div class="tl-h"><div><h1>Pattern block maker</h1><p class="lead">Kurta front, back and sleeve, or a straight or A-line skirt, drafted from your measurements at true scale. Download as SVG or print on A4.</p></div>'

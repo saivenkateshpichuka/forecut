@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en-IN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Textile Calculator · Fabric Consumption, GSM, Yarn Count, Costing · Forecut</title>
+<title>Textile Calculator · Yarn Count, GSM, Warp &amp; Weft, Knitting, Garment Costing, Units · Forecut</title>
 
 <link rel="preload" href="fonts/dm-sans.woff" as="font" type="font/woff" crossorigin><link rel="stylesheet" href="fonts/fonts.css">
 <style>
@@ -83,7 +83,18 @@ details.fs summary{cursor:pointer;font:700 15px "DM Sans",sans-serif;padding:13p
 .hubg .b{padding:16px 18px 18px;display:grid;gap:8px}.hubg small{font:700 11px "DM Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--chalk)}
 .hubg b{font:700 20px "DM Sans",sans-serif}.hubg span{font:15px/1.5 "Source Serif 4",Georgia,serif;color:var(--muted)}.hubg em{font:700 14px "DM Sans",sans-serif;font-style:normal;color:var(--chalk)}
 .tile{display:none}
-@media (max-width:860px){.tl-h,.tool,.tool.wide,.hubg{grid-template-columns:1fr}.yc{grid-template-columns:1fr 1fr}.fg{grid-template-columns:1fr 1fr}}
+.cl{display:grid;grid-template-columns:250px minmax(0,1fr);gap:24px;align-items:start;margin-bottom:30px}
+.cl aside{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:12px}
+.cl aside input{margin-bottom:8px}
+.clg{margin:10px 0 4px}.clg b{display:block;font:700 11px "DM Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--chalk);margin:0 0 4px}
+.clg a{display:block;font:500 14px/1.35 "DM Sans",sans-serif;color:var(--ink);text-decoration:none;padding:6px 8px;border-radius:6px}
+.clg a:hover{background:var(--paper)}.clg a[aria-current=true]{background:var(--ink);color:var(--paper)}
+.clm{display:none;margin-bottom:12px}
+.clh small{font:700 11px "DM Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--chalk)}.clh h2{margin:4px 0 6px;font-size:26px}.clh p{margin:0 0 16px;color:var(--muted);font-size:16px}
+.iu{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:6px}.iu .un{font-size:14px}
+details.fx{margin-top:12px;border-top:1px solid var(--grid);padding-top:8px}details.fx summary{cursor:pointer;font:700 13.5px "DM Sans",sans-serif;color:var(--chalk)}details.fx p{font:14px/1.55 "DM Sans",sans-serif;color:var(--muted);margin:6px 0 0}
+.res .big b{font-size:22px}
+@media (max-width:860px){.cl{grid-template-columns:1fr}.cl aside{display:none}.clm{display:grid}.tl-h,.tool,.tool.wide,.hubg{grid-template-columns:1fr}.yc{grid-template-columns:1fr 1fr}.fg{grid-template-columns:1fr 1fr}}
 @media print{body{padding:0}nav,footer,.tabs,.noprint,.prose,.tl-h,details.fs,.fctab{display:none!important}.card{border:0;padding:0}
  #p-tiles .tile{display:block;page-break-after:always}#p-tiles .tile p{font:10px "DM Sans",sans-serif;margin:2mm 0 0}
  body.pt .wrap>*:not(#p-tiles){display:none!important}}
@@ -91,7 +102,7 @@ details.fs summary{cursor:pointer;font:700 15px "DM Sans",sans-serif;padding:13p
 </style></head><body><div class="wrap">
 <nav><a class="logo" href="/"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/><path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="#a9481f" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Forecut</a>
 <div class="links"><a href="/">Home</a><a href="regions.html">Regions</a><a href="aw26.html">Seasons</a><a href="couture.html">Couture</a><a href="fabrics.html">Fabrics</a><a href="colour.html">Colour</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a><a href="search.html" aria-label="Search Forecut">⌕ Search</a></div></nav>
-<div class="eb">Free tool</div><div class="tl-h"><div><h1>Textile calculator</h1><p class="lead">Fabric needed per garment and per order, GSM and weight, yarn count, shrinkage and costing up to MRP, in one place.</p></div><div class="chiprow"><span>Metres and yards</span><span>₹ costing</span><span>Exact conversions</span><span>Nothing is uploaded</span></div></div><div id="tc"><div class="tabs noprint" role="tablist"><button data-tab="cons" role="tab">Fabric needed</button><button data-tab="gsm" role="tab">GSM &amp; weight</button><button data-tab="yarn" role="tab">Yarn count</button><button data-tab="shrink" role="tab">Shrinkage</button><button data-tab="cost" role="tab">Costing &amp; MRP</button></div><section data-pane="cons" class="tool"><div class="card"><h3>Garment and fabric</h3><div class="fg"><label class="full">Garment<select id="c-g"></select></label><label>Fabric width<select id="c-w"><option value="91">36&quot; (91 cm)</option><option value="112" selected>44&quot; (112 cm)</option><option value="114">45&quot; (114 cm)</option><option value="137">54&quot; (137 cm)</option><option value="147">58&quot; (147 cm)</option><option value="152">60&quot; (152 cm)</option></select></label><label>Size<select id="c-s"><option value="XS">XS</option><option value="S">S</option><option value="M" selected>M</option><option value="L">L</option><option value="XL">XL</option><option value="XXL">XXL</option><option value="3XL">3XL</option></select></label><label>Pieces to make<input type="number" id="c-q" value="50" step="1" min="1" inputmode="decimal"></label><label>Fabric price (₹ per metre, optional)<input type="number" id="c-p" value="" step="1" min="0" inputmode="decimal"></label><label>Shrinkage allowance %<input type="number" id="c-sh" value="3" step="0.5" min="0" inputmode="decimal"></label><label>Cutting wastage %<input type="number" id="c-wa" value="5" step="0.5" min="0" inputmode="decimal"></label><label class="full">Your own consumption per piece (m), optional<input type="number" id="c-own" step="0.05" min="0" placeholder="Leave empty to use the typical figure"></label></div><p class="hint" id="c-note"></p></div><div class="card res"><h3>You need</h3><div class="big"><span>Per piece</span><b><span id="c-per" style="font:inherit;color:inherit">–</span><small id="c-peryd"></small></b></div><div class="big"><span>For the whole order</span><b><span id="c-tot" style="font:inherit;color:inherit">–</span><small id="c-totyd"></small></b></div><div class="big"><span>Typical base consumption</span><b><span id="c-base" style="font:inherit;color:inherit">–</span></b></div><p class="hint" id="c-cost"></p><p class="hint">Typical figures are industry rules of thumb for the style shown. Confirm with your cutting master or a CAD marker before ordering bulk, especially for prints, stripes or checks that need matching.</p></div></section><section data-pane="gsm" class="tool" hidden><div><div class="card"><h3>GSM from a swatch</h3><div class="fg"><label>Swatch weight (g)<input type="number" id="g-g" value="1.8" step="0.01" min="0" inputmode="decimal"></label><label>Swatch<select id="g-shape"><option value="circle" selected>GSM cutter circle (100 cm²)</option><option value="rect">Rectangle I cut myself</option></select></label><div class="fg full" id="g-ab"><label>Length (cm)<input type="number" id="g-a" value="10" step="0.1" min="0" inputmode="decimal"></label><label>Width (cm)<input type="number" id="g-b" value="10" step="0.1" min="0" inputmode="decimal"></label></div></div><div class="big"><span>Fabric weight</span><b><span id="g-out" style="font:inherit;color:inherit">–</span><small id="g-oz"></small></b></div><p class="hint">Weigh a dry, conditioned swatch on a scale reading to 0.01 g. GSM = grams ÷ area in m².</p></div><div class="card"><h3>oz/yd² to GSM</h3><label>Ounces per square yard (e.g. denim 12 oz)<input type="number" id="o-oz" value="12" step="0.1" min="0" inputmode="decimal"></label><div class="big"><span>Equals</span><b><span id="o-out" style="font:inherit;color:inherit">–</span></b></div></div></div><div class="card"><h3>Weight and price of a roll or order</h3><div class="fg"><label>GSM<input type="number" id="w-gsm" value="180" step="1" min="0" inputmode="decimal"></label><label>Width<select id="w-w"><option value="91">36&quot; (91 cm)</option><option value="112">44&quot; (112 cm)</option><option value="114">45&quot; (114 cm)</option><option value="137">54&quot; (137 cm)</option><option value="147" selected>58&quot; (147 cm)</option><option value="152">60&quot; (152 cm)</option></select></label><label>Length (m)<input type="number" id="w-l" value="100" step="1" min="0" inputmode="decimal"></label><span></span><label>Price per kg (₹, optional)<input type="number" id="w-pk" value="" step="1" min="0" inputmode="decimal"></label><label>Price per metre (₹, optional)<input type="number" id="w-pm" value="" step="1" min="0" inputmode="decimal"></label></div><div class="big"><span>Total weight</span><b><span id="w-kg" style="font:inherit;color:inherit">–</span></b></div><div class="big"><span>Metres in one kg</span><b><span id="w-mpk" style="font:inherit;color:inherit">–</span></b></div><p class="hint" id="w-conv"></p><p class="hint">Weight per metre = GSM × width (m) ÷ 1000 kg. Knits are often sold by the kilo, wovens by the metre: this converts between them.</p></div></section><section data-pane="yarn" hidden><div class="card"><h3>Yarn count converter</h3><p class="hint" style="margin:0 0 12px">Type in any box; the others update. Ne and Nm are indirect (higher = finer); tex, denier and dtex are direct (higher = heavier).</p><div class="yc"><label>Ne (English cotton)<input type="number" id="y-ne" value="40" step="0.1" min="0" inputmode="decimal"></label><label>Nm (metric)<input type="number" id="y-nm" value="67.7" step="0.1" min="0" inputmode="decimal"></label><label>Tex<input type="number" id="y-tex" value="14.76" step="0.01" min="0" inputmode="decimal"></label><label>Denier<input type="number" id="y-den" value="132.86" step="0.01" min="0" inputmode="decimal"></label><label>dtex<input type="number" id="y-dtex" value="147.6" step="0.1" min="0" inputmode="decimal"></label></div></div><div class="card woven"><h3>Woven fabric GSM from construction</h3><div class="fg" style="grid-template-columns:repeat(3,1fr)"><label>Ends per inch (EPI)<input type="number" id="f-epi" value="132" step="1" min="0" inputmode="decimal"></label><label>Picks per inch (PPI)<input type="number" id="f-ppi" value="72" step="1" min="0" inputmode="decimal"></label><span></span><label>Warp count (Ne)<input type="number" id="f-wa" value="40" step="0.5" min="0" inputmode="decimal"></label><label>Weft count (Ne)<input type="number" id="f-we" value="40" step="0.5" min="0" inputmode="decimal"></label><span></span><label>Warp crimp %<input type="number" id="f-cw" value="8" step="0.5" min="0" inputmode="decimal"></label><label>Weft crimp %<input type="number" id="f-cf" value="6" step="0.5" min="0" inputmode="decimal"></label></div><div class="big"><span>Estimated fabric weight</span><b><span id="f-out" style="font:inherit;color:inherit">–</span><small id="f-split"></small></b></div><p class="hint">Greige estimate: g/m² = threads per inch × 39.37 × tex ÷ 1000 × (1 + crimp), for warp and weft. Finishing, sizing and washing change the final GSM.</p></div></section><section data-pane="shrink" class="tool" hidden><div class="card"><h3>Shrinkage from a wash test</h3><div class="fg"><label>Marked length before washing (cm)<input type="number" id="s-b" value="50" step="0.1" min="0" inputmode="decimal"></label><label>Length after washing and drying (cm)<input type="number" id="s-a" value="48.5" step="0.1" min="0" inputmode="decimal"></label></div><div class="big"><span>Shrinkage</span><b><span id="s-out" style="font:inherit;color:inherit">–</span></b></div><p class="hint" id="s-verdict"></p><p class="hint">Mark 50 × 50 cm on the fabric, wash and dry it as the customer will, measure again. Test warp and weft separately.</p></div><div class="card"><h3>Allow for it when cutting</h3><div class="fg"><label>Finished length you need (cm)<input type="number" id="s-f" value="110" step="0.5" min="0" inputmode="decimal"></label><label>Expected shrinkage %<input type="number" id="s-p" value="3" step="0.5" min="0" inputmode="decimal"></label></div><div class="big"><span>Cut length</span><b><span id="s-cut" style="font:inherit;color:inherit">–</span></b></div><p class="hint">Cut length = finished length ÷ (1 − shrinkage).</p></div></section><section data-pane="cost" class="tool" hidden><div class="card"><h3>Cost of one garment</h3><div class="fg"><label>Fabric consumption (m)<input type="number" id="k-c" value="2.5" step="0.05" min="0" inputmode="decimal"></label><label>Fabric price (₹ per m)<input type="number" id="k-p" value="180" step="1" min="0" inputmode="decimal"></label><label>Trims and labels (₹)<input type="number" id="k-t" value="60" step="1" min="0" inputmode="decimal"></label><label>Cutting, making and finishing (₹)<input type="number" id="k-cmt" value="220" step="1" min="0" inputmode="decimal"></label><label>Packing (₹)<input type="number" id="k-pk" value="25" step="1" min="0" inputmode="decimal"></label><label>Overheads and rejects %<input type="number" id="k-oh" value="10" step="0.5" min="0" inputmode="decimal"></label><label>Your margin on cost %<input type="number" id="k-m" value="60" step="1" min="0" inputmode="decimal"></label><label>Retailer or marketplace margin %<input type="number" id="k-r" value="40" step="1" min="0" inputmode="decimal"></label><label>GST %<input type="number" id="k-g" value="5" step="0.5" min="0" inputmode="decimal"></label></div><div class="btns"><button type="button" id="k-from">Use the fabric figure from “Fabric needed”</button></div></div><div class="card res"><h3>Price build-up</h3><div class="big"><span>Fabric cost</span><b><span id="k-fab" style="font:inherit;color:inherit">–</span></b></div><div class="big"><span>Total cost</span><b><span id="k-cost" style="font:inherit;color:inherit">–</span></b></div><div class="big"><span>Your selling price</span><b><span id="k-ws" style="font:inherit;color:inherit">–</span></b></div><div class="big"><span>Retail price before tax</span><b><span id="k-rt" style="font:inherit;color:inherit">–</span></b></div><div class="big"><span>Suggested MRP (incl. GST)</span><b><span id="k-mrp" style="font:inherit;color:inherit">–</span></b></div><div class="kbar" id="k-bar"></div><div class="kkey" id="k-key"></div><p class="hint">GST on garments depends on the sale value and can change; check the current rate for your price band. MRP is rounded to end in 9.</p></div></section></div><div class="prose"><h2>How to use the textile calculator</h2><p><b>Fabric needed</b> starts from typical consumption for a size M garment at 44 and 58 inch widths, then adjusts for the width you choose, the size, shrinkage and cutting wastage, and multiplies by the number of pieces. If your pattern master has already laid a marker, type your own consumption per piece and the calculator applies only shrinkage, wastage and quantity. Add a price per metre to see the fabric cost per piece and for the order.</p><p><b>GSM and weight</b> works out grams per square metre from a swatch, converts ounces per square yard (common for denim) to GSM, and turns a GSM, width and length into the weight of a roll or an order. It also converts between price per kilo and price per metre, which helps when a knit mill quotes by the kilo and your costing is by the metre.</p><p><b>Yarn count</b> converts between Ne, Nm, tex, denier and dtex using the standard formulas: tex = 590.5 ÷ Ne, Nm = 1000 ÷ tex, denier = 9 × tex and dtex = 10 × tex. The woven estimate gives a greige fabric weight from ends and picks per inch, yarn counts and crimp.</p><p><b>Shrinkage</b> turns a wash test into a percentage and tells you how much longer to cut. <b>Costing and MRP</b> adds fabric, trims, making, packing and overheads, then your margin, the retailer's margin and GST, to suggest a retail price.</p><h2>Good to know</h2><ul><li>Wider fabric is usually cheaper per garment even when the price per metre is higher: compare the fabric cost per piece, not the price per metre.</li><li>Directional prints, one-way pile (velvet, corduroy) and stripes or checks that must match can add 10–20% to consumption.</li><li>Order a little extra for shade variation between rolls, and cut a whole order from the same dye lot where you can.</li></ul><p>Related: the <a href="fabrics.html">Fabrics hub</a> for weaves, knits and GSM ranges, and the <a href="india-textile-craft-guide.html">India textile and craft sourcing guide</a>.</p></div><footer><span>© 2026 Forecut · <a href="mailto:hello@forecut.in">hello@forecut.in</a></span>
+<div class="eb">Free tool</div><div class="tl-h"><div><h1>Textile calculator</h1><p class="lead">27 calculators for yarn, weaving, knitting, garments, dyeing and units. Enter values in any unit, metric or imperial, and in any yarn count system.</p></div><div class="chiprow"><span>15 yarn count systems</span><span>Metric and imperial</span><span>Formula shown for each</span><span>Nothing is uploaded</span></div></div><div class="cl"><aside class="noprint"><input type="search" id="cl-q" placeholder="Search calculators" aria-label="Search calculators"><nav id="cl-list" aria-label="Calculators"></nav></aside><div><label class="clm noprint">Calculator<select id="cl-sel"></select></label><div id="cl-pane"></div></div></div><div class="prose"><h2>What is in the textile calculator</h2><ul><li><b>Yarn:</b> count systems, ply, length and weight, twist, strength, diameter and sett, blend price.</li><li><b>Weaving:</b> reed and ends, warp and weft, GSM from construction, cover factor, loom-to-finished, loom production.</li><li><b>Knitting:</b> knit GSM and tightness, circular machine needles, width and output.</li><li><b>Garment:</b> woven and knit consumption, marker efficiency, sewing thread, shrinkage, SMV, costing to MRP.</li><li><b>Dyeing &amp; processing:</b> dye recipe and liquor, padding pick-up, moisture regain and invoice weight.</li><li><b>Units:</b> every length, weight, area, GSM, density, twist, force, volume, price and temperature unit.</li></ul><h2>Units and yarn counts</h2><p>Every length, width, weight, area, density and price box has its own unit menu, so you can mix units freely: a reed width in inches, a cloth length in metres and a yarn price per pound all work together. Yarn counts can be entered in any of 15 systems, from English cotton (Ne), metric (Nm), tex, dtex and denier to worsted, linen lea, American woollen run and cut, Yorkshire skein, spun silk, raw silk drams and jute. Internally every count is converted to tex, the weight in grams of 1000 metres, which keeps mixed-system calculations exact.</p><h2>Where the formulas come from</h2><p>The yarn, warp, weft, reed, mixing and cloth-structure calculations follow the classic rules set out in E. A. Posselt's <i>Textile Calculations</i> (1906), restated in modern units. For example, 12,600 yards of 30s cotton weigh 8 oz, and a 20s and a 60s twisted together make a 15s. Knitting, garment, sewing-thread, SMV, dyeing and regain calculations use the standard formulas taught in textile and apparel courses today. Each calculator shows its formula, so you can check the working.</p><h2>Good to know</h2><ul><li>Formulas and unit conversions are exact. Consumption, thread ratios, packing factors and typical ranges are rules of thumb: confirm with your marker, your mill or a lab test before ordering bulk.</li><li>Wider fabric is often cheaper per garment even when the price per metre is higher: compare the fabric cost per piece.</li><li>GST on garments depends on the price band and can change; check the current rate.</li></ul><p>Related: the <a href="fabrics.html">Fabrics hub</a> for weaves, knits and GSM ranges, and the <a href="india-textile-craft-guide.html">India textile and craft sourcing guide</a>.</p></div><footer><span>© 2026 Forecut · <a href="mailto:hello@forecut.in">hello@forecut.in</a></span>
 <span class="fl"><a href="couture.html">Couture</a><a href="fabrics.html">Fabrics</a><a href="colour.html">Colour</a><a href="reports.html">Reports</a><a href="journal.html">Journal</a><a href="celebrity-style.html">Celebrity style</a><a href="about.html">About</a><a href="method.html">Methodology</a><a href="contact.html">Contact</a><a href="terms.html">Terms &amp; Conditions</a><a href="privacy.html">Privacy Policy</a></span></footer>
 <script>/* Forecut tools: shared helpers (nearest Pantone TCX by CIEDE2000, formatting, downloads, saved state). */
 var FC = window.FC || {};
@@ -160,83 +171,246 @@ FC.nearest = function (hex, list) {
   return best ? { code: best[0] + ' TCX', name: best[1].replace(/-/g, ' ').replace(/\b\w/g, function (m) { return m.toUpperCase(); }), de: Math.round(bd * 10) / 10 } : null;
 };
 window.FC = FC;
-window.FC_GARMENTS=[["Men's shirt, full sleeve", 2.5, 1.75, 0, "Typical for a regular-fit shirt with a collar and cuffs, size M."], ["Men's shirt, half sleeve", 2.0, 1.5, 0, "Regular fit, size M."], ["Women's kurta, knee length", 2.5, 1.75, 0, "Straight or A-line kurta with 3/4 sleeves, size M."], ["Women's kurta, calf length / Anarkali", 3.5, 2.6, 0, "Longer kurtas and gentle flares; full Anarkalis with many panels can need 5 m or more."], ["Men's kurta, full sleeve", 2.75, 2.0, 0, "Knee-length kurta, size M."], ["Trousers / pants", 2.3, 1.25, 0, "At 44\" both legs rarely fit across one width, so two lengths are usually needed."], ["Palazzo pants", 2.4, 1.8, 0, "Wide-leg palazzo, ankle length."], ["Salwar / churidar", 2.5, 2.0, 0, "Churidars are often cut on the bias, which uses more fabric."], ["Saree blouse", 0.8, 0.6, 0, "Standard blouse piece; long sleeves or a peplum need about 1\u20131.2 m."], ["Lehenga skirt, kalidar", 4.5, 3.5, 0, "Flare is the big variable: a very full lehenga can need 6\u20138 m."], ["A-line dress, knee length", 2.2, 1.6, 0, "Sleeveless or cap sleeve, size M."], ["Nehru jacket / waistcoat", 1.6, 1.25, 0, "Outer fabric only; add the same again for lining."], ["Blazer (outer fabric)", 2.4, 1.6, 0, "Single-breasted, size M; lining and interlining extra."], ["Dupatta / stole", 2.5, 2.5, 1, "A dupatta is a fixed length (about 2.25\u20132.5 m); width sets its breadth."]];/* Forecut textile calculator */
+window.FC_GARMENTS=[["Men's shirt, full sleeve", 2.5, 1.75, 0, "Typical for a regular-fit shirt with a collar and cuffs, size M."], ["Men's shirt, half sleeve", 2.0, 1.5, 0, "Regular fit, size M."], ["Women's kurta, knee length", 2.5, 1.75, 0, "Straight or A-line kurta with 3/4 sleeves, size M."], ["Women's kurta, calf length / Anarkali", 3.5, 2.6, 0, "Longer kurtas and gentle flares; full Anarkalis with many panels can need 5 m or more."], ["Men's kurta, full sleeve", 2.75, 2.0, 0, "Knee-length kurta, size M."], ["Trousers / pants", 2.3, 1.25, 0, "At 44\" both legs rarely fit across one width, so two lengths are usually needed."], ["Palazzo pants", 2.4, 1.8, 0, "Wide-leg palazzo, ankle length."], ["Salwar / churidar", 2.5, 2.0, 0, "Churidars are often cut on the bias, which uses more fabric."], ["Saree blouse", 0.8, 0.6, 0, "Standard blouse piece; long sleeves or a peplum need about 1\u20131.2 m."], ["Lehenga skirt, kalidar", 4.5, 3.5, 0, "Flare is the big variable: a very full lehenga can need 6\u20138 m."], ["A-line dress, knee length", 2.2, 1.6, 0, "Sleeveless or cap sleeve, size M."], ["Nehru jacket / waistcoat", 1.6, 1.25, 0, "Outer fabric only; add the same again for lining."], ["Blazer (outer fabric)", 2.4, 1.6, 0, "Single-breasted, size M; lining and interlining extra."], ["Dupatta / stole", 2.5, 2.5, 1, "A dupatta is a fixed length (about 2.25\u20132.5 m); width sets its breadth."]];/* Forecut textile & fashion calculators: a data-driven engine. Every input can be entered in any unit; results show in several units.
+   Yarn counts are converted through tex (g per 1000 m). Indirect systems: tex = 496055.4 / (N x yards-per-lb standard). */
 (function () {
-  var $ = FC.$, $$ = FC.$$, n = FC.num;
-  FC.tabs($('#tc'));
-  function bind(pane, fn) { $$('input,select', pane).forEach(function (e) { e.addEventListener('input', fn); e.addEventListener('change', fn); }); fn(); }
+  var $ = FC.$, $$ = FC.$$;
+  /* ---------- units (factor to base unit) ---------- */
+  var U = {
+    len: { b: 'm', u: [['mm', .001], ['cm', .01], ['m', 1], ['km', 1000], ['in', .0254], ['ft', .3048], ['yd', .9144]] },
+    mass: { b: 'g', u: [['mg', .001], ['g', 1], ['kg', 1000], ['tonne', 1e6], ['grain', .06479891], ['dram', 1.7718452], ['oz', 28.349523], ['lb', 453.59237]] },
+    area: { b: 'm²', u: [['cm²', 1e-4], ['m²', 1], ['in²', .00064516], ['ft²', .09290304], ['yd²', .83612736]] },
+    gsm: { b: 'GSM', u: [['GSM (g/m²)', 1], ['oz/yd²', 33.905747], ['g/cm²', 10000]] },
+    dens: { b: '/cm', u: [['per cm', 1], ['per inch', 1 / 2.54], ['per 10 cm', .1]] },
+    twist: { b: '/m', u: [['turns per metre (TPM)', 1], ['turns per cm', 100], ['turns per inch (TPI)', 39.370079]] },
+    force: { b: 'cN', u: [['cN', 1], ['N', 100], ['gf', .980665], ['kgf', 980.665], ['lbf', 444.82216]] },
+    vol: { b: 'L', u: [['mL', .001], ['L', 1], ['US gal', 3.7854118], ['UK gal', 4.54609]] },
+    pricel: { b: '₹/m', u: [['₹ per metre', 1], ['₹ per yard', 1 / .9144]] },
+    pricem: { b: '₹/kg', u: [['₹ per kg', 1], ['₹ per lb', 1 / .45359237]] },
+    speed: { b: 'm/min', u: [['m/min', 1], ['yd/min', .9144], ['m/s', 60]] }
+  };
+  /* yarn count systems: [key, label, kind ('i' indirect with yd/lb standard, 'd' direct with tex factor)] */
+  var CS = [
+    ['ne', 'Ne · English cotton (840 yd/lb)', 'i', 840], ['nm', 'Nm · metric (km per kg)', 'n', 1], ['tex', 'tex (g per 1000 m)', 'd', 1], ['dtex', 'dtex (g per 10,000 m)', 'd', .1],
+    ['den', 'denier (g per 9000 m)', 'd', 1 / 9], ['ktex', 'ktex (sliver, roving)', 'd', 1000], ['grex', 'grex (g per 10,000 m)', 'd', .1],
+    ['nw', 'Worsted, NeK (560 yd/lb)', 'i', 560], ['nl', 'Linen lea, NeL (300 yd/lb)', 'i', 300], ['run', 'Woollen run, US (1600 yd/lb)', 'i', 1600],
+    ['cut', 'Woollen cut, US (300 yd/lb)', 'i', 300], ['ysk', 'Yorkshire skein, YSW (256 yd/lb)', 'i', 256], ['silk', 'Spun silk (840 yd/lb, ply as Ne)', 'i', 840],
+    ['dram', 'Raw silk, drams per 1000 yd', 'd', 1.9377], ['jute', 'Jute, lb per spyndle (14,400 yd)', 'd', 34.4482]];
+  var CSM = {}; CS.forEach(function (c) { CSM[c[0]] = c; });
+  function toTex(sys, v) { var c = CSM[sys]; if (!(v > 0)) return NaN; return c[2] === 'i' ? 496055.4 / (v * c[3]) : c[2] === 'n' ? 1000 / v : v * c[3]; }
+  function fromTex(sys, t) { var c = CSM[sys]; return c[2] === 'i' ? 496055.4 / (t * c[3]) : c[2] === 'n' ? 1000 / t : t / c[3]; }
+  function f(v, d) { if (!isFinite(v)) return '–'; var a = Math.abs(v), dd = d !== undefined ? d : a >= 1000 ? 0 : a >= 100 ? 1 : a >= 1 ? 2 : 3; return v.toLocaleString('en-IN', { minimumFractionDigits: dd, maximumFractionDigits: dd }); }
+  function mass(g) { var a = Math.abs(g); return a >= 1e6 ? f(g / 1e6, 3) + ' t · ' + f(g / 453.59237, 0) + ' lb'   : a >= 1000 ? f(g / 1000) + ' kg · ' + f(g / 453.59237) + ' lb' : f(g) + ' g · ' + f(g / 28.349523) + ' oz'; }
+  function len(m) { return Math.abs(m) >= 1000 ? f(m / 1000) + ' km · ' + f(m / .9144, 0) + ' yd' : f(m) + ' m · ' + f(m / .9144) + ' yd'; }
+  function cnt(t) { return f(fromTex('ne', t), 1) + ' Ne · ' + f(t, 1) + ' tex · ' + f(t * 9, 0) + ' den · Nm ' + f(1000 / t, 1); }
+  function inr(v) { return isFinite(v) ? '₹' + v.toLocaleString('en-IN', { maximumFractionDigits: v < 100 ? 2 : 0 }) : '–'; }
+  var STD_R = { cotton: 8.5, wool: 18.25, woolen: 17, silk: 11, linen: 12, jute: 13.75, viscose: 13, modal: 11, nylon: 5.75, polyester: 1.5, acrylic: 2, lyocell: 11.5 };
 
-  /* 1. Fabric consumption: typical size-M estimates at 44"/112 cm and 58"/147 cm width */
-  var G = window.FC_GARMENTS, SIZE = { XS: .9, S: .95, M: 1, L: 1.06, XL: 1.12, XXL: 1.2, '3XL': 1.28 };
-  var gs = $('#c-g'); G.forEach(function (g, i) { var o = document.createElement('option'); o.value = i; o.textContent = g[0]; gs.appendChild(o); });
-  function cons(g, wcm) {
-    var a = g[1], b = g[2]; if (g[3]) return a;               // fixed-length piece (dupatta)
-    if (wcm >= 147) return b * Math.pow(147 / wcm, .5);
-    if (wcm >= 112) return a + (b - a) * (wcm - 112) / 35;    // between 44" and 58"
-    return a * Math.pow(112 / wcm, .85);                       // narrower than 44"
-  }
-  bind($('[data-pane=cons]'), function () {
-    var g = G[+gs.value], w = n($('#c-w')), sz = SIZE[$('#c-s').value], q = Math.max(1, n($('#c-q'))), sh = n($('#c-sh')) / 100, ws = n($('#c-wa')) / 100, pr = n($('#c-p'));
-    var own = n($('#c-own')), base = own > 0 ? own : cons(g, w) * (g[3] ? 1 : sz);
-    var per = base / (1 - Math.min(sh, .5)) * (1 + ws), tot = per * q;
-    $('#c-note').textContent = g[4];
-    $('#c-per').textContent = FC.fmt(per) + ' m'; $('#c-peryd').textContent = FC.fmt(per * 1.0936) + ' yd';
-    $('#c-tot').textContent = FC.fmt(tot, 1) + ' m'; $('#c-totyd').textContent = FC.fmt(tot * 1.0936, 1) + ' yd';
-    $('#c-base').textContent = FC.fmt(base) + ' m';
-    $('#c-cost').textContent = pr > 0 ? FC.inr(per * pr) + ' a piece · ' + FC.inr(tot * pr) + ' in all' : 'Add a price per metre to see the fabric cost';
-  });
+  /* ---------- calculators ---------- */
+  var G = window.FC_GARMENTS || [], SIZE = { XS: .9, S: .95, M: 1, L: 1.06, XL: 1.12, XXL: 1.2, '3XL': 1.28 };
+  function cons(g, wcm) { var a = g[1], b = g[2]; if (g[3]) return a; if (wcm >= 147) return b * Math.pow(147 / wcm, .5); if (wcm >= 112) return a + (b - a) * (wcm - 112) / 35; return a * Math.pow(112 / wcm, .85); }
+  var WEAVE = [['plain', 'Plain 1/1', 2, 2], ['tw21', 'Twill 2/1', 3, 2], ['tw22', 'Twill 2/2 or 3/1', 4, 2], ['tw41', 'Twill 4/1', 5, 2], ['sat5', 'Satin 5-end', 5, 2], ['sat8', 'Satin 8-end', 8, 2], ['hop22', 'Hopsack 2/2 (basket)', 4, 2]];
+  var STITCH = [['301', '301 lockstitch', 2.5], ['101', '101 single chain', 4], ['304', '304 zigzag lockstitch', 7], ['401', '401 two-thread chainstitch', 5.5], ['503', '503 two-thread overedge', 12], ['504', '504 three-thread overlock', 14], ['512', '512/514 four-thread overlock', 18], ['516', '516 five-thread safety stitch', 20], ['406', '406 two-needle coverstitch', 18], ['602', '602 top and bottom cover', 25], ['605', '605 three-needle cover', 28]];
+  var FIB = [['cotton', 'Cotton', 1.52], ['viscose', 'Viscose / modal', 1.51], ['linen', 'Linen', 1.5], ['polyester', 'Polyester', 1.38], ['silk', 'Silk', 1.34], ['wool', 'Wool', 1.31], ['acrylic', 'Acrylic', 1.17], ['nylon', 'Nylon', 1.14]];
 
-  /* 2. GSM & weight */
-  bind($('[data-pane=gsm]'), function () {
-    var g = n($('#g-g')), sh = $('#g-shape').value, a = sh === 'circle' ? 100 : n($('#g-a')) * n($('#g-b'));
-    var gsm = a > 0 ? g / (a / 10000) : 0; $('#g-out').textContent = gsm ? FC.fmt(gsm, 0) + ' GSM' : '–';
-    $('#g-oz').textContent = gsm ? FC.fmt(gsm / 33.906) + ' oz/yd²' : '';
-    $('#g-ab').hidden = sh === 'circle';
-    var G2 = n($('#w-gsm')), W = n($('#w-w')) / 100, L = n($('#w-l')), pk = n($('#w-pk')), pm = n($('#w-pm'));
-    var kgm = G2 * W / 1000;
-    $('#w-kg').textContent = kgm ? FC.fmt(kgm * L, 2) + ' kg' : '–';
-    $('#w-mpk').textContent = kgm ? FC.fmt(1 / kgm, 2) + ' m per kg' : '–';
-    $('#w-conv').textContent = kgm ? (pk ? FC.inr(pk * kgm) + ' per metre (from ₹' + pk + '/kg)' : '') + (pk && pm ? ' · ' : '') + (pm ? FC.inr(pm / kgm) + ' per kg (from ₹' + pm + '/m)' : '') : '';
-    var oz = n($('#o-oz')); $('#o-out').textContent = oz ? FC.fmt(oz * 33.906, 0) + ' GSM' : '–';
-  });
+  var C = [
+  /* ===== Yarn ===== */
+  { id: 'count', cat: 'Yarn', t: 'Yarn count converter', d: 'Convert a yarn count between every system: Ne, Nm, tex, dtex, denier, worsted, linen lea, woollen run and cut, Yorkshire skein, spun and raw silk, jute.',
+    i: [{ k: 'c', l: 'Yarn count', t: 'count', d: 40, s: 'ne' }, { k: 'ply', l: 'Ply (folded)', d: 1, step: 1 }],
+    o: function (v) { var t = v.c * v.ply; return [['Resultant (ply ' + v.ply + ')', f(t, 2) + ' tex']].concat(CS.map(function (c) { var x = fromTex(c[0], t); return [c[1], f(x, c[2] === 'i' || c[2] === 'n' ? 1 : 2)]; })); },
+    fx: 'tex = 496,055.4 ÷ (count × yards per lb) for indirect systems; tex = denier ÷ 9; Nm = 1000 ÷ tex. A folded yarn of n plies has n × the single tex (shown as Ne ÷ n), before twist contraction.' },
+  { id: 'ply', cat: 'Yarn', t: 'Ply / resultant count', d: 'Count of a folded yarn made from 2 to 4 threads of different counts or materials, or the count a missing ply must be to hit a target.',
+    i: [{ k: 'a', l: 'Thread 1', t: 'count', d: 20, s: 'ne' }, { k: 'b', l: 'Thread 2', t: 'count', d: 60, s: 'ne' }, { k: 'c3', l: 'Thread 3 (optional)', t: 'count', d: '', s: 'ne' }, { k: 'd4', l: 'Thread 4 (optional)', t: 'count', d: '', s: 'ne' },
+      { k: 'tc', l: 'Twist contraction %', d: 0, step: .5 }, { k: 'tg', l: 'Target resultant (optional, to solve a missing ply)', t: 'count', d: '', s: 'ne' }],
+    o: function (v) { var s = [v.a, v.b, v.c3, v.d4].filter(function (x) { return x > 0; }), t = s.reduce(function (p, q) { return p + q; }, 0) * (1 + v.tc / 100), r = [['Resultant count', cnt(t)], ['Plies', s.length]];
+      if (v.tg > 0) { var miss = v.tg / (1 + v.tc / 100) - s.reduce(function (p, q) { return p + q; }, 0); r.push(['Extra ply needed for the target', miss > 0 ? cnt(miss) : 'Target is finer than the threads already given']); } return r; },
+    fx: 'Resultant tex = (tex₁ + tex₂ + …) × (1 + contraction). In Ne terms: 1/R = 1/N₁ + 1/N₂ + … (e.g. 20s with 60s = 15s, as in Posselt).' },
+  { id: 'yl', cat: 'Yarn', t: 'Yarn length ↔ weight', d: 'Weight of a given length of yarn, or the length in a given weight, for any count.',
+    i: [{ k: 'c', l: 'Yarn count', t: 'count', d: 30, s: 'ne' }, { k: 'L', l: 'Length (leave 0 to use weight)', u: 'len', du: 'yd', d: 12600 }, { k: 'W', l: 'Weight (used if length is 0)', u: 'mass', du: 'kg', d: 0 }],
+    o: function (v) { if (v.L > 0) { var g = v.L * v.c / 1000; return [['Weight', mass(g)], ['Per 1000 m', f(v.c) + ' g'], ['Yards per lb', f(453.59237 / v.c * 1000 / .9144, 0)]]; } var m = v.W / v.c * 1000; return [['Length', len(m)], ['Yards per lb', f(453.59237 / v.c * 1000 / .9144, 0)]]; },
+    fx: 'Weight (g) = length (m) × tex ÷ 1000. Posselt: 12,600 yd of 30s cotton weigh 8 oz.' },
+  { id: 'twist', cat: 'Yarn', t: 'Twist and twist multiplier', d: 'Convert twist between TPI, TPM and turns per cm, and find the twist multiplier (TM / αe, αm, tex twist factor), or the twist needed for a chosen TM.',
+    i: [{ k: 'c', l: 'Yarn count', t: 'count', d: 30, s: 'ne' }, { k: 'tw', l: 'Twist (0 to solve from TM)', u: 'twist', du: 'turns per inch (TPI)', d: 20 }, { k: 'tm', l: 'Or: twist multiplier αe (Ne basis)', d: 4, step: .05 }],
+    o: function (v) { var ne = fromTex('ne', v.c), nm = 1000 / v.c, tpm = v.tw > 0 ? v.tw : v.tm * Math.sqrt(ne) * 39.370079, tpi = tpm / 39.370079;
+      return [['Twist', f(tpi) + ' TPI · ' + f(tpm, 0) + ' TPM · ' + f(tpm / 100) + ' per cm'], ['TM / αe (TPI ÷ √Ne)', f(tpi / Math.sqrt(ne))], ['αm (TPM ÷ √Nm)', f(tpm / Math.sqrt(nm), 1)], ['Tex twist factor (turns/cm × √tex)', f(tpm / 100 * Math.sqrt(v.c), 1)],
+        ['Typical αe', 'Hosiery 2.8–3.2 · weft 3.2–3.6 · warp 3.8–4.5 · voile/crepe 5+']]; },
+    fx: 'αe = TPI ÷ √Ne; αm = TPM ÷ √Nm; tex factor = turns per cm × √tex (≈ 9.57 × αe).' },
+  { id: 'strength', cat: 'Yarn', t: 'Yarn strength: tenacity, RKM, CSP', d: 'Turn a breaking force into tenacity (cN/tex), RKM and grams per denier, and lea strength into CSP.',
+    i: [{ k: 'c', l: 'Yarn count', t: 'count', d: 30, s: 'ne' }, { k: 'F', l: 'Single-end breaking force', u: 'force', du: 'cN', d: 330 }, { k: 'lea', l: 'Lea strength in lbf (optional, for CSP)', d: 80 }],
+    o: function (v) { var ten = v.F / v.c; return [['Tenacity', f(ten) + ' cN/tex'], ['RKM', f(ten / .980665) + ' km'], ['Grams per denier', f(ten / 8.826) + ' gf/den'], ['CSP (lea lbf × Ne)', v.lea > 0 ? f(v.lea * fromTex('ne', v.c), 0) : '–']]; },
+    fx: 'Tenacity = force (cN) ÷ tex; RKM = tenacity ÷ 0.981; 1 gf/den = 8.83 cN/tex; CSP = lea strength (lbf) × Ne.' },
+  { id: 'diam', cat: 'Yarn', t: 'Yarn diameter and maximum sett', d: 'Approximate yarn diameter and how many threads fit side by side, then the sett for a weave (Ashenhurst), as in Posselt’s “ends that lie side by side in one inch”.',
+    i: [{ k: 'c', l: 'Yarn count', t: 'count', d: 40, s: 'ne' }, { k: 'fib', l: 'Fibre', o: FIB.map(function (x) { return [x[0], x[1]]; }), d: 'cotton' }, { k: 'phi', l: 'Packing factor (0.55–0.65)', d: .6, step: .01 }, { k: 'wv', l: 'Weave', o: WEAVE.map(function (w) { return [w[0], w[1]]; }), d: 'plain' }],
+    o: function (v) { var rho = FIB.filter(function (x) { return x[0] === v.fib; })[0][2], d = .03568 * Math.sqrt(v.c / (rho * v.phi)), per = 10 / d, w = WEAVE.filter(function (x) { return x[0] === v.wv; })[0], k = w[2] / (w[2] + w[3]);
+      return [['Diameter', f(d, 3) + ' mm · ' + f(d / 25.4, 4) + ' in'], ['Threads touching side by side', f(per, 1) + ' per cm · ' + f(per * 2.54, 0) + ' per inch'], ['Maximum sett for ' + w[1], f(per * k, 1) + ' per cm · ' + f(per * k * 2.54, 0) + ' per inch'], ['Practical starting sett (≈ 85%)', f(per * k * .85, 1) + ' per cm · ' + f(per * k * .85 * 2.54, 0) + ' per inch']]; },
+    fx: 'd (mm) = 0.0357 × √(tex ÷ (fibre density × packing)). Sett = threads per unit × E ÷ (E + I), with E ends and I intersections per repeat.' },
+  { id: 'blend', cat: 'Yarn', t: 'Blend price and mixing', d: 'Average price of a blend (up to 4 components), or how much of a cheaper and a dearer lot to mix for a target price (Posselt’s mixing rule).',
+    i: [{ k: 'q1', l: 'Component 1 quantity (kg or %)', d: 60 }, { k: 'p1', l: 'Price 1', u: 'pricem', du: '₹ per kg', d: 280 }, { k: 'q2', l: 'Component 2 quantity', d: 40 }, { k: 'p2', l: 'Price 2', u: 'pricem', du: '₹ per kg', d: 190 },
+      { k: 'q3', l: 'Component 3 quantity (optional)', d: '' }, { k: 'p3', l: 'Price 3', u: 'pricem', du: '₹ per kg', d: '' }, { k: 'tp', l: 'Target price (optional, mixes 1 and 2)', u: 'pricem', du: '₹ per kg', d: 250 }],
+    o: function (v) { var q = [v.q1, v.q2, v.q3], p = [v.p1, v.p2, v.p3], sq = 0, sv = 0; q.forEach(function (x, i) { if (x > 0 && p[i] > 0) { sq += x; sv += x * p[i]; } });
+      var r = [['Average price of the blend', inr(sv / sq) + ' per kg · ' + inr(sv / sq * .45359237) + ' per lb'], ['Total quantity', f(sq)]];
+      if (v.tp > 0 && v.p1 !== v.p2) { var lo = Math.min(v.p1, v.p2), hi = Math.max(v.p1, v.p2); if (v.tp <= lo || v.tp >= hi) r.push(['Mix for target', 'Target must lie between the two prices']); else { var a = (v.tp - v.p2) / (v.p1 - v.p2); r.push(['Mix for target', f(a * 100, 1) + '% of component 1 + ' + f((1 - a) * 100, 1) + '% of component 2']); } }
+      return r; },
+    fx: 'Average = Σ(quantity × price) ÷ Σ quantity. Two-lot mix: share of lot 1 = (target − price₂) ÷ (price₁ − price₂).' },
 
-  /* 3. Yarn count */
-  var Y = ['ne', 'nm', 'tex', 'den', 'dtex'];
-  function fromTex(t) { return { ne: 590.5 / t, nm: 1000 / t, tex: t, den: 9 * t, dtex: 10 * t }; }
-  function toTex(k, v) { return { ne: 590.5 / v, nm: 1000 / v, tex: v, den: v / 9, dtex: v / 10 }[k]; }
-  Y.forEach(function (k) {
-    $('#y-' + k).addEventListener('input', function () {
-      var v = n(this); if (!(v > 0)) return; var r = fromTex(toTex(k, v));
-      Y.forEach(function (j) { if (j !== k) $('#y-' + j).value = +r[j].toFixed(j === 'ne' || j === 'nm' ? 1 : 2); });
+  /* ===== Weaving ===== */
+  { id: 'reed', cat: 'Weaving', t: 'Reed and ends in warp', d: 'Ends in the warp from reed count, ends per dent and width; or the reed you need for a given number of ends.',
+    i: [{ k: 'rs', l: 'Reed system', o: [['dpi', 'Dents per inch'], ['st', 'Stockport (dents per 2 in)'], ['met', 'Metric (dents per 10 cm)']], d: 'st' }, { k: 'r', l: 'Reed count (0 to solve from ends)', d: 64 }, { k: 'epd', l: 'Ends per dent', d: 2, step: 1 },
+      { k: 'w', l: 'Width in reed', u: 'len', du: 'in', d: 63 }, { k: 'sel', l: 'Extra selvedge ends (both sides)', d: 48, step: 1 }, { k: 'te', l: 'Or: total ends (to solve the reed)', d: 0, step: 1 }],
+    o: function (v) { var win = v.w / .0254, conv = { dpi: 1, st: .5, met: .254 }[v.rs];
+      if (v.r > 0) { var dpi = v.r * conv, epi = dpi * v.epd, ends = Math.round(epi * win) + v.sel; return [['Ends per inch in reed', f(epi, 1) + ' (' + f(epi / 2.54, 1) + ' per cm)'], ['Total ends in warp', f(ends, 0)], ['Dents used', f(dpi * win, 0)]]; }
+      var epi2 = (v.te - v.sel) / win, dpi2 = epi2 / v.epd; return [['Ends per inch needed', f(epi2, 1)], ['Reed needed', f(dpi2, 1) + ' dpi · Stockport ' + f(dpi2 * 2, 1) + ' · metric ' + f(dpi2 / .254, 1)]]; },
+    fx: 'Ends = dents per inch × ends per dent × width in reed (in) + selvedge ends. Stockport count = dents per 2 inches; metric = dents per 10 cm.' },
+  { id: 'warp', cat: 'Weaving', t: 'Warp length and weight', d: 'Warp yarn length and weight for an order, allowing for crimp and wastage; works with one count or the average of a dressing.',
+    i: [{ k: 'ends', l: 'Total ends', d: 4032, step: 1 }, { k: 'c', l: 'Warp count', t: 'count', d: 40, s: 'ne' }, { k: 'cl', l: 'Cloth length to weave', u: 'len', du: 'm', d: 1000 }, { k: 'cr', l: 'Warp crimp %', d: 8, step: .5 }, { k: 'ws', l: 'Wastage %', d: 2, step: .5 }, { k: 'pr', l: 'Yarn price (optional)', u: 'pricem', du: '₹ per kg', d: '' }],
+    o: function (v) { var wl = v.cl * (1 + v.cr / 100), yl = v.ends * wl * (1 + v.ws / 100), g = yl * v.c / 1000; return [['Warp length on the beam', len(wl)], ['Total warp yarn', len(yl)], ['Warp weight', mass(g)], ['Per metre of cloth', f(g / v.cl) + ' g'], ['Warp yarn cost', v.pr > 0 ? inr(g / 1000 * v.pr) : '–']]; },
+    fx: 'Warp length = cloth length × (1 + crimp). Weight (g) = ends × warp length (m) × (1 + wastage) × tex ÷ 1000.' },
+  { id: 'weft', cat: 'Weaving', t: 'Weft (filling) length and weight', d: 'Weft needed for a length of cloth; or, for a target weft weight, the picks or the count to use.',
+    i: [{ k: 'pp', l: 'Picks', u: 'dens', du: 'per inch', d: 72 }, { k: 'w', l: 'Width in reed', u: 'len', du: 'in', d: 63 }, { k: 'cl', l: 'Cloth length', u: 'len', du: 'm', d: 1000 }, { k: 'c', l: 'Weft count', t: 'count', d: 40, s: 'ne' }, { k: 'ws', l: 'Wastage %', d: 3, step: .5 },
+      { k: 'tw', l: 'Target weft weight per metre of cloth (optional)', u: 'mass', du: 'g', d: '' }],
+    o: function (v) { var yl = v.pp * 100 * v.cl * v.w * (1 + v.ws / 100), g = yl * v.c / 1000, r = [['Weft yarn needed', len(yl)], ['Weft weight', mass(g)], ['Per metre of cloth', f(g / v.cl) + ' g']];
+      if (v.tw > 0) { var gpm = v.tw; r.push(['Picks for the target', f(gpm * 1000 / (100 * v.w * (1 + v.ws / 100) * v.c), 1) + ' per cm · ' + f(gpm * 1000 / (100 * v.w * (1 + v.ws / 100) * v.c) * 2.54, 0) + ' per inch'], ['Or count for the target', cnt(gpm * 1000 / (v.pp * 100 * v.w * (1 + v.ws / 100)))]); }
+      return r; },
+    fx: 'Weft length (m) = picks per cm × 100 × cloth length (m) × width in reed (m) × (1 + wastage). Weight = length × tex ÷ 1000.' },
+  { id: 'gsmc', cat: 'Weaving', t: 'Woven GSM from construction', d: 'Estimate fabric weight from ends and picks, counts and crimp; plus weight per running metre or yard.',
+    i: [{ k: 'epi', l: 'Ends', u: 'dens', du: 'per inch', d: 132 }, { k: 'ppi', l: 'Picks', u: 'dens', du: 'per inch', d: 72 }, { k: 'wa', l: 'Warp count', t: 'count', d: 40, s: 'ne' }, { k: 'we', l: 'Weft count', t: 'count', d: 40, s: 'ne' },
+      { k: 'cw', l: 'Warp crimp %', d: 8, step: .5 }, { k: 'cf', l: 'Weft crimp %', d: 6, step: .5 }, { k: 'fw', l: 'Finished width', u: 'len', du: 'in', d: 58 }],
+    o: function (v) { var gw = v.epi * 100 * v.wa * (1 + v.cw / 100) / 1000, gf = v.ppi * 100 * v.we * (1 + v.cf / 100) / 1000, g = gw + gf;
+      return [['Fabric weight', f(g, 0) + ' GSM · ' + f(g / 33.905747) + ' oz/yd²'], ['Warp share / weft share', f(gw, 0) + ' + ' + f(gf, 0) + ' g/m²'], ['Per running metre', f(g * v.fw) + ' g'], ['Per running yard', f(g * v.fw * .9144 / 28.349523) + ' oz']]; },
+    fx: 'g/m² = threads per cm × 100 × tex ÷ 1000 × (1 + crimp), for warp plus weft. Greige estimate; finishing changes it.' },
+  { id: 'cover', cat: 'Weaving', t: 'Cover factor', d: 'Peirce cover factor for warp, weft and fabric, showing how open or tight a construction is.',
+    i: [{ k: 'epi', l: 'Ends', u: 'dens', du: 'per inch', d: 132 }, { k: 'ppi', l: 'Picks', u: 'dens', du: 'per inch', d: 72 }, { k: 'wa', l: 'Warp count', t: 'count', d: 40, s: 'ne' }, { k: 'we', l: 'Weft count', t: 'count', d: 40, s: 'ne' }],
+    o: function (v) { var k1 = v.epi * Math.sqrt(v.wa) / 10, k2 = v.ppi * Math.sqrt(v.we) / 10, kc = k1 + k2 - k1 * k2 / 28;
+      return [['Warp cover factor K₁', f(k1, 1) + ' (' + f(k1 / 28 * 100, 0) + '% covered)'], ['Weft cover factor K₂', f(k2, 1) + ' (' + f(k2 / 28 * 100, 0) + '%)'], ['Fabric cover factor', f(kc, 1) + ' (' + f(kc / 28 * 100, 0) + '%)'], ['Guide', 'Under 20 open (voile, gauze) · 20–24 medium (poplin, sheeting) · over 24 dense (canvas, drill)']]; },
+    fx: 'K = threads per cm × √tex ÷ 10 (≈ threads per inch ÷ √Ne); fabric K = K₁ + K₂ − K₁K₂ ÷ 28. 28 = fully covered.' },
+  { id: 'shrinkw', cat: 'Weaving', t: 'Loom to finished: width and length', d: 'Finished width and length from loom state, or the reed width and warp needed for a finished size.',
+    i: [{ k: 'rw', l: 'Width in reed', u: 'len', du: 'in', d: 63 }, { k: 'ws', l: 'Width contraction in weaving + finishing %', d: 7, step: .5 }, { k: 'll', l: 'Length off the loom', u: 'len', du: 'm', d: 100 }, { k: 'ls', l: 'Length shrinkage in finishing %', d: 4, step: .5 }, { k: 'tw', l: 'Target finished width (optional)', u: 'len', du: 'in', d: '' }],
+    o: function (v) { var fw = v.rw * (1 - v.ws / 100), fl = v.ll * (1 - v.ls / 100), r = [['Finished width', f(fw * 100, 1) + ' cm · ' + f(fw / .0254, 1) + ' in'], ['Finished length', len(fl)]]; if (v.tw > 0) r.push(['Reed width for the target', f(v.tw / (1 - v.ws / 100) / .0254, 1) + ' in · ' + f(v.tw / (1 - v.ws / 100) * 100, 1) + ' cm']); return r; },
+    fx: 'Finished = loom × (1 − contraction). Reed width needed = finished width ÷ (1 − contraction).' },
+  { id: 'loom', cat: 'Weaving', t: 'Loom production', d: 'Metres woven per hour, shift and day from loom speed, picks and efficiency; and weft insertion rate.',
+    i: [{ k: 'rpm', l: 'Loom speed (picks per minute)', d: 600 }, { k: 'pp', l: 'Picks', u: 'dens', du: 'per inch', d: 72 }, { k: 'eff', l: 'Efficiency %', d: 85 }, { k: 'h', l: 'Hours per shift', d: 8 }, { k: 'n', l: 'Number of looms', d: 1, step: 1 }, { k: 'rw', l: 'Width in reed', u: 'len', du: 'in', d: 63 }],
+    o: function (v) { var mph = v.rpm * 60 * v.eff / 100 / (v.pp * 100) * v.n; return [['Per hour', len(mph)], ['Per shift', len(mph * v.h)], ['Per day (3 shifts)', len(mph * v.h * 3)], ['Weft insertion rate', f(v.rpm * v.rw, 0) + ' m/min per loom']]; },
+    fx: 'Metres per hour = picks per minute × 60 × efficiency ÷ (picks per cm × 100). WIR = picks per minute × reed width (m).' },
+
+  /* ===== Knitting ===== */
+  { id: 'knit', cat: 'Knitting', t: 'Knit fabric GSM and tightness', d: 'GSM of a weft knit from stitch length, courses and wales; with tightness factor.',
+    i: [{ k: 'c', l: 'Yarn count', t: 'count', d: 30, s: 'ne' }, { k: 'sl', l: 'Stitch length (loop length)', u: 'len', du: 'mm', d: 2.7 }, { k: 'cpc', l: 'Courses', u: 'dens', du: 'per cm', d: 20 }, { k: 'wpc', l: 'Wales', u: 'dens', du: 'per cm', d: 14 }],
+    o: function (v) { var lmm = v.sl * 1000, g = v.cpc * v.wpc * lmm * v.c * .01, tf = Math.sqrt(v.c) / lmm; return [['Fabric weight', f(g, 0) + ' GSM · ' + f(g / 33.905747) + ' oz/yd²'], ['Stitch density', f(v.cpc * v.wpc, 0) + ' loops per cm²'], ['Tightness factor (√tex ÷ ℓ mm)', f(tf) + (tf < 1.2 ? ' · slack' : tf > 1.7 ? ' · tight' : ' · normal for single jersey')]]; },
+    fx: 'GSM = courses/cm × wales/cm × stitch length (mm) × tex × 0.01. TF = √tex ÷ stitch length (mm).' },
+  { id: 'kmc', cat: 'Knitting', t: 'Circular knitting machine', d: 'Needles, fabric width and production for a circular knitting machine.',
+    i: [{ k: 'dia', l: 'Machine diameter', u: 'len', du: 'in', d: 30 }, { k: 'gg', l: 'Gauge (needles per inch)', d: 24 }, { k: 'fd', l: 'Feeders', d: 90, step: 1 }, { k: 'rpm', l: 'Speed (rpm)', d: 25 }, { k: 'sl', l: 'Stitch length', u: 'len', du: 'mm', d: 2.7 }, { k: 'c', l: 'Yarn count', t: 'count', d: 30, s: 'ne' }, { k: 'eff', l: 'Efficiency %', d: 85 }, { k: 'wpc', l: 'Wales in finished fabric', u: 'dens', du: 'per cm', d: 14 }],
+    o: function (v) { var N = Math.round(Math.PI * v.dia / .0254 * v.gg), kgph = v.rpm * v.fd * N * v.sl * 1000 * v.c * 60 * v.eff / 100 / 1e9;
+      return [['Needles', f(N, 0)], ['Open width (approx.)', f(N / v.wpc, 0) + ' cm · tubular ' + f(N / v.wpc / 2, 0) + ' cm'], ['Production', f(kgph) + ' kg per hour · ' + f(kgph * 24, 0) + ' kg per day'], ['Yarn per revolution', f(N * v.sl * v.fd, 1) + ' m']]; },
+    fx: 'Needles = π × diameter (in) × gauge. kg/h = rpm × feeders × needles × stitch length (mm) × tex × 60 × efficiency ÷ 10⁹.' },
+
+  /* ===== Garment ===== */
+  { id: 'gcons', cat: 'Garment', t: 'Woven fabric needed per garment', d: 'Typical metres per piece and for an order, adjusted for width, size, shrinkage and wastage.',
+    i: [{ k: 'g', l: 'Garment', o: G.map(function (g, i) { return [String(i), g[0]]; }), d: '2' }, { k: 'w', l: 'Fabric width', u: 'len', du: 'in', d: 44 }, { k: 'sz', l: 'Size', o: Object.keys(SIZE).map(function (s) { return [s, s]; }), d: 'M' },
+      { k: 'q', l: 'Pieces', d: 50, step: 1 }, { k: 'sh', l: 'Shrinkage %', d: 3, step: .5 }, { k: 'wa', l: 'Cutting wastage %', d: 5, step: .5 }, { k: 'own', l: 'Your own consumption per piece in metres (optional)', d: '', step: .05 }, { k: 'pr', l: 'Fabric price (optional)', u: 'pricel', du: '₹ per metre', d: '' }],
+    o: function (v) { var g = G[+v.g], base = v.own > 0 ? v.own : cons(g, v.w * 100) * (g[3] ? 1 : SIZE[v.sz]), per = base / (1 - Math.min(v.sh, 50) / 100) * (1 + v.wa / 100);
+      return [['Per piece', len(per)], ['For the order', len(per * v.q)], ['Fabric cost', v.pr > 0 ? inr(per * v.pr) + ' a piece · ' + inr(per * v.q * v.pr) + ' in all' : '–'], ['Note', g[4]]]; },
+    fx: 'Typical size-M consumption at 44" and 58", interpolated for width, × size factor ÷ (1 − shrinkage) × (1 + wastage). Confirm with your marker.' },
+  { id: 'kcons', cat: 'Garment', t: 'Knit fabric needed (kg per dozen)', d: 'The standard body-and-sleeve formula for T-shirts, polos and sweatshirts.',
+    i: [{ k: 'bl', l: 'Body length', u: 'len', du: 'cm', d: 72 }, { k: 'sl', l: 'Sleeve length', u: 'len', du: 'cm', d: 22 }, { k: 'ch', l: 'Half chest', u: 'len', du: 'cm', d: 52 }, { k: 'al', l: 'Length allowances (hem, seams)', u: 'len', du: 'cm', d: 6 }, { k: 'aw', l: 'Width allowance (seams)', u: 'len', du: 'cm', d: 4 },
+      { k: 'gsm', l: 'Fabric weight', u: 'gsm', du: 'GSM (g/m²)', d: 180 }, { k: 'wa', l: 'Wastage %', d: 8, step: .5 }, { k: 'q', l: 'Pieces', d: 1200, step: 1 }],
+    o: function (v) { var kgdz = (v.bl + v.sl + v.al) * (v.ch + v.aw) * 2 * v.gsm * 12 / 1000 * (1 + v.wa / 100); return [['Per dozen', f(kgdz, 3) + ' kg'], ['Per piece', f(kgdz / 12 * 1000, 0) + ' g'], ['For the order', mass(kgdz / 12 * v.q * 1000)]]; },
+    fx: 'kg/dozen = (body + sleeve + allowance) × (half chest + allowance) × 2 × GSM × 12 ÷ 1000 (lengths in m), plus wastage.' },
+  { id: 'marker', cat: 'Garment', t: 'Marker efficiency and consumption', d: 'How well a marker uses fabric, and the consumption per garment it gives.',
+    i: [{ k: 'ml', l: 'Marker length', u: 'len', du: 'm', d: 6.2 }, { k: 'mw', l: 'Marker width', u: 'len', du: 'in', d: 58 }, { k: 'n', l: 'Garments in marker', d: 4, step: 1 }, { k: 'pa', l: 'Pattern area per garment', u: 'area', du: 'm²', d: 1.7 }, { k: 'el', l: 'End loss per lay %', d: 1.5, step: .5 }, { k: 'pl', l: 'Plies in the lay', d: 60, step: 1 }],
+    o: function (v) { var eff = v.pa * v.n / (v.ml * v.mw) * 100, per = v.ml * (1 + v.el / 100) / v.n; return [['Marker efficiency', f(eff, 1) + '%' + (eff > 85 ? ' · excellent' : eff > 78 ? ' · good' : ' · review the lay')], ['Consumption per garment', len(per)], ['Garments per lay', f(v.n * v.pl, 0)], ['Fabric for the lay', len(v.ml * (1 + v.el / 100) * v.pl)]]; },
+    fx: 'Efficiency = pattern area × garments ÷ (marker length × width). Consumption = marker length × (1 + end loss) ÷ garments.' },
+  { id: 'thread', cat: 'Garment', t: 'Sewing thread consumption', d: 'Thread per garment and cones for an order, from seam lengths and stitch types.',
+    i: [{ k: 's1', l: 'Stitch type A', o: STITCH.map(function (s) { return [s[0], s[1]]; }), d: '301' }, { k: 'l1', l: 'Seam length A', u: 'len', du: 'cm', d: 320 }, { k: 's2', l: 'Stitch type B', o: STITCH.map(function (s) { return [s[0], s[1]]; }), d: '504' },
+      { k: 'l2', l: 'Seam length B', u: 'len', du: 'cm', d: 240 }, { k: 's3', l: 'Stitch type C', o: STITCH.map(function (s) { return [s[0], s[1]]; }), d: '406' }, { k: 'l3', l: 'Seam length C', u: 'len', du: 'cm', d: 0 },
+      { k: 'wa', l: 'Wastage %', d: 15, step: 1 }, { k: 'q', l: 'Garments', d: 1000, step: 1 }, { k: 'cone', l: 'Thread per cone', u: 'len', du: 'm', d: 5000 }],
+    o: function (v) { function r(s) { return STITCH.filter(function (x) { return x[0] === s; })[0][2]; } var t = (v.l1 * r(v.s1) + v.l2 * r(v.s2) + v.l3 * r(v.s3)) * (1 + v.wa / 100);
+      return [['Thread per garment', len(t)], ['For the order', len(t * v.q)], ['Cones needed', f(Math.ceil(t * v.q / v.cone), 0)]]; },
+    fx: 'Thread = seam length × stitch ratio (301 ≈ 2.5, 401 ≈ 5.5, 504 ≈ 14, 514 ≈ 18, 516 ≈ 20, 406 ≈ 18, 605 ≈ 28 × seam) + wastage. Ratios vary with stitches per inch and fabric thickness.' },
+  { id: 'shrink', cat: 'Garment', t: 'Shrinkage test and cutting allowance', d: 'Length, width and area shrinkage from a wash test, and the cut size needed.',
+    i: [{ k: 'lb', l: 'Length before wash', u: 'len', du: 'cm', d: 50 }, { k: 'la', l: 'Length after', u: 'len', du: 'cm', d: 48.5 }, { k: 'wb', l: 'Width before', u: 'len', du: 'cm', d: 50 }, { k: 'wa', l: 'Width after', u: 'len', du: 'cm', d: 49 }, { k: 'fin', l: 'Finished length you need', u: 'len', du: 'cm', d: 110 }],
+    o: function (v) { var sl = (v.lb - v.la) / v.lb * 100, sw = (v.wb - v.wa) / v.wb * 100, sa = (1 - (v.la * v.wa) / (v.lb * v.wb)) * 100;
+      return [['Length shrinkage', f(sl, 1) + '%'], ['Width shrinkage', f(sw, 1) + '%'], ['Area shrinkage', f(sa, 1) + '%'], ['Cut length for the finished size', f(v.fin / (1 - sl / 100) * 100, 1) + ' cm · ' + f(v.fin / (1 - sl / 100) / .0254, 1) + ' in'], ['Verdict', sl <= 3 ? 'Within 3%: acceptable to most buyers for wovens' : sl <= 5 ? 'Typical for untreated cotton and knits' : 'High: pre-shrink before cutting']]; },
+    fx: 'Shrinkage = (before − after) ÷ before. Cut length = finished ÷ (1 − shrinkage).' },
+  { id: 'smv', cat: 'Garment', t: 'SMV, line output and efficiency', d: 'Target output for a sewing line, actual efficiency and labour cost per piece.',
+    i: [{ k: 'smv', l: 'Garment SMV (minutes)', d: 14.5, step: .1 }, { k: 'op', l: 'Operators', d: 30, step: 1 }, { k: 'min', l: 'Working minutes per day', d: 480 }, { k: 'eff', l: 'Planned efficiency %', d: 60 }, { k: 'act', l: 'Actual output per day (optional)', d: '', step: 1 }, { k: 'cpm', l: 'Labour cost per minute (₹)', d: 4.5, step: .1 }],
+    o: function (v) { var tgt = v.op * v.min * v.eff / 100 / v.smv, r = [['Target output per day', f(tgt, 0) + ' pieces'], ['Per hour', f(tgt / v.min * 60, 0) + ' pieces'], ['Labour cost per piece', inr(v.smv * v.cpm / (v.eff / 100))]];
+      if (v.act > 0) r.push(['Actual line efficiency', f(v.act * v.smv / (v.op * v.min) * 100, 1) + '%']); return r; },
+    fx: 'Output = operators × minutes × efficiency ÷ SMV. Efficiency = output × SMV ÷ (operators × minutes). Cost = SMV × cost per minute ÷ efficiency.' },
+  { id: 'cost', cat: 'Garment', t: 'Garment costing and MRP', d: 'From fabric, trims, making and overheads to your price, the retailer’s price and MRP with GST.',
+    i: [{ k: 'fc', l: 'Fabric consumption', u: 'len', du: 'm', d: 2.5 }, { k: 'fp', l: 'Fabric price', u: 'pricel', du: '₹ per metre', d: 180 }, { k: 'tr', l: 'Trims and labels (₹)', d: 60 }, { k: 'cmt', l: 'Cutting, making, finishing (₹)', d: 220 }, { k: 'pk', l: 'Packing (₹)', d: 25 },
+      { k: 'oh', l: 'Overheads and rejects %', d: 10 }, { k: 'mg', l: 'Your margin on cost %', d: 60 }, { k: 'rm', l: 'Retailer / marketplace margin %', d: 40 }, { k: 'gst', l: 'GST %', d: 5, step: .5 }],
+    o: function (v) { var fab = v.fc * v.fp, cost = (fab + v.tr + v.cmt + v.pk) * (1 + v.oh / 100), ws = cost * (1 + v.mg / 100), rt = ws * (1 + v.rm / 100), mrp = rt * (1 + v.gst / 100);
+      return [['Fabric cost', inr(fab)], ['Total cost', inr(cost)], ['Your selling price', inr(ws)], ['Retail price before tax', inr(rt)], ['Suggested MRP incl. GST', inr(Math.ceil(mrp / 10) * 10 - 1)], ['Fabric share of cost', f(fab / (fab + v.tr + v.cmt + v.pk) * 100, 0) + '%']]; },
+    fx: 'Cost = (fabric + trims + CMT + packing) × (1 + overheads); then × (1 + your margin) × (1 + retailer margin) × (1 + GST). GST on garments depends on the price band; check the current rate.' },
+
+  /* ===== Dyeing & processing ===== */
+  { id: 'dye', cat: 'Dyeing & processing', t: 'Dye recipe and liquor', d: 'Dye and chemicals for a batch from shade %, liquor ratio and g/L recipe.',
+    i: [{ k: 'fw', l: 'Fabric / yarn weight', u: 'mass', du: 'kg', d: 100 }, { k: 'sh', l: 'Shade % (owf)', d: 2.5, step: .05 }, { k: 'lr', l: 'Liquor ratio (1 : x)', d: 8, step: .5 }, { k: 'salt', l: 'Salt (g/L)', d: 60 }, { k: 'soda', l: 'Soda ash (g/L)', d: 20 }, { k: 'aux', l: 'Other auxiliary (% owf)', d: 1, step: .1 }],
+    o: function (v) { var kg = v.fw / 1000, L = kg * v.lr; return [['Dye', mass(kg * 1000 * v.sh / 100)], ['Water (liquor)', f(L, 0) + ' L · ' + f(L / 3.7854118, 0) + ' US gal'], ['Salt', mass(L * v.salt)], ['Soda ash', mass(L * v.soda)], ['Auxiliary', mass(kg * 1000 * v.aux / 100)]]; },
+    fx: 'Dye (g) = material (g) × shade % ÷ 100. Liquor (L) = material (kg) × liquor ratio. Chemicals (g) = g/L × litres.' },
+  { id: 'pad', cat: 'Dyeing & processing', t: 'Padding: wet pick-up and chemical add-on', d: 'Solution absorbed and chemical needed for a padding or finishing run.',
+    i: [{ k: 'fw', l: 'Fabric weight', u: 'mass', du: 'kg', d: 500 }, { k: 'wp', l: 'Wet pick-up %', d: 70 }, { k: 'conc', l: 'Chemical in the pad bath (g/L)', d: 40 }, { k: 'ad', l: 'Or: target add-on % (solids on fabric)', d: '', step: .1 }],
+    o: function (v) { var kg = v.fw / 1000, L = kg * v.wp / 100, r = [['Solution absorbed', f(L, 0) + ' L'], ['Chemical used', mass(L * v.conc)], ['Add-on on fabric', f(v.conc * v.wp / 1000, 2) + '%']];
+      if (v.ad > 0) r.push(['Bath strength for the target', f(v.ad * 1000 / v.wp, 1) + ' g/L']); return r; },
+    fx: 'Solution (L) ≈ fabric (kg) × pick-up % ÷ 100. Add-on % = g/L × pick-up % ÷ 1000.' },
+  { id: 'regain', cat: 'Dyeing & processing', t: 'Moisture regain and invoice weight', d: 'Correct a measured weight to the standard (commercial) regain used for trading fibres and yarns.',
+    i: [{ k: 'fib', l: 'Fibre', o: Object.keys(STD_R).map(function (k) { return [k, k[0].toUpperCase() + k.slice(1) + ' (' + STD_R[k] + '%)']; }), d: 'cotton' }, { k: 'w', l: 'Measured weight', u: 'mass', du: 'kg', d: 1000 }, { k: 'mr', l: 'Measured regain % (0 if the weight is oven-dry)', d: 10, step: .1 }],
+    o: function (v) { var R = STD_R[v.fib], dry = v.w / (1 + v.mr / 100), com = dry * (1 + R / 100); return [['Oven-dry weight', mass(dry)], ['Commercial weight at ' + R + '%', mass(com)], ['Difference', mass(com - v.w)]]; },
+    fx: 'Commercial weight = measured × (100 + standard regain) ÷ (100 + actual regain). Standard regains follow common commercial allowances (e.g. cotton 8.5%, wool 18.25% for worsted tops).' },
+
+  /* ===== Units ===== */
+  { id: 'units', cat: 'Units', t: 'Unit converter', d: 'Length, weight, area, fabric weight, thread density, twist, force, volume and price conversions in one place.',
+    i: [{ k: 'g', l: 'Convert', o: [['len', 'Length'], ['mass', 'Weight'], ['area', 'Area'], ['gsm', 'Fabric weight (GSM / oz)'], ['dens', 'Threads, courses, wales'], ['twist', 'Twist'], ['force', 'Force / strength'], ['vol', 'Volume'], ['pricel', 'Price per length'], ['pricem', 'Price per weight'], ['temp', 'Temperature']], d: 'len' }, { k: 'x', l: 'Value', d: 1 }, { k: 'fu', l: 'From unit', o: [], d: '' }],
+    o: function (v, raw) { if (raw.g === 'temp') { var c = raw.fu === 'F' ? (raw.x - 32) / 1.8 : raw.fu === 'K' ? raw.x - 273.15 : raw.x; return [['°C', f(c, 1)], ['°F', f(c * 1.8 + 32, 1)], ['K', f(c + 273.15, 1)]]; }
+      var gr = U[raw.g], fu = gr.u.filter(function (u) { return u[0] === raw.fu; })[0] || gr.u[0], b = raw.x * fu[1]; return gr.u.map(function (u) { return [u[0], f(b / u[1], Math.abs(b / u[1]) < .01 ? 5 : undefined)]; }); },
+    fx: 'Exact conversion factors: 1 in = 2.54 cm; 1 yd = 0.9144 m; 1 lb = 453.592 g; 1 oz = 28.3495 g; 1 oz/yd² = 33.906 g/m²; 1 lbf = 4.448 N.' }
+  ];
+  window.FC_CALCS = C;
+
+  /* ---------- rendering ---------- */
+  var list = $('#cl-list'), pane = $('#cl-pane'), q = $('#cl-q'), sel = $('#cl-sel'), cats = [];
+  C.forEach(function (c) { if (cats.indexOf(c.cat) < 0) cats.push(c.cat); });
+  list.innerHTML = cats.map(function (k) { return '<div class="clg"><b>' + k + '</b>' + C.filter(function (c) { return c.cat === k; }).map(function (c) { return '<a href="#' + c.id + '" data-id="' + c.id + '" data-t="' + (c.t + ' ' + c.d + ' ' + c.cat).toLowerCase().replace(/"/g, '') + '">' + c.t + '</a>'; }).join('') + '</div>'; }).join('');
+  sel.innerHTML = cats.map(function (k) { return '<optgroup label="' + k + '">' + C.filter(function (c) { return c.cat === k; }).map(function (c) { return '<option value="' + c.id + '">' + c.t + '</option>'; }).join('') + '</optgroup>'; }).join('');
+  q.addEventListener('input', function () { var w = q.value.trim().toLowerCase(); $$('a', list).forEach(function (a) { a.hidden = w && a.dataset.t.indexOf(w) < 0; }); $$('.clg', list).forEach(function (g) { g.hidden = !$$('a:not([hidden])', g).length; }); });
+  sel.addEventListener('change', function () { location.hash = sel.value; });
+  function unitSel(id, gr, du) { return '<select id="' + id + '" class="un">' + U[gr].u.map(function (u) { return '<option' + (u[0] === du ? ' selected' : '') + '>' + u[0] + '</option>'; }).join('') + '</select>'; }
+  function show(id) {
+    var c = C.filter(function (x) { return x.id === id; })[0] || C[0]; sel.value = c.id;
+    $$('a', list).forEach(function (a) { a.setAttribute('aria-current', a.dataset.id === c.id ? 'true' : 'false'); });
+    var h = '<div class="clh"><small>' + c.cat + '</small><h2>' + c.t + '</h2><p>' + c.d + '</p></div><div class="tool"><div class="card"><h3>Inputs</h3><div class="fg">';
+    c.i.forEach(function (x) {
+      var id = 'ci-' + x.k;
+      if (x.o) h += '<label class="' + (x.o.length > 6 || x.k === 'g' ? 'full' : '') + '">' + x.l + '<select id="' + id + '">' + x.o.map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === x.d ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></label>';
+      else if (x.t === 'count') h += '<label class="full">' + x.l + '<span class="iu"><input type="number" id="' + id + '" value="' + x.d + '" step="any" min="0" inputmode="decimal"><select id="' + id + '-u" class="un">' + CS.map(function (s) { return '<option value="' + s[0] + '"' + (s[0] === x.s ? ' selected' : '') + '>' + s[1] + '</option>'; }).join('') + '</select></span></label>';
+      else if (x.u) { var dv = x.d; h += '<label class="full">' + x.l + '<span class="iu"><input type="number" id="' + id + '" value="' + dv + '" step="any" min="0" inputmode="decimal">' + unitSel(id + '-u', x.u, x.du) + '</span></label>'; }
+      else h += '<label>' + x.l + '<input type="number" id="' + id + '" value="' + x.d + '" step="' + (x.step || 'any') + '" min="0" inputmode="decimal"></label>';
     });
-  });
-  bind($('[data-pane=yarn] .woven'), function () {
-    var epi = n($('#f-epi')), ppi = n($('#f-ppi')), wa = n($('#f-wa')), we = n($('#f-we')), cw = n($('#f-cw')) / 100, cf = n($('#f-cf')) / 100;
-    if (!(wa > 0 && we > 0)) { $('#f-out').textContent = '–'; return; }
-    var gw = epi * 39.37 * (590.5 / wa) / 1000 * (1 + cw), gf = ppi * 39.37 * (590.5 / we) / 1000 * (1 + cf);
-    $('#f-out').textContent = FC.fmt(gw + gf, 0) + ' GSM'; $('#f-split').textContent = 'Warp ' + FC.fmt(gw, 0) + ' + weft ' + FC.fmt(gf, 0) + ' g/m², before finishing';
-  });
-
-  /* 4. Shrinkage */
-  bind($('[data-pane=shrink]'), function () {
-    var b = n($('#s-b')), a = n($('#s-a')), s = b > 0 ? (b - a) / b * 100 : 0;
-    $('#s-out').textContent = b > 0 && a > 0 ? FC.fmt(s, 1) + '%' : '–';
-    $('#s-verdict').textContent = b > 0 && a > 0 ? (s <= 3 ? 'Within the 3% most buyers accept for wovens.' : s <= 5 ? 'Typical for untreated cotton and knits; allow for it when cutting.' : 'High: consider pre-shrinking (sanforising or washing) before cutting.') : '';
-    var f = n($('#s-f')), p = n($('#s-p')) / 100; $('#s-cut').textContent = f > 0 && p < 1 ? FC.fmt(f / (1 - p), 1) + ' cm to cut' : '–';
-  });
-
-  /* 5. Costing */
-  bind($('[data-pane=cost]'), function () {
-    var fab = n($('#k-c')) * n($('#k-p')), tr = n($('#k-t')), cmt = n($('#k-cmt')), pk = n($('#k-pk')), oh = n($('#k-oh')) / 100;
-    var cost = (fab + tr + cmt + pk) * (1 + oh), ws = cost * (1 + n($('#k-m')) / 100), rt = ws * (1 + n($('#k-r')) / 100), gst = n($('#k-g')) / 100, mrp = rt * (1 + gst);
-    $('#k-fab').textContent = FC.inr(fab); $('#k-cost').textContent = FC.inr(cost); $('#k-ws').textContent = FC.inr(ws); $('#k-rt').textContent = FC.inr(rt); $('#k-mrp').textContent = FC.inr(Math.ceil(mrp / 10) * 10 - 1);
-    var tot = fab + tr + cmt + pk || 1, parts = [['Fabric', fab, '#1f3d33'], ['Trims', tr, '#a9481f'], ['CMT', cmt, '#d99a00'], ['Packing', pk, '#6d4fc2']];
-    $('#k-bar').innerHTML = parts.map(function (p) { return '<i style="flex:' + Math.max(p[1], .0001) + ';background:' + p[2] + '" title="' + p[0] + '"></i>'; }).join('');
-    $('#k-key').innerHTML = parts.map(function (p) { return '<span><i style="background:' + p[2] + '"></i>' + p[0] + ' ' + Math.round(p[1] / tot * 100) + '%</span>'; }).join('');
-  });
-  $('#k-from').addEventListener('click', function () {
-    var t = $('#c-per').textContent.match(/[\d.,]+/), p = n($('#c-p'));
-    if (t) $('#k-c').value = parseFloat(t[0].replace(/,/g, '')); if (p) $('#k-p').value = p; $('#k-c').dispatchEvent(new Event('input'));
-  });
+    h += '</div></div><div class="card res"><h3>Results</h3><div id="cl-out"></div><details class="fx"><summary>Formula</summary><p>' + c.fx + '</p></details></div></div>';
+    pane.innerHTML = h;
+    if (c.id === 'units') {
+      var gs = $('#ci-g'), fs = $('#ci-fu');
+      var fill = function () { var g = gs.value; fs.innerHTML = g === 'temp' ? '<option value="C">°C</option><option value="F">°F</option><option value="K">K</option>' : U[g].u.map(function (u) { return '<option>' + u[0] + '</option>'; }).join(''); };
+      gs.addEventListener('change', fill); fill();
+    }
+    function run() {
+      var v = {}, raw = {};
+      c.i.forEach(function (x) {
+        var e = $('#ci-' + x.k); raw[x.k] = x.o ? e.value : parseFloat(e.value);
+        if (x.o) { v[x.k] = e.value; return; }
+        var n = parseFloat(String(e.value).replace(',', '.')); if (!isFinite(n)) n = 0;
+        if (x.t === 'count') v[x.k] = n > 0 ? toTex($('#ci-' + x.k + '-u').value, n) : 0;
+        else if (x.u) { var uu = $('#ci-' + x.k + '-u').value, fct = U[x.u].u.filter(function (u) { return u[0] === uu; })[0][1]; v[x.k] = n * fct; }
+        else v[x.k] = n;
+      });
+      var out; try { out = c.o(v, raw); } catch (err) { out = [['Check the inputs', '–']]; }
+      $('#cl-out').innerHTML = out.map(function (r) { return '<div class="big"><span>' + r[0] + '</span><b>' + r[1] + '</b></div>'; }).join('');
+    }
+    $$('input,select', pane).forEach(function (e) { e.addEventListener('input', run); e.addEventListener('change', run); });
+    run();
+    try { document.title = c.t + ' · Textile Calculator · Forecut'; } catch (e) { }
+  }
+  window.addEventListener('hashchange', function () { show(location.hash.slice(1)); });
+  show(location.hash.slice(1) || 'count');
 })();
 </script></div></body></html>
