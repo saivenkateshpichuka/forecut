@@ -163,6 +163,8 @@ for fn, (title, desc, path) in pages.items():
     if '<html lang="en">' in h: h = h.replace('<html lang="en">', '<html lang="en-IN">', 1)
     h = re.sub(r'<nav class="fctab".*?</nav>', '', h, flags=re.S)
     h = re.sub(r'<a href="(?:https://forecut\.in/)?tools\.html">Tools</a>', '', h)
+    h = h.replace('<script src="pm-link.js" defer></script>', '')
+    if 'id="vname"' in h and os.path.exists(os.path.join(R, 'pattern-maker.html')): h = h.replace('</body>', '<script src="pm-link.js" defer></script></body>', 1)
     if os.path.exists(os.path.join(R, 'tools.html')):
         if '<a href="reports.html">Reports</a>' in h: h = h.replace('<a href="reports.html">Reports</a>', '<a href="reports.html">Reports</a><a href="tools.html">Tools</a>', 1)
         else: h = h.replace('<a href="https://forecut.in/reports.html">Reports</a>', '<a href="https://forecut.in/reports.html">Reports</a><a href="https://forecut.in/tools.html">Tools</a>', 1)

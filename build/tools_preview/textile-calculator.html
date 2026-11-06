@@ -43,6 +43,7 @@ footer a{color:var(--muted)} footer .fl{display:flex;gap:16px;flex-wrap:wrap}
 .card+.card{margin-top:16px}
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
 .fg .full{grid-column:1/-1}
+.fg>*,.tool>*,.cl>*{min-width:0}
 label{display:grid;gap:5px;font:600 13px "DM Sans",sans-serif;color:var(--muted)}
 input,select{font:16px "DM Sans",sans-serif;color:var(--ink);background:var(--paper);border:1px solid var(--grid);border-radius:8px;padding:9px 10px;width:100%;min-width:0}
 input[type=color]{padding:2px;height:40px}
@@ -83,6 +84,10 @@ details.fs summary{cursor:pointer;font:700 15px "DM Sans",sans-serif;padding:13p
 .hubg .b{padding:16px 18px 18px;display:grid;gap:8px}.hubg small{font:700 11px "DM Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--chalk)}
 .hubg b{font:700 20px "DM Sans",sans-serif}.hubg span{font:15px/1.5 "Source Serif 4",Georgia,serif;color:var(--muted)}.hubg em{font:700 14px "DM Sans",sans-serif;font-style:normal;color:var(--chalk)}
 .tile{display:none}
+.seg{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}.seg button{font:600 14px "DM Sans",sans-serif;border:1px solid var(--grid);background:var(--paper);color:var(--ink);border-radius:999px;padding:8px 14px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}.seg.gar button{border-radius:8px}
+.tw{overflow-x:auto}table.pt input[type=text]{min-width:220px}table.pt input[type=number]{width:80px}table.pt th{font:700 12px "DM Sans",sans-serif;text-align:left;color:var(--muted);padding:6px}
+#pm-dsearch{margin-top:4px}
 .cl{display:grid;grid-template-columns:250px minmax(0,1fr);gap:24px;align-items:start;margin-bottom:30px}
 .cl aside{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:12px}
 .cl aside input{margin-bottom:8px}

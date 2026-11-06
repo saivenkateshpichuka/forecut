@@ -1,4 +1,4 @@
-"""PREVIEW ONLY (not part of build.sh, not deployed): writes tools_preview/tools.html (hub), textile-calculator.html and pattern-blocks.html
+"""PREVIEW ONLY (not part of build.sh, not deployed): writes tools_preview/tools.html (hub), textile-calculator.html and pattern-maker.html
 for review. To publish later: point OUT at ".." and add this script to build.sh after legal.py.
 Everything runs in the browser; nothing is sent anywhere. Shared header/footer come from legal.py."""
 import html, json, shutil, os
@@ -28,6 +28,7 @@ CSS = '''<style>
 .card+.card{margin-top:16px}
 .fg{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}
 .fg .full{grid-column:1/-1}
+.fg>*,.tool>*,.cl>*{min-width:0}
 label{display:grid;gap:5px;font:600 13px "DM Sans",sans-serif;color:var(--muted)}
 input,select{font:16px "DM Sans",sans-serif;color:var(--ink);background:var(--paper);border:1px solid var(--grid);border-radius:8px;padding:9px 10px;width:100%;min-width:0}
 input[type=color]{padding:2px;height:40px}
@@ -68,6 +69,10 @@ details.fs summary{cursor:pointer;font:700 15px "DM Sans",sans-serif;padding:13p
 .hubg .b{padding:16px 18px 18px;display:grid;gap:8px}.hubg small{font:700 11px "DM Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--chalk)}
 .hubg b{font:700 20px "DM Sans",sans-serif}.hubg span{font:15px/1.5 "Source Serif 4",Georgia,serif;color:var(--muted)}.hubg em{font:700 14px "DM Sans",sans-serif;font-style:normal;color:var(--chalk)}
 .tile{display:none}
+.seg{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}.seg button{font:600 14px "DM Sans",sans-serif;border:1px solid var(--grid);background:var(--paper);color:var(--ink);border-radius:999px;padding:8px 14px;cursor:pointer}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}.seg.gar button{border-radius:8px}
+.tw{overflow-x:auto}table.pt input[type=text]{min-width:220px}table.pt input[type=number]{width:80px}table.pt th{font:700 12px "DM Sans",sans-serif;text-align:left;color:var(--muted);padding:6px}
+#pm-dsearch{margin-top:4px}
 .cl{display:grid;grid-template-columns:250px minmax(0,1fr);gap:24px;align-items:start;margin-bottom:30px}
 .cl aside{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto;background:var(--paper-2);border:1px solid var(--grid);border-radius:12px;padding:12px}
 .cl aside input{margin-bottom:8px}
@@ -87,8 +92,10 @@ details.fx{margin-top:12px;border-top:1px solid var(--grid);padding-top:8px}deta
 </style>'''
 
 
-def page(fn, title, body, js=''):
-    open(OUT + fn, 'w').write(HEAD.format(title=E(title)).replace('</style>', '</style>' + CSS, 1) + body + FOOT.replace('</div></body>', (('<script>' + JS('common.js') + js + '</script>') if js else '') + '</div></body>'))
+def page(fn, title, body, js='', auth=False):
+    pre = '<script>window.FC_PREVIEW=' + ('true' if os.environ.get('PM_PREVIEW') else 'false') + ';</script>' if auth else ''
+    au = '<script type="module" src="auth.js"></script>' if auth else ''
+    open(OUT + fn, 'w').write(HEAD.format(title=E(title)).replace('</style>', '</style>' + CSS, 1) + body + FOOT.replace('</div></body>', pre + (('<script>' + JS('common.js') + js + '</script>') if js else '') + au + '</div></body>'))
 
 
 def num(id_, lab, val, step='any', mn='0', extra=''):
@@ -106,8 +113,8 @@ def big(lab, id_, sub=''):
 # ------------------------------------------------------------------ hub
 TOOLS = [('textile-calculator.html', 'Textile calculator', 'Fabric, GSM, yarn & costing',
           '27 calculators: yarn counts in 15 systems, ply, twist and strength, reed, warp and weft, GSM and cover factor, knitting, consumption, markers, thread, SMV, dyeing, regain, costing and units.', 'hub-fabrics-art-forecast'),
-         ('pattern-blocks.html', 'Pattern block maker', 'Kurta, sleeve & skirt blocks',
-          'Enter measurements and get printable kurta (front, back, sleeve) and straight or A-line skirt blocks at true scale, with seam allowance and tiled A4 printing.', 'couture-bespoke-tailoring-2026')]
+         ('pattern-maker.html', 'Pattern maker', 'Members · 12 garments, 4 categories',
+          'Draft kurtas, shirts, blouses, dresses, skirts, lehengas, trousers and more from measurements or from a Forecut detail. Per-piece seam allowance, editable names, SVG, DXF, PNG and PDF downloads.', 'couture-bespoke-tailoring-2026')]
 hub = ('<div class="eb">Free tools</div><div class="tl-h"><div><h1>Design and production tools</h1>'
        '<p class="lead">Quick, practical calculators and planners for designers, students, D2C brands and production teams. They are free, need no sign-in, and run entirely in your browser: nothing you type is sent to us.</p></div>'
        '<div class="chiprow"><span>Free</span><span>No sign-in</span><span>Works on phone</span><span>Metric and imperial</span><span>Download SVG, PNG or print</span></div></div>'
@@ -157,30 +164,34 @@ tc = ('<div class="eb">Free tool</div><div class="tl-h"><div><h1>Textile calcula
 page('textile-calculator.html', 'Textile Calculator · Yarn Count, GSM, Warp & Weft, Knitting, Garment Costing, Units · Forecut', tc,
      'window.FC_GARMENTS=' + json.dumps(GARMENTS) + ';' + JS('calcs.js'))
 
-# ------------------------------------------------------------------ pattern blocks
-pb = ('<div class="eb">Free tool</div><div class="tl-h"><div><h1>Pattern block maker</h1><p class="lead">Kurta front, back and sleeve, or a straight or A-line skirt, drafted from your measurements at true scale. Download as SVG or print on A4.</p></div>'
-      '<div class="chiprow"><span>True scale in cm</span><span>Seam allowance</span><span>Sleeve cap matched to armhole</span><span>Tiled A4 printing</span></div></div>'
-      '<div class="tool wide" id="pb"><div class="noprint"><div class="card"><h3>Block</h3><div class="fg">'
-      + sel('p-block', 'Block', [('kurta', 'Kurta / tunic + sleeve'), ('skirt', 'Skirt (straight or A-line)')], 'kurta') + sel('p-size', 'Start from size', [('', 'My measurements'), ('S', 'S'), ('M', 'M'), ('L', 'L'), ('XL', 'XL'), ('XXL', 'XXL')], '')
-      + '</div></div><div class="card"><h3>Body measurements (cm)</h3><div class="fg">' + num('p-bust', 'Bust', 91, '0.5') + num('p-waist', 'Waist', 75, '0.5') + num('p-hip', 'Hip', 99, '0.5') + num('p-shoulder', 'Shoulder width', 37, '0.5') + num('p-nw', 'Neck to waist (back)', 40, '0.5') + num('p-bicep', 'Upper arm (bicep)', 28, '0.5') + '</div></div>'
-      '<div class="card" id="p-kurta"><h3>Kurta options</h3><div class="fg">' + num('p-len', 'Kurta length from shoulder', 105, '1') + num('p-ad', 'Armhole depth', 21, '0.5') +
-      sel('p-ease', 'Fit', [('4', 'Fitted (+4 cm)'), ('8', 'Regular (+8 cm)'), ('12', 'Relaxed (+12 cm)')], '8') + sel('p-shape', 'Side seam', [('straight', 'Straight'), ('shaped', 'Shaped at waist')], 'straight') +
-      sel('p-neck', 'Neckline', [('round', 'Round'), ('deep', 'Deep round'), ('v', 'V-neck'), ('boat', 'Boat'), ('band', 'For a band collar')], 'round') + num('p-flare', 'Flare at hem (each side)', 2, '0.5') +
-      num('p-slit', 'Side slit length', 30, '1') + num('p-slen', 'Sleeve length', 42, '1') + num('p-sease', 'Sleeve ease at bicep', 5, '0.5') + num('p-cuff', 'Sleeve hem width', 28, '0.5') + '</div></div>'
-      '<div class="card" id="p-skirt" hidden><h3>Skirt options</h3><div class="fg">' + num('p-slen2', 'Skirt length', 60, '1') + num('p-hd', 'Waist to hip depth', 20, '0.5') + num('p-aline', 'A-line flare at hem (each side)', 0, '0.5') + '</div></div>'
-      '<div class="card"><h3>Output</h3><div class="fg">' + num('p-sa', 'Seam allowance (cm)', 1, '0.25') + '<label class="ck"><input type="checkbox" id="p-grid" checked> Show 1 cm grid</label></div>'
-      '<div class="btns"><button type="button" class="p" id="p-dl">Download SVG (true scale)</button><button type="button" id="p-print">Print on A4 tiles</button></div></div></div>'
-      '<div><div class="canvas" id="p-svg"></div><div class="info" id="p-info"></div>'
-      '<p class="hint">Grain lines run parallel to the selvedge. The shaded band is the seam allowance; its outer line is the cutting line. Pieces marked “on fold” have no allowance at the fold.</p></div></div>'
-      '<div id="p-tiles"></div>'
-      '<div class="prose"><h2>How to use the pattern block maker</h2>'
-      '<p>Choose a block, start from a size or enter your own measurements, then adjust the fit and style options. The drawing updates as you type. Every piece is drawn at true scale in centimetres: one grid square is one centimetre, and the small 5 cm square lets you check the scale after printing.</p>'
-      '<p><b>The kurta block</b> drafts a front and back, each cut on the fold, from bust, shoulder width and armhole depth, with your choice of fit ease, straight or waist-shaped sides, neckline, hem flare and side slit. The sleeve is solved to fit: the tool measures the front and back armhole curves and sets the cap height so the sleeve head is about 1 cm longer than the armhole, the small amount of ease that lets it set in smoothly.</p>'
-      '<p><b>The skirt block</b> drafts a front (on the fold) and back (with a centre back zip) from waist, hip and the waist-to-hip depth, with darts that share the waist shaping with the side seam. Add flare at the hem for an A-line.</p>'
-      '<h2>Printing and using the pattern</h2><ul><li><b>Download SVG</b> to send to a plotter or open in Illustrator, Inkscape or CLO. The file is sized in centimetres.</li>'
-      '<li><b>Print on A4 tiles</b> splits the sheet into numbered tiles. Print at 100% or “actual size”, never “fit to page”, then check the 5 cm square and tape the tiles together in order (A1, A2 across, then B1…).</li>'
-      '<li>Always make a toile in calico or muslin first, check the fit on the body, and transfer any changes to the pattern before cutting good fabric.</li></ul>'
-      '<h2>Limits</h2><p>These are simplified blocks for learning, quick samples and first toiles. They do not include grading, facings, plackets, pockets or collars, and every body is different. For production, a pattern maker should true the seams, add notches and grade the pattern across sizes. See also our guides on <a href="fabrics.html">fabrics</a> and <a href="couture.html">couture construction</a>.</p></div>')
-page('pattern-blocks.html', 'Pattern Block Maker · Kurta, Sleeve & Skirt Patterns from Your Measurements · Forecut', pb, JS('pattern.js'))
+# ------------------------------------------------------------------ pattern maker (sign-in only)
+import pm_details
+PMD = pm_details.build()
+PM_NAMES = {'bodice': 'fitted bodice', 'kurta': 'kurta', 'shirt': 'shirt', 'tshirt': 'T-shirt', 'hoodie': 'hoodie', 'blouse': 'saree blouse', 'top': 'top', 'dress': 'dress', 'jacket': 'Nehru jacket / waistcoat', 'skirt': 'skirt', 'lehenga': 'lehenga', 'trousers': 'trousers'}
+pm = ('<div class="eb">Members tool</div><div class="tl-h"><div><h1>Pattern maker</h1><p class="lead">Draft patterns for 12 garment types across womenswear, menswear, kidswear and unisex, or start from any of ' + str(len(PMD)) + ' Forecut details. Set measurements in cm, mm or inches, adjust seam allowances per piece, and download SVG, DXF, PNG or PDF.</p></div>'
+      '<div class="chiprow"><span>12 garments · 4 categories</span><span>' + str(len(PMD)) + ' linked Forecut details</span><span>cm · mm · inches</span><span>SVG · DXF · PNG · PDF</span><span>Forecut-branded files</span></div></div>'
+      '<div class="card" id="pm-gate"><h3>Sign in to use the pattern maker</h3><p style="margin:0 0 12px">The pattern maker is for registered Forecut members. Sign in or create a free account to draft and download patterns.</p>'
+      '<div class="btns"><a class="btn p" href="account.html?next=pattern-maker.html#signin">Sign in</a><a class="btn" href="account.html?next=pattern-maker.html#signup">Create a free account</a></div></div>'
+      '<div id="pm-app" hidden>'
+      '<div class="card"><h3>1 · Start from a Forecut detail <small style="font-weight:500;color:var(--muted)">(<span id="pm-dcount"></span> linked)</small></h3><input type="search" id="pm-dsearch" list="pm-dlist" placeholder="Type a detail, e.g. band collar, barrel-leg, camp collar, peplum, Anarkali"><datalist id="pm-dlist"></datalist><p class="hint" id="pm-dnote"></p></div>'
+      '<div class="card"><h3>2 · Category and garment</h3><div class="seg" id="pm-gtabs"></div><div class="seg gar" id="pm-garments"></div></div>'
+      '<div class="tool wide" style="margin-top:16px"><div class="noprint"><div class="card"><h3>3 · Measurements</h3><div id="pm-meas"></div></div><div class="card"><h3>4 · Style · <span id="pm-ttl" style="font-weight:500"></span></h3><div id="pm-opts"></div></div>'
+      '<div class="card"><h3>5 · Seam allowance</h3><div class="fg"><label>Seam allowance, all pieces<input type="number" step="any" min="0" id="pm-sa"></label><label>Hem allowance, all pieces<input type="number" step="any" min="0" id="pm-hemall"></label></div>'
+      '<div class="btns"><button type="button" id="pm-apply">Reset pieces to these values</button><button type="button" id="pm-nosa">Remove all allowances</button></div><p class="hint">Change a single piece in the pieces table. Fold edges never get an allowance.</p></div></div>'
+      '<div><div class="canvas" id="pm-svg"></div><label class="ck" style="margin:8px 0"><input type="checkbox" id="pm-grid" checked> Show grid (1 cm or 1 inch)</label><div class="info" id="pm-info"></div>'
+      '<div class="card" style="margin-top:14px"><h3>6 · Pieces</h3><div id="pm-pieces" class="tw"></div><div class="btns"><button type="button" id="pm-resetnames">Reset names to automatic</button></div></div>'
+      '<div class="card" style="margin-top:14px"><h3>7 · Download</h3><div class="btns"><button type="button" class="p" id="pm-dl-pdf">PDF · A4 tiles to print</button><button type="button" id="pm-dl-pdf2">PDF · full size (plotter)</button><button type="button" id="pm-dl-svg">SVG</button><button type="button" id="pm-dl-dxf">DXF (CAD)</button><button type="button" id="pm-dl-png">PNG</button></div>'
+      '<p class="hint" id="pm-msg">All files are true scale and carry the Forecut label. DXF uses millimetres (inches if you choose inches) with layers CUT, SEAM, MARK, GRAIN, TEXT and BRAND.</p></div></div></div></div>'
+      '<div class="prose"><h2>How the pattern maker works</h2>'
+      '<p><b>Start from a Forecut detail</b>, such as a band-collar kurta, Cuban camp collar shirt, barrel-leg jeans, peplum top or fit-and-flare Anarkali, and the matching garment and options load automatically. Or pick a category (womenswear, menswear, kidswear or unisex) and one of 12 garments: fitted bodice, kurta, shirt, T-shirt, hoodie, saree blouse, top, dress or frock, Nehru jacket or waistcoat, skirt, lehenga and trousers.</p>'
+      '<p><b>Measurements</b> start from a size chart for each category and can be changed to your own in centimetres, millimetres or inches. <b>Style options</b> cover fit ease, length, neckline, collar (band, shirt collar with band, camp, Peter Pan), sleeve (set-in, shirt with cuff, T-shirt, puff, bell, cap), pockets, yoke, hem, slits, flare, dropped shoulders, skirt type and leg shape.</p>'
+      '<p>Every piece is drafted from the measurements, so pieces that are sewn together fit together: sleeve heads are matched to the armhole, collars and bands to the neckline, and cuffs and waistbands to the wrist and waist. Each piece gets an automatic name, like “Men\'s shirt · Collar band”, which you can edit. Seam and hem allowances can be set for the whole pattern or for each piece, and fold edges never get an allowance.</p>'
+      '<h2>Downloads</h2><ul><li><b>PDF, A4 tiles:</b> print at 100% or actual size, check the 5 cm square, and tape the tiles together (A1, A2 across, then B1…). Blank tiles are skipped.</li><li><b>PDF, full size:</b> one page at true size for a plotter or copy shop.</li>'
+      '<li><b>DXF:</b> for Gerber, Lectra, Optitex, CLO, Illustrator or AutoCAD, with cutting lines, sewing lines, marks, grain lines and text on separate layers.</li><li><b>SVG and PNG:</b> for editing, sharing and tech packs.</li></ul>'
+      '<p>Every file carries the Forecut label on each piece and on the sheet.</p>'
+      '<h2>Before you cut</h2><p>These are block patterns for samples, learning and first toiles. They do not include grading across sizes, and every body and fabric behaves differently. Make a toile in calico or muslin, check the fit, and transfer any changes before cutting good fabric. Advanced pattern editing is planned for a later version.</p></div>')
+open(OUT + 'pm-link.js', 'w').write('window.FC_PM_LINKS=' + json.dumps({d[0]: PM_NAMES[d[3]] for d in PMD}) + ';' + JS('pm_link.js'))
+page('pattern-maker.html', 'Pattern Maker · Draft Kurta, Shirt, Blouse, Dress, Trousers & More · Forecut', pm,
+     'window.PM_DETAILS=' + json.dumps(PMD) + ';' + JS('pm_engine.js') + JS('pm_export.js') + JS('pm_ui.js'), auth=True)
 
 print('tools preview ok', 3)
