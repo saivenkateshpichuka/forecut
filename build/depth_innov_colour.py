@@ -152,3 +152,17 @@ MORE['innovation-biodegradable-biopolyester'] = MORE['innovation-biodegradable-b
  ('h2', 'What to ask before you commit'),
  ('p', 'Ask the supplier for the certified test standard, the conditions (industrial compost, home compost, soil or marine), the time to break down and whether any additives or dyes change the result. Ask how the fabric performs after washing and in storage, because a fibre designed to break down must not degrade in a warehouse. Treat early pilots as learning projects and keep conventional or recycled polyester as the default until results are proven over a full season.'),
 ]
+
+# --- Depth added 7 Nov 2026 (weekly content-depth pass). Add only. ---
+MORE['innovation-mono-material-thread'] = MORE['innovation-mono-material-thread'] + [
+ ('h2', 'How to use it in a collection'),
+ ('ul', ['<b>Pick one simple style first.</b> A 100% cotton shirt, T-shirt or kurta has few components, so switching the sewing thread, the care label and the buttons to cotton, cellulose or corozo makes the whole garment one fibre family without a redesign.',
+         '<b>Audit every component.</b> List fabric, thread, interlining, labels, buttons, zips, elastic and embroidery yarn in the tech pack. Interlinings and polyester labels are usually the hidden mixed materials.',
+         '<b>Test on the real machines.</b> Cellulose threads can break more easily on high-speed overlock and bartack operations; run a sample batch at production speed and check seam strength after five washes.',
+         '<b>Write it into the tech pack.</b> Add the thread type and count to the bill of materials so the factory does not substitute a cheaper polyester core-spun thread in bulk.'])
+ ,
+ ('h2', 'Regional sourcing notes'),
+ ('p', 'In <b>Europe</b>, single-material design supports ecodesign and extended producer responsibility schemes that are being phased in for textiles, and some buyers already ask for a fibre breakdown by component. In <b>India, Bangladesh and Pakistan</b>, where much cotton and viscose sewing is done, cotton and lyocell threads are available locally, but colour ranges are narrower than for polyester, so plan the colour card early. In <b>North America and Oceania</b>, the first use is usually basics and home textiles sold with a take-back or resale programme, where easier recycling has a direct value.'),
+ ('h2', 'What it does not solve'),
+ ('p', 'A mono-material garment is easier to recycle only if a recycling route exists for that fibre in the market where it is thrown away. It does not make a garment biodegradable, and dyes and finishes can still affect recycling quality. Treat it as one step in design for recycling, alongside durable construction and clear fibre labels.'),
+]

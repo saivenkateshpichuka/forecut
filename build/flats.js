@@ -1423,6 +1423,22 @@ var Flats = (function () {
     'Skirts for men': { g: 'skirt', s: 'midi', x: ['wrap', 'dark'], hl: ['front'] },
     'Raffia wedge sandals': { g: 'shoe', s: 'sandal', heel: 'wedge', x: ['woven'], hl: ['heel'] },
     'Tonal suede low-profile sneakers': { g: 'shoe', s: 'sneaker', x: ['suede', 'slimsole'], hl: ['upper'] },
+    /* Weekly details 2026-11-07 (Bahnsen x Uniqlo/TNF, Ralph Lauren Pre-Fall 27, Chanel Sydney, OPEN YY Seoul, De Goeye, Reserved x Wolinski, Baumeister x Nike) */
+    'Drawcord-hem cropped fleece jackets': T({ t: 'jacket', len: 180, col: 'funnelsmall', cl: 'zip', hem: 'band', cuff: 'band', x: ['fur', 'floral'], hl: ['hem'] }),
+    'Floral-embroidered cropped puffers': T({ t: 'jacket', len: 180, fl: 8, col: 'funnel', cl: 'zip', hem: 'band', cuff: 'band', x: ['quiltlines', 'floral'], hl: ['body'] }),
+    'Lacquered funnel-neck trenches': T({ t: 'coat', col: 'funnel', cl: 'db', x: ['patent', 'belt'], hl: ['collar'] }),
+    'Shell-paillette jacket edging': T({ t: 'jacket', col: 'band', cl: 'sb', pk: 'patch', x: ['melange', 'piping'], hl: ['closure'] }),
+    'Wired peacoats': T({ t: 'coat', col: 'notch', cl: 'db', fl: 10, x: ['dark'], hl: ['body'] }),
+    'Laser-cut coral-relief dresses': { g: 'dress', nk: 'square', sl: 'none', sk: 'column', x: ['slots', 'beads'], hl: ['body'] },
+    'Scale-beaded mermaid hems': { g: 'dress', nk: 'slip', sl: 'none', sk: 'column', hem: 'fringe', x: ['beads'], hl: ['hem'] },
+    'Ankle-strap balloon trousers': { g: 'trousers', leg: 'balloon', x: ['anklestrap'], hl: ['hem'] },
+    'Taffeta jogger evening trousers': { g: 'trousers', leg: 'balloon', noloops: true, x: ['elastic', 'gloss'], hl: ['hem'] },
+    'Parachute-poplin tuxedo shirts': T({ t: 'shirt', col: 'shirt', cl: 'sb', x: ['pintuck'], hl: ['body'] }),
+    'Armour-structured vests': T({ t: 'waistcoat', col: 'vneck', cl: 'sb', pk: 'welt', x: ['dark'], hl: ['shoulders'] }),
+    'Black tailoring with fuchsia accents': T({ t: 'blazer', col: 'notch', cl: 'sb', pk: 'flap', x: ['dark'], hl: ['body'] }),
+    'Convertible backpack puffers': T({ t: 'jacket', len: 210, fl: 8, col: 'funnel', cl: 'zip', hem: 'band', cuff: 'band', x: ['quiltlines', 'belt'], hl: ['body'] }),
+    'Sculpted rocker-sole trainers': { g: 'shoe', s: 'sneaker', chunky: true, hl: ['sole'] },
+    'Barefoot sole-less sandals': { g: 'shoe', s: 'sandal', heel: 'flat', x: ['anklestrap'], hl: ['strap'] },
   };
   var LABEL = { knees: 'Knees', bodice: 'Bodice', front: 'Wrap front', chain: 'Chain trim', centre: 'Centre front', collar: 'Collar', cuffs: 'Cuffs', hem: 'Hem', shoulders: 'Shoulders', body: 'Whole piece', closure: 'Front closure', pockets: 'Pockets', waist: 'Waist', cape: 'Cape', stormflap: 'Storm flap', chest: 'Chest', yoke: 'Yoke', tie: 'Tie', sleeves: 'Sleeves', skirt: 'Skirt', sides: 'Side seams', neck: 'Neckline', legs: 'Legs', pleats: 'Pleats', fly: 'Fly', seams: 'Outseams', adjusters: 'Side adjusters', loop: 'Hammer loop', slit: 'Slit', strap: 'Strap', toe: 'Toe', heel: 'Heel', vamp: 'Vamp', upper: 'Upper', sole: 'Sole', shaft: 'Shaft', topline: 'Topline', laces: 'Lacing', sock: 'Sock' };
 

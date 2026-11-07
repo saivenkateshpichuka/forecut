@@ -175,3 +175,8 @@ FAQ['innovation-recycled-plastic-embellishment'] = FAQ['innovation-recycled-plas
 FAQ['innovation-biodegradable-biopolyester'] = FAQ['innovation-biodegradable-biopolyester'] + [
  ('Is biopolyester the same as bio-based polyester?', 'No. Bio-based means made partly from plant sources; biodegradable means it can break down under defined conditions. A fibre can be one, both or neither, so check each claim separately.'),
  ('When will it be widely available?', 'Forecut expects pilot volumes through 2027 and wider commercial use from about 2028, depending on price and test results.')]
+
+# --- Added 7 Nov 2026 (weekly content-depth pass). Add only. ---
+FAQ['innovation-mono-material-thread'] = FAQ['innovation-mono-material-thread'] + [
+ ('Is cotton thread strong enough for jeans?', 'Usually not for the main seams of heavy denim, which take high stress; it is better suited to shirts, T-shirts, kurtas and home textiles. Test seam strength before using it on heavier fabrics.'),
+ ('Does a mono-material garment cost more?', 'The thread itself can cost a little more and may slow some operations, but the difference per garment is usually small compared with fabric and making costs. Ask the factory for a costed sample.')]

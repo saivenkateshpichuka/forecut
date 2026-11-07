@@ -3,6 +3,7 @@ For a local review copy instead: TOOLS_OUT=tools_preview/ PM_PREVIEW=1 python3 t
 Everything runs in the browser; nothing is sent anywhere. Shared header/footer come from legal.py."""
 import html, json, shutil, os
 import reports_data as R
+import depth_tools as DT
 src = open('legal.py').read()
 ns = {}
 exec(src[:src.index('P = {}')], ns)
@@ -124,6 +125,7 @@ hub = ('<div class="eb">Free tools</div><div class="tl-h"><div><h1>Design and pr
        '<p><b>The pattern block maker</b> drafts simple blocks from your own measurements: a kurta or tunic front and back with a sleeve whose cap is matched to the armhole, and a straight or A-line skirt with darts. Blocks are drawn at true scale in centimetres, so you can download them as SVG for a plotter or print them on A4 sheets and tape them together. They are starting points for a first toile, not finished production patterns.</p>'
               '<h2>How accurate are they?</h2>'
        '<p>Formulas such as GSM, yarn count and weight conversions are exact. Fabric consumption figures are typical industry estimates for a size M garment and change with style, fabric direction, prints that need matching and how tightly a marker is laid, so treat them as a planning figure and confirm with your cutting master or CAD marker before ordering bulk. Pattern blocks use standard, simplified drafting and should always be tested in calico or muslin first.</p>'
+       + DT.HUB +
        '<p>Ideas for another tool? Write to <a href="mailto:hello@forecut.in">hello@forecut.in</a>.</p></div>')
 page('tools.html', 'Free Fashion Design Tools · Textile Calculator & Pattern Blocks · Forecut', hub)
 
@@ -225,6 +227,7 @@ tc = (TCCSS + '<div class="tch"><div><div class="eb">Free tool</div><h1>Textile 
       '<h2>Good to know</h2><ul><li>Formulas and unit conversions are exact. Consumption, thread ratios, packing factors and typical ranges are rules of thumb: confirm with your marker, your mill or a lab test before ordering bulk.</li>'
       '<li>Wider fabric is often cheaper per garment even when the price per metre is higher: compare the fabric cost per piece.</li>'
       '<li>GST on garments depends on the price band and can change; check the current rate.</li></ul>'
+      + DT.CALC +
       '<p>Related: the <a href="fabrics.html">Fabrics hub</a> for weaves, knits and GSM ranges, and the <a href="india-textile-craft-guide.html">India textile and craft sourcing guide</a>.</p></div></details>')
 page('textile-calculator.html', 'Textile Calculator · Yarn Count, GSM, Warp & Weft, Knitting, Garment Costing, Units · Forecut', tc,
      'window.FC_GARMENTS=' + json.dumps(GARMENTS) + ';' + JS('calcs.js'))

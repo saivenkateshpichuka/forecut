@@ -224,6 +224,12 @@ D = [
  ("Women's Ethnic", 'Lehengas', 'Black mirror-work lehengas', 'Colour', "Black lehengas worked in mirrors, hand embroidery and metallic accents, with a bralette blouse and sheer sequinned dupatta, as worn by Kriti Sanon closing Abhinav Mishra's Into the Wild 2026, New Delhi, 24 Oct 2026.", 'rprpf', None),
  ("Women's Ethnic", 'Sarees', 'Mirror-bordered tissue sarees', 'Trim', "Beige-gold tissue silk sarees edged with mirror-work borders and a matching high-neck blouse, as on Mira Rajput in Mumbai, 29 Oct 2026; a lighter way to wear mirror work for evening functions.", 'rpprf', None),
  ("Men's Ethnic", 'Kurtas & sets', 'Floral kurtas with harem trousers', 'Print', "Deep-toned floral-print kurtas paired with relaxed harem trousers instead of churidars, as worn by Aamir Khan in Mumbai, 29 Oct 2026; a softer, comfortable festive set for men.", 'errpf', None),
+ # Weekly details 2026-11-07 (Manish Malhotra Diwali party, Mumbai, reported 5-6 Nov; Ramesh Taurani Diwali party, Mumbai, 3 Nov)
+ ("Women's Ethnic", 'Sarees', 'Halter-neck saree blouses', 'Neckline', "Halter-neck blouses replacing the classic choli under metallic and sequinned sarees, as on Kareena Kapoor Khan (champagne-gold sequin saree) at Manish Malhotra's Diwali party and Bhumi Pednekar (halter cross-neck blouse) at Ramesh Taurani's, Mumbai, Nov 2026.", 'rpprf', None),
+ ("Women's Ethnic", 'Lehengas', 'Tiger-stripe fishtail lehengas', 'Print', "Black-and-gold stripe-patterned lehengas cut close through the hip and flared at the hem, worn with a sheer dupatta, as on Janhvi Kapoor at Manish Malhotra's Diwali party, Mumbai, Nov 2026.", 'erppf', None),
+ ("Women's Ethnic", 'Sarees', 'Black velvet sarees', 'Fabric', "Black velvet sarees with embellished borders for winter evening functions, as on Kajol at Manish Malhotra's Diwali party, Mumbai, Nov 2026; velvet suits the cooler North Indian wedding months.", 'rprpf', None),
+ ("Women's Ethnic", 'Sarees', 'Metallic grey pre-draped sarees', 'Colour', "Silver-grey georgette pre-draped sarees with mirror and sequin work and a sleeveless sequinned blouse, as on Shilpa Shetty at Ramesh Taurani's Diwali party, Mumbai, 3 Nov 2026: a quieter alternative to gold.", 'errpf', None),
+ ("Men's Ethnic", 'Kurtas & sets', 'Burgundy velvet kurtas', 'Fabric', "Dark burgundy velvet kurtas worn with black trousers, as on Vicky Kaushal at Manish Malhotra's Diwali party, Mumbai, Nov 2026, with burgundy velvet co-ords on women the same night.", 'rprpf', None),
 
 ]
 
