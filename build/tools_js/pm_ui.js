@@ -1,7 +1,7 @@
 /* Forecut pattern maker: interface, state, scene building and downloads. Needs pm_engine.js and pm_export.js. */
 (function () {
   var $ = FC.$, $$ = FC.$$, PM = window.PM, X = window.PMX, V = window.PMV, DET = window.PM_DETAILS || [];
-  var GC = { bodice: 'BOD', kurta: 'KUR', shirt: 'SHT', tshirt: 'TEE', hoodie: 'HOD', blouse: 'BLS', top: 'TOP', dress: 'DRS', jacket: 'JKT', skirt: 'SKT', lehenga: 'LEH', trousers: 'TRS' }, VER = '1.2';
+  var GC = { anarkali: 'ANK', angrakha: 'ANG', sherwani: 'SHW', bandhgala: 'BDG', salwar: 'SAL', patiala: 'PAT', churidar: 'CHU', gharara: 'GHR', bodice: 'BOD', kurta: 'KUR', shirt: 'SHT', tshirt: 'TEE', hoodie: 'HOD', blouse: 'BLS', top: 'TOP', dress: 'DRS', jacket: 'JKT', skirt: 'SKT', lehenga: 'LEH', trousers: 'TRS' }, VER = '1.2';
   function code() { return 'FC-' + { women: 'W', men: 'M', kids: 'K', unisex: 'U' }[S.gender] + '-' + GC[S.gid] + '-' + (S.size === 'custom' ? 'CUS' : S.size); }
   var UF = { cm: 1, mm: 10, in: 1 / 2.54 };
   var OPT = {
@@ -15,7 +15,7 @@
     yoke: { l: 'Back yoke', o: [['1', 'Yoke with box pleat'], ['0', 'No yoke']] }, drop: { l: 'Dropped shoulder', L: 1 }, hood: { l: 'Hood', o: [['1', 'With hood'], ['0', 'Neck rib instead']] },
     opening: { l: 'Opening', o: [['1', 'Front opening (hooks)'], ['0', 'Back opening']] }, peplum: { l: 'Peplum', o: [['0', 'No'], ['1', 'Yes']] }, dress: { l: 'Dress style', o: [['shift', 'Shift (one piece)'], ['frock', 'Bodice + gathered skirt']] },
     skirt: { l: 'Skirt', o: [['straight', 'Straight / pencil'], ['aline', 'A-line'], ['circle', 'Circle'], ['gathered', 'Gathered'], ['panels', 'Panelled (kalis)']] }, slen2: { l: 'Skirt length', L: 1 },
-    circle: { l: 'Circle', o: [['0.25', 'Quarter'], ['0.5', 'Half'], ['1', 'Full']] }, panels: { l: 'Panels', n: 1 }, hemc: { l: 'Hem circumference', L: 1 },
+    circle: { l: 'Circle', o: [['0.25', 'Quarter'], ['0.5', 'Half'], ['1', 'Full']] }, panels: { l: 'Panels', n: 1 }, hemc: { l: 'Hem circumference', L: 1 }, mohri: { l: 'Mohri (leg opening)', L: 1 }, fullness: { l: 'Fullness', o: [['slim', 'Slim'], ['regular', 'Regular'], ['full', 'Full (Punjabi)']] }, ruch: { l: 'Extra length for ruching', L: 1 }, gfull: { l: 'Flare fullness (× knee)', n: 1 },
     leg: { l: 'Leg', o: [['straight', 'Straight'], ['tapered', 'Tapered'], ['wide', 'Wide-leg'], ['palazzo', 'Palazzo'], ['barrel', 'Barrel'], ['jogger', 'Jogger'], ['shorts', 'Shorts']] },
     pfit: { l: 'Fit at crotch', o: [['trouser', 'Trouser (hangs straight)'], ['slack', 'Slack (closer, cups slightly)'], ['jean', 'Jean (contoured)']] },
     wtype: { l: 'Waist', o: [['fitted', 'Waistband with darts'], ['elastic', 'Elastic / drawstring casing']] }, tlen: { l: 'Length, waist to hem (0 = full length)', L: 1 }, cargo: { l: 'Cargo pocket', o: [['0', 'No'], ['1', 'Yes']] }
@@ -45,7 +45,7 @@
 
   function U(v) { return +(v * UF[S.unit]).toFixed(S.unit === 'mm' ? 0 : S.unit === 'in' ? 2 : 1); }
   function cm(v) { return v / UF[S.unit]; }
-  function measSet() { var k = S.gid === 'skirt' || S.gid === 'lehenga' ? MEAS.skirt : S.gid === 'trousers' ? MEAS.trousers : MEAS.torso.concat(S.gid === 'hoodie' ? ['head'] : []);
+  function measSet() { var k = S.gid === 'skirt' || S.gid === 'lehenga' ? MEAS.skirt : ['trousers', 'salwar', 'patiala', 'churidar', 'gharara'].indexOf(S.gid) > -1 ? MEAS.trousers : MEAS.torso.concat(S.gid === 'hoodie' ? ['head'] : []);
     k = k.filter(function (x) { return (S.gender === 'women' || !/^bust_/.test(x)) && (S.gid === 'tshirt' || S.gid === 'hoodie' || S.gid === 'jacket' || x !== 'elbow' || true); });
     k.forEach(function (x) { if (!(S.m[x] > 0)) { var c = chart()[S.size] || chart()[Object.keys(chart())[2]]; if (c[x]) S.m[x] = c[x]; } }); return k; }
   function chart() { return PM.CHARTS[S.gender]; }

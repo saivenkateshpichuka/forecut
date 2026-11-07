@@ -4,7 +4,7 @@
    PMC.cost()   - fabric, trims, making, overheads, margins and MRP with the Indian GST band for garments */
 (function () {
   var C = window.PMC = {}, PM = window.PM;
-  var SMV = { bodice: 10, kurta: 18, shirt: 22, tshirt: 9, hoodie: 16, blouse: 20, top: 12, dress: 20, jacket: 34, skirt: 12, lehenga: 32, trousers: 20 };
+  var SMV = { anarkali: 40, angrakha: 30, sherwani: 60, bandhgala: 50, salwar: 14, patiala: 18, churidar: 14, gharara: 22, bodice: 10, kurta: 18, shirt: 22, tshirt: 9, hoodie: 16, blouse: 20, top: 12, dress: 20, jacket: 34, skirt: 12, lehenga: 32, trousers: 20 };
   C.SMV = SMV;
   function area(p) { var a = 0; for (var i = 0, n = p.length; i < n; i++) { var q = p[i], r = p[(i + 1) % n]; a += q[0] * r[1] - r[0] * q[1]; } return Math.abs(a) / 2; }
   function refl(p, a, b) { var dx = b[0] - a[0], dy = b[1] - a[1], l2 = dx * dx + dy * dy || 1; return p.map(function (q) { var t = ((q[0] - a[0]) * dx + (q[1] - a[1]) * dy) / l2, fx = a[0] + t * dx, fy = a[1] + t * dy; return [2 * fx - q[0], 2 * fy - q[1]]; }); }
@@ -16,10 +16,11 @@
       var st = S.pc[p.id] || {}; if (st.on === false) return;
       var sa = st.sa !== undefined ? st.sa : S.sa, ha = st.hem !== undefined ? st.hem : (p.defHem !== undefined ? p.defHem : S.hemA), cut = PM.cutline(p, sa, ha), c = p.cut || 'Cut 1';
       var n = +(c.match(/Cut (\d+)/) || [0, 1])[1], pair = /pair|left and right/i.test(c), mat = /in rib/i.test(c) ? 'rib' : 'main';
+      var cutM = null; if (p.bias) { cutM = cut.map(function (q) { return [(q[0] + q[1]) * .7071, (q[1] - q[0]) * .7071]; }); cut = cut.map(function (q) { return [(q[0] - q[1]) * .7071, (q[0] + q[1]) * .7071]; }); } // bias pieces at 45°; mirrored copies turned the other way so all strips lie parallel
       var fold = p.edges.filter(function (e) { return e.t === 'fold'; })[0], polys = [cut];
       if (fold && /on fold/i.test(c)) { var a = fold.p[0], b = fold.p[fold.p.length - 1]; polys = [cut, refl(cut, a, b)]; }
       var one = { id: p.id, name: st.name || p.auto, comp: p.comp, polys: polys, area: polys.reduce(function (s, q) { return s + area(q); }, 0), mat: mat };
-      for (var i = 0; i < n; i++) out.push(Object.assign({}, one, { mirror: pair && i % 2 === 1 }));
+      for (var i = 0; i < n; i++) { var mir = pair && i % 2 === 1; out.push(Object.assign({}, one, { mirror: mir }, mir && cutM ? { polys: [cutM], id: p.id + '-b' } : {})); }
       var lin = (c.match(/\+ ?(\d+)? ?lining/i) || null), fus = (c.match(/\+ ?(\d+)? ?interfacing/i) || null);
       if (lin) for (var j = 0; j < (+lin[1] || n); j++) out.push(Object.assign({}, one, { mat: 'lining', mirror: j % 2 === 1 }));
       if (fus) for (var k = 0; k < (+fus[1] || 1); k++) out.push(Object.assign({}, one, { mat: 'fusing', mirror: k % 2 === 1 }));
@@ -90,7 +91,7 @@
     r.pieces.forEach(function (p) { var st = S.pc[p.id] || {}; if (st.on === false) return; var q = +((p.cut || '').match(/Cut (\d+)/) || [0, 1])[1], fold = /on fold/i.test(p.cut || '') ? 2 : 1;
       p.edges.forEach(function (e) { if (e.t !== 'fold') { var l = 0; for (var i = 1; i < e.p.length; i++) l += Math.hypot(e.p[i][0] - e.p[i - 1][0], e.p[i][1] - e.p[i - 1][1]); seam += l * q * fold; } }); });
     var threadM = seam / 2 / 100 * 5.5 * 1.12, cones = threadM / (+cfg.cone || 4000);
-    var elastic = gid === 'trousers' && S.o.wtype === 'elastic' ? (S.m.waist * .9 + 3) / 100 : 0;
+    var elastic = (gid === 'trousers' && S.o.wtype === 'elastic') || gid === 'churidar' || gid === 'gharara' ? (S.m.waist * .9 + 3) / 100 : 0;
     var smv = +cfg.smv || SMV[gid] || 15, cmt = smv * (+cfg.cpm || 0) / Math.max(.2, (+cfg.eff || 60) / 100);
     var lines = [
       ['Main fabric', fabM, 'm', +cfg.fp || 0, fabCost],

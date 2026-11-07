@@ -210,8 +210,9 @@
     var rise = m.rise + F.ce, kn0 = m.knee_l, Lg = o.len || m.outseam - 2, out = [], casing = el ? 3.5 : 0, kid = o.kid;
     var D = rise * 2 / 3; // hip line: one third of the rise above the crotch line
     var ease = el ? 8 : 2.5, hF = (hip + ease) / 4 - 1, hB = (hip + ease) / 4 + 1; // back hip arc larger than front
-    var hemW = { straight: m.knee + 4, tapered: m.ankle + 8, wide: hip * .6, palazzo: hip * .75, barrel: m.ankle + 10, jogger: m.ankle + 4, shorts: m.thigh + 6 }[style] || m.knee + 4;
-    var kneeW = { straight: m.knee + 6, tapered: m.knee + 4, wide: hip * .55, palazzo: hip * .72, barrel: m.knee + 16, jogger: m.knee + 4, shorts: m.thigh + 6 }[style] || m.knee + 6;
+    if (style === 'churidar') Lg = Lg + (o.ruch || 22);
+    var hemW = { churidar: m.ankle + 4, straight: m.knee + 4, tapered: m.ankle + 8, wide: hip * .6, palazzo: hip * .75, barrel: m.ankle + 10, jogger: m.ankle + 4, shorts: m.thigh + 6 }[style] || m.knee + 4;
+    var kneeW = { churidar: m.knee + 5, straight: m.knee + 6, tapered: m.knee + 4, wide: hip * .55, palazzo: hip * .72, barrel: m.knee + 16, jogger: m.knee + 4, shorts: m.thigh + 6 }[style] || m.knee + 6;
     if (style === 'shorts') Lg = Math.min(Lg, kn0 - 8);
     var kneeY = Math.min(rise + (Lg - rise) / 2 - 2.5, Lg - 4); // knee: midpoint of crotch-to-hem, raised slightly
     // crotch extensions as a share of each hip width; jean front is a fixed amount graded by size
@@ -273,7 +274,31 @@
     jacket: { n: 'Nehru jacket / waistcoat', g: ['men', 'kids', 'women'], o: ['ease', 'len', 'collar', 'pockets'], d: { ease: 12, len: 72, collar: 'band', pockets: 2 } },
     skirt: { n: 'Skirt', g: ['women', 'kids'], o: ['skirt', 'slen2', 'flare', 'circle', 'panels'], d: { skirt: 'aline', slen2: 65, flare: 8, circle: 1, panels: 8 } },
     lehenga: { n: 'Lehenga (kalidar) skirt', g: ['women', 'kids'], o: ['slen2', 'panels', 'hemc'], d: { slen2: 100, panels: 12, hemc: 380 } },
-    trousers: { n: 'Trousers / pants', g: ['men', 'women', 'unisex', 'kids'], o: ['pfit', 'leg', 'wtype', 'tlen', 'cargo'], d: { pfit: 'trouser', leg: 'straight', wtype: 'fitted', tlen: 0, cargo: 0 } }
+    trousers: { n: 'Trousers / pants', g: ['men', 'women', 'unisex', 'kids'], o: ['pfit', 'leg', 'wtype', 'tlen', 'cargo'], d: { pfit: 'trouser', leg: 'straight', wtype: 'fitted', tlen: 0, cargo: 0 } },
+    anarkali: { n: 'Anarkali (kalidar kurta)', g: ['women', 'kids'], o: ['ease', 'len', 'neck', 'cup', 'sleeve', 'slen', 'panels', 'hemc'], d: { ease: 6, len: 130, neck: 'round', cup: 'B', sleeve: 'plain', slen: 'full', panels: 16, hemc: 420, fit: 'fitted' } },
+    angrakha: { n: 'Angrakha (wrap kurta)', g: ['women', 'men', 'kids'], o: ['ease', 'len', 'sleeve', 'slen', 'flare', 'slit'], d: { ease: 10, len: 105, sleeve: 'plain', slen: 'full', flare: 4, slit: 25 } },
+    sherwani: { n: 'Sherwani', g: ['men', 'kids'], o: ['ease', 'len', 'slit', 'slen'], d: { ease: 12, len: 102, slit: 28, slen: 'full', sleeve: 'plain' } },
+    bandhgala: { n: 'Bandhgala jacket', g: ['men', 'kids', 'women'], o: ['ease', 'len', 'pockets', 'slen'], d: { ease: 12, len: 74, pockets: 2, slen: 'full', sleeve: 'plain' } },
+    salwar: { n: 'Salwar', g: ['women', 'men', 'kids'], o: ['tlen', 'mohri', 'fullness'], d: { tlen: 0, mohri: 38, fullness: 'regular' } },
+    patiala: { n: 'Patiala salwar', g: ['women', 'kids'], o: ['tlen', 'mohri'], d: { tlen: 0, mohri: 36 } },
+    churidar: { n: 'Churidar', g: ['women', 'men', 'kids'], o: ['tlen', 'ruch'], d: { tlen: 0, ruch: 22 } },
+    gharara: { n: 'Gharara', g: ['women', 'kids'], o: ['tlen', 'gfull'], d: { tlen: 0, gfull: 3 } }
+  };
+  /* ---------- salwar and patiala: leg panels (cut on the outer fold) + kalis that form the crotch ---------- */
+  PM.salwar = function (m, o) {
+    var pat = o.type === 'patiala', kid = o.kid, Lb = (o.len || m.outseam - 3) + 4, mo = (o.mohri || (pat ? 36 : 38)) * (kid ? .72 : 1), full = { slim: .62, regular: .75, full: .95 }[o.fullness] || .75;
+    var Wt = m.hip * (pat ? 1.45 : full), kw = m.hip * (pat ? .34 : .28), Lk = Lb * (pat ? .8 : .7), out = [];
+    var hemY = pat ? Lb - 7 : Lb, half = [[0, 0], [Wt / 2, 0]], inseam = B([Wt / 2, 0], [Wt / 2, Lk * .6], [mo / 2 + (Wt - mo) * .08, hemY * .85], [mo / 2, hemY]);
+    var marks = [{ t: 'line', p: L([0, 4], [Wt / 2, 4]), lab: 'fold casing for drawstring', dash: 1 }, { t: 'notch', c: atY(inseam, Lk).pt, n: 1 }];
+    if (pat) for (var i = 0; i < 6; i++) { var px = Wt / 2 * (i + .5) / 6.5; marks.push({ t: 'line', p: L([px, 0], [px, 12]), lab: i ? '' : 'pleat lines: fold towards the side', dash: 1 }); }
+    out.push(piece('salwar-leg', pat ? 'Patiala leg panel (half)' : 'Leg panel', [E(pat ? 'seam' : 'fold', L([0, hemY], [0, 0], 4)), E('seam', L([0, 0], [Wt / 2, 0], 4)), E('seam', inseam), E(pat ? 'seam' : 'hem', L([mo / 2, hemY], [0, hemY], 2))],
+      { cut: pat ? 'Cut 4 (2 pairs)' : 'Cut 2 on fold', grain: [[Wt / 8, 10], [Wt / 8, hemY - 10]], marks: marks, notes: pat ? 'join front and back halves at the outer side seam' : 'fold = outer side of the leg' }));
+    out.push(piece('kali', 'Kali (crotch gusset)', [E('seam', L([0, 0], [kw, 0], 3)), E('seam', L([kw, 0], [kw / 2, Lk], 4)), E('seam', L([kw / 2, Lk], [0, 0], 4))],
+      { cut: 'Cut 2 (pair)', grain: [[kw / 2, 4], [kw / 2, Lk - 8]], marks: [{ t: 'notch', c: [kw, 0], n: 1 }, { t: 'notch', c: [0, 0], n: 2 }] }));
+    if (pat) out.push(rect('cuff', 'Mohri band', mo + 2, 16, { cut: 'Cut 2 + 2 interfacing', marks: [{ t: 'line', p: L([0, 8], [mo + 2, 8]), lab: 'fold', dash: 1 }] }));
+    out.push(rect('nada', 'Drawstring (nada)', Math.min(140, m.waist * 1.6), 4, { cut: 'Cut 1 (or use ready cord)' }));
+    out.info = { 'Waist before gathering': Wt * 2 + kw * 2, 'Mohri (leg opening)': mo, 'Length incl. casing': Lb, 'Kali length': Lk };
+    return out;
   };
   var SLEN = { cap: 7, short: .3, elbow: .55, '3q': .75, full: 1 };
   PM.build = function (gid, gender, m, o) {
@@ -290,13 +315,20 @@
       var sty = style === 'shirt' ? 'plain' : style === 'tee' ? 'plain' : style;
       var cuffD = style === 'shirt' ? 6 : 0, rib = extra && extra.rib ? 7 : 0, len = sl(slen) - cuffD - rib + (style === 'shirt' ? 2 : 0) - (t.drop || 0);
       var s = PM.sleeve(m, t.armhole, { style: sty, slen: Math.max(len, 5), sease: style === 'tee' ? 4 : style === 'shirt' ? 8 : 5, capEase: style === 'tee' || t.drop ? 0 : style === 'shirt' ? (kid ? 1 : 1.5) : G.d.fit === 'fitted' ? (kid ? 2 : Math.max(3, Math.min(3.8, t.armhole * .072))) : (kid ? 1.5 : 2.5), elbow: G.d.fit === 'fitted' && !kid, flat: style === 'tee' || t.drop > 0, capMax: t.drop ? 9 : (style === 'tee' ? 13 : 0),
-        hem: style === 'shirt' ? m.wrist + 10 : rib ? m.wrist + 12 : slen === 'full' ? m.wrist + 9 : slen === 'short' || slen === 'cap' ? undefined : m.bicep * .85, placket: style === 'shirt' && slen === 'full' });
+        hem: style === 'shirt' ? m.wrist + 10 : rib ? m.wrist + 12 : slen === 'full' ? Math.max(m.wrist + 9, m.bicep * .78) : slen === 'short' || slen === 'cap' ? undefined : m.bicep * .85, placket: style === 'shirt' && slen === 'full' });
       P.push(s.piece); info['Sleeve cap seam'] = s.cap; info['Sleeve cap height'] = s.CH;
       if (style === 'shirt' && slen === 'full') P.push(rect('cuff', 'Cuff', m.wrist + 7, 12, { cut: 'Cut 4 + 2 interfacing', marks: [{ t: 'line', p: L([0, 6], [m.wrist + 7, 6]), lab: 'fold', dash: 1 }, { t: 'button', c: [2, 3] }] }));
       if (rib) P.push(rect('cuff', 'Rib cuff', (m.wrist + 4) * .85, rib * 2, { cut: 'Cut 2 in rib', marks: [{ t: 'line', p: L([0, rib], [(m.wrist + 4) * .85, rib]), lab: 'fold', dash: 1 }] }));
     }
     var len = o.len || 0, ease = +o.ease;
-    if (gid === 'skirt' || gid === 'lehenga') {
+    function biasGrain(p) { var g = p.grain, mx = (g[0][0] + g[1][0]) / 2, my = (g[0][1] + g[1][1]) / 2, h = Math.hypot(g[1][0] - g[0][0], g[1][1] - g[0][1]) * .35; p.grain = [[mx - h * .7071, my - h * .7071], [mx + h * .7071, my + h * .7071]]; p.bias = true; }
+    if (gid === 'salwar' || gid === 'patiala') { P = PM.salwar(m, { type: gid, len: +o.tlen || 0, mohri: +o.mohri, fullness: o.fullness, kid: kid }); info = P.info; }
+    else if (gid === 'churidar') { P = PM.trousers(m, { leg: 'churidar', waist: 'elastic', len: +o.tlen || 0, kid: kid, ruch: +o.ruch || 22, fit: 'trouser' }); info = P.info || {};
+      P.forEach(function (p) { if (/^tr-/.test(p.id)) { biasGrain(p); p.notes = 'cut on the true bias (45°)'; } }); info['Extra length for ruching'] = +o.ruch || 22; }
+    else if (gid === 'gharara') { var kl = m.knee_l + 6, Lt = +o.tlen || m.outseam - 2; P = PM.trousers(m, { leg: 'straight', waist: 'elastic', len: kl, kid: kid, fit: 'trouser' }); info = P.info || {};
+      var kc = m.knee + 14, fw = kc / 2 * (+o.gfull || 3), fh = Lt - kl + 2; P.push(rect('flare', 'Gharara flare', fw, fh, { cut: 'Cut 4 (front and back of each leg)', grainV: true, notes: 'gather to the knee seam' })); P[P.length - 1].edges[3].t = 'hem';
+      info['Knee seam (each leg)'] = kc; info['Flare before gathering (each leg)'] = fw * 2; }
+    else if (gid === 'skirt' || gid === 'lehenga') {
       P = PM.skirt(m, { type: gid === 'lehenga' ? 'panels' : o.skirt, len: +o.slen2, flare: +o.flare, circle: +o.circle, panels: +o.panels, hemCirc: +o.hemc });
       info['Finished waist'] = m.waist + 2.5; info['Finished hip'] = m.hip + 5; if (gid === 'lehenga') info['Hem circumference'] = +o.hemc;
     } else if (gid === 'trousers') {
@@ -308,6 +340,9 @@
       if (gid === 'blouse') { to.len = o.len || m.nape - 6; to.opening = +o.opening; to.ext = 1.5; to.buttons = +o.opening ? 5 : 0; }
       if (gid === 'shirt') { to.opening = true; to.ext = 1.75; to.buttons = kid ? 5 : 7; to.neck = 'collar'; to.hemCurve = o.hem === 'curved' ? (kid ? 4 : 7) : 0; }
       if (gid === 'jacket') { to.opening = true; to.ext = 2; to.buttons = 5; to.neck = (o.collar || 'band') === 'band' ? 'collar' : 'v'; to.sleeveless = true; to.shape = 'shaped'; }
+      if (gid === 'sherwani' || gid === 'bandhgala') { to.opening = true; to.ext = 2; to.buttons = gid === 'sherwani' ? (kid ? 6 : 8) : (kid ? 5 : 6); to.neck = 'collar'; to.shape = 'shaped'; to.slit = gid === 'sherwani' ? +o.slit || 0 : 0; }
+      if (gid === 'anarkali') { to.len = m.nape; to.fit = 'fitted'; }
+      if (gid === 'angrakha') { to.neck = 'round'; }
       if (gid === 'kurta' && o.collar === 'band') to.neck = o.neck === 'v' ? 'v' : 'collar';
       if (gid === 'hoodie' || gid === 'tshirt') to.neck = gid === 'hoodie' ? 'round' : o.neck;
       if (gid === 'dress' && o.dress === 'frock') to.len = m.nape;
@@ -329,12 +364,22 @@
       if (gid === 'dress' && o.dress === 'frock') { var wb = t.waistHalf * 2; P.push(rect('skirt', 'Gathered skirt', (wb + 2) * 1.8 / 2, (o.len || 70) - m.nape, { cut: 'Cut 2 (front and back)', grainV: true, notes: 'Gather to bodice waist ' + (wb / 2).toFixed(1) + ' cm each' })); P[P.length - 1].edges[3].t = 'hem'; }
       if (gid === 'top' && +o.peplum) { var pw = t.waistHalf * 2, r = pw / (2 * Math.PI * .75), inner = arc(0, 0, r, 0, Math.PI * .75), outer = arc(0, 0, r + 18, Math.PI * .75, 0, 50);
         P.push(piece('peplum', 'Peplum', [E('seam', L([r + 18, 0], [r, 0])), E('seam', inner), E('seam', L(inner[inner.length - 1], outer[0])), E('hem', outer)], { cut: 'Cut 2 (front and back halves on fold)', grain: [[r + 3, 3], [r + 14, 8]] })); }
+      if (gid === 'angrakha') { // wrap fronts: the over front crosses to the opposite side and ties under the arm
+        var Fh = t.F, e = Fh.edges, hp = e[5].p[0], ua = e[3].p[0], Lh2 = Fh.Lh, hx = e[1].p[e[1].p.length - 1][0], Qy = ua[1] + 8, msd = e[2].p.map(function (q) { return [-q[0], q[1]]; }), Qh = atY(msd, Qy);
+        var Q = Qh ? Qh.pt : [-e[2].p[0][0], Qy], lower = msd.filter(function (q) { return q[1] > Qy; }).sort(function (a, b) { return a[1] - b[1]; });
+        var ownM = Fh.marks.filter(function (k) { return !k.p || k.p.every(function (q) { return q[0] >= 0; }); });
+        var over = piece('front', 'Over front', [E('seam', B(hp, [hp[0] * .3, hp[1] + Qy * .45], [Q[0] * .55, Qy - 3], Q)), E('seam', [Q].concat(lower)), E('hem', rev(e[1].p.map(function (q) { return [-q[0], q[1]]; })).concat(e[1].p.slice(1))), E('seam', e[2].p), E('seam', e[3].p), E('seam', e[4].p)],
+          { cut: 'Cut 1', grain: [[hx * .35, Math.max(Fh.nd + 4, 14)], [hx * .35, Lh2 - 8]], marks: ownM.concat([{ t: 'notch', c: Q, n: 1 }, { t: 'text', c: [Q[0] * .4, Qy + 6], s: 'tie point' }]), notes: 'face the wrap edge with 3 cm bias' });
+        var U = [-6, Qy + 2], under = piece('front2', 'Under front', [E('seam', B(hp, [hp[0] * .4, hp[1] + Qy * .5], [-2, Qy - 2], U)), E('seam', L(U, [-6, Lh2], 4)), E('hem', [[-6, Lh2]].concat(e[1].p)), E('seam', e[2].p), E('seam', e[3].p), E('seam', e[4].p)],
+          { cut: 'Cut 1', grain: [[hx * .35, Math.max(Fh.nd + 4, 14)], [hx * .35, Lh2 - 8]], marks: ownM.concat([{ t: 'notch', c: [-6, Qy + 4], n: 1 }]), notes: 'mirror image of the over front side' });
+        P[0] = over; P.splice(1, 0, under); P.push(rect('tie', 'Ties', 36, 3, { cut: 'Cut 4' }));
+      }
       var sleeveStyle = gid === 'jacket' ? 'none' : gid === 'hoodie' ? 'plain' : o.sleeve || G.d.sleeve;
       addSleeve(t, sleeveStyle, o.slen || G.d.slen, { rib: gid === 'hoodie' });
       var nl = t.neckline;
-      var col = o.collar || (gid === 'jacket' ? 'band' : 'none');
+      var col = o.collar || (gid === 'jacket' || gid === 'sherwani' || gid === 'bandhgala' ? 'band' : 'none');
       if (gid === 'shirt' && col === 'shirt') { P.push(PM.band(nl, 3.4, 1.75, 'band', 'Collar band')); P.push(PM.leaf(nl, 'collar')); }
-      else if (col === 'band' || (gid === 'shirt' && col === 'band')) P.push(PM.band(nl, gid === 'jacket' ? 3.8 : 3.4, to.opening ? to.ext : 0, 'band', 'Band collar'));
+      else if (col === 'band' || (gid === 'shirt' && col === 'band')) P.push(PM.band(nl, gid === 'jacket' || gid === 'sherwani' || gid === 'bandhgala' ? 3.8 : 3.4, to.opening ? to.ext : 0, 'band', 'Band collar'));
       else if (col === 'camp') P.push(PM.camp(nl));
       else if (col === 'peterpan') P.push(PM.peterpan(nl));
       if (gid === 'tshirt' || gid === 'hoodie' && !+o.hood) P.push(rect('neckrib', 'Neck rib', nl * 2 * .85, 5, { cut: 'Cut 1 in rib', marks: [{ t: 'line', p: L([0, 2.5], [nl * 1.7, 2.5]), lab: 'fold', dash: 1 }] }));
@@ -342,9 +387,11 @@
         if (+o.pockets) P.push(PM.kangaroo(t.F.hemX * .62, kid ? 15 : 20)); }
       if (gid === 'blouse' || gid === 'bodice') { /* no extras */ }
       var pk = +o.pockets || 0;
-      if (pk && ['shirt', 'kurta', 'jacket'].indexOf(gid) > -1) { var pw2 = kid ? 9 : gender === 'women' ? 11.5 : 13, ph = kid ? 10 : gender === 'women' ? 12.5 : 14.5;
-        var pc = gid === 'jacket' ? PM.pocket(pw2 + 1, 2.5 * 2, 'square', 'welt', 'Welt pocket (cut 2 per pocket)') : PM.pocket(pw2, ph, 'point', 'pocket', 'Patch pocket'); pc.cut = gid === 'jacket' ? 'Cut ' + (2 * pk) : 'Cut ' + pk; P.push(pc); }
-      if (gid === 'jacket') { var F = t.F, nk = F.neckPts, hp0 = nk[0], ex = to.ext, sp0 = F.sp, k = 3.5 / Math.hypot(sp0[0] - hp0[0], sp0[1] - hp0[1]), sh = [hp0[0] + (sp0[0] - hp0[0]) * k, hp0[1] + (sp0[1] - hp0[1]) * k], fx = 7 - ex;
+      if (pk && ['shirt', 'kurta', 'jacket', 'bandhgala'].indexOf(gid) > -1) { var pw2 = kid ? 9 : gender === 'women' ? 11.5 : 13, ph = kid ? 10 : gender === 'women' ? 12.5 : 14.5;
+        var wl = gid === 'jacket' || gid === 'bandhgala', pc = wl ? PM.pocket(pw2 + 1, 2.5 * 2, 'square', 'welt', 'Welt pocket (cut 2 per pocket)') : PM.pocket(pw2, ph, 'point', 'pocket', 'Patch pocket'); pc.cut = wl ? 'Cut ' + (2 * pk) : 'Cut ' + pk; P.push(pc); }
+      if (gid === 'anarkali') { var sk = PM.skirt(Object.assign({}, m, { waist: t.waistHalf * 2 - 2.5 }), { type: 'panels', len: (o.len || 130) - m.nape, panels: +o.panels || 16, hemCirc: +o.hemc || 420 }).filter(function (p) { return p.id !== 'waistband'; });
+        sk.forEach(function (p) { p.comp = 'Kali'; }); P = P.concat(sk); info['Hem circumference'] = +o.hemc || 420; info['Waist seam (bodice to kalis)'] = t.waistHalf * 2; }
+      if (gid === 'jacket' || gid === 'sherwani' || gid === 'bandhgala') { var F = t.F, nk = F.neckPts, hp0 = nk[0], ex = to.ext, sp0 = F.sp, k = 3.5 / Math.hypot(sp0[0] - hp0[0], sp0[1] - hp0[1]), sh = [hp0[0] + (sp0[0] - hp0[0]) * k, hp0[1] + (sp0[1] - hp0[1]) * k], fx = 7 - ex;
         P.push(piece('facing', 'Front facing', [E('seam', nk), E('seam', L([-ex, F.nd], [-ex, F.Lh], 4)), E('hem', L([-ex, F.Lh], [fx, F.Lh])), E('seam', cat(L([fx, F.Lh], [fx, F.nd + 6], 3), L([fx, F.nd + 6], sh, 4))), E('seam', L(sh, hp0))], { cut: 'Cut 2 (pair) + interfacing', grain: [[fx * .4, F.nd + 4], [fx * .4, F.Lh - 6]] })); }
       info['Armhole (front + back)'] = t.armhole; info['Neckline (half)'] = nl; info['Finished chest'] = m.bust + ease;
       if (info['Sleeve cap seam']) info['Sleeve cap ease'] = info['Sleeve cap seam'] - t.armhole;

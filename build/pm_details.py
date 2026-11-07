@@ -8,8 +8,10 @@ M = json.load(open('details.json'))['model']
 
 # (pattern, garment-hint or None, options) - first matching rule per group wins; groups combine.
 GARMENT = [(r'\bt-?shirts?\b|\btees?\b', 'tshirt'), (r'hood(ie|ed)|sweatshirt', 'hoodie'), (r'saree blouse|\bblouses?\b.*saree|choli', 'blouse'),
-           (r'kurta|kurti|anarkali|tunic|kaftan', 'kurta'), (r'lehenga|ghagra|kalidar', 'lehenga'), (r'nehru|bandhgala|waistcoat|sadri|\bvests?\b|gilet', 'jacket'), (r'\bpolos?\b', 'tshirt'),
-           (r'shirt dress|frock|\bdress(es)?\b|gown', 'dress'), (r'\bskirts?\b', 'skirt'), (r'trouser|\bpants?\b|jeans|palazzo|sharara|salwar|churidar|jogger|chino|cargo|shorts|culotte', 'trousers'),
+           (r'anarkali|kalidar kurta|floor-length kurta', 'anarkali'), (r'angrakha|wrap kurta', 'angrakha'), (r'sherwani|achkan', 'sherwani'), (r'bandhgala|bandh gala|jodhpuri', 'bandhgala'),
+           (r'patiala', 'patiala'), (r'churidar', 'churidar'), (r'gharara', 'gharara'), (r'salwar|dhoti salwar', 'salwar'),
+           (r'kurta|kurti|tunic|kaftan', 'kurta'), (r'lehenga|ghagra|kalidar', 'lehenga'), (r'nehru|waistcoat|sadri|\bvests?\b|gilet', 'jacket'), (r'\bpolos?\b', 'tshirt'),
+           (r'shirt dress|frock|\bdress(es)?\b|gown', 'dress'), (r'\bskirts?\b', 'skirt'), (r'trouser|\bpants?\b|jeans|palazzo|sharara|jogger|chino|cargo|shorts|culotte', 'trousers'),
            (r'\bshirts?\b|overshirt', 'shirt'), (r'\btops?\b|blouse|camisole|peplum|bodice|corset', 'top')]
 OPTS = [
     (r'band[- ]collar|mandarin|grandad|nehru collar|stand collar|chinese collar', {'collar': 'band'}),
@@ -50,7 +52,7 @@ def preset(text, gender, cat_hint, name=''):
     if not g and not re.search(EXCL, n):
         for rx, gid in GARMENT:
             if re.search(rx, t): g = gid; break
-    if re.search(EXCL, n) and not (g == 'jacket' and re.search(r'nehru|bandhgala|waistcoat|sadri|vest', n) and 'knit' not in n) and not (g and re.search(GARMENT_RX[g], n) and not re.search(r'\bjackets?\b|\bcoats?\b|blazer|\bcapes?\b', n) and re.search(r'tier|ruffle|pleated', n)):
+    if re.search(EXCL, n) and not (g in ('jacket', 'bandhgala', 'sherwani') and re.search(r'nehru|bandhgala|waistcoat|sadri|vest|sherwani|achkan|jodhpuri', n) and 'knit' not in n) and not (g and re.search(GARMENT_RX[g], n) and not re.search(r'\bjackets?\b|\bcoats?\b|blazer|\bcapes?\b', n) and re.search(r'tier|ruffle|pleated', n)):
         return None
     g = g or cat_hint
     if not g or gender not in GG.AVAIL[g]: return None
