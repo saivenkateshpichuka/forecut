@@ -88,6 +88,27 @@ def share_img(fn):
     return 'og-image.png', 1200, 630
 TAB = '<style>.fctab{display:none}@media (max-width:760px){body{padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))!important}\n.fctab{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb,#fffcf7 92%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-top:1px solid #e3d9cc;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px))}\n.fctab a{display:grid;justify-items:center;gap:2px;text-decoration:none;color:#6e6259;font:600 10.5px "DM Sans",system-ui,sans-serif;padding:4px 0;border-radius:10px}\n.fctab svg{width:22px;height:22px}.fctab a[aria-current="page"]{color:#1f3d33}.fctab a[aria-current="page"] svg{transform:translateY(-1px)}\n.fctab a[aria-current="page"]::after{content:"";width:18px;height:3px;border-radius:3px;background:#a9481f;margin-top:1px}\n.scrim:not([hidden])~.fctab,body:has(.scrim:not([hidden])) .fctab,body:has(#tscrim:not([hidden])) .fctab{display:none}}\n@media (max-width:760px) and (prefers-color-scheme:dark){.fctab{background:color-mix(in srgb,#1e1a17 92%,transparent);border-color:#352d27}.fctab a{color:#b3a698}.fctab a[aria-current="page"]{color:#f2ebe2}}\n@media print{.fctab{display:none!important}}</style>'
 NAV = '<nav class="fctab" aria-label="App navigation"><a href="/" data-m="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</a><a href="/regions.html" data-m="regions"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 3v18M3 12h18M5.5 6.5c3.5 2.5 9.5 2.5 13 0M5.5 17.5c3.5-2.5 9.5-2.5 13 0"/></svg>Regions</a><a href="/aw26.html" data-m="seasons"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Seasons</a><a href="/reports.html" data-m="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h9l4 4v14H6z"/><path d="M14 3v5h5M9 13h7M9 17h5"/></svg>Reports</a><a href="/account.html#saved" data-m="saved"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20s-7-4.3-9-8.6C1.6 8.2 3.6 5 6.8 5c1.9 0 3.2 1 4.2 2.3C12 6 13.3 5 15.2 5c3.2 0 5.2 3.2 3.8 6.4C17 15.7 12 20 12 20z"/></svg>Saved</a></nav>'
+MOB = ('<style id="fcmob">'
+  # top navigation: one swipeable row on phones instead of two wrapped rows; current page marked
+  '@media (max-width:760px){nav:has(>.links){flex-wrap:nowrap;flex-direction:column;align-items:stretch;gap:6px;padding-block:14px 4px}'
+  'nav>.links{flex-wrap:nowrap!important;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;gap:4px!important;margin:0 -16px;padding:0 16px;'
+  '-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 16px,#000 calc(100% - 28px),transparent);mask-image:linear-gradient(90deg,transparent 0,#000 16px,#000 calc(100% - 28px),transparent)}'
+  'nav>.links::-webkit-scrollbar{display:none}'
+  'nav>.links a{flex:none;display:inline-flex;align-items:center;min-height:44px;padding:0 10px;border-radius:8px;white-space:nowrap}'
+  'nav>.links a[aria-current=page]{color:var(--ink,#1c1714);font-weight:600;box-shadow:inset 0 -2px 0 var(--chalk,#a9481f);border-radius:0}'
+  'header.bar nav a,.seasons a,.subnav a,.jump a{min-height:40px;display:inline-flex;align-items:center}'
+  # footer and inline links: comfortable tap size
+  'footer a{display:inline-flex;align-items:center;min-height:44px}footer .fl{gap:2px 18px!important}'
+  'a.source-link{display:inline-block;padding:10px 0}'
+  # general: never let media, tables or code push the page sideways
+  'img,video,svg,canvas,iframe{max-width:100%}img{height:auto}table{max-width:100%}pre{overflow-x:auto}'
+  'input,select,textarea{font-size:16px}'  # stops iOS zooming into form fields
+  'h1{overflow-wrap:break-word;hyphens:manual}'
+  '}'
+  '@media (hover:none){a,button{-webkit-tap-highlight-color:rgba(169,72,31,.15)}}'
+  '</style>'
+  '<script>(function(){function m(){var p=location.pathname.split("/").pop()||"index.html";document.querySelectorAll("nav>.links a").forEach(function(a){var h=(a.getAttribute("href")||"").split("/").pop().split("#")[0]||"index.html";if(h===p){a.setAttribute("aria-current","page");if(a.scrollIntoView&&innerWidth<=760){var l=a.parentNode;l.scrollLeft=a.offsetLeft-l.clientWidth/2+a.offsetWidth/2;}}});}'
+  'if(document.readyState!=="loading")m();else document.addEventListener("DOMContentLoaded",m);})();</script>')
 REPORT_FILES = set()
 def tab_for(fn):
     if fn == 'index.html': return 'home'
@@ -145,8 +166,27 @@ def block(fn, title, desc, path):
     b.append('<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Forecut"><meta name="apple-mobile-web-app-status-bar-style" content="default">')
     b.append("<script>if('serviceWorker' in navigator)addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){})});</script>")
     b.append(TAB)
+    b.append(MOB)
     b.append(SO.CSS)
     b.append('<!--/seo-->'); return '\n'.join(b)
+# large inline scripts shared by several pages (the season pages' sketch engine) go to one hashed file that the browser caches once
+import hashlib as _hl, collections as _co
+_SHARED = _co.Counter()
+for _f in pages:
+    _pp = os.path.join(R, _f)
+    if os.path.exists(_pp):
+        for _sc in re.findall(r'<script>(.*?)</script>', open(_pp).read(), flags=re.S):
+            if len(_sc) > 40000: _SHARED[_hl.md5(_sc.encode()).hexdigest()[:10]] += 1
+def externalise(h):
+    def rep(m):
+        sc = m.group(1)
+        if len(sc) <= 40000: return m.group(0)
+        k = _hl.md5(sc.encode()).hexdigest()[:10]
+        if _SHARED[k] < 2: return m.group(0)
+        os.makedirs(os.path.join(R, 'assets'), exist_ok=True); fp = os.path.join(R, 'assets', 'shared-' + k + '.js')
+        if not os.path.exists(fp): open(fp, 'w').write(sc)
+        return '<script src="/assets/shared-' + k + '.js"></script>'
+    return re.sub(r'<script>(.*?)</script>', rep, h, flags=re.S)
 for fn, (title, desc, path) in pages.items():
     if os.environ.get('ONLY') and fn not in os.environ['ONLY'].split(','): continue
     p = os.path.join(R, fn)
@@ -179,6 +219,7 @@ for fn, (title, desc, path) in pages.items():
     h = h.replace('</body>', _nav + '</body>', 1) if '</body>' in h else h + _nav
     # owner's rule: pages show the photo only; flat sketches stay inside the detail viewer's "Flat sketch" button
     h = re.sub(r'(<img[^>]*?\ssrc="img/)([a-z0-9-]+)(\.webp")', lambda m: m.group(1) + (m.group(2) + '-photo' if not m.group(2).endswith('-photo') and os.path.exists(os.path.join(R, 'img', m.group(2) + '-photo.webp')) else m.group(2)) + m.group(3), h)
+    h = externalise(h)
     open(p, 'w').write(h)
 if not os.environ.get('ONLY') or os.environ.get('SITEMAP'):
     today = datetime.date.today().isoformat()

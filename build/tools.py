@@ -205,7 +205,7 @@ TCCSS = r"""<style>
 .toast2{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:#f4f1ea;color:#1b1d20;border-radius:4px;padding:8px 14px;font-size:12.5px;font-weight:600;box-shadow:0 10px 28px rgba(0,0,0,.4);margin:0;z-index:30}
 .tcdoc{margin-top:26px}.tcdoc>summary{cursor:pointer;font:700 15px "DM Sans",sans-serif;padding:12px 0;border-top:1px solid var(--grid);list-style:none;display:flex;justify-content:space-between}.tcdoc>summary::-webkit-details-marker{display:none}.tcdoc>summary::after{content:"Show";font:600 12px "DM Sans",sans-serif;color:var(--muted)}.tcdoc[open]>summary::after{content:"Hide"}
 @media (max-width:1100px){.tgrid{grid-template-columns:1fr}}
-@media (max-width:860px){.tbody{grid-template-columns:1fr}.tnav{display:none}.tsel{display:block;padding:10px 14px 0;background:var(--stage,#26292e)}.tsel label{display:grid;gap:4px;color:var(--mu);font-size:12px}.tbar .brand{display:none}.tsr{flex:1 1 100%;order:5}.tmain{padding:14px}.ans b{font-size:26px}}
+@media (max-width:860px){.tbody{grid-template-columns:1fr}.tnav{display:none!important}.tsel select{min-height:44px;font-size:16px}.tch{flex-wrap:wrap}.tch .tag{white-space:normal;max-width:100%}.tbar button,.tbar .xbtn{min-height:40px}.tmain input,.tmain select{min-height:40px;font-size:16px}.tsel{display:block;padding:10px 14px 0;background:var(--stage,#26292e)}.tsel label{display:grid;gap:4px;color:var(--mu);font-size:12px}.tbar .brand{display:none}.tsr{flex:1 1 100%;order:5}.tmain{padding:14px}.ans b{font-size:26px}}
 @media print{.tbar,.tnav,.tsel,.tcdoc,.tch .tag{display:none!important}.tcx{border:0;color:#000;background:#fff}.tmain{background:#fff}.tp{border-color:#ccc;background:#fff}}
 </style>"""
 TI = lambda k: IC[k].replace('<svg ', '<svg class="ic" ', 1)
@@ -382,7 +382,7 @@ PMCSS = r"""<style>
 .pmdoc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:4px 0 10px}
 .pmdoc h2{font:700 15px "DM Sans",sans-serif;margin:0 0 8px}.pmdoc p,.pmdoc li{font:14px/1.55 "DM Sans",sans-serif;color:var(--muted);margin:0 0 8px}.pmdoc ul{padding-left:18px;margin:0}.pmdoc b{color:var(--ink)}
 @media (max-width:1240px){.pbody{grid-template-columns:250px minmax(0,1fr) 320px}.leg{display:none}}
-@media (max-width:980px){.pbody{grid-template-columns:1fr;height:auto}.pc{order:-1;height:70vh}.pl{border-right:0;border-top:1px solid #121315}.pr{border-left:0;border-top:1px solid #121315}
+@media (max-width:980px){.pbody{grid-template-columns:1fr;height:auto}.pc{order:-1;height:72vh;height:72svh}.view{touch-action:pan-x pan-y}.glist{grid-template-columns:1fr 1fr;gap:2px}.glist button{padding:9px 8px;min-height:40px}.pl input,.pl select,.pr input,.pr select{min-height:38px;font-size:16px}.rt button{min-height:44px}.pmh{flex-wrap:wrap;gap:8px}.pmh .tag{white-space:normal}.pl{border-right:0;border-top:1px solid #121315}.pr{border-left:0;border-top:1px solid #121315}
  .srch{flex:1 1 100%;order:5}.brand{display:none}.crumb{flex:1 1 auto}.pmdoc{grid-template-columns:1fr}.view{padding:14px}.sbar .xy{display:none}}
 </style>"""
 A = lambda k: IC[k].replace('<svg ', '<svg class="ic" ', 1)

@@ -221,6 +221,11 @@
   function zoom(f, cx, cy) { var old = ZR; ZR = Math.max(.25, Math.min(8, ZR * f)); if (cx === undefined) { cx = view.clientWidth / 2; cy = view.clientHeight / 2; } var sx = (view.scrollLeft + cx) / (view.scrollWidth || 1), sy = (view.scrollTop + cy) / (view.scrollHeight || 1); applyZoom(); view.scrollLeft = sx * view.scrollWidth - cx; view.scrollTop = sy * view.scrollHeight - cy; }
   $('#pm-zin').onclick = function () { zoom(1.25); }; $('#pm-zout').onclick = function () { zoom(.8); }; $('#pm-zfit').onclick = function () { ZR = 1; applyZoom(); view.scrollTo(0, 0); };
   view.addEventListener('wheel', function (e) { if (!e.ctrlKey && !e.metaKey) return; e.preventDefault(); var r = view.getBoundingClientRect(); zoom(e.deltaY < 0 ? 1.12 : .89, e.clientX - r.left, e.clientY - r.top); }, { passive: false });
+  /* phones and tablets: pinch with two fingers to zoom the pattern; one finger scrolls it */
+  var pinch = null; function tdist(t) { return Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY); }
+  view.addEventListener('touchstart', function (e) { if (e.touches.length === 2) { pinch = tdist(e.touches); e.preventDefault(); } }, { passive: false });
+  view.addEventListener('touchmove', function (e) { if (!pinch || e.touches.length !== 2) return; e.preventDefault(); var d = tdist(e.touches), r = view.getBoundingClientRect(); if (Math.abs(d / pinch - 1) > .04) { zoom(d / pinch, (e.touches[0].clientX + e.touches[1].clientX) / 2 - r.left, (e.touches[0].clientY + e.touches[1].clientY) / 2 - r.top); pinch = d; } }, { passive: false });
+  view.addEventListener('touchend', function (e) { if (e.touches.length < 2) pinch = null; });
   var pan = null;
   view.addEventListener('pointerdown', function (e) { if (e.pointerType !== 'mouse' || e.button !== 0) return; pan = [e.clientX, e.clientY, view.scrollLeft, view.scrollTop]; view.classList.add('drag'); });
   window.addEventListener('pointermove', function (e) { if (!pan) return; view.scrollLeft = pan[2] - (e.clientX - pan[0]); view.scrollTop = pan[3] - (e.clientY - pan[1]); });
