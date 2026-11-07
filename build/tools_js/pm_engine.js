@@ -50,10 +50,11 @@
     var nwB = m.neck / 6 + .5, ndB = m.neck / 6 + 1.5, out = { pieces: [] };
     var NL = { crew: [0, 0], round: [.5, 1.5], deep: [1.5, 7], v: [.5, 11], boat: [4, -1.5], square: [2.5, 6], collar: [0, 0], ushape: [2, 10] }[o.neck || 'round'];
     var BK = { std: 0, deepU: 13, deepV: 15, low: 6 }[o.backNeck || 'std'];
-    var cup = { A: 2.5, B: 3.5, C: 4.5, D: 5.5 }[o.cup || 'B'];
+    var FA = o.adj || {}, fba = +FA.fba || 0, bb = +FA.bb || 0, fsh = +FA.fsh || 0, sway = +FA.sway || 0;
+    var cup = { A: 2.5, B: 3.5, C: 4.5, D: 5.5 }[o.cup || 'B'] + fba * .8; // full bust: more dart intake and front width
     var res = {}, Bq0 = Bq, split = kid ? 0 : men ? -.5 : .9, cupI = { A: 0, B: 1, C: 2, D: 3 }[o.cup || 'B'];
     ['F', 'B'].forEach(function (SD) {
-      var front = SD === 'F'; Bq = Bq0 + (front ? split : -split); var slope = kid ? 3 : front ? 4.6 : 4, nw = nwB + NL[0], nd = front ? ndB + NL[1] : (kid ? 1.8 : 2.2) + BK;
+      var front = SD === 'F'; Bq = Bq0 + (front ? split + fba / 2 : -split + bb / 2); var slope = (kid ? 3 : front ? 4.6 : 4) + (front ? -fsh : fsh), nw = nwB + NL[0], nd = front ? ndB + NL[1] : (kid ? 1.8 : 2.2) + BK;
       if (!front) nw = nwB + Math.min(NL[0], 2.5);
       var hp = [nw, 0], sp0 = [hs, slope], dir = [sp0[0] - hp[0], sp0[1] - hp[1]], dl = Math.hypot(dir[0], dir[1]);
       var sp = drop ? [sp0[0] + dir[0] / dl * drop, sp0[1] + dir[1] / dl * drop * .55] : sp0;
@@ -103,6 +104,9 @@
       if (o.slit && Lh > Hy) marks.push({ t: 'notch', c: [hemX + (o.flare || 0) * 0, Lh - o.slit], lab: 'slit' });
       // armhole notches: front single, back double at ~1/3 from underarm
       var an = arm[Math.round(arm.length * .62)]; marks.push({ t: 'notch', c: an, n: front ? 1 : 2 });
+      if (!front && sway && Lh <= Wy + 1.5) { // sway back: take the excess out at centre back waist, tapering to nothing at the side
+        var hx0 = Math.max(1, Math.abs(edges[1].p[edges[1].p.length - 1][0]));
+        edges[1].p = edges[1].p.map(function (q) { return [q[0], q[1] - sway * Math.max(0, 1 - Math.abs(q[0]) / hx0)]; }); var e0 = edges[0].p; e0[e0.length - 1] = [e0[e0.length - 1][0], e0[e0.length - 1][1] - sway]; }
       res[SD] = { edges: edges, marks: marks, arm: plen(arm), neck: plen(neck) - ext, side: plen(side), hemX: hemX, hipX: hipX, nd: nd, Lh: Lh, ua: ua, sp: sp, armPts: arm, neckPts: neck, wq: shaped ? wqx : hipX };
     });
     out.F = res.F; out.B = res.B; out.armhole = res.F.arm + res.B.arm; out.neckline = res.F.neck + res.B.neck; out.Ad = Ad; out.waistHalf = (res.F.wq + res.B.wq);
@@ -173,7 +177,7 @@
       // Dart number and intake follow the hip-waist difference: about half of the excess goes into darts (none for a small difference) (one third front, two thirds back), the rest into the side seam.
       var diff = Hp - W, exH = ((Hp + 5) - (W + 2.5)) / 2, dT = diff < 8 ? 0 : Math.max(0, exH * .5), nF = diff >= 20 ? 2 : 1, nB = diff >= 15 ? 2 : 1;
       [['front', 1], ['back', -1]].forEach(function (s) {
-        var f = s[1] > 0, hq = (Hp + 5) / 4 - s[1] * .6, wq = (W + 2.5) / 4 + s[1] * .5, n = f ? nF : nB, per = (f ? dT / 3 : dT * 2 / 3) / n, dart = per * n, sideIn = Math.max(0, hq - wq - dart), y0 = f ? 0 : 1;
+        var f = s[1] > 0, hq = (Hp + 5) / 4 - s[1] * .6, wq = (W + 2.5) / 4 + s[1] * .5, n = f ? nF : nB, per = (f ? dT / 3 : dT * 2 / 3) / n, dart = per * n, sideIn = Math.max(0, hq - wq - dart), y0 = f ? 0 : 1 + (+(o.adj || {}).sway || 0);
         var ws = [hq - sideIn, -1.2], hipS = [hq + fl * D / Lk, D], hem = [hq + fl, Lk - fl * .12], cb = [0, y0];
         var waist = B(cb, [ws[0] * .45, y0], [ws[0] * .85, -.6], ws), side = cat(B(ws, [ws[0] + sideIn * .1, D * .3], [hipS[0], D * .6], hipS), L(hipS, hem, 4)), hemE = B(hem, [(hq + fl) * .8, Lk], [(hq + fl) * .4, Lk], [0, Lk]);
         var marks = [{ t: 'line', p: L([0, D], [hipS[0], D]), lab: 'hip line', dash: 1 }];
@@ -209,15 +213,16 @@
     var hip = m.hip, waist = m.waist, el = o.waist === 'elastic', style = o.leg || 'straight', fit = PM.PFIT[o.fit] ? o.fit : 'trouser', F = PM.PFIT[el ? 'trouser' : fit];
     var rise = m.rise + F.ce, kn0 = m.knee_l, Lg = o.len || m.outseam - 2, out = [], casing = el ? 3.5 : 0, kid = o.kid;
     var D = rise * 2 / 3; // hip line: one third of the rise above the crotch line
-    var ease = el ? 8 : 2.5, hF = (hip + ease) / 4 - 1, hB = (hip + ease) / 4 + 1; // back hip arc larger than front
+    var FA = o.adj || {}, seat = +FA.seat || 0, swayT = +FA.sway || 0, ease = el ? 8 : 2.5, hF = (hip + ease) / 4 - 1, hB = (hip + ease) / 4 + 1 + seat * .4; // back hip arc larger than front
     if (style === 'churidar') Lg = Lg + (o.ruch || 22);
     var hemW = { churidar: m.ankle + 4, straight: m.knee + 4, tapered: m.ankle + 8, wide: hip * .6, palazzo: hip * .75, barrel: m.ankle + 10, jogger: m.ankle + 4, shorts: m.thigh + 6 }[style] || m.knee + 4;
     var kneeW = { churidar: m.knee + 5, straight: m.knee + 6, tapered: m.knee + 4, wide: hip * .55, palazzo: hip * .72, barrel: m.knee + 16, jogger: m.knee + 4, shorts: m.thigh + 6 }[style] || m.knee + 6;
     if (style === 'shorts') Lg = Math.min(Lg, kn0 - 8);
     var kneeY = Math.min(rise + (Lg - rise) / 2 - 2.5, Lg - 4); // knee: midpoint of crotch-to-hem, raised slightly
     // crotch extensions as a share of each hip width; jean front is a fixed amount graded by size
-    var cF = fit === 'jean' && !el ? (kid ? 3.5 : 5 + (hip - 96) / 5 * .3) : hF * F.fx, cB = hB * F.bx - (F.bm || 0);
+    var cF0 = 0, cF = fit === 'jean' && !el ? (kid ? 3.5 : 5 + (hip - 96) / 5 * .3) : hF * F.fx, cB = hB * F.bx - (F.bm || 0);
     if (fit === 'jean' && !el) cB = hB / 3 - 1.3;
+    cB += seat * .6; // full seat: more back crotch extension and back hip width
     // crotch-level width must exceed the thigh by the fit's minimum; extend both points equally if short
     var short = m.thigh + (kid ? F.thigh * .6 : F.thigh) - (hF + cF + hB + cB); if (short > 0) { cF += short / 2; cB += short / 2; }
     function draft(sd, drop) {
@@ -226,7 +231,7 @@
       var crease = (hw + cext) / 2 - (f ? 0 : .6); // crease centred on the crotch-level width (back nudged towards the side)
       // waist: front darts 2 x 1.3 (or pleat), back darts 2 x 2.5; side and centre absorb the rest
       var dN = f ? (waist > 70 ? 2 : 1) : 2, dI = f ? 1.3 : 2.5 * Math.min(1, Math.max(.5, (hip - waist) / 25));
-      var wW = el ? hw : (waist + 2) / 4 + (f ? 1 : -1) + dN * dI, ctop = f ? [hw - 1.5, -casing] : [hw - 2, -.6 - casing], stop = [ctop[0] - wW, -casing];
+      var wW = el ? hw : (waist + 2) / 4 + (f ? 1 : -1) + dN * dI, ctop = f ? [hw - 1.5, -casing] : [hw - 2, -.6 - casing + swayT], stop = [ctop[0] - wW, -casing];
       if (el) { ctop = [hw - (f ? 0 : 1.5), -casing - (f ? 0 : 2.5)]; stop = [0, -casing]; }
       if (!el && stop[0] < -1.5) { stop[0] = -1.5; }
       var cpt = [hw + cext, cy], corner = [hw, cy], dg = f ? 3.8 : (kid ? 4.4 : 5); // crotch curve passes this far from the corner on the diagonal
@@ -329,13 +334,13 @@
       var kc = m.knee + 14, fw = kc / 2 * (+o.gfull || 3), fh = Lt - kl + 2; P.push(rect('flare', 'Gharara flare', fw, fh, { cut: 'Cut 4 (front and back of each leg)', grainV: true, notes: 'gather to the knee seam' })); P[P.length - 1].edges[3].t = 'hem';
       info['Knee seam (each leg)'] = kc; info['Flare before gathering (each leg)'] = fw * 2; }
     else if (gid === 'skirt' || gid === 'lehenga') {
-      P = PM.skirt(m, { type: gid === 'lehenga' ? 'panels' : o.skirt, len: +o.slen2, flare: +o.flare, circle: +o.circle, panels: +o.panels, hemCirc: +o.hemc });
+      P = PM.skirt(m, { adj: o.adj, type: gid === 'lehenga' ? 'panels' : o.skirt, len: +o.slen2, flare: +o.flare, circle: +o.circle, panels: +o.panels, hemCirc: +o.hemc });
       info['Finished waist'] = m.waist + 2.5; info['Finished hip'] = m.hip + 5; if (gid === 'lehenga') info['Hem circumference'] = +o.hemc;
     } else if (gid === 'trousers') {
       var el = o.wtype === 'elastic' || ['jogger', 'palazzo'].indexOf(o.leg) > -1 && o.wtype !== 'fitted';
-      P = PM.trousers(m, { leg: o.leg, waist: o.wtype === 'elastic' ? 'elastic' : 'fitted', len: +o.tlen || 0, cargo: +o.cargo, kid: kid, fit: o.pfit }); info = P.info || {};
+      P = PM.trousers(m, { adj: o.adj, leg: o.leg, waist: o.wtype === 'elastic' ? 'elastic' : 'fitted', len: +o.tlen || 0, cargo: +o.cargo, kid: kid, fit: o.pfit }); info = P.info || {};
     } else {
-      var to = { gender: gender, ease: ease, len: len || m.nape + m.wh + 20, neck: o.neck, backNeck: o.back, cup: o.cup, fit: G.d.fit || (o.shape === 'fitted' ? 'fitted' : 'semi'), shape: o.shape, flare: +o.flare || 0, slit: +o.slit || 0, drop: +o.drop || 0, sleeveless: o.sleeve === 'none' };
+      var to = { adj: o.adj, gender: gender, ease: ease, len: len || m.nape + m.wh + 20, neck: o.neck, backNeck: o.back, cup: o.cup, fit: G.d.fit || (o.shape === 'fitted' ? 'fitted' : 'semi'), shape: o.shape, flare: +o.flare || 0, slit: +o.slit || 0, drop: +o.drop || 0, sleeveless: o.sleeve === 'none' };
       if (gid === 'bodice') to.len = m.nape;
       if (gid === 'blouse') { to.len = o.len || m.nape - 6; to.opening = +o.opening; to.ext = 1.5; to.buttons = +o.opening ? 5 : 0; }
       if (gid === 'shirt') { to.opening = true; to.ext = 1.75; to.buttons = kid ? 5 : 7; to.neck = 'collar'; to.hemCurve = o.hem === 'curved' ? (kid ? 4 : 7) : 0; }

@@ -26,6 +26,44 @@
   var MGROUP = [['Body', ['bust', 'bust_span', 'bust_depth', 'waist', 'hip', 'wh', 'shoulder', 'across_back', 'across_front', 'nape', 'neck', 'head']], ['Arms', ['bicep', 'elbow', 'wrist', 'sleeve']], ['Legs', ['rise', 'inseam', 'knee_l', 'outseam', 'thigh', 'knee', 'calf', 'ankle']]];
   var S = FC.load('pm2') || {};
   S = Object.assign({ gender: 'women', gid: 'kurta', size: 'M', unit: 'cm', m: null, o: {}, pc: {}, sa: 1, hemA: 2.5, detail: null }, S);
+  S.adj = S.adj || {}; S.clients = null;
+  function OO() { return Object.assign({}, S.o, { adj: S.adj }); }
+  var ADJ = [ // [key, label, help, applies-to]
+    ['fba', 'Full bust', 'Adds front width and bust dart intake. Use when the bust is fuller than the chart for the size.', 'top-w'],
+    ['bb', 'Broad back', 'Adds width across the back and armhole.', 'top'],
+    ['fsh', 'Forward shoulder', 'Moves the shoulder seam forward: raises the front shoulder, lowers the back.', 'top'],
+    ['sway', 'Sway back', 'Takes out length at centre back waist, tapering to the side.', 'sway'],
+    ['seat', 'Full seat', 'Adds back crotch length and back hip width.', 'bottom']];
+  function adjFor() { var top = !(['skirt', 'lehenga', 'trousers', 'salwar', 'patiala', 'churidar', 'gharara'].indexOf(S.gid) > -1), bot = ['trousers', 'churidar', 'gharara'].indexOf(S.gid) > -1;
+    return ADJ.filter(function (a) { return a[3] === 'top' ? top : a[3] === 'top-w' ? top && S.gender === 'women' : a[3] === 'bottom' ? bot : a[3] === 'sway' ? (S.gid === 'bodice' || S.gid === 'blouse' || S.gid === 'skirt' || S.gid === 'trousers') : false; }); }
+  function adjForm() {
+    var el = $('#pm-adj'), list = adjFor(), any = list.some(function (a) { return +S.adj[a[0]]; });
+    if (!list.length) { el.innerHTML = '<p class="hint2">No fit adjustments for this garment.</p>'; return; }
+    el.innerHTML = list.map(function (a) { return '<label class="row" title="' + a[2] + '"><span>' + a[1] + '<small class="ah">' + a[2] + '</small></span>' + uinp('data-a="' + a[0] + '" max="8"', U(+S.adj[a[0]] || 0)) + '</label>'; }).join('')
+      + '<div class="acts"><button type="button" class="xbtn" id="pm-adjr"' + (any ? '' : ' disabled') + '>Clear adjustments</button></div><p class="hint2">Use what you found at the first fitting. Adjustments are saved with the client profile.</p>';
+    $$('#pm-adj [data-a]').forEach(function (e) { e.oninput = function () { S.adj[e.dataset.a] = Math.max(0, Math.min(8, cm(parseFloat(e.value) || 0))); draw(); }; });
+    $('#pm-adjr').onclick = function () { S.adj = {}; adjForm(); draw(); };
+  }
+  /* client profiles: saved on this device, exportable as a file */
+  function clients() { var c = FC.load('pm-clients', []); return Array.isArray(c) ? c : []; }
+  function clientForm() {
+    var cs = clients(), el = $('#pm-clients'), cur = S.client || '';
+    el.innerHTML = '<div class="clrow"><select id="pm-csel" aria-label="Client profile"><option value="">Size chart (no client)</option>' + cs.map(function (c) { return '<option' + (c.name === cur ? ' selected' : '') + '>' + c.name.replace(/</g, '') + '</option>'; }).join('') + '</select>'
+      + '<button type="button" class="xbtn" id="pm-cdel"' + (cur ? '' : ' disabled') + '>Delete</button></div>'
+      + '<div class="clrow"><input type="text" id="pm-cname" placeholder="Client or fit model name" value="' + (cur ? cur.replace(/"/g, '&quot;') : '') + '" maxlength="60"><button type="button" class="xbtn" id="pm-csave">' + (cur ? 'Update' : 'Save') + '</button></div>'
+      + '<div class="clrow small"><button type="button" class="lnk" id="pm-cexp"' + (cs.length ? '' : ' disabled') + '>Export profiles</button><label class="lnk">Import<input type="file" id="pm-cimp" accept="application/json,.json" hidden></label><span>' + cs.length + ' saved on this device</span></div>';
+    $('#pm-csel').onchange = function () { var c = clients().filter(function (x) { return x.name === this.value; }, this)[0]; if (!c) { S.client = null; clientForm(); return; }
+      S.client = c.name; if (c.gender && PM.GENDER[c.gender]) S.gender = c.gender; if (PM.GARMENTS[S.gid].g.indexOf(S.gender) < 0) S.gid = Object.keys(PM.GARMENTS).filter(function (k) { return PM.GARMENTS[k].g.indexOf(S.gender) > -1; })[0];
+      S.m = Object.assign({}, chart()[c.size] || chart()[Object.keys(chart())[2]], c.m); S.size = 'custom'; S.adj = Object.assign({}, c.adj || {}); ui(); toast('Loaded ' + c.name); };
+    $('#pm-csave').onclick = function () { var n = $('#pm-cname').value.trim(); if (!n) { $('#pm-cname').focus(); return; } var cs2 = clients().filter(function (x) { return x.name !== n; });
+      cs2.push({ name: n, gender: S.gender, size: baseSize(), m: Object.assign({}, S.m), adj: Object.assign({}, S.adj), saved: new Date().toISOString().slice(0, 10) }); cs2.sort(function (a, b) { return a.name.localeCompare(b.name); });
+      FC.save('pm-clients', cs2); S.client = n; clientForm(); toast('Saved ' + n + ' on this device'); };
+    $('#pm-cdel').onclick = function () { if (!S.client) return; FC.save('pm-clients', clients().filter(function (x) { return x.name !== S.client; })); toast('Deleted ' + S.client + '.'); S.client = null; clientForm(); };
+    $('#pm-cexp').onclick = function () { FC.download('forecut-client-measurements.json', JSON.stringify({ forecut: 'pattern-maker-clients', v: 1, clients: clients() }, null, 1), 'application/json'); };
+    $('#pm-cimp').onchange = function () { var f = this.files[0]; if (!f) return; var rd = new FileReader(); rd.onload = function () { try { var d = JSON.parse(rd.result), inc = (d.clients || []).filter(function (c) { return c && c.name && c.m; }), cs3 = clients();
+        inc.forEach(function (c) { cs3 = cs3.filter(function (x) { return x.name !== c.name; }); cs3.push({ name: String(c.name).slice(0, 60), gender: c.gender, size: c.size, m: c.m, adj: c.adj || {}, saved: c.saved }); });
+        FC.save('pm-clients', cs3); clientForm(); toast('Imported ' + inc.length + ' profile' + (inc.length === 1 ? '' : 's') + '.'); } catch (e) { toast('That file is not a Forecut profile export.'); } }; rd.readAsText(f); };
+  }
   S.fab = Object.assign({ fw: 0, shl: 0, shw: 0, st: 0, oneWay: false }, S.fab || {});
   S.cost = Object.assign({ fp: 180, per: 2, endloss: 3, lp: 90, ip: 60, rp: 220, bp: 3, zp: 12, ep: 25, tp: 110, cone: 4000, lab: 15, smv: 0, cpm: 5, eff: 60, wash: 0, pack: 15, oh: 10, mg: 50, rm: 40, gst: 'auto', qty: 100, wastage: 3 }, S.cost || {});
   /* grading: every size = your base measurements + the chart's step from the base size to that size */
@@ -104,7 +142,7 @@
   var built = null;
   function drillAt(sc, c) { var pts = []; for (var i = 0; i <= 16; i++) pts.push([c[0] + .3 * Math.cos(i / 16 * 6.2832), c[1] + .3 * Math.sin(i / 16 * 6.2832)]); sc.push({ k: 'poly', p: pts, c: 1, w: .05, L: 'MARK' }); sc.push({ k: 'poly', p: [[c[0] - .45, c[1]], [c[0] + .45, c[1]]], w: .04, L: 'MARK' }); sc.push({ k: 'poly', p: [[c[0], c[1] - .45], [c[0], c[1] + .45]], w: .04, L: 'MARK' }); }
   function scene(forExport) { function drill(c) { drillAt(sc, c); }
-    var OFF = {}, PCS = [], r0 = PM.build(S.gid, S.gender, S.m, S.o), r = shrink(r0), sc = [], x = 2, y = 2, rowH = 0, maxW = 165, sizeLab = (S.size === 'custom' ? 'custom size' : 'size ' + S.size) + ' · ' + PM.GENDER[S.gender] + shrLab(), title = r.label;
+    var adjOn = Object.keys(S.adj || {}).filter(function (k) { return +S.adj[k]; }), OFF = {}, PCS = [], r0 = PM.build(S.gid, S.gender, S.m, OO()), r = shrink(r0), sc = [], x = 2, y = 2, rowH = 0, maxW = 165, sizeLab = (S.size === 'custom' ? 'custom size' : 'size ' + S.size) + ' · ' + PM.GENDER[S.gender] + shrLab() + (adjOn.length ? ' · fit adj.' : '') + (S.client ? ' · ' + S.client : ''), title = r.label;
     built = r0;
     var onList = r.pieces.filter(function (p) { return (S.pc[p.id] || {}).on !== false; }), NP = onList.length, cd = code();
     r.pieces.forEach(function (p) {
@@ -149,7 +187,7 @@
     sc.push({ k: 'poly', p: [[1, H - 6.5], [6, H - 6.5], [6, H - 1.5], [1, H - 1.5]], c: 1, w: .06, L: 'MARK' }, { k: 'text', x: 3.5, y: H - 3.7, s: .7, t: '5 cm square', a: 'middle', L: 'TEXT' });
     sc.push({ k: 'text', x: 7.5, y: H - 4.6, s: 1.2, t: title + ' · ' + sizeLab + ' · ' + cd + ' · ' + NP + ' pieces', b: 1, L: 'TEXT' }, { k: 'text', x: 7.5, y: H - 3, s: .75, t: 'Pattern by FORECUT · forecut.in · engine ' + VER + ' · ' + new Date().toISOString().slice(0, 10) + ' · print at 100%, check the 5 cm square · test in calico before cutting good fabric', col: '#a9481f', L: 'BRAND' });
     if (NEST || forExport === 'nest') { var bs = baseSize(), szs = Object.keys(chart()), leg = [];
-      szs.forEach(function (sz, i) { if (sz === bs && S.size !== 'custom') { leg.push([sz, '#1c1714']); return; } var col = SZCOL[i % SZCOL.length], rs; try { rs = shrink(PM.build(S.gid, S.gender, gradeM(sz), S.o)); } catch (e) { return; } leg.push([sz, col]);
+      szs.forEach(function (sz, i) { if (sz === bs && S.size !== 'custom') { leg.push([sz, '#1c1714']); return; } var col = SZCOL[i % SZCOL.length], rs; try { rs = shrink(PM.build(S.gid, S.gender, gradeM(sz), OO())); } catch (e) { return; } leg.push([sz, col]);
         rs.pieces.forEach(function (p) { var o = OFF[p.id]; if (!o) return; sc.push({ k: 'poly', p: PM.cutline(p, o[2], o[3]).map(function (q) { return [q[0] + o[0], q[1] + o[1]]; }), c: 1, w: .035, col: col, L: 'SIZE_' + sz.replace(/[^A-Za-z0-9]/g, '') }); }); });
       if (S.size === 'custom') leg.unshift(['yours', '#1c1714']);
       leg.forEach(function (l, i) { var lx = W - 8 - (leg.length - i) * 6.5; sc.push({ k: 'poly', p: [[lx, H - 8], [lx + 4.5, H - 8]], w: .35, col: l[1], L: 'TEXT' }); sc.push({ k: 'text', x: lx, y: H - 5.4, s: 1.5, t: l[0], col: l[1], b: 1, L: 'TEXT' }); });
@@ -243,7 +281,7 @@
   var ICONS = { check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>', warn: '<path d="M12 4 2.5 20h19zM12 10v4.5M12 17.5v.01"/>' };
   function IC(k) { return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">' + ICONS[k] + '</svg>'; }
   function units() { $$('#pm-units button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.u === S.unit); }); $$('.pl .u').forEach(function (i) { i.textContent = S.unit; }); }
-  function ui(fit) { genderTabs(); detailPicker(); measForm(); optForm(); units(); fabForm(); $('#pm-sa').value = U(S.sa); $('#pm-hemall').value = U(S.hemA); if (fit) ZR = 1; draw(); }
+  function ui(fit) { genderTabs(); detailPicker(); measForm(); optForm(); units(); fabForm(); adjForm(); clientForm(); $('#pm-sa').value = U(S.sa); $('#pm-hemall').value = U(S.hemA); if (fit) ZR = 1; draw(); }
   $$('#pm-units button').forEach(function (b) { b.onclick = function () { S.unit = b.dataset.u; ui(); }; });
   $('#pm-sa').oninput = function () { S.sa = cm(parseFloat(this.value) || 0); draw(); };
   $('#pm-hemall').oninput = function () { S.hemA = cm(parseFloat(this.value) || 0); draw(); };
@@ -283,7 +321,7 @@
   $('#pm-nestb').onclick = function () { NEST = !NEST; this.setAttribute('aria-pressed', NEST); if (NEST && MARK) { MARK = false; $('#pm-markb').setAttribute('aria-pressed', false); } draw(true); if (NEST) toast('Size range: every size graded from ' + (S.size === 'custom' ? 'your measurements' : 'size ' + baseSize()) + ', stacked on each piece.'); };
   function gradeTable() {
     var szs = Object.keys(chart()), bs = baseSize(), rows = [], body = { bust: 'Bust / chest', waist: 'Waist', hip: 'Hip', shoulder: 'Shoulder', nape: 'Back length', sleeve: 'Sleeve length', neck: 'Neck', rise: 'Rise', outseam: 'Outseam' }, ms = measSet();
-    var built2 = szs.map(function (sz) { try { return PM.build(S.gid, S.gender, gradeM(sz), S.o).info; } catch (e) { return {}; } });
+    var built2 = szs.map(function (sz) { try { return PM.build(S.gid, S.gender, gradeM(sz), OO()).info; } catch (e) { return {}; } });
     Object.keys(body).forEach(function (k) { if (ms.indexOf(k) > -1) rows.push([body[k] + ' (body)', szs.map(function (sz) { return gradeM(sz)[k]; })]); });
     Object.keys(built2[0] || {}).forEach(function (k) { if (typeof built2[0][k] === 'number' && !/minus|check|lowered|ease|extension/i.test(k)) rows.push([k, built2.map(function (i) { return i[k]; })]); });
     var bi = szs.indexOf(bs);

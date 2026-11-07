@@ -358,6 +358,9 @@ PMCSS = r"""<style>
 .about p,.about li{font-size:12px;line-height:1.5;color:var(--mu);margin:0 0 6px}.about ul{padding-left:16px;margin:0}.about b{color:var(--tx)}
 .spec{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:12px;margin:0}.spec dt{color:var(--dim)}.spec dd{margin:0;color:var(--tx)}
 .toast{position:absolute;left:50%;bottom:36px;transform:translateX(-50%);background:#f4f1ea;color:#1b1d20;border-radius:4px;padding:8px 14px;font-size:12.5px;font-weight:600;box-shadow:0 10px 28px rgba(0,0,0,.4);margin:0;max-width:90%;z-index:30}
+.ah{display:block;font-size:10.5px;color:var(--dim);line-height:1.35;margin-top:1px}
+.cls{display:grid;gap:6px;margin-bottom:10px;padding:8px;border:1px solid var(--ln);border-radius:4px;background:var(--p2)}.clrow{display:grid;grid-template-columns:1fr auto;gap:6px}.clrow .xbtn{height:28px}
+.clrow.small{display:flex;gap:12px;align-items:center;font-size:11px;color:var(--dim)}.lnk{border:0;background:none;color:var(--ac2);font-weight:600;font-size:11.5px;padding:0;cursor:pointer}.lnk[disabled],.xbtn[disabled]{opacity:.45;cursor:default}
 .row.chk{grid-template-columns:minmax(0,1fr) auto}
 .cst .ctiles{display:grid;grid-template-columns:1fr 1fr;gap:6px;position:sticky;top:38px;z-index:1;background:var(--p1);padding-bottom:8px}
 .cst .ctile{background:var(--p2);border:1px solid var(--ln);border-radius:4px;padding:8px 9px}.cst .ctile span{display:block;font-size:11px;color:var(--mu)}.cst .ctile b{display:block;font:700 19px/1.2 "DM Sans",sans-serif;color:var(--tx);font-variant-numeric:tabular-nums}
@@ -402,6 +405,7 @@ pm = (PMCSS + '<div class="pmh"><div><div class="eb">Members tool</div><h1>Patte
       '<div class="pbody"><aside class="pl" aria-label="Pattern settings">'
       '<details class="sec" open><summary>Garment' + A('chev') + '</summary><div class="bd"><div class="cats" id="pm-gtabs" role="group" aria-label="Category"></div><div class="glist" id="pm-garments"></div><p class="dnote" id="pm-dnote"></p></div></details>'
       '<details class="sec" open><summary><span>Style <em id="pm-gname"></em></span>' + A('chev') + '</summary><div class="bd" id="pm-opts"></div></details>'
+      '<details class="sec"><summary>Fit adjustments' + A('chev') + '</summary><div class="bd" id="pm-adj"></div></details>'
       '<details class="sec" open><summary>Seam allowance' + A('chev') + '</summary><div class="bd"><label class="row"><span>Seams, all pieces</span><span class="uin"><input type="number" step="any" min="0" id="pm-sa"><i class="u"></i></span></label>'
       '<label class="row"><span>Hems, all pieces</span><span class="uin"><input type="number" step="any" min="0" id="pm-hemall"><i class="u"></i></span></label>'
       '<div class="acts"><button type="button" class="xbtn" id="pm-apply">Apply to all pieces</button><button type="button" class="xbtn" id="pm-nosa">Net pattern</button></div><p class="hint2">Set a single piece in Pieces. Fold edges never get an allowance.</p></div></details>'
@@ -418,7 +422,7 @@ pm = (PMCSS + '<div class="pmh"><div><div class="eb">Members tool</div><h1>Patte
       '<div class="stg"><div class="rc" id="pm-ru"></div><canvas class="rul" id="pm-rx" aria-hidden="true"></canvas><canvas class="rul" id="pm-ry" aria-hidden="true"></canvas><div class="view" id="pm-view"><div id="pm-svg"></div></div></div><div class="sbar" id="pm-status"></div></section>'
       '<aside class="pr" aria-label="Garment, pieces and checks">'
       '<div class="rt" role="tablist"><button type="button" role="tab" data-t="meas" aria-selected="true">Measure</button><button type="button" role="tab" data-t="pieces" aria-selected="false">Pieces</button><button type="button" role="tab" data-t="cost" aria-selected="false">Costing</button><button type="button" role="tab" data-t="checks" aria-selected="false">Checks</button><button type="button" role="tab" data-t="about" aria-selected="false">About</button></div>'
-      '<div class="rp" data-tp="meas"><div class="fig" id="pm-fig"></div><div id="pm-meas"></div></div>'
+      '<div class="rp" data-tp="meas"><div class="cls" id="pm-clients"></div><div class="fig" id="pm-fig"></div><div id="pm-meas"></div></div>'
       '<div class="rp" data-tp="pieces" hidden><div class="pcs" id="pm-pieces"></div><div class="acts"><button type="button" class="xbtn" id="pm-resetnames">Reset labels</button></div></div>'
       '<div class="rp" data-tp="cost" hidden><div id="pm-cost"></div></div>'
       '<div class="rp" data-tp="checks" hidden><h5>Automatic pattern checks</h5><div class="ck" id="pm-checks"></div><h5>Grade rules: size range</h5><div id="pm-grade"></div><h5>Measurements of this pattern</h5><div class="kv" id="pm-info" style="margin-top:0"></div></div>'
