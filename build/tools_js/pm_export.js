@@ -69,6 +69,7 @@
     function a() { for (var i = 0; i < arguments.length; i++) L.push(arguments[i]); }
     a('0', 'SECTION', '2', 'HEADER', '9', '$ACADVER', '1', 'AC1009', '9', '$INSUNITS', '70', String(ins), '9', '$EXTMIN', '10', '0', '20', '0', '9', '$EXTMAX', '10', n(W * f), '20', n(H * f), '0', 'ENDSEC');
     var layers = [['CUT', 7], ['SEAM', 8], ['MARK', 1], ['GRAIN', 3], ['TEXT', 7], ['BRAND', 30]];
+    var extra = {}; sc.forEach(function (o) { if (o.L && o.L !== 'GRID' && !layers.some(function (l) { return l[0] === o.L; })) extra[o.L] = 1; }); Object.keys(extra).forEach(function (k, i) { layers.push([k, [5, 6, 4, 2, 140, 200, 40, 180, 220][i % 9]]); });
     a('0', 'SECTION', '2', 'TABLES', '0', 'TABLE', '2', 'LAYER', '70', String(layers.length));
     layers.forEach(function (l) { a('0', 'LAYER', '2', l[0], '70', '0', '62', String(l[1]), '6', 'CONTINUOUS'); });
     a('0', 'ENDTAB', '0', 'ENDSEC', '0', 'SECTION', '2', 'ENTITIES');
@@ -77,6 +78,36 @@
       if (o.k === 'poly') { a('0', 'POLYLINE', '8', ly, '66', '1', '70', o.c ? '1' : '0'); o.p.forEach(function (q) { a('0', 'VERTEX', '8', ly, '10', n(q[0] * f), '20', n((H - q[1]) * f)); }); a('0', 'SEQEND', '8', ly); }
       else a('0', 'TEXT', '8', ly, '10', n(o.x * f), '20', n((H - o.y) * f), '40', n(o.s * f * .72), '1', String(o.t).replace(/[^\x20-\x7e]/g, '-'), '50', n(-(o.r || 0)));
     });
+    a('0', 'ENDSEC', '0', 'EOF');
+    return L.join('\r\n') + '\r\n';
+  };
+  /* ---------- AAMA / ASTM D6673 style pattern DXF: one BLOCK per piece, standard layer numbers ----------
+     1 boundary (cut line) · 4 notches · 6 mirror (fold) line · 7 grain line · 8 internal lines · 13 drill holes · 14 sew line · 15 annotation */
+  X.aama = function (pcs, o) {
+    var f = o.unit === 'in' ? 1 / 2.54 : 10, H = o.H || 0, L = [];
+    function a() { for (var i = 0; i < arguments.length; i++) L.push(arguments[i]); }
+    function P(q) { return [n(q[0] * f), n((H - q[1]) * f)]; }
+    function poly(ly, pts, closed) { a('0', 'POLYLINE', '8', ly, '66', '1', '70', closed ? '1' : '0'); pts.forEach(function (q) { var v = P(q); a('0', 'VERTEX', '8', ly, '10', v[0], '20', v[1]); }); a('0', 'SEQEND', '8', ly); }
+    function line(ly, p1, p2) { var u = P(p1), v = P(p2); a('0', 'LINE', '8', ly, '10', u[0], '20', u[1], '11', v[0], '21', v[1]); }
+    function pt(ly, q) { var v = P(q); a('0', 'POINT', '8', ly, '10', v[0], '20', v[1]); }
+    function txt(ly, q, s, h) { var v = P(q); a('0', 'TEXT', '8', ly, '10', v[0], '20', v[1], '40', n(h * f), '1', String(s).replace(/[^\x20-\x7e]/g, '-')); }
+    a('0', 'SECTION', '2', 'HEADER', '9', '$ACADVER', '1', 'AC1009', '9', '$INSUNITS', '70', o.unit === 'in' ? '1' : '4', '0', 'ENDSEC');
+    a('0', 'SECTION', '2', 'TABLES', '0', 'TABLE', '2', 'LAYER', '70', '8');
+    ['1', '4', '6', '7', '8', '13', '14', '15'].forEach(function (l) { a('0', 'LAYER', '2', l, '70', '0', '62', '7', '6', 'CONTINUOUS'); });
+    a('0', 'ENDTAB', '0', 'ENDSEC', '0', 'SECTION', '2', 'BLOCKS');
+    pcs.forEach(function (pc, i) {
+      var bn = (o.style + '-' + (i + 1) + '-' + pc.comp).replace(/[^A-Za-z0-9_-]+/g, '_').slice(0, 30), q = +((pc.cut || '').match(/Cut (\d+)/) || [0, 1])[1], c = pc.poly[0];
+      a('0', 'BLOCK', '8', '1', '2', bn, '70', '0', '10', '0', '20', '0');
+      poly('1', pc.poly, true); if (pc.seam) poly('14', pc.seam, true);
+      pc.notches.forEach(function (q2) { pt('4', q2); }); pc.drills.forEach(function (q2) { pt('13', q2); });
+      if (pc.grain) line('7', pc.grain[0], pc.grain[1]); if (pc.fold) line('6', pc.fold[0], pc.fold[1]);
+      pc.lines.forEach(function (l) { poly('8', l, false); });
+      var tx = pc.grain ? [pc.grain[0][0] + .8, pc.grain[0][1] + 2] : [c[0] + 1, c[1] + 2];
+      ['Piece Name: ' + pc.name, 'Size: ' + o.size, 'Quantity: ' + q, 'Style Name: ' + o.style, 'Category: ' + pc.comp, 'Annotation: ' + pc.cut + ' - FORECUT'].forEach(function (t, k) { txt('15', [tx[0], tx[1] + k * 1.2], t, .8); });
+      a('0', 'ENDBLK', '8', '1');
+    });
+    a('0', 'ENDSEC', '0', 'SECTION', '2', 'ENTITIES');
+    pcs.forEach(function (pc, i) { var bn = (o.style + '-' + (i + 1) + '-' + pc.comp).replace(/[^A-Za-z0-9_-]+/g, '_').slice(0, 30); a('0', 'INSERT', '8', '1', '2', bn, '10', '0', '20', '0'); });
     a('0', 'ENDSEC', '0', 'EOF');
     return L.join('\r\n') + '\r\n';
   };

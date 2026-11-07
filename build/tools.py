@@ -327,6 +327,7 @@ PMCSS = r"""<style>
 #pm-svg path[data-l=SEAM]{vector-effect:non-scaling-stroke;stroke-width:1px;stroke-dasharray:6 4}
 #pm-svg path[data-l=MARK]{vector-effect:non-scaling-stroke;stroke-width:1.1px}
 #pm-svg path[data-l=GRAIN]{vector-effect:non-scaling-stroke;stroke-width:1.3px}
+#pm-svg path[data-l^=SIZE]{vector-effect:non-scaling-stroke;stroke-width:1.3px}
 #pm-svg path[data-l=TILE]{vector-effect:non-scaling-stroke;stroke-width:1.2px;stroke-dasharray:7 5}
 #pm-svg path[stroke="#a9481f"][data-l=MARK]{stroke-width:2px;stroke-dasharray:9 5}
 .sbar{display:flex;gap:14px;align-items:center;padding:4px 10px;border-top:1px solid #121315;background:var(--bg);font:11px ui-monospace,Menlo,monospace;color:var(--mu);white-space:nowrap;overflow:hidden}
@@ -368,6 +369,7 @@ PMCSS = r"""<style>
 .bk td small{display:block;color:var(--dim);font:10.5px ui-monospace,Menlo,monospace}.bk .bar{height:3px;background:var(--p3);border-radius:2px;margin-top:3px}.bk .bar i{display:block;height:3px;background:var(--ac);border-radius:2px}
 .bk tr.t td{color:var(--tx);font-weight:700;border-bottom:1px solid #4a5057}.bk tr.g td{color:var(--ac2)}
 .cst .acts2{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0}.cst .acts2 .xbtn,.cst .acts2 a{justify-content:center;font-size:12px;height:28px;text-decoration:none;color:var(--tx)}
+.gt{overflow-x:auto;border:1px solid var(--ln);border-radius:4px}.gt table{border-collapse:collapse;font:11px ui-monospace,Menlo,monospace;width:100%}.gt th,.gt td{padding:5px 6px;border-bottom:1px solid var(--ln);text-align:right;white-space:nowrap}.gt td:first-child{text-align:left;font-family:"DM Sans",sans-serif;color:var(--mu);white-space:normal;min-width:120px}.gt th{color:var(--mu);font-weight:700}.gt .b{color:var(--ac2);background:rgba(224,138,94,.08)}
 .cst .note{font-size:11px;color:var(--dim);margin:8px 0 0;line-height:1.45}
 .pmdocw{margin:26px 0 8px;border-top:1px solid var(--grid)}.pmdocw>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;padding:12px 0;font:700 15px "DM Sans",sans-serif}.pmdocw>summary::-webkit-details-marker{display:none}.pmdocw>summary::after{content:"Show";font:600 12px "DM Sans",sans-serif;color:var(--muted)}.pmdocw[open]>summary::after{content:"Hide"}
 .pmdoc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:4px 0 10px}
@@ -389,6 +391,9 @@ pm = (PMCSS + '<div class="pmh"><div><div class="eb">Members tool</div><h1>Patte
       '<button type="button" role="menuitem" id="pm-dl-pdf"><b>PDF</b><span>A4 tiles for home printing</span><small id="pm-tilecount">Print at 100%, check the 5 cm square, tape together</small></button>'
       '<button type="button" role="menuitem" id="pm-dl-pdf2"><b>PDF</b><span>Full-size sheet</span><small>One page for a plotter or copy shop</small></button><hr>'
       '<button type="button" role="menuitem" id="pm-dl-dxf"><b>DXF</b><span>CAD file</span><small>Layers: CUT, SEAM, MARK, GRAIN, TEXT, BRAND</small></button>'
+      '<button type="button" role="menuitem" id="pm-dl-aama"><b>AAMA</b><span>Pattern CAD DXF (AAMA/ASTM)</span><small>For Gerber, Lectra, Optitex: pieces, notches, drill holes, grain</small></button>'
+      '<button type="button" role="menuitem" id="pm-dl-gdxf"><b>DXF</b><span>All sizes, graded</span><small>Every size stacked, one layer per size</small></button>'
+      '<button type="button" role="menuitem" id="pm-dl-gpdf"><b>PDF</b><span>All sizes, full sheet</span><small>Graded nest for checking and plotting</small></button>'
       '<button type="button" role="menuitem" id="pm-dl-svg"><b>SVG</b><span>Vector, true scale</span><small>For Illustrator, Inkscape and tech packs</small></button>'
       '<button type="button" role="menuitem" id="pm-dl-png"><b>PNG</b><span>Image</span><small>For sharing and presentations</small></button><hr>'
       '<button type="button" role="menuitem" id="pm-dl-cost"><b>COST</b><span>Cost sheet</span><small>Print or save as PDF, with the marker</small></button>'
@@ -408,7 +413,7 @@ pm = (PMCSS + '<div class="pmh"><div><div class="eb">Members tool</div><h1>Patte
       '</aside><section class="pc" aria-label="Pattern sheet"><div class="ctl"><button type="button" class="ib" id="pm-zout" title="Zoom out (−)" aria-label="Zoom out">' + A('minus') + '</button><span id="pm-zl">100%</span><button type="button" class="ib" id="pm-zin" title="Zoom in (+)" aria-label="Zoom in">' + A('plus') + '</button>'
       '<button type="button" class="ib" id="pm-zfit" title="Fit sheet (0)">' + A('fit') + 'Fit</button><span class="sep"></span><button type="button" class="ib" id="pm-gridb" aria-pressed="true" title="Grid">' + A('grid') + 'Grid</button><input type="checkbox" id="pm-grid" checked hidden>'
       '<button type="button" class="ib" id="pm-tilesb" aria-pressed="false" title="Show how the pattern splits into A4 pages">' + A('tiles') + 'A4 pages</button>'
-      '<button type="button" class="ib" id="pm-markb" aria-pressed="false" title="Show the fabric marker used for costing">' + A('ruler') + 'Marker</button>'
+      '<button type="button" class="ib" id="pm-nestb" aria-pressed="false" title="Stack every size on each piece">' + A('grid') + 'Sizes</button><button type="button" class="ib" id="pm-markb" aria-pressed="false" title="Show the fabric marker used for costing">' + A('ruler') + 'Marker</button>'
       '<span class="sp"></span><span class="leg"><span><i></i>Cut</span><span><i class="s"></i>Sew</span><span><i class="f"></i>Fold</span><span><i class="g"></i>Grain</span></span></div>'
       '<div class="stg"><div class="rc" id="pm-ru"></div><canvas class="rul" id="pm-rx" aria-hidden="true"></canvas><canvas class="rul" id="pm-ry" aria-hidden="true"></canvas><div class="view" id="pm-view"><div id="pm-svg"></div></div></div><div class="sbar" id="pm-status"></div></section>'
       '<aside class="pr" aria-label="Garment, pieces and checks">'
@@ -416,7 +421,7 @@ pm = (PMCSS + '<div class="pmh"><div><div class="eb">Members tool</div><h1>Patte
       '<div class="rp" data-tp="meas"><div class="fig" id="pm-fig"></div><div id="pm-meas"></div></div>'
       '<div class="rp" data-tp="pieces" hidden><div class="pcs" id="pm-pieces"></div><div class="acts"><button type="button" class="xbtn" id="pm-resetnames">Reset labels</button></div></div>'
       '<div class="rp" data-tp="cost" hidden><div id="pm-cost"></div></div>'
-      '<div class="rp" data-tp="checks" hidden><h5>Automatic pattern checks</h5><div class="ck" id="pm-checks"></div><h5>Measurements of this pattern</h5><div class="kv" id="pm-info" style="margin-top:0"></div></div>'
+      '<div class="rp" data-tp="checks" hidden><h5>Automatic pattern checks</h5><div class="ck" id="pm-checks"></div><h5>Grade rules: size range</h5><div id="pm-grade"></div><h5>Measurements of this pattern</h5><div class="kv" id="pm-info" style="margin-top:0"></div></div>'
       '<div class="rp about" data-tp="about" hidden><h5>This pattern</h5><dl class="spec" id="pm-spec"></dl>'
       '<h5>Drafting method</h5><p>Blocks are drafted with established industry block methods, as taught in fashion schools and set out in standard references such as H. Joseph-Armstrong, <i>Patternmaking for Fashion Design</i>. Forecut\'s own code calculates each piece from your measurements.</p>'
       '<ul><li><b>Bodice:</b> front wider than back at the bust, bust dart sized by cup with the side seam lengthened to match, back waist and shoulder darts.</li><li><b>Sleeve:</b> cap height set from the armhole so the cap carries the right ease for the sleeve type; elbow dart on fitted long sleeves.</li><li><b>Skirt:</b> back hip wider than front; darts from the hip-to-waist difference.</li><li><b>Trousers:</b> crotch depth plus ease, extensions by fit, crotch width checked against the thigh, back inseam walked 0.5 cm shorter.</li></ul>'

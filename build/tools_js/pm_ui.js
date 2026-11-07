@@ -28,6 +28,10 @@
   S = Object.assign({ gender: 'women', gid: 'kurta', size: 'M', unit: 'cm', m: null, o: {}, pc: {}, sa: 1, hemA: 2.5, detail: null }, S);
   S.fab = Object.assign({ fw: 0, shl: 0, shw: 0, st: 0, oneWay: false }, S.fab || {});
   S.cost = Object.assign({ fp: 180, per: 2, endloss: 3, lp: 90, ip: 60, rp: 220, bp: 3, zp: 12, ep: 25, tp: 110, cone: 4000, lab: 15, smv: 0, cpm: 5, eff: 60, wash: 0, pack: 15, oh: 10, mg: 50, rm: 40, gst: 'auto', qty: 100, wastage: 3 }, S.cost || {});
+  /* grading: every size = your base measurements + the chart's step from the base size to that size */
+  function baseSize() { var c = chart(); if (S.size !== 'custom' && c[S.size]) return S.size; var best = null, bd = 1e9; Object.keys(c).forEach(function (k) { var d = Math.abs(c[k].bust - S.m.bust) + Math.abs(c[k].hip - S.m.hip); if (d < bd) { bd = d; best = k; } }); return best; }
+  function gradeM(sz) { var c = chart(), b = c[baseSize()], t = c[sz], m = {}; Object.keys(S.m).forEach(function (k) { m[k] = S.m[k] + ((t[k] || 0) - (b[k] || 0)); }); return m; }
+  var NEST = false, SZCOL = ['#3b6ea8', '#2f8f83', '#6f9a3c', '#b3862d', '#c0582b', '#a33a64', '#6a4aa0'];
   function knit() { return S.gid === 'tshirt' || S.gid === 'hoodie'; }
   function fabW() { return +S.fab.fw || (knit() ? 160 : 112); }
   function shrink(r0) { var sx = 1 / (1 - (+S.fab.shw || 0) / 100) * (knit() ? 1 - (+S.fab.st || 0) * .1 / 100 : 1), sy = 1 / (1 - (+S.fab.shl || 0) / 100); return PM.scale(r0, sx, sy); }
@@ -98,8 +102,9 @@
 
   /* ---------- scene ---------- */
   var built = null;
-  function scene(forExport) {
-    var r0 = PM.build(S.gid, S.gender, S.m, S.o), r = shrink(r0), sc = [], x = 2, y = 2, rowH = 0, maxW = 165, sizeLab = (S.size === 'custom' ? 'custom size' : 'size ' + S.size) + ' · ' + PM.GENDER[S.gender] + shrLab(), title = r.label;
+  function drillAt(sc, c) { var pts = []; for (var i = 0; i <= 16; i++) pts.push([c[0] + .3 * Math.cos(i / 16 * 6.2832), c[1] + .3 * Math.sin(i / 16 * 6.2832)]); sc.push({ k: 'poly', p: pts, c: 1, w: .05, L: 'MARK' }); sc.push({ k: 'poly', p: [[c[0] - .45, c[1]], [c[0] + .45, c[1]]], w: .04, L: 'MARK' }); sc.push({ k: 'poly', p: [[c[0], c[1] - .45], [c[0], c[1] + .45]], w: .04, L: 'MARK' }); }
+  function scene(forExport) { function drill(c) { drillAt(sc, c); }
+    var OFF = {}, PCS = [], r0 = PM.build(S.gid, S.gender, S.m, S.o), r = shrink(r0), sc = [], x = 2, y = 2, rowH = 0, maxW = 165, sizeLab = (S.size === 'custom' ? 'custom size' : 'size ' + S.size) + ' · ' + PM.GENDER[S.gender] + shrLab(), title = r.label;
     built = r0;
     var onList = r.pieces.filter(function (p) { return (S.pc[p.id] || {}).on !== false; }), NP = onList.length, cd = code();
     r.pieces.forEach(function (p) {
@@ -107,19 +112,31 @@
       var sa = st.sa !== undefined ? st.sa : S.sa, ha = st.hem !== undefined ? st.hem : (p.defHem !== undefined ? p.defHem : S.hemA), name = st.name || p.auto;
       var outl = PM.outline(p), cut = PM.cutline(p, sa, ha), bb = X.bbox([{ k: 'poly', p: cut }]), w = bb[2] - bb[0], h = bb[3] - bb[1];
       if (x + w > maxW && x > 2) { x = 2; y += rowH + 4; rowH = 0; }
-      var dx = x - bb[0], dy = y - bb[1]; function T(q) { return [q[0] + dx, q[1] + dy]; }
+      var dx = x - bb[0], dy = y - bb[1]; function T(q) { return [q[0] + dx, q[1] + dy]; } OFF[p.id] = [dx, dy, sa, ha]; var PCd = { id: p.id, name: name, cut: p.cut, comp: p.comp, poly: cut.map(T), seam: outl.map(T), notches: [], drills: [], lines: [], fold: null, grain: null, size: S.size }; PCS.push(PCd);
       sc.push({ k: 'poly', p: cut.map(T), c: 1, w: .07, col: '#1c1714', L: 'CUT', fill: forExport ? null : '#fffcf7' });
       if (sa > 0 || ha > 0) sc.push({ k: 'poly', p: outl.map(T), c: 1, w: .045, d: [.5, .3], col: '#6e6259', L: 'SEAM' });
       p.edges.forEach(function (e) { if (e.t === 'fold') { sc.push({ k: 'poly', p: e.p.map(T), w: .14, col: '#a9481f', d: [.8, .4], L: 'MARK' }); var mid = e.p[Math.floor(e.p.length / 2)], vert = Math.abs(e.p[0][0] - e.p[e.p.length - 1][0]) < Math.abs(e.p[0][1] - e.p[e.p.length - 1][1]); sc.push({ k: 'text', x: mid[0] + dx + (vert ? .9 : 0), y: mid[1] + dy + (vert ? 0 : -.6), s: .9, t: 'PLACE ON FOLD', col: '#a9481f', r: vert ? 90 : 0, a: 'middle', L: 'TEXT' }); } });
       p.marks.forEach(function (k) {
         if (k.t === 'line') { sc.push({ k: 'poly', p: k.p.map(T), w: .04, d: k.dash ? [.4, .3] : null, col: '#6e6259', L: 'MARK' }); if (k.lab) { var a = k.p[0], b = k.p[k.p.length - 1], hor = Math.abs(b[0] - a[0]) > Math.abs(b[1] - a[1]); sc.push({ k: 'text', x: (hor ? a[0] + 1 : a[0] + .4) + dx, y: (hor ? a[1] - .3 : (a[1] + b[1]) / 2) + dy, s: .75, t: k.lab, col: '#6e6259', L: 'TEXT', r: hor ? 0 : 90 }); } }
-        if (k.t === 'dart') { sc.push({ k: 'poly', p: k.p.map(T), w: .06, col: '#1c1714', L: 'MARK' }); if (k.lab) sc.push({ k: 'text', x: k.p[1][0] + dx + .5, y: k.p[1][1] + dy, s: .7, t: k.lab, col: '#6e6259', L: 'TEXT' }); }
+        if (k.t === 'dart') { PCd.lines.push(k.p.map(T));
+          var dp = k.p, ap = dp.length === 3 ? [dp[1]] : [dp[0], dp[2]], base = dp.length === 3 ? [(dp[0][0] + dp[2][0]) / 2, (dp[0][1] + dp[2][1]) / 2] : null;
+          if (dp.length === 3) { var ux = base[0] - dp[1][0], uy = base[1] - dp[1][1], ul = Math.hypot(ux, uy) || 1, dh = [dp[1][0] + ux / ul * 1, dp[1][1] + uy / ul * 1]; drill(T(dh)); PCd.drills.push(T(dh));
+            [dp[0], dp[2]].forEach(function (leg) { { var lx = leg[0] - dp[1][0], ly = leg[1] - dp[1][1], ll = Math.hypot(lx, ly) || 1; sc.push({ k: 'poly', p: [T([leg[0] - lx / ll * .3, leg[1] - ly / ll * .3]), T([leg[0] + lx / ll * (sa + .2), leg[1] + ly / ll * (sa + .2)])], w: .07, L: 'MARK' }); PCd.notches.push(T([leg[0] + lx / ll * sa, leg[1] + ly / ll * sa])); } }); }
+          else if (dp.length >= 5) { [[dp[0], dp[2]], [dp[2], dp[0]]].forEach(function (pr) { var vx2 = pr[1][0] - pr[0][0], vy2 = pr[1][1] - pr[0][1], vl = Math.hypot(vx2, vy2) || 1, dq = [pr[0][0] + vx2 / vl, pr[0][1] + vy2 / vl]; drill(T(dq)); PCd.drills.push(T(dq)); }); }
+          sc.push({ k: 'poly', p: k.p.map(T), w: .06, col: '#1c1714', L: 'MARK' }); if (k.lab) sc.push({ k: 'text', x: k.p[1][0] + dx + .5, y: k.p[1][1] + dy, s: .7, t: k.lab, col: '#6e6259', L: 'TEXT' }); }
         if (k.t === 'dot') { var c = T(k.c), pts = []; for (var i = 0; i <= 16; i++) pts.push([c[0] + .35 * Math.cos(i / 16 * 6.2832), c[1] + .35 * Math.sin(i / 16 * 6.2832)]); sc.push({ k: 'poly', p: pts, c: 1, w: .06, L: 'MARK' }); if (k.lab) sc.push({ k: 'text', x: c[0] + .6, y: c[1] + .3, s: .7, t: k.lab, col: '#6e6259', L: 'TEXT' }); }
         if (k.t === 'button') { var c2 = T(k.c), bp = []; for (var j = 0; j <= 16; j++) bp.push([c2[0] + .55 * Math.cos(j / 16 * 6.2832), c2[1] + .55 * Math.sin(j / 16 * 6.2832)]); sc.push({ k: 'poly', p: bp, c: 1, w: .05, L: 'MARK' }); }
         if (k.t === 'notch') { var c3 = k.c, best = null, bd = 1e9; for (var q = 1; q < outl.length; q++) { var A = outl[q - 1], Bp = outl[q], vx = Bp[0] - A[0], vy = Bp[1] - A[1], t = Math.max(0, Math.min(1, ((c3[0] - A[0]) * vx + (c3[1] - A[1]) * vy) / (vx * vx + vy * vy || 1))), px = A[0] + vx * t, py = A[1] + vy * t, dd = Math.hypot(px - c3[0], py - c3[1]); if (dd < bd) { bd = dd; best = [px, py, vx, vy]; } }
-          if (best) { var l = Math.hypot(best[2], best[3]) || 1, nx = best[3] / l, ny = -best[2] / l, inside = pip([best[0] + nx * .3, best[1] + ny * .3], outl); if (inside) { nx = -nx; ny = -ny; } var cnt = k.n || 1; for (var z = 0; z < cnt; z++) { var off = (z - (cnt - 1) / 2) * .5, ox = best[0] + best[2] / l * off, oy = best[1] + best[3] / l * off; sc.push({ k: 'poly', p: [T([ox - nx * .25, oy - ny * .25]), T([ox + nx * (Math.max(sa, .4) + .2), oy + ny * (Math.max(sa, .4) + .2)])], w: .07, L: 'MARK' }); } } }
+          if (best) { var l = Math.hypot(best[2], best[3]) || 1, nx = best[3] / l, ny = -best[2] / l, inside = pip([best[0] + nx * .3, best[1] + ny * .3], outl); if (inside) { nx = -nx; ny = -ny; } var cnt = k.n || 1; for (var z = 0; z < cnt; z++) { var off = (z - (cnt - 1) / 2) * .5, ox = best[0] + best[2] / l * off, oy = best[1] + best[3] / l * off; sc.push({ k: 'poly', p: [T([ox - nx * .25, oy - ny * .25]), T([ox + nx * (Math.max(sa, .4) + .2), oy + ny * (Math.max(sa, .4) + .2)])], w: .07, L: 'MARK' }); PCd.notches.push(T([ox + nx * sa, oy + ny * sa])); } } }
         if (k.t === 'text') sc.push({ k: 'text', x: k.c[0] + dx, y: k.c[1] + dy, s: .8, t: k.s, a: 'middle', col: '#6e6259', L: 'TEXT' });
       });
+      p.edges.forEach(function (e) { if (e.t === 'fold') PCd.fold = [T(e.p[0]), T(e.p[e.p.length - 1])]; });
+      if (p.grain) PCd.grain = [T(p.grain[0]), T(p.grain[1])];
+      // pocket placement on the left front (patch pockets), with drill holes 1 cm inside the top corners
+      if (p.id === 'front') { var pk = r.pieces.filter(function (q) { return q.id === 'pocket' && /patch/i.test(q.comp) && (S.pc.pocket || {}).on !== false; })[0];
+        if (pk) { var po = PM.outline(pk), pw = Math.max.apply(null, po.map(function (q) { return q[0]; })) - Math.min.apply(null, po.map(function (q) { return q[0]; })), ph = Math.max.apply(null, po.map(function (q) { return q[1]; })) - Math.min.apply(null, po.map(function (q) { return q[1]; })), ua2 = p.edges[3].p[0], px0 = Math.max(5.5, ua2[0] * .27), py0 = ua2[1] - 3;
+          sc.push({ k: 'poly', p: [[px0, py0], [px0 + pw, py0], [px0 + pw, py0 + ph], [px0, py0 + ph]].map(T), c: 1, w: .04, d: [.4, .3], col: '#6e6259', L: 'MARK' }); sc.push({ k: 'text', x: px0 + dx + .5, y: py0 + dy - .5, s: .7, t: 'pocket placement (left front)', col: '#6e6259', L: 'TEXT' });
+          [[px0 + 1, py0 + 1], [px0 + pw - 1, py0 + 1]].forEach(function (q) { drill(T(q)); PCd.drills.push(T(q)); }); PCd.lines.push([[px0, py0], [px0 + pw, py0], [px0 + pw, py0 + ph], [px0, py0 + ph], [px0, py0]].map(T)); } }
       if (p.grain) { var g0 = T(p.grain[0]), g1 = T(p.grain[1]), ang = Math.atan2(g1[1] - g0[1], g1[0] - g0[0]); sc.push({ k: 'poly', p: [g0, g1], w: .08, col: '#1f3d33', L: 'GRAIN' });
         var gl = Math.hypot(g1[0] - g0[0], g1[1] - g0[1]); if (gl > 9) { var gd = ang * 180 / Math.PI, gx = g0[0] + (g1[0] - g0[0]) * .22 - Math.sin(ang) * .45, gy = g0[1] + (g1[1] - g0[1]) * .22 + Math.cos(ang) * .45; sc.push({ k: 'text', x: gx, y: gy, s: .62, t: 'GRAINLINE', col: '#1f3d33', r: gd > 90 || gd < -90 ? gd + 180 : gd, L: 'TEXT' }); }
         [[g1, ang], [g0, ang + Math.PI]].forEach(function (z) { sc.push({ k: 'poly', p: [[z[0][0] - Math.cos(z[1] - .35) * 1, z[0][1] - Math.sin(z[1] - .35) * 1], z[0], [z[0][0] - Math.cos(z[1] + .35) * 1, z[0][1] - Math.sin(z[1] + .35) * 1]], w: .08, col: '#1f3d33', L: 'GRAIN' }); }); }
@@ -131,7 +148,13 @@
     var W = Math.max(30, Math.min(maxW + 4, sc.length ? X.bbox(sc.filter(function (o) { return o.L !== 'BRAND'; }))[2] + 2 : 30)), H = y + rowH + 9;
     sc.push({ k: 'poly', p: [[1, H - 6.5], [6, H - 6.5], [6, H - 1.5], [1, H - 1.5]], c: 1, w: .06, L: 'MARK' }, { k: 'text', x: 3.5, y: H - 3.7, s: .7, t: '5 cm square', a: 'middle', L: 'TEXT' });
     sc.push({ k: 'text', x: 7.5, y: H - 4.6, s: 1.2, t: title + ' · ' + sizeLab + ' · ' + cd + ' · ' + NP + ' pieces', b: 1, L: 'TEXT' }, { k: 'text', x: 7.5, y: H - 3, s: .75, t: 'Pattern by FORECUT · forecut.in · engine ' + VER + ' · ' + new Date().toISOString().slice(0, 10) + ' · print at 100%, check the 5 cm square · test in calico before cutting good fabric', col: '#a9481f', L: 'BRAND' });
-    return { sc: sc, W: W, H: H, title: title + ' - ' + sizeLab, r: r, r0: r0 };
+    if (NEST || forExport === 'nest') { var bs = baseSize(), szs = Object.keys(chart()), leg = [];
+      szs.forEach(function (sz, i) { if (sz === bs && S.size !== 'custom') { leg.push([sz, '#1c1714']); return; } var col = SZCOL[i % SZCOL.length], rs; try { rs = shrink(PM.build(S.gid, S.gender, gradeM(sz), S.o)); } catch (e) { return; } leg.push([sz, col]);
+        rs.pieces.forEach(function (p) { var o = OFF[p.id]; if (!o) return; sc.push({ k: 'poly', p: PM.cutline(p, o[2], o[3]).map(function (q) { return [q[0] + o[0], q[1] + o[1]]; }), c: 1, w: .035, col: col, L: 'SIZE_' + sz.replace(/[^A-Za-z0-9]/g, '') }); }); });
+      if (S.size === 'custom') leg.unshift(['yours', '#1c1714']);
+      leg.forEach(function (l, i) { var lx = W - 8 - (leg.length - i) * 6.5; sc.push({ k: 'poly', p: [[lx, H - 8], [lx + 4.5, H - 8]], w: .35, col: l[1], L: 'TEXT' }); sc.push({ k: 'text', x: lx, y: H - 5.4, s: 1.5, t: l[0], col: l[1], b: 1, L: 'TEXT' }); });
+      title += ' · graded ' + szs[0] + '–' + szs[szs.length - 1] + ' from ' + (S.size === 'custom' ? 'your measurements' : 'size ' + bs); }
+    return { sc: sc, W: W, H: H, title: title + ' - ' + sizeLab, r: r, r0: r0, pcs: PCS };
   }
   function pip(pt, poly) { var c = false; for (var i = 0, j = poly.length - 1; i < poly.length; j = i++) { var a = poly[i], b = poly[j]; if ((a[1] > pt[1]) !== (b[1] > pt[1]) && pt[0] < (b[0] - a[0]) * (pt[1] - a[1]) / (b[1] - a[1]) + a[0]) c = !c; } return c; }
   function grid(W, H) { var st = S.unit === 'in' ? 2.54 : 1, g = '<g stroke="#ece4d8" stroke-width=".03">'; for (var x = 0, i = 0; x <= W; x += st, i++) g += '<path d="M' + x.toFixed(2) + ' 0V' + H + '"' + (i % 5 ? '' : ' stroke="#d9cdbd" stroke-width=".06"') + '/>'; for (var y = 0, j = 0; y <= H; y += st, j++) g += '<path d="M0 ' + y.toFixed(2) + 'H' + W + '"' + (j % 5 ? '' : ' stroke="#d9cdbd" stroke-width=".06"') + '/>'; return g + '</g>'; }
@@ -206,6 +229,7 @@
     var info = s.r.info, num = function (v) { return typeof v === 'number' ? U(v) + ' ' + S.unit : v; };
     $('#pm-info').innerHTML = Object.keys(info).map(function (k) { return '<div><span>' + k + '</span><b>' + num(info[k]) + '</b></div>'; }).join('') + '<div><span>Sheet</span><b>' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + '</b></div>';
     var ck = V.checks(s.r0, S, U, S.gid), ok = ck.filter(function (c) { return c.ok; }).length;
+    $('#pm-grade').innerHTML = gradeTable();
     $('#pm-checks').innerHTML = ck.map(function (c) { return '<div class="ckr ' + (c.ok ? 'ok' : 'w') + '">' + IC(c.ok ? 'check' : 'warn') + '<b>' + c.t + '</b><em>' + c.v + '</em><span>' + c.why + '</span></div>'; }).join('');
     var qa = $('#pm-qa'); qa.className = 'qa' + (ok === ck.length ? '' : ' w'); qa.innerHTML = IC(ok === ck.length ? 'check' : 'warn') + (ok === ck.length ? ck.length + '/' + ck.length + ' checks passed' : (ck.length - ok) + ' check' + (ck.length - ok > 1 ? 's' : '') + ' to review');
     var on = s.r.pieces.filter(function (p) { return (S.pc[p.id] || {}).on !== false; }).length;
@@ -256,7 +280,20 @@
   $('#pm-shw').oninput = function () { S.fab.shw = Math.max(0, Math.min(15, parseFloat(this.value) || 0)); draw(true); };
   $('#pm-st').oninput = function () { S.fab.st = Math.max(0, Math.min(100, parseFloat(this.value) || 0)); draw(true); };
   $('#pm-oneway').onchange = function () { S.fab.oneWay = this.checked; draw(true); };
-  $('#pm-markb').onclick = function () { MARK = !MARK; this.setAttribute('aria-pressed', MARK); if (MARK && TILES) { TILES = false; $('#pm-tilesb').setAttribute('aria-pressed', false); } ZR = 1; draw(true); if (MARK && COST) toast('Marker: ' + (COST.marker.length / 100).toFixed(2) + ' m for ' + COST.perMarker + ' garment' + (COST.perMarker > 1 ? 's' : '') + ' on ' + COST.marker.width + ' cm fabric, ' + Math.round(COST.marker.eff * 100) + '% efficiency.'); };
+  $('#pm-nestb').onclick = function () { NEST = !NEST; this.setAttribute('aria-pressed', NEST); if (NEST && MARK) { MARK = false; $('#pm-markb').setAttribute('aria-pressed', false); } draw(true); if (NEST) toast('Size range: every size graded from ' + (S.size === 'custom' ? 'your measurements' : 'size ' + baseSize()) + ', stacked on each piece.'); };
+  function gradeTable() {
+    var szs = Object.keys(chart()), bs = baseSize(), rows = [], body = { bust: 'Bust / chest', waist: 'Waist', hip: 'Hip', shoulder: 'Shoulder', nape: 'Back length', sleeve: 'Sleeve length', neck: 'Neck', rise: 'Rise', outseam: 'Outseam' }, ms = measSet();
+    var built2 = szs.map(function (sz) { try { return PM.build(S.gid, S.gender, gradeM(sz), S.o).info; } catch (e) { return {}; } });
+    Object.keys(body).forEach(function (k) { if (ms.indexOf(k) > -1) rows.push([body[k] + ' (body)', szs.map(function (sz) { return gradeM(sz)[k]; })]); });
+    Object.keys(built2[0] || {}).forEach(function (k) { if (typeof built2[0][k] === 'number' && !/minus|check|lowered|ease|extension/i.test(k)) rows.push([k, built2.map(function (i) { return i[k]; })]); });
+    var bi = szs.indexOf(bs);
+    return '<div class="gt"><table><tr><th></th>' + szs.map(function (z, i) { return '<th' + (i === bi ? ' class="b"' : '') + '>' + z + '</th>'; }).join('') + '<th>Step</th></tr>'
+      + rows.map(function (r) { var v = r[1], st = v.length > 1 ? (v[v.length - 1] - v[0]) / (v.length - 1) : 0; return '<tr><td>' + r[0] + '</td>' + v.map(function (x, i) { return '<td' + (i === bi ? ' class="b"' : '') + '>' + (x === undefined ? '–' : U(x)) + '</td>'; }).join('') + '<td>' + (st >= 0 ? '+' : '') + U(st) + '</td></tr>'; }).join('') + '</table></div><p class="hint2">Graded from ' + (S.size === 'custom' ? 'your measurements (nearest chart size ' + bs + ')' : 'size ' + bs) + ' using the chart\'s steps between sizes. Values in ' + S.unit + '; Step is the average change per size.</p>';
+  }
+  $('#pm-dl-aama').onclick = dl(function () { var s = scene(true); FC.download(fname('aama.dxf'), X.aama(s.pcs, { style: code(), size: S.size === 'custom' ? 'CUSTOM' : S.size, unit: S.unit === 'in' ? 'in' : 'mm', H: s.H }), 'application/dxf'); toast('AAMA/ASTM DXF downloaded for pattern CAD import.'); });
+  $('#pm-dl-gdxf').onclick = dl(function () { var s = scene('nest'); FC.download(fname('all-sizes.dxf'), X.dxf(s.sc, s.W, s.H, S.unit === 'in' ? 'in' : 'mm'), 'application/dxf'); toast('Graded DXF downloaded: one layer per size.'); });
+  $('#pm-dl-gpdf').onclick = dl(function () { var s = scene('nest'), r = X.pdf(s.sc, s.W, s.H, 'sheet', { title: s.title }); FC.download(fname('all-sizes.pdf'), r.blob); toast('Graded full-size PDF downloaded.'); });
+  $('#pm-markb').onclick = function () { MARK = !MARK; this.setAttribute('aria-pressed', MARK); if (MARK && TILES) { TILES = false; $('#pm-tilesb').setAttribute('aria-pressed', false); } if (MARK && NEST) { NEST = false; $('#pm-nestb').setAttribute('aria-pressed', false); } ZR = 1; draw(true); if (MARK && COST) toast('Marker: ' + (COST.marker.length / 100).toFixed(2) + ' m for ' + COST.perMarker + ' garment' + (COST.perMarker > 1 ? 's' : '') + ' on ' + COST.marker.width + ' cm fabric, ' + Math.round(COST.marker.eff * 100) + '% efficiency.'); };
   function costing(s) {
     var cfg = Object.assign({}, S.cost, { width: fabW(), oneWay: S.fab.oneWay, smv: +S.cost.smv || PMC.SMV[S.gid] });
     try { COST = PMC.cost(s.r, S, cfg, S.gid); } catch (e) { COST = null; }
