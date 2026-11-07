@@ -361,6 +361,7 @@ PMCSS = r"""<style>
 .ah{display:block;font-size:10.5px;color:var(--dim);line-height:1.35;margin-top:1px}
 .cls{display:grid;gap:6px;margin-bottom:10px;padding:8px;border:1px solid var(--ln);border-radius:4px;background:var(--p2)}.clrow{display:grid;grid-template-columns:1fr auto;gap:6px}.clrow .xbtn{height:28px}
 .clrow.small{display:flex;gap:12px;align-items:center;font-size:11px;color:var(--dim)}.lnk{border:0;background:none;color:var(--ac2);font-weight:600;font-size:11.5px;padding:0;cursor:pointer}.lnk[disabled],.xbtn[disabled]{opacity:.45;cursor:default}
+.spk{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:8px 12px;background:rgba(224,138,94,.12);border-bottom:1px solid rgba(224,138,94,.4)}.spk span{color:var(--mu);flex:1}.spk b{color:var(--ac2)}
 .row.chk{grid-template-columns:minmax(0,1fr) auto}
 .cst .ctiles{display:grid;grid-template-columns:1fr 1fr;gap:6px;position:sticky;top:38px;z-index:1;background:var(--p1);padding-bottom:8px}
 .cst .ctile{background:var(--p2);border:1px solid var(--ln);border-radius:4px;padding:8px 9px}.cst .ctile span{display:block;font-size:11px;color:var(--mu)}.cst .ctile b{display:block;font:700 19px/1.2 "DM Sans",sans-serif;color:var(--tx);font-variant-numeric:tabular-nums}
@@ -399,6 +400,7 @@ pm = (PMCSS + '<div class="pmh"><div><div class="eb">Members tool</div><h1>Patte
       '<button type="button" role="menuitem" id="pm-dl-gpdf"><b>PDF</b><span>All sizes, full sheet</span><small>Graded nest for checking and plotting</small></button>'
       '<button type="button" role="menuitem" id="pm-dl-svg"><b>SVG</b><span>Vector, true scale</span><small>For Illustrator, Inkscape and tech packs</small></button>'
       '<button type="button" role="menuitem" id="pm-dl-png"><b>PNG</b><span>Image</span><small>For sharing and presentations</small></button><hr>'
+      '<button type="button" role="menuitem" id="pm-dl-tech"><b>PACK</b><span>Tech pack</span><small>Graded specs, pieces, materials, construction, marker</small></button>'
       '<button type="button" role="menuitem" id="pm-dl-cost"><b>COST</b><span>Cost sheet</span><small>Print or save as PDF, with the marker</small></button>'
       '<button type="button" role="menuitem" id="pm-dl-csv"><b>CSV</b><span>Cost sheet data</span><small>For Excel or Google Sheets</small></button>'
       '<button type="button" role="menuitem" id="pm-dl-mdxf"><b>DXF</b><span>Marker</span><small>Pieces laid on the fabric width</small></button></div></div></div>'

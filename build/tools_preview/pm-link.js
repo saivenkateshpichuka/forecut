@@ -4,9 +4,12 @@ window.FC_PM_LINKS={"Utility vest layers": "Nehru jacket / waistcoat", "Drop wai
   function upd() {
     var key = (nm.textContent || '').trim(), act = document.querySelector('.vact'), a = document.getElementById('vpm');
     if (!act) return;
-    if (!M[key]) { if (a) a.hidden = true; return; }
+    if (!M[key]) { if (a) a.hidden = true; var b0 = document.getElementById('vsp'); if (b0) b0.hidden = true; return; }
     if (!a) { a = document.createElement('a'); a.id = 'vpm'; a.className = 'vbtn'; a.style.cssText = 'background:#1f3d33;color:#f5f0e8;text-decoration:none;display:inline-flex;align-items:center;gap:6px'; act.insertBefore(a, act.firstChild); }
     a.hidden = false; a.href = 'pattern-maker.html?detail=' + encodeURIComponent(key); a.textContent = 'Make the pattern'; a.title = 'Open this detail in the Forecut pattern maker (' + M[key] + ')';
+    var b = document.getElementById('vsp');
+    if (!b) { b = document.createElement('a'); b.id = 'vsp'; b.className = 'vbtn'; b.style.cssText = 'text-decoration:none;display:inline-flex;align-items:center;gap:6px'; a.after(b); }
+    b.hidden = false; b.href = 'pattern-maker.html?detail=' + encodeURIComponent(key) + '&pack=1'; b.textContent = 'Style pack'; b.title = 'Pattern, costing and tech pack for this detail (members)';
   }
   new MutationObserver(upd).observe(nm, { childList: true, characterData: true, subtree: true }); upd();
 })();

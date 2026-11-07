@@ -379,6 +379,71 @@
   }
   function markerScene() { var sc = []; COST.marker.placed.forEach(function (pl) { pl.polys.forEach(function (p) { sc.push({ k: 'poly', p: p, c: 1, w: .07, col: '#1c1714', L: 'CUT' }); }); var q = pl.polys[0], cx = 0, cy = 0; q.forEach(function (z) { cx += z[0]; cy += z[1]; }); sc.push({ k: 'text', x: cx / q.length, y: cy / q.length, s: 1.4, t: pl.it.comp + (pl.it.mirror ? ' (R)' : ''), a: 'middle', L: 'TEXT' }); });
     sc.push({ k: 'poly', p: [[0, 0], [COST.marker.length, 0], [COST.marker.length, COST.marker.width], [0, COST.marker.width]], c: 1, w: .05, L: 'MARK' }); return sc; }
+  /* ---------- tech pack / style pack ---------- */
+  var TOL = [[/chest|bust/i, 1.5], [/waist/i, 1.5], [/hip|seat/i, 1.5], [/length|outseam|inseam/i, 1], [/shoulder/i, .5], [/sleeve/i, 1], [/armhole/i, 1], [/neck/i, .5], [/hem|mohri/i, 1.5], [/crotch/i, 1]];
+  function tol(k) { for (var i = 0; i < TOL.length; i++) if (TOL[i][0].test(k)) return TOL[i][1]; return 1; }
+  function construction(r) {
+    var ids = r.pieces.filter(function (p) { return (S.pc[p.id] || {}).on !== false; }).map(function (p) { return p.id; }), has = function (i) { return ids.indexOf(i) > -1; }, st = [], g = S.gid;
+    var darts = r.pieces.some(function (p) { return p.marks.some(function (k) { return k.t === 'dart'; }); });
+    var fuse = r.pieces.some(function (p) { return /interfacing/i.test(p.cut || ''); }); st.push('Cut all pieces as listed, with notches and drill holes marked.' + (fuse ? ' Fuse the interfacing pieces before sewing.' : ''));
+    if (['salwar', 'patiala'].indexOf(g) > -1) { st.push('Sew a kali to the inside edge of each leg panel, matching the notch at the kali point.'); if (g === 'patiala') st.push('Join the front and back leg halves at the outer side seams. Fold the pleats at the top towards the side and tack them.'); st.push('Join the two kalis at the centre to form the crotch, then sew the inside leg seams.'); st.push('Fold and stitch the 4 cm casing at the top; leave an opening for the drawstring.'); st.push(g === 'patiala' ? 'Gather or pleat the leg opening to the mohri band and attach the band.' : 'Hem the leg openings (mohri).'); }
+    else if (['trousers', 'churidar', 'gharara'].indexOf(g) > -1) {
+      if (g === 'churidar') st.push('Handle the bias-cut legs gently; stay-stitch the waist to stop it stretching.');
+      if (darts) st.push('Sew the darts or fold the pleats; press darts towards the centre.');
+      if (S.o.cargo) st.push('Make and attach the cargo pockets at the side of the legs.');
+      if (S.o.wtype !== 'elastic' && g === 'trousers') st.push('Insert the fly zip at centre front.');
+      st.push('Sew the inside leg seams, stretching the back slightly to match the front (the back is drafted 0.5 cm shorter).', 'Sew the crotch seam from centre back to centre front in one, then the outside leg seams.');
+      if (g === 'gharara') st.push('Join the flare pieces into a tube for each leg, gather to the knee seam and attach; cover the seam with gota or a band if wanted.');
+      st.push(S.o.wtype === 'elastic' || g !== 'trousers' ? 'Fold the waist casing and insert elastic or a drawstring.' : 'Attach the waistband, interfaced, and finish with a hook or button.');
+      if (g === 'churidar') st.push('Finish the leg opening with a 10 cm slit and hooks or a tight hem; the extra length ruches at the ankle.'); else if (has('cuff')) st.push('Attach the rib ankle cuffs.'); else st.push('Hem the legs.');
+    } else if (g === 'skirt' || g === 'lehenga') {
+      if (darts) st.push('Sew the darts and press them towards the centre.');
+      if (g === 'lehenga') st.push('Join the kalis, alternating their direction, into a ring; leave a side placket open.'); else st.push('Insert the zip at centre back to the notch, then sew the side seams.');
+      st.push('Attach the waistband (or a drawstring casing for a lehenga).', 'Hem; for a lehenga add can-can or a facing at the hem if wanted.');
+    } else {
+      st.push('Stay-stitch the necklines and the armholes.');
+      if (darts) st.push('Sew the darts: bust darts pressed down, waist and shoulder darts pressed towards the centre.');
+      if (has('yoke')) st.push('Fold the back box pleat and attach the yoke (outer and lining) to the back; sandwich the fronts at the shoulder.'); else st.push('Join the shoulder seams.');
+      if (g === 'angrakha') st.push('Face the wrap edges of the over and under fronts with 3 cm bias. Attach the ties at the tie points.');
+      if (has('facing')) st.push('Attach the front facings, understitch and press.');
+      if (has('pocket') || has('welt')) st.push(has('welt') ? 'Make the welt pockets on the fronts.' : 'Attach the patch pocket on the left front at the drill holes.');
+      if (has('band') || has('collar')) st.push(has('collar') ? 'Make the collar and collar band, then attach to the neckline matching centre back and the shoulder notches.' : 'Make the band collar and attach to the neckline matching centre back and the shoulder notches.');
+      else if (has('neckrib')) st.push('Join the neck rib into a ring, fold and attach to the neckline, stretching it evenly.'); else if (has('hood')) st.push('Join the hood halves and attach to the neckline.'); else st.push('Face or bind the neckline.');
+      if (has('sleeve')) st.push((S.o.sleeve === 'puff' ? 'Gather the sleeve cap between the notches. ' : 'Ease the sleeve cap between the notches. ') + 'Set the sleeves into the armholes: single notch to the front, double notch to the back.');
+      st.push('Sew the side seams and underarm seams in one' + (+S.o.slit ? ', stopping at the slit notch; finish the slits' : '') + (g === 'anarkali' ? ', leaving a side opening for a zip or hooks' : '') + '.');
+      if (g === 'anarkali') st.push('Join the kalis, alternating their direction, and attach to the bodice waist, easing evenly.');
+      if (has('skirt')) st.push('Gather the skirt to the bodice waist and attach.'); if (has('peplum')) st.push('Attach the peplum to the waist.');
+      if (has('cuff')) st.push('Attach the cuffs' + (S.o.sleeve === 'shirt' ? ', with sleeve plackets' : '') + '.');
+      if (has('hemband')) st.push('Attach the rib hem band.'); else st.push('Hem with a ' + U(S.hemA) + ' ' + S.unit + ' hem allowance.');
+      if (r.pieces.some(function (p) { return p.marks.some(function (k) { return k.t === 'button'; }); })) st.push('Make the buttonholes and sew the buttons.');
+    }
+    st.push('Press, trim threads and attach the main label at centre back and the size and care label at the left side seam.');
+    return st;
+  }
+  function gradeRows() { var szs = Object.keys(chart()), rows = [], b = szs.map(function (sz) { try { return PM.build(S.gid, S.gender, gradeM(sz), OO()).info; } catch (e) { return {}; } });
+    Object.keys(b[0] || {}).forEach(function (k) { if (typeof b[0][k] === 'number' && !/minus|check|lowered|ease|extension|walk/i.test(k)) rows.push([k, b.map(function (i) { return i[k]; })]); });
+    return { sizes: szs, rows: rows }; }
+  $('#pm-dl-tech').onclick = dl(function () { var s = scene(true); if (!COST) costing(s); var c = COST, w = window.open('', '_blank'); if (!w) { toast('Allow pop-ups to open the tech pack.'); return; }
+    var G = PM.GARMENTS[S.gid], gr = gradeRows(), bs = baseSize(), today = new Date().toISOString().slice(0, 10), onP = s.r.pieces.filter(function (p) { return (S.pc[p.id] || {}).on !== false; });
+    var sheet = X.svg(s.sc, s.W, s.H, S.unit, { title: s.title }).replace(/ width="[^"]*" height="[^"]*"/, ''), mk = c ? PMC.markerSvg(c, '').svg : '';
+    var pom = '<table><tr><th>Point of measure (finished)</th>' + gr.sizes.map(function (z) { return '<th' + (z === bs ? ' class="b"' : '') + '>' + z + '</th>'; }).join('') + '<th>Tol. ±</th></tr>' + gr.rows.map(function (r) { return '<tr><td>' + r[0] + '</td>' + r[1].map(function (v, i) { return '<td' + (gr.sizes[i] === bs ? ' class="b"' : '') + '>' + (v === undefined ? '–' : U(v)) + '</td>'; }).join('') + '<td>' + U(tol(r[0])) + '</td></tr>'; }).join('') + '</table>';
+    var pcs = '<table><tr><th>#</th><th>Piece</th><th>Cut</th><th>Seam / hem allowance</th></tr>' + onP.map(function (p, i) { var st = S.pc[p.id] || {}, sa = st.sa !== undefined ? st.sa : S.sa, ha = st.hem !== undefined ? st.hem : (p.defHem !== undefined ? p.defHem : S.hemA); return '<tr><td>' + String(i + 1).padStart(2, '0') + '</td><td>' + (st.name || p.auto) + '</td><td>' + p.cut + (p.notes ? '<br><small>' + p.notes + '</small>' : '') + '</td><td>' + U(sa) + ' / ' + U(ha) + ' ' + S.unit + '</td></tr>'; }).join('') + '</table>';
+    var bom = c ? '<table><tr><th>Material</th><th>Per garment</th><th>For ' + c.qty + ' pcs</th></tr><tr><td>Main fabric, ' + c.marker.width + ' cm wide' + (S.fab.oneWay ? ' (one-way)' : '') + '</td><td>' + c.fabricPerGarment.toFixed(2) + ' m</td><td>' + c.order.fabric.toFixed(1) + ' m</td></tr>'
+      + c.lines.filter(function (l) { return !/Main fabric|Cutting|Washing|Packing/.test(l[0]); }).map(function (l) { return '<tr><td>' + l[0] + '</td><td>' + (l[2] === 'set' ? '1 set' : (l[2] === 'pcs' ? l[1] : l[1].toFixed(2)) + ' ' + l[2]) + '</td><td>' + (l[2] === 'pcs' ? Math.ceil(l[1] * c.qty * (1 + S.cost.wastage / 100)) : l[2] === 'set' ? c.qty + ' sets' : (l[1] * c.qty * (1 + S.cost.wastage / 100)).toFixed(1) + ' ' + l[2]) + '</td></tr>'; }).join('') + '</table>' : '';
+    var steps = '<ol>' + construction(s.r).map(function (t) { return '<li>' + t + '</li>'; }).join('') + '</ol>';
+    var css = 'body{font:12.5px/1.5 Helvetica,Arial,sans-serif;color:#1c1714;margin:26px}h1{font-size:24px;margin:2px 0 6px}h2{font-size:15px;margin:22px 0 6px;border-bottom:2px solid #1c1714;padding-bottom:4px}.k{color:#a9481f;font-weight:700;letter-spacing:.1em;font-size:11px}table{width:100%;border-collapse:collapse;margin:6px 0}td,th{padding:5px 7px;border-bottom:1px solid #ddd;text-align:left;vertical-align:top}th{background:#f4f1ea;font-size:11.5px}td.b,th.b{background:#fbeee6;font-weight:700}.meta{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:14px 0}.meta div{border:1px solid #ddd;border-radius:6px;padding:8px}.meta b{display:block;font-size:14px}.pg{page-break-before:always}.svg svg{width:100%;height:auto;border:1px solid #ddd}small{color:#666}ol li{margin:0 0 5px}.sign{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:20px}.sign div{border-top:1px solid #1c1714;padding-top:5px;font-size:11px;color:#555}@media print{button{display:none}}';
+    w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Tech pack ' + code() + '</title><style>' + css + '</style></head><body>'
+      + '<div class="k">FORECUT · TECH PACK' + (S.detail ? ' · STYLE PACK' : '') + '</div><h1>' + s.r.label + '</h1><div>' + code() + ' · ' + PM.GENDER[S.gender] + ' · base size ' + (S.size === 'custom' ? 'custom (' + bs + ')' : bs) + ' · size range ' + gr.sizes[0] + '–' + gr.sizes[gr.sizes.length - 1] + ' · ' + today + '</div>'
+      + (S.detail ? '<p>From the Forecut detail <b>' + S.detail + '</b>. See the detail on forecut.in for the trend context.</p>' : '')
+      + '<div class="meta"><div>Pieces<b>' + onP.length + '</b></div><div>Fabric per garment<b>' + (c ? c.fabricPerGarment.toFixed(2) + ' m' : '–') + '</b><small>' + (c ? c.marker.width + ' cm wide' : '') + '</small></div><div>Cost per garment<b>' + (c ? money(c.total) : '–') + '</b></div><div>Suggested MRP<b>' + (c ? money(c.mrp) : '–') + '</b><small>' + (c ? 'incl. GST ' + c.gst + '%' : '') + '</small></div></div>'
+      + '<h2>Fabric and finishing</h2><table><tr><td>Seam allowance</td><td>' + U(S.sa) + ' ' + S.unit + ' (hem ' + U(S.hemA) + ' ' + S.unit + ')</td></tr><tr><td>Shrinkage built into the pattern</td><td>length ' + (+S.fab.shl || 0) + '%, width ' + (+S.fab.shw || 0) + '%</td></tr>' + (Object.keys(S.adj).some(function (k) { return +S.adj[k]; }) ? '<tr><td>Fit adjustments</td><td>' + ADJ.filter(function (a) { return +S.adj[a[0]]; }).map(function (a) { return a[1] + ' ' + U(S.adj[a[0]]) + ' ' + S.unit; }).join(', ') + '</td></tr>' : '') + '<tr><td>Checks</td><td>' + $('#pm-qa').textContent + '</td></tr></table>'
+      + '<h2>Points of measure, graded (' + S.unit + ')</h2>' + pom
+      + '<h2>Pieces</h2>' + pcs + '<h2>Bill of materials</h2>' + bom
+      + '<h2 class="pg">Construction sequence</h2>' + steps
+      + '<h2>Pattern</h2><div class="svg">' + sheet + '</div>' + (mk ? '<h2>Marker</h2><div>' + (c.marker.length / 100).toFixed(2) + ' m for ' + c.perMarker + ' garment(s) on ' + c.marker.width + ' cm fabric · efficiency ' + Math.round(c.marker.eff * 100) + '%</div><div class="svg">' + mk + '</div>' : '')
+      + '<h2>Approval</h2><div class="sign"><div>Designer · date</div><div>Pattern maker · date</div><div>Production · date</div></div>'
+      + '<p><small>Generated with the Forecut pattern maker (forecut.in). Block patterns for sampling: sew a toile and approve the fit before production.</small></p><button onclick="print()">Print or save as PDF</button></body></html>');
+    w.document.close(); toast('Tech pack opened in a new tab.'); });
   $('#pm-dl-mdxf').onclick = dl(function () { scene(true); if (!COST) return; FC.download(fname('marker.dxf'), X.dxf(markerScene(), COST.marker.length, COST.marker.width, S.unit === 'in' ? 'in' : 'mm'), 'application/dxf'); toast('Marker DXF downloaded.'); });
   $('#pm-dl-csv').onclick = dl(function () { if (!COST) return; var c = COST, rows = [['Forecut cost sheet', code(), PM.GARMENTS[S.gid].n, S.size], [], ['Item', 'Quantity', 'Unit', 'Rate (INR)', 'Amount (INR)']].concat(c.lines.map(function (l) { return [l[0], l[1].toFixed(3), l[2], l[3].toFixed(3), l[4].toFixed(2)]; }))
       .concat([[], ['Direct cost', '', '', '', c.direct.toFixed(2)], ['Overheads and rejects ' + S.cost.oh + '%', '', '', '', c.overheads.toFixed(2)], ['Total cost', '', '', '', c.total.toFixed(2)], ['Your selling price ex GST', '', '', '', c.sell.toFixed(2)], ['Retail price ex GST', '', '', '', c.retail.toFixed(2)], ['MRP incl GST ' + c.gst + '%', '', '', '', c.mrp], [],
@@ -402,4 +467,5 @@
   var qs = new URLSearchParams(location.search), qd = qs.get('detail');
   if (qd) { var d = DET.filter(function (x) { return x[0].toLowerCase() === qd.toLowerCase(); })[0]; if (d) { S.gender = d[2]; S.gid = d[3]; resetMeas(); resetOpts(); Object.keys(d[4]).forEach(function (k) { S.o[k] = d[4][k]; }); S.detail = d[0]; S.pc = {}; } }
   ui(true);
+  try { if (/[?&]pack=1/.test(location.search) && S.detail) { var bn = document.createElement('div'); bn.className = 'spk'; bn.innerHTML = '<b>Style pack for ' + S.detail + '</b><span>Pattern, costing and tech pack are ready.</span><button type="button" class="xbtn pri" id="pm-spk">Open tech pack</button><button type="button" class="xbtn" id="pm-spkx">Close</button>'; $('.pbar').after(bn); $('#pm-spk').onclick = function () { $('#pm-dl-tech').click(); }; $('#pm-spkx').onclick = function () { bn.remove(); }; } } catch (e) { }
 })();
