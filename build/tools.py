@@ -340,7 +340,7 @@ PMCSS = r"""<style>
 #pm-flat circle{fill:#fff;stroke:#1b1d20;stroke-width:.9px;vector-effect:non-scaling-stroke}#pm-flat text{font-family:"DM Sans",sans-serif;font-weight:700;fill:#6f757c;letter-spacing:.08em}
 .pmx p,.pmx li,.pmx dd,.pmx dt{font-family:"DM Sans",sans-serif}
 .rt{display:flex;background:var(--bg);border-bottom:1px solid var(--ln);position:sticky;top:0;z-index:2}
-.rt button{flex:1;border:0;background:none;padding:9px 0;font-weight:600;color:var(--mu);border-bottom:2px solid transparent}.rt button:hover{color:var(--tx)}
+.rt button{flex:1;border:0;background:none;padding:9px 0;font-size:12px;font-weight:600;color:var(--mu);border-bottom:2px solid transparent}.rt button:hover{color:var(--tx)}
 .rt button[aria-selected=true]{color:var(--tx);border-bottom-color:var(--ac)}
 .rp{padding:10px 12px}
 .pcs{display:grid;gap:6px}
@@ -357,6 +357,18 @@ PMCSS = r"""<style>
 .about p,.about li{font-size:12px;line-height:1.5;color:var(--mu);margin:0 0 6px}.about ul{padding-left:16px;margin:0}.about b{color:var(--tx)}
 .spec{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:12px;margin:0}.spec dt{color:var(--dim)}.spec dd{margin:0;color:var(--tx)}
 .toast{position:absolute;left:50%;bottom:36px;transform:translateX(-50%);background:#f4f1ea;color:#1b1d20;border-radius:4px;padding:8px 14px;font-size:12.5px;font-weight:600;box-shadow:0 10px 28px rgba(0,0,0,.4);margin:0;max-width:90%;z-index:30}
+.row.chk{grid-template-columns:minmax(0,1fr) auto}
+.cst .ctiles{display:grid;grid-template-columns:1fr 1fr;gap:6px;position:sticky;top:38px;z-index:1;background:var(--p1);padding-bottom:8px}
+.cst .ctile{background:var(--p2);border:1px solid var(--ln);border-radius:4px;padding:8px 9px}.cst .ctile span{display:block;font-size:11px;color:var(--mu)}.cst .ctile b{display:block;font:700 19px/1.2 "DM Sans",sans-serif;color:var(--tx);font-variant-numeric:tabular-nums}
+.cst .ctile.hi{border-color:rgba(224,138,94,.5);background:linear-gradient(180deg,rgba(224,138,94,.14),rgba(224,138,94,.04))}.cst .ctile.hi b{color:var(--ac2)}.cst .ctile small{display:block;font-size:10.5px;color:var(--dim);margin-top:2px}
+.cst details{border:1px solid var(--ln);border-radius:4px;margin:6px 0;background:var(--p1)}.cst summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;padding:7px 9px;font:700 10.5px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--mu)}
+.cst summary::-webkit-details-marker{display:none}.cst summary em{font-style:normal;text-transform:none;letter-spacing:0;color:var(--tx);font:600 11.5px ui-monospace,Menlo,monospace}.cst details>div{padding:2px 9px 8px}
+.cst .row{grid-template-columns:minmax(0,1fr) 112px}.cst .row small{color:var(--dim);font-size:10.5px;display:block}
+.bk{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:4px}.bk td{padding:5px 0;border-bottom:1px solid var(--ln);vertical-align:top}.bk td:last-child{text-align:right;font:600 11.5px ui-monospace,Menlo,monospace;white-space:nowrap}
+.bk td small{display:block;color:var(--dim);font:10.5px ui-monospace,Menlo,monospace}.bk .bar{height:3px;background:var(--p3);border-radius:2px;margin-top:3px}.bk .bar i{display:block;height:3px;background:var(--ac);border-radius:2px}
+.bk tr.t td{color:var(--tx);font-weight:700;border-bottom:1px solid #4a5057}.bk tr.g td{color:var(--ac2)}
+.cst .acts2{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0}.cst .acts2 .xbtn,.cst .acts2 a{justify-content:center;font-size:12px;height:28px;text-decoration:none;color:var(--tx)}
+.cst .note{font-size:11px;color:var(--dim);margin:8px 0 0;line-height:1.45}
 .pmdocw{margin:26px 0 8px;border-top:1px solid var(--grid)}.pmdocw>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;padding:12px 0;font:700 15px "DM Sans",sans-serif}.pmdocw>summary::-webkit-details-marker{display:none}.pmdocw>summary::after{content:"Show";font:600 12px "DM Sans",sans-serif;color:var(--muted)}.pmdocw[open]>summary::after{content:"Hide"}
 .pmdoc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:4px 0 10px}
 .pmdoc h2{font:700 15px "DM Sans",sans-serif;margin:0 0 8px}.pmdoc p,.pmdoc li{font:14px/1.55 "DM Sans",sans-serif;color:var(--muted);margin:0 0 8px}.pmdoc ul{padding-left:18px;margin:0}.pmdoc b{color:var(--ink)}
@@ -378,22 +390,32 @@ pm = (PMCSS + '<div class="pmh"><div><div class="eb">Members tool</div><h1>Patte
       '<button type="button" role="menuitem" id="pm-dl-pdf2"><b>PDF</b><span>Full-size sheet</span><small>One page for a plotter or copy shop</small></button><hr>'
       '<button type="button" role="menuitem" id="pm-dl-dxf"><b>DXF</b><span>CAD file</span><small>Layers: CUT, SEAM, MARK, GRAIN, TEXT, BRAND</small></button>'
       '<button type="button" role="menuitem" id="pm-dl-svg"><b>SVG</b><span>Vector, true scale</span><small>For Illustrator, Inkscape and tech packs</small></button>'
-      '<button type="button" role="menuitem" id="pm-dl-png"><b>PNG</b><span>Image</span><small>For sharing and presentations</small></button></div></div></div>'
+      '<button type="button" role="menuitem" id="pm-dl-png"><b>PNG</b><span>Image</span><small>For sharing and presentations</small></button><hr>'
+      '<button type="button" role="menuitem" id="pm-dl-cost"><b>COST</b><span>Cost sheet</span><small>Print or save as PDF, with the marker</small></button>'
+      '<button type="button" role="menuitem" id="pm-dl-csv"><b>CSV</b><span>Cost sheet data</span><small>For Excel or Google Sheets</small></button>'
+      '<button type="button" role="menuitem" id="pm-dl-mdxf"><b>DXF</b><span>Marker</span><small>Pieces laid on the fabric width</small></button></div></div></div>'
       '<div class="pbody"><aside class="pl" aria-label="Pattern settings">'
       '<details class="sec" open><summary>Garment' + A('chev') + '</summary><div class="bd"><div class="cats" id="pm-gtabs" role="group" aria-label="Category"></div><div class="glist" id="pm-garments"></div><p class="dnote" id="pm-dnote"></p></div></details>'
       '<details class="sec" open><summary><span>Style <em id="pm-gname"></em></span>' + A('chev') + '</summary><div class="bd" id="pm-opts"></div></details>'
       '<details class="sec" open><summary>Seam allowance' + A('chev') + '</summary><div class="bd"><label class="row"><span>Seams, all pieces</span><span class="uin"><input type="number" step="any" min="0" id="pm-sa"><i class="u"></i></span></label>'
       '<label class="row"><span>Hems, all pieces</span><span class="uin"><input type="number" step="any" min="0" id="pm-hemall"><i class="u"></i></span></label>'
       '<div class="acts"><button type="button" class="xbtn" id="pm-apply">Apply to all pieces</button><button type="button" class="xbtn" id="pm-nosa">Net pattern</button></div><p class="hint2">Set a single piece in Pieces. Fold edges never get an allowance.</p></div></details>'
+      '<details class="sec" open><summary>Fabric' + A('chev') + '</summary><div class="bd"><label class="row wide"><span>Fabric width</span><select id="pm-fw"><option value="0">Auto (44" woven, 63" knit)</option><option value="90">90 cm · 36"</option><option value="112">112 cm · 44"</option><option value="140">140 cm · 55"</option><option value="150">150 cm · 58/60"</option><option value="160">160 cm · 63"</option><option value="180">180 cm · 72"</option></select></label>'
+      '<label class="row"><span>Shrinkage, length %</span><span class="uin"><input type="number" step=".5" min="0" max="15" id="pm-shl"><i>%</i></span></label><label class="row"><span>Shrinkage, width %</span><span class="uin"><input type="number" step=".5" min="0" max="15" id="pm-shw"><i>%</i></span></label>'
+      '<label class="row" id="pm-strow"><span>Knit stretch, width %</span><span class="uin"><input type="number" step="5" min="0" max="100" id="pm-st"><i>%</i></span></label>'
+      '<label class="row chk"><span>One-way fabric (nap, pile or directional print)</span><input type="checkbox" id="pm-oneway"></label>'
+      '<p class="hint2" id="pm-fabnote">Shrinkage enlarges every piece so the garment is the right size after washing. Get the figures from a wash test of your fabric.</p></div></details>'
       '</aside><section class="pc" aria-label="Pattern sheet"><div class="ctl"><button type="button" class="ib" id="pm-zout" title="Zoom out (−)" aria-label="Zoom out">' + A('minus') + '</button><span id="pm-zl">100%</span><button type="button" class="ib" id="pm-zin" title="Zoom in (+)" aria-label="Zoom in">' + A('plus') + '</button>'
       '<button type="button" class="ib" id="pm-zfit" title="Fit sheet (0)">' + A('fit') + 'Fit</button><span class="sep"></span><button type="button" class="ib" id="pm-gridb" aria-pressed="true" title="Grid">' + A('grid') + 'Grid</button><input type="checkbox" id="pm-grid" checked hidden>'
       '<button type="button" class="ib" id="pm-tilesb" aria-pressed="false" title="Show how the pattern splits into A4 pages">' + A('tiles') + 'A4 pages</button>'
+      '<button type="button" class="ib" id="pm-markb" aria-pressed="false" title="Show the fabric marker used for costing">' + A('ruler') + 'Marker</button>'
       '<span class="sp"></span><span class="leg"><span><i></i>Cut</span><span><i class="s"></i>Sew</span><span><i class="f"></i>Fold</span><span><i class="g"></i>Grain</span></span></div>'
       '<div class="stg"><div class="rc" id="pm-ru"></div><canvas class="rul" id="pm-rx" aria-hidden="true"></canvas><canvas class="rul" id="pm-ry" aria-hidden="true"></canvas><div class="view" id="pm-view"><div id="pm-svg"></div></div></div><div class="sbar" id="pm-status"></div></section>'
       '<aside class="pr" aria-label="Garment, pieces and checks">'
-      '<div class="rt" role="tablist"><button type="button" role="tab" data-t="meas" aria-selected="true">Measure</button><button type="button" role="tab" data-t="pieces" aria-selected="false">Pieces</button><button type="button" role="tab" data-t="checks" aria-selected="false">Checks</button><button type="button" role="tab" data-t="about" aria-selected="false">About</button></div>'
+      '<div class="rt" role="tablist"><button type="button" role="tab" data-t="meas" aria-selected="true">Measure</button><button type="button" role="tab" data-t="pieces" aria-selected="false">Pieces</button><button type="button" role="tab" data-t="cost" aria-selected="false">Costing</button><button type="button" role="tab" data-t="checks" aria-selected="false">Checks</button><button type="button" role="tab" data-t="about" aria-selected="false">About</button></div>'
       '<div class="rp" data-tp="meas"><div class="fig" id="pm-fig"></div><div id="pm-meas"></div></div>'
       '<div class="rp" data-tp="pieces" hidden><div class="pcs" id="pm-pieces"></div><div class="acts"><button type="button" class="xbtn" id="pm-resetnames">Reset labels</button></div></div>'
+      '<div class="rp" data-tp="cost" hidden><div id="pm-cost"></div></div>'
       '<div class="rp" data-tp="checks" hidden><h5>Automatic pattern checks</h5><div class="ck" id="pm-checks"></div><h5>Measurements of this pattern</h5><div class="kv" id="pm-info" style="margin-top:0"></div></div>'
       '<div class="rp about" data-tp="about" hidden><h5>This pattern</h5><dl class="spec" id="pm-spec"></dl>'
       '<h5>Drafting method</h5><p>Blocks are drafted with established industry block methods, as taught in fashion schools and set out in standard references such as H. Joseph-Armstrong, <i>Patternmaking for Fashion Design</i>. Forecut\'s own code calculates each piece from your measurements.</p>'
@@ -402,13 +424,14 @@ pm = (PMCSS + '<div class="pmh"><div><div class="eb">Members tool</div><h1>Patte
       '<h5>Accuracy</h5><p>Pieces are drawn as vectors at true scale. After printing, the 5 cm square on the sheet must measure exactly 5 cm. If it does not, set the printer to 100% / actual size.</p>'
       '<h5>Before production</h5><ul><li>Sew a toile in calico and correct the fit.</li><li>Sizes are drafted from the chart, not graded from an approved base size.</li><li>Add fabric shrinkage before cutting bulk.</li></ul></div></aside></div>'
       '<p class="toast" id="pm-msg" role="status" hidden></p></div>'
-      '<details class="pmdocw"><summary>How the pattern maker works</summary><div class="pmdoc"><div><h2>How it works</h2><p><b>Load a Forecut detail</b>, such as a band-collar kurta, Cuban camp collar shirt, barrel-leg jeans, peplum top or fit-and-flare Anarkali, and the matching garment and options load automatically. Or pick a category and a garment: fitted bodice, kurta, shirt, T-shirt, hoodie, saree blouse, top, dress or frock, Nehru jacket or waistcoat, skirt, lehenga and trousers.</p>'
+      '<details class="pmdocw"><summary>How the pattern maker works</summary><div class="pmdoc" style="grid-template-columns:repeat(4,minmax(0,1fr))"><div><h2>How it works</h2><p><b>Load a Forecut detail</b>, such as a band-collar kurta, Cuban camp collar shirt, barrel-leg jeans, peplum top or fit-and-flare Anarkali, and the matching garment and options load automatically. Or pick a category and a garment: fitted bodice, kurta, shirt, T-shirt, hoodie, saree blouse, top, dress or frock, Nehru jacket or waistcoat, skirt, lehenga and trousers.</p>'
       '<p><b>Measurements</b> start from a size chart and can be changed to your own in centimetres, millimetres or inches; the body diagram shows where to take each one.</p></div>'
       '<div><h2>Checked as you draft</h2><p>Every piece is drafted from the same measurements, so pieces that are sewn together fit together: sleeve heads to the armhole, collars and bands to the neckline, cuffs and waistbands to the wrist and waist. The checks panel tests matching seams, sleeve cap ease and crotch width every time you change something.</p></div>'
+      '<div><h2>Costing from the pattern</h2><p>The pattern maker lays your actual pieces, with seam allowances, on the fabric width you choose and works out the fabric per garment, marker length and efficiency. Buttons, thread, zips and elastic are counted from the pattern. Add your rates for fabric, trims and making (SMV × cost per minute) to get the cost per garment, your price, the retail price and MRP with GST, and the totals for an order. Download the cost sheet, the CSV or the marker as DXF.</p><p>Shrinkage from your wash test enlarges every piece, so the garment is the right size after washing.</p></div>'
       '<div><h2>Downloads</h2><ul><li><b>PDF, A4 tiles:</b> print at 100%, check the 5 cm square, tape the tiles together. Preview the pages before you print. Blank tiles are skipped.</li><li><b>PDF, full size:</b> one page at true size for a plotter.</li><li><b>DXF:</b> for Gerber, Lectra, Optitex, CLO, Illustrator or AutoCAD, on separate layers.</li><li><b>SVG and PNG:</b> for editing, sharing and tech packs.</li></ul>'
       '<p>These are block patterns for samples and first toiles. Make a toile, check the fit and correct it before cutting good fabric or going to production.</p></div></div></details>')
 open(OUT + 'pm-link.js', 'w').write('window.FC_PM_LINKS=' + json.dumps({d[0]: PM_NAMES[d[3]] for d in PMD}) + ';' + JS('pm_link.js'))
 page('pattern-maker.html', 'Pattern Maker · Draft Kurta, Shirt, Blouse, Dress, Trousers & More · Forecut', pm,
-     'window.PM_DETAILS=' + json.dumps(PMD) + ';' + JS('pm_engine.js') + JS('pm_export.js') + JS('pm_views.js') + JS('pm_ui.js'), auth=True)
+     'window.PM_DETAILS=' + json.dumps(PMD) + ';' + JS('pm_engine.js') + JS('pm_export.js') + JS('pm_views.js') + JS('pm_cost.js') + JS('pm_ui.js'), auth=True)
 
 print('tools preview ok', 3)

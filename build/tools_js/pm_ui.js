@@ -26,6 +26,12 @@
   var MGROUP = [['Body', ['bust', 'bust_span', 'bust_depth', 'waist', 'hip', 'wh', 'shoulder', 'across_back', 'across_front', 'nape', 'neck', 'head']], ['Arms', ['bicep', 'elbow', 'wrist', 'sleeve']], ['Legs', ['rise', 'inseam', 'knee_l', 'outseam', 'thigh', 'knee', 'calf', 'ankle']]];
   var S = FC.load('pm2') || {};
   S = Object.assign({ gender: 'women', gid: 'kurta', size: 'M', unit: 'cm', m: null, o: {}, pc: {}, sa: 1, hemA: 2.5, detail: null }, S);
+  S.fab = Object.assign({ fw: 0, shl: 0, shw: 0, st: 0, oneWay: false }, S.fab || {});
+  S.cost = Object.assign({ fp: 180, per: 2, endloss: 3, lp: 90, ip: 60, rp: 220, bp: 3, zp: 12, ep: 25, tp: 110, cone: 4000, lab: 15, smv: 0, cpm: 5, eff: 60, wash: 0, pack: 15, oh: 10, mg: 50, rm: 40, gst: 'auto', qty: 100, wastage: 3 }, S.cost || {});
+  function knit() { return S.gid === 'tshirt' || S.gid === 'hoodie'; }
+  function fabW() { return +S.fab.fw || (knit() ? 160 : 112); }
+  function shrink(r0) { var sx = 1 / (1 - (+S.fab.shw || 0) / 100) * (knit() ? 1 - (+S.fab.st || 0) * .1 / 100 : 1), sy = 1 / (1 - (+S.fab.shl || 0) / 100); return PM.scale(r0, sx, sy); }
+  function shrLab() { return (+S.fab.shl || +S.fab.shw) ? ' · incl. shrinkage L ' + (+S.fab.shl || 0) + '% W ' + (+S.fab.shw || 0) + '%' : ''; }
   var gate = $('#pm-gate'), app = $('#pm-app');
 
   function unlock() { gate.hidden = true; app.hidden = false; }
@@ -93,8 +99,8 @@
   /* ---------- scene ---------- */
   var built = null;
   function scene(forExport) {
-    var r = PM.build(S.gid, S.gender, S.m, S.o), sc = [], x = 2, y = 2, rowH = 0, maxW = 165, sizeLab = (S.size === 'custom' ? 'custom size' : 'size ' + S.size) + ' · ' + PM.GENDER[S.gender], title = r.label;
-    built = r;
+    var r0 = PM.build(S.gid, S.gender, S.m, S.o), r = shrink(r0), sc = [], x = 2, y = 2, rowH = 0, maxW = 165, sizeLab = (S.size === 'custom' ? 'custom size' : 'size ' + S.size) + ' · ' + PM.GENDER[S.gender] + shrLab(), title = r.label;
+    built = r0;
     var onList = r.pieces.filter(function (p) { return (S.pc[p.id] || {}).on !== false; }), NP = onList.length, cd = code();
     r.pieces.forEach(function (p) {
       var st = S.pc[p.id] || (S.pc[p.id] = {}), on = st.on !== false; if (!on) return; var pn = onList.indexOf(p) + 1;
@@ -125,7 +131,7 @@
     var W = Math.max(30, Math.min(maxW + 4, sc.length ? X.bbox(sc.filter(function (o) { return o.L !== 'BRAND'; }))[2] + 2 : 30)), H = y + rowH + 9;
     sc.push({ k: 'poly', p: [[1, H - 6.5], [6, H - 6.5], [6, H - 1.5], [1, H - 1.5]], c: 1, w: .06, L: 'MARK' }, { k: 'text', x: 3.5, y: H - 3.7, s: .7, t: '5 cm square', a: 'middle', L: 'TEXT' });
     sc.push({ k: 'text', x: 7.5, y: H - 4.6, s: 1.2, t: title + ' · ' + sizeLab + ' · ' + cd + ' · ' + NP + ' pieces', b: 1, L: 'TEXT' }, { k: 'text', x: 7.5, y: H - 3, s: .75, t: 'Pattern by FORECUT · forecut.in · engine ' + VER + ' · ' + new Date().toISOString().slice(0, 10) + ' · print at 100%, check the 5 cm square · test in calico before cutting good fabric', col: '#a9481f', L: 'BRAND' });
-    return { sc: sc, W: W, H: H, title: title + ' - ' + sizeLab, r: r };
+    return { sc: sc, W: W, H: H, title: title + ' - ' + sizeLab, r: r, r0: r0 };
   }
   function pip(pt, poly) { var c = false; for (var i = 0, j = poly.length - 1; i < poly.length; j = i++) { var a = poly[i], b = poly[j]; if ((a[1] > pt[1]) !== (b[1] > pt[1]) && pt[0] < (b[0] - a[0]) * (pt[1] - a[1]) / (b[1] - a[1]) + a[0]) c = !c; } return c; }
   function grid(W, H) { var st = S.unit === 'in' ? 2.54 : 1, g = '<g stroke="#ece4d8" stroke-width=".03">'; for (var x = 0, i = 0; x <= W; x += st, i++) g += '<path d="M' + x.toFixed(2) + ' 0V' + H + '"' + (i % 5 ? '' : ' stroke="#d9cdbd" stroke-width=".06"') + '/>'; for (var y = 0, j = 0; y <= H; y += st, j++) g += '<path d="M0 ' + y.toFixed(2) + 'H' + W + '"' + (j % 5 ? '' : ' stroke="#d9cdbd" stroke-width=".06"') + '/>'; return g + '</g>'; }
@@ -192,12 +198,14 @@
   function draw(keepTable) {
     var s = scene(false); last = s; var tl = null, svg = X.svg(s.sc, s.W, s.H, S.unit, { screen: 1, grid: $('#pm-grid').checked ? grid(s.W, s.H) : '' });
     if (TILES) { tl = tilesSvg(s.sc, s.W, s.H); svg = svg.replace('</svg>', tl.g + '</svg>'); }
+    var cres = costing(s);
+    if (MARK && cres) { var mv = PMC.markerSvg(cres, 'Marker · ' + s.r.label + ' · ' + (S.size === 'custom' ? 'custom' : S.size) + ' · ' + cres.perMarker + ' garment' + (cres.perMarker > 1 ? 's' : '') + ' · width ' + cres.marker.width + ' cm · length ' + (cres.marker.length / 100).toFixed(2) + ' m · efficiency ' + Math.round(cres.marker.eff * 100) + '%' + shrLab()); svg = mv.svg; last = { W: mv.W, H: mv.H, sc: s.sc }; }
     $('#pm-svg').innerHTML = svg;
     applyZoom();
     var T = tl ? tl.T : X.tiles(s.sc, s.W, s.H); $('#pm-tilecount').textContent = T.pages + ' A4 pages (' + T.rows + ' rows × ' + T.cols + ' columns, blanks skipped). Print at 100%.';
     var info = s.r.info, num = function (v) { return typeof v === 'number' ? U(v) + ' ' + S.unit : v; };
     $('#pm-info').innerHTML = Object.keys(info).map(function (k) { return '<div><span>' + k + '</span><b>' + num(info[k]) + '</b></div>'; }).join('') + '<div><span>Sheet</span><b>' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + '</b></div>';
-    var ck = V.checks(s.r, S, U, S.gid), ok = ck.filter(function (c) { return c.ok; }).length;
+    var ck = V.checks(s.r0, S, U, S.gid), ok = ck.filter(function (c) { return c.ok; }).length;
     $('#pm-checks').innerHTML = ck.map(function (c) { return '<div class="ckr ' + (c.ok ? 'ok' : 'w') + '">' + IC(c.ok ? 'check' : 'warn') + '<b>' + c.t + '</b><em>' + c.v + '</em><span>' + c.why + '</span></div>'; }).join('');
     var qa = $('#pm-qa'); qa.className = 'qa' + (ok === ck.length ? '' : ' w'); qa.innerHTML = IC(ok === ck.length ? 'check' : 'warn') + (ok === ck.length ? ck.length + '/' + ck.length + ' checks passed' : (ck.length - ok) + ' check' + (ck.length - ok > 1 ? 's' : '') + ' to review');
     var on = s.r.pieces.filter(function (p) { return (S.pc[p.id] || {}).on !== false; }).length;
@@ -211,7 +219,7 @@
   var ICONS = { check: '<path d="m5 12.5 4.5 4.5L19 7.5"/>', warn: '<path d="M12 4 2.5 20h19zM12 10v4.5M12 17.5v.01"/>' };
   function IC(k) { return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">' + ICONS[k] + '</svg>'; }
   function units() { $$('#pm-units button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.u === S.unit); }); $$('.pl .u').forEach(function (i) { i.textContent = S.unit; }); }
-  function ui(fit) { genderTabs(); detailPicker(); measForm(); optForm(); units(); $('#pm-sa').value = U(S.sa); $('#pm-hemall').value = U(S.hemA); if (fit) ZR = 1; draw(); }
+  function ui(fit) { genderTabs(); detailPicker(); measForm(); optForm(); units(); fabForm(); $('#pm-sa').value = U(S.sa); $('#pm-hemall').value = U(S.hemA); if (fit) ZR = 1; draw(); }
   $$('#pm-units button').forEach(function (b) { b.onclick = function () { S.unit = b.dataset.u; ui(); }; });
   $('#pm-sa').oninput = function () { S.sa = cm(parseFloat(this.value) || 0); draw(); };
   $('#pm-hemall').oninput = function () { S.hemA = cm(parseFloat(this.value) || 0); draw(); };
@@ -236,6 +244,81 @@
   function dl(f) { return function () { menuOpen(false); f(); }; }
   $('#pm-dl-svg').onclick = dl(function () { var s = scene(true); FC.download(fname('svg'), X.svg(s.sc, s.W, s.H, S.unit, { title: s.title }), 'image/svg+xml'); toast('SVG downloaded at true scale.'); });
   $('#pm-dl-dxf').onclick = dl(function () { var s = scene(true); FC.download(fname('dxf'), X.dxf(s.sc, s.W, s.H, S.unit === 'in' ? 'in' : 'mm'), 'application/dxf'); toast('DXF downloaded (' + (S.unit === 'in' ? 'inches' : 'millimetres') + ').'); });
+  /* ---------- fabric, costing, marker ---------- */
+  var MARK = false, COST = null, PMC = window.PMC;
+  function money(v) { return '₹' + Math.round(v).toLocaleString('en-IN'); }
+  function money2(v) { return '₹' + (Math.round(v * 100) / 100).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function fabForm() {
+    $('#pm-fw').value = String(+S.fab.fw || 0); $('#pm-shl').value = S.fab.shl; $('#pm-shw').value = S.fab.shw; $('#pm-st').value = S.fab.st; $('#pm-oneway').checked = !!S.fab.oneWay; $('#pm-strow').hidden = !knit();
+  }
+  $('#pm-fw').onchange = function () { S.fab.fw = +this.value; draw(true); };
+  $('#pm-shl').oninput = function () { S.fab.shl = Math.max(0, Math.min(15, parseFloat(this.value) || 0)); draw(true); };
+  $('#pm-shw').oninput = function () { S.fab.shw = Math.max(0, Math.min(15, parseFloat(this.value) || 0)); draw(true); };
+  $('#pm-st').oninput = function () { S.fab.st = Math.max(0, Math.min(100, parseFloat(this.value) || 0)); draw(true); };
+  $('#pm-oneway').onchange = function () { S.fab.oneWay = this.checked; draw(true); };
+  $('#pm-markb').onclick = function () { MARK = !MARK; this.setAttribute('aria-pressed', MARK); if (MARK && TILES) { TILES = false; $('#pm-tilesb').setAttribute('aria-pressed', false); } ZR = 1; draw(true); if (MARK && COST) toast('Marker: ' + (COST.marker.length / 100).toFixed(2) + ' m for ' + COST.perMarker + ' garment' + (COST.perMarker > 1 ? 's' : '') + ' on ' + COST.marker.width + ' cm fabric, ' + Math.round(COST.marker.eff * 100) + '% efficiency.'); };
+  function costing(s) {
+    var cfg = Object.assign({}, S.cost, { width: fabW(), oneWay: S.fab.oneWay, smv: +S.cost.smv || PMC.SMV[S.gid] });
+    try { COST = PMC.cost(s.r, S, cfg, S.gid); } catch (e) { COST = null; }
+    costForm(); return COST;
+  }
+  var CF = [ // [key, label, suffix, step, group, show-if]
+    ['fp', 'Main fabric price', '₹/m', 1, 'Fabric'], ['per', 'Garments per marker', '', 1, 'Fabric'], ['endloss', 'End loss and splicing', '%', .5, 'Fabric'],
+    ['lp', 'Lining price', '₹/m', 1, 'Fabric', 'lining'], ['ip', 'Fusing price', '₹/m', 1, 'Fabric', 'fusing'], ['rp', 'Rib price', '₹/m', 1, 'Fabric', 'rib'],
+    ['bp', 'Button price, each', '₹', .1, 'Trims', 'buttons'], ['zp', 'Zip price', '₹', .5, 'Trims', 'zip'], ['ep', 'Elastic price', '₹/m', .5, 'Trims', 'elastic'], ['tp', 'Thread price per cone', '₹', 1, 'Trims'], ['cone', 'Metres per cone', 'm', 100, 'Trims'], ['lab', 'Labels, tags and other trims', '₹', 1, 'Trims'],
+    ['smv', 'SMV (sewing minutes)', 'min', .5, 'Making'], ['cpm', 'Cost per minute', '₹', .1, 'Making'], ['eff', 'Line efficiency', '%', 1, 'Making'], ['wash', 'Washing / finishing', '₹', 1, 'Making'], ['pack', 'Packing', '₹', 1, 'Making'],
+    ['oh', 'Overheads and rejects', '%', 1, 'Price'], ['mg', 'Your margin on cost', '%', 1, 'Price'], ['rm', 'Retailer / marketplace margin', '%', 1, 'Price'],
+    ['qty', 'Order quantity', 'pcs', 1, 'Order'], ['wastage', 'Cutting wastage', '%', .5, 'Order']];
+  var CO = { Fabric: 1, Trims: 0, Making: 0, Price: 0, Order: 0 };
+  function costForm() {
+    var c = COST, el = $('#pm-cost'); if (!el) return; if (!c) { el.innerHTML = '<p class="note">Costing is not available for this pattern.</p>'; return; }
+    var has = { lining: c.lines.some(function (l) { return l[0] === 'Lining'; }), fusing: c.lines.some(function (l) { return /Fusing/.test(l[0]); }), rib: c.lines.some(function (l) { return l[0] === 'Rib'; }), buttons: c.buttons > 0, zip: c.zip > 0, elastic: c.lines.some(function (l) { return l[0] === 'Elastic'; }) };
+    var act = document.activeElement && el.contains(document.activeElement) ? document.activeElement.dataset.c : null;
+    var h = '<div class="cst"><div class="ctiles"><div class="ctile hi"><span>Cost per garment</span><b>' + money(c.total) + '</b><small>incl. ' + S.cost.oh + '% overheads</small></div><div class="ctile hi"><span>Suggested MRP</span><b>' + money(c.mrp) + '</b><small>incl. GST ' + c.gst + '%</small></div>'
+      + '<div class="ctile"><span>Fabric per garment</span><b>' + (c.fabricPerGarment).toFixed(2) + ' m</b><small>' + c.marker.width + ' cm wide' + shrLab().replace(' · incl. ', ', ') + '</small></div><div class="ctile"><span>Marker efficiency</span><b>' + Math.round(c.marker.eff * 100) + '%</b><small>' + (c.marker.length / 100).toFixed(2) + ' m for ' + c.perMarker + ' garment' + (c.perMarker > 1 ? 's' : '') + '</small></div></div>';
+    if (c.marker.tooWide.length) h += '<p class="note" style="color:var(--wa)">Too wide for this fabric: ' + c.marker.tooWide.join(', ') + '. Choose a wider fabric.</p>';
+    var groups = {}; CF.forEach(function (f) { if (f[5] && !has[f[5]]) return; (groups[f[4]] = groups[f[4]] || []).push(f); });
+    var sumTxt = { Fabric: money(c.lines.filter(function (l) { return /fabric|Lining|Fusing|Rib/i.test(l[0]); }).reduce(function (s, l) { return s + l[4]; }, 0)), Trims: money(c.lines.filter(function (l) { return /Button|Zip|Elastic|thread|Labels/i.test(l[0]); }).reduce(function (s, l) { return s + l[4]; }, 0)), Making: money(c.cmt + (+S.cost.wash || 0) + (+S.cost.pack || 0)), Price: money(c.sell) + ' ex GST', Order: S.cost.qty + ' pcs' };
+    Object.keys(groups).forEach(function (g) { h += '<details data-g="' + g + '"' + (CO[g] ? ' open' : '') + '><summary>' + g + '<em>' + sumTxt[g] + '</em></summary><div>';
+      groups[g].forEach(function (f) { var v = f[0] === 'smv' ? (+S.cost.smv || PMC.SMV[S.gid]) : S.cost[f[0]], extra = f[0] === 'bp' ? '<small>' + c.buttons + ' buttons from the pattern</small>' : f[0] === 'tp' ? '<small>' + Math.round(c.threadM) + ' m thread per garment</small>' : f[0] === 'smv' && !+S.cost.smv ? '<small>typical for this garment</small>' : '';
+        if (f[0] === 'per') h += '<label class="row"><span>' + f[1] + '<small>more garments nest better</small></span><select data-c="per">' + [1, 2, 3, 4].map(function (n) { return '<option' + (n === +S.cost.per ? ' selected' : '') + '>' + n + '</option>'; }).join('') + '</select></label>';
+        else h += '<label class="row"><span>' + f[1] + extra + '</span><span class="uin"><input type="number" min="0" step="' + f[3] + '" data-c="' + f[0] + '" value="' + v + '"><i>' + f[2] + '</i></span></label>'; });
+      if (g === 'Price') h += '<label class="row"><span>GST<small>garments: 5% up to ₹2,500 a piece, 18% above</small></span><select data-c="gst">' + [['auto', 'Auto'], ['5', '5%'], ['18', '18%'], ['12', '12%'], ['0', '0%']].map(function (o) { return '<option value="' + o[0] + '"' + (String(S.cost.gst) === o[0] ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></label>';
+      h += '</div></details>'; });
+    var mx = Math.max.apply(null, c.lines.map(function (l) { return l[4]; })) || 1;
+    h += '<details open data-g="bk"><summary>Cost breakdown per garment<em>' + money2(c.total) + '</em></summary><div><table class="bk">' + c.lines.map(function (l) { var q = l[2] === 'SMV' ? l[1].toFixed(1) + ' min × ' + money2(l[3]) : l[2] === 'set' || l[2] === 'pc' ? '' : (l[2] === 'pcs' ? l[1] : l[1].toFixed(2)) + ' ' + l[2] + ' × ' + money2(l[3]);
+        return '<tr><td>' + l[0] + (q ? '<small>' + q + '</small>' : '') + '<div class="bar"><i style="width:' + Math.max(2, l[4] / mx * 100).toFixed(0) + '%"></i></div></td><td>' + money2(l[4]) + '</td></tr>'; }).join('')
+      + '<tr class="t"><td>Direct cost</td><td>' + money2(c.direct) + '</td></tr><tr><td>Overheads and rejects ' + S.cost.oh + '%</td><td>' + money2(c.overheads) + '</td></tr><tr class="t"><td>Total cost</td><td>' + money2(c.total) + '</td></tr>'
+      + '<tr><td>Your selling price (ex GST)<small>+' + S.cost.mg + '% margin · GST at this price ' + c.sellGst + '%</small></td><td>' + money2(c.sell) + '</td></tr><tr><td>Retail price (ex GST)<small>+' + S.cost.rm + '% retailer margin</small></td><td>' + money2(c.retail) + '</td></tr><tr class="g"><td>MRP incl. GST ' + c.gst + '%<small>rounded to a price point</small></td><td>' + money(c.mrp) + '</td></tr></table></div></details>';
+    var o = c.order; h += '<details open data-g="ord"><summary>For ' + c.qty + ' pieces<em>' + money(o.cost) + '</em></summary><div><table class="bk"><tr><td>Main fabric to buy<small>incl. ' + S.cost.wastage + '% cutting wastage</small></td><td>' + o.fabric.toFixed(1) + ' m</td></tr>'
+      + (o.lining ? '<tr><td>Lining</td><td>' + o.lining.toFixed(1) + ' m</td></tr>' : '') + (o.fusing ? '<tr><td>Fusing</td><td>' + o.fusing.toFixed(1) + ' m</td></tr>' : '') + (o.rib ? '<tr><td>Rib</td><td>' + o.rib.toFixed(1) + ' m</td></tr>' : '')
+      + (o.buttons ? '<tr><td>Buttons</td><td>' + o.buttons + '</td></tr>' : '') + (o.zips ? '<tr><td>Zips</td><td>' + o.zips + '</td></tr>' : '') + '<tr><td>Thread cones</td><td>' + o.thread + '</td></tr>'
+      + '<tr class="t"><td>Total cost</td><td>' + money(o.cost) + '</td></tr><tr><td>Sales value at your price</td><td>' + money(o.sales) + '</td></tr><tr class="g"><td>Gross margin</td><td>' + money(o.sales - o.cost) + '</td></tr></table></div></details>';
+    h += '<div class="acts2"><button type="button" class="xbtn" id="pm-cview">' + (MARK ? 'Show pattern' : 'View marker') + '</button><button type="button" class="xbtn" id="pm-csheet">Cost sheet</button></div>'
+      + '<p class="note">The marker is laid automatically with the grain along the fabric length and pieces turned end to end where allowed. A marker from a CAD system or an experienced marker maker is usually a few per cent shorter. Rates are examples: enter your own. GST rules change; confirm the current rate.</p></div>';
+    el.innerHTML = h;
+    $$('#pm-cost details[data-g]').forEach(function (d) { d.ontoggle = function () { CO[d.dataset.g] = d.open ? 1 : 0; }; });
+    $$('#pm-cost [data-c]').forEach(function (e) { e.onchange = e.oninput = function () { var k = e.dataset.c; S.cost[k] = k === 'gst' ? e.value : (parseFloat(e.value) || 0); clearTimeout(costing.t); costing.t = setTimeout(function () { draw(true); var f = $('#pm-cost [data-c="' + k + '"]'); if (f && f.tagName === 'INPUT') { f.focus(); var v = f.value; f.value = ''; f.value = v; } }, e.tagName === 'SELECT' ? 0 : 350); }; });
+    $('#pm-cview').onclick = function () { $('#pm-markb').click(); }; $('#pm-csheet').onclick = function () { $('#pm-dl-cost').click(); };
+    if (act) { var f = $('#pm-cost [data-c="' + act + '"]'); if (f) f.focus(); }
+  }
+  function markerScene() { var sc = []; COST.marker.placed.forEach(function (pl) { pl.polys.forEach(function (p) { sc.push({ k: 'poly', p: p, c: 1, w: .07, col: '#1c1714', L: 'CUT' }); }); var q = pl.polys[0], cx = 0, cy = 0; q.forEach(function (z) { cx += z[0]; cy += z[1]; }); sc.push({ k: 'text', x: cx / q.length, y: cy / q.length, s: 1.4, t: pl.it.comp + (pl.it.mirror ? ' (R)' : ''), a: 'middle', L: 'TEXT' }); });
+    sc.push({ k: 'poly', p: [[0, 0], [COST.marker.length, 0], [COST.marker.length, COST.marker.width], [0, COST.marker.width]], c: 1, w: .05, L: 'MARK' }); return sc; }
+  $('#pm-dl-mdxf').onclick = dl(function () { scene(true); if (!COST) return; FC.download(fname('marker.dxf'), X.dxf(markerScene(), COST.marker.length, COST.marker.width, S.unit === 'in' ? 'in' : 'mm'), 'application/dxf'); toast('Marker DXF downloaded.'); });
+  $('#pm-dl-csv').onclick = dl(function () { if (!COST) return; var c = COST, rows = [['Forecut cost sheet', code(), PM.GARMENTS[S.gid].n, S.size], [], ['Item', 'Quantity', 'Unit', 'Rate (INR)', 'Amount (INR)']].concat(c.lines.map(function (l) { return [l[0], l[1].toFixed(3), l[2], l[3].toFixed(3), l[4].toFixed(2)]; }))
+      .concat([[], ['Direct cost', '', '', '', c.direct.toFixed(2)], ['Overheads and rejects ' + S.cost.oh + '%', '', '', '', c.overheads.toFixed(2)], ['Total cost', '', '', '', c.total.toFixed(2)], ['Your selling price ex GST', '', '', '', c.sell.toFixed(2)], ['Retail price ex GST', '', '', '', c.retail.toFixed(2)], ['MRP incl GST ' + c.gst + '%', '', '', '', c.mrp], [],
+        ['Fabric width (cm)', c.marker.width], ['Fabric per garment (m)', c.fabricPerGarment.toFixed(3)], ['Marker length (m)', (c.marker.length / 100).toFixed(3)], ['Garments per marker', c.perMarker], ['Marker efficiency %', (c.marker.eff * 100).toFixed(1)], ['Order quantity', c.qty], ['Fabric to buy (m)', c.order.fabric.toFixed(1)], ['Order cost (INR)', c.order.cost.toFixed(0)]]);
+    FC.download(fname('cost.csv'), rows.map(function (r) { return r.map(function (v) { v = String(v === undefined ? '' : v); return /[",]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(','); }).join('\n'), 'text/csv'); toast('Cost sheet CSV downloaded.'); });
+  $('#pm-dl-cost').onclick = dl(function () { var s = scene(true); if (!COST) return; var c = COST, mv = PMC.markerSvg(c, ''), w = window.open('', '_blank'); if (!w) { toast('Allow pop-ups to open the cost sheet.'); return; }
+    var rows = c.lines.map(function (l) { return '<tr><td>' + l[0] + '</td><td>' + (l[2] === 'set' || l[2] === 'pc' ? '' : (l[2] === 'pcs' ? l[1] : l[1].toFixed(2)) + ' ' + l[2]) + '</td><td>' + (l[2] === 'set' || l[2] === 'pc' ? '' : money2(l[3])) + '</td><td>' + money2(l[4]) + '</td></tr>'; }).join('');
+    w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>Cost sheet ' + code() + '</title><style>body{font:13px/1.45 Helvetica,Arial,sans-serif;color:#1c1714;margin:28px}h1{font-size:20px;margin:0 0 4px}.k{color:#a9481f;font-weight:700;letter-spacing:.08em;font-size:11px}table{width:100%;border-collapse:collapse;margin:10px 0}td,th{padding:6px 8px;border-bottom:1px solid #ddd;text-align:left}td:last-child,th:last-child{text-align:right}tr.t td{font-weight:700;border-top:2px solid #1c1714}.g{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}.g div{border:1px solid #ddd;border-radius:6px;padding:8px}.g b{display:block;font-size:17px}.m svg{width:100%;height:auto;border:1px solid #ddd}small{color:#666}@media print{button{display:none}}</style></head><body>'
+      + '<div class="k">FORECUT · COST SHEET</div><h1>' + s.r.label + '</h1><div>' + code() + ' · size ' + S.size + ' · ' + PM.GENDER[S.gender] + ' · ' + new Date().toISOString().slice(0, 10) + shrLab() + '</div>'
+      + '<div class="g"><div>Cost per garment<b>' + money2(c.total) + '</b></div><div>Your price (ex GST)<b>' + money2(c.sell) + '</b></div><div>Suggested MRP<b>' + money(c.mrp) + '</b><small>incl. GST ' + c.gst + '%</small></div><div>Fabric per garment<b>' + c.fabricPerGarment.toFixed(2) + ' m</b><small>' + c.marker.width + ' cm wide</small></div></div>'
+      + '<table><tr><th>Item</th><th>Quantity</th><th>Rate</th><th>Amount</th></tr>' + rows + '<tr class="t"><td>Direct cost</td><td></td><td></td><td>' + money2(c.direct) + '</td></tr><tr><td>Overheads and rejects ' + S.cost.oh + '%</td><td></td><td></td><td>' + money2(c.overheads) + '</td></tr><tr class="t"><td>Total cost</td><td></td><td></td><td>' + money2(c.total) + '</td></tr><tr><td>Your selling price (+' + S.cost.mg + '%)</td><td></td><td></td><td>' + money2(c.sell) + '</td></tr><tr><td>Retail price (+' + S.cost.rm + '%)</td><td></td><td></td><td>' + money2(c.retail) + '</td></tr><tr class="t"><td>MRP incl. GST ' + c.gst + '%</td><td></td><td></td><td>' + money(c.mrp) + '</td></tr></table>'
+      + '<h3>Marker</h3><div>' + (c.marker.length / 100).toFixed(2) + ' m for ' + c.perMarker + ' garment(s) on ' + c.marker.width + ' cm fabric · efficiency ' + Math.round(c.marker.eff * 100) + '%</div><div class="m">' + mv.svg + '</div>'
+      + '<h3>Order of ' + c.qty + ' pieces</h3><table><tr><td>Main fabric to buy (incl. ' + S.cost.wastage + '% wastage)</td><td>' + c.order.fabric.toFixed(1) + ' m</td></tr>' + (c.order.buttons ? '<tr><td>Buttons</td><td>' + c.order.buttons + '</td></tr>' : '') + (c.order.zips ? '<tr><td>Zips</td><td>' + c.order.zips + '</td></tr>' : '') + '<tr><td>Thread cones</td><td>' + c.order.thread + '</td></tr><tr class="t"><td>Order cost</td><td>' + money(c.order.cost) + '</td></tr></table>'
+      + '<p><small>Estimated with the Forecut pattern maker (forecut.in). The marker is laid automatically; a CAD marker is usually a few per cent shorter. Rates are as entered. Confirm the current GST rate.</small></p><button onclick="print()">Print or save as PDF</button></body></html>');
+    w.document.close(); toast('Cost sheet opened in a new tab.'); });
   $('#pm-dl-png').onclick = dl(function () { var s = scene(true); X.png(X.svg(s.sc, s.W, s.H, S.unit, { title: s.title }), s.W, s.H, function (b) { FC.download(fname('png'), b); }); toast('PNG downloaded.'); });
   $('#pm-dl-pdf').onclick = dl(function () { var s = scene(true), r = X.pdf(s.sc, s.W, s.H, 'tiles', { title: s.title }); FC.download(fname('pdf'), r.blob); toast('PDF ready: ' + r.pages + ' A4 pages. Print at 100% / actual size.'); });
   $('#pm-dl-pdf2').onclick = dl(function () { var s = scene(true), r = X.pdf(s.sc, s.W, s.H, 'sheet', { title: s.title }); FC.download(fname('sheet.pdf'), r.blob); toast('Full-size PDF ready (' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + ') for a plotter or copy shop.'); });

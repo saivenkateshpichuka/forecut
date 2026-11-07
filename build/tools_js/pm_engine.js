@@ -368,6 +368,16 @@
     } return o;
   }
   function inter(a1, a2, b1, b2) { var d = (a2[0] - a1[0]) * (b2[1] - b1[1]) - (a2[1] - a1[1]) * (b2[0] - b1[0]); if (Math.abs(d) < 1e-9) return null; var t = ((b1[0] - a1[0]) * (b2[1] - b1[1]) - (b1[1] - a1[1]) * (b2[0] - b1[0])) / d; return [a1[0] + (a2[0] - a1[0]) * t, a1[1] + (a2[1] - a1[1]) * t]; }
+  // fabric shrinkage and knit stretch: scale every piece across (x) and along the grain (y); returns a copy, info is unchanged
+  PM.scale = function (r, sx, sy) {
+    if (Math.abs(sx - 1) < 1e-6 && Math.abs(sy - 1) < 1e-6) return r;
+    function S(q) { return [q[0] * sx, q[1] * sy]; }
+    var o = { info: r.info, label: r.label, pieces: r.pieces.map(function (p) { var c = Object.assign({}, p);
+      c.edges = p.edges.map(function (e) { return { t: e.t, p: e.p.map(S) }; });
+      c.marks = p.marks.map(function (k) { var m = Object.assign({}, k); if (k.p) m.p = k.p.map(S); if (k.c) m.c = S(k.c); return m; });
+      if (p.grain) c.grain = p.grain.map(S); return c; }) };
+    return o;
+  };
   PM.outline = function (pc) { var p = []; pc.edges.forEach(function (e) { p = p.concat(p.length ? e.p.slice(1) : e.p); }); return dedupe(p); };
   PM.cutline = function (pc, sa, hemA) {
     var all = PM.outline(pc), s = area(all) > 0 ? 1 : -1, offs = pc.edges.map(function (e) { var d = e.t === 'fold' ? 0 : e.t === 'hem' ? hemA : sa; return offEdge(e.p, d, s); }), res = [];
