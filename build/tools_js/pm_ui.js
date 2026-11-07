@@ -1,13 +1,14 @@
 /* Forecut pattern maker: interface, state, scene building and downloads. Needs pm_engine.js and pm_export.js. */
 (function () {
   var $ = FC.$, $$ = FC.$$, PM = window.PM, X = window.PMX, V = window.PMV, DET = window.PM_DETAILS || [];
-  var GC = { anarkali: 'ANK', angrakha: 'ANG', sherwani: 'SHW', bandhgala: 'BDG', salwar: 'SAL', patiala: 'PAT', churidar: 'CHU', gharara: 'GHR', bodice: 'BOD', kurta: 'KUR', shirt: 'SHT', tshirt: 'TEE', hoodie: 'HOD', blouse: 'BLS', top: 'TOP', dress: 'DRS', jacket: 'JKT', skirt: 'SKT', lehenga: 'LEH', trousers: 'TRS' }, VER = '1.2';
+  var GC = { anarkali: 'ANK', angrakha: 'ANG', sherwani: 'SHW', bandhgala: 'BDG', salwar: 'SAL', patiala: 'PAT', churidar: 'CHU', gharara: 'GHR', bodice: 'BOD', kurta: 'KUR', shirt: 'SHT', tshirt: 'TEE', hoodie: 'HOD', blouse: 'BLS', top: 'TOP', dress: 'DRS', jacket: 'JKT', skirt: 'SKT', lehenga: 'LEH', trousers: 'TRS' }, VER = '1.3';
   function code() { return 'FC-' + { women: 'W', men: 'M', kids: 'K', unisex: 'U' }[S.gender] + '-' + GC[S.gid] + '-' + (S.size === 'custom' ? 'CUS' : S.size); }
   var UF = { cm: 1, mm: 10, in: 1 / 2.54 };
   var OPT = {
     ease: { l: 'Ease at chest', L: 1 }, len: { l: 'Length from shoulder (0 = standard)', L: 1 }, shape: { l: 'Side seam', o: [['straight', 'Straight'], ['shaped', 'Shaped at waist']] },
     neck: { l: 'Neckline', o: [['crew', 'Crew'], ['round', 'Round'], ['deep', 'Deep round'], ['ushape', 'U-neck'], ['v', 'V-neck'], ['boat', 'Boat'], ['square', 'Square']] },
     back: { l: 'Back neckline', o: [['std', 'Standard'], ['low', 'Low'], ['deepU', 'Deep U'], ['deepV', 'Deep V']] }, cup: { l: 'Bust dart (cup)', o: [['A', 'A'], ['B', 'B'], ['C', 'C'], ['D', 'D']] },
+    dartpos: { l: 'Bust dart position', o: [['side', 'Side seam'], ['shoulder', 'Shoulder'], ['armhole', 'Armhole'], ['neck', 'Neckline'], ['waist', 'Into the waist dart']] }, princess: { l: 'Princess seams', o: [['0', 'No (darts)'], ['1', 'Yes, armhole princess']] },
     collar: { l: 'Collar', o: [['none', 'None'], ['band', 'Band / mandarin'], ['shirt', 'Shirt collar + band'], ['camp', 'Camp / revere'], ['peterpan', 'Peter Pan']] },
     sleeve: { l: 'Sleeve', o: [['none', 'Sleeveless'], ['plain', 'Set-in sleeve'], ['shirt', 'Shirt sleeve with cuff'], ['tee', 'T-shirt sleeve'], ['puff', 'Puff sleeve'], ['bell', 'Bell sleeve'], ['cap', 'Cap sleeve']] },
     slen: { l: 'Sleeve length', o: [['cap', 'Cap'], ['short', 'Short'], ['elbow', 'Elbow'], ['3q', 'Three-quarter'], ['full', 'Full']] },
@@ -72,7 +73,7 @@
   var NEST = false, SZCOL = ['#3b6ea8', '#2f8f83', '#6f9a3c', '#b3862d', '#c0582b', '#a33a64', '#6a4aa0'];
   function knit() { return S.gid === 'tshirt' || S.gid === 'hoodie'; }
   function fabW() { return +S.fab.fw || (knit() ? 160 : 112); }
-  function shrink(r0) { var sx = 1 / (1 - (+S.fab.shw || 0) / 100) * (knit() ? 1 - (+S.fab.st || 0) * .1 / 100 : 1), sy = 1 / (1 - (+S.fab.shl || 0) / 100); return PM.scale(r0, sx, sy); }
+  function shrink(r0) { var sx = 1 / (1 - (+S.fab.shw || 0) / 100) * (knit() ? 1 - (+S.fab.st || 0) * .1 / 100 : 1), sy = 1 / (1 - (+S.fab.shl || 0) / 100); return PM.scale(PM.manip(r0, OO()), sx, sy); }
   function shrLab() { return (+S.fab.shl || +S.fab.shw) ? ' · incl. shrinkage L ' + (+S.fab.shl || 0) + '% W ' + (+S.fab.shw || 0) + '%' : ''; }
   var gate = $('#pm-gate'), app = $('#pm-app');
 
@@ -272,6 +273,7 @@
     var qa = $('#pm-qa'); qa.className = 'qa' + (ok === ck.length ? '' : ' w'); qa.innerHTML = IC(ok === ck.length ? 'check' : 'warn') + (ok === ck.length ? ck.length + '/' + ck.length + ' checks passed' : (ck.length - ok) + ' check' + (ck.length - ok > 1 ? 's' : '') + ' to review');
     var on = s.r.pieces.filter(function (p) { return (S.pc[p.id] || {}).on !== false; }).length;
     $('#pm-spec').innerHTML = [['Style code', code()], ['Garment', PM.GENDER[S.gender] + ' · ' + PM.GARMENTS[S.gid].n], ['Size', S.size === 'custom' ? 'Custom measurements' : S.size + ' (Forecut base chart)'], ['Pieces', on + ' of ' + s.r.pieces.length], ['Allowances', 'seam ' + U(S.sa) + ', hem ' + U(S.hemA) + ' ' + S.unit + (S.sa ? '' : ' (net pattern)')], ['Checks', ok + ' of ' + ck.length + ' passed'], ['Engine', 'Forecut pattern engine ' + VER]].map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; }).join('');
+    var tt = TOILE[S.gid + '-' + S.gender]; $('#pm-toile').innerHTML = tt ? '<b>Toile-tested</b> ' + tt : 'This pattern has not yet been sewn and fit-tested by Forecut. Sew a toile in calico before you cut good fabric; when Forecut has tested a style, the date and fit model will show here.';
     $('#pm-status').innerHTML = '<span><b>' + on + '</b> pieces</span><span>Sheet <b>' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + '</b></span><span><b>' + T.pages + '</b> A4 pages</span><span>SA <b>' + U(S.sa) + '</b> · Hem <b>' + U(S.hemA) + '</b></span><span class="xy" id="pm-xy"></span>';
     crumb();
     if (!keepTable) pieceTable();
@@ -464,8 +466,36 @@
   $('#pm-dl-pdf2').onclick = dl(function () { var s = scene(true), r = X.pdf(s.sc, s.W, s.H, 'sheet', { title: s.title }); FC.download(fname('sheet.pdf'), r.blob); toast('Full-size PDF ready (' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + ') for a plotter or copy shop.'); });
   window.PM_UI = { scene: scene, state: function () { return S; }, applyDetail: applyDetail };
   /* deep link from a Forecut detail: pattern-maker.html?detail=<name> */
+
+  /* Hindi interface: main labels only; measurements, codes and pattern text stay as they are */
+  var HI = { 'Export': 'एक्सपोर्ट', 'Garment': 'परिधान', 'Women': 'महिला', 'Men': 'पुरुष', 'Kids': 'बच्चे', 'Unisex': 'यूनिसेक्स', 'Womenswear': 'महिला वस्त्र', 'Menswear': 'पुरुष वस्त्र', 'Kidswear': 'बाल वस्त्र',
+    'Style': 'स्टाइल', 'Fit adjustments': 'फ़िट सुधार', 'Seam allowance': 'सिलाई छूट', 'Fabric': 'कपड़ा', 'Fit': 'फ़िट', 'Grid': 'ग्रिड', 'A4 pages': 'A4 पेज', 'Sizes': 'साइज़', 'Marker': 'मार्कर',
+    'Cut': 'कटिंग', 'Sew': 'सिलाई', 'Fold': 'मोड़', 'Grain': 'ग्रेन', 'Measure': 'नाप', 'Pieces': 'टुकड़े', 'Costing': 'लागत', 'Checks': 'जाँच', 'About': 'जानकारी',
+    'Front': 'आगे', 'Back': 'पीछे', 'How to measure': 'नाप कैसे लें', 'Used for': 'किसके लिए', 'Your value': 'आपका नाप', 'Size chart': 'साइज़ चार्ट', 'Size chart (no client)': 'साइज़ चार्ट (कोई ग्राहक नहीं)', 'Custom': 'अपना नाप',
+    'Body': 'शरीर', 'Arms': 'बाँहें', 'Legs': 'टाँगें', 'Bust / chest': 'छाती / सीना', 'Waist': 'कमर', 'Hip / seat': 'कूल्हा / सीट', 'Neck': 'गला', 'Wrist': 'कलाई', 'Across back': 'पीठ की चौड़ाई', 'Across front': 'सामने की चौड़ाई',
+    'Shoulder width (tip to tip)': 'कंधे की चौड़ाई (सिरे से सिरे)', 'Nape to waist (back length)': 'गर्दन से कमर (पीठ की लंबाई)', 'Upper arm (bicep)': 'बाँह (बाइसेप)', 'Sleeve length (shoulder to wrist)': 'आस्तीन लंबाई (कंधे से कलाई)',
+    'Waist to hip depth': 'कमर से कूल्हे की गहराई', 'Bust span (apex to apex)': 'बस्ट स्पैन (पॉइंट से पॉइंट)', 'Bust point depth (shoulder to apex)': 'बस्ट पॉइंट गहराई (कंधे से)',
+    'Ease at chest': 'छाती पर ढील', 'Length from shoulder (0 = standard)': 'कंधे से लंबाई (0 = मानक)', 'Side seam': 'साइड सिलाई', 'Neckline': 'गले का डिज़ाइन', 'Back neckline': 'पीछे का गला', 'Collar': 'कॉलर', 'Sleeve': 'आस्तीन', 'Sleeve length': 'आस्तीन की लंबाई',
+    'Pockets': 'जेब', 'Opening': 'खुलाव', 'Bust dart (cup)': 'बस्ट डार्ट (कप)', 'Bust dart position': 'बस्ट डार्ट की जगह', 'Princess seams': 'प्रिंसेस कट', 'Flare at hem (each side)': 'नीचे घेर (हर तरफ़)', 'Side slit length': 'साइड चाक की लंबाई',
+    'Panels': 'कलियाँ', 'Hem circumference': 'घेर', 'Mohri (leg opening)': 'मोहरी', 'Leg': 'पायंचा', 'Waist band': 'कमरबंद',
+    'Straight': 'सीधा', 'None': 'कोई नहीं', 'Sleeveless': 'बिना आस्तीन', 'Short': 'छोटी', 'Full': 'पूरी', 'Elbow': 'कोहनी तक', 'Three-quarter': 'तीन-चौथाई', 'Cap': 'कैप',
+    'Seams, all pieces': 'सिलाई, सभी टुकड़े', 'Hems, all pieces': 'तुरपाई, सभी टुकड़े', 'Apply to all pieces': 'सभी टुकड़ों पर लगाएँ', 'Net pattern': 'नेट पैटर्न (बिना छूट)',
+    'Fabric width': 'कपड़े का अर्ज़', 'Shrinkage, length %': 'सिकुड़न, लंबाई %', 'Shrinkage, width %': 'सिकुड़न, चौड़ाई %', 'Knit stretch, width %': 'निट खिंचाव, चौड़ाई %',
+    'Save': 'सेव', 'Delete': 'हटाएँ', 'Import': 'इम्पोर्ट', 'Expand all': 'सब खोलें', 'Seam': 'सिलाई', 'Hem': 'तुरपाई', 'Cut 1 on fold': 'मोड़ पर 1 काटें', 'Cut 2 (pair)': '2 काटें (जोड़ी)', 'Reset labels': 'लेबल रीसेट',
+    'Cost per garment': 'प्रति पीस लागत', 'Suggested MRP': 'सुझाया MRP', 'Fabric per garment': 'प्रति पीस कपड़ा', 'Marker efficiency': 'मार्कर दक्षता', 'Main fabric price': 'मुख्य कपड़े का दाम', 'Trims': 'ट्रिम्स', 'Making': 'सिलाई ख़र्च', 'Price': 'क़ीमत', 'Order': 'ऑर्डर',
+    'Order quantity': 'ऑर्डर मात्रा', 'Cost breakdown per garment': 'प्रति पीस लागत विवरण', 'Main fabric': 'मुख्य कपड़ा', 'Sewing thread': 'सिलाई धागा', 'Direct cost': 'सीधी लागत', 'Total cost': 'कुल लागत', 'View marker': 'मार्कर देखें', 'Main fabric to buy': 'ख़रीदने का कपड़ा',
+    'Automatic pattern checks': 'स्वचालित पैटर्न जाँच', 'This pattern': 'यह पैटर्न', 'Style code': 'स्टाइल कोड', 'Size': 'साइज़', 'Allowances': 'छूट', 'Engine': 'इंजन', 'Drafting method': 'ड्राफ़्टिंग विधि', 'Size charts': 'साइज़ चार्ट', 'Accuracy': 'सटीकता',
+    'Before production': 'प्रोडक्शन से पहले', "What's new": 'नया क्या है', 'Fit testing': 'फ़िट टेस्टिंग', 'Tech pack': 'टेक पैक', 'Cost sheet': 'लागत शीट' };
+  function lang() { var hi = S.lang === 'hi', root = $('.pmx'); if (!root) return; var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT), n;
+    while ((n = w.nextNode())) { if (n.parentNode.closest && n.parentNode.closest('svg')) continue; if (n.__en === undefined) { var t = n.nodeValue.trim(); if (!HI[t]) continue; n.__en = n.nodeValue; }
+      var v = hi ? n.__en.replace(n.__en.trim(), HI[n.__en.trim()]) : n.__en; if (n.nodeValue !== v) n.nodeValue = v; }
+    $$('#pm-lang button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.l === (S.lang || 'en')); }); document.querySelector('.pmx').setAttribute('lang', hi ? 'hi' : 'en'); }
+  try { S.lang = localStorage.getItem('fc-tool-pm-lang') || 'en'; } catch (e) { S.lang = 'en'; }
+  $$('#pm-lang button').forEach(function (b) { b.onclick = function () { S.lang = b.dataset.l; try { localStorage.setItem('fc-tool-pm-lang', S.lang); } catch (e) {} lang(); }; });
+  var langT; if (window.MutationObserver) new MutationObserver(function () { if (S.lang !== 'hi') return; cancelAnimationFrame(langT); langT = requestAnimationFrame(lang); }).observe($('.pmx'), { childList: true, subtree: true });
+  var TOILE = {}; // filled only from real sewn samples: 'kurta-women': 'size M, 12 Jan 2027, fit model …'
   var qs = new URLSearchParams(location.search), qd = qs.get('detail');
   if (qd) { var d = DET.filter(function (x) { return x[0].toLowerCase() === qd.toLowerCase(); })[0]; if (d) { S.gender = d[2]; S.gid = d[3]; resetMeas(); resetOpts(); Object.keys(d[4]).forEach(function (k) { S.o[k] = d[4][k]; }); S.detail = d[0]; S.pc = {}; } }
-  ui(true);
+  ui(true); lang();
   try { if (/[?&]pack=1/.test(location.search) && S.detail) { var bn = document.createElement('div'); bn.className = 'spk'; bn.innerHTML = '<b>Style pack for ' + S.detail + '</b><span>Pattern, costing and tech pack are ready.</span><button type="button" class="xbtn pri" id="pm-spk">Open tech pack</button><button type="button" class="xbtn" id="pm-spkx">Close</button>'; $('.pbar').after(bn); $('#pm-spk').onclick = function () { $('#pm-dl-tech').click(); }; $('#pm-spkx').onclick = function () { bn.remove(); }; } } catch (e) { }
 })();

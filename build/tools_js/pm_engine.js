@@ -268,19 +268,19 @@
 
   /* ---------- garments ---------- */
   var GAR = PM.GARMENTS = {
-    bodice: { n: 'Fitted bodice block', g: ['women'], o: ['ease', 'len', 'neck', 'cup', 'sleeve', 'slen'], d: { ease: 6, len: 0, neck: 'crew', cup: 'B', sleeve: 'plain', slen: 'full', fit: 'fitted' } },
+    bodice: { n: 'Fitted bodice block', g: ['women'], o: ['ease', 'len', 'neck', 'cup', 'dartpos', 'princess', 'sleeve', 'slen'], d: { ease: 6, len: 0, neck: 'crew', cup: 'B', dartpos: 'side', princess: 0, sleeve: 'plain', slen: 'full', fit: 'fitted' } },
     kurta: { n: 'Kurta / tunic', g: ['women', 'men', 'kids'], o: ['ease', 'len', 'shape', 'neck', 'collar', 'sleeve', 'slen', 'flare', 'slit', 'pockets'], d: { ease: 8, len: 105, shape: 'straight', neck: 'round', collar: 'none', sleeve: 'plain', slen: '3q', flare: 2, slit: 30, pockets: 0 } },
     shirt: { n: 'Shirt', g: ['men', 'women', 'kids', 'unisex'], o: ['ease', 'len', 'shape', 'collar', 'sleeve', 'slen', 'pockets', 'hem', 'yoke', 'drop'], d: { ease: 14, len: 76, shape: 'straight', collar: 'shirt', sleeve: 'shirt', slen: 'full', pockets: 1, hem: 'curved', yoke: 1, drop: 0 } },
     tshirt: { n: 'T-shirt', g: ['unisex', 'men', 'women', 'kids'], o: ['ease', 'len', 'neck', 'sleeve', 'slen', 'drop'], d: { ease: 8, len: 70, neck: 'crew', sleeve: 'tee', slen: 'short', drop: 0 } },
     hoodie: { n: 'Hoodie / sweatshirt', g: ['unisex', 'kids', 'men', 'women'], o: ['ease', 'len', 'hood', 'slen', 'drop', 'pockets'], d: { ease: 16, len: 68, hood: 1, slen: 'full', drop: 6, pockets: 1 } },
-    blouse: { n: 'Saree blouse', g: ['women'], o: ['ease', 'len', 'neck', 'back', 'cup', 'sleeve', 'slen', 'opening'], d: { ease: 4, len: 0, neck: 'deep', back: 'deepU', cup: 'B', sleeve: 'plain', slen: 'short', opening: 1, fit: 'fitted' } },
+    blouse: { n: 'Saree blouse', g: ['women'], o: ['ease', 'len', 'neck', 'back', 'cup', 'dartpos', 'princess', 'sleeve', 'slen', 'opening'], d: { ease: 4, len: 0, neck: 'deep', back: 'deepU', cup: 'B', dartpos: 'side', princess: 0, sleeve: 'plain', slen: 'short', opening: 1, fit: 'fitted' } },
     top: { n: 'Top / peplum top', g: ['women', 'kids'], o: ['ease', 'len', 'shape', 'neck', 'collar', 'sleeve', 'slen', 'peplum'], d: { ease: 8, len: 60, shape: 'shaped', neck: 'round', collar: 'none', sleeve: 'plain', slen: 'short', peplum: 0 } },
     dress: { n: 'Dress / frock', g: ['women', 'kids'], o: ['ease', 'len', 'neck', 'collar', 'sleeve', 'slen', 'dress'], d: { ease: 8, len: 100, neck: 'round', collar: 'none', sleeve: 'puff', slen: 'short', dress: 'shift' } },
     jacket: { n: 'Nehru jacket / waistcoat', g: ['men', 'kids', 'women'], o: ['ease', 'len', 'collar', 'pockets'], d: { ease: 12, len: 72, collar: 'band', pockets: 2 } },
     skirt: { n: 'Skirt', g: ['women', 'kids'], o: ['skirt', 'slen2', 'flare', 'circle', 'panels'], d: { skirt: 'aline', slen2: 65, flare: 8, circle: 1, panels: 8 } },
     lehenga: { n: 'Lehenga (kalidar) skirt', g: ['women', 'kids'], o: ['slen2', 'panels', 'hemc'], d: { slen2: 100, panels: 12, hemc: 380 } },
     trousers: { n: 'Trousers / pants', g: ['men', 'women', 'unisex', 'kids'], o: ['pfit', 'leg', 'wtype', 'tlen', 'cargo'], d: { pfit: 'trouser', leg: 'straight', wtype: 'fitted', tlen: 0, cargo: 0 } },
-    anarkali: { n: 'Anarkali (kalidar kurta)', g: ['women', 'kids'], o: ['ease', 'len', 'neck', 'cup', 'sleeve', 'slen', 'panels', 'hemc'], d: { ease: 6, len: 130, neck: 'round', cup: 'B', sleeve: 'plain', slen: 'full', panels: 16, hemc: 420, fit: 'fitted' } },
+    anarkali: { n: 'Anarkali (kalidar kurta)', g: ['women', 'kids'], o: ['ease', 'len', 'neck', 'cup', 'dartpos', 'princess', 'sleeve', 'slen', 'panels', 'hemc'], d: { ease: 6, len: 130, neck: 'round', cup: 'B', dartpos: 'side', princess: 0, sleeve: 'plain', slen: 'full', panels: 16, hemc: 420, fit: 'fitted' } },
     angrakha: { n: 'Angrakha (wrap kurta)', g: ['women', 'men', 'kids'], o: ['ease', 'len', 'sleeve', 'slen', 'flare', 'slit'], d: { ease: 10, len: 105, sleeve: 'plain', slen: 'full', flare: 4, slit: 25 } },
     sherwani: { n: 'Sherwani', g: ['men', 'kids'], o: ['ease', 'len', 'slit', 'slen'], d: { ease: 12, len: 102, slit: 28, slen: 'full', sleeve: 'plain' } },
     bandhgala: { n: 'Bandhgala jacket', g: ['men', 'kids', 'women'], o: ['ease', 'len', 'pockets', 'slen'], d: { ease: 12, len: 74, pockets: 2, slen: 'full', sleeve: 'plain' } },
@@ -420,6 +420,73 @@
     } return o;
   }
   function inter(a1, a2, b1, b2) { var d = (a2[0] - a1[0]) * (b2[1] - b1[1]) - (a2[1] - a1[1]) * (b2[0] - b1[0]); if (Math.abs(d) < 1e-9) return null; var t = ((b1[0] - a1[0]) * (b2[1] - b1[1]) - (b1[1] - a1[1]) * (b2[0] - b1[0])) / d; return [a1[0] + (a2[0] - a1[0]) * t, a1[1] + (a2[1] - a1[1]) * t]; }
+  /* ---------- pattern manipulation: move the bust dart by pivoting, princess seams ---------- */
+  function flatPts(pc) { var F = []; pc.edges.forEach(function (e, ei) { e.p.forEach(function (q, j) { if (j === 0 && F.length) return; F.push({ p: [q[0], q[1]], e: ei }); }); }); return F; }
+  function nearIdx(F, q) { var bi = -1, bd = 1e9; F.forEach(function (f, i) { var d = Math.hypot(f.p[0] - q[0], f.p[1] - q[1]); if (d < bd) { bd = d; bi = i; } }); return bd < .3 ? bi : -1; }
+  function insertOn(F, q, e) { // put an exact point on the outline (on edge e), return its index
+    var k = nearIdx(F, q); if (k > -1) return k; var best = null, bd = 1e9;
+    for (var i = 0; i < F.length - 1; i++) { var a = F[i].p, b = F[i + 1].p, vx = b[0] - a[0], vy = b[1] - a[1], t = Math.max(0, Math.min(1, ((q[0] - a[0]) * vx + (q[1] - a[1]) * vy) / (vx * vx + vy * vy || 1))), d = Math.hypot(a[0] + vx * t - q[0], a[1] + vy * t - q[1]); if (d < bd && (e === undefined || F[i + 1].e === e)) { bd = d; best = i; } }
+    F.splice(best + 1, 0, { p: [q[0], q[1]], e: F[best + 1].e }); return best + 1;
+  }
+  function atLen(F, e, frac, from) { var pts = F.filter(function (f) { return f.e === e; }), L2 = 0, seg = []; for (var i = 1; i < pts.length; i++) { var d = Math.hypot(pts[i].p[0] - pts[i - 1].p[0], pts[i].p[1] - pts[i - 1].p[1]); seg.push(d); L2 += d; }
+    var want = L2 * frac, acc = 0; for (var j = 0; j < seg.length; j++) { if (acc + seg[j] >= want) { var t = (want - acc) / (seg[j] || 1), a = pts[j].p, b = pts[j + 1].p; return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]; } acc += seg[j]; } return pts[pts.length - 1].p; }
+  function rebuild(pc, F, types) { var edges = [], cur = null; F.forEach(function (f, i) { if (!cur || cur.e !== f.e) { var start = cur ? [cur.p[cur.p.length - 1]] : []; cur = { e: f.e, p: start.concat([f.p]) }; edges.push(cur); } else cur.p.push(f.p); });
+    if (edges.length > 1 && edges[0].e === edges[edges.length - 1].e) { var last = edges.pop(); edges[0].p = last.p.concat(edges[0].p.slice(1)); }
+    edges.forEach(function (e, i) { var nx = edges[(i + 1) % edges.length]; if (Math.hypot(e.p[e.p.length - 1][0] - nx.p[0][0], e.p[e.p.length - 1][1] - nx.p[0][1]) > 1e-6) e.p.push(nx.p[0]); });
+    var c = Object.assign({}, pc); c.edges = edges.map(function (e) { return { t: types[e.e] || 'seam', p: e.p }; }); return c; }
+  function rot(q, c, a) { var x = q[0] - c[0], y = q[1] - c[1], co = Math.cos(a), si = Math.sin(a); return [c[0] + x * co - y * si, c[1] + x * si + y * co]; }
+  PM.moveDart = function (pc, target) {
+    var dart = pc.marks.filter(function (k) { return k.t === 'dart' && /bust/.test(k.lab || ''); })[0]; if (!dart || !target || target === 'side') return pc;
+    var types = pc.edges.map(function (e) { return e.t; }), F = flatPts(pc), apex = dart.p[1], i1 = nearIdx(F, dart.p[0]), i2 = nearIdx(F, dart.p[2]); if (i1 < 0 || i2 < 0) return pc;
+    var up = F[i1].p[1] < F[i2].p[1] ? i1 : i2, lo = up === i1 ? i2 : i1, ang = Math.atan2(F[lo].p[1] - apex[1], F[lo].p[0] - apex[0]) - Math.atan2(F[up].p[1] - apex[1], F[up].p[0] - apex[0]);
+    var marks = pc.marks.filter(function (k) { return k !== dart; }), wd = marks.filter(function (k) { return k.t === 'dart' && /waist/.test(k.lab || '') && k.p.length === 3; })[0], res;
+    if (target === 'waist' && wd) { // close the side dart into the waist dart: swing the lower side panel up
+      var iw = insertOn(F, wd.p[2], 1); i1 = nearIdx(F, dart.p[0]); i2 = nearIdx(F, dart.p[2]); up = F[i1].p[1] < F[i2].p[1] ? i1 : i2; lo = up === i1 ? i2 : i1;
+      var a2 = -ang; for (var k = iw; k <= lo; k++) F[k].p = rot(F[k].p, apex, a2); var w2 = F[iw].p; F.splice(lo, 1);
+      marks = marks.map(function (m) { return m === wd ? { t: 'dart', p: [wd.p[0], apex, w2], lab: 'waist dart (incl. bust dart)' } : m; });
+      res = rebuild(pc, F, types);
+    } else {
+      var tp = target === 'shoulder' ? atLen(F, 4, .5) : target === 'armhole' ? atLen(F, 3, .42) : atLen(F, 5, .45), eT = target === 'shoulder' ? 4 : target === 'armhole' ? 3 : 5, it = insertOn(F, tp, eT);
+      i1 = nearIdx(F, dart.p[0]); i2 = nearIdx(F, dart.p[2]); up = F[i1].p[1] < F[i2].p[1] ? i1 : i2; lo = up === i1 ? i2 : i1;
+      var reg = []; for (var j = up; j < it; j++) reg.push(j); var Tp = rot(F[it].p, apex, ang);
+      reg.forEach(function (j) { F[j].p = rot(F[j].p, apex, ang); });
+      marks = marks.map(function (m) { if (m.t === 'notch' && reg.some(function (j) { return Math.hypot(F[j].p[0] - rot(m.c, apex, ang)[0], F[j].p[1] - rot(m.c, apex, ang)[1]) < 3; })) return Object.assign({}, m, { c: rot(m.c, apex, ang) }); return m; });
+      F.splice(it, 0, { p: Tp, e: eT }); F.splice(up, 1);
+      marks.push({ t: 'dart', p: [Tp, apex, tp], lab: 'bust dart (' + target + ')' });
+      res = rebuild(pc, F, types);
+    }
+    res.marks = marks; return res;
+  };
+  PM.princess = function (pc, isBack) { // split along the moved bust dart (front: armhole) or shoulder dart (back) and the waist dart
+    var types = pc.edges.map(function (e) { return e.t; }), F = flatPts(pc), wd = pc.marks.filter(function (k) { return k.t === 'dart' && /waist/.test(k.lab || '') && k.p.length === 3; })[0], td = pc.marks.filter(function (k) { return k.t === 'dart' && (isBack ? /shoulder/ : /bust/).test(k.lab || ''); })[0];
+    if (!wd || !td) return null;
+    var tA = insertOn(F, td.p[0]), tB = insertOn(F, td.p[2]); var w1 = insertOn(F, wd.p[0], 1), w2 = insertOn(F, wd.p[2], 1); tA = nearIdx(F, td.p[0]); tB = nearIdx(F, td.p[2]); w1 = nearIdx(F, wd.p[0]); w2 = nearIdx(F, wd.p[2]);
+    var tFirst = Math.min(tA, tB), tSecond = Math.max(tA, tB), n = F.length;
+    function walk(a, b) { var o = [], i = a; while (true) { o.push(F[i]); if (i === b) break; i = (i + 1) % n; if (o.length > n) break; } return o; }
+    var A1 = td.p[1], A2 = wd.p[1];
+    // centre panel: from the dart leg nearer the centre, round through neck/centre/hem to the centre-side waist leg; side panel: the rest
+    var cen = walk(tSecond, w1), sid = walk(w2, tFirst), sc = B(F[w1].p, A2, A1, F[tSecond].p, 24).slice(1, -1).map(function (q) { return { p: q, e: 99 }; }), ss = B(F[tFirst].p, A1, A2, F[w2].p, 24).slice(1, -1).map(function (q) { return { p: q, e: 99 }; });
+    var t2 = types.concat([]); t2[99] = 'seam';
+    function mk(list, id, comp) { var c = rebuild(pc, list.concat(id === 'c' ? sc : ss), t2); c.id = pc.id + (id === 'c' ? '' : '-side'); c.comp = comp; return c; }
+    var C = mk(cen, 'c', isBack ? 'Centre back' : 'Centre front'), S2 = mk(sid, 's', isBack ? 'Side back' : 'Side front');
+    var keep = function (pp) { return pc.marks.filter(function (k) { return k.t !== 'dart' && k.c && pip2(k.c, PM.outline(pp)); }); };
+    C.marks = keep(C).concat([{ t: 'notch', c: sc[Math.floor(sc.length * .45)].p, n: 1 }]); S2.marks = keep(S2).concat([{ t: 'notch', c: ss[Math.floor(ss.length * .55)].p, n: 1 }]);
+    var g = (function (pp) { var o = PM.outline(pp), xs = o.map(function (q) { return q[0]; }), ys = o.map(function (q) { return q[1]; }), mx = (Math.min.apply(null, xs) + Math.max.apply(null, xs)) / 2; return [[mx, Math.min.apply(null, ys) + 6], [mx, Math.max.apply(null, ys) - 5]]; });
+    C.grain = pc.grain ? [[Math.min(pc.grain[0][0], F[w1].p[0] - 2), pc.grain[0][1]], [Math.min(pc.grain[1][0], F[w1].p[0] - 2), pc.grain[1][1]]] : g(C); S2.grain = g(S2);
+    S2.cut = 'Cut 2 (pair)'; S2.defHem = pc.defHem; return [C, S2];
+  };
+  function pip2(pt, poly) { var c = false; for (var i = 0, j = poly.length - 1; i < poly.length; j = i++) { var a = poly[i], b = poly[j]; if ((a[1] > pt[1]) !== (b[1] > pt[1]) && pt[0] < (b[0] - a[0]) * (pt[1] - a[1]) / (b[1] - a[1] || 1e-9) + a[0]) c = !c; } return c; }
+  PM.manip = function (r, o) {
+    if (!o || ((!o.dartpos || o.dartpos === 'side') && !+o.princess)) return r;
+    var out = { info: r.info, label: r.label, pieces: [] };
+    r.pieces.forEach(function (p) {
+      if (p.id === 'front') { var q = PM.moveDart(p, +o.princess ? 'armhole' : o.dartpos); if (+o.princess) { var sp = PM.princess(q, false); if (sp) { out.pieces.push(sp[0], sp[1]); return; } } out.pieces.push(q); return; }
+      if (p.id === 'back' && +o.princess) { var sb = PM.princess(p, true); if (sb) { out.pieces.push(sb[0], sb[1]); return; } }
+      out.pieces.push(p);
+    });
+    out.pieces.forEach(function (p) { p.auto = r.label + ' · ' + p.comp; });
+    return out;
+  };
   // fabric shrinkage and knit stretch: scale every piece across (x) and along the grain (y); returns a copy, info is unchanged
   PM.scale = function (r, sx, sy) {
     if (Math.abs(sx - 1) < 1e-6 && Math.abs(sy - 1) < 1e-6) return r;
