@@ -113,7 +113,7 @@ def big(lab, id_, sub=''):
 # ------------------------------------------------------------------ hub
 TOOLS = [('textile-calculator.html', 'Textile calculator', 'Fabric, GSM, yarn & costing',
           '27 calculators: yarn counts in 15 systems, ply, twist and strength, reed, warp and weft, GSM and cover factor, knitting, consumption, markers, thread, SMV, dyeing, regain, costing and units.', 'hub-fabrics-art-forecast'),
-         ('pattern-maker.html', 'Pattern maker', 'Members · 12 garments, 4 categories',
+         ('pattern-maker.html', 'Pattern maker', 'Members · garments and Forecut details',
           'Draft kurtas, shirts, blouses, dresses, skirts, lehengas, trousers and more from measurements or from a Forecut detail. Automatic fit checks, a how-to-measure guide, per-piece seam allowance and true-scale PDF, DXF, SVG and PNG downloads.', 'couture-bespoke-tailoring-2026')]
 hub = ('<div class="eb">Free tools</div><div class="tl-h"><div><h1>Design and production tools</h1>'
        '<p class="lead">Quick, practical calculators and planners for designers, students, D2C brands and production teams. The textile calculator is free for everyone; the pattern maker is free for signed-in Forecut members. Both run entirely in your browser: nothing you type is sent to us.</p></div>'
@@ -237,7 +237,7 @@ IC.update({'tiles': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3h7
            'check': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>', 'warn': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 2.5 20h19zM12 10v4.5M12 17.5v.01"/></svg>',
            'ruler': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 16 16 3l5 5L8 21zM7 12l2 2M10 9l2 2M13 6l2 2"/></svg>'})
 PMCSS = r"""<style>
-.wrap{max-width:1720px!important}
+.wrap{max-width:none!important;padding-left:16px!important;padding-right:16px!important}
 .pmh{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 24px;flex-wrap:wrap;margin:26px 0 14px}.pmh>div{display:grid;gap:6px}
 .pmh .eb{margin:0}.pmh h1{font-size:30px!important;line-height:1.1;margin:0}
 .pmh p{margin:0;max-width:660px;font:14px/1.5 "DM Sans",sans-serif;color:var(--muted)}
@@ -260,7 +260,7 @@ PMCSS = r"""<style>
 .crumb{display:flex;align-items:center;gap:6px;min-width:0;flex:1 1 240px;white-space:nowrap;overflow:hidden;color:var(--mu)}.crumb b{color:var(--tx);overflow:hidden;text-overflow:ellipsis}.crumb i{font-style:normal;color:var(--dim)}
 .crumb code{font:600 11px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ac2);background:rgba(224,138,94,.1);border:1px solid rgba(224,138,94,.3);border-radius:3px;padding:2px 6px}
 .srch{position:relative;display:flex;align-items:center;flex:0 1 320px;min-width:190px}.srch .ic{position:absolute;left:8px;color:var(--mu)}
-.srch input{padding-left:28px;padding-right:40px}.srch small{position:absolute;right:8px;color:var(--dim);font-size:11px}
+.srch input{padding-left:28px}.srch small{position:absolute;right:8px;color:var(--dim);font-size:11px}
 .useg{display:inline-flex;border:1px solid var(--ln);border-radius:3px;overflow:hidden;height:28px}
 .useg button{border:0;background:#16181b;padding:0 10px;font-weight:600;color:var(--mu)}.useg button+button{border-left:1px solid var(--ln)}.useg button[aria-pressed=true]{background:var(--p3);color:var(--tx)}
 .xbtn{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px;border-radius:3px;border:1px solid var(--ln);background:var(--p2);font-weight:600;white-space:nowrap}
@@ -274,7 +274,7 @@ PMCSS = r"""<style>
 .menu b{grid-row:span 2;font:700 10.5px ui-monospace,Menlo,monospace;border:1px solid var(--ln);border-radius:3px;padding:3px 0;text-align:center;color:var(--ac2)}
 .menu span{font-weight:600}.menu small{color:var(--mu);font-size:11.5px}.menu hr{border:0;border-top:1px solid var(--ln);margin:4px 2px}
 /* layout */
-.pbody{display:grid;grid-template-columns:300px minmax(0,1fr) 320px;height:clamp(640px,calc(100vh - 170px),1150px)}
+.pbody{display:grid;grid-template-columns:280px minmax(0,1fr) 360px;height:clamp(640px,calc(100vh - 128px),1400px)}
 .pl,.pr{overflow:auto;background:var(--p1);scrollbar-width:thin;scrollbar-color:#3a3f46 transparent}.pl{border-right:1px solid #121315}.pr{border-left:1px solid #121315}
 .sec{border-bottom:1px solid var(--ln)}
 .sec>summary{display:flex;align-items:center;justify-content:space-between;gap:8px;list-style:none;cursor:pointer;padding:9px 12px;font:700 10.5px "DM Sans",sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--mu);background:var(--bg)}
@@ -295,12 +295,19 @@ PMCSS = r"""<style>
 .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.acts .xbtn{height:26px;font-size:12px;padding:0 9px}
 .hint2{font-size:11.5px;color:var(--dim);margin:8px 0 0}
 /* body diagram */
-.fig{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:center;background:#16181b;border:1px solid var(--ln);border-radius:4px;padding:8px;margin-bottom:10px}
-.fig svg{width:118px;height:auto;display:block}
-.fig .bd0{fill:#2a2e33;stroke:#5d636b;stroke-width:.9}.fig .gd{stroke:#4a5057;stroke-width:.6;stroke-dasharray:2 2;fill:none}
+.fig{display:grid;grid-template-columns:44% 1fr;gap:12px;align-items:start;background:#16181b;border:1px solid var(--ln);border-radius:4px;padding:10px;margin-bottom:8px}
+.fv{display:grid;gap:6px}.vt{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--ln);border-radius:3px;overflow:hidden}.vt button{border:0;background:#16181b;padding:3px 0;font-size:11.5px;font-weight:600;color:var(--mu)}.vt button+button{border-left:1px solid var(--ln)}.vt button[aria-pressed=true]{background:var(--p3);color:var(--tx)}
+.fig svg{width:100%;height:auto;display:block}
+.fig .bd0{fill:#2a2e33;stroke:#5d636b;stroke-width:.9}.fig .gd{stroke:#4a5057;stroke-width:.6;stroke-dasharray:2 2;fill:none}.fig .vl{font:700 7px "DM Sans",sans-serif;fill:#6f757c;letter-spacing:.1em}
 .fig .ms{fill:none;stroke:transparent;stroke-width:7;cursor:pointer}.fig .mv{fill:none;stroke:#59606a;stroke-width:1.1;pointer-events:none}.fig .mv.v{stroke-dasharray:3 2}
 .fig g.on .mv{stroke:var(--ac);stroke-width:2.2}.fig g.on circle{fill:var(--ac)}.fig circle{fill:#59606a}
-.fig p{margin:0;font-size:11.5px;line-height:1.45;color:var(--mu)}.fig p b{display:block;color:var(--tx);font-size:12.5px;margin-bottom:3px}
+.fd small{display:block;font:700 10px "DM Sans",sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--dim);margin-bottom:3px}
+.fd b{display:block;color:var(--ac2);font-size:13.5px;line-height:1.3;margin-bottom:5px}.fd p{margin:0 0 7px;font-size:12px;line-height:1.5;color:var(--tx)}.fd p.tip{color:var(--mu);border-left:2px solid var(--ln);padding-left:7px}
+.fd dl{display:grid;grid-template-columns:auto 1fr;gap:3px 8px;margin:8px 0 0;font-size:11.5px}.fd dt{color:var(--dim)}.fd dd{margin:0;color:var(--tx)}
+.mg{font:700 10.5px "DM Sans",sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--mu);margin:12px 0 4px;padding-top:8px;border-top:1px solid var(--ln)}#pm-meas>.row:first-child+.mg{border-top:0}
+.pchd{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--dim);margin:0 0 2px}.pchd button{border:0;background:none;color:var(--ac2);font-weight:600;font-size:11.5px}
+.pcard{display:grid;grid-template-columns:18px 1fr;column-gap:4px;padding:6px 8px!important}.pexp{border:0;background:none;color:var(--mu);padding:0;height:20px;display:flex;align-items:center}.pexp .ic{width:14px;height:14px;transition:transform .15s}.pcard.open .pexp .ic{transform:rotate(90deg)}
+.pcard .t em{font-style:normal;font:600 10.5px ui-monospace,Menlo,monospace;color:var(--dim);white-space:nowrap}.pcard:not(.open) .nm,.pcard:not(.open) .a{display:none}.pcard .nm,.pcard .a{grid-column:2}
 /* stage */
 .pc{display:flex;flex-direction:column;min-width:0;background:var(--stage)}
 .ctl{display:flex;align-items:center;gap:3px;padding:4px 6px;border-bottom:1px solid #121315;background:var(--p1);flex-wrap:wrap}
@@ -353,7 +360,7 @@ PMCSS = r"""<style>
 .pmdocw{margin:26px 0 8px;border-top:1px solid var(--grid)}.pmdocw>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;padding:12px 0;font:700 15px "DM Sans",sans-serif}.pmdocw>summary::-webkit-details-marker{display:none}.pmdocw>summary::after{content:"Show";font:600 12px "DM Sans",sans-serif;color:var(--muted)}.pmdocw[open]>summary::after{content:"Hide"}
 .pmdoc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:4px 0 10px}
 .pmdoc h2{font:700 15px "DM Sans",sans-serif;margin:0 0 8px}.pmdoc p,.pmdoc li{font:14px/1.55 "DM Sans",sans-serif;color:var(--muted);margin:0 0 8px}.pmdoc ul{padding-left:18px;margin:0}.pmdoc b{color:var(--ink)}
-@media (max-width:1240px){.pbody{grid-template-columns:270px minmax(0,1fr) 280px}.leg{display:none}}
+@media (max-width:1240px){.pbody{grid-template-columns:250px minmax(0,1fr) 320px}.leg{display:none}}
 @media (max-width:980px){.pbody{grid-template-columns:1fr;height:auto}.pc{order:-1;height:70vh}.pl{border-right:0;border-top:1px solid #121315}.pr{border-left:0;border-top:1px solid #121315}
  .srch{flex:1 1 100%;order:5}.brand{display:none}.crumb{flex:1 1 auto}.pmdoc{grid-template-columns:1fr}.view{padding:14px}.sbar .xy{display:none}}
 </style>"""
@@ -363,7 +370,7 @@ pm = (PMCSS + '<div class="pmh"><div><div class="eb">Members tool</div><h1>Patte
       '<div class="btns"><a class="btn p" href="account.html?next=pattern-maker.html#signin">Sign in</a><a class="btn" href="account.html?next=pattern-maker.html#signup">Create a free account</a></div></div>'
       '<div id="pm-app" class="pmx" hidden>'
       '<div class="pbar"><span class="brand"><i></i>FORECUT PATTERN</span><div class="crumb" id="pm-ttl"></div>'
-      '<label class="srch" title="Load a Forecut detail">' + A('search') + '<input type="search" id="pm-dsearch" list="pm-dlist" placeholder="Load a Forecut detail…" aria-label="Load a Forecut detail"><small id="pm-dcount"></small><datalist id="pm-dlist"></datalist></label>'
+      '<label class="srch" title="Load a Forecut detail">' + A('search') + '<input type="search" id="pm-dsearch" list="pm-dlist" placeholder="Load a Forecut detail…" aria-label="Load a Forecut detail"><datalist id="pm-dlist"></datalist></label>'
       '<button type="button" class="qa" id="pm-qa" title="Pattern checks"></button>'
       '<div class="useg" id="pm-units" role="group" aria-label="Units"><button type="button" data-u="cm">cm</button><button type="button" data-u="mm">mm</button><button type="button" data-u="in">in</button></div>'
       '<div class="exp"><button type="button" class="xbtn pri" id="pm-exp" aria-haspopup="menu" aria-expanded="false">' + A('down') + 'Export</button><div class="menu" id="pm-menu" role="menu" hidden>'
@@ -374,7 +381,6 @@ pm = (PMCSS + '<div class="pmh"><div><div class="eb">Members tool</div><h1>Patte
       '<button type="button" role="menuitem" id="pm-dl-png"><b>PNG</b><span>Image</span><small>For sharing and presentations</small></button></div></div></div>'
       '<div class="pbody"><aside class="pl" aria-label="Pattern settings">'
       '<details class="sec" open><summary>Garment' + A('chev') + '</summary><div class="bd"><div class="cats" id="pm-gtabs" role="group" aria-label="Category"></div><div class="glist" id="pm-garments"></div><p class="dnote" id="pm-dnote"></p></div></details>'
-      '<details class="sec" open><summary>Measurements' + A('chev') + '</summary><div class="bd"><div class="fig" id="pm-fig"></div><div id="pm-meas"></div></div></details>'
       '<details class="sec" open><summary><span>Style <em id="pm-gname"></em></span>' + A('chev') + '</summary><div class="bd" id="pm-opts"></div></details>'
       '<details class="sec" open><summary>Seam allowance' + A('chev') + '</summary><div class="bd"><label class="row"><span>Seams, all pieces</span><span class="uin"><input type="number" step="any" min="0" id="pm-sa"><i class="u"></i></span></label>'
       '<label class="row"><span>Hems, all pieces</span><span class="uin"><input type="number" step="any" min="0" id="pm-hemall"><i class="u"></i></span></label>'
@@ -385,8 +391,9 @@ pm = (PMCSS + '<div class="pmh"><div><div class="eb">Members tool</div><h1>Patte
       '<span class="sp"></span><span class="leg"><span><i></i>Cut</span><span><i class="s"></i>Sew</span><span><i class="f"></i>Fold</span><span><i class="g"></i>Grain</span></span></div>'
       '<div class="stg"><div class="rc" id="pm-ru"></div><canvas class="rul" id="pm-rx" aria-hidden="true"></canvas><canvas class="rul" id="pm-ry" aria-hidden="true"></canvas><div class="view" id="pm-view"><div id="pm-svg"></div></div></div><div class="sbar" id="pm-status"></div></section>'
       '<aside class="pr" aria-label="Garment, pieces and checks">'
-      '<div class="rt" role="tablist"><button type="button" role="tab" data-t="pieces" aria-selected="true">Pieces</button><button type="button" role="tab" data-t="checks" aria-selected="false">Checks</button><button type="button" role="tab" data-t="about" aria-selected="false">About</button></div>'
-      '<div class="rp" data-tp="pieces"><div class="pcs" id="pm-pieces"></div><div class="acts"><button type="button" class="xbtn" id="pm-resetnames">Reset labels</button></div></div>'
+      '<div class="rt" role="tablist"><button type="button" role="tab" data-t="meas" aria-selected="true">Measure</button><button type="button" role="tab" data-t="pieces" aria-selected="false">Pieces</button><button type="button" role="tab" data-t="checks" aria-selected="false">Checks</button><button type="button" role="tab" data-t="about" aria-selected="false">About</button></div>'
+      '<div class="rp" data-tp="meas"><div class="fig" id="pm-fig"></div><div id="pm-meas"></div></div>'
+      '<div class="rp" data-tp="pieces" hidden><div class="pcs" id="pm-pieces"></div><div class="acts"><button type="button" class="xbtn" id="pm-resetnames">Reset labels</button></div></div>'
       '<div class="rp" data-tp="checks" hidden><h5>Automatic pattern checks</h5><div class="ck" id="pm-checks"></div><h5>Measurements of this pattern</h5><div class="kv" id="pm-info" style="margin-top:0"></div></div>'
       '<div class="rp about" data-tp="about" hidden><h5>This pattern</h5><dl class="spec" id="pm-spec"></dl>'
       '<h5>Drafting method</h5><p>Blocks are drafted with established industry block methods, as taught in fashion schools and set out in standard references such as H. Joseph-Armstrong, <i>Patternmaking for Fashion Design</i>. Forecut\'s own code calculates each piece from your measurements.</p>'
@@ -395,7 +402,7 @@ pm = (PMCSS + '<div class="pmh"><div><div class="eb">Members tool</div><h1>Patte
       '<h5>Accuracy</h5><p>Pieces are drawn as vectors at true scale. After printing, the 5 cm square on the sheet must measure exactly 5 cm. If it does not, set the printer to 100% / actual size.</p>'
       '<h5>Before production</h5><ul><li>Sew a toile in calico and correct the fit.</li><li>Sizes are drafted from the chart, not graded from an approved base size.</li><li>Add fabric shrinkage before cutting bulk.</li></ul></div></aside></div>'
       '<p class="toast" id="pm-msg" role="status" hidden></p></div>'
-      '<details class="pmdocw"><summary>How the pattern maker works</summary><div class="pmdoc"><div><h2>How it works</h2><p><b>Load a Forecut detail</b>, such as a band-collar kurta, Cuban camp collar shirt, barrel-leg jeans, peplum top or fit-and-flare Anarkali, and the matching garment and options load automatically. Or pick a category and one of 12 garments: fitted bodice, kurta, shirt, T-shirt, hoodie, saree blouse, top, dress or frock, Nehru jacket or waistcoat, skirt, lehenga and trousers.</p>'
+      '<details class="pmdocw"><summary>How the pattern maker works</summary><div class="pmdoc"><div><h2>How it works</h2><p><b>Load a Forecut detail</b>, such as a band-collar kurta, Cuban camp collar shirt, barrel-leg jeans, peplum top or fit-and-flare Anarkali, and the matching garment and options load automatically. Or pick a category and a garment: fitted bodice, kurta, shirt, T-shirt, hoodie, saree blouse, top, dress or frock, Nehru jacket or waistcoat, skirt, lehenga and trousers.</p>'
       '<p><b>Measurements</b> start from a size chart and can be changed to your own in centimetres, millimetres or inches; the body diagram shows where to take each one.</p></div>'
       '<div><h2>Checked as you draft</h2><p>Every piece is drafted from the same measurements, so pieces that are sewn together fit together: sleeve heads to the armhole, collars and bands to the neckline, cuffs and waistbands to the wrist and waist. The checks panel tests matching seams, sleeve cap ease and crotch width every time you change something.</p></div>'
       '<div><h2>Downloads</h2><ul><li><b>PDF, A4 tiles:</b> print at 100%, check the 5 cm square, tape the tiles together. Preview the pages before you print. Blank tiles are skipped.</li><li><b>PDF, full size:</b> one page at true size for a plotter.</li><li><b>DXF:</b> for Gerber, Lectra, Optitex, CLO, Illustrator or AutoCAD, on separate layers.</li><li><b>SVG and PNG:</b> for editing, sharing and tech packs.</li></ul>'

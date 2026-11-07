@@ -7,7 +7,7 @@
   var K = ['bust', 'waist', 'hip', 'shoulder', 'nape', 'neck', 'bicep', 'wrist', 'sleeve', 'wh', 'rise', 'knee_l', 'outseam', 'thigh', 'knee', 'ankle', 'head'];
   PM.KEYS = K;
   PM.LABELS = { bust: 'Bust / chest', waist: 'Waist', hip: 'Hip / seat', shoulder: 'Shoulder width (tip to tip)', nape: 'Nape to waist (back length)', neck: 'Neck', bicep: 'Upper arm (bicep)', wrist: 'Wrist',
-    sleeve: 'Sleeve length (shoulder to wrist)', wh: 'Waist to hip depth', rise: 'Body rise (seated waist to seat)', knee_l: 'Waist to knee', outseam: 'Waist to floor (outseam)', thigh: 'Thigh', knee: 'Knee', ankle: 'Ankle', head: 'Head' };
+    sleeve: 'Sleeve length (shoulder to wrist)', bust_span: 'Bust span (apex to apex)', bust_depth: 'Bust point depth (shoulder to apex)', across_back: 'Across back', across_front: 'Across front', elbow: 'Elbow', calf: 'Calf', inseam: 'Inside leg (crotch to floor)', wh: 'Waist to hip depth', rise: 'Body rise (seated waist to seat)', knee_l: 'Waist to knee', outseam: 'Waist to floor (outseam)', thigh: 'Thigh', knee: 'Knee', ankle: 'Ankle', head: 'Head' };
   function chart(sizes, cols) { var o = {}; sizes.forEach(function (s, i) { o[s] = {}; K.forEach(function (k, j) { o[s][k] = cols[j][i]; }); }); return o; }
   PM.CHARTS = {
     women: chart(['XS', 'S', 'M', 'L', 'XL', 'XXL'], [[81, 86, 91, 97, 102, 108], [65, 70, 75, 81, 86, 92], [89, 94, 99, 104, 109, 115], [35, 36, 37, 38, 39.5, 41], [39, 39.5, 40, 41, 41.5, 42], [34, 35, 36, 37, 38, 39], [26, 27, 28, 30, 32, 34], [15, 15.5, 16, 16.5, 17, 17.5],
@@ -17,6 +17,12 @@
     kids: chart(['2Y', '4Y', '6Y', '8Y', '10Y', '12Y'], [[53, 57, 61, 66, 71, 76], [51, 53, 55, 58, 61, 64], [55, 60, 65, 70, 76, 82], [24, 26, 28, 30, 32, 34], [23, 26, 28, 30, 32, 34], [26, 27, 28, 29, 30, 31], [17, 18, 19, 20.5, 22, 23.5], [12, 12.5, 13, 13.5, 14, 14.5],
       [30, 35, 39, 44, 48, 52], [10, 12, 13, 14, 15, 16], [16, 17, 18, 19, 20, 21], [26, 31, 35, 39, 43, 47], [50, 60, 68, 76, 84, 90], [31, 34, 37, 40, 44, 47], [23, 25, 27, 29, 31, 33], [17, 18, 19, 20, 21, 22], [49, 51, 52, 53, 54, 55]])
   };
+  // extra measurements, derived in proportion for every size (users can replace them with their own)
+  function r5(v) { return Math.round(v * 2) / 2; }
+  ['women', 'men', 'kids'].forEach(function (g) { var C = PM.CHARTS[g]; Object.keys(C).forEach(function (sz) { var m = C[sz];
+    if (g === 'women') { m.bust_span = r5(m.bust * .2); m.bust_depth = r5(m.bust / 12 + 16.5); }
+    m.across_back = r5(m.shoulder * (g === 'men' ? .9 : g === 'kids' ? .88 : .86)); m.across_front = r5(m.across_back - (g === 'women' ? 1.5 : 1));
+    m.elbow = r5(m.bicep * .86); m.calf = r5(m.knee * (g === 'kids' ? 1 : .97)); m.inseam = r5(m.outseam - m.rise + 1); }); });
   PM.CHARTS.unisex = PM.CHARTS.men;
   PM.GENDER = { women: 'Womenswear', men: 'Menswear', kids: 'Kidswear', unisex: 'Unisex' };
 
@@ -71,7 +77,7 @@
       } else side = cat(L(ua, [hipX, Math.min(Hy, Lh)], 4), Lh > Hy ? L([hipX, Hy], [hemX, Lh], 4) : []);
       if (Lh <= Hy && !shaped && Lh > Wy) hemX = hipX;
       // side bust dart: the front side seam is longer than the back by the dart intake; below the dart the side drops by that amount
-      var sdrop = 0, dy0 = Math.min(m.bust / 12 + 15.5, Ad + 4);
+      var sdrop = 0, dy0 = Math.min((m.bust_depth || m.bust / 12 + 16.5) - 1, Ad + 4);
       if (fw && front && Lh > dy0 + cup + 2) { var sp1 = atY(side, dy0); if (sp1) { sdrop = cup; side = side.slice(0, sp1.i).concat([sp1.pt, [sp1.pt[0], sp1.pt[1] + sdrop]], side.slice(sp1.i).map(function (q) { return [q[0], q[1] + sdrop]; })); } }
       var ext = front && o.opening ? (o.ext || 1.5) : 0, curve = o.hemCurve || 0;
       var hem = sdrop ? B([hemX, Lh + sdrop], [hemX * .7, Lh + sdrop], [hemX * .4, Lh], [-ext, Lh]) : curve ? B([hemX, Lh - curve], [hemX * .7, Lh - curve * .1], [hemX * .35, Lh], [-ext, Lh]) : L([hemX, Lh], [-ext, Lh], 2);
@@ -84,7 +90,7 @@
       if (ext) marks.push({ t: 'line', p: L([0, nd], [0, Lh]), lab: 'centre front' });
       if (ext && o.buttons) { var n = o.buttons, y0 = nd + 1.5, y1 = Math.min(Lh - 12, Hy + 4); for (var i = 0; i < n; i++) { var yy = y0 + (y1 - y0) * i / (n - 1); marks.push({ t: 'button', c: [0, yy] }); } }
       if (fitted && front && g === 'women') { // bust dart from side seam + waist dart
-        var bp = [m.bust * .107, m.bust / 12 + 16.5], s1 = sdrop ? atY(side, dy0) : null, dlen = cup;
+        var bp = [m.bust_span ? m.bust_span / 2 : m.bust * .107, m.bust_depth || m.bust / 12 + 16.5], s1 = sdrop ? atY(side, dy0) : null, dlen = cup;
         if (s1) { var p1 = s1.pt, p2 = [p1[0], p1[1] + dlen]; marks.push({ t: 'dart', p: [p1, [bp[0] + 2, bp[1]], p2], lab: 'bust dart ' + dlen.toFixed(1) }); }
         if (dartF > .3) { var wy = Math.min(Wy, Lh); var dp = bp[1] + 1.6; marks.push({ t: 'dart', p: Lh > Wy + 8 ? [[bp[0], dp], [bp[0] - dartF / 2, wy], [bp[0], Math.min(Lh - 3, wy + 12)], [bp[0] + dartF / 2, wy], [bp[0], dp]] : [[bp[0] - dartF / 2, Lh], [bp[0], dp], [bp[0] + dartF / 2, Lh]], lab: 'waist dart ' + dartF.toFixed(1) }); }
         marks.push({ t: 'dot', c: bp, lab: 'bust point' });

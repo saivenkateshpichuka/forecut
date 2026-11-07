@@ -22,7 +22,8 @@
   };
   var ALLOW = { collar: { kurta: ['none', 'band'], shirt: ['shirt', 'band', 'camp'], top: ['none', 'band', 'peterpan'], dress: ['none', 'band', 'peterpan'], jacket: ['band', 'none'] },
     sleeve: { kurta: ['plain', 'bell', 'puff', 'cap', 'none'], shirt: ['shirt', 'plain'], tshirt: ['tee', 'none'], bodice: ['plain', 'none'], blouse: ['plain', 'puff', 'cap', 'none'], top: ['plain', 'puff', 'bell', 'cap', 'none'], dress: ['puff', 'plain', 'bell', 'cap', 'none'] } };
-  var MEAS = { torso: ['bust', 'waist', 'hip', 'shoulder', 'nape', 'neck', 'bicep', 'wrist', 'sleeve', 'wh'], skirt: ['waist', 'hip', 'wh'], trousers: ['waist', 'hip', 'wh', 'rise', 'knee_l', 'outseam', 'thigh', 'knee', 'ankle'] };
+  var MEAS = { torso: ['bust', 'bust_span', 'bust_depth', 'waist', 'hip', 'wh', 'shoulder', 'across_back', 'across_front', 'nape', 'neck', 'bicep', 'elbow', 'wrist', 'sleeve'], skirt: ['waist', 'hip', 'wh'], trousers: ['waist', 'hip', 'wh', 'rise', 'inseam', 'knee_l', 'outseam', 'thigh', 'knee', 'calf', 'ankle'] };
+  var MGROUP = [['Body', ['bust', 'bust_span', 'bust_depth', 'waist', 'hip', 'wh', 'shoulder', 'across_back', 'across_front', 'nape', 'neck', 'head']], ['Arms', ['bicep', 'elbow', 'wrist', 'sleeve']], ['Legs', ['rise', 'inseam', 'knee_l', 'outseam', 'thigh', 'knee', 'calf', 'ankle']]];
   var S = FC.load('pm2') || {};
   S = Object.assign({ gender: 'women', gid: 'kurta', size: 'M', unit: 'cm', m: null, o: {}, pc: {}, sa: 1, hemA: 2.5, detail: null }, S);
   var gate = $('#pm-gate'), app = $('#pm-app');
@@ -34,7 +35,9 @@
 
   function U(v) { return +(v * UF[S.unit]).toFixed(S.unit === 'mm' ? 0 : S.unit === 'in' ? 2 : 1); }
   function cm(v) { return v / UF[S.unit]; }
-  function measSet() { return S.gid === 'skirt' || S.gid === 'lehenga' ? MEAS.skirt : S.gid === 'trousers' ? MEAS.trousers : MEAS.torso.concat(S.gid === 'hoodie' ? ['head'] : []); }
+  function measSet() { var k = S.gid === 'skirt' || S.gid === 'lehenga' ? MEAS.skirt : S.gid === 'trousers' ? MEAS.trousers : MEAS.torso.concat(S.gid === 'hoodie' ? ['head'] : []);
+    k = k.filter(function (x) { return (S.gender === 'women' || !/^bust_/.test(x)) && (S.gid === 'tshirt' || S.gid === 'hoodie' || S.gid === 'jacket' || x !== 'elbow' || true); });
+    k.forEach(function (x) { if (!(S.m[x] > 0)) { var c = chart()[S.size] || chart()[Object.keys(chart())[2]]; if (c[x]) S.m[x] = c[x]; } }); return k; }
   function chart() { return PM.CHARTS[S.gender]; }
   function resetMeas() { var c = chart(); if (!c[S.size]) S.size = Object.keys(c)[2]; S.m = Object.assign({}, c[S.size]); }
   function resetOpts() { S.o = Object.assign({}, PM.GARMENTS[S.gid].d); if (S.gender === 'kids') { if (S.o.len) S.o.len = Math.round(S.o.len * .62); if (S.o.slen2) S.o.slen2 = Math.round(S.o.slen2 * .6); if (S.o.ease) S.o.ease = Math.max(6, Math.round(S.o.ease * .75)); if (S.o.slit) S.o.slit = 12; if (S.o.hemc) S.o.hemc = 220; } if (S.gender === 'men' && S.gid === 'kurta') S.o.len = 102; if (S.gender === 'men' && S.gid === 'tshirt') S.o.len = 72; }
@@ -52,16 +55,21 @@
   }
   function measForm() {
     var c = chart(), h = '<label class="row"><span>Size chart</span><select id="pm-size">' + Object.keys(c).map(function (s) { return '<option' + (s === S.size ? ' selected' : '') + '>' + s + '</option>'; }).join('') + '<option value="custom"' + (S.size === 'custom' ? ' selected' : '') + '>Custom</option></select></label>';
-    measSet().forEach(function (k) { h += '<label class="row" title="' + PM.LABELS[k] + '"><span>' + PM.LABELS[k] + '</span>' + uinp('data-m="' + k + '"', U(S.m[k])) + '</label>'; });
+    var ks = measSet(); MGROUP.forEach(function (g) { var in_ = g[1].filter(function (k) { return ks.indexOf(k) > -1; }); if (!in_.length) return; h += '<h6 class="mg">' + g[0] + '</h6>';
+      in_.forEach(function (k) { h += '<label class="row" title="' + PM.LABELS[k] + '"><span>' + PM.LABELS[k] + '</span>' + uinp('data-m="' + k + '"', U(S.m[k])) + '</label>'; }); });
     $('#pm-meas').innerHTML = h;
     var keys = measSet(); figure(keys, keys.indexOf(FK) > -1 ? FK : keys[0]);
     $$('#pm-meas [data-m]').forEach(function (e) { var row = e.closest('.row'), k = e.dataset.m; row.onmouseenter = function () { figure(keys, k); }; e.onfocus = function () { figure(keys, k); }; });
     $('#pm-size').onchange = function () { S.size = this.value; if (S.size !== 'custom') S.m = Object.assign({}, chart()[S.size]); ui(); };
     $$('#pm-meas [data-m]').forEach(function (e) { e.oninput = function () { var v = parseFloat(e.value); if (v > 0) { S.m[e.dataset.m] = cm(v); S.size = 'custom'; $('#pm-size').value = 'custom'; draw(); } }; });
   }
-  var FK = null;
-  function figure(keys, k) {
-    FK = k; $('#pm-fig').innerHTML = V.figure(keys, k) + '<p><b>' + PM.LABELS[k] + '</b>' + (V.HOW[k] || '') + '</p>';
+  var FK = null, FV = 'front';
+  function figure(keys, k, view) {
+    FK = k; FV = view || (V.BACK.indexOf(k) > -1 ? 'back' : 'front');
+    var c = chart()[S.size], ref = S.size === 'custom' ? '' : '<dt>Size ' + S.size + ' chart</dt><dd>' + U(c[k]) + ' ' + S.unit + '</dd>';
+    $('#pm-fig').innerHTML = '<div class="fv"><div class="vt" role="group" aria-label="Body view"><button type="button" data-v="front" aria-pressed="' + (FV === 'front') + '">Front</button><button type="button" data-v="back" aria-pressed="' + (FV === 'back') + '">Back</button></div>' + V.figure(keys, k, FV) + '</div>'
+      + '<div class="fd"><small>How to measure</small><b>' + PM.LABELS[k] + '</b><p>' + (V.HOW[k] || '') + '</p>' + (V.TIP[k] ? '<p class="tip">' + V.TIP[k] + '</p>' : '') + '<dl><dt>Used for</dt><dd>' + (V.USE[k] || '') + '</dd>' + ref + '<dt>Your value</dt><dd>' + U(S.m[k]) + ' ' + S.unit + '</dd></dl></div>';
+    $$('#pm-fig .vt button').forEach(function (b) { b.onclick = function () { var ks = keys.filter(function (x) { return (V.BACK.indexOf(x) > -1) === (b.dataset.v === 'back'); }); figure(keys, b.dataset.v === 'back' ? (V.BACK.indexOf(k) > -1 ? k : ks[0] || k) : (V.BACK.indexOf(k) < 0 ? k : ks[0] || k), b.dataset.v); }; });
     $$('#pm-meas .row').forEach(function (r) { var i = r.querySelector('[data-m]'); r.classList.toggle('on', !!i && i.dataset.m === k); });
     $$('#pm-fig g[data-k]').forEach(function (g) { g.onmouseenter = function () { figure(keys, g.dataset.k); }; g.onclick = function () { var i = $('#pm-meas [data-m="' + g.dataset.k + '"]'); if (i) { i.focus(); i.select(); } }; });
   }
@@ -77,7 +85,6 @@
   }
   function detailPicker() {
     var dl = $('#pm-dlist'); if (!dl.options.length) dl.innerHTML = DET.map(function (d) { return '<option value="' + d[0].replace(/"/g, '') + ' · ' + d[1] + '">'; }).join('');
-    $('#pm-dcount').textContent = DET.length;
     $('#pm-dsearch').onchange = function () { var v = this.value, d = DET.filter(function (x) { return x[0] + ' · ' + x[1] === v; })[0]; if (d) { applyDetail(d); this.value = ''; this.blur(); } };
     $('#pm-dnote').innerHTML = S.detail ? 'From Forecut detail <b>' + S.detail + '</b>' : '';
   }
@@ -123,14 +130,20 @@
   function pip(pt, poly) { var c = false; for (var i = 0, j = poly.length - 1; i < poly.length; j = i++) { var a = poly[i], b = poly[j]; if ((a[1] > pt[1]) !== (b[1] > pt[1]) && pt[0] < (b[0] - a[0]) * (pt[1] - a[1]) / (b[1] - a[1]) + a[0]) c = !c; } return c; }
   function grid(W, H) { var st = S.unit === 'in' ? 2.54 : 1, g = '<g stroke="#ece4d8" stroke-width=".03">'; for (var x = 0, i = 0; x <= W; x += st, i++) g += '<path d="M' + x.toFixed(2) + ' 0V' + H + '"' + (i % 5 ? '' : ' stroke="#d9cdbd" stroke-width=".06"') + '/>'; for (var y = 0, j = 0; y <= H; y += st, j++) g += '<path d="M0 ' + y.toFixed(2) + 'H' + W + '"' + (j % 5 ? '' : ' stroke="#d9cdbd" stroke-width=".06"') + '/>'; return g + '</g>'; }
 
+  var OPEN = {}, PIC = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
   function pieceTable() {
     var r = built; if (!r) return; var nOn = 0;
-    $('#pm-pieces').innerHTML = r.pieces.map(function (p) {
+    $('#pm-pieces').innerHTML = '<div class="pchd"><span>' + r.pieces.length + ' pieces</span><button type="button" id="pm-pexp">' + (OPEN.all ? 'Collapse all' : 'Expand all') + '</button></div>';
+    $('#pm-pieces').innerHTML += r.pieces.map(function (p) {
       var st = S.pc[p.id] || {}, on = st.on !== false, sa = st.sa !== undefined ? st.sa : S.sa, ha = st.hem !== undefined ? st.hem : (p.defHem !== undefined ? p.defHem : S.hemA), hasHem = p.edges.some(function (e) { return e.t === 'hem'; });
-      return '<div class="pcard' + (on ? '' : ' off') + '"><label class="t"><input type="checkbox" data-p="' + p.id + '" data-f="on"' + (on ? ' checked' : '') + ' aria-label="Include ' + p.comp + '"><code>' + (on ? String(++nOn).padStart(2, '0') : '––') + '</code><b>' + p.comp + '</b><small>' + p.cut + '</small></label>'
+      var op = OPEN.all || OPEN[p.id];
+      return '<div class="pcard' + (on ? '' : ' off') + (op ? ' open' : '') + '" data-pc="' + p.id + '"><button type="button" class="pexp" aria-expanded="' + !!op + '" aria-label="Edit ' + p.comp + '">' + PIC + '</button><div class="t"><input type="checkbox" data-p="' + p.id + '" data-f="on"' + (on ? ' checked' : '') + ' aria-label="Include ' + p.comp + '"><code>' + (on ? String(++nOn).padStart(2, '0') : '––') + '</code><b>' + p.comp + '</b><small>' + p.cut + '</small><em title="Seam / hem allowance">' + U(sa) + (hasHem ? ' / ' + U(ha) : '') + ' ' + S.unit + '</em></div>'
         + '<label class="nm"><span>Label on pattern</span><input type="text" data-p="' + p.id + '" data-f="name" value="' + (st.name || p.auto).replace(/"/g, '&quot;') + '"></label>'
         + '<div class="a"><label>Seam' + uinp('data-p="' + p.id + '" data-f="sa"', U(sa)) + '</label>' + (hasHem ? '<label>Hem' + uinp('data-p="' + p.id + '" data-f="hem"', U(ha)) + '</label>' : '<label>Hem<input disabled value="–"></label>') + '</div></div>';
     }).join('');
+    $('#pm-pexp').onclick = function () { OPEN = OPEN.all ? {} : { all: 1 }; pieceTable(); };
+    $$('#pm-pieces .pcard').forEach(function (cd) { var id = cd.dataset.pc, tg = function () { if (OPEN.all) { OPEN = {}; r.pieces.forEach(function (p) { OPEN[p.id] = 1; }); } OPEN[id] = !OPEN[id]; cd.classList.toggle('open', !!OPEN[id]); cd.querySelector('.pexp').setAttribute('aria-expanded', !!OPEN[id]); };
+      cd.querySelector('.pexp').onclick = tg; cd.querySelector('.t').onclick = function (e) { if (e.target.tagName !== 'INPUT') tg(); }; });
     $$('#pm-pieces [data-p]').forEach(function (e) { e.oninput = e.onchange = function () { var st = S.pc[e.dataset.p] || (S.pc[e.dataset.p] = {}), f = e.dataset.f; if (f === 'on') { st.on = e.checked; draw(); return; } else if (f === 'name') st.name = e.value; else st[f] = cm(parseFloat(e.value) || 0); draw(true); }; });
   }
   /* ---------- view: zoom and pan ---------- */

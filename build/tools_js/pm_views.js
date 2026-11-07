@@ -27,8 +27,25 @@
     thigh: 'Around the fullest part of the upper thigh, just below the crotch.',
     knee: 'Around the knee, leg straight.',
     ankle: 'Around the ankle, over the ankle bone.',
-    head: 'Around the head, across the forehead and the fullest part of the back of the head.'
+    head: 'Around the head, across the forehead and the fullest part of the back of the head.',
+    bust_span: 'Straight across from one bust point (apex) to the other.',
+    bust_depth: 'From the high point of the shoulder, where it meets the neck, straight down to the bust point.',
+    across_back: 'Across the shoulder blades, from where one arm meets the body to the other, about 10 cm below the neck bone.',
+    across_front: 'Across the chest, from where one arm meets the body to the other, about 5 cm below the collarbone.',
+    elbow: 'Around the elbow with the arm bent, so a fitted sleeve still lets the arm move.',
+    calf: 'Around the fullest part of the calf, standing.',
+    inseam: 'On the inside of the leg, from the crotch straight down to the floor, without shoes.'
   };
+  V.TIP = { bust: 'Wear the bra or vest you will wear under the garment.', waist: 'Bend sideways: the crease that forms is the natural waist. Tie a string there and measure the lengths from it.', hip: 'Usually 18–23 cm below the waist.',
+    shoulder: 'Measure over the top of the back, following its curve.', nape: 'Tip the head forward to find the neck bone, then stand straight to measure.', neck: 'Keep one finger under the tape for comfort.', bicep: 'Keep the arm relaxed at the side.',
+    wrist: 'For a cuff, add the ease in Style, not here.', sleeve: 'Bend the elbow slightly so the length allows for movement.', wh: 'Measure at the side seam position.', rise: 'Sit up straight with feet flat on the floor.',
+    knee_l: 'Straight down the side, not following the curve of the leg.', outseam: 'Stand straight, feet slightly apart.', thigh: 'Stand with the weight on both feet.', knee: 'Leg straight and relaxed.', ankle: 'For a fitted hem, check it still passes over the heel.',
+    head: 'For a hood, measure loosely.', bust_span: 'Take it wearing the usual bra.', bust_depth: 'Used to place the bust point and the bust darts.', across_back: 'Arms relaxed in front of the body.', across_front: 'Stand naturally; do not lift the shoulders.',
+    elbow: 'Bend the arm to about 90°.', calf: 'Needed for tapered legs and joggers.', inseam: 'Together with the rise it should come close to the outseam.' };
+  V.USE = { bust: 'Front, back, sleeve cap', waist: 'Waist shaping, darts, waistband', hip: 'Hip width, side seams', shoulder: 'Shoulder line, armhole', nape: 'Back length, armhole depth', neck: 'Neckline, collar, band', bicep: 'Sleeve width',
+    wrist: 'Sleeve hem, cuff', sleeve: 'Sleeve length', wh: 'Hip line', rise: 'Crotch depth', knee_l: 'Knee line', outseam: 'Trouser length', thigh: 'Crotch-level width check', knee: 'Leg width at the knee', ankle: 'Hem width',
+    head: 'Hood size', bust_span: 'Bust point and dart positions', bust_depth: 'Bust point and dart positions', across_back: 'Across-back check', across_front: 'Across-front check', elbow: 'Elbow room check', calf: 'Calf room check', inseam: 'Leg length check' };
+  V.BACK = ['nape', 'shoulder', 'across_back'];
   var HALF = [[74, 33], [73, 43], [62, 47], [52, 52], [47, 62], [44, 88], [42, 112], [39, 140], [37, 152], [35, 163], [39, 170], [44, 161], [45, 151], [48, 124], [51, 98], [57, 73], [57, 86], [61, 104], [62, 113], [57, 128], [54, 142], [55, 160], [58, 190], [61, 222], [61, 250], [65, 280], [62, 292], [77, 293], [73, 280], [74, 250], [75, 222], [77, 190], [80, 167]];
   function smooth(pts) { // closed Catmull-Rom -> cubic Bezier
     var n = pts.length, d = 'M' + pts[0].join(' ');
@@ -41,13 +58,16 @@
     head: ['M68 21 Q80 29 92 21'], neck: ['M73 40 Q80 45 87 40'], shoulder: ['M52 49 Q80 43 108 49'], bust: ['M57 86 Q80 93 103 86'], waist: ['M62 113 Q80 118 98 113'], hip: ['M54 142 Q80 148 106 142'],
     nape: ['M80 41 L80 113', '', 1], bicep: ['M45 80 L56 82'], wrist: ['M38 150 L45 151'], sleeve: ['M52 52 L43 112 L38 151', '', 1],
     wh: ['M134 113 L134 142', 'M100 113 H136 M107 142 H136', 1], rise: ['M140 113 L140 167', 'M100 113 H142 M81 167 H142', 1], knee_l: ['M146 113 L146 222', 'M100 113 H148 M100 222 H148', 1],
-    outseam: ['M152 113 L152 293', 'M100 113 H154 M99 293 H154', 1], thigh: ['M56 172 Q67 176 79 172'], knee: ['M61 222 L75 222'], ankle: ['M65 279 L73 279']
+    outseam: ['M152 113 L152 293', 'M100 113 H154 M99 293 H154', 1], thigh: ['M56 172 Q67 176 79 172'], knee: ['M61 222 L75 222'], ankle: ['M65 279 L73 279'],
+    bust_span: ['M70 88 L90 88'], bust_depth: ['M74 44 L70 88', '', 1], across_front: ['M60 65 Q80 68 100 65'], across_back: ['M59 63 Q80 66 101 63'], elbow: ['M41 112 L50 113'],
+    calf: ['M61 250 Q67 253 74 250'], inseam: ['M128 167 L128 293', 'M81 167 H130 M99 293 H130', 1]
   };
-  V.figure = function (keys, on) {
-    var g = '';
-    keys.forEach(function (k) { var m = M[k]; if (!m) return; var a = m[0].match(/-?[\d.]+/g).map(Number), e = a.slice(-2);
+  V.figure = function (keys, on, view) {
+    var g = '', back = view === 'back';
+    keys.forEach(function (k) { var m = M[k]; if (!m || (V.BACK.indexOf(k) > -1) !== back && ['wh', 'rise', 'knee_l', 'outseam', 'inseam'].indexOf(k) < 0) return; var a = m[0].match(/-?[\d.]+/g).map(Number), e = a.slice(-2);
       g += '<g data-k="' + k + '"' + (k === on ? ' class="on"' : '') + '>' + (m[1] ? '<path class="gd" d="' + m[1] + '"/>' : '') + '<path class="mv' + (m[2] ? ' v' : '') + '" d="' + m[0] + '"/><circle cx="' + a[0] + '" cy="' + a[1] + '" r="1.6"/><circle cx="' + e[0] + '" cy="' + e[1] + '" r="1.6"/><path class="ms" d="' + m[0] + '"><title>' + PM.LABELS[k] + '</title></path></g>'; });
-    return '<svg viewBox="28 6 132 292" role="img" aria-label="Where to take each measurement"><ellipse class="bd0" cx="80" cy="21" rx="10.5" ry="13"/><path class="bd0" d="' + BODY + '"/>' + g + '</svg>';
+    var cue = back ? '<path class="gd" d="M80 36 V160"/><path class="gd" d="M64 62 Q70 80 76 74 M96 62 Q90 80 84 74"/>' : '<path class="gd" d="M72 47 Q80 51 88 47"/>';
+    return '<svg viewBox="28 6 132 292" role="img" aria-label="Where to take each measurement, ' + (back ? 'back' : 'front') + ' view"><ellipse class="bd0" cx="80" cy="21" rx="10.5" ry="13"/><path class="bd0" d="' + BODY + '"/>' + cue + g + '<text x="32" y="294" class="vl">' + (back ? 'BACK' : 'FRONT') + '</text></svg>';
   };
 
   /* ---------- garment drawing from the pattern ---------- */
@@ -157,6 +177,19 @@
     if (I['Inseam back minus front'] !== undefined) { var iv = I['Inseam back minus front']; add(iv <= .05 && iv >= -1.2, 'Inseams walked', U(iv) + u, 'The back inseam is a little shorter than the front and is stretched to fit in sewing.'); }
     if (gid === 'skirt' && (o.skirt === 'straight' || o.skirt === 'aline')) { var tot = 0, dar = 0; r.pieces.forEach(function (p) { if (!/^sk-/.test(p.id)) return; tot += PM.plen(p.edges[1].p) * 2; p.marks.forEach(function (k) { if (k.t === 'dart') dar += Math.hypot(k.p[2][0] - k.p[0][0], k.p[2][1] - k.p[0][1]) * 2; }); });
       var fin = tot - dar, want = S.m.waist + 2.5; add(Math.abs(fin - want) <= 1.5, 'Skirt waist fits the waistband', U(fin) + u, 'Waist seam with darts closed should equal waist + ease (' + U(want) + u + ').'); }
+    // body-room checks from the extra measurements: pattern width at the body line must be at least the body measurement
+    function widthAt(pc, y) { var o = PM.outline(pc), xs = []; for (var i = 0; i < o.length; i++) { var a = o[i], b = o[(i + 1) % o.length]; if ((a[1] - y) * (b[1] - y) <= 0 && a[1] !== b[1]) xs.push(a[0] + (b[0] - a[0]) * (y - a[1]) / (b[1] - a[1])); } return xs.length > 1 ? Math.max.apply(null, xs) - Math.min.apply(null, xs) : 0; }
+    function closedAt(pc, y) { var o = PM.outline(pc), xs = []; for (var i = 0; i < o.length; i++) { var a = o[i], b = o[(i + 1) % o.length]; if ((a[1] - y) * (b[1] - y) <= 0 && a[1] !== b[1]) xs.push(a[0] + (b[0] - a[0]) * (y - a[1]) / (b[1] - a[1])); } return xs.length === 2 && Math.min.apply(null, xs) < .6; } // fabric reaches the centre line at this level
+    function by2(id) { return r.pieces.filter(function (p) { return p.id === id; })[0]; }
+    var M2 = S.m, fr = by2('front'), bk = by2('back');
+    if (fr && bk && M2.across_back && !by2('yoke')) { var ua = fr.edges[3].p[0][1], yb = ua * .62, ab = widthAt(bk, yb) * 2, af = (widthAt(fr, ua * .7) - (fr.edges[0].t === 'fold' ? 0 : Math.abs(Math.min(0, fr.edges[0].p[0][0])))) * 2;
+      if (closedAt(bk, yb)) add(ab >= M2.across_back + .5, 'Room across the back', U(ab - M2.across_back) + u + ' over body', 'Pattern width across the shoulder blades compared with the across-back measurement; needs at least 0.5 cm so the arms can move forward.');
+      if (M2.across_front && closedAt(fr, ua * .7)) add(af >= M2.across_front, 'Room across the front', U(af - M2.across_front) + u + ' over body', 'Pattern width across the chest compared with the across-front measurement.'); }
+    var sl = by2('sleeve'); if (sl && M2.elbow) { var so = PM.outline(sl), ys = so.map(function (q) { return q[1]; }), top = Math.min.apply(null, ys), bot = Math.max.apply(null, ys), CH = I['Sleeve cap height'] || 0;
+      if (bot - top - CH > 30) { var we = widthAt(sl, CH + (bot - CH) * .5 + 1.9); add(we >= M2.elbow + 2, 'Room at the elbow', U(we - M2.elbow) + u + ' over body', 'Sleeve width at the elbow must be at least the bent-elbow measurement plus 2 cm.'); } }
+    var tf = by2('tr-front'), tb = by2('tr-back'); if (tf && tb && M2.calf) { var kneeY = tf.marks.filter(function (k) { return k.lab === 'knee'; })[0], ky = kneeY ? kneeY.p[0][1] : 0, oy = Math.max.apply(null, PM.outline(tf).map(function (q) { return q[1]; }));
+      if (ky && oy - ky > 18) { var wc = widthAt(tf, ky + 12) + widthAt(tb, ky + 12); add(wc >= M2.calf + 1, 'Room at the calf', U(wc - M2.calf) + u + ' over body', 'Leg width 12 cm below the knee must be at least the calf plus 1 cm.'); } }
+    if (gid === 'trousers' && M2.inseam) { var dsum = M2.rise + M2.inseam - M2.outseam; add(Math.abs(dsum) <= 4, 'Leg measurements agree', 'rise + inside leg ' + (dsum >= 0 ? '+' : '') + U(dsum) + u + ' vs outseam', 'Body rise plus inside leg should come within 4 cm of the outseam. If not, re-check those three measurements.'); }
     return c;
   };
 
