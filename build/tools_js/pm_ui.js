@@ -189,7 +189,6 @@
     var qa = $('#pm-qa'); qa.className = 'qa' + (ok === ck.length ? '' : ' w'); qa.innerHTML = IC(ok === ck.length ? 'check' : 'warn') + (ok === ck.length ? ck.length + '/' + ck.length + ' checks passed' : (ck.length - ok) + ' check' + (ck.length - ok > 1 ? 's' : '') + ' to review');
     var on = s.r.pieces.filter(function (p) { return (S.pc[p.id] || {}).on !== false; }).length;
     $('#pm-spec').innerHTML = [['Style code', code()], ['Garment', PM.GENDER[S.gender] + ' · ' + PM.GARMENTS[S.gid].n], ['Size', S.size === 'custom' ? 'Custom measurements' : S.size + ' (Forecut base chart)'], ['Pieces', on + ' of ' + s.r.pieces.length], ['Allowances', 'seam ' + U(S.sa) + ', hem ' + U(S.hemA) + ' ' + S.unit + (S.sa ? '' : ' (net pattern)')], ['Checks', ok + ' of ' + ck.length + ' passed'], ['Engine', 'Forecut pattern engine ' + VER]].map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; }).join('');
-    try { $('#pm-flat').innerHTML = V.flat(s.r, S.o, S.gid, S.m); } catch (e) { $('#pm-flat').innerHTML = ''; }
     $('#pm-status').innerHTML = '<span><b>' + on + '</b> pieces</span><span>Sheet <b>' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + '</b></span><span><b>' + T.pages + '</b> A4 pages</span><span>SA <b>' + U(S.sa) + '</b> · Hem <b>' + U(S.hemA) + '</b></span><span class="xy" id="pm-xy"></span>';
     crumb();
     if (!keepTable) pieceTable();

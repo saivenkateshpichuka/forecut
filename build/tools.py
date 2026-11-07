@@ -1,5 +1,5 @@
-"""PREVIEW ONLY (not part of build.sh, not deployed): writes tools_preview/tools.html (hub), textile-calculator.html and pattern-maker.html
-for review. To publish later: point OUT at ".." and add this script to build.sh after legal.py.
+"""Writes the tools hub (tools.html), textile-calculator.html and pattern-maker.html to the site root (published; run from build.sh after legal.py).
+For a local review copy instead: TOOLS_OUT=tools_preview/ PM_PREVIEW=1 python3 tools.py
 Everything runs in the browser; nothing is sent anywhere. Shared header/footer come from legal.py."""
 import html, json, shutil, os
 import reports_data as R
@@ -8,7 +8,7 @@ ns = {}
 exec(src[:src.index('P = {}')], ns)
 HEAD, FOOT = ns['HEAD'], ns['FOOT']
 E = html.escape
-OUT = 'tools_preview/'
+OUT = os.environ.get('TOOLS_OUT', '../')
 os.makedirs(OUT, exist_ok=True)
 JS = lambda n: open(os.path.join('tools_js', n)).read()
 
@@ -114,10 +114,10 @@ def big(lab, id_, sub=''):
 TOOLS = [('textile-calculator.html', 'Textile calculator', 'Fabric, GSM, yarn & costing',
           '27 calculators: yarn counts in 15 systems, ply, twist and strength, reed, warp and weft, GSM and cover factor, knitting, consumption, markers, thread, SMV, dyeing, regain, costing and units.', 'hub-fabrics-art-forecast'),
          ('pattern-maker.html', 'Pattern maker', 'Members · 12 garments, 4 categories',
-          'Draft kurtas, shirts, blouses, dresses, skirts, lehengas, trousers and more from measurements or from a Forecut detail. Per-piece seam allowance, editable names, SVG, DXF, PNG and PDF downloads.', 'couture-bespoke-tailoring-2026')]
+          'Draft kurtas, shirts, blouses, dresses, skirts, lehengas, trousers and more from measurements or from a Forecut detail. Automatic fit checks, a how-to-measure guide, per-piece seam allowance and true-scale PDF, DXF, SVG and PNG downloads.', 'couture-bespoke-tailoring-2026')]
 hub = ('<div class="eb">Free tools</div><div class="tl-h"><div><h1>Design and production tools</h1>'
-       '<p class="lead">Quick, practical calculators and planners for designers, students, D2C brands and production teams. They are free, need no sign-in, and run entirely in your browser: nothing you type is sent to us.</p></div>'
-       '<div class="chiprow"><span>Free</span><span>No sign-in</span><span>Works on phone</span><span>Metric and imperial</span><span>Download SVG, PNG or print</span></div></div>'
+       '<p class="lead">Quick, practical calculators and planners for designers, students, D2C brands and production teams. The textile calculator is free for everyone; the pattern maker is free for signed-in Forecut members. Both run entirely in your browser: nothing you type is sent to us.</p></div>'
+       '<div class="chiprow"><span>Free</span><span>Works on phone</span><span>Metric and imperial</span><span>PDF, DXF, SVG and PNG patterns</span><span>Nothing is uploaded</span></div></div>'
        '<div class="hubg">' + ''.join(f'<a href="{fn}"><img src="img/{img}.webp" alt="" loading="lazy" width="800" height="600"><span class="b"><small>{E(k)}</small><b>{E(t)}</b><span>{E(d)}</span><em>Open the tool →</em></span></a>' for fn, t, k, d, img in TOOLS) + '</div>'
        '<div class="prose"><h2>What each tool is for</h2>'
        '<p><b>The textile calculator</b> answers the questions that come up every day between a design team and a fabric supplier: how many metres to order for a run of kurtas, what a 180 GSM fabric weighs per metre, what a price per kilo means per metre, how a 40s cotton compares with a 150 denier polyester, how much to allow for shrinkage, and what a garment must sell for once fabric, trims, making, margins and GST are added.</p>'
@@ -148,26 +148,6 @@ WIDTHS = [('91', '36" (91 cm)'), ('112', '44" (112 cm)'), ('114', '45" (114 cm)'
 CATS = [('Yarn', 'count systems, ply, length and weight, twist, strength, diameter and sett, blend price'), ('Weaving', 'reed and ends, warp and weft, GSM from construction, cover factor, loom-to-finished, loom production'),
         ('Knitting', 'knit GSM and tightness, circular machine needles, width and output'), ('Garment', 'woven and knit consumption, marker efficiency, sewing thread, shrinkage, SMV, costing to MRP'),
         ('Dyeing & processing', 'dye recipe and liquor, padding pick-up, moisture regain and invoice weight'), ('Units', 'every length, weight, area, GSM, density, twist, force, volume, price and temperature unit')]
-tc = ('<div class="eb">Free tool</div><div class="tl-h"><div><h1>Textile calculator</h1><p class="lead">27 calculators for yarn, weaving, knitting, garments, dyeing and units. Enter values in any unit, metric or imperial, and in any yarn count system.</p></div>'
-      '<div class="chiprow"><span>15 yarn count systems</span><span>Metric and imperial</span><span>Formula shown for each</span><span>Nothing is uploaded</span></div></div>'
-      '<div class="cl"><aside class="noprint"><input type="search" id="cl-q" placeholder="Search calculators" aria-label="Search calculators"><nav id="cl-list" aria-label="Calculators"></nav></aside>'
-      '<div><label class="clm noprint">Calculator<select id="cl-sel"></select></label><div id="cl-pane"></div></div></div>'
-      '<div class="prose"><h2>What is in the textile calculator</h2><ul>' + ''.join(f'<li><b>{E(c)}:</b> {E(d)}.</li>' for c, d in CATS) + '</ul>'
-      '<h2>Units and yarn counts</h2>'
-      '<p>Every length, width, weight, area, density and price box has its own unit menu, so you can mix units freely: a reed width in inches, a cloth length in metres and a yarn price per pound all work together. Yarn counts can be entered in any of 15 systems, from English cotton (Ne), metric (Nm), tex, dtex and denier to worsted, linen lea, American woollen run and cut, Yorkshire skein, spun silk, raw silk drams and jute. Internally every count is converted to tex, the weight in grams of 1000 metres, which keeps mixed-system calculations exact.</p>'
-      '<h2>Where the formulas come from</h2>'
-      '<p>The yarn, warp, weft, reed, mixing and cloth-structure calculations follow the classic rules set out in E. A. Posselt\'s <i>Textile Calculations</i> (1906), restated in modern units. For example, 12,600 yards of 30s cotton weigh 8 oz, and a 20s and a 60s twisted together make a 15s. Knitting, garment, sewing-thread, SMV, dyeing and regain calculations use the standard formulas taught in textile and apparel courses today. Each calculator shows its formula, so you can check the working.</p>'
-      '<h2>Good to know</h2><ul><li>Formulas and unit conversions are exact. Consumption, thread ratios, packing factors and typical ranges are rules of thumb: confirm with your marker, your mill or a lab test before ordering bulk.</li>'
-      '<li>Wider fabric is often cheaper per garment even when the price per metre is higher: compare the fabric cost per piece.</li>'
-      '<li>GST on garments depends on the price band and can change; check the current rate.</li></ul>'
-      '<p>Related: the <a href="fabrics.html">Fabrics hub</a> for weaves, knits and GSM ranges, and the <a href="india-textile-craft-guide.html">India textile and craft sourcing guide</a>.</p></div>')
-page('textile-calculator.html', 'Textile Calculator · Yarn Count, GSM, Warp & Weft, Knitting, Garment Costing, Units · Forecut', tc,
-     'window.FC_GARMENTS=' + json.dumps(GARMENTS) + ';' + JS('calcs.js'))
-
-# ------------------------------------------------------------------ pattern maker (sign-in only)
-import pm_details
-PMD = pm_details.build()
-PM_NAMES = {'bodice': 'fitted bodice', 'kurta': 'kurta', 'shirt': 'shirt', 'tshirt': 'T-shirt', 'hoodie': 'hoodie', 'blouse': 'saree blouse', 'top': 'top', 'dress': 'dress', 'jacket': 'Nehru jacket / waistcoat', 'skirt': 'skirt', 'lehenga': 'lehenga', 'trousers': 'trousers'}
 IC = {  # small line icons (24px grid, 1.6 stroke)
     'search': '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>',
     'minus': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"/></svg>', 'plus': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12M12 6v12"/></svg>',
@@ -175,6 +155,84 @@ IC = {  # small line icons (24px grid, 1.6 stroke)
     'grid': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM4 9.3h16M4 14.6h16M9.3 4v16M14.6 4v16"/></svg>',
     'down': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m-4.5-4.5L12 15l4.5-4.5M5 19.5h14"/></svg>',
     'chev': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg>'}
+TCCSS = r"""<style>
+.wrap{max-width:1500px!important}
+.tch{display:flex;justify-content:space-between;align-items:flex-end;gap:12px 24px;flex-wrap:wrap;margin:26px 0 14px}.tch>div{display:grid;gap:6px}.tch .eb{margin:0}.tch h1{font-size:30px!important;line-height:1.1;margin:0}
+.tch .tag{font:600 12px "DM Sans",sans-serif;color:var(--muted);border:1px solid var(--grid);border-radius:4px;padding:5px 9px;white-space:nowrap}
+.tcx{--bg:#1b1d20;--p1:#212428;--p2:#2a2e33;--p3:#33383e;--ln:#3a3f46;--tx:#e8e6e1;--mu:#9da3aa;--dim:#6f757c;--ac:#e08a5e;--ac2:#f0a37b;
+  font:13px/1.45 "DM Sans",sans-serif;color:var(--tx);background:var(--p1);border:1px solid #121315;border-radius:8px;overflow:hidden;position:relative;color-scheme:dark}
+.tcx p,.tcx li,.tcx label,.tcx span,.tcx b,.tcx h2,.tcx h3{font-family:"DM Sans",sans-serif}
+.tcx .ic{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.tcx button{font:inherit;color:inherit;cursor:pointer}
+.tcx input,.tcx select{font:13px "DM Sans",sans-serif;color:var(--tx);background:#16181b;border:1px solid var(--ln);border-radius:3px;padding:5px 8px;height:32px;width:100%;min-width:0;margin:0}
+.tcx input:hover,.tcx select:hover{border-color:#4b5159}.tcx input:focus,.tcx select:focus{outline:0;border-color:var(--ac);box-shadow:0 0 0 2px rgba(224,138,94,.22)}
+.tcx button:focus-visible,.tcx a:focus-visible{outline:2px solid var(--ac);outline-offset:1px}.tcx select option,.tcx select optgroup{background:#16181b;color:var(--tx)}
+.tbar{display:flex;align-items:center;gap:8px;padding:6px 8px;background:var(--bg);border-bottom:1px solid #121315;flex-wrap:wrap}
+.tbar .brand{display:flex;align-items:center;gap:8px;padding:0 10px 0 4px;border-right:1px solid var(--ln);font-weight:700;letter-spacing:.02em;white-space:nowrap}.tbar .brand i{width:8px;height:8px;border-radius:2px;background:var(--ac)}
+.tcr{display:flex;align-items:center;gap:6px;min-width:0;flex:1 1 220px;white-space:nowrap;overflow:hidden;color:var(--mu)}.tcr b{color:var(--tx);overflow:hidden;text-overflow:ellipsis}.tcr i{font-style:normal;color:var(--dim)}
+.tsr{position:relative;display:flex;align-items:center;flex:0 1 330px;min-width:200px}.tsr .ic{position:absolute;left:9px;color:var(--mu)}.tsr input{padding-left:30px;padding-right:34px;height:30px}
+.tsr kbd{position:absolute;right:7px;font:600 10.5px ui-monospace,Menlo,monospace;color:var(--dim);border:1px solid var(--ln);border-radius:3px;padding:0 5px;line-height:16px}
+.xb{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 11px;border-radius:3px;border:1px solid var(--ln);background:var(--p2);font-weight:600;white-space:nowrap}.xb:hover{background:var(--p3)}
+.tbody{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:640px}
+.tnav{display:block!important;background:var(--p1);border-right:1px solid #121315;overflow:auto;max-height:calc(100vh - 150px);position:sticky;top:0;scrollbar-width:thin;scrollbar-color:#3a3f46 transparent;padding:6px 0 14px}
+.tg h4{display:flex;justify-content:space-between;margin:12px 14px 4px;font:700 10.5px "DM Sans",sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--mu)}.tg h4 small{font:600 10.5px ui-monospace,Menlo,monospace;color:var(--dim);letter-spacing:0}
+.tg a{display:block;margin:0 8px;padding:6px 8px;border-radius:3px;color:var(--mu);text-decoration:none;font-size:13px;line-height:1.3}.tg a:hover{background:var(--p2);color:var(--tx)}
+.tg a[aria-current=true]{background:var(--p3);color:var(--tx);font-weight:700;box-shadow:inset 2px 0 0 var(--ac)}
+.tg.rec a{display:flex;justify-content:space-between;gap:8px}.tg.rec a small{color:var(--dim);font-size:11px;white-space:nowrap}
+.tnone{margin:14px;color:var(--dim);font-size:12.5px}
+.tmain{min-width:0;background:var(--stage,#26292e);padding:20px 22px 26px}
+.tmh{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:16px}.tmh small{font:700 10.5px "DM Sans",sans-serif;letter-spacing:.09em;text-transform:uppercase;color:var(--ac2)}
+.tmh h2{font:700 24px/1.2 "DM Sans",sans-serif!important;color:var(--tx);margin:4px 0 6px}.tmh p{margin:0;color:var(--mu);max-width:760px;font-size:13.5px}
+.tgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);gap:16px;align-items:start}
+.tp{background:var(--p1);border:1px solid var(--ln);border-radius:6px;overflow:hidden}
+.tp>h3{display:flex;justify-content:space-between;align-items:center;margin:0;padding:9px 14px;background:var(--bg);border-bottom:1px solid var(--ln);font:700 10.5px "DM Sans",sans-serif!important;letter-spacing:.09em;text-transform:uppercase;color:var(--mu)}
+.tp>h3 button{border:0;background:none;color:var(--mu);font:600 11.5px "DM Sans",sans-serif;letter-spacing:0;text-transform:none;display:inline-flex;gap:5px;align-items:center}.tp>h3 button:hover{color:var(--tx)}
+.tin{padding:10px 14px 14px;display:grid;gap:2px}
+.ir{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:10px;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.04)}.ir:last-child{border-bottom:0}
+.ir>span,.ir>span label{color:var(--mu);font-size:12.5px;font-weight:500;margin:0}.tcx label{color:inherit}.ir.on>span{color:var(--ac2)}
+.iu2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:4px}.iu2 input{text-align:right;font-variant-numeric:tabular-nums}.iu2 select{color:var(--mu)}
+.ir input[type=number]{text-align:right;font-variant-numeric:tabular-nums}
+.ans{padding:16px 16px 14px;border-bottom:1px solid var(--ln);background:linear-gradient(180deg,rgba(224,138,94,.08),transparent)}
+.ans span{display:block;color:var(--mu);font-size:12.5px;margin-bottom:4px}.ans b{display:block;font:700 30px/1.15 "DM Sans",sans-serif;color:var(--tx);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.ans em{display:block;font-style:normal;color:var(--ac2);font:600 12.5px ui-monospace,Menlo,monospace;margin-top:6px}
+.rt2{padding:4px 14px 10px}.rr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06);align-items:baseline}.rr:last-child{border-bottom:0}
+.rr span{color:var(--mu);font-size:12.5px}.rr b{font:600 13.5px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--tx);text-align:right;font-variant-numeric:tabular-nums}.rr b i{font-style:normal;color:var(--dim);font-weight:500}.rr b.tx{font:500 12.5px/1.45 "DM Sans",sans-serif;color:var(--tx);max-width:62%;justify-self:end}
+.fxb{margin-top:16px}.fxb .fx2{padding:12px 14px;font:12.5px/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;color:#cfd3d8;white-space:normal}
+.tnote{margin:12px 2px 0;font-size:12px;color:var(--dim)}
+.tsel{display:none}
+.toast2{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);background:#f4f1ea;color:#1b1d20;border-radius:4px;padding:8px 14px;font-size:12.5px;font-weight:600;box-shadow:0 10px 28px rgba(0,0,0,.4);margin:0;z-index:30}
+.tcdoc{margin-top:26px}.tcdoc>summary{cursor:pointer;font:700 15px "DM Sans",sans-serif;padding:12px 0;border-top:1px solid var(--grid);list-style:none;display:flex;justify-content:space-between}.tcdoc>summary::-webkit-details-marker{display:none}.tcdoc>summary::after{content:"Show";font:600 12px "DM Sans",sans-serif;color:var(--muted)}.tcdoc[open]>summary::after{content:"Hide"}
+@media (max-width:1100px){.tgrid{grid-template-columns:1fr}}
+@media (max-width:860px){.tbody{grid-template-columns:1fr}.tnav{display:none}.tsel{display:block;padding:10px 14px 0;background:var(--stage,#26292e)}.tsel label{display:grid;gap:4px;color:var(--mu);font-size:12px}.tbar .brand{display:none}.tsr{flex:1 1 100%;order:5}.tmain{padding:14px}.ans b{font-size:26px}}
+@media print{.tbar,.tnav,.tsel,.tcdoc,.tch .tag{display:none!important}.tcx{border:0;color:#000;background:#fff}.tmain{background:#fff}.tp{border-color:#ccc;background:#fff}}
+</style>"""
+TI = lambda k: IC[k].replace('<svg ', '<svg class="ic" ', 1)
+IC.update({'copy': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8h11v12H8zM5 16V4h11"/></svg>', 'reset': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v5h5"/></svg>',
+           'print': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z"/></svg>'})
+tc = (TCCSS + '<div class="tch"><div><div class="eb">Free tool</div><h1>Textile calculator</h1></div><span class="tag">27 calculators · 15 yarn count systems · metric and imperial</span></div>'
+      '<div class="tcx" id="tc-app"><div class="tbar"><span class="brand"><i></i>FORECUT TEXTILE CALC</span><div class="tcr" id="tc-crumb"></div>'
+      '<label class="tsr">' + TI('search') + '<input type="search" id="cl-q" placeholder="Search calculators, e.g. GSM, denier, costing" aria-label="Search calculators" autocomplete="off"><kbd>/</kbd></label>'
+      '<button type="button" class="xb" id="tc-copy">' + TI('copy') + 'Copy results</button><button type="button" class="xb" id="tc-reset" title="Back to the example values">' + TI('reset') + 'Reset</button><button type="button" class="xb" id="tc-print">' + TI('print') + 'Print</button></div>'
+      '<div class="tbody"><nav class="tnav noprint" id="cl-list" aria-label="Calculators"></nav>'
+      '<div class="tmain"><div class="tsel noprint"><label>Calculator<select id="cl-sel"></select></label></div><div id="cl-pane"></div></div></div>'
+      '<p class="toast2" id="tc-msg" role="status" hidden></p></div>'
+      '<details class="tcdoc"><summary>About the textile calculator: units, yarn counts and where the formulas come from</summary>'
+'<div class="prose"><h2>What is in the textile calculator</h2><ul>' + ''.join(f'<li><b>{E(c)}:</b> {E(d)}.</li>' for c, d in CATS) + '</ul>'
+      '<h2>Units and yarn counts</h2>'
+      '<p>Every length, width, weight, area, density and price box has its own unit menu, so you can mix units freely: a reed width in inches, a cloth length in metres and a yarn price per pound all work together. Yarn counts can be entered in any of 15 systems, from English cotton (Ne), metric (Nm), tex, dtex and denier to worsted, linen lea, American woollen run and cut, Yorkshire skein, spun silk, raw silk drams and jute. Internally every count is converted to tex, the weight in grams of 1000 metres, which keeps mixed-system calculations exact.</p>'
+      '<h2>Where the formulas come from</h2>'
+      '<p>The yarn, warp, weft, reed, mixing and cloth-structure calculations follow the classic rules set out in E. A. Posselt\'s <i>Textile Calculations</i> (1906), restated in modern units. For example, 12,600 yards of 30s cotton weigh 8 oz, and a 20s and a 60s twisted together make a 15s. Knitting, garment, sewing-thread, SMV, dyeing and regain calculations use the standard formulas taught in textile and apparel courses today. Each calculator shows its formula, so you can check the working.</p>'
+      '<h2>Good to know</h2><ul><li>Formulas and unit conversions are exact. Consumption, thread ratios, packing factors and typical ranges are rules of thumb: confirm with your marker, your mill or a lab test before ordering bulk.</li>'
+      '<li>Wider fabric is often cheaper per garment even when the price per metre is higher: compare the fabric cost per piece.</li>'
+      '<li>GST on garments depends on the price band and can change; check the current rate.</li></ul>'
+      '<p>Related: the <a href="fabrics.html">Fabrics hub</a> for weaves, knits and GSM ranges, and the <a href="india-textile-craft-guide.html">India textile and craft sourcing guide</a>.</p></div></details>')
+page('textile-calculator.html', 'Textile Calculator · Yarn Count, GSM, Warp & Weft, Knitting, Garment Costing, Units · Forecut', tc,
+     'window.FC_GARMENTS=' + json.dumps(GARMENTS) + ';' + JS('calcs.js'))
+
+# ------------------------------------------------------------------ pattern maker (sign-in only)
+import pm_details
+PMD = pm_details.build()
+PM_NAMES = {'bodice': 'fitted bodice', 'kurta': 'kurta', 'shirt': 'shirt', 'tshirt': 'T-shirt', 'hoodie': 'hoodie', 'blouse': 'saree blouse', 'top': 'top', 'dress': 'dress', 'jacket': 'Nehru jacket / waistcoat', 'skirt': 'skirt', 'lehenga': 'lehenga', 'trousers': 'trousers'}
 IC.update({'tiles': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 3h7v9H4zM13 3h7v9h-7zM4 14h7v7H4zM13 14h7v7h-7z"/></svg>',
            'check': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>', 'warn': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4 2.5 20h19zM12 10v4.5M12 17.5v.01"/></svg>',
            'ruler': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 16 16 3l5 5L8 21zM7 12l2 2M10 9l2 2M13 6l2 2"/></svg>'})
@@ -280,7 +338,7 @@ PMCSS = r"""<style>
 .rp{padding:10px 12px}
 .pcs{display:grid;gap:6px}
 .pcard{border:1px solid var(--ln);border-radius:4px;background:var(--p2);padding:7px 8px}.pcard.off{opacity:.5}
-.pcard .t{display:flex;gap:8px;align-items:center;cursor:pointer}.pcard .t code{font:700 10.5px ui-monospace,Menlo,monospace;color:var(--ac2);min-width:22px}.pcard .t b{font-weight:700;flex:1;min-width:0}.pcard .t small{font-size:11px;color:var(--mu);white-space:nowrap}
+.pcard .t{display:flex;gap:8px;align-items:center;cursor:pointer}.pcard .t code{font:700 10.5px ui-monospace,Menlo,monospace;color:var(--ac2);min-width:22px}.pcard .t b{font-weight:700;flex:1;min-width:0;color:var(--tx)}.pcard .t small{font-size:11px;color:var(--mu);white-space:nowrap}
 .pcard .nm{display:grid;gap:2px;margin:6px 0 0 22px;font-size:10.5px;color:var(--dim);font-weight:600}
 .pcard .a{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:5px 0 0 22px}.pcard .a label{display:grid;gap:2px;font-size:10.5px;color:var(--dim);font-weight:600}.pcard .a input{height:26px}
 .ck{display:grid;gap:6px}
@@ -292,14 +350,15 @@ PMCSS = r"""<style>
 .about p,.about li{font-size:12px;line-height:1.5;color:var(--mu);margin:0 0 6px}.about ul{padding-left:16px;margin:0}.about b{color:var(--tx)}
 .spec{display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:12px;margin:0}.spec dt{color:var(--dim)}.spec dd{margin:0;color:var(--tx)}
 .toast{position:absolute;left:50%;bottom:36px;transform:translateX(-50%);background:#f4f1ea;color:#1b1d20;border-radius:4px;padding:8px 14px;font-size:12.5px;font-weight:600;box-shadow:0 10px 28px rgba(0,0,0,.4);margin:0;max-width:90%;z-index:30}
-.pmdoc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:34px 0 10px;border-top:1px solid var(--grid);padding-top:22px}
+.pmdocw{margin:26px 0 8px;border-top:1px solid var(--grid)}.pmdocw>summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;padding:12px 0;font:700 15px "DM Sans",sans-serif}.pmdocw>summary::-webkit-details-marker{display:none}.pmdocw>summary::after{content:"Show";font:600 12px "DM Sans",sans-serif;color:var(--muted)}.pmdocw[open]>summary::after{content:"Hide"}
+.pmdoc{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:4px 0 10px}
 .pmdoc h2{font:700 15px "DM Sans",sans-serif;margin:0 0 8px}.pmdoc p,.pmdoc li{font:14px/1.55 "DM Sans",sans-serif;color:var(--muted);margin:0 0 8px}.pmdoc ul{padding-left:18px;margin:0}.pmdoc b{color:var(--ink)}
 @media (max-width:1240px){.pbody{grid-template-columns:270px minmax(0,1fr) 280px}.leg{display:none}}
 @media (max-width:980px){.pbody{grid-template-columns:1fr;height:auto}.pc{order:-1;height:70vh}.pl{border-right:0;border-top:1px solid #121315}.pr{border-left:0;border-top:1px solid #121315}
  .srch{flex:1 1 100%;order:5}.brand{display:none}.crumb{flex:1 1 auto}.pmdoc{grid-template-columns:1fr}.view{padding:14px}.sbar .xy{display:none}}
 </style>"""
 A = lambda k: IC[k].replace('<svg ', '<svg class="ic" ', 1)
-pm = (PMCSS + '<div class="pmh"><div><div class="eb">Members tool</div><h1>Pattern maker</h1><p>Draft block patterns for 12 garments across womenswear, menswear, kidswear and unisex, or load one of ' + str(len(PMD)) + ' Forecut details. Every pattern is checked automatically and exports at true scale to PDF, DXF, SVG and PNG.</p></div><span class="tag">For sampling · fit-test before production</span></div>'
+pm = (PMCSS + '<div class="pmh"><div><div class="eb">Members tool</div><h1>Pattern maker</h1></div><span class="tag">For sampling · fit-test before production</span></div>'
       '<div class="gate" id="pm-gate"><h3>Sign in to use the pattern maker</h3><p>The pattern maker is for registered Forecut members. Sign in or create a free account to draft and download patterns.</p>'
       '<div class="btns"><a class="btn p" href="account.html?next=pattern-maker.html#signin">Sign in</a><a class="btn" href="account.html?next=pattern-maker.html#signup">Create a free account</a></div></div>'
       '<div id="pm-app" class="pmx" hidden>'
@@ -325,7 +384,7 @@ pm = (PMCSS + '<div class="pmh"><div><div class="eb">Members tool</div><h1>Patte
       '<button type="button" class="ib" id="pm-tilesb" aria-pressed="false" title="Show how the pattern splits into A4 pages">' + A('tiles') + 'A4 pages</button>'
       '<span class="sp"></span><span class="leg"><span><i></i>Cut</span><span><i class="s"></i>Sew</span><span><i class="f"></i>Fold</span><span><i class="g"></i>Grain</span></span></div>'
       '<div class="stg"><div class="rc" id="pm-ru"></div><canvas class="rul" id="pm-rx" aria-hidden="true"></canvas><canvas class="rul" id="pm-ry" aria-hidden="true"></canvas><div class="view" id="pm-view"><div id="pm-svg"></div></div></div><div class="sbar" id="pm-status"></div></section>'
-      '<aside class="pr" aria-label="Garment, pieces and checks"><div class="gv"><h4>Garment preview <span>front · back, from your pattern</span></h4><div id="pm-flat"></div></div>'
+      '<aside class="pr" aria-label="Garment, pieces and checks">'
       '<div class="rt" role="tablist"><button type="button" role="tab" data-t="pieces" aria-selected="true">Pieces</button><button type="button" role="tab" data-t="checks" aria-selected="false">Checks</button><button type="button" role="tab" data-t="about" aria-selected="false">About</button></div>'
       '<div class="rp" data-tp="pieces"><div class="pcs" id="pm-pieces"></div><div class="acts"><button type="button" class="xbtn" id="pm-resetnames">Reset labels</button></div></div>'
       '<div class="rp" data-tp="checks" hidden><h5>Automatic pattern checks</h5><div class="ck" id="pm-checks"></div><h5>Measurements of this pattern</h5><div class="kv" id="pm-info" style="margin-top:0"></div></div>'
@@ -336,11 +395,11 @@ pm = (PMCSS + '<div class="pmh"><div><div class="eb">Members tool</div><h1>Patte
       '<h5>Accuracy</h5><p>Pieces are drawn as vectors at true scale. After printing, the 5 cm square on the sheet must measure exactly 5 cm. If it does not, set the printer to 100% / actual size.</p>'
       '<h5>Before production</h5><ul><li>Sew a toile in calico and correct the fit.</li><li>Sizes are drafted from the chart, not graded from an approved base size.</li><li>Add fabric shrinkage before cutting bulk.</li></ul></div></aside></div>'
       '<p class="toast" id="pm-msg" role="status" hidden></p></div>'
-      '<div class="pmdoc"><div><h2>How it works</h2><p><b>Load a Forecut detail</b>, such as a band-collar kurta, Cuban camp collar shirt, barrel-leg jeans, peplum top or fit-and-flare Anarkali, and the matching garment and options load automatically. Or pick a category and one of 12 garments: fitted bodice, kurta, shirt, T-shirt, hoodie, saree blouse, top, dress or frock, Nehru jacket or waistcoat, skirt, lehenga and trousers.</p>'
+      '<details class="pmdocw"><summary>How the pattern maker works</summary><div class="pmdoc"><div><h2>How it works</h2><p><b>Load a Forecut detail</b>, such as a band-collar kurta, Cuban camp collar shirt, barrel-leg jeans, peplum top or fit-and-flare Anarkali, and the matching garment and options load automatically. Or pick a category and one of 12 garments: fitted bodice, kurta, shirt, T-shirt, hoodie, saree blouse, top, dress or frock, Nehru jacket or waistcoat, skirt, lehenga and trousers.</p>'
       '<p><b>Measurements</b> start from a size chart and can be changed to your own in centimetres, millimetres or inches; the body diagram shows where to take each one.</p></div>'
-      '<div><h2>Checked as you draft</h2><p>Every piece is drafted from the same measurements, so pieces that are sewn together fit together: sleeve heads to the armhole, collars and bands to the neckline, cuffs and waistbands to the wrist and waist. The checks panel tests matching seams, sleeve cap ease and crotch width every time you change something. The garment preview is assembled from your actual pattern pieces.</p></div>'
+      '<div><h2>Checked as you draft</h2><p>Every piece is drafted from the same measurements, so pieces that are sewn together fit together: sleeve heads to the armhole, collars and bands to the neckline, cuffs and waistbands to the wrist and waist. The checks panel tests matching seams, sleeve cap ease and crotch width every time you change something.</p></div>'
       '<div><h2>Downloads</h2><ul><li><b>PDF, A4 tiles:</b> print at 100%, check the 5 cm square, tape the tiles together. Preview the pages before you print. Blank tiles are skipped.</li><li><b>PDF, full size:</b> one page at true size for a plotter.</li><li><b>DXF:</b> for Gerber, Lectra, Optitex, CLO, Illustrator or AutoCAD, on separate layers.</li><li><b>SVG and PNG:</b> for editing, sharing and tech packs.</li></ul>'
-      '<p>These are block patterns for samples and first toiles. Make a toile, check the fit and correct it before cutting good fabric or going to production.</p></div></div>')
+      '<p>These are block patterns for samples and first toiles. Make a toile, check the fit and correct it before cutting good fabric or going to production.</p></div></div></details>')
 open(OUT + 'pm-link.js', 'w').write('window.FC_PM_LINKS=' + json.dumps({d[0]: PM_NAMES[d[3]] for d in PMD}) + ';' + JS('pm_link.js'))
 page('pattern-maker.html', 'Pattern Maker · Draft Kurta, Shirt, Blouse, Dress, Trousers & More · Forecut', pm,
      'window.PM_DETAILS=' + json.dumps(PMD) + ';' + JS('pm_engine.js') + JS('pm_export.js') + JS('pm_views.js') + JS('pm_ui.js'), auth=True)

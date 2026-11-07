@@ -194,27 +194,47 @@
   ];
   window.FC_CALCS = C;
 
-  /* ---------- rendering ---------- */
-  var list = $('#cl-list'), pane = $('#cl-pane'), q = $('#cl-q'), sel = $('#cl-sel'), cats = [];
+  /* ---------- rendering: workspace with grouped navigation, recent list, aligned inputs, highlighted answer ---------- */
+  var list = $('#cl-list'), pane = $('#cl-pane'), q = $('#cl-q'), sel = $('#cl-sel'), cats = [], cur = null;
   C.forEach(function (c) { if (cats.indexOf(c.cat) < 0) cats.push(c.cat); });
-  list.innerHTML = cats.map(function (k) { return '<div class="clg"><b>' + k + '</b>' + C.filter(function (c) { return c.cat === k; }).map(function (c) { return '<a href="#' + c.id + '" data-id="' + c.id + '" data-t="' + (c.t + ' ' + c.d + ' ' + c.cat).toLowerCase().replace(/"/g, '') + '">' + c.t + '</a>'; }).join('') + '</div>'; }).join('');
+  function recent() { var r = FC.load('tc-recent', []); return Array.isArray(r) ? r.filter(function (id) { return C.some(function (c) { return c.id === id; }); }) : []; }
+  function nav() {
+    var rc = recent().slice(0, 4), h = '';
+    if (rc.length > 1) h += '<div class="tg rec"><h4>Recent</h4>' + rc.map(function (id) { var c = C.filter(function (x) { return x.id === id; })[0]; return '<a href="#' + c.id + '" data-id="' + c.id + '" data-t="">' + c.t + '<small>' + c.cat + '</small></a>'; }).join('') + '</div>';
+    h += cats.map(function (k) { var cs = C.filter(function (c) { return c.cat === k; }); return '<div class="tg" data-g="' + k + '"><h4>' + k + '<small>' + cs.length + '</small></h4>' + cs.map(function (c) { return '<a href="#' + c.id + '" data-id="' + c.id + '" data-t="' + (c.t + ' ' + c.d + ' ' + c.cat).toLowerCase().replace(/"/g, '') + '">' + c.t + '</a>'; }).join('') + '</div>'; }).join('');
+    list.innerHTML = h + '<p class="tnone" id="tc-none" hidden>No calculator matches. Try “GSM”, “count” or “cost”.</p>';
+    mark(); filter();
+  }
+  function mark() { $$('a', list).forEach(function (a) { a.setAttribute('aria-current', cur && a.dataset.id === cur.id ? 'true' : 'false'); }); }
+  function filter() {
+    var w = q.value.trim().toLowerCase(), any = false;
+    $$('.tg', list).forEach(function (g) { if (g.classList.contains('rec')) { g.hidden = !!w; return; } var vis = 0; $$('a', g).forEach(function (a) { a.hidden = !!w && a.dataset.t.indexOf(w) < 0; if (!a.hidden) vis++; }); g.hidden = !vis; if (vis) any = true; });
+    $('#tc-none').hidden = any;
+  }
   sel.innerHTML = cats.map(function (k) { return '<optgroup label="' + k + '">' + C.filter(function (c) { return c.cat === k; }).map(function (c) { return '<option value="' + c.id + '">' + c.t + '</option>'; }).join('') + '</optgroup>'; }).join('');
-  q.addEventListener('input', function () { var w = q.value.trim().toLowerCase(); $$('a', list).forEach(function (a) { a.hidden = w && a.dataset.t.indexOf(w) < 0; }); $$('.clg', list).forEach(function (g) { g.hidden = !$$('a:not([hidden])', g).length; }); });
+  q.addEventListener('input', filter);
+  q.addEventListener('keydown', function (e) { if (e.key === 'Enter') { var a = $('a:not([hidden])', $('.tg:not([hidden]):not(.rec)', list) || list); if (a) { location.hash = a.dataset.id; q.blur(); } } if (e.key === 'Escape') { q.value = ''; filter(); q.blur(); } });
+  document.addEventListener('keydown', function (e) { if (e.key === '/' && !/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) { e.preventDefault(); q.focus(); q.select(); } });
   sel.addEventListener('change', function () { location.hash = sel.value; });
-  function unitSel(id, gr, du) { return '<select id="' + id + '" class="un">' + U[gr].u.map(function (u) { return '<option' + (u[0] === du ? ' selected' : '') + '>' + u[0] + '</option>'; }).join('') + '</select>'; }
+  function unitSel(id, gr, du) { return '<select id="' + id + '" class="un" aria-label="Unit">' + U[gr].u.map(function (u) { return '<option' + (u[0] === du ? ' selected' : '') + '>' + u[0] + '</option>'; }).join('') + '</select>'; }
+  var tt = null; function toast(t) { var m = $('#tc-msg'); m.textContent = t; m.hidden = false; clearTimeout(tt); tt = setTimeout(function () { m.hidden = true; }, 2600); }
+  var lastOut = [];
+  function split(v) { var p = String(v).split(' · '); return { main: p[0], alt: p.slice(1).join(' · ') }; }
   function show(id) {
-    var c = C.filter(function (x) { return x.id === id; })[0] || C[0]; sel.value = c.id;
-    $$('a', list).forEach(function (a) { a.setAttribute('aria-current', a.dataset.id === c.id ? 'true' : 'false'); });
-    var h = '<div class="clh"><small>' + c.cat + '</small><h2>' + c.t + '</h2><p>' + c.d + '</p></div><div class="tool"><div class="card"><h3>Inputs</h3><div class="fg">';
+    var c = C.filter(function (x) { return x.id === id; })[0] || C[0]; cur = c; sel.value = c.id;
+    var rc = recent().filter(function (x) { return x !== c.id; }); rc.unshift(c.id); FC.save('tc-recent', rc.slice(0, 6));
+    $('#tc-crumb').innerHTML = '<span>' + c.cat + '</span><i>/</i><b>' + c.t + '</b>';
+    var h = '<div class="tmh"><div><small>' + c.cat + '</small><h2>' + c.t + '</h2><p>' + c.d + '</p></div></div><div class="tgrid"><section class="tp"><h3>Inputs<button type="button" id="tc-reset2">' + FCI('reset') + 'Example values</button></h3><div class="tin">';
     c.i.forEach(function (x) {
       var id = 'ci-' + x.k;
-      if (x.o) h += '<label class="' + (x.o.length > 6 || x.k === 'g' ? 'full' : '') + '">' + x.l + '<select id="' + id + '">' + x.o.map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === x.d ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></label>';
-      else if (x.t === 'count') h += '<label class="full">' + x.l + '<span class="iu"><input type="number" id="' + id + '" value="' + x.d + '" step="any" min="0" inputmode="decimal"><select id="' + id + '-u" class="un">' + CS.map(function (s) { return '<option value="' + s[0] + '"' + (s[0] === x.s ? ' selected' : '') + '>' + s[1] + '</option>'; }).join('') + '</select></span></label>';
-      else if (x.u) { var dv = x.d; h += '<label class="full">' + x.l + '<span class="iu"><input type="number" id="' + id + '" value="' + dv + '" step="any" min="0" inputmode="decimal">' + unitSel(id + '-u', x.u, x.du) + '</span></label>'; }
-      else h += '<label>' + x.l + '<input type="number" id="' + id + '" value="' + x.d + '" step="' + (x.step || 'any') + '" min="0" inputmode="decimal"></label>';
+      if (x.o) h += '<label class="ir"><span>' + x.l + '</span><select id="' + id + '">' + x.o.map(function (o) { return '<option value="' + o[0] + '"' + (o[0] === x.d ? ' selected' : '') + '>' + o[1] + '</option>'; }).join('') + '</select></label>';
+      else if (x.t === 'count') h += '<div class="ir"><span><label for="' + id + '">' + x.l + '</label></span><span class="iu2"><input type="number" id="' + id + '" value="' + x.d + '" step="any" min="0" inputmode="decimal"><select id="' + id + '-u" class="un" aria-label="Count system">' + CS.map(function (s) { return '<option value="' + s[0] + '"' + (s[0] === x.s ? ' selected' : '') + '>' + s[1] + '</option>'; }).join('') + '</select></span></div>';
+      else if (x.u) h += '<div class="ir"><span><label for="' + id + '">' + x.l + '</label></span><span class="iu2"><input type="number" id="' + id + '" value="' + x.d + '" step="any" min="0" inputmode="decimal">' + unitSel(id + '-u', x.u, x.du) + '</span></div>';
+      else h += '<label class="ir"><span>' + x.l + '</span><input type="number" id="' + id + '" value="' + x.d + '" step="' + (x.step || 'any') + '" min="0" inputmode="decimal"></label>';
     });
-    h += '</div></div><div class="card res"><h3>Results</h3><div id="cl-out"></div><details class="fx"><summary>Formula</summary><p>' + c.fx + '</p></details></div></div>';
-    pane.innerHTML = h;
+    h += '</div></section><section class="tp" aria-live="polite"><h3>Results<button type="button" id="tc-copy2">' + FCI('copy') + 'Copy</button></h3><div id="cl-out"></div></section></div>'
+      + '<section class="tp fxb"><h3>Formula</h3><div class="fx2">' + c.fx + '</div></section><p class="tnote">Results update as you type. Unit conversions are exact; consumption, thread and packing figures are rules of thumb, so confirm with your marker, mill or lab before ordering bulk.</p>';
+    pane.innerHTML = h; mark();
     if (c.id === 'units') {
       var gs = $('#ci-g'), fs = $('#ci-fu');
       var fill = function () { var g = gs.value; fs.innerHTML = g === 'temp' ? '<option value="C">°C</option><option value="F">°F</option><option value="K">K</option>' : U[g].u.map(function (u) { return '<option>' + u[0] + '</option>'; }).join(''); };
@@ -231,12 +251,25 @@
         else v[x.k] = n;
       });
       var out; try { out = c.o(v, raw); } catch (err) { out = [['Check the inputs', '–']]; }
-      $('#cl-out').innerHTML = out.map(function (r) { return '<div class="big"><span>' + r[0] + '</span><b>' + r[1] + '</b></div>'; }).join('');
+      lastOut = out; var a = split(out[0][1]);
+      $('#cl-out').innerHTML = '<div class="ans"><span>' + out[0][0] + '</span><b>' + a.main + '</b>' + (a.alt ? '<em>' + a.alt + '</em>' : '') + '</div><div class="rt2">'
+        + out.slice(1).map(function (r) { var p = split(r[1]); return '<div class="rr"><span>' + r[0] + '</span><b' + (/[a-z]{4,}\s+[a-z]{3,}/i.test(p.main) ? ' class="tx"' : '') + '>' + p.main + (p.alt ? ' <i>· ' + p.alt + '</i>' : '') + '</b></div>'; }).join('') + '</div>';
     }
-    $$('input,select', pane).forEach(function (e) { e.addEventListener('input', run); e.addEventListener('change', run); });
+    $$('input,select', pane).forEach(function (e) { e.addEventListener('input', run); e.addEventListener('change', run); var r = e.closest('.ir'); if (r) { e.addEventListener('focus', function () { r.classList.add('on'); }); e.addEventListener('blur', function () { r.classList.remove('on'); }); } });
+    $('#tc-reset2').onclick = function () { show(c.id); toast('Example values restored.'); };
+    $('#tc-copy2').onclick = copy;
     run();
     try { document.title = c.t + ' · Textile Calculator · Forecut'; } catch (e) { }
   }
-  window.addEventListener('hashchange', function () { show(location.hash.slice(1)); });
-  show(location.hash.slice(1) || 'count');
+  function FCI(k) { var P = { reset: '<path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v5h5"/>', copy: '<path d="M8 8h11v12H8zM5 16V4h11"/>' }; return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:14px;height:14px">' + P[k] + '</svg>'; }
+  function copy() {
+    if (!cur) return; var ins = cur.i.map(function (x) { var e = $('#ci-' + x.k), u = $('#ci-' + x.k + '-u'); return x.l + ': ' + (x.o ? e.options[e.selectedIndex].text : e.value + (u ? ' ' + u.options[u.selectedIndex].text : '')); });
+    var txt = cur.t + ' (Forecut textile calculator)\n\nInputs\n' + ins.join('\n') + '\n\nResults\n' + lastOut.map(function (r) { return r[0] + ': ' + r[1]; }).join('\n') + '\n\nforecut.in/textile-calculator.html#' + cur.id;
+    var done = function () { toast('Results copied.'); };
+    try { navigator.clipboard.writeText(txt).then(done, function () { fallback(txt); done(); }); } catch (e) { fallback(txt); done(); }
+  }
+  function fallback(t) { var ta = document.createElement('textarea'); ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0'; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (e) { } ta.remove(); }
+  $('#tc-copy').onclick = copy; $('#tc-reset').onclick = function () { if (cur) { show(cur.id); toast('Example values restored.'); } }; $('#tc-print').onclick = function () { window.print(); };
+  window.addEventListener('hashchange', function () { show(location.hash.slice(1)); nav(); });
+  show(location.hash.slice(1) || 'count'); nav();
 })();
