@@ -200,7 +200,7 @@ pages.update(COLLECTION_PAGES)
 pages['tools.html'] = ('Fashion Design & Collection Planning Tools | Forecut', 'Free browser tools for garment costing, collection planning, colour palettes, break-even, production calendars, textiles and pattern drafting.', 'tools.html')
 
 for fn, (title, desc, path) in pages.items():
-    if fn in COLLECTION_PAGES: continue
+    if fn in COLLECTION_PAGES or fn == 'tools.html': continue
     if os.environ.get('ONLY') and fn not in os.environ['ONLY'].split(','): continue
     p = os.path.join(R, fn)
     if not os.path.exists(p): continue
