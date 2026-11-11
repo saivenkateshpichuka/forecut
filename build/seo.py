@@ -187,7 +187,20 @@ def externalise(h):
         if not os.path.exists(fp): open(fp, 'w').write(sc)
         return '<script src="/assets/shared-' + k + '.js"></script>'
     return re.sub(r'<script>(.*?)</script>', rep, h, flags=re.S)
+# The collection pages own their metadata and load no third-party scripts.
+COLLECTION_PAGES = {}
+for slug, title, desc in [
+ ('pricefold', 'Pricefold · Price and Margin Planner', 'Calculate product costs, channel fees, returns and contribution margin.'),
+ ('rangeboard', 'Rangeboard · Collection Planner', 'Plan seasonal styles, colourways, sizes, quantities, budgets and drops.'),
+ ('swatchsmith', 'Swatchsmith · Colour Palette Builder', 'Create collection palettes from unlocked Forecut forecasts and your own colours.'),
+ ('evenpoint', 'Evenpoint · MOQ and Break-even Calculator', 'Compare production quantities, investment and sell-through scenarios.'),
+ ('cutclock', 'Cutclock · Production Calendar', 'Plan sampling, sourcing and production backward from your launch date.')]:
+    COLLECTION_PAGES[slug + '.html'] = (title + ' | Forecut', desc, slug + '.html')
+pages.update(COLLECTION_PAGES)
+pages['tools.html'] = ('Fashion Design & Collection Planning Tools | Forecut', 'Free browser tools for garment costing, collection planning, colour palettes, break-even, production calendars, textiles and pattern drafting.', 'tools.html')
+
 for fn, (title, desc, path) in pages.items():
+    if fn in COLLECTION_PAGES: continue
     if os.environ.get('ONLY') and fn not in os.environ['ONLY'].split(','): continue
     p = os.path.join(R, fn)
     if not os.path.exists(p): continue
