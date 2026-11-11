@@ -16,6 +16,7 @@ python3 india_prompts.py
 # SEO tags, sitemap, robots (run last)
 python3 season_prompts.py
 python3 legal.py
+python3 collection_tools.py
 python3 tools.py
 python3 journal.py
 python3 celebrity.py
