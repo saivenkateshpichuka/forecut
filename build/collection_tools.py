@@ -2,7 +2,7 @@
 from pathlib import Path
 import json, html
 ROOT=Path(__file__).resolve().parent.parent
-TOOLS=[('pricefold','Pricefold','Price & margin','Calculate product costs, channel fees, returns and the price needed for your target margin.'),('rangeboard','Rangeboard','Collection planner','Plan your seasonal styles, colourways, sizes, quantities, prices and delivery drops.'),('swatchsmith','Swatchsmith','Colour palettes','Build a collection palette from Forecut forecasts or your own colours.'),('evenpoint','Evenpoint','MOQ & break-even','Compare order quantities, investment, sell-through and the risk of unsold stock.'),('cutclock','Cutclock','Production calendar','Work backward from launch to plan sampling, sourcing, production and delivery.')]
+TOOLS=[('pricefold','Price & Profit Calculator','Price & margin','Calculate product costs, channel fees, returns and the price needed for your target margin.'),('rangeboard','Collection Planner','Collection planner','Plan your seasonal styles, colourways, sizes, quantities, prices and delivery drops.'),('swatchsmith','Colour Palette Builder','Colour palettes','Build a collection palette from Forecut forecasts or your own colours.'),('evenpoint','Break-even Calculator','MOQ & break-even','Compare order quantities, investment, sell-through and the risk of unsold stock.'),('cutclock','Production Calendar','Production calendar','Work backward from launch to plan sampling, sourcing, production and delivery.')]
 nav=''.join(f'<a class="tab" href="{key}.html" data-tab="{key}"><img src="tools/icons/{key}.svg" alt=""><span>{name}<small>{label}</small></span></a>' for key,name,label,_ in TOOLS)
 def build():
  for key,name,label,desc in TOOLS:
