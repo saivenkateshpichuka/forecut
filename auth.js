@@ -59,8 +59,10 @@ css.textContent = `.fca{position:relative;display:inline-flex;align-items:center
 document.head.appendChild(css);
 
 function host() {
+  const slot = document.getElementById('fc-account-slot');
+  if (slot) { slot.classList.add('fca'); return slot; }
   const nl = document.getElementById('navlinks');
-  if (nl) { const w = document.createElement('span'); w.className = 'fca'; w.style.marginLeft = '12px'; const mb = nl.parentNode.querySelector('.menu'); nl.parentNode.insertBefore(w, mb || nl.nextSibling); return w; }
+  if (nl) { nl.querySelectorAll('a[href*="account.html"]').forEach(a => { a.style.display = 'none'; }); const w = document.createElement('span'); w.className = 'fca'; w.style.marginLeft = '12px'; const mb = nl.parentNode.querySelector('.menu'); nl.parentNode.insertBefore(w, mb || nl.nextSibling); return w; }
   const bar = document.querySelector('.bar'); if (bar) { const w = document.createElement('span'); w.className = 'fca fcbar'; bar.appendChild(w); return w; }
   const l = document.querySelector('nav .links'); if (l) { const w = document.createElement('span'); w.className = 'fca'; l.appendChild(w); return w; }
   return null;
@@ -79,18 +81,19 @@ function unlock() {
   const sn = document.querySelector('#seasons .hint'); if (sn) sn.textContent = 'You have member access to every season. Thanks for joining Forecut early.';
 }
 onAuthStateChanged(auth, (u) => {
-  if (u) unlock(); else if (wasMember) { location.reload(); return; }
+  if (u) { unlock(); const cta = document.querySelector('#fc-header ~ .hero .cta a[href*="account"]'); if (cta) { cta.textContent = 'My saved details'; cta.href = '/account.html#saved'; } } else if (wasMember) { location.reload(); return; }
   wasMember = !!u;
   if (!w) return;
   if (!u) { w.innerHTML = isAccount ? '' : `<a class="fcin" href="/account.html?next=${encodeURIComponent(location.pathname + location.hash)}">Sign in</a>`; return; }
   const name = u.displayName || (u.email || '').split('@')[0];
   const ini = (name || '?').trim().charAt(0).toUpperCase();
-  w.innerHTML = `<button class="fcav" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Account menu">${u.photoURL ? `<img src="${u.photoURL}" alt="" referrerpolicy="no-referrer">` : ini}</button>
+  w.innerHTML = `<button class="fcav" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Account menu">${w.id === 'fc-account-slot' ? `<span class="fc-avatar">${u.photoURL ? `<img src="${u.photoURL}" alt="" referrerpolicy="no-referrer">` : ini}</span><span class="fc-account-label">My account</span>` : (u.photoURL ? `<img src="${u.photoURL}" alt="" referrerpolicy="no-referrer">` : ini)}</button>
   <div class="fcm" role="menu" hidden><b></b><small></small><span class="tg">Member · all seasons unlocked</span><a href="/account.html" role="menuitem">My account</a><button type="button" role="menuitem" class="fcout">Sign out</button></div>`;
   w.querySelector('.fcm b').textContent = name; w.querySelector('.fcm small').textContent = u.email || '';
   const b = w.querySelector('.fcav'), m = w.querySelector('.fcm');
   b.onclick = (e) => { e.stopPropagation(); m.hidden = !m.hidden; b.setAttribute('aria-expanded', String(!m.hidden)); };
   document.addEventListener('click', (e) => { if (!w.contains(e.target)) { m.hidden = true; b.setAttribute('aria-expanded', 'false'); } });
+  w.addEventListener('keydown', (e) => { if (e.key === 'Escape') { m.hidden = true; b.setAttribute('aria-expanded', 'false'); b.focus(); } });
   w.querySelector('.fcout').onclick = () => signOut(auth);
 });
 // ---- install app button ----
@@ -100,18 +103,21 @@ onAuthStateChanged(auth, (u) => {
   const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
   let deferred = null;
   const b = document.createElement('button'); b.type = 'button'; b.className = 'fcinst'; b.innerHTML = '<span class="fcl">Get the </span>app'; b.hidden = true;
-  w.parentNode.insertBefore(b, w);
+  const installSlot = document.getElementById('fc-install-slot');
+  if (installSlot) { installSlot.appendChild(b); b.innerHTML = 'Install Forecut app ↗'; } else w.parentNode.insertBefore(b, w);
+  const showInstall = () => { b.hidden = false; if (installSlot) installSlot.hidden = false; };
+  const hideInstall = () => { b.hidden = true; if (installSlot) installSlot.hidden = true; };
   const st = document.createElement('style'); st.textContent = '.fcinst{all:unset;cursor:pointer;font:600 13.5px "DM Sans",sans-serif;color:inherit;border-bottom:1.5px solid currentColor;margin:0 10px;white-space:nowrap}.fcip{position:fixed;left:12px;right:12px;bottom:14px;z-index:9999;background:#1f3d33;color:#f5f0e8;border-radius:14px;padding:14px 16px;font:15px/1.5 "DM Sans",sans-serif;box-shadow:0 12px 30px -10px rgba(0,0,0,.5)}.fcip b{display:block}.fcip button{all:unset;cursor:pointer;float:right;font-weight:700;margin-left:10px}@media (max-width:520px){.fcinst{margin:0 4px 0 auto;font-size:12.5px}.fcinst .fcl{display:none}.fca a.fcin{padding:6px 9px!important;font-size:12.5px!important}.fca{margin-right:6px!important;margin-left:8px!important}}';
   document.head.appendChild(st);
-  addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferred = e; b.hidden = false; });
-  if (ios) b.hidden = false;
+  addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferred = e; showInstall(); });
+  if (ios) showInstall();
   b.onclick = async () => {
-    if (deferred) { deferred.prompt(); await deferred.userChoice; deferred = null; b.hidden = true; return; }
+    if (deferred) { deferred.prompt(); await deferred.userChoice; deferred = null; hideInstall(); return; }
     const p = document.createElement('div'); p.className = 'fcip';
     p.innerHTML = '<button type="button" aria-label="Close">✕</button><b>Install Forecut</b>Tap the Share button <span aria-hidden="true">⬆︎</span> in Safari, then <b style="display:inline">Add to Home Screen</b>.';
     document.body.appendChild(p); p.querySelector('button').onclick = () => p.remove();
   };
-  addEventListener('appinstalled', () => { b.hidden = true; });
+  addEventListener('appinstalled', hideInstall);
 })();
 // ---- free trial gate: the trial (full access until 1 January 2027) is for signed-in members ----
 (function () {
