@@ -190,11 +190,11 @@ def externalise(h):
 # The collection pages own their metadata and load no third-party scripts.
 COLLECTION_PAGES = {}
 for slug, title, desc in [
- ('pricefold', 'Pricefold · Price and Margin Planner', 'Calculate product costs, channel fees, returns and contribution margin.'),
- ('rangeboard', 'Rangeboard · Collection Planner', 'Plan seasonal styles, colourways, sizes, quantities, budgets and drops.'),
- ('swatchsmith', 'Swatchsmith · Colour Palette Builder', 'Create collection palettes from unlocked Forecut forecasts and your own colours.'),
- ('evenpoint', 'Evenpoint · MOQ and Break-even Calculator', 'Compare production quantities, investment and sell-through scenarios.'),
- ('cutclock', 'Cutclock · Production Calendar', 'Plan sampling, sourcing and production backward from your launch date.')]:
+ ('pricefold', 'Price & Profit Calculator · Price and Margin Planner', 'Calculate product costs, channel fees, returns and contribution margin.'),
+ ('rangeboard', 'Collection Planner · Collection Planner', 'Plan seasonal styles, colourways, sizes, quantities, budgets and drops.'),
+ ('swatchsmith', 'Colour Palette Builder · Colour Palette Builder', 'Create collection palettes from unlocked Forecut forecasts and your own colours.'),
+ ('evenpoint', 'Break-even Calculator · MOQ and Break-even Calculator', 'Compare production quantities, investment and sell-through scenarios.'),
+ ('cutclock', 'Production Calendar · Production Calendar', 'Plan sampling, sourcing and production backward from your launch date.')]:
     COLLECTION_PAGES[slug + '.html'] = (title + ' | Forecut', desc, slug + '.html')
 pages.update(COLLECTION_PAGES)
 pages['tools.html'] = ('Fashion Design & Collection Planning Tools | Forecut', 'Free browser tools for garment costing, collection planning, colour palettes, break-even, production calendars, textiles and pattern drafting.', 'tools.html')
