@@ -1,0 +1,18 @@
+"""Build Forecut's eight browser-local design and production tools."""
+from pathlib import Path
+from html import escape
+ROOT=Path(__file__).resolve().parent.parent
+TOOLS=[
+ ('trend-to-style','Trend-to-style Builder','Turn a trend detail into a practical, editable style brief.','design','Motiforge'),
+ ('tech-pack-builder','Tech Pack Builder','Bring sketches, callouts, materials and measurements into a supplier-ready document.','production','Packsmith'),
+ ('size-chart-builder','Size Chart Builder','Grade your measurements across sizes with your own steps and tolerances.','design','Sizewright'),
+ ('fabric-finder','Fabric Finder','Compare fabric examples by construction, weight, stretch and drape.','design','Weftwise'),
+ ('export-market-checker','Export Market Checker','Organise destination research with official sources and an export checklist.','production','Borderready'),
+ ('product-description-writer','Product Description Writer','Turn verified product facts into editable English or Hindi product copy.','plan','Tagwright'),
+ ('decoration-cost-estimator','Embroidery & Print Cost Estimator','Estimate decoration cost, setup allocation and embroidery batch time.','cost','Stitchquote'),
+ ('care-label-generator','Care Label Generator','Create a text care label from approved composition and care instructions.','production','Carefold')]
+def build():
+ for slug,name,desc,group,icon in TOOLS:
+  page=f'''<!doctype html><html lang="en-IN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{escape(name)} | Forecut</title><meta name="description" content="{escape(desc)}"><link rel="canonical" href="https://forecut.in/{slug}.html"><meta property="og:title" content="{escape(name)} | Forecut"><meta property="og:description" content="{escape(desc)}"><meta property="og:image" content="https://forecut.in/tools/thumbnails/{slug}.svg"><meta name="theme-color" content="#203d33"><link rel="icon" href="favicon.svg"><link rel="stylesheet" href="tools/studio.css?v=studio-v3-20261111"><script defer src="tools/studio-core.js?v=studio-v3-20261111"></script><script defer src="tools/studio.js?v=studio-v3-20261111"></script></head><body data-tool="{slug}"><header><a class="brand" href="index.html">Forecut<span>.</span></a><a href="tools.html">← All tools</a><a href="rangeboard.html">Collection workspace ↗</a></header><div class="shell"><aside><nav id="studioNav" aria-label="Design and production tools"></nav></aside><main><span class="eyebrow">Forecut · Design to production</span><h1>{escape(name)}</h1><p class="intro">{escape(desc)}</p><div class="panel workspace"><label>Collection name<input id="collectionName" maxlength="100"></label><div class="actions"><button id="backup">Download studio backup</button><button id="restore">Restore studio backup</button><button id="print">Print / Save PDF</button><input id="restoreFile" type="file" accept=".json,application/json" hidden></div><p class="note">These eight tools share a production studio in this browser. The Collection Planner and Colour Palette Builder keep their existing workspace; use the import buttons to bring in a style or colour. Back up both workspaces before clearing browser data.</p></div><div id="status" role="status" aria-live="polite"></div><div id="app"></div><noscript>Enable JavaScript to use this browser-local tool.</noscript><footer>Forecut · Supplier-ready starts with approved inputs. Check estimates, fit and specifications before production.<br><a href="privacy.html">Privacy</a> · <a href="tools.html">All tools</a></footer></main></div></body></html>'''
+  (ROOT/(slug+'.html')).write_text(page)
+if __name__=='__main__':build()
