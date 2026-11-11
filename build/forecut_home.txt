@@ -1,4 +1,5 @@
 <title>Forecut</title>
+<link rel="stylesheet" href="navigation.css?v=organized-20261111"><script defer src="navigation.js?v=organized-20261111"></script>
 <link rel="preload" href="fonts/dm-sans.woff" as="font" type="font/woff" crossorigin><link rel="stylesheet" href="fonts/fonts.css">
 <style>
 /* Layout: pattern-paper page. Grid-paper hero with an annotated pattern piece, then sample detail cards, coverage, method, pricing, waitlist. */
@@ -548,23 +549,18 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
 </style>
 
 <div class="wrap">
-  <nav aria-label="Main">
-    <a class="logo" href="#top" aria-label="Forecut home">
-      <svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="var(--mat)"/><path d="M10 23V9h12M10 16h8" stroke="var(--mat-ink)" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="var(--chalk)" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Forecut
-    </a>
-    <div class="navlinks" id="navlinks">
-      <a href="#explore">Forecasts</a>
-      <a href="https://forecut.in/regions.html">Regions</a>
-      <details class="ddn"><summary>Explore</summary><div><a href="https://forecut.in/couture.html">Couture</a><a href="https://forecut.in/fabrics.html">Fabrics</a><a href="https://forecut.in/colour.html">Colour</a><a href="https://forecut.in/celebrity-style.html">Celebrity style</a><a href="method.html">Methodology</a></div></details>
-      <a href="https://forecut.in/reports.html">Reports</a>
-      <a href="https://forecut.in/journal.html">Journal</a>
-      <a href="search.html" aria-label="Search Forecut">⌕ Search</a>
-      <a href="#pricing">Pricing</a>
-      <a class="btn" href="https://forecut.in/account.html#signup">Sign in free</a>
-    </div>
-    <button class="menu" type="button" aria-expanded="false" aria-controls="navlinks">Menu</button>
-  </nav>
+  <nav id="fc-header" aria-label="Main">
+ <a class="logo" href="#top" aria-label="Forecut home"><svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="var(--mat)"/><path d="M10 23V9h12M10 16h8" stroke="var(--mat-ink)" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="var(--chalk)" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>Forecut</a>
+ <div class="navlinks" id="navlinks">
+  <details class="fc-nav-group"><summary>Forecasts</summary><div class="fc-nav-dropdown"><a href="#explore">Find a forecast<small>Choose your market, season and category</small></a><a href="#seasons">Browse by season<small>Current seasons and future outlooks</small></a><a href="regions.html">Browse by region<small>Global forecasts, read for your market</small></a></div></details>
+  <a href="reports.html">Reports</a><a href="tools.html">Tools</a>
+  <details class="fc-nav-group"><summary>Resources</summary><div class="fc-nav-dropdown fc-nav-resources"><div><strong>Design inspiration</strong><a href="couture.html">Couture</a><a href="fabrics.html">Fabrics</a><a href="colour.html">Colour</a><a href="celebrity-style.html">Celebrity style</a></div><div><strong>Learn & explore</strong><a href="journal.html">Journal</a><a href="method.html">How we forecast</a><a href="about.html">About Forecut</a><a href="contact.html">Contact</a></div><div id="fc-install-slot" hidden></div></div></details>
+  <a class="fc-mobile-link" href="#pricing">Pricing & access</a>
+ </div>
+ <div class="fc-actions"><a class="fc-search" href="search.html" aria-label="Search Forecut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><span>Search</span></a><a class="fc-pricing" href="#pricing">Pricing</a><span id="fc-account-slot"><a href="account.html#signin">Sign in</a></span></div>
+ <button class="menu" type="button" aria-expanded="false" aria-controls="navlinks">Menu</button>
+</nav>
+
 
   <header class="hero hx" id="top">
     <div class="hxt">
@@ -976,11 +972,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
   });
 })();
 document.addEventListener('click',function(e){if(innerWidth<=820)return;document.querySelectorAll('.ddn[open]').forEach(function(d){if(!d.contains(e.target))d.removeAttribute('open');});});
-(function () {
-  var b = document.querySelector('.menu'), l = document.getElementById('navlinks'); document.querySelectorAll('.ddn').forEach(function(d){ if (innerWidth <= 820) d.open = true; });
-  b.addEventListener('click', function () { var o = l.classList.toggle('open'); b.setAttribute('aria-expanded', o ? 'true' : 'false'); b.textContent = o ? 'Close' : 'Menu'; });
-  l.addEventListener('click', function (e) { if (e.target.tagName === 'A') { l.classList.remove('open'); b.setAttribute('aria-expanded', 'false'); b.textContent = 'Menu'; } });
-})();
+// Header navigation is managed by navigation.js.
 document.getElementById('wl').addEventListener('submit', function (e) {
   e.preventDefault();
   var email = document.getElementById('email');
