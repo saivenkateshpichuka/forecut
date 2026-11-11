@@ -4,7 +4,7 @@ Everything runs in the browser; nothing is sent anywhere. Shared header/footer c
 import html, json, shutil, os
 import reports_data as R
 import depth_tools as DT
-from collection_tools import hub_cards
+from tools_hub import page as tools_hub_page
 src = open('legal.py').read()
 ns = {}
 exec(src[:src.index('P = {}')], ns)
@@ -117,19 +117,7 @@ TOOLS = [('textile-calculator.html', 'Textile calculator', 'Fabric, GSM, yarn & 
           '27 calculators: yarn counts in 15 systems, ply, twist and strength, reed, warp and weft, GSM and cover factor, knitting, consumption, markers, thread, SMV, dyeing, regain, costing and units.', 'hub-fabrics-art-forecast'),
          ('pattern-maker.html', 'Pattern maker', 'Members · garments and Forecut details',
           'Draft kurtas, shirts, blouses, dresses, skirts, lehengas, trousers and more from measurements or from a Forecut detail. Automatic fit checks, a how-to-measure guide, per-piece seam allowance and true-scale PDF, DXF, SVG and PNG downloads.', 'couture-bespoke-tailoring-2026')]
-hub = ('<div class="eb">Free tools</div><div class="tl-h"><div><h1>Design and production tools</h1>'
-       '<p class="lead">Quick, practical calculators and planners for designers, students, D2C brands and production teams. The textile calculator is free for everyone; the pattern maker is free for signed-in Forecut members. The tools run entirely in your browser: nothing you type is sent to us.</p></div>'
-       '<div class="chiprow"><span>Free</span><span>Works on phone</span><span>Metric and imperial</span><span>PDF, DXF, SVG and PNG patterns</span><span>Nothing is uploaded</span></div></div>'
-       '<div class="hubg">' + ''.join(f'<a href="{fn}"><img src="img/{img}.webp" alt="" loading="lazy" width="800" height="600"><span class="b"><small>{E(k)}</small><b>{E(t)}</b><span>{E(d)}</span><em>Open the tool →</em></span></a>' for fn, t, k, d, img in TOOLS) + '</div>'
-       + hub_cards() +
-       '<div class="prose"><h2>What each tool is for</h2>'
-       '<p><b>The textile calculator</b> answers the questions that come up every day between a design team and a fabric supplier: how many metres to order for a run of kurtas, what a 180 GSM fabric weighs per metre, what a price per kilo means per metre, how a 40s cotton compares with a 150 denier polyester, how much to allow for shrinkage, and what a garment must sell for once fabric, trims, making, margins and GST are added.</p>'
-       '<p><b>The pattern block maker</b> drafts simple blocks from your own measurements: a kurta or tunic front and back with a sleeve whose cap is matched to the armhole, and a straight or A-line skirt with darts. Blocks are drawn at true scale in centimetres, so you can download them as SVG for a plotter or print them on A4 sheets and tape them together. They are starting points for a first toile, not finished production patterns.</p>'
-              '<h2>How accurate are they?</h2>'
-       '<p>Formulas such as GSM, yarn count and weight conversions are exact. Fabric consumption figures are typical industry estimates for a size M garment and change with style, fabric direction, prints that need matching and how tightly a marker is laid, so treat them as a planning figure and confirm with your cutting master or CAD marker before ordering bulk. Pattern blocks use standard, simplified drafting and should always be tested in calico or muslin first.</p>'
-       + DT.HUB +
-       '<p>Ideas for another tool? Write to <a href="mailto:hello@forecut.in">hello@forecut.in</a>.</p></div>')
-page('tools.html', 'Free Fashion Design Tools · Textile Calculator & Pattern Blocks · Forecut', hub)
+open(OUT + 'tools.html', 'w').write(tools_hub_page())
 
 # ------------------------------------------------------------------ textile calculator
 GARMENTS = [  # name, metres at 44"/112 cm, metres at 58"/147 cm, fixed length?, note
