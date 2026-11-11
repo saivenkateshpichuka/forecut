@@ -196,6 +196,10 @@ for slug, title, desc in [
  ('evenpoint', 'Break-even Calculator · MOQ and Break-even Calculator', 'Compare production quantities, investment and sell-through scenarios.'),
  ('cutclock', 'Production Calendar · Production Calendar', 'Plan sampling, sourcing and production backward from your launch date.')]:
     COLLECTION_PAGES[slug + '.html'] = (title + ' | Forecut', desc, slug + '.html')
+
+from studio_tools import TOOLS as STUDIO_TOOLS
+for slug, title, desc, _, _ in STUDIO_TOOLS:
+    COLLECTION_PAGES[slug+'.html'] = (title+' | Forecut', desc, slug+'.html')
 pages.update(COLLECTION_PAGES)
 pages['tools.html'] = ('Fashion Design & Collection Planning Tools | Forecut', 'Free browser tools for garment costing, collection planning, colour palettes, break-even, production calendars, textiles and pattern drafting.', 'tools.html')
 
