@@ -15,6 +15,7 @@ NAMES = {
     'textile-calculator': ('Textile Calculator', 'Yarn, GSM, weaving, knitting and costing', '02 Colour and fabric'),
     'textile-processing-studio': ('Textile Processing Studio', 'Dyeing, processing and colour blends', '02 Colour and fabric'),
     'pattern-maker': ('Pattern Maker', 'Draft and grade garment patterns', '03 Pattern and fit'),
+    '3d-drape-studio': ('3D Drape Studio', 'Sew and drape your pattern in 3D', '03 Pattern and fit'),
     'size-chart-builder': ('Size Chart Builder', 'Grade measurements across sizes', '03 Pattern and fit'),
     'decoration-cost-estimator': ('Embroidery & Print Cost', 'Decoration cost per piece', '04 Sampling and tech pack'),
     'tech-pack-builder': ('Tech Pack Builder', 'Supplier-ready tech packs', '04 Sampling and tech pack'),

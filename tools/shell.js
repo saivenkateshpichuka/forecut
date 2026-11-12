@@ -11,6 +11,7 @@
       ['textile-processing-studio', 'Textile Processing Studio', 'Dyeing, processing and colour blends']]],
     ['Pattern and fit', [
       ['pattern-maker', 'Pattern Maker', 'Draft and grade garment patterns · opens full window'],
+      ['3d-drape-studio', '3D Drape Studio', 'Sew and drape your pattern in 3D · desktop'],
       ['size-chart-builder', 'Size Chart Builder', 'Grade measurements across sizes']]],
     ['Sampling and tech pack', [
       ['decoration-cost-estimator', 'Embroidery & Print Cost', 'Decoration cost per piece'],
