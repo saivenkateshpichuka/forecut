@@ -130,7 +130,7 @@ Social: https://www.instagram.com/forecut.in/, https://www.linkedin.com/company/
 - [Colour Palette Builder · Colour Palette Builder | Forecut](https://forecut.in/swatchsmith.html): Create collection palettes from unlocked Forecut forecasts and your own colours.
 - [Break-even Calculator · MOQ and Break-even Calculator | Forecut](https://forecut.in/evenpoint.html): Compare production quantities, investment and sell-through scenarios.
 - [Production Calendar · Production Calendar | Forecut](https://forecut.in/cutclock.html): Plan sampling, sourcing and production backward from your launch date.
-- [Trend-to-style Builder | Forecut](https://forecut.in/trend-to-style.html): Turn a trend detail into a practical, editable style brief.
+- [Trend-to-style Builder | Forecut](https://forecut.in/trend-to-style.html): Arrange collection, mood and accessories boards, then turn a trend detail into an editable style brief.
 - [Tech Pack Builder | Forecut](https://forecut.in/tech-pack-builder.html): Bring sketches, callouts, materials and measurements into a supplier-ready document.
 - [Size Chart Builder | Forecut](https://forecut.in/size-chart-builder.html): Grade your measurements across sizes with your own steps and tolerances.
 - [Export Market Checker | Forecut](https://forecut.in/export-market-checker.html): Organise destination research with official sources and an export checklist.

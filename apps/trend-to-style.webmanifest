@@ -2,7 +2,7 @@
  "id": "/forecut-trend-to-style",
  "name": "Forecut Trend to Style Brief",
  "short_name": "Trend to",
- "description": "Turn a trend detail into a style brief",
+ "description": "Collection, mood and accessories boards, then a style brief",
  "start_url": "/trend-to-style.html?source=app",
  "scope": "/",
  "display": "standalone",

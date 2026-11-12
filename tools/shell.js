@@ -4,7 +4,7 @@
   var STAGES = [
     ['Plan the collection', [
       ['rangeboard', 'Collection Planner', 'Plan styles, sizes, quantities and drops'],
-      ['trend-to-style', 'Trend to Style Brief', 'Turn a trend detail into a style brief']]],
+      ['trend-to-style', 'Trend to Style Brief', 'Boards and style briefs']]],
     ['Colour and fabric', [
       ['swatchsmith', 'Colour Palette Builder', 'Season palettes and swatch sheets'],
       ['textile-calculator', 'Textile Calculator', 'Yarn, GSM, weaving, knitting and costing'],

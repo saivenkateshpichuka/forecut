@@ -10,7 +10,7 @@ VER = 'fx-20261112'
 # slug: (brand name, plain label, stage)
 NAMES = {
     'rangeboard': ('Collection Planner', 'Plan styles, sizes, quantities and drops', '01 Plan the collection'),
-    'trend-to-style': ('Trend to Style Brief', 'Turn a trend detail into a style brief', '01 Plan the collection'),
+    'trend-to-style': ('Trend to Style Brief', 'Collection, mood and accessories boards, then a style brief', '01 Plan the collection'),
     'swatchsmith': ('Colour Palette Builder', 'Season palettes and swatch sheets', '02 Colour and fabric'),
     'textile-calculator': ('Textile Calculator', 'Yarn, GSM, weaving, knitting and costing', '02 Colour and fabric'),
     'textile-processing-studio': ('Textile Processing Studio', 'Dyeing, processing and colour blends', '02 Colour and fabric'),
