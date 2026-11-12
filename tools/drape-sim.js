@@ -7,124 +7,195 @@
   'use strict';
   var D = {}, PI = Math.PI, TAU = 2 * PI;
 
-  /* ---------------- body form ---------------- */
-  D.body = function (m, g) {
-    var kid = g === 'kids', men = g === 'men' || g === 'unisex', wom = !kid && !men;
-    var waistY = m.outseam, hps = waistY + m.nape, hipY = waistY - m.wh, crotchY = waistY - m.rise;
-    var bustY = hps - (wom ? (m.bust_depth || m.bust / 12 + 16.5) : m.nape * (kid ? .42 : .45));
-    var armY = hps - m.nape * (kid ? .42 : .48), shY = hps - (kid ? 2.5 : men ? 5 : 4.5);
-    if (wom) armY = Math.max(armY, bustY + 3);
-    function ab(C, k) { var f = PI * (3 * (1 + k) - Math.sqrt((3 + k) * (1 + 3 * k))); var a = C / f; return [a, a * k]; }
-    var kB = kid ? .8 : men ? .72 : .76, kW = kid ? .82 : men ? .74 : .7, kH = kid ? .8 : men ? .68 : .7;
-    var K = [];
-    function addC(y, C, k, zc) { var e = ab(C, k); K.push([y, e[0], e[1], zc]); }
-    addC(crotchY - 8, m.hip * .22, kH, -1);
-    addC(crotchY - 6, m.hip * .58, kH, -1);
-    addC(crotchY - 2, m.hip * .86, kH, -1);
-    addC(hipY, m.hip, kH, wom ? -1.2 : -.8);
-    addC((hipY + waistY) / 2, (m.hip + m.waist) / 2 + (wom ? 1 : 0), (kH + kW) / 2, -.5);
-    addC(waistY, m.waist, kW, 0);
-    if (wom) addC(bustY - 8, Math.max(m.waist + 2, m.bust - 14), .72, .5);
-    else addC((waistY + bustY) / 2, (m.waist + m.bust) / 2, (kW + kB) / 2, 0);
-    addC(bustY, m.bust, kB, wom ? 1.5 : .5);
-    if (armY > bustY + 1.5) addC(armY, m.bust * (wom ? .97 : 1), .72, wom ? .8 : .3);
-    var sa = m.shoulder / 2, nr = m.neck / TAU, neckTop = hps + (kid ? 6 : 9);
-    K.push([shY - 3.5, sa - 1.2, kid ? 6.5 : 9, -.5]);
-    K.push([shY, sa - 2.2, kid ? 5.5 : 7.5, -.8]);
-    K.push([hps, nr + 1.8, nr + .6, -1.5]);
-    K.push([hps + 2, nr * 1.04, nr * .96, -1.5]);
-    K.push([neckTop, nr * 1.04, nr * .96, -1.2]);
-    K.sort(function (p, q) { return p[0] - q[0]; });
-    var step = .5, y0 = K[0][0], y1 = K[K.length - 1][0], N = Math.ceil((y1 - y0) / step) + 1;
-    var A = new Float32Array(N), Bt = new Float32Array(N), C = new Float32Array(N), j = 0;
-    for (var i = 0; i < N; i++) {
-      var y = y0 + i * step; while (j < K.length - 2 && K[j + 1][0] < y) j++;
-      var k0 = K[j], k1 = K[j + 1], t = Math.max(0, Math.min(1, (y - k0[0]) / ((k1[0] - k0[0]) || 1)));
-      A[i] = k0[1] + (k1[1] - k0[1]) * t; Bt[i] = k0[2] + (k1[2] - k0[2]) * t; C[i] = k0[3] + (k1[3] - k0[3]) * t;
+  /* ---------------- avatar ---------------- */
+  // Realistic avatars from the MakeHuman base mesh (CC0). One stored shape per size; here it is fitted exactly to the
+  // measurements: heights (crotch, waist, neck) by a vertical remap, then bust, waist and hip girths by scaling each torso
+  // level about its own centre. Collision uses a signed distance field built from the fitted mesh.
+  D.loadAvatars = function (buf, meta) {
+    var L = meta.layout;
+    return { meta: meta, tri: new Uint16Array(buf, L.tri[0], L.tri[1] / 2), part: new Uint8Array(buf, L.part[0], L.part[1]),
+      shape: function (key) { var sh = meta.shapes[key]; return sh ? new Int16Array(buf, L.shape0 + sh.i * L.shapeBytes, meta.n * 3) : null; } };
+  };
+  var LEN = ['outseam', 'nape', 'wh', 'rise', 'knee_l', 'sleeve', 'inseam', 'bust_depth'];
+  D.body = function (m0, g, AV, size, targetH) {
+    var b = fitBody(m0, g, AV, size);
+    if (targetH > 60 && targetH < 230 && Math.abs(targetH - b.height) > .5) { // a taller or shorter body: scale every length, keep the girths
+      var m = {}, k; for (k in m0) m[k] = m0[k]; var f = targetH / b.height; LEN.forEach(function (q) { if (m[q]) m[q] = Math.round(m[q] * f * 10) / 10; });
+      b = fitBody(m, g, AV, size);
     }
-    function blur(a, s) { var o = new Float32Array(a.length), r = Math.ceil(s * 3), w = []; for (var q = -r; q <= r; q++) w.push(Math.exp(-q * q / (2 * s * s)));
-      for (var i = 0; i < a.length; i++) { var acc = 0, ws = 0; for (var q = -r; q <= r; q++) { var k = Math.min(a.length - 1, Math.max(0, i + q)); acc += a[k] * w[q + r]; ws += w[q + r]; } o[i] = acc / ws; } return o; }
-    A = blur(A, 3); Bt = blur(Bt, 3); C = blur(C, 3);
-
-    var segs = [], al = (kid ? 40 : 44) * PI / 180, sx = Math.sin(al), cy = Math.cos(al);
-    var Lu = m.sleeve * .56 - 3, Lf = m.sleeve * .44, hipA = ab(m.hip, kH)[0];
-    var rb = (m.bicep / TAU) * 1.12, re = (m.elbow || m.bicep * .86) / TAU, rw = m.wrist / TAU;
-    var joints = [];
-    [1, -1].forEach(function (s) {
-      var J = [s * (sa - 3.2), shY - 3.2, -.5], d = [s * sx, -cy, 0];
-      var E = [J[0] + d[0] * Lu, J[1] + d[1] * Lu, J[2] + 1], W = [E[0] + d[0] * Lf, E[1] + d[1] * Lf, E[2] + 2.5], Hn = [W[0] + d[0] * (kid ? 6 : 8), W[1] + d[1] * (kid ? 6 : 8), W[2] + 1];
-      segs.push({ a: J, b: E, ra: rb, rb: re, k: 'arm' }, { a: E, b: W, ra: re, rb: rw, k: 'arm' }, { a: W, b: Hn, ra: rw * 1.15, rb: kid ? 2.2 : 2.9, k: 'hand' });
-      var hj = [s * hipA * .42, crotchY + 6, -1], kn = [s * (hipA * .42 + 1.2), waistY - m.knee_l, -.5], an = [s * (hipA * .42 + 2.2), kid ? 5 : 8, -1.5];
-      segs.push({ a: hj, b: kn, ra: m.thigh / TAU, rb: m.knee / TAU, k: 'leg' }, { a: kn, b: an, ra: (m.calf || m.knee) / TAU, rb: m.ankle / TAU, k: 'leg' },
-        { a: [an[0], kid ? 3 : 4, an[2] - 2], b: [an[0] + s * 1.5, kid ? 2 : 3, an[2] + (kid ? 10 : 14)], ra: kid ? 3 : 4, rb: kid ? 2.4 : 3.2, k: 'foot' });
-      joints.push({ s: s, J: J, d: d, up: [s * cy, sx, 0], rb: rb });
+    buildSDF(b);
+    return b;
+  };
+  function fitBody(m, g, AV, size) {
+    var gk = g === 'unisex' ? 'men' : g, meta = AV.meta, key = gk + '|' + size;
+    if (!meta.shapes[key]) { // custom size: the stored shape nearest in bust and hip
+      var best = null, bd = 1e9; Object.keys(meta.shapes).forEach(function (k2) { if (k2.indexOf(gk + '|') !== 0) return; best = best || k2; }); key = best;
+    }
+    var n = meta.n, raw = AV.shape(key), tri = AV.tri, part = AV.part, P = new Float32Array(n * 3), i, j;
+    for (i = 0; i < n * 3; i++) P[i] = raw[i] * meta.scale;
+    var J = {}, js = meta.shapes[key].joints; for (var q in js) J[q] = js[q].slice();
+    var tw = new Float32Array(n), aw = new Float32Array(n), lw = new Float32Array(n), hw = new Float32Array(n);
+    for (i = 0; i < n; i++) { tw[i] = part[4 * i] / 255; aw[i] = part[4 * i + 1] / 255; lw[i] = part[4 * i + 2] / 255; hw[i] = part[4 * i + 3] / 255; }
+    // torso-only triangles for girth slices
+    var TT = []; for (i = 0; i < tri.length; i += 3) { var a = tri[i], b2 = tri[i + 1], c = tri[i + 2]; if (tw[a] + hw[a] > .5 && tw[b2] + hw[b2] > .5 && tw[c] + hw[c] > .5) TT.push(a, b2, c); }
+    function girth(y) { // tape measure: perimeter of the convex outline of the torso cut at height y
+      var pts = [];
+      for (var t = 0; t < TT.length; t += 3) {
+        var v = [TT[t], TT[t + 1], TT[t + 2]];
+        for (var e = 0; e < 3; e++) { var A = 3 * v[e], B = 3 * v[(e + 1) % 3], ya = P[A + 1], yb = P[B + 1]; if ((ya - y) * (yb - y) < 0) { var u = (y - ya) / (yb - ya); pts.push([P[A] + (P[B] - P[A]) * u, P[A + 2] + (P[B + 2] - P[A + 2]) * u]); } }
+      }
+      if (pts.length < 3) return 0;
+      return hullLen(pts);
+    }
+    function scan(y0, y1, max) { var by = y0, bg = max ? -1 : 1e9; for (var y = y0; y <= y1; y += .5) { var gg = girth(y); if (gg && (max ? gg > bg : gg < bg)) { bg = gg; by = y; } } return by; }
+    function marks() {
+      var cr = 1e9; for (i = 0; i < n; i++) if (Math.abs(P[3 * i]) < .8 && lw[i] < .5 && P[3 * i + 1] > 15 && P[3 * i + 1] < cr) cr = P[3 * i + 1];
+      var hps = J.neck[1] + 1, sh = (J['l-shoulder'][1] + J['r-shoulder'][1]) / 2;
+      var wa = scan(cr + .3 * (hps - cr), cr + .62 * (hps - cr), false), hp = scan(cr + 2, wa - 5, true), bu = scan(wa + 8, sh - 4, true);
+      return { crotch: cr, hps: hps, waist: wa, hip: hp, bust: bu, shoulder: sh };
+    }
+    var M0 = marks();
+    // 1. heights: crotch, waist and neck base land exactly where the size chart puts them
+    var tc = m.outseam - m.rise, tw2 = m.outseam, th = m.outseam + m.nape, kt = (th - tw2) / (M0.hps - M0.waist), kh = (kt + 1) / 2;
+    function remap(y) {
+      if (y <= M0.crotch) return y * tc / M0.crotch;
+      if (y <= M0.waist) return tc + (y - M0.crotch) * (tw2 - tc) / (M0.waist - M0.crotch);
+      if (y <= M0.hps) return tw2 + (y - M0.waist) * kt;
+      return th + (y - M0.hps) * kh;
+    }
+    for (i = 0; i < n; i++) P[3 * i + 1] = remap(P[3 * i + 1]);
+    for (q in J) J[q][1] = remap(J[q][1]);
+    var Y = { crotch: tc, waist: tw2, hps: th, hip: remap(M0.hip), bust: g === 'women' ? th - (m.bust_depth || m.bust / 12 + 16.5) : th - m.nape * (g === 'kids' ? .42 : .45), shoulder: remap(M0.shoulder) }; // bust line where the pattern puts it
+    // pose: raise both arms to the same A-pose (46 degrees from the body) so every size has room under the arm
+    ['l', 'r'].forEach(function (sd) {
+      var Sj = J[sd + '-shoulder'], E = J[sd + '-elbow'], sg = sd === 'l' ? 1 : -1, a0 = Math.atan2(Math.abs(E[0] - Sj[0]), Sj[1] - E[1]), da = (46 * PI / 180 - a0) * sg;
+      function rot(p, w) { var c = Math.cos(da * w), s2 = Math.sin(da * w), dx = p[0] - Sj[0], dy = p[1] - Sj[1]; return [Sj[0] + dx * c - dy * s2, Sj[1] + dx * s2 + dy * c]; }
+      for (var t = 0; t < n; t++) { if (aw[t] <= 0 || (P[3 * t] > 0) !== (sg > 0)) continue; var r2 = rot([P[3 * t], P[3 * t + 1]], aw[t]); P[3 * t] = r2[0]; P[3 * t + 1] = r2[1]; }
+      ['-elbow', '-hand'].forEach(function (jn) { var r3 = rot(J[sd + jn], 1); J[sd + jn][0] = r3[0]; J[sd + jn][1] = r3[1]; });
     });
-    segs.forEach(function (q) { var v = [q.b[0] - q.a[0], q.b[1] - q.a[1], q.b[2] - q.a[2]]; q.v = v; q.l2 = v[0] * v[0] + v[1] * v[1] + v[2] * v[2];
-      q.min = [Math.min(q.a[0], q.b[0]) - q.ra - 3, Math.min(q.a[1], q.b[1]) - q.ra - 3, Math.min(q.a[2], q.b[2]) - q.ra - 3];
-      q.max = [Math.max(q.a[0], q.b[0]) + q.ra + 3, Math.max(q.a[1], q.b[1]) + q.ra + 3, Math.max(q.a[2], q.b[2]) + q.ra + 3]; });
-    var hr = m.head / TAU, head = { c: [0, neckTop + hr * 1.05, -.5], r: [hr * .86, hr * 1.16, hr] };
-
-    function torsoF(x, y, z) {
-      var t = (y - y0) / step; if (t < 0) t = 0; if (t > N - 1.001) t = N - 1.001;
-      var i = t | 0, f = t - i, a = A[i] + (A[i + 1] - A[i]) * f, b = Bt[i] + (Bt[i + 1] - Bt[i]) * f, c = C[i] + (C[i + 1] - C[i]) * f;
-      var dz = z - c, r = Math.sqrt(x * x + dz * dz) + 1e-9, ct = x / r, st = dz / r;
-      var d = r - a * b / Math.sqrt(b * b * ct * ct + a * a * st * st);
-      var top = y - y1, bot = y0 - y; if (top > d) d = top; if (bot > d) d = bot;
-      return d;
-    }
-    // signed distance (approx.) to the form; writes the outward normal into n
-    function dist(x, y, z, n) {
-      var best = 1e9;
-      // torso
-      if (y > y0 - 4 && y < y1 + 4 && Math.abs(x) < 40) {
-        var f = torsoF(x, y, z);
-        if (f < 6) {
-          var e = .3, gx = (torsoF(x + e, y, z) - torsoF(x - e, y, z)) / (2 * e), gy = (torsoF(x, y + e, z) - torsoF(x, y - e, z)) / (2 * e), gz = (torsoF(x, y, z + e) - torsoF(x, y, z - e)) / (2 * e);
-          var gl = Math.sqrt(gx * gx + gy * gy + gz * gz) || 1;
-          best = f / gl; n[0] = gx / gl; n[1] = gy / gl; n[2] = gz / gl;
-        } else best = f;
+    // 2. girths: bust, waist and hip, scaling each torso level about its own centre (twice, to settle the blend)
+    var zc = {}; function zCentre(y) { var k2 = Math.round(y); if (zc[k2] !== undefined) return zc[k2]; var lo = 1e9, hi = -1e9; for (var t = 0; t < n; t++) if (tw[t] > .8 && Math.abs(P[3 * t + 1] - y) < 1) { lo = Math.min(lo, P[3 * t + 2]); hi = Math.max(hi, P[3 * t + 2]); } return (zc[k2] = lo < hi ? (lo + hi) / 2 : 0); }
+    for (var it = 0; it < 3; it++) {
+      zc = {};
+      var fb = m.bust / girth(Y.bust), fw = m.waist / girth(Y.waist), fh = m.hip / girth(Y.hip);
+      var K = [[Y.crotch - 8, 1 + (fh - 1) * .6], [Y.crotch, 1 + (fh - 1) * .85], [Y.hip, fh], [Y.waist, fw], [Y.bust, fb], [Y.shoulder, 1 + (fb - 1) * .5], [Y.hps, 1]];
+      var fAt = function (y) { if (y <= K[0][0]) return K[0][1]; for (var k2 = 1; k2 < K.length; k2++) if (y <= K[k2][0]) { var u = (y - K[k2 - 1][0]) / ((K[k2][0] - K[k2 - 1][0]) || 1), e = u * u * (3 - 2 * u); return K[k2 - 1][1] + (K[k2][1] - K[k2 - 1][1]) * e; } return 1; };
+      var shW = (Math.abs(J['l-shoulder'][0]) + Math.abs(J['r-shoulder'][0])) / 2, dArm = (fAt(Y.shoulder - 6) - 1) * shW * .8;
+      var knee = J['l-knee'][1];
+      for (i = 0; i < n; i++) {
+        var X = P[3 * i], yy = P[3 * i + 1], Z = P[3 * i + 2], f = fAt(yy), w = tw[i];
+        if (w > 0) { var cz = zCentre(yy), s2 = 1 + (f - 1) * w; X *= s2; Z = cz + (Z - cz) * s2; }
+        if (aw[i] > 0) X += (X > 0 ? 1 : -1) * dArm * aw[i];
+        if (lw[i] > 0 && yy > knee) { var side = X > 0 ? 'l' : 'r', H = J[side + '-upper-leg'], Kn = J[side + '-knee'], u2 = Math.min(1, (yy - knee) / ((Y.crotch - knee) || 1)), lx = Kn[0] + (H[0] - Kn[0]) * u2, lz = Kn[2] + (H[2] - Kn[2]) * u2, sl = 1 + (K[1][1] - 1) * u2 * lw[i];
+          X = lx + (X - lx) * sl; Z = lz + (Z - lz) * sl; }
+        P[3 * i] = X; P[3 * i + 2] = Z;
       }
-      for (var s = 0; s < segs.length; s++) {
-        var q = segs[s];
-        if (x < q.min[0] || y < q.min[1] || z < q.min[2] || x > q.max[0] || y > q.max[1] || z > q.max[2]) continue;
-        var px = x - q.a[0], py = y - q.a[1], pz = z - q.a[2], t = (px * q.v[0] + py * q.v[1] + pz * q.v[2]) / q.l2;
-        if (t < 0) t = 0; else if (t > 1) t = 1;
-        var cx = px - q.v[0] * t, cyy = py - q.v[1] * t, cz = pz - q.v[2] * t, l = Math.sqrt(cx * cx + cyy * cyy + cz * cz) + 1e-9, dd = l - (q.ra + (q.rb - q.ra) * t);
-        if (dd < best) { best = dd; n[0] = cx / l; n[1] = cyy / l; n[2] = cz / l; }
-      }
-      var hx = (x - head.c[0]) / head.r[0], hy = (y - head.c[1]) / head.r[1], hz = (z - head.c[2]) / head.r[2], hq = Math.sqrt(hx * hx + hy * hy + hz * hz);
-      if (hq < 1.6) { var hd = (hq - 1) * head.r[0]; if (hd < best) { best = hd; var ux = hx / head.r[0], uy = hy / head.r[1], uz = hz / head.r[2], ul = Math.sqrt(ux * ux + uy * uy + uz * uz) || 1; n[0] = ux / ul; n[1] = uy / ul; n[2] = uz / ul; } }
-      return best;
+      ['l', 'r'].forEach(function (sd) { ['-shoulder', '-elbow', '-hand'].forEach(function (jn) { J[sd + jn][0] += (sd === 'l' ? 1 : -1) * dArm; }); });
     }
-    // push a point out of every part of the form it has entered (torso, limbs, head in turn); returns 1 on contact, normal in n
-    function push(x, k, th, n) {
-      var hit = 0, ax = 0, ay = 0, az = 0, X = x[k], Y = x[k + 1], Z = x[k + 2];
-      if (Y > y0 - 4 && Y < y1 + 4 && Math.abs(X) < 40) {
-        var f = torsoF(X, Y, Z);
-        if (f < th + 1) {
-          var e = .3, gx = (torsoF(X + e, Y, Z) - torsoF(X - e, Y, Z)) / (2 * e), gy = (torsoF(X, Y + e, Z) - torsoF(X, Y - e, Z)) / (2 * e), gz = (torsoF(X, Y, Z + e) - torsoF(X, Y, Z - e)) / (2 * e);
-          var gl = Math.sqrt(gx * gx + gy * gy + gz * gz) || 1, d = f / gl;
-          if (d < th) { gx /= gl; gy /= gl; gz /= gl; X += gx * (th - d); Y += gy * (th - d); Z += gz * (th - d); ax += gx; ay += gy; az += gz; hit = 1; }
+    var top = 0; for (i = 0; i < n; i++) top = Math.max(top, P[3 * i + 1]);
+    // sleeves hang from the shoulder joint along the upper arm
+    var joints = [['l', 1], ['r', -1]].map(function (sd) {
+      var Sj = J[sd[0] + '-shoulder'], E = J[sd[0] + '-elbow'], d = [E[0] - Sj[0], E[1] - Sj[1], E[2] - Sj[2]], dl = Math.hypot(d[0], d[1], d[2]); d = [d[0] / dl, d[1] / dl, d[2] / dl];
+      var up = sd[1] > 0 ? [-d[1], d[0], 0] : [d[1], -d[0], 0], ul = Math.hypot(up[0], up[1]); up = [up[0] / ul, up[1] / ul, 0];
+      var rs = 0, rc = 0; for (var t = 0; t < n; t++) { if (aw[t] < .8 || (P[3 * t] > 0) !== (sd[1] > 0)) continue; var px = P[3 * t] - Sj[0], py = P[3 * t + 1] - Sj[1], pz = P[3 * t + 2] - Sj[2], a2 = px * d[0] + py * d[1] + pz * d[2]; if (a2 < 5 || a2 > 10) continue; rs += Math.hypot(px - d[0] * a2, py - d[1] * a2, pz - d[2] * a2); rc++; }
+      return { s: sd[1], J: Sj, d: d, up: up, rb: rc ? rs / rc : 5 };
+    });
+    // where underwear may be drawn (not arms or head); the page draws pants and a bra from the landmarks, per pixel
+    var mask = new Uint8Array(n), hipHalf = 0; for (i = 0; i < n; i++) { if (tw[i] > .6 && Math.abs(P[3 * i + 1] - Y.hip) < 1) hipHalf = Math.max(hipHalf, Math.abs(P[3 * i])); mask[i] = aw[i] < .5 && hw[i] < .5 ? 255 : 0; }
+    var men = g === 'men' || g === 'unisex', under = { pantsTop: Y.hip + (Y.waist - Y.hip) * (men ? .55 : .4), legCut: Y.crotch - (g === 'kids' ? 3 : men ? 7 : 2), legRise: men ? 0 : g === 'kids' ? 2 : 7, hipHalf: hipHalf,
+      braLo: men ? 0 : Y.bust - (g === 'kids' ? 6 : 8.5), braHi: men ? 0 : Y.bust + (g === 'kids' ? 6 : 6.5) };
+    function maxA(ya, yb) { var r = 0; for (var t = 0; t < n; t++) { if (aw[t] > .3 || hw[t] > .5) continue; var y = P[3 * t + 1]; if (y < ya || y > yb) continue; r = Math.max(r, Math.hypot(P[3 * t], P[3 * t + 2])); } return r; }
+    var neckTop = Y.hps + (top - Y.hps) * .35;
+    return { m: m, g: g, key: key, pos: P, tri: tri, mask: mask, under: under, joints: joints, maxA: maxA, girth: girth, height: top,
+      head: { c: [0, (neckTop + top) / 2, 0], r: [9, (top - neckTop) / 2, 10] },
+      y: { waist: Y.waist, hps: Y.hps, hip: Y.hip, crotch: Y.crotch, bust: Y.bust, arm: Y.shoulder - 6, shoulder: Y.shoulder, neckTop: neckTop } };
+  }
+  function hullLen(P) {
+    P.sort(function (p, q) { return p[0] - q[0] || p[1] - q[1]; });
+    function cr(o, a, b) { return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]); }
+    var lo = [], up = []; P.forEach(function (p) { while (lo.length > 1 && cr(lo[lo.length - 2], lo[lo.length - 1], p) <= 0) lo.pop(); lo.push(p); });
+    for (var k = P.length - 1; k >= 0; k--) { var p = P[k]; while (up.length > 1 && cr(up[up.length - 2], up[up.length - 1], p) <= 0) up.pop(); up.push(p); }
+    var H = lo.slice(0, -1).concat(up.slice(0, -1)), s = 0; for (var i = 0; i < H.length; i++) { var u = H[i], v = H[(i + 1) % H.length]; s += Math.hypot(u[0] - v[0], u[1] - v[1]); } return s;
+  }
+  // signed distance field on a 1 cm grid: exact distances in a band round the skin, sign from inside/outside along z
+  function buildSDF(b) {
+    var P = b.pos, T = b.tri, n = P.length / 3, cs = 1, band = 3, i;
+    var mn = [1e9, 1e9, 1e9], mx = [-1e9, -1e9, -1e9];
+    for (i = 0; i < n; i++) for (var k = 0; k < 3; k++) { mn[k] = Math.min(mn[k], P[3 * i + k]); mx[k] = Math.max(mx[k], P[3 * i + k]); }
+    var o = [mn[0] - 4, mn[1] - 4, mn[2] - 4], nx = Math.ceil((mx[0] - o[0] + 4) / cs) + 1, ny = Math.ceil((mx[1] - o[1] + 4) / cs) + 1, nz = Math.ceil((mx[2] - o[2] + 4) / cs) + 1;
+    var G = new Float32Array(nx * ny * nz).fill(band), cols = new Array(nx * ny);
+    var cp = [0, 0, 0];
+    for (var t = 0; t < T.length; t += 3) {
+      var a = 3 * T[t], bb = 3 * T[t + 1], c = 3 * T[t + 2];
+      var x0 = Math.max(0, Math.floor((Math.min(P[a], P[bb], P[c]) - band - o[0]) / cs)), x1 = Math.min(nx - 1, Math.ceil((Math.max(P[a], P[bb], P[c]) + band - o[0]) / cs));
+      var y0 = Math.max(0, Math.floor((Math.min(P[a + 1], P[bb + 1], P[c + 1]) - band - o[1]) / cs)), y1 = Math.min(ny - 1, Math.ceil((Math.max(P[a + 1], P[bb + 1], P[c + 1]) + band - o[1]) / cs));
+      var z0 = Math.max(0, Math.floor((Math.min(P[a + 2], P[bb + 2], P[c + 2]) - band - o[2]) / cs)), z1 = Math.min(nz - 1, Math.ceil((Math.max(P[a + 2], P[bb + 2], P[c + 2]) + band - o[2]) / cs));
+      for (var ix = x0; ix <= x1; ix++) for (var iy = y0; iy <= y1; iy++) for (var iz = z0; iz <= z1; iz++) {
+        var id = (iz * ny + iy) * nx + ix, d = triDist(o[0] + ix * cs, o[1] + iy * cs, o[2] + iz * cs, P, a, bb, c, cp); if (d < G[id]) G[id] = d;
+      }
+      // inside/outside: where the triangle crosses each grid column (x, y), record the z of the crossing
+      var ax = P[a], ay = P[a + 1], bx = P[bb], by = P[bb + 1], cx = P[c], cy = P[c + 1], den = (by - cy) * (ax - cx) + (cx - bx) * (ay - cy);
+      if (Math.abs(den) < 1e-12) continue;
+      var cx0 = Math.ceil((Math.min(ax, bx, cx) - o[0]) / cs), cx1 = Math.floor((Math.max(ax, bx, cx) - o[0]) / cs), cy0 = Math.ceil((Math.min(ay, by, cy) - o[1]) / cs), cy1 = Math.floor((Math.max(ay, by, cy) - o[1]) / cs);
+      for (ix = cx0; ix <= cx1; ix++) for (iy = cy0; iy <= cy1; iy++) {
+        var px = o[0] + ix * cs + 1e-4, py = o[1] + iy * cs + 1e-4, l1 = ((by - cy) * (px - cx) + (cx - bx) * (py - cy)) / den, l2 = ((cy - ay) * (px - cx) + (ax - cx) * (py - cy)) / den, l3 = 1 - l1 - l2;
+        if (l1 < 0 || l2 < 0 || l3 < 0) continue;
+        var ci = iy * nx + ix; (cols[ci] || (cols[ci] = [])).push(l1 * P[a + 2] + l2 * P[bb + 2] + l3 * P[c + 2]);
+      }
+    }
+    for (var ci2 = 0; ci2 < cols.length; ci2++) {
+      var zs = cols[ci2]; if (!zs || zs.length < 2) continue; zs.sort(function (p, q) { return p - q; });
+      if (zs.length % 2) continue; // an open spot in the skin (eyes, mouth): leave it
+      var ix2 = ci2 % nx, iy2 = (ci2 / nx) | 0;
+      for (var k2 = 0; k2 < zs.length; k2 += 2) { var za = Math.ceil((zs[k2] - o[2]) / cs), zb = Math.floor((zs[k2 + 1] - o[2]) / cs); for (var iz2 = Math.max(0, za); iz2 <= Math.min(nz - 1, zb); iz2++) { var id2 = (iz2 * ny + iy2) * nx + ix2; G[id2] = -Math.abs(G[id2]); } }
+    }
+    function sample(x, y, z, n3) { // trilinear distance and its gradient
+      var fx = (x - o[0]) / cs, fy = (y - o[1]) / cs, fz = (z - o[2]) / cs;
+      if (fx < 0 || fy < 0 || fz < 0 || fx >= nx - 1 || fy >= ny - 1 || fz >= nz - 1) return band;
+      var ix = fx | 0, iy = fy | 0, iz = fz | 0, u = fx - ix, v = fy - iy, w = fz - iz, i0 = (iz * ny + iy) * nx + ix, sy = nx, sz = nx * ny;
+      var c000 = G[i0], c100 = G[i0 + 1], c010 = G[i0 + sy], c110 = G[i0 + sy + 1], c001 = G[i0 + sz], c101 = G[i0 + sz + 1], c011 = G[i0 + sz + sy], c111 = G[i0 + sz + sy + 1];
+      var c00 = c000 + (c100 - c000) * u, c10 = c010 + (c110 - c010) * u, c01 = c001 + (c101 - c001) * u, c11 = c011 + (c111 - c011) * u, c0 = c00 + (c10 - c00) * v, c1 = c01 + (c11 - c01) * v;
+      if (n3) {
+        var gx = ((c100 - c000) * (1 - v) + (c110 - c010) * v) * (1 - w) + ((c101 - c001) * (1 - v) + (c111 - c011) * v) * w;
+        var gy = (c10 - c00) * (1 - w) + (c11 - c01) * w, gz = c1 - c0, gl = Math.sqrt(gx * gx + gy * gy + gz * gz) || 1;
+        n3[0] = gx / gl; n3[1] = gy / gl; n3[2] = gz / gl;
+      }
+      return c0 + (c1 - c0) * w;
+    }
+    b.dist = function (x, y, z, n3) { return sample(x, y, z, n3); };
+    b.push = function (x, k, th, n3) {
+      var d = sample(x[k], x[k + 1], x[k + 2], n3); if (d >= th) return 0;
+      if (d <= -band + .01) { var r = Math.hypot(x[k], x[k + 2]) || 1; n3[0] = x[k] / r; n3[1] = 0; n3[2] = x[k + 2] / r; } // deep inside: out from the centre line
+      x[k] += n3[0] * (th - d); x[k + 1] += n3[1] * (th - d); x[k + 2] += n3[2] * (th - d); return 1;
+    };
+  }
+  function triDist(px, py, pz, P, a, b, c, out) { // distance from a point to a triangle (closest-point regions)
+    var ax = P[a], ay = P[a + 1], az = P[a + 2], abx = P[b] - ax, aby = P[b + 1] - ay, abz = P[b + 2] - az, acx = P[c] - ax, acy = P[c + 1] - ay, acz = P[c + 2] - az;
+    var apx = px - ax, apy = py - ay, apz = pz - az, d1 = abx * apx + aby * apy + abz * apz, d2 = acx * apx + acy * apy + acz * apz, qx, qy, qz;
+    if (d1 <= 0 && d2 <= 0) { qx = ax; qy = ay; qz = az; }
+    else {
+      var bpx = px - P[b], bpy = py - P[b + 1], bpz = pz - P[b + 2], d3 = abx * bpx + aby * bpy + abz * bpz, d4 = acx * bpx + acy * bpy + acz * bpz;
+      if (d3 >= 0 && d4 <= d3) { qx = P[b]; qy = P[b + 1]; qz = P[b + 2]; }
+      else {
+        var vc = d1 * d4 - d3 * d2;
+        if (vc <= 0 && d1 >= 0 && d3 <= 0) { var v = d1 / (d1 - d3); qx = ax + abx * v; qy = ay + aby * v; qz = az + abz * v; }
+        else {
+          var cpx = px - P[c], cpy = py - P[c + 1], cpz = pz - P[c + 2], d5 = abx * cpx + aby * cpy + abz * cpz, d6 = acx * cpx + acy * cpy + acz * cpz;
+          if (d6 >= 0 && d5 <= d6) { qx = P[c]; qy = P[c + 1]; qz = P[c + 2]; }
+          else {
+            var vb = d5 * d2 - d1 * d6;
+            if (vb <= 0 && d2 >= 0 && d6 <= 0) { var w = d2 / (d2 - d6); qx = ax + acx * w; qy = ay + acy * w; qz = az + acz * w; }
+            else {
+              var va = d3 * d6 - d5 * d4;
+              if (va <= 0 && (d4 - d3) >= 0 && (d5 - d6) >= 0) { var w2 = (d4 - d3) / ((d4 - d3) + (d5 - d6)); qx = P[b] + (P[c] - P[b]) * w2; qy = P[b + 1] + (P[c + 1] - P[b + 1]) * w2; qz = P[b + 2] + (P[c + 2] - P[b + 2]) * w2; }
+              else { var den = 1 / (va + vb + vc), v2 = vb * den, w3 = vc * den; qx = ax + abx * v2 + acx * w3; qy = ay + aby * v2 + acy * w3; qz = az + abz * v2 + acz * w3; }
+            }
+          }
         }
       }
-      for (var s = 0; s < segs.length; s++) {
-        var q = segs[s];
-        if (X < q.min[0] || Y < q.min[1] || Z < q.min[2] || X > q.max[0] || Y > q.max[1] || Z > q.max[2]) continue;
-        var px = X - q.a[0], py = Y - q.a[1], pz = Z - q.a[2], t = (px * q.v[0] + py * q.v[1] + pz * q.v[2]) / q.l2;
-        if (t < 0) t = 0; else if (t > 1) t = 1;
-        var cx = px - q.v[0] * t, cyy = py - q.v[1] * t, cz = pz - q.v[2] * t, l = Math.sqrt(cx * cx + cyy * cyy + cz * cz) + 1e-9, dd = l - (q.ra + (q.rb - q.ra) * t);
-        if (dd < th) { cx /= l; cyy /= l; cz /= l; X += cx * (th - dd); Y += cyy * (th - dd); Z += cz * (th - dd); ax += cx; ay += cyy; az += cz; hit = 1; }
-      }
-      var hx = (X - head.c[0]) / head.r[0], hy = (Y - head.c[1]) / head.r[1], hz = (Z - head.c[2]) / head.r[2], hq = Math.sqrt(hx * hx + hy * hy + hz * hz);
-      if (hq < 1 + th / head.r[0]) { var sc = (1 + th / head.r[0]) / (hq || 1); X = head.c[0] + (X - head.c[0]) * sc; Y = head.c[1] + (Y - head.c[1]) * sc; Z = head.c[2] + (Z - head.c[2]) * sc; ax += hx; ay += hy; az += hz; hit = 1; }
-      if (hit) { var al2 = Math.sqrt(ax * ax + ay * ay + az * az) || 1; n[0] = ax / al2; n[1] = ay / al2; n[2] = az / al2; x[k] = X; x[k + 1] = Y; x[k + 2] = Z; }
-      return hit;
     }
-    // clearance radius of a horizontal cylinder around the torso between two heights
-    function maxA(ya, yb) { var r = 0; for (var i = 0; i < N; i++) { var y = y0 + i * step; if (y >= ya && y <= yb) r = Math.max(r, A[i], Bt[i] + Math.abs(C[i])); } return r; }
-    return { m: m, g: g, dist: dist, push: push, torso: { A: A, B: Bt, C: C, y0: y0, step: step, N: N }, segs: segs, head: head, joints: joints, maxA: maxA,
-      y: { waist: waistY, hps: hps, hip: hipY, crotch: crotchY, bust: bustY, arm: armY, shoulder: shY, neckTop: neckTop } };
-  };
+    return Math.sqrt((px - qx) * (px - qx) + (py - qy) * (py - qy) + (pz - qz) * (pz - qz));
+  }
 
   /* ---------------- 2D helpers ---------------- */
   function plen(p) { var s = 0; for (var i = 1; i < p.length; i++) s += Math.hypot(p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1]); return s; }
@@ -345,7 +416,15 @@
     for (var k in edges) { var e = edges[k]; E.push(e[0], e[1], rest(e[0], e[1])); if (e[3] >= 0) Bn.push(e[2], e[3], rest(e[2], e[3])); }
     for (i = 0; i < n; i++) this.w[i] = mass[i] > 0 ? 1 / mass[i] : 0;
     this.E = new Float32Array(E); this.B = new Float32Array(Bn); this.S = M.seams; this.Tt = M.teth || new Float32Array(0); this.rings = M.rings || [];
-    this.t = 0; this.sub = 14; this.th = .32; this.settled = false; this.calm = 0;
+    this.t = 0; this.sub = 14; this.th = .32; this.settled = false; this.calm = 0; this.tWake = 0;
+    // self-collision: points sewn together (same group) or close on the same flat piece never push each other apart
+    var grp = new Int32Array(n); for (i = 0; i < n; i++) grp[i] = i;
+    function root(a) { while (grp[a] !== a) { grp[a] = grp[grp[a]]; a = grp[a]; } return a; }
+    for (i = 0; i < M.seams.length; i += 2) { var ra = root(M.seams[i]), rb2 = root(M.seams[i + 1]); if (ra !== rb2) grp[ra] = rb2; }
+    for (i = 0; i < n; i++) grp[i] = root(i);
+    var onSeam = new Uint8Array(n); for (i = 0; i < M.seams.length; i++) onSeam[M.seams[i]] = 1;
+    this.onSeam = onSeam; this.grp = grp; this.panel = M.panel; this.selfR = .75; this.HS = 1 << 14; this.head = new Int32Array(this.HS); this.next = new Int32Array(n);
+    this.nrm = new Float32Array(n * 3); this.grab = null; this.pinned = null;
     // per-vertex gap to the body, for the fit map
     this.gap = new Float32Array(n); this.strain = new Float32Array(n);
   }
@@ -353,11 +432,18 @@
     var n = this.n, x = this.x, p = this.p, v = this.v, w = this.w, sub = this.sub, dt = Math.min(frameDt, 1 / 30) / sub, fab = this.fab;
     var E = this.E, Bn = this.B, S = this.S, body = this.body, th = this.th, nrm = [0, 0, 0], nrm2 = [0, 0, 0];
     var aS = fab.stretch / (dt * dt), aB = fab.bend / (dt * dt), mu = fab.fric, i, j;
+    this.normals();
+    var nr = this.nrm, air = Math.exp(-260 / fab.gsm * dt), G = this.grab;
     for (var s = 0; s < sub; s++) {
-      var tt = this.t, gScale = tt < .7 ? 0 : Math.min(1, (tt - .7) / .5), g = -981 * gScale * dt, damp = tt < .7 ? .985 : .9985;
+      var tt = this.t, gScale = tt < .7 ? 0 : Math.min(1, (tt - .7) / .5), g = -981 * gScale * dt, rest = Math.max(0, Math.min(1, (tt - this.tWake - (this.tWake ? 1.5 : 2.5)) / 3)), damp = tt < .7 ? .985 : this.grab || this.pinned ? .997 : .9985 - .0075 * rest; // settle: more damping as the drape comes to rest
       var sewMax = tt < .7 ? .25 : 1.5;
-      for (i = 0; i < n; i++) { if (!w[i]) continue; var i3 = 3 * i; v[i3 + 1] += g; v[i3] *= damp; v[i3 + 1] *= damp; v[i3 + 2] *= damp;
-        p[i3] = x[i3]; p[i3 + 1] = x[i3 + 1]; p[i3 + 2] = x[i3 + 2]; x[i3] += v[i3] * dt; x[i3 + 1] += v[i3 + 1] * dt; x[i3 + 2] += v[i3 + 2] * dt; }
+      for (i = 0; i < n; i++) { var i3 = 3 * i; p[i3] = x[i3]; p[i3 + 1] = x[i3 + 1]; p[i3 + 2] = x[i3 + 2]; if (!w[i]) continue;
+        v[i3 + 1] += g; v[i3] *= damp; v[i3 + 1] *= damp; v[i3 + 2] *= damp;
+        var vn = v[i3] * nr[i3] + v[i3 + 1] * nr[i3 + 1] + v[i3 + 2] * nr[i3 + 2], dv = vn * (1 - air); // air resists cloth moving face-on
+        v[i3] -= dv * nr[i3]; v[i3 + 1] -= dv * nr[i3 + 1]; v[i3 + 2] -= dv * nr[i3 + 2];
+        x[i3] += v[i3] * dt; x[i3 + 1] += v[i3 + 1] * dt; x[i3 + 2] += v[i3 + 2] * dt; }
+      if (G) for (var gi = 0; gi < G.ids.length; gi++) { var gq = 3 * G.ids[gi], gw = G.wt[gi]; // the hand pulling the cloth
+        x[gq] += (G.t[0] + G.off[3 * gi] - x[gq]) * gw; x[gq + 1] += (G.t[1] + G.off[3 * gi + 1] - x[gq + 1]) * gw; x[gq + 2] += (G.t[2] + G.off[3 * gi + 2] - x[gq + 2]) * gw; }
       // stretch
       for (j = 0; j < E.length; j += 3) {
         var a = E[j] * 3, b = E[j + 1] * 3, r = E[j + 2], wa = w[E[j]], wb = w[E[j + 1]], dx = x[b] - x[a], dy = x[b + 1] - x[a + 1], dz = x[b + 2] - x[a + 2], l = Math.sqrt(dx * dx + dy * dy + dz * dz);
@@ -391,6 +477,7 @@
         for (q = 0; q < ord.length; q++) { var qa = 3 * ord[q], qb = 3 * ord[(q + 1) % ord.length]; circ += Math.hypot(x[qa] - x[qb], x[qa + 2] - x[qb + 2]); }
         if (circ > rg.len * 1.01) { var sc = rg.len * 1.01 / circ; for (q = 0; q < ids.length; q++) { var qi = 3 * ids[q]; x[qi] = cx0 + (x[qi] - cx0) * sc; x[qi + 2] = cz0 + (x[qi + 2] - cz0) * sc; } }
       }
+      if (s % 3 === 0 && tt > 1.1) this.selfCollide();
       // body
       for (i = 0; i < n; i++) {
         var k3 = 3 * i;
@@ -409,10 +496,67 @@
     }
     for (i = 0, ke = 0; i < n * 3; i++) ke += v[i] * v[i];
     var vrms = Math.sqrt(ke / n);
-    if (this.t > 2 && vrms < 1.2) this.calm += frameDt; else this.calm = 0;
-    if (this.calm > .6 || this.t > 14) this.settled = true;
+    var since = this.t - this.tWake;
+    if (!G && !this.pinned && since > (this.tWake ? .8 : 2) && vrms < 1.5) this.calm += frameDt; else this.calm = 0;
+    if (!G && !this.pinned && (this.calm > .5 || since > 10)) this.settled = true;
     return vrms;
   };
+  Sim.prototype.wake = function () { this.settled = false; this.calm = 0; this.tWake = Math.max(this.t, 1.3); this.t = this.tWake; };
+  Sim.prototype.normals = function () {
+    var x = this.x, T = this.M.tri, nr = this.nrm, i;
+    nr.fill(0);
+    for (i = 0; i < T.length; i += 3) {
+      var a = 3 * T[i], b = 3 * T[i + 1], c = 3 * T[i + 2], ux = x[b] - x[a], uy = x[b + 1] - x[a + 1], uz = x[b + 2] - x[a + 2], vx = x[c] - x[a], vy = x[c + 1] - x[a + 1], vz = x[c + 2] - x[a + 2];
+      var nx = uy * vz - uz * vy, ny = uz * vx - ux * vz, nz = ux * vy - uy * vx;
+      nr[a] += nx; nr[a + 1] += ny; nr[a + 2] += nz; nr[b] += nx; nr[b + 1] += ny; nr[b + 2] += nz; nr[c] += nx; nr[c + 1] += ny; nr[c + 2] += nz;
+    }
+    for (i = 0; i < this.n; i++) { var k = 3 * i, l = Math.hypot(nr[k], nr[k + 1], nr[k + 2]) || 1; nr[k] /= l; nr[k + 1] /= l; nr[k + 2] /= l; }
+  };
+  // cloth against cloth: keep points of different layers at least selfR apart (spatial hash)
+  Sim.prototype.selfCollide = function () {
+    var sm = this.onSeam, x = this.x, n = this.n, R = this.selfR, R2 = R * R, inv = 1 / R, HS = this.HS, M1 = HS - 1, head = this.head, next = this.next, grp = this.grp, uv = this.M.uv, pan = this.panel, w = this.w, i;
+    head.fill(-1);
+    function h(ix, iy, iz) { return ((ix * 92837111) ^ (iy * 689287499) ^ (iz * 283923481)) & M1; }
+    for (i = 0; i < n; i++) { var c = h(Math.floor(x[3 * i] * inv), Math.floor(x[3 * i + 1] * inv), Math.floor(x[3 * i + 2] * inv)); next[i] = head[c]; head[c] = i; }
+    for (i = 0; i < n; i++) {
+      var k = 3 * i, ix = Math.floor(x[k] * inv), iy = Math.floor(x[k + 1] * inv), iz = Math.floor(x[k + 2] * inv);
+      for (var a = -1; a <= 1; a++) for (var b = -1; b <= 1; b++) for (var c2 = -1; c2 <= 1; c2++) {
+        for (var j = head[h(ix + a, iy + b, iz + c2)]; j >= 0; j = next[j]) {
+          if (j <= i || grp[i] === grp[j] || (sm[i] && sm[j])) continue;
+          var q = 3 * j, dx = x[q] - x[k], dy = x[q + 1] - x[k + 1], dz = x[q + 2] - x[k + 2], d2 = dx * dx + dy * dy + dz * dz;
+          if (d2 >= R2 || d2 < 1e-10) continue;
+          if (pan[i] === pan[j]) { var du = uv[2 * i] - uv[2 * j], dv = uv[2 * i + 1] - uv[2 * j + 1]; if (du * du + dv * dv < 9) continue; }
+          var d = Math.sqrt(d2), ws = w[i] + w[j]; if (!ws) continue; var corr = (R - d) / d / ws;
+          x[k] -= dx * corr * w[i]; x[k + 1] -= dy * corr * w[i]; x[k + 2] -= dz * corr * w[i];
+          x[q] += dx * corr * w[j]; x[q + 1] += dy * corr * w[j]; x[q + 2] += dz * corr * w[j];
+        }
+      }
+    }
+  };
+  // grab the cloth at point i: nearby points follow with a soft falloff
+  Sim.prototype.startGrab = function (i, radius) {
+    var x = this.x, uv = this.M.uv, pan = this.panel, ids = [], wt = [], off = [], r = radius || 4;
+    for (var k = 0; k < this.n; k++) {
+      if (pan[k] !== pan[i]) continue; var d = Math.hypot(uv[2 * k] - uv[2 * i], uv[2 * k + 1] - uv[2 * i + 1]); if (d > r) continue;
+      ids.push(k); wt.push(.9 * (1 - d / r) + .1); off.push(x[3 * k] - x[3 * i], x[3 * k + 1] - x[3 * i + 1], x[3 * k + 2] - x[3 * i + 2]);
+    }
+    this.grab = { ids: ids, wt: wt, off: off, t: [x[3 * i], x[3 * i + 1], x[3 * i + 2]] }; this.wake();
+  };
+  Sim.prototype.moveGrab = function (t) { if (this.grab) { this.grab.t = t; this.wake(); } };
+  Sim.prototype.endGrab = function () { this.grab = null; this.wake(); };
+  // move a whole piece rigidly (the gizmo): matrix applied to where the piece was when the move began
+  Sim.prototype.startPanel = function (pi) {
+    var ids = [], snap = []; for (var k = 0; k < this.n; k++) if (this.panel[k] === pi) { ids.push(k); snap.push(this.x[3 * k], this.x[3 * k + 1], this.x[3 * k + 2]); }
+    var wsave = ids.map(function (k) { return this.w[k]; }, this); ids.forEach(function (k) { this.w[k] = 0; this.v[3 * k] = this.v[3 * k + 1] = this.v[3 * k + 2] = 0; }, this);
+    this.pinned = { ids: ids, snap: snap, wsave: wsave }; this.wake();
+  };
+  Sim.prototype.movePanel = function (e) { // e: 4x4 column-major
+    var P = this.pinned; if (!P) return; var x = this.x;
+    for (var q = 0; q < P.ids.length; q++) { var k = 3 * P.ids[q], a = P.snap[3 * q], b = P.snap[3 * q + 1], c = P.snap[3 * q + 2];
+      x[k] = e[0] * a + e[4] * b + e[8] * c + e[12]; x[k + 1] = e[1] * a + e[5] * b + e[9] * c + e[13]; x[k + 2] = e[2] * a + e[6] * b + e[10] * c + e[14]; }
+    this.wake();
+  };
+  Sim.prototype.endPanel = function () { var P = this.pinned; if (!P) return; P.ids.forEach(function (k, q) { this.w[k] = P.wsave[q]; this.v[3 * k] = this.v[3 * k + 1] = this.v[3 * k + 2] = 0; }, this); this.pinned = null; this.wake(); };
   Sim.prototype.seamGap = function () { var S = this.S, x = this.x, mx = 0; for (var j = 0; j < S.length; j += 2) { var a = S[j] * 3, b = S[j + 1] * 3; mx = Math.max(mx, Math.hypot(x[a] - x[b], x[a + 1] - x[b + 1], x[a + 2] - x[b + 2])); } return mx; };
   Sim.prototype.computeStrain = function () {
     var E = this.E, x = this.x, n = this.n, s = this.strain, c = new Float32Array(n), i;

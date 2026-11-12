@@ -40,7 +40,7 @@ body[data-tool="3d-drape-studio"] .fx-title p{max-width:760px}
 .dr-legend{position:absolute;right:12px;bottom:12px;background:rgba(255,253,248,.95);border:1px solid var(--fx-line);border-radius:8px;padding:9px 12px;font-size:12px;display:grid;gap:4px}
 .dr-legend b{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--fx-green)}
 .dr-legend span{display:flex;align-items:center;gap:7px}.dr-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
-.dr-hint{position:absolute;right:14px;top:56px;margin:0;font-size:11.5px;color:var(--fx-muted);pointer-events:none}
+.dr-hint{position:absolute;left:50%;transform:translateX(-50%);bottom:14px;margin:0;font-size:11.5px;color:var(--fx-muted);pointer-events:none;background:rgba(255,253,248,.8);padding:4px 10px;border-radius:999px;white-space:nowrap;max-width:60%;overflow:hidden;text-overflow:ellipsis}
 #drPieces svg{width:100%;height:auto;max-height:300px;display:block;margin:4px 0}
 .dr-tab{width:100%;border-collapse:collapse;font-size:13px}.dr-tab th,.dr-tab td{padding:6px 4px;text-align:right;border-bottom:1px solid var(--fx-line)}
 .dr-tab th:first-child{text-align:left}.dr-tab thead th{font-size:11px;color:var(--fx-muted);font-weight:600}
@@ -53,3 +53,9 @@ body[data-tool="3d-drape-studio"] .fx-title p{max-width:760px}
 @media (max-width:1280px){.dr{grid-template-columns:250px minmax(0,1fr) 260px}}
 @media print{.dr{display:block;height:auto}.dr-ctl,.dr-bar,.dr-hint{display:none}}
 body.dr-mobile .fx-actions{display:none!important}
+
+.dr-tone{margin:2px 0 8px}.dr-tone button{width:22px;height:22px}
+.dr-pc{fill:#fbf8f2;cursor:pointer;transition:fill .15s}.dr-pc:hover{fill:#eef2ec}.dr-pc.on{fill:#dfe9f5}
+.dr-view.pulling canvas{cursor:grabbing!important}
+#drGz{background:#214538}#drGz button{color:#fff}#drGz button[aria-pressed=true]{background:#fff;color:var(--fx-green)}
+@media (max-width:1380px){.dr-hint{display:none}}

@@ -8,8 +8,8 @@ import tools_shell as T
 ROOT = Path(__file__).resolve().parent.parent
 SRC = Path(__file__).resolve().parent / 'tools_js'
 SLUG = '3d-drape-studio'
-DESC = ('Sew your pattern onto a body form in 3D and see how it drapes in different fabrics. '
-        'Check proportion, length and ease with a fit map before you cut a sample.')
+DESC = ('Sew your pattern onto a realistic 3D avatar in your size and see how it drapes in different fabrics. '
+        'Pull the cloth, move pieces with a gizmo, and check ease with a fit map before you cut a sample.')
 
 
 def scripts(v):

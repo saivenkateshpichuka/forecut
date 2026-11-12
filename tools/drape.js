@@ -1,11 +1,12 @@
 /* Forecut. Built from build/tools_js; edit there. */
-import './pm-engine.js?v=fx-20261112';
-import './drape-sim.js?v=fx-20261112';
+import './pm-engine.js?v=fx-20261112b';
+import './drape-sim.js?v=fx-20261112b';
 /* Forecut 3D Drape Studio: page, controls, 3D view and 2D pattern view. Desktop only. */
 import * as THREE from './vendor/three.module.min.js';
 import { OrbitControls } from './vendor/OrbitControls.js';
+import { TransformControls } from './vendor/TransformControls.js';
 
-const PM = window.PM, D = window.FCDrape, V = 'fx-20261112';
+const PM = window.PM, D = window.FCDrape, V = 'fx-20261112b';
 const $ = (s, r) => (r || document).querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const KEY = 'fc-tool-drape';
@@ -14,13 +15,14 @@ const NECK = [['round', 'Round'], ['crew', 'Crew'], ['deep', 'Deep round'], ['us
 const SLEEVE = { plain: 'Set-in sleeve', tee: 'T-shirt sleeve', puff: 'Puff sleeve', bell: 'Bell sleeve', cap: 'Cap sleeve', none: 'Sleeveless' };
 const SLEEVES = { tshirt: ['tee', 'none'], top: ['plain', 'puff', 'bell', 'cap', 'none'], kurta: ['plain', 'bell', 'puff', 'cap', 'none'], dress: ['plain', 'puff', 'bell', 'cap', 'none'] };
 const SLEN = [['cap', 'Cap'], ['short', 'Short'], ['elbow', 'Elbow'], ['3q', 'Three-quarter'], ['full', 'Full']];
-const GENDER = { women: 'Women', men: 'Men', kids: 'Kids', unisex: 'Unisex' };
-const MEAS = [['bust', 'Bust / chest'], ['waist', 'Waist'], ['hip', 'Hip'], ['shoulder', 'Shoulder width'], ['nape', 'Back length (nape to waist)'], ['bicep', 'Upper arm']];
+const GENDER = { women: 'Female', men: 'Male', kids: 'Kids', unisex: 'Unisex' };
+const TONES = [['form', '#d8d2c8', 'Grey form'], ['t1', '#efd3bd', 'Light'], ['t2', '#d9a988', 'Light medium'], ['t3', '#b98260', 'Medium'], ['t4', '#8a5a3c', 'Medium deep'], ['t5', '#5e3b27', 'Deep']];
+const MEAS = [['height', 'Height'], ['bust', 'Bust / chest'], ['waist', 'Waist'], ['hip', 'Hip'], ['shoulder', 'Shoulder width'], ['nape', 'Back length (nape to waist)'], ['bicep', 'Upper arm']];
 const SEAMC = ['#c4572f', '#2f6f8f', '#7a5c99', '#3d8a5a', '#b08a1e', '#a23b72', '#4a7d84', '#8c6d3f', '#5b6bbf', '#9c4f2f', '#3f7f3f', '#7f3f6f', '#2f8f7f', '#8f2f3f', '#6f6f2f', '#2f4f8f', '#b2672b', '#6a8f2f'];
 
 let S = load();
 try { const q = new URLSearchParams(location.search); if (D.STYLES[q.get('style')]) { S.style = q.get('style'); S.opts = {}; S.meas = {}; } if (GENDER[q.get('gender')]) S.gender = q.get('gender'); if (q.get('size')) S.size = q.get('size'); if (q.get('o')) { const o = JSON.parse(q.get('o')); S.opts = {}; ['len', 'ease', 'neck', 'sleeve', 'slen', 'flare', 'slit', 'slen2'].forEach(k => { const v = o[k]; if (v === undefined) return; if (/^[\d.]+$/.test(String(v))) S.opts[k] = Math.min(200, +v); else if ((k === 'neck' && NECK.some(n => n[0] === v)) || (k === 'sleeve' && SLEEVE[v]) || (k === 'slen' && SLEN.some(n => n[0] === v))) S.opts[k] = v; }); } if (q.get('m')) { const mm = JSON.parse(q.get('m')); S.meas = {}; MEAS.forEach(k => { if (+mm[k[0]] > 0) S.meas[k[0]] = +mm[k[0]]; }); } if (q.get('style')) history.replaceState(null, '', location.pathname); } catch (e) { }
-function defaults() { return { style: 'tshirt', gender: 'women', size: 'M', fabric: 'jersey', colour: '#7c8ea3', opts: {}, meas: {}, fit: 'off', bodyOn: true, seamsOn: true, quality: 'std' }; }
+function defaults() { return { style: 'tshirt', gender: 'women', size: 'M', fabric: 'jersey', colour: '#7c8ea3', opts: {}, meas: {}, fit: 'off', bodyOn: true, seamsOn: true, quality: 'std', tone: 'form', tool: 'pull' }; }
 function load() { try { const v = JSON.parse(localStorage.getItem(KEY) || 'null'); if (v && D.STYLES[v.style]) return Object.assign(defaults(), v); } catch (e) { } return defaults(); }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
 
@@ -29,7 +31,8 @@ const app = $('#app');
 app.innerHTML = `<div class="dr">
   <aside class="dr-ctl" aria-label="Garment, body and fabric">
     <section><h2>Garment</h2><label>Style<select id="drStyle"></select></label><div id="drOpts" class="dr-opts"></div></section>
-    <section><h2>Body form</h2><div class="dr-two"><label>Fit for<select id="drGender"></select></label><label>Size<select id="drSize"></select></label></div>
+    <section><h2>Avatar</h2><div class="dr-two"><label>Body<select id="drGender"></select></label><label>Size<select id="drSize"></select></label></div>
+      <div class="dr-sw dr-tone" id="drTone" role="radiogroup" aria-label="Avatar skin tone"></div>
       <details id="drMeasBox"><summary>Adjust measurements</summary><div id="drMeas" class="dr-meas"></div><button type="button" class="dr-link" id="drMeasReset">Back to the size chart</button></details></section>
     <section><h2>Fabric</h2><label>Fabric<select id="drFabric"></select></label><p class="dr-note" id="drFabNote"></p>
       <div class="dr-sw" id="drSw" role="radiogroup" aria-label="Colour"></div><label class="dr-cc">Own colour <input type="color" id="drColour"></label></section>
@@ -41,11 +44,13 @@ app.innerHTML = `<div class="dr">
     <div class="dr-bar" role="toolbar" aria-label="View">
       <div class="dr-seg" id="drViews"><button data-v="front" aria-pressed="true">Front</button><button data-v="q">¾</button><button data-v="side">Side</button><button data-v="back">Back</button></div>
       <div class="dr-seg" id="drFit"><button data-f="off">Fabric</button><button data-f="fit">Fit map</button><button data-f="strain">Stretch map</button></div>
-      <div class="dr-seg"><button id="drBody" aria-pressed="true">Body form</button><button id="drSeams" aria-pressed="true">Seams</button></div>
+      <div class="dr-seg"><button id="drBody" aria-pressed="true">Avatar</button><button id="drSeams" aria-pressed="true">Seams</button></div>
+      <div class="dr-seg" id="drTool" aria-label="Mouse tool"><button data-t="pull" title="Drag the fabric to pull it, as you would on a real garment">Pull fabric</button><button data-t="move" title="Click a piece, then move or rotate it with the gizmo">Move piece</button></div>
+      <div class="dr-seg" id="drGz" hidden><button data-g="translate" aria-pressed="true" title="Move (W)">Move</button><button data-g="rotate" title="Rotate (E)">Rotate</button><button data-g="done" title="Finish (Esc)">Done</button></div>
     </div>
     <div class="dr-status" id="drStatus" role="status" aria-live="polite">Preparing…</div>
     <div class="dr-legend" id="drLegend" hidden></div>
-    <p class="dr-hint">Drag to turn · Scroll to zoom · Right-drag to move</p>
+    <p class="dr-hint" id="drHint">Drag the fabric to pull it · Drag the background to turn · Scroll to zoom · Right-drag to pan · Click an axis to snap the view</p>
   </section>
   <aside class="dr-2d" aria-label="Pattern pieces and measurements">
     <section><h2>Pattern pieces</h2><p class="dr-note">Matching colours are sewn together.</p><div id="drPieces"></div></section>
@@ -61,7 +66,11 @@ function style() { return D.STYLES[S.style]; }
 function gar() { return PM.GARMENTS[style().gid]; }
 function genders() { return gar().g.filter(g => g !== 'unisex' || !gar().g.includes('men')); }
 function sizes() { return Object.keys(PM.CHARTS[S.gender]); }
-function baseMeas() { const m = Object.assign({}, PM.CHARTS[S.gender][S.size]); Object.keys(S.meas || {}).forEach(k => { if (+S.meas[k] > 0) m[k] = +S.meas[k]; }); if (S.meas && +S.meas.bust > 0 && S.gender === 'women') m.bust_depth = Math.round((m.bust / 12 + 16.5) * 2) / 2; return m; }
+function baseMeas() {
+  const m = Object.assign({}, PM.CHARTS[S.gender][S.size]); Object.keys(S.meas || {}).forEach(k => { if (k !== 'height' && +S.meas[k] > 0) m[k] = +S.meas[k]; });
+  if (S.meas && +S.meas.bust > 0 && S.gender === 'women') m.bust_depth = Math.round((m.bust / 12 + 16.5) * 2) / 2;
+  return m;
+}
 function baseOpts() { // the same starting values as Pattern Maker
   const o = Object.assign({}, gar().d, style().def || {}), gid = style().gid;
   if (S.gender === 'kids') { if (o.len) o.len = Math.round(o.len * .62); if (o.slen2) o.slen2 = Math.round(o.slen2 * .6); if (o.ease) o.ease = Math.max(6, Math.round(o.ease * .75)); if (o.slit) o.slit = 12; }
@@ -99,8 +108,10 @@ function renderControls() {
     if (S.style === 'aline') h.push(`<label>Flare at hem, each side <output>${optVal('flare')} cm</output><input type="range" data-o="flare" min="2" max="20" step="1" value="${optVal('flare')}"></label>`);
   }
   $('#drOpts').innerHTML = h.join('');
-  const m = baseMeas();
-  $('#drMeas').innerHTML = MEAS.filter(k => st.kind === 'torso' || ['waist', 'hip'].includes(k[0])).map(k => `<label>${k[1]}<span><input type="number" step="0.5" min="20" max="200" data-m="${k[0]}" value="${m[k[0]]}"> cm</span></label>`).join('');
+  const m = baseMeas(); m.height = +(S.meas || {}).height || (lastBody ? Math.round(lastBody.height) : '');
+  $('#drMeas').innerHTML = MEAS.filter(k => st.kind === 'torso' || ['height', 'waist', 'hip'].includes(k[0])).map(k => `<label>${k[1]}<span><input type="number" step="0.5" min="20" max="230" data-m="${k[0]}" value="${m[k[0]]}"> cm</span></label>`).join('');
+  $('#drTone').innerHTML = TONES.map(t => `<button type="button" role="radio" aria-checked="${t[0] === S.tone}" title="${t[2]}" aria-label="${t[2]}" data-tone="${t[0]}" style="background:${t[1]}"></button>`).join('');
+  $$('#drTool button').forEach(b => b.setAttribute('aria-pressed', b.dataset.t === S.tool));
   $$('#drViews button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === view));
   $$('#drFit button').forEach(b => b.setAttribute('aria-pressed', b.dataset.f === S.fit));
   $('#drBody').setAttribute('aria-pressed', S.bodyOn); $('#drSeams').setAttribute('aria-pressed', S.seamsOn);
@@ -120,6 +131,10 @@ $('#drMeasReset').addEventListener('click', () => { S.meas = {}; save(); renderC
 $('#drSw').addEventListener('click', e => { const c = e.target.dataset && e.target.dataset.c; if (!c) return; S.colour = c; save(); $$('#drSw button').forEach(b => b.setAttribute('aria-checked', b.dataset.c === c)); $('#drColour').value = c; applyMaterial(); });
 $('#drColour').addEventListener('input', e => { S.colour = e.target.value; save(); $$('#drSw button').forEach(b => b.setAttribute('aria-checked', b.dataset.c === S.colour)); applyMaterial(); });
 $('#drSew').addEventListener('click', () => rebuild());
+$('#drTone').addEventListener('click', e => { const t = e.target.dataset && e.target.dataset.tone; if (!t) return; S.tone = t; save(); $$('#drTone button').forEach(b => b.setAttribute('aria-checked', b.dataset.tone === t)); tintBody(); });
+$('#drTool').addEventListener('click', e => { const t = e.target.dataset.t; if (!t) return; S.tool = t; save(); $$('#drTool button').forEach(b => b.setAttribute('aria-pressed', b.dataset.t === t)); if (t === 'pull') selectPanel(-1); $('#drHint').textContent = t === 'move' ? 'Click a piece to move or rotate it · Drag the background to turn' : 'Drag the fabric to pull it · Drag the background to turn · Scroll to zoom · Right-drag to pan · Click an axis to snap the view'; });
+$('#drGz').addEventListener('click', e => { const g = e.target.dataset.g; if (!g) return; if (g === 'done') { selectPanel(-1); return; } tc.setMode(g); $$('#drGz button').forEach(b => b.setAttribute('aria-pressed', b.dataset.g === g)); });
+window.addEventListener('keydown', e => { if (selPanel < 0 || /INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return; if (e.key === 'w' || e.key === 'W') $('[data-g=translate]').click(); else if (e.key === 'e' || e.key === 'E') $('[data-g=rotate]').click(); else if (e.key === 'Escape') selectPanel(-1); });
 $('#drPause').addEventListener('click', e => { if (!worker) return; paused = !paused; worker.postMessage({ cmd: paused ? 'pause' : 'resume' }); e.target.textContent = paused ? 'Resume' : 'Pause'; if (!paused) worker.postMessage({ cmd: 'ack', gen }); });
 $('#drViews').addEventListener('click', e => { const v = e.target.dataset.v; if (v) setView(v, true); });
 $('#drFit').addEventListener('click', e => { const f = e.target.dataset.f; if (!f) return; S.fit = f; save(); $$('#drFit button').forEach(b => b.setAttribute('aria-pressed', b.dataset.f === f)); paintFit(); });
@@ -148,32 +163,35 @@ const rim = new THREE.DirectionalLight(0xffffff, 1.1); rim.position.set(-80, 220
 const floor = new THREE.Mesh(new THREE.CircleGeometry(160, 64), new THREE.MeshStandardMaterial({ color: '#e3ddd2', roughness: 1 }));
 floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
 const bodyGroup = new THREE.Group(); scene.add(bodyGroup);
-const bodyMat = new THREE.MeshStandardMaterial({ color: '#d8d2c8', roughness: .82, metalness: 0 });
+const bodyMat = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: .62, metalness: 0 });
 
+const UNDER = { form: '#a9a39a', t1: '#3b3f46', t2: '#3b3f46', t3: '#2f3237', t4: '#e9e4dc', t5: '#e9e4dc' };
+const bodyU = { skin: { value: new THREE.Color() }, cloth: { value: new THREE.Color() }, pt: { value: 0 }, lc: { value: 0 }, lr: { value: 0 }, hh: { value: 1 }, bl: { value: 0 }, bh: { value: 0 } };
+bodyMat.onBeforeCompile = sh => { // underwear drawn per pixel from heights, so its edges are clean
+  Object.assign(sh.uniforms, bodyU);
+  sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float elig; varying float vEl; varying vec3 vW;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvEl = elig; vW = (modelMatrix * vec4(position, 1.0)).xyz;');
+  sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nuniform vec3 skin; uniform vec3 cloth; uniform float pt, lc, lr, hh, bl, bh; varying float vEl; varying vec3 vW;')
+    .replace('#include <color_fragment>', `#include <color_fragment>
+      float ax = abs(vW.x), cut = lc + lr * smoothstep(.25, .95, ax / hh);
+      float pants = step(.5, vEl) * step(vW.y, pt) * step(cut, vW.y);
+      float bra = step(.5, vEl) * step(bl, vW.y) * step(vW.y, bh) * step(.01, bh - bl);
+      float u = max(pants, bra); diffuseColor.rgb = mix(skin, cloth, u);`);
+};
 function buildBody(body) {
   bodyGroup.clear();
-  const T = body.torso, seg = 56, rows = [];
-  for (let i = 0; i < T.N; i += 2) rows.push(i);
-  if (rows[rows.length - 1] !== T.N - 1) rows.push(T.N - 1);
-  const pos = [], idx = [];
-  const SH = .45; // draw the form a little inside its collision surface so it never shows through the cloth
-  rows.forEach(i => { const y = T.y0 + i * T.step, a = Math.max(.5, T.A[i] - SH), b = Math.max(.5, T.B[i] - SH), c = T.C[i]; for (let k = 0; k <= seg; k++) { const t = k / seg * Math.PI * 2; pos.push(a * Math.sin(t), y, c + b * Math.cos(t)); } });
-  for (let r = 0; r < rows.length - 1; r++) for (let k = 0; k < seg; k++) { const a = r * (seg + 1) + k, b = a + seg + 1; idx.push(a, b, a + 1, b, b + 1, a + 1); }
-  const top = pos.length / 3; const ti = T.N - 1; pos.push(0, T.y0 + ti * T.step, T.C[ti]); for (let k = 0; k < seg; k++) { const a = (rows.length - 1) * (seg + 1) + k; idx.push(a, top, a + 1); }
-  const bot = pos.length / 3; pos.push(0, T.y0, T.C[0]); for (let k = 0; k < seg; k++) idx.push(k + 1, bot, k);
-  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.setIndex(idx); g.computeVertexNormals();
-  const torso = new THREE.Mesh(g, bodyMat); torso.castShadow = torso.receiveShadow = true; bodyGroup.add(torso);
-  body.segs.forEach(q => {
-    const a = new THREE.Vector3(...q.a), b = new THREE.Vector3(...q.b), len = a.distanceTo(b);
-    const cyl = new THREE.Mesh(new THREE.CylinderGeometry(q.rb - SH, q.ra - SH, len, 32, 1, true), bodyMat);
-    cyl.position.copy(a).add(b).multiplyScalar(.5); cyl.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), b.clone().sub(a).normalize());
-    cyl.castShadow = cyl.receiveShadow = true; bodyGroup.add(cyl);
-    [[a, q.ra], [b, q.rb]].forEach(p => { const s = new THREE.Mesh(new THREE.SphereGeometry(p[1] - SH, 28, 18), bodyMat); s.position.copy(p[0]); s.castShadow = true; bodyGroup.add(s); });
-  });
-  const hd = new THREE.Mesh(new THREE.SphereGeometry(1, 40, 28), bodyMat); hd.scale.set(...body.head.r); hd.position.set(...body.head.c); hd.castShadow = true; bodyGroup.add(hd);
-  const stand = new THREE.Mesh(new THREE.CylinderGeometry(1.4, 1.4, 6, 12), new THREE.MeshStandardMaterial({ color: '#8b8278', roughness: .6 })); stand.position.set(0, 3, -6); bodyGroup.add(stand);
-  bodyGroup.visible = S.bodyOn;
+  const g = new THREE.BufferGeometry(), n = body.pos.length / 3;
+  g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(body.pos), 3));
+  g.setIndex(new THREE.BufferAttribute(new Uint16Array(body.tri), 1));
+  const el = new Float32Array(n); for (let i = 0; i < n; i++) el[i] = body.mask[i] / 255; g.setAttribute('elig', new THREE.BufferAttribute(el, 1));
+  g.computeVertexNormals();
+  // draw the skin a little inside the collision surface so it never shows through the cloth
+  const p = g.attributes.position, nr = g.attributes.normal; for (let i = 0; i < n; i++) p.setXYZ(i, p.getX(i) - nr.getX(i) * .55, p.getY(i) - nr.getY(i) * .55, p.getZ(i) - nr.getZ(i) * .55);
+  const u = body.under; bodyU.pt.value = u.pantsTop; bodyU.lc.value = u.legCut; bodyU.lr.value = u.legRise; bodyU.hh.value = u.hipHalf; bodyU.bl.value = u.braLo; bodyU.bh.value = u.braHi;
+  bodyMesh = new THREE.Mesh(g, bodyMat); bodyMesh.castShadow = bodyMesh.receiveShadow = true; bodyGroup.add(bodyMesh);
+  tintBody(); bodyGroup.visible = S.bodyOn;
 }
+let bodyMesh = null;
+function tintBody() { const t = TONES.find(x => x[0] === S.tone) || TONES[0]; bodyU.skin.value.set(t[1]); bodyU.cloth.value.set(UNDER[t[0]]); dirty = true; }
 
 /* fabric surface: a fine weave or knit bump so the cloth reads as cloth up close */
 function weaveTex(kind) {
@@ -190,11 +208,11 @@ garMat.onBeforeCompile = sh => { sh.fragmentShader = sh.fragmentShader.replace('
 function applyMaterial() {
   const f = D.FABRICS[S.fabric], kind = /jersey|fleece/.test(S.fabric) ? 'knit' : S.fabric === 'denim' ? 'twill' : 'plain';
   garMat.color.set(S.fit === 'off' ? S.colour : '#ffffff'); garMat.roughness = f.rough; garMat.bumpMap = TEX[kind]; garMat.bumpScale = kind === 'plain' ? .25 : .45;
-  garMat.vertexColors = S.fit !== 'off'; garMat.needsUpdate = true;
+  garMat.vertexColors = S.fit !== 'off' || selPanel >= 0; garMat.needsUpdate = true;
   if (seamMat) seamMat.color.set(new THREE.Color(S.colour).multiplyScalar(.55));
   dirty = true;
 }
-let garMesh = null, seamMesh = null, seamMat = null, posAttr = null, colAttr = null, lastGap = null, lastStrain = null;
+let garMesh = null, seamMesh = null, seamMat = null, posAttr = null, colAttr = null, lastGap = null, lastStrain = null, panelOf = null, selPanel = -1, lastMesh = null;
 function buildGarment(d) {
   if (garMesh) { scene.remove(garMesh); garMesh.geometry.dispose(); }
   if (seamMesh) { scene.remove(seamMesh); seamMesh.geometry.dispose(); }
@@ -222,6 +240,8 @@ function paintFit() {
   if (colAttr) {
     const src = S.fit === 'fit' ? lastGap : S.fit === 'strain' ? lastStrain : null, c = colAttr.array;
     if (src) for (let i = 0; i < src.length; i++) { const v = ramp(S.fit === 'fit' ? FITR : STRR, src[i]); c[3 * i] = v[0]; c[3 * i + 1] = v[1]; c[3 * i + 2] = v[2]; }
+    else c.fill(1);
+    if (selPanel >= 0 && panelOf) for (let i = 0; i < panelOf.length; i++) if (panelOf[i] === selPanel) { c[3 * i] *= .7; c[3 * i + 1] *= .86; c[3 * i + 2] = Math.min(1, c[3 * i + 2] * 1.1 + .1); }
     colAttr.needsUpdate = true;
   }
   applyMaterial();
@@ -240,7 +260,7 @@ function setView(v, anim) {
 }
 function fitTarget(body, d) {
   let lo = 1e9, hi = -1e9; for (let i = 1; i < d.x.length; i += 3) { lo = Math.min(lo, d.x[i]); hi = Math.max(hi, d.x[i]); }
-  const top = body.head.c[1] + body.head.r[1], bot = Math.max(0, Math.min(lo, body.y.waist) - 12);
+  const top = body.height, bot = Math.max(0, Math.min(lo, body.y.waist) - 12);
   tgt.set(0, (top + bot) / 2, 0);
   const asp = Math.max(.6, camera.aspect || 1), half = (top - bot) / 2 * 1.12, wide = 70 / asp;
   camDist = Math.max(half, wide) / Math.tan(camera.fov * Math.PI / 360);
@@ -259,12 +279,12 @@ function drawPieces(d) {
   P.forEach((p, k) => {
     const pi = d.panels.indexOf(p), b = boxes[k], dx = place[k], dy = -b.y0;
     const all = []; p.segs.forEach((s, i) => s.pts.forEach((q, j) => { if (i && !j) return; all.push(q); }));
-    svg += `<path d="M${all.map(q => (q[0] + dx).toFixed(1) + ' ' + (q[1] + dy).toFixed(1)).join('L')}Z" fill="#fbf8f2" stroke="none"/>`;
+    svg += `<path data-pi="${pi}" class="dr-pc${pi === selPanel ? ' on' : ''}" d="M${all.map(q => (q[0] + dx).toFixed(1) + ' ' + (q[1] + dy).toFixed(1)).join('L')}Z"><title>Click to move or rotate this piece in 3D</title></path>`;
     p.segs.forEach(s => { const c = seamColour[pi + '|' + s.key]; svg += `<polyline points="${s.pts.map(q => (q[0] + dx).toFixed(1) + ',' + (q[1] + dy).toFixed(1)).join(' ')}" fill="none" stroke="${c || '#6a6157'}" stroke-width="${c ? 1.3 : .7}" stroke-linejoin="round"${c ? '' : ' stroke-dasharray="2 1.2"'}/>`; });
     svg += `<text x="${(b.x0 + b.x1) / 2 + dx}" y="${(b.y0 + b.y1) / 2 + dy}" text-anchor="middle" font-size="4.2" fill="#6a6157">${names[p.name] || p.name}${p.name === 'SR' ? ' ×2' : ''}</text>`;
   });
   svg += '</svg>';
-  $('#drPieces').innerHTML = svg + '<p class="dr-note">Front and back are shown opened out from the fold. Dashed edges are hems and necklines.</p>';
+  $('#drPieces').innerHTML = svg + '<p class="dr-note">Front and back are shown opened out from the fold. Dashed edges are hems and necklines. Click a piece to move it in 3D.</p>';
 }
 function drawTable(d, m) {
   const r = [], info = d.info || {};
@@ -279,27 +299,30 @@ function drawTable(d, m) {
 }
 
 /* ---------- worker ---------- */
-let worker = null, gen = 0, built = false, paused = false, dirty = true, curBody = null;
+let worker = null, gen = 0, built = false, paused = false, dirty = true, curBody = null, lastBody = null;
 function status(t, k) { const s = $('#drStatus'); s.textContent = t; s.dataset.k = k || ''; }
 function rebuild() {
   if (!worker) { worker = new Worker('tools/drape-worker.js?v=' + V); worker.onmessage = onMsg; worker.onerror = () => status('The 3D engine could not start in this browser.', 'err'); }
   gen++; built = false; paused = false; $('#drPause').textContent = 'Pause';
   const m = baseMeas(), opts = Object.assign(baseOpts(), S.opts);
-  curBody = D.body(m, S.gender); buildBody(curBody);
-  status('Cutting and sewing the pieces…', 'run');
-  worker.postMessage({ cmd: 'build', gen, style: S.style, gender: S.gender, m, opts, fabric: S.fabric, h: { fast: 3, std: 2.3, fine: 1.8 }[S.quality] || 2.3 });
+  status(lastBody ? 'Cutting and sewing the pieces…' : 'Loading the avatar…', 'run');
+  worker.postMessage({ cmd: 'build', gen, style: S.style, gender: S.gender, size: S.size, height: +(S.meas || {}).height || 0, m, opts, fabric: S.fabric, h: { fast: 3, std: 2.3, fine: 1.8 }[S.quality] || 2.3 });
 }
 function onMsg(e) {
   const d = e.data; if (d.gen !== gen) return;
   if (d.type === 'error') { status(d.message, 'err'); return; }
+  if (d.type === 'body') {
+    if (!d.same) { lastBody = d; curBody = d; buildBody(d); const hi = $('#drMeas [data-m=height]'); if (hi && !(+(S.meas || {}).height)) hi.value = Math.round(d.height); }
+    status('Cutting and sewing the pieces…', 'run'); return;
+  }
   if (d.type === 'mesh') {
-    built = true; buildGarment(d); drawPieces(d); drawTable(d, baseMeas()); fitTarget(curBody, d); setView(view, false);
+    built = true; panelOf = d.panel; lastMesh = d; selPanel = -1; tc.detach(); $('#drGz').hidden = true; buildGarment(d); drawPieces(d); drawTable(d, baseMeas()); fitTarget(curBody, d); setView(view, false);
     $('#drPM').href = 'pattern-maker.html'; return;
   }
   if (d.type === 'frame') {
     posAttr.array.set(d.x); posAttr.needsUpdate = true; garMesh.geometry.computeVertexNormals(); garMesh.geometry.computeBoundingSphere(); dirty = true;
     if (d.gap) { lastGap = d.gap; lastStrain = d.strain; if (S.fit !== 'off') paintFit(); }
-    status(d.done ? 'Settled · ' + D.FABRICS[S.fabric].n : d.t < .7 ? 'Sewing the seams…' : 'Draping…', d.done ? 'ok' : 'run');
+    status(d.done ? 'Settled · ' + D.FABRICS[S.fabric].n : pulling ? 'Pulling the fabric…' : moving ? 'Moving the piece…' : d.t < .7 ? 'Sewing the seams…' : 'Draping…', d.done ? 'ok' : 'run');
     if (!d.done && !paused) requestAnimationFrame(() => worker.postMessage({ cmd: 'ack', gen }));
   }
 }
@@ -307,12 +330,99 @@ function onMsg(e) {
 /* ---------- loop, resize, save image, backup ---------- */
 function size() { const r = canvas.parentNode.getBoundingClientRect(); renderer.setSize(r.width, r.height, false); camera.aspect = r.width / r.height; camera.updateProjectionMatrix(); dirty = true; }
 new ResizeObserver(size).observe(canvas.parentNode);
-(function loop() { requestAnimationFrame(loop); if (controls.update()) dirty = true; if (dirty) { renderer.render(scene, camera); dirty = false; } })();
-const pb = $('#print'); if (pb) pb.addEventListener('click', () => { renderer.render(scene, camera); const a = document.createElement('a'); a.href = canvas.toDataURL('image/png'); a.download = 'forecut-3d-' + S.style + '-' + S.gender + '-' + S.size + '.png'; a.click(); });
+function loop() { requestAnimationFrame(loop); if (controls.update()) dirty = true; if (dirty) { draw(); dirty = false; } }
+const pb = $('#print'); if (pb) pb.addEventListener('click', () => { draw(true); const a = document.createElement('a'); a.href = canvas.toDataURL('image/png'); a.download = 'forecut-3d-' + S.style + '-' + S.gender + '-' + S.size + '.png'; a.click(); });
 const bk = $('#backup'); if (bk) bk.addEventListener('click', () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(Object.assign({ v: 1, tool: 'drape' }, S), null, 1)], { type: 'application/json' })); a.download = 'forecut-3d-drape-backup.json'; a.click(); });
 const rs = $('#restore'), rf = $('#restoreFile');
 if (rs && rf) { rs.addEventListener('click', () => rf.click()); rf.addEventListener('change', () => { const f = rf.files[0]; if (!f) return; f.text().then(t => { const x = JSON.parse(t); if (x && x.tool === 'drape' && D.STYLES[x.style]) { S = Object.assign(defaults(), x); save(); renderControls(); rebuild(); } else alert('This is not a 3D Drape Studio backup.'); }).catch(() => alert('Could not read that file.')); rf.value = ''; }); }
 const ex = $('#fxExample'); if (ex) ex.addEventListener('click', () => { S = Object.assign(defaults(), { style: 'kurta', gender: 'women', size: 'M', fabric: 'rayon', colour: '#d9a441', opts: { sleeve: 'plain', slen: '3q' } }); save(); renderControls(); rebuild(); });
 
-function go() { renderControls(); size(); setView('front', false); rebuild(); }
+/* ---------- view gizmo (corner axes: click one to look along it) ---------- */
+const gzScene = new THREE.Scene(), gzCam = new THREE.OrthographicCamera(-1.7, 1.7, 1.7, -1.7, .1, 10), gzRoot = new THREE.Group(), gzPick = [], GZ = 104;
+gzCam.position.set(0, 0, 5); gzScene.add(gzRoot); gzScene.add(new THREE.AmbientLight(0xffffff, 3));
+function label(t, col) { const c = document.createElement('canvas'); c.width = c.height = 64; const g = c.getContext('2d'); g.fillStyle = col; g.beginPath(); g.arc(32, 32, 30, 0, 7); g.fill(); g.fillStyle = '#fff'; g.font = '700 34px DM Sans, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(t, 32, 35); const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: new THREE.CanvasTexture(c), depthTest: false })); s.scale.set(.56, .56, 1); return s; }
+[[new THREE.Vector3(1, 0, 0), '#d64b47', 'X'], [new THREE.Vector3(0, 1, 0), '#4f9d55', 'Y'], [new THREE.Vector3(0, 0, 1), '#3f72c9', 'Z']].forEach(([d, col, t]) => {
+  const bar = new THREE.Mesh(new THREE.CylinderGeometry(.045, .045, 1, 8), new THREE.MeshBasicMaterial({ color: col })); bar.position.copy(d).multiplyScalar(.5); bar.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), d); gzRoot.add(bar);
+  const pos = label(t, col); pos.position.copy(d); pos.userData.dir = d.clone(); gzRoot.add(pos); gzPick.push(pos);
+  const neg = new THREE.Mesh(new THREE.SphereGeometry(.15, 16, 12), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: .55 })); neg.position.copy(d).multiplyScalar(-1); neg.userData.dir = d.clone().multiplyScalar(-1); gzRoot.add(neg); gzPick.push(neg);
+});
+const gzDisc = new THREE.Mesh(new THREE.CircleGeometry(1.55, 40), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: .55, depthTest: false })); gzDisc.renderOrder = -1; gzScene.add(gzDisc);
+function gzRect() { const r = canvas.getBoundingClientRect(); return { x: r.width - GZ - 12, y: 56, w: GZ, h: GZ, W: r.width, H: r.height }; }
+function draw(full) {
+  renderer.autoClear = false; renderer.clear(); renderer.render(scene, camera);
+  if (full) return;
+  const g = gzRect(); gzRoot.quaternion.copy(camera.quaternion).invert();
+  renderer.clearDepth(); renderer.setScissorTest(true); renderer.setScissor(g.x, g.H - g.y - g.h, g.w, g.h); renderer.setViewport(g.x, g.H - g.y - g.h, g.w, g.h);
+  renderer.render(gzScene, gzCam); renderer.setScissorTest(false); renderer.setViewport(0, 0, g.W, g.H);
+}
+function gzHit(e) {
+  const r = canvas.getBoundingClientRect(), g = gzRect(), x = e.clientX - r.left - g.x, y = e.clientY - r.top - g.y;
+  if (x < 0 || y < 0 || x > g.w || y > g.h) return null;
+  const rc = new THREE.Raycaster(); rc.setFromCamera(new THREE.Vector2(x / g.w * 2 - 1, -(y / g.h) * 2 + 1), gzCam);
+  const h = rc.intersectObjects(gzPick, false)[0]; return h ? h.object.userData.dir : 'pad';
+}
+function lookAlong(dir) {
+  const d = dir.clone(); if (Math.abs(d.y) > .99) d.z += .002; d.normalize();
+  const to = tgt.clone().add(d.multiplyScalar(camDist)), from = camera.position.clone(), ft = controls.target.clone(), t0 = performance.now();
+  view = ''; $$('#drViews button').forEach(b => b.setAttribute('aria-pressed', false));
+  (function go() { const t = Math.min(1, (performance.now() - t0) / 450), e = t * t * (3 - 2 * t); camera.position.lerpVectors(from, to, e); controls.target.lerpVectors(ft, tgt, e); controls.update(); dirty = true; if (t < 1) requestAnimationFrame(go); })();
+}
+
+/* ---------- move gizmo (a whole pattern piece) ---------- */
+const tc = new TransformControls(camera, canvas); tc.setSize(.85); scene.add(tc.getHelper());
+const pivot = new THREE.Object3D(); scene.add(pivot);
+let baseInv = new THREE.Matrix4(), moving = false;
+tc.addEventListener('change', () => { dirty = true; });
+tc.addEventListener('dragging-changed', e => { controls.enabled = !e.value; });
+tc.addEventListener('mouseDown', () => { if (!worker || selPanel < 0) return; pivot.updateMatrixWorld(); baseInv.copy(pivot.matrixWorld).invert(); moving = true; paused = false; worker.postMessage({ cmd: 'pstart', panel: selPanel, gen }); });
+tc.addEventListener('objectChange', () => { if (!moving) return; pivot.updateMatrixWorld(); const m = new THREE.Matrix4().multiplyMatrices(pivot.matrixWorld, baseInv); worker.postMessage({ cmd: 'pmove', e: Array.from(m.elements), gen }); });
+tc.addEventListener('mouseUp', () => { if (!moving) return; moving = false; worker.postMessage({ cmd: 'pend', gen }); });
+function selectPanel(pi) {
+  selPanel = pi;
+  if (pi < 0 || !posAttr) { tc.detach(); $('#drGz').hidden = true; }
+  else {
+    const a = posAttr.array, c = new THREE.Vector3(); let k = 0; for (let i = 0; i < panelOf.length; i++) if (panelOf[i] === pi) { c.x += a[3 * i]; c.y += a[3 * i + 1]; c.z += a[3 * i + 2]; k++; }
+    pivot.position.copy(c.multiplyScalar(1 / Math.max(1, k))); pivot.rotation.set(0, 0, 0); pivot.updateMatrixWorld(); tc.attach(pivot); $('#drGz').hidden = false;
+    if (S.tool !== 'move') { S.tool = 'move'; $$('#drTool button').forEach(b => b.setAttribute('aria-pressed', b.dataset.t === 'move')); }
+  }
+  $$('#drPieces .dr-pc').forEach(p => p.classList.toggle('on', +p.dataset.pi === pi || (pi >= 0 && lastMesh && lastMesh.panels[pi] && lastMesh.panels[pi].name === 'SL' && lastMesh.panels[+p.dataset.pi].name === 'SR')));
+  paintFit(); dirty = true;
+}
+$('#drPieces').addEventListener('click', e => { const p = e.target.closest('[data-pi]'); if (p) selectPanel(+p.dataset.pi); });
+
+/* ---------- pull the fabric with the mouse ---------- */
+const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), view3d = $('.dr-view');
+let pulling = null;
+function setNDC(e) { const r = canvas.getBoundingClientRect(); ndc.set((e.clientX - r.left) / r.width * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1); }
+function pickVertex(e) {
+  if (!garMesh) return null; setNDC(e); ray.setFromCamera(ndc, camera);
+  const h = ray.intersectObject(garMesh, false)[0]; if (!h) return null;
+  const a = posAttr.array; let best = -1, bd = 1e9;
+  [h.face.a, h.face.b, h.face.c].forEach(i => { const d = (a[3 * i] - h.point.x) ** 2 + (a[3 * i + 1] - h.point.y) ** 2 + (a[3 * i + 2] - h.point.z) ** 2; if (d < bd) { bd = d; best = i; } });
+  return { i: best, point: h.point.clone() };
+}
+const marker = new THREE.Mesh(new THREE.SphereGeometry(.9, 16, 12), new THREE.MeshBasicMaterial({ color: '#c4572f', depthTest: false })); marker.renderOrder = 10; marker.visible = false; scene.add(marker);
+view3d.addEventListener('pointerdown', e => {
+  if (e.target !== canvas || e.button !== 0) return;
+  const gz = gzHit(e); if (gz) { e.stopPropagation(); if (gz !== 'pad') lookAlong(gz); return; }
+  if (tc.object && tc.axis) return; // the move gizmo handles this one
+  if (!built || !worker) return;
+  const pk = pickVertex(e); if (!pk) return;
+  if (S.tool === 'move') { e.stopPropagation(); selectPanel(panelOf[pk.i]); return; }
+  e.stopPropagation(); canvas.setPointerCapture(e.pointerId); view3d.classList.add('pulling');
+  const n = new THREE.Vector3(); camera.getWorldDirection(n);
+  pulling = { plane: new THREE.Plane().setFromNormalAndCoplanarPoint(n, pk.point), off: new THREE.Vector3(posAttr.array[3 * pk.i], posAttr.array[3 * pk.i + 1], posAttr.array[3 * pk.i + 2]).sub(pk.point) };
+  marker.position.copy(pk.point); marker.visible = true; dirty = true; paused = false; $('#drPause').textContent = 'Pause';
+  worker.postMessage({ cmd: 'grab', i: pk.i, r: 5, gen });
+}, true);
+canvas.addEventListener('pointermove', e => {
+  if (pulling) { setNDC(e); ray.setFromCamera(ndc, camera); const p = new THREE.Vector3(); if (ray.ray.intersectPlane(pulling.plane, p)) { marker.position.copy(p); dirty = true; const t = p.add(pulling.off); worker.postMessage({ cmd: 'drag', t: [t.x, t.y, t.z], gen }); } return; }
+  if (e.buttons || !garMesh) return;
+  const over = gzHit(e) ? 'pointer' : pickVertex(e) ? (S.tool === 'move' ? 'pointer' : 'grab') : '';
+  canvas.style.cursor = over;
+});
+function endPull() { if (!pulling) return; pulling = null; marker.visible = false; view3d.classList.remove('pulling'); dirty = true; worker.postMessage({ cmd: 'release', gen }); }
+canvas.addEventListener('pointerup', endPull); canvas.addEventListener('pointercancel', endPull);
+
+function go() { renderControls(); size(); setView('front', false); loop(); rebuild(); }
 if (document.body.classList.contains('fx-locked')) { const mo = new MutationObserver(() => { if (!document.body.classList.contains('fx-locked')) { mo.disconnect(); go(); } }); mo.observe(document.body, { attributes: true, attributeFilter: ['class'] }); } else go();
