@@ -2,12 +2,12 @@
 /* Forecut 3D Drape Studio: runs the sewing and draping off the page's main thread. */
 /* global importScripts, PM, FCDrape, Delaunator */
 self.window = self;
-importScripts('pm-engine.js?v=fx-20261112b', 'drape-sim.js?v=fx-20261112b', 'vendor/delaunator.min.js');
+importScripts('pm-engine.js?v=fx-20261113', 'drape-sim.js?v=fx-20261113', 'vendor/delaunator.min.js');
 var sim = null, M = null, body = null, running = false, gen = 0, frames = 0;
 
 var AV = null, AVP = null, bodyKey = '';
 function avatars() {
-  if (!AVP) AVP = Promise.all([fetch('avatar/avatars.bin?v=fx-20261112b').then(function (r) { return r.arrayBuffer(); }), fetch('avatar/avatars.json?v=fx-20261112b').then(function (r) { return r.json(); })])
+  if (!AVP) AVP = Promise.all([fetch('avatar/avatars.bin?v=fx-20261113').then(function (r) { return r.arrayBuffer(); }), fetch('avatar/avatars.json?v=fx-20261113').then(function (r) { return r.json(); })])
     .then(function (x) { AV = FCDrape.loadAvatars(x[0], x[1]); return AV; });
   return AVP;
 }

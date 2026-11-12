@@ -5,7 +5,7 @@ The tool list itself is rendered by tools/shell.js from one registry.
 """
 from html import escape
 
-VER = 'fx-20261112b'
+VER = 'fx-20261113'
 
 # slug: (brand name, plain label, stage)
 NAMES = {

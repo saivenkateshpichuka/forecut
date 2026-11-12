@@ -1,12 +1,12 @@
 /* Forecut. Built from build/tools_js; edit there. */
-import './pm-engine.js?v=fx-20261112b';
-import './drape-sim.js?v=fx-20261112b';
+import './pm-engine.js?v=fx-20261113';
+import './drape-sim.js?v=fx-20261113';
 /* Forecut 3D Drape Studio: page, controls, 3D view and 2D pattern view. Desktop only. */
 import * as THREE from './vendor/three.module.min.js';
 import { OrbitControls } from './vendor/OrbitControls.js';
 import { TransformControls } from './vendor/TransformControls.js';
 
-const PM = window.PM, D = window.FCDrape, V = 'fx-20261112b';
+const PM = window.PM, D = window.FCDrape, V = 'fx-20261113';
 const $ = (s, r) => (r || document).querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const KEY = 'fc-tool-drape';
