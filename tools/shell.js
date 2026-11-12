@@ -3,27 +3,27 @@
   'use strict';
   var STAGES = [
     ['Plan the collection', [
-      ['rangeboard', 'Rangeboard', 'Collection planner'],
-      ['trend-to-style', 'Motiforge', 'Trend-to-style builder']]],
+      ['rangeboard', 'Collection Planner', 'Plan styles, sizes, quantities and drops'],
+      ['trend-to-style', 'Trend to Style Brief', 'Turn a trend detail into a style brief']]],
     ['Colour and fabric', [
-      ['swatchsmith', 'Swatchsmith', 'Colour palette builder'],
-      ['fabric-finder', 'Weftwise', 'Fabric finder'],
-      ['textile-calculator', 'Boltmath', 'Textile calculator'],
-      ['textile-processing-studio', 'Textile Processing Studio', 'Dyeing, processing, colour blends']]],
+      ['swatchsmith', 'Colour Palette Builder', 'Season palettes and swatch sheets'],
+      ['fabric-finder', 'Fabric Finder', 'Choose fabric by weight, stretch and drape'],
+      ['textile-calculator', 'Textile Calculator', 'Yarn, GSM, weaving, knitting and costing'],
+      ['textile-processing-studio', 'Textile Processing Studio', 'Dyeing, processing and colour blends']]],
     ['Pattern and fit', [
-      ['pattern-maker', 'Seamdraft', 'Pattern maker · opens full window'],
-      ['size-chart-builder', 'Sizewright', 'Size chart builder']]],
+      ['pattern-maker', 'Pattern Maker', 'Draft and grade garment patterns · opens full window'],
+      ['size-chart-builder', 'Size Chart Builder', 'Grade measurements across sizes']]],
     ['Sampling and tech pack', [
-      ['decoration-cost-estimator', 'Stitchquote', 'Embroidery and print cost'],
-      ['tech-pack-builder', 'Packsmith', 'Tech pack builder']]],
+      ['decoration-cost-estimator', 'Embroidery & Print Cost', 'Decoration cost per piece'],
+      ['tech-pack-builder', 'Tech Pack Builder', 'Supplier-ready tech packs']]],
     ['Costing and production', [
-      ['pricefold', 'Pricefold', 'Price and margin planner'],
-      ['evenpoint', 'Evenpoint', 'Break-even calculator'],
-      ['cutclock', 'Cutclock', 'Production calendar']]],
+      ['pricefold', 'Price & Margin Calculator', 'Real margin after GST, fees and returns'],
+      ['evenpoint', 'Break-even Calculator', 'Pieces you must sell to cover costs'],
+      ['cutclock', 'Production Calendar', 'Deadlines worked back from launch']]],
     ['Labels, listing and export', [
-      ['care-label-generator', 'Carefold', 'Care label generator'],
-      ['product-description-writer', 'Tagwright', 'Product description writer'],
-      ['export-market-checker', 'Borderready', 'Export market checker']]]
+      ['care-label-generator', 'Care Label Generator', 'Fibre content and care instructions'],
+      ['product-description-writer', 'Product Description Writer', 'Listing titles, bullets and tags'],
+      ['export-market-checker', 'Export Market Checker', 'Rules and dates by country']]]
   ];
   window.ForecutTools = STAGES;
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }

@@ -9,22 +9,22 @@ VER = 'fx-20261112'
 
 # slug: (brand name, plain label, stage)
 NAMES = {
-    'rangeboard': ('Rangeboard', 'Collection planner', '01 Plan the collection'),
-    'trend-to-style': ('Motiforge', 'Trend-to-style builder', '01 Plan the collection'),
-    'swatchsmith': ('Swatchsmith', 'Colour palette builder', '02 Colour and fabric'),
-    'fabric-finder': ('Weftwise', 'Fabric finder', '02 Colour and fabric'),
-    'textile-calculator': ('Boltmath', 'Textile calculator', '02 Colour and fabric'),
+    'rangeboard': ('Collection Planner', 'Plan styles, sizes, quantities and drops', '01 Plan the collection'),
+    'trend-to-style': ('Trend to Style Brief', 'Turn a trend detail into a style brief', '01 Plan the collection'),
+    'swatchsmith': ('Colour Palette Builder', 'Season palettes and swatch sheets', '02 Colour and fabric'),
+    'fabric-finder': ('Fabric Finder', 'Choose fabric by weight, stretch and drape', '02 Colour and fabric'),
+    'textile-calculator': ('Textile Calculator', 'Yarn, GSM, weaving, knitting and costing', '02 Colour and fabric'),
     'textile-processing-studio': ('Textile Processing Studio', 'Dyeing, processing and colour blends', '02 Colour and fabric'),
-    'pattern-maker': ('Seamdraft', 'Pattern maker', '03 Pattern and fit'),
-    'size-chart-builder': ('Sizewright', 'Size chart builder', '03 Pattern and fit'),
-    'decoration-cost-estimator': ('Stitchquote', 'Embroidery and print cost', '04 Sampling and tech pack'),
-    'tech-pack-builder': ('Packsmith', 'Tech pack builder', '04 Sampling and tech pack'),
-    'pricefold': ('Pricefold', 'Price and margin planner', '05 Costing and production'),
-    'evenpoint': ('Evenpoint', 'Break-even calculator', '05 Costing and production'),
-    'cutclock': ('Cutclock', 'Production calendar', '05 Costing and production'),
-    'care-label-generator': ('Carefold', 'Care label generator', '06 Labels, listing and export'),
-    'product-description-writer': ('Tagwright', 'Product description writer', '06 Labels, listing and export'),
-    'export-market-checker': ('Borderready', 'Export market checker', '06 Labels, listing and export'),
+    'pattern-maker': ('Pattern Maker', 'Draft and grade garment patterns', '03 Pattern and fit'),
+    'size-chart-builder': ('Size Chart Builder', 'Grade measurements across sizes', '03 Pattern and fit'),
+    'decoration-cost-estimator': ('Embroidery & Print Cost', 'Decoration cost per piece', '04 Sampling and tech pack'),
+    'tech-pack-builder': ('Tech Pack Builder', 'Supplier-ready tech packs', '04 Sampling and tech pack'),
+    'pricefold': ('Price & Margin Calculator', 'Real margin after GST, fees and returns', '05 Costing and production'),
+    'evenpoint': ('Break-even Calculator', 'Pieces you must sell to cover costs', '05 Costing and production'),
+    'cutclock': ('Production Calendar', 'Deadlines worked back from launch', '05 Costing and production'),
+    'care-label-generator': ('Care Label Generator', 'Fibre content and care instructions', '06 Labels, listing and export'),
+    'product-description-writer': ('Product Description Writer', 'Listing titles, bullets and tags', '06 Labels, listing and export'),
+    'export-market-checker': ('Export Market Checker', 'Rules and dates by country', '06 Labels, listing and export'),
 }
 COUNT = len(NAMES)
 
@@ -41,8 +41,7 @@ RAIL = {
 
 
 def title(slug):
-    n, l, _ = NAMES[slug]
-    return f'{n} · {l}'
+    return NAMES[slug][0]
 
 
 def head_links():
