@@ -18,6 +18,7 @@ python3 season_prompts.py
 python3 legal.py
 python3 collection_tools.py
 python3 studio_tools.py
+python3 processing_tool.py
 python3 tools.py
 python3 journal.py
 python3 celebrity.py

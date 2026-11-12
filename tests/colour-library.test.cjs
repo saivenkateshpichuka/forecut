@@ -9,12 +9,9 @@ test('library names are data and cannot supply markup through colour values',()=
 
 test('material suffix must match the selected system',()=>{assert.throws(()=>L.codeValue('18-0000 TPG','TCX'));assert.throws(()=>L.codeValue('123 C','PMS U'));});
 
-test('bundles all supplied textile swatches with unique material references',()=>{
+test('ships no Pantone shade data; users import their own licensed references',()=>{
  assert.deepEqual(L.systems,['TCX','TN','TSX']);
- assert.equal(L.bundled.length,2534);
- for(const [system,count] of [['TCX',2310],['TN',21],['TSX',203]])assert.equal(L.bundled.filter(c=>c.system===system).length,count);
- assert.equal(new Set(L.bundled.map(c=>c.system+'|'+c.code)).size,2534);
- L.bundled.forEach(c=>assert.deepEqual(L.validateEntry(c),c));
+ assert.equal(L.bundled.length,0);
 });
 test('imports TN and TSX and rejects mismatched textile suffixes',()=>{
  for(const system of ['TN','TSX']){
@@ -23,10 +20,9 @@ test('imports TN and TSX and rejects mismatched textile suffixes',()=>{
  }
  assert.throws(()=>L.importCSV('code,name,hex,system\n18-0000,Test,#123456,TPG'));
 });
-test('library merges user labels without losing built-in shades and excludes other systems',()=>{
+test('library holds only the user\'s imported references and excludes other systems',()=>{
  const custom={code:'11-0601',name:'My white',hex:'#ffffff',system:'TCX'};
  const merged=L.library([custom,{...custom,system:'TPG'}]);
- assert.equal(merged.length,2534);assert.equal(merged[0].name,'My white');
+ assert.equal(merged.length,1);assert.equal(merged[0].name,'My white');
  assert.ok(merged.every(c=>L.systems.includes(c.system)));
- assert.equal(L.bundled[0].name,'PANTONE 11-0601 TCX');
 });

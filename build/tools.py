@@ -113,9 +113,9 @@ def big(lab, id_, sub=''):
 
 
 # ------------------------------------------------------------------ hub
-TOOLS = [('textile-calculator.html', 'Textile calculator', 'Fabric, GSM, yarn & costing',
+TOOLS = [('textile-calculator.html', 'Boltmath · Textile calculator', 'Fabric, GSM, yarn & costing',
           '27 calculators: yarn counts in 15 systems, ply, twist and strength, reed, warp and weft, GSM and cover factor, knitting, consumption, markers, thread, SMV, dyeing, regain, costing and units.', 'hub-fabrics-art-forecast'),
-         ('pattern-maker.html', 'Pattern maker', 'Members · garments and Forecut details',
+         ('pattern-maker.html', 'Seamdraft · Pattern maker', 'Members · garments and Forecut details',
           'Draft kurtas, shirts, blouses, dresses, skirts, lehengas, trousers and more from measurements or from a Forecut detail. Automatic fit checks, a how-to-measure guide, per-piece seam allowance and true-scale PDF, DXF, SVG and PNG downloads.', 'couture-bespoke-tailoring-2026')]
 open(OUT + 'tools.html', 'w').write(tools_hub_page())
 
@@ -201,8 +201,8 @@ TCCSS = r"""<style>
 TI = lambda k: IC[k].replace('<svg ', '<svg class="ic" ', 1)
 IC.update({'copy': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 8h11v12H8zM5 16V4h11"/></svg>', 'reset': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v5h5"/></svg>',
            'print': '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z"/></svg>'})
-tc = (TCCSS + '<div class="tch"><div><div class="eb">Free tool</div><h1>Textile calculator</h1></div><span class="tag">27 calculators · 15 yarn count systems · metric and imperial</span></div>'
-      '<div class="tcx" id="tc-app"><div class="tbar"><span class="brand"><i></i>FORECUT TEXTILE CALC</span><div class="tcr" id="tc-crumb"></div>'
+tc = (TCCSS + '<div class="tch"><div><div class="eb">Design and make · <a href="tools.html" style="color:inherit">All 16 tools</a></div><h1>Boltmath <small style="font-weight:500;font-size:.5em;color:#6a6157">Textile calculator</small></h1></div><span class="tag">27 calculators · 15 yarn count systems · metric and imperial</span></div>'
+      '<link rel="stylesheet" href="tools/shell.css?v=fx-20261112"><script>document.body.setAttribute("data-tool-name","Boltmath")</script><script defer src="tools/gate.js?v=fx-20261112"></script><div class="tcx" id="tc-app" data-fx-gate><div class="tbar"><span class="brand"><i></i>FORECUT TEXTILE CALC</span><div class="tcr" id="tc-crumb"></div>'
       '<label class="tsr">' + TI('search') + '<input type="search" id="cl-q" placeholder="Search calculators, e.g. GSM, denier, costing" aria-label="Search calculators" autocomplete="off"><kbd>/</kbd></label>'
       '<button type="button" class="xb" id="tc-copy">' + TI('copy') + 'Copy results</button><button type="button" class="xb" id="tc-reset" title="Back to the example values">' + TI('reset') + 'Reset</button><button type="button" class="xb" id="tc-print">' + TI('print') + 'Print</button></div>'
       '<div class="tbody"><nav class="tnav noprint" id="cl-list" aria-label="Calculators"></nav>'
@@ -220,7 +220,7 @@ tc = (TCCSS + '<div class="tch"><div><div class="eb">Free tool</div><h1>Textile 
       + DT.CALC +
       '<p>Related: the <a href="fabrics.html">Fabrics hub</a> for weaves, knits and GSM ranges, and the <a href="india-textile-craft-guide.html">India textile and craft sourcing guide</a>.</p></div></details>')
 page('textile-calculator.html', 'Textile Calculator · Yarn Count, GSM, Warp & Weft, Knitting, Garment Costing, Units · Forecut', tc,
-     'window.FC_GARMENTS=' + json.dumps(GARMENTS) + ';' + JS('calcs.js'))
+     'window.FC_GARMENTS=' + json.dumps(GARMENTS) + ';' + JS('calcs.js'), auth=True)
 
 # ------------------------------------------------------------------ pattern maker (sign-in only)
 import pm_details
@@ -374,13 +374,13 @@ PMCSS = r"""<style>
 @media (max-width:1240px){.pbody{grid-template-columns:250px minmax(0,1fr) 320px}.leg{display:none}}
 @media (max-width:980px){.pbody{grid-template-columns:1fr;height:auto}.pc{order:-1;height:72vh;height:72svh}.view{touch-action:pan-x pan-y}.glist{grid-template-columns:1fr 1fr;gap:2px}.glist button{padding:9px 8px;min-height:40px}.pl input,.pl select,.pr input,.pr select{min-height:38px;font-size:16px}.rt button{min-height:44px}.pmh{flex-wrap:wrap;gap:8px}.pmh .tag{white-space:normal}.pl{border-right:0;border-top:1px solid #121315}.pr{border-left:0;border-top:1px solid #121315}
  .srch{flex:1 1 100%;order:5}.brand{display:none}.crumb{flex:1 1 auto}.pmdoc{grid-template-columns:1fr}.view{padding:14px}.sbar .xy{display:none}}
-</style>"""
+@media (min-width:981px){body.pm-full{overflow:hidden}body.pm-full #pm-app{position:fixed;inset:0;z-index:900;display:flex;flex-direction:column;margin:0;max-width:none;border-radius:0}body.pm-full #pm-app .pbody{flex:1;height:auto;min-height:0}}.pmexit{color:inherit;opacity:.75;font-size:12px;text-decoration:none;border:1px solid currentColor;border-radius:4px;padding:3px 8px;margin-left:10px;white-space:nowrap}.pmexit:hover{opacity:1}</style>"""
 A = lambda k: IC[k].replace('<svg ', '<svg class="ic" ', 1)
-pm = (PMCSS + '<div class="pmh"><div><div class="eb">Members tool</div><h1>Pattern maker</h1></div><span class="tag">For sampling · fit-test before production</span></div>'
+pm = (PMCSS + '<div class="pmh"><div><div class="eb">Design and make · <a href="tools.html" style="color:inherit">All 16 tools</a></div><h1>Seamdraft <small style="font-weight:500;font-size:.5em;color:#6a6157">Pattern maker</small></h1></div><span class="tag">For sampling · fit-test before production</span></div>'
       '<div class="gate" id="pm-gate"><h3>Sign in to use the pattern maker</h3><p>The pattern maker is for registered Forecut members. Sign in or create a free account to draft and download patterns.</p>'
       '<div class="btns"><a class="btn p" href="account.html?next=pattern-maker.html#signin">Sign in</a><a class="btn" href="account.html?next=pattern-maker.html#signup">Create a free account</a></div></div>'
       '<div id="pm-app" class="pmx" hidden>'
-      '<div class="pbar"><span class="brand"><i></i>FORECUT PATTERN</span><div class="crumb" id="pm-ttl"></div>'
+      '<div class="pbar"><span class="brand"><i></i>SEAMDRAFT</span><a class="pmexit" href="tools.html" title="All Forecut tools">All tools</a><div class="crumb" id="pm-ttl"></div>'
       '<label class="srch" title="Load a Forecut detail">' + A('search') + '<input type="search" id="pm-dsearch" list="pm-dlist" placeholder="Load a Forecut detail…" aria-label="Load a Forecut detail"><datalist id="pm-dlist"></datalist></label>'
       '<button type="button" class="qa" id="pm-qa" title="Pattern checks"></button>'
       '<div class="useg" id="pm-units" role="group" aria-label="Units"><button type="button" data-u="cm">cm</button><button type="button" data-u="mm">mm</button><button type="button" data-u="in">in</button></div>'

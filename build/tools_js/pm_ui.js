@@ -77,7 +77,7 @@
   function shrLab() { return (+S.fab.shl || +S.fab.shw) ? ' · incl. shrinkage L ' + (+S.fab.shl || 0) + '% W ' + (+S.fab.shw || 0) + '%' : ''; }
   var gate = $('#pm-gate'), app = $('#pm-app');
 
-  function unlock() { gate.hidden = true; app.hidden = false; }
+  function unlock() { gate.hidden = true; app.hidden = false; document.body.classList.add('pm-full'); window.dispatchEvent(new Event('resize')); }
   if (window.FC_PREVIEW) unlock();
   else document.addEventListener('fcauth-ready', function () { try { FCAuth.onChange(function (u) { if (u) unlock(); else { gate.hidden = false; app.hidden = true; } }); } catch (e) { } });
   if (window.FCAuth && FCAuth.onChange) FCAuth.onChange(function (u) { if (u) unlock(); });
