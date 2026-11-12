@@ -117,7 +117,8 @@ TOOLS = [('textile-calculator.html', 'Textile calculator', 'Fabric, GSM, yarn & 
           '27 calculators: yarn counts in 15 systems, ply, twist and strength, reed, warp and weft, GSM and cover factor, knitting, consumption, markers, thread, SMV, dyeing, regain, costing and units.', 'hub-fabrics-art-forecast'),
          ('pattern-maker.html', 'Pattern maker', 'Members · garments and Forecut details',
           'Draft kurtas, shirts, blouses, dresses, skirts, lehengas, trousers and more from measurements or from a Forecut detail. Automatic fit checks, a how-to-measure guide, per-piece seam allowance and true-scale PDF, DXF, SVG and PNG downloads.', 'couture-bespoke-tailoring-2026')]
-open(OUT + 'tools.html', 'w').write(tools_hub_page())
+import re as _re, site_header as _SH
+open(OUT + 'tools.html', 'w').write(_SH.apply(_re.sub(r'<header class="tk-site-head">.*?</header>', '', tools_hub_page(), count=1, flags=_re.S), 'tools.html'))
 
 # ------------------------------------------------------------------ textile calculator
 GARMENTS = [  # name, metres at 44"/112 cm, metres at 58"/147 cm, fixed length?, note

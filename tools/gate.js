@@ -13,7 +13,8 @@
   card.innerHTML = '<p class="fx-gate-wait">Checking your Forecut account…</p>';
   target.parentNode.insertBefore(card, target);
   function locked() {
-    card.innerHTML = '<span class="fx-kicker">Members tool</span><h2>Sign in to use ' + name.replace(/[<>&]/g, '') + '</h2>' +
+    var slug = page.replace(/\.html$/, '');
+    card.innerHTML = '<img class="fx-gate-cover" src="tools/covers/' + slug + '-640.webp" alt="" width="640" height="360" onerror="this.remove()"><span class="fx-kicker">Members tool</span><h2>Sign in to use ' + name.replace(/[<>&]/g, '') + '</h2>' +
       '<p>Forecut tools are free for registered members. Sign in, or create a free account in under a minute. Your work stays in your own browser.</p>' +
       '<div class="fx-gate-btns"><a class="fx-gate-p" href="account.html?next=' + encodeURIComponent(page) + '#signin">Sign in</a>' +
       '<a href="account.html?next=' + encodeURIComponent(page) + '#signup">Create a free account</a></div>';

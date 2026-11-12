@@ -245,6 +245,17 @@ for fn, (title, desc, path) in pages.items():
     h = SH.apply(h, fn)
     h = externalise(h)
     open(p, 'w').write(h)
+
+# Tool cover images: social share preview for each tool page (tools/covers/<slug>-og.jpg, 1200x630)
+for _c in sorted(os.listdir(os.path.join(R, 'tools', 'covers'))) if os.path.isdir(os.path.join(R, 'tools', 'covers')) else []:
+    if not _c.endswith('-og.jpg'): continue
+    _slug = _c[:-7]; _tp = os.path.join(R, _slug + '.html')
+    if not os.path.exists(_tp): continue
+    _h = open(_tp).read()
+    _h = re.sub(r'<meta (?:property|name)="(?:og:image(?::width|:height|:alt)?|twitter:image|twitter:card)" content="[^"]*">\n?', '', _h)
+    _m = f'<meta property="og:image" content="{BASE}tools/covers/{_c}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="{BASE}tools/covers/{_c}">'
+    _h = _h.replace('</title>', '</title>' + _m, 1)
+    open(_tp, 'w').write(_h)
 if not os.environ.get('ONLY') or os.environ.get('SITEMAP'):
     today = datetime.date.today().isoformat()
     pri = {'index.html': '1.0', 'how-to-choose-a-fashion-trend-forecasting-service.html': '0.9', 'tools.html': '0.95', 'pattern-maker.html': '0.95', 'textile-processing-studio.html': '0.9', 'tech-pack-builder.html': '0.9', 'trend-to-style.html': '0.9', 'reports.html': '0.9', 'ss27.html': '0.9', 'regions.html': '0.9', 'india.html': '0.9', 'journal.html': '0.8', 'couture.html': '0.8', 'fabrics.html': '0.8', 'colour.html': '0.8', 'about.html': '0.5', 'contact.html': '0.4', 'terms.html': '0.1', 'privacy.html': '0.1'}
