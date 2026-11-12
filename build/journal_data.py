@@ -6,6 +6,79 @@ DATE = '2026-10-11'
 DATE_TXT = '11 October 2026'
 
 ARTICLES = [
+{'slug': 'eu-unsold-clothes-destruction-ban-ss27-europe-guide',
+ 'title': "Europe's ban on destroying unsold clothes: what it means for SS27 buys, AW26 clearance and textile EPR",
+ 'desc': 'The EU ban on destroying unsold clothes and shoes now applies to large firms. What it means for SS27 buys, AW26 clearance and textile EPR for anyone selling to Europe.',
+ 'tag': 'Sourcing',
+ 'read': 6,
+ 'hero': 'hub-fabrics-radar-textile-to-textile-recycling',
+ 'date': '2026-11-12',
+ 'date_txt': '12 November 2026',
+ 'sources': "European Commission, DG Environment, 'Ban on destruction of unsold clothes and shoes enters into application' (17 July 2026), citing European Environment Agency estimates; "
+            "MyProductPassport, 'Unsold Goods Ban: the Derogations in Delegated Regulation (EU) 2026/296' (updated 11 November 2026); Bindu, 'Textile DPP Timeline: When the Passport Applies' (21 "
+            "August 2026); Vieira de Almeida (VdA), 'Directive 2025/1892 amending the Waste Framework Directive' (21 October 2025); CMS, 'EU Parliament approves new measures on textile waste' (18 "
+            'September 2025); Forecut Europe regional data and SS27 detail tracking',
+ 'hero_new': 'art-eu-unsold-clothes-destruction-ban-ss27-europe-guide',
+ 'img_kw': 'clothing rail, folded clothes, textile recycling',
+ 'img_prompt': 'Realistic documentary photograph inside a bright European apparel warehouse: long rails of unsold spring clothes in soft pastels (butter yellow, lavender, sage, light blue) and sheer '
+               'organza blouses, neatly folded knitwear stacked in clear bins labelled only with blank tags, cardboard boxes ready for donation and repair, a worktable with a sewing machine and '
+               'measuring tape, soft daylight from high windows, concrete floor, shallow depth of field, landscape 16:10, no people, no faces, no text, no logos, no brand names.',
+ 'body': [('p',
+           'Since 19 July 2026, large companies in the European Union may no longer destroy unsold clothes, clothing accessories and footwear. The European Commission calls it the first product '
+           'group under the new ban, set under the Ecodesign for Sustainable Products Regulation (ESPR). It matters well beyond Europe: any brand, wholesaler or manufacturer that ships stock into '
+           'the EU now has to plan what happens to the pieces that do not sell. With SS27 orders being finalised and AW26 heading into the January sales, this guide explains the rules and what to '
+           'change in buying, production and clearance.'),
+          ('h2', 'What the ban says'),
+          ('p',
+           'The Commission says companies must prioritise keeping products in use: selling them, including at a discount or in other markets, donating them to charities or social enterprises, or '
+           'preparing them for reuse through repair, refurbishment or remanufacturing. Any destruction that is still allowed must follow the waste hierarchy, with recycling first. The rule applies '
+           'to <b>large companies from 19 July 2026</b> and to <b>medium-sized companies from 19 July 2030</b>. Small and micro businesses are exempt. Vendor guides list the covered goods by customs '
+           'code: apparel and clothing accessories (CN 61, 62, 4203, 6504 and 6505) and footwear (CN 6401 to 6405).'),
+          ('p',
+           'The scale is real. The Commission cites European Environment Agency estimates that <b>4–9% of all textile products</b> put on the European market are destroyed before use, or <b>264,000 '
+           'to 594,000 tonnes</b> a year.'),
+          ('h2', 'When destruction is still allowed'),
+          ('p', 'Delegated Regulation (EU) 2026/296 sets out the exceptions. As summarised by MyProductPassport, destruction remains possible only with documented proof in cases such as:'),
+          ('ul',
+           ['Products that are <b>unsafe</b> or non-compliant with EU or national law, where destruction is the proportionate fix.',
+            'Goods that <b>infringe intellectual property</b> (counterfeits), or licensed products whose licence has expired.',
+            'Items where <b>labels, logos or protected design features cannot feasibly be removed</b> to allow resale.',
+            'Damaged, contaminated or defective goods where repair is not technically or <b>cost-effectively</b> possible (repair costing more than destruction plus a replacement).',
+            'Stock that was <b>offered for donation</b> to at least three social economy organisations in the EU, or on an easy-to-find page of the company website for at least eight weeks, and not '
+            'taken.']),
+          ('p',
+           'Companies relying on an exception must keep evidence, such as documents or test results, for five years, and publish annual reports on what they discarded and why. National authorities '
+           'enforce the rule and can impose fines.'),
+          ('fig', 'hub-fabrics-radar-lyocell-and-closed-loop-fibres', 'Closed-loop fibres such as lyocell: part of the circular toolkit as unsold stock becomes harder to write off.'),
+          ('h2', 'Next: textile EPR from 2028'),
+          ('p',
+           'The ban is the first of several rules. Directive (EU) 2025/1892, which revises the Waste Framework Directive, entered into force on 16 October 2025. According to law firm VdA, member '
+           'states must transpose it by 17 June 2027 and set up <b>extended producer responsibility (EPR) schemes for textiles by 17 April 2028</b>, with micro-enterprises given until 17 April 2029. '
+           'Producers, including importers and online sellers outside the EU, will pay for collection, sorting, reuse and recycling of clothing, accessories, hats, footwear, blankets, bed and '
+           'kitchen linen and curtains. CMS notes that fees may be adjusted for durability, repairability and recyclability. A textile Digital Product Passport is expected to follow a delegated act '
+           'that Bindu expects around 2027, with the passport itself applying later.'),
+          ('fig', 'hub-fabrics-inn-fibre-traceability', 'Fibre traceability: the data a future Digital Product Passport will ask for.'),
+          ('h2', 'What it means for SS27 in Europe'),
+          ('p',
+           "Forecut's Europe forecast for SS27 points to featherlight see-through fabrics (organza, voile, ripstop), the return of the waist, below-the-knee skirts and soft pastels such as butter, "
+           'lavender, sage and light blue. These are trend-led pieces with short selling windows, exactly the stock most at risk of being left over. Over-buying a fast-moving trend now carries a '
+           'cost that cannot simply be written off and destroyed.'),
+          ('ul',
+           ['<b>Buy deeper in carry-over pieces</b>, such as tailoring, trench coats and knitwear, and test trend pieces in smaller first drops with fast reorders.',
+            '<b>Keep logos removable</b>: printed or woven-in branding that cannot be taken off limits resale through outlets and secondary markets.',
+            '<b>Plan the clearance route before the buy</b>: outlets, off-price partners, resale, rental, or markets outside Europe whose seasons run later, such as the Gulf or the southern '
+            'hemisphere.',
+            '<b>Line up donation and repair partners now</b>, ahead of the January 2027 sales, the first winter clearance under the ban.',
+            '<b>Record what is unsold and why</b>, by style and customs code, so annual disclosures are easy.']),
+          ('fig', 'hub-fabrics-radar-mono-material-garments', 'Mono-material garments: easier to recycle and a likely winner when EPR fees are adjusted for recyclability.'),
+          ('h2', 'For manufacturers and suppliers worldwide'),
+          ('p',
+           'European buyers will push risk back up the supply chain. Expect smaller initial orders, more requests for quick-response capacity, and questions about fibre content, trims and '
+           'repairability. Suppliers who can offer short lead times on reorders, single-fibre fabrics, removable trims and clear fibre data will be easier to buy from. Brands below the large-company '
+           'threshold should still prepare: medium firms join in 2030, and EPR will apply to almost every producer selling textiles in the EU from 2028.'),
+          ('cta',
+           'See local timing, climate, fashion weeks and the latest news for Europe on the <a href="region-europe.html">Europe regional forecast</a>, compare all six regions on <a '
+           'href="regions.html">Forecut Regions</a>, or check which details are rising and fading in the <a href="ss27.html">SS27 forecast</a>.')]},
 {
  'slug': 'east-asia-ss27-china-japan-korea-guide',
  'title': "Selling SS27 in East Asia: Double 11, Shanghai's heritage revival and Seoul tailoring",
