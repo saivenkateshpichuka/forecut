@@ -287,7 +287,65 @@
     salwar: { n: 'Salwar', g: ['women', 'men', 'kids'], o: ['tlen', 'mohri', 'fullness'], d: { tlen: 0, mohri: 38, fullness: 'regular' } },
     patiala: { n: 'Patiala salwar', g: ['women', 'kids'], o: ['tlen', 'mohri'], d: { tlen: 0, mohri: 36 } },
     churidar: { n: 'Churidar', g: ['women', 'men', 'kids'], o: ['tlen', 'ruch'], d: { tlen: 0, ruch: 22 } },
-    gharara: { n: 'Gharara', g: ['women', 'kids'], o: ['tlen', 'gfull'], d: { tlen: 0, gfull: 3 } }
+    gharara: { n: 'Gharara', g: ['women', 'kids'], o: ['tlen', 'gfull'], d: { tlen: 0, gfull: 3 } },
+    blazer: { n: 'Blazer / tailored jacket', w: 1, g: ['women', 'men', 'unisex'], o: ['ease', 'len', 'slen', 'pockets'], d: { ease: 10, len: 72, slen: 'full', sleeve: 'plain', pockets: 2 } },
+    coat: { n: 'Overcoat', w: 1, g: ['women', 'men', 'unisex'], o: ['ease', 'len', 'slen', 'pockets'], d: { ease: 12, len: 100, slen: 'full', sleeve: 'plain', pockets: 2 } },
+    bomber: { n: 'Bomber jacket', w: 1, g: ['unisex', 'men', 'women', 'kids'], o: ['ease', 'len', 'slen', 'drop'], d: { ease: 18, len: 64, slen: 'full', sleeve: 'plain', drop: 3 } },
+    jeans: { n: 'Jeans (5-pocket)', w: 1, g: ['women', 'men', 'unisex', 'kids'], o: ['leg', 'tlen'], d: { leg: 'straight', tlen: 0, pfit: 'jean', wtype: 'fitted' } },
+    jumpsuit: { n: 'Jumpsuit', w: 1, g: ['women', 'kids'], o: ['ease', 'neck', 'sleeve', 'slen', 'leg', 'tlen'], d: { ease: 8, neck: 'round', sleeve: 'plain', slen: 'short', leg: 'straight', tlen: 0 } },
+    shirtdress: { n: 'Shirt dress', w: 1, g: ['women', 'kids'], o: ['ease', 'len', 'collar', 'sleeve', 'slen', 'pockets', 'hem'], d: { ease: 12, len: 100, shape: 'straight', collar: 'shirt', sleeve: 'shirt', slen: 'full', pockets: 1, hem: 'curved', yoke: 1, drop: 0 } },
+    polo: { n: 'Polo shirt', w: 1, g: ['unisex', 'men', 'women', 'kids'], o: ['ease', 'len', 'slen'], d: { ease: 10, len: 72, neck: 'crew', sleeve: 'tee', slen: 'short', drop: 0 } },
+    tank: { n: 'Tank top / camisole', w: 1, g: ['women', 'men', 'unisex', 'kids'], o: ['ease', 'len', 'neck'], d: { ease: 6, len: 62, neck: 'ushape', shape: 'shaped', collar: 'none', sleeve: 'none' } }
+  };
+  ['kurta', 'blouse', 'anarkali', 'angrakha', 'sherwani', 'bandhgala', 'salwar', 'patiala', 'churidar', 'gharara', 'lehenga', 'jacket'].forEach(function (k) { GAR[k].ind = 1; });
+  ['shirt', 'tshirt', 'hoodie', 'top', 'dress', 'skirt', 'trousers', 'bodice'].forEach(function (k) { GAR[k].w = 1; });
+  /* ---------- western styles built from the blocks above ---------- */
+  PM.western = function (gid, gender, m, o) {
+    var G = GAR[gid], kid = gender === 'kids';
+    function relabel(r, name) { var lab = (gender === 'men' ? "Men's " : gender === 'women' ? "Women's " : kid ? "Kids' " : 'Unisex ') + name; r.label = lab; r.pieces.forEach(function (p) { p.auto = lab + ' · ' + p.comp; }); return r; }
+    var nlOf = function (r) { return r.info && r.info['Neckline (half)'] || m.neck / 2 + 2; };
+    if (gid === 'shirtdress') {
+      var r = PM.build('shirt', gender, m, Object.assign({}, GAR.shirt.d, o, { len: +o.len || (kid ? 60 : 100) }));
+      r.pieces.push(rect('belt', 'Tie belt', m.waist + 70, 8, { cut: 'Cut 1', marks: [{ t: 'line', p: L([0, 4], [m.waist + 70, 4]), lab: 'fold', dash: 1 }] }));
+      r.info['Finished length'] = +o.len || (kid ? 60 : 100); return relabel(r, 'shirt dress');
+    }
+    if (gid === 'polo') {
+      var r2 = PM.build('tshirt', gender, m, Object.assign({}, GAR.tshirt.d, o, { neck: 'crew' })), nl = nlOf(r2);
+      r2.pieces = r2.pieces.filter(function (p) { return p.id !== 'neckrib'; });
+      r2.pieces.push(rect('knitcollar', 'Knit collar', nl * 2 - 2, kid ? 6.5 : 8.5, { cut: 'Cut 1 flat-knit collar (or rib)', notes: 'join to the neckline between the placket centres' }));
+      r2.pieces.push(rect('placket', 'Front placket', kid ? 3 : 4, kid ? 12 : 16, { cut: 'Cut 2 + interfacing', marks: [{ t: 'button', c: [kid ? 1.5 : 2, 4] }, { t: 'button', c: [kid ? 1.5 : 2, kid ? 9 : 11] }], notes: 'cut the front open ' + (kid ? 12 : 16) + ' cm at centre front' }));
+      return relabel(r2, 'polo shirt');
+    }
+    if (gid === 'tank') {
+      var r3 = PM.build('top', gender, m, Object.assign({}, GAR.top.d, o, { sleeve: 'none', collar: 'none', peplum: 0 })), nl3 = nlOf(r3), ah = r3.info['Armhole (front + back)'] || 44;
+      r3.pieces.push(rect('neckbind', 'Neck binding', nl3 * 2 * .92, 3.2, { cut: 'Cut 1 on the bias (or in rib)', notes: 'finished 0.8 cm' }));
+      r3.pieces.push(rect('armbind', 'Armhole binding', ah * .95, 3.2, { cut: 'Cut 2 on the bias (or in rib)', notes: 'finished 0.8 cm' }));
+      return relabel(r3, 'tank top or camisole');
+    }
+    if (gid === 'jeans') {
+      var r4 = PM.build('trousers', gender, m, Object.assign({}, GAR.trousers.d, o, { pfit: 'jean', wtype: 'fitted', cargo: 0 }));
+      var pw = kid ? 11 : gender === 'women' ? 13.5 : 15, ph = kid ? 12 : gender === 'women' ? 14.5 : 16.5;
+      var bp = PM.pocket(pw, ph, 'point', 'backpocket', 'Back patch pocket'); bp.cut = 'Cut 2'; r4.pieces.push(bp);
+      r4.pieces.push(rect('coin', 'Coin pocket', kid ? 7 : 9, kid ? 6 : 7.5, { cut: 'Cut 1' }));
+      r4.pieces.push(rect('pocketbag', 'Front pocket bag', kid ? 14 : 18, kid ? 22 : 30, { cut: 'Cut 2 in pocketing (fold at the bottom)' }));
+      r4.pieces.push(rect('pocketfacing', 'Front pocket facing (scoop)', kid ? 12 : 16, kid ? 14 : 19, { cut: 'Cut 2 in self fabric' }));
+      r4.pieces.push(rect('fly', 'Fly facing', 4.5, kid ? 13 : 19, { cut: 'Cut 1 + interfacing', notes: 'zip ' + (kid ? 10 : 15) + '–' + (kid ? 12 : 18) + ' cm' }));
+      r4.pieces.push(rect('flyshield', 'Fly shield', 8, kid ? 14 : 21, { cut: 'Cut 1 (fold lengthwise)' }));
+      r4.pieces.push(rect('loops', 'Belt loops (one strip)', 3.5, 5 * (kid ? 7 : 9), { cut: 'Cut 1, cut into 5 loops after stitching' }));
+      r4.info['Back yoke'] = 'mark a yoke line 5 cm below the waist at centre back and 3 cm at the side, then cut the back apart on it';
+      return relabel(r4, 'jeans');
+    }
+    if (gid === 'jumpsuit') {
+      var top = PM.build('top', gender, m, Object.assign({}, GAR.top.d, { ease: o.ease, neck: o.neck, sleeve: o.sleeve, slen: o.slen, collar: 'none', shape: 'shaped', peplum: 0, len: m.nape + 1, adj: o.adj }));
+      var tr = PM.build('trousers', gender, m, Object.assign({}, GAR.trousers.d, { leg: o.leg, tlen: o.tlen, pfit: 'trouser', wtype: 'fitted', adj: o.adj }));
+      top.pieces.forEach(function (p) { p.comp = 'Bodice ' + p.comp.toLowerCase(); });
+      var legs = tr.pieces.filter(function (p) { return !/waistband/i.test(p.id + p.comp); }); legs.forEach(function (p) { p.id = 'leg-' + p.id; p.comp = 'Trouser ' + p.comp.toLowerCase(); });
+      var pcs = top.pieces.concat(legs);
+      pcs.push(rect('belt', 'Tie belt', m.waist + 70, 8, { cut: 'Cut 1', marks: [{ t: 'line', p: L([0, 4], [m.waist + 70, 4]), lab: 'fold', dash: 1 }] }));
+      var info = Object.assign({}, tr.info || {}, top.info || {}); info['Waist seam'] = 'bodice joins the trousers at the waist; add a 50 cm invisible zip at centre back';
+      return relabel({ pieces: pcs, info: info }, 'jumpsuit');
+    }
+    return null;
   };
   /* ---------- salwar and patiala: leg panels (cut on the outer fold) + kalis that form the crotch ---------- */
   PM.salwar = function (m, o) {
@@ -307,6 +365,7 @@
   };
   var SLEN = { cap: 7, short: .3, elbow: .55, '3q': .75, full: 1 };
   PM.build = function (gid, gender, m, o) {
+    var W = PM.western(gid, gender, m, o); if (W) return W;
     var G = GAR[gid], kid = gender === 'kids', P = [], info = {}, lab = (gender === 'men' ? "Men's " : gender === 'women' ? "Women's " : gender === 'kids' ? "Kids' " : 'Unisex ') + G.n.toLowerCase().replace(' / ', ' or ');
     var sl = function (kind) { return kind === 'cap' ? 7 : (SLEN[kind] || 1) * m.sleeve - (kind === 'full' ? 0 : 0); };
     function torsoSet(t, opt) {
@@ -346,6 +405,8 @@
       if (gid === 'shirt') { to.opening = true; to.ext = 1.75; to.buttons = kid ? 5 : 7; to.neck = 'collar'; to.hemCurve = o.hem === 'curved' ? (kid ? 4 : 7) : 0; }
       if (gid === 'jacket') { to.opening = true; to.ext = 2; to.buttons = 5; to.neck = (o.collar || 'band') === 'band' ? 'collar' : 'v'; to.sleeveless = true; to.shape = 'shaped'; }
       if (gid === 'sherwani' || gid === 'bandhgala') { to.opening = true; to.ext = 2; to.buttons = gid === 'sherwani' ? (kid ? 6 : 8) : (kid ? 5 : 6); to.neck = 'collar'; to.shape = 'shaped'; to.slit = gid === 'sherwani' ? +o.slit || 0 : 0; }
+      if (gid === 'blazer' || gid === 'coat') { to.opening = true; to.ext = gid === 'coat' ? 3 : 2.5; to.buttons = gid === 'coat' ? 4 : 2; to.neck = 'v'; to.shape = 'shaped'; }
+      if (gid === 'bomber') { to.opening = true; to.ext = 0; to.buttons = 0; to.neck = 'round'; to.shape = 'straight'; }
       if (gid === 'anarkali') { to.len = m.nape; to.fit = 'fitted'; }
       if (gid === 'angrakha') { to.neck = 'round'; }
       if (gid === 'kurta' && o.collar === 'band') to.neck = o.neck === 'v' ? 'v' : 'collar';
@@ -380,7 +441,7 @@
         P[0] = over; P.splice(1, 0, under); P.push(rect('tie', 'Ties', 36, 3, { cut: 'Cut 4' }));
       }
       var sleeveStyle = gid === 'jacket' ? 'none' : gid === 'hoodie' ? 'plain' : o.sleeve || G.d.sleeve;
-      addSleeve(t, sleeveStyle, o.slen || G.d.slen, { rib: gid === 'hoodie' });
+      addSleeve(t, sleeveStyle, o.slen || G.d.slen, { rib: gid === 'hoodie' || gid === 'bomber' });
       var nl = t.neckline;
       var col = o.collar || (gid === 'jacket' || gid === 'sherwani' || gid === 'bandhgala' ? 'band' : 'none');
       if (gid === 'shirt' && col === 'shirt') { P.push(PM.band(nl, 3.4, 1.75, 'band', 'Collar band')); P.push(PM.leaf(nl, 'collar')); }
@@ -396,7 +457,11 @@
         var wl = gid === 'jacket' || gid === 'bandhgala', pc = wl ? PM.pocket(pw2 + 1, 2.5 * 2, 'square', 'welt', 'Welt pocket (cut 2 per pocket)') : PM.pocket(pw2, ph, 'point', 'pocket', 'Patch pocket'); pc.cut = wl ? 'Cut ' + (2 * pk) : 'Cut ' + pk; P.push(pc); }
       if (gid === 'anarkali') { var sk = PM.skirt(Object.assign({}, m, { waist: t.waistHalf * 2 - 2.5 }), { type: 'panels', len: (o.len || 130) - m.nape, panels: +o.panels || 16, hemCirc: +o.hemc || 420 }).filter(function (p) { return p.id !== 'waistband'; });
         sk.forEach(function (p) { p.comp = 'Kali'; }); P = P.concat(sk); info['Hem circumference'] = +o.hemc || 420; info['Waist seam (bodice to kalis)'] = t.waistHalf * 2; }
-      if (gid === 'jacket' || gid === 'sherwani' || gid === 'bandhgala') { var F = t.F, nk = F.neckPts, hp0 = nk[0], ex = to.ext, sp0 = F.sp, k = 3.5 / Math.hypot(sp0[0] - hp0[0], sp0[1] - hp0[1]), sh = [hp0[0] + (sp0[0] - hp0[0]) * k, hp0[1] + (sp0[1] - hp0[1]) * k], fx = 7 - ex;
+      if (gid === 'blazer' || gid === 'coat') { var lc = PM.leaf(nl, 'collar'); lc.comp = 'Top collar'; lc.cut = 'Cut 1 on fold'; var uc = PM.leaf(nl, 'undercollar'); uc.comp = 'Under collar'; uc.cut = 'Cut 2 on the bias (centre-back seam)'; P.push(lc, uc);
+        if (+o.pockets) { var fl = PM.pocket(16, 5.5, 'square', 'flap', 'Pocket flap'); fl.cut = 'Cut ' + 4 * Math.min(2, +o.pockets) + ' (outer and lining)'; P.push(fl); P.push(rect('pocketbag', 'Pocket bag', 18, 34, { cut: 'Cut ' + 2 * Math.min(2, +o.pockets) + ' in pocketing', notes: 'fold at half length' })); }
+        if (gid === 'coat') P.push(rect('belt', 'Belt', m.waist + ease + 50, 10, { cut: 'Cut 1 + interfacing', marks: [{ t: 'line', p: L([0, 5], [m.waist + ease + 50, 5]), lab: 'fold', dash: 1 }] })); }
+      if (gid === 'bomber') { var bw = (t.F.hemX + t.B.hemX) * 2 * .9; P.push(rect('hemband', 'Rib hem band', bw, 14, { cut: 'Cut 1 in rib', marks: [{ t: 'line', p: L([0, 7], [bw, 7]), lab: 'fold', dash: 1 }] })); P.push(rect('collarrib', 'Rib collar', nl * 2 * .9, 12, { cut: 'Cut 1 in rib', marks: [{ t: 'line', p: L([0, 6], [nl * 1.8, 6]), lab: 'fold', dash: 1 }] })); P.push(rect('zipfacing', 'Zip facing', 5, t.F.Lh - t.F.nd, { cut: 'Cut 2 + interfacing', notes: 'separating zip ' + Math.round(t.F.Lh - t.F.nd - 3) + ' cm' })); }
+      if (gid === 'blazer' || gid === 'coat' || gid === 'jacket' || gid === 'sherwani' || gid === 'bandhgala') { var F = t.F, nk = F.neckPts, hp0 = nk[0], ex = to.ext, sp0 = F.sp, k = 3.5 / Math.hypot(sp0[0] - hp0[0], sp0[1] - hp0[1]), sh = [hp0[0] + (sp0[0] - hp0[0]) * k, hp0[1] + (sp0[1] - hp0[1]) * k], fx = 7 - ex;
         P.push(piece('facing', 'Front facing', [E('seam', nk), E('seam', L([-ex, F.nd], [-ex, F.Lh], 4)), E('hem', L([-ex, F.Lh], [fx, F.Lh])), E('seam', cat(L([fx, F.Lh], [fx, F.nd + 6], 3), L([fx, F.nd + 6], sh, 4))), E('seam', L(sh, hp0))], { cut: 'Cut 2 (pair) + interfacing', grain: [[fx * .4, F.nd + 4], [fx * .4, F.Lh - 6]] })); }
       info['Armhole (front + back)'] = t.armhole; info['Neckline (half)'] = nl; info['Finished chest'] = m.bust + ease;
       if (info['Sleeve cap seam']) info['Sleeve cap ease'] = info['Sleeve cap seam'] - t.armhole;
@@ -488,6 +553,38 @@
     return out;
   };
   // fabric shrinkage and knit stretch: scale every piece across (x) and along the grain (y); returns a copy, info is unchanged
+  /* ---------- CAD-style edits: move a corner (both meeting edges stretch) or reshape a curve with a smooth falloff; add notches.
+     Edits are stored against edge index + position along the edge, so the same change applies to every size. ---------- */
+  function cumLen(p) { var c = [0]; for (var i = 1; i < p.length; i++) c.push(c[i - 1] + Math.hypot(p[i][0] - p[i - 1][0], p[i][1] - p[i - 1][1])); return c; }
+  PM.edgePoint = function (p, t) { var c = cumLen(p), L = c[c.length - 1], want = L * t; for (var i = 1; i < p.length; i++) if (c[i] >= want) { var u = (want - c[i - 1]) / ((c[i] - c[i - 1]) || 1); return [p[i - 1][0] + (p[i][0] - p[i - 1][0]) * u, p[i - 1][1] + (p[i][1] - p[i - 1][1]) * u]; } return p[p.length - 1].slice(); };
+  PM.applyEdits = function (r, edits) {
+    if (!edits) return r;
+    var out = { info: r.info, label: r.label, pieces: r.pieces.map(function (pc) {
+      var ops = edits[pc.id]; if (!ops || !ops.length) return pc;
+      var c = Object.assign({}, pc, { edges: pc.edges.map(function (e) { return { t: e.t, p: e.p.map(function (q) { return q.slice(); }) }; }), marks: pc.marks.slice(), edited: true });
+      var n = c.edges.length;
+      ops.forEach(function (op) {
+        if (op.e == null || op.e >= n) return;
+        if (op.k === 'notch') { var e0 = c.edges[op.e]; c.marks.push({ t: 'notch', c: PM.edgePoint(e0.p, op.t), n: 1, user: 1 }); return; }
+        if (op.k === 'corner') { // vertex shared by the end of edge e-1 and the start of edge e
+          var a = c.edges[(op.e - 1 + n) % n].p, b = c.edges[op.e].p, ca = cumLen(a), cb = cumLen(b), La = ca[ca.length - 1] || 1, Lb = cb[cb.length - 1] || 1;
+          a.forEach(function (q, i) { var w = ca[i] / La; q[0] += op.dx * w; q[1] += op.dy * w; });
+          b.forEach(function (q, i) { if (i === 0) return; var w = 1 - cb[i] / Lb; q[0] += op.dx * w; q[1] += op.dy * w; });
+          b[0][0] = a[a.length - 1][0]; b[0][1] = a[a.length - 1][1];
+          return;
+        }
+        var p = c.edges[op.e].p, cl = cumLen(p), L = cl[cl.length - 1] || 1, s0 = L * op.t, R = Math.max(1, op.r || 8);
+        p.forEach(function (q, i) {
+          if (i === 0 || i === p.length - 1) return;
+          var d = Math.abs(cl[i] - s0); if (d >= R) return;
+          var f = 0.5 * (1 + Math.cos(Math.PI * d / R)), ends = Math.min(1, cl[i] / (L * .12 + .01), (L - cl[i]) / (L * .12 + .01));
+          q[0] += op.dx * f * ends; q[1] += op.dy * f * ends;
+        });
+      });
+      return c;
+    }) };
+    return out;
+  };
   PM.scale = function (r, sx, sy) {
     if (Math.abs(sx - 1) < 1e-6 && Math.abs(sy - 1) < 1e-6) return r;
     function S(q) { return [q[0] * sx, q[1] * sy]; }

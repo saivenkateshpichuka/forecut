@@ -1,7 +1,7 @@
 /* Forecut pattern maker: interface, state, scene building and downloads. Needs pm_engine.js and pm_export.js. */
 (function () {
   var $ = FC.$, $$ = FC.$$, PM = window.PM, X = window.PMX, V = window.PMV, DET = window.PM_DETAILS || [];
-  var GC = { anarkali: 'ANK', angrakha: 'ANG', sherwani: 'SHW', bandhgala: 'BDG', salwar: 'SAL', patiala: 'PAT', churidar: 'CHU', gharara: 'GHR', bodice: 'BOD', kurta: 'KUR', shirt: 'SHT', tshirt: 'TEE', hoodie: 'HOD', blouse: 'BLS', top: 'TOP', dress: 'DRS', jacket: 'JKT', skirt: 'SKT', lehenga: 'LEH', trousers: 'TRS' }, VER = '1.3';
+  var GC = { anarkali: 'ANK', angrakha: 'ANG', sherwani: 'SHW', bandhgala: 'BDG', salwar: 'SAL', patiala: 'PAT', churidar: 'CHU', gharara: 'GHR', bodice: 'BOD', kurta: 'KUR', shirt: 'SHT', tshirt: 'TEE', hoodie: 'HOD', blouse: 'BLS', top: 'TOP', dress: 'DRS', jacket: 'JKT', skirt: 'SKT', lehenga: 'LEH', trousers: 'TRS', blazer: 'BLZ', coat: 'COT', bomber: 'BMB', jeans: 'JNS', jumpsuit: 'JMP', shirtdress: 'SHD', polo: 'POL', tank: 'TNK' }, VER = '1.3';
   function code() { return 'FC-' + { women: 'W', men: 'M', kids: 'K', unisex: 'U' }[S.gender] + '-' + GC[S.gid] + '-' + (S.size === 'custom' ? 'CUS' : S.size); }
   var UF = { cm: 1, mm: 10, in: 1 / 2.54 };
   var OPT = {
@@ -73,7 +73,9 @@
   var NEST = false, SZCOL = ['#3b6ea8', '#2f8f83', '#6f9a3c', '#b3862d', '#c0582b', '#a33a64', '#6a4aa0'];
   function knit() { return S.gid === 'tshirt' || S.gid === 'hoodie'; }
   function fabW() { return +S.fab.fw || (knit() ? 160 : 112); }
-  function shrink(r0) { var sx = 1 / (1 - (+S.fab.shw || 0) / 100) * (knit() ? 1 - (+S.fab.st || 0) * .1 / 100 : 1), sy = 1 / (1 - (+S.fab.shl || 0) / 100); return PM.scale(PM.manip(r0, OO()), sx, sy); }
+  function shrink(r0) { var sx = 1 / (1 - (+S.fab.shw || 0) / 100) * (knit() ? 1 - (+S.fab.st || 0) * .1 / 100 : 1), sy = 1 / (1 - (+S.fab.shl || 0) / 100); return PM.scale(PM.applyEdits(PM.manip(r0, OO()), editsFor()), sx, sy); }
+  function editKey() { return S.gid + '|' + S.gender + '|' + JSON.stringify(S.o); }
+  function editsFor() { S.edits = S.edits || {}; return S.edits[editKey()] || null; }
   function shrLab() { return (+S.fab.shl || +S.fab.shw) ? ' · incl. shrinkage L ' + (+S.fab.shl || 0) + '% W ' + (+S.fab.shw || 0) + '%' : ''; }
   var gate = $('#pm-gate'), app = $('#pm-app');
 
@@ -99,7 +101,9 @@
     $('#pm-gtabs').innerHTML = Object.keys(PM.GENDER).map(function (g) { return '<button type="button" data-g="' + g + '" title="' + PM.GENDER[g] + '" aria-pressed="' + (g === S.gender) + '">' + short[g] + '</button>'; }).join('');
     $$('#pm-gtabs button').forEach(function (b) { b.onclick = function () { S.gender = b.dataset.g; if (PM.GARMENTS[S.gid].g.indexOf(S.gender) < 0) S.gid = Object.keys(PM.GARMENTS).filter(function (k) { return PM.GARMENTS[k].g.indexOf(S.gender) > -1; })[0]; S.detail = null; resetMeas(); resetOpts(); S.pc = {}; ui(true); }; });
     var gs = Object.keys(PM.GARMENTS).filter(function (k) { return PM.GARMENTS[k].g.indexOf(S.gender) > -1; });
-    $('#pm-garments').innerHTML = gs.map(function (k) { return '<button type="button" data-k="' + k + '" aria-pressed="' + (k === S.gid) + '"><span>' + PM.GARMENTS[k].n + '</span><small>' + GC[k] + '</small></button>'; }).join('');
+    var gbtn = function (k) { return '<button type="button" data-k="' + k + '" aria-pressed="' + (k === S.gid) + '"><span>' + PM.GARMENTS[k].n + '</span><small>' + GC[k] + '</small></button>'; };
+    var wg = gs.filter(function (k) { return !PM.GARMENTS[k].ind; }), ig = gs.filter(function (k) { return PM.GARMENTS[k].ind; });
+    $('#pm-garments').innerHTML = (wg.length ? '<div class="ghead">Western</div>' + wg.map(gbtn).join('') : '') + (ig.length ? '<div class="ghead">Indian</div>' + ig.map(gbtn).join('') : '');
     $$('#pm-garments button').forEach(function (b) { b.onclick = function () { S.gid = b.dataset.k; S.detail = null; resetOpts(); S.pc = {}; ui(true); }; });
   }
   function measForm() {
@@ -501,6 +505,7 @@
   var TOILE = {}; // filled only from real sewn samples: 'kurta-women': 'size M, 12 Jan 2027, fit model …'
   var qs = new URLSearchParams(location.search), qd = qs.get('detail');
   if (qd) { var d = DET.filter(function (x) { return x[0].toLowerCase() === qd.toLowerCase(); })[0]; if (d) { S.gender = d[2]; S.gid = d[3]; resetMeas(); resetOpts(); Object.keys(d[4]).forEach(function (k) { S.o[k] = d[4][k]; }); S.detail = d[0]; S.pc = {}; } }
+  window.PMUI = { S: function () { return S; }, draw: function () { draw(); }, last: function () { return last; }, U: U, key: editKey, toast: function (t) { try { toast(t); } catch (e) {} }, unit: function () { return S.unit; } };
   ui(true); lang();
   try { if (/[?&]pack=1/.test(location.search) && S.detail) { var bn = document.createElement('div'); bn.className = 'spk'; bn.innerHTML = '<b>Style pack for ' + S.detail + '</b><span>Pattern, costing and tech pack are ready.</span><button type="button" class="xbtn pri" id="pm-spk">Open tech pack</button><button type="button" class="xbtn" id="pm-spkx">Close</button>'; $('.pbar').after(bn); $('#pm-spk').onclick = function () { $('#pm-dl-tech').click(); }; $('#pm-spkx').onclick = function () { bn.remove(); }; } } catch (e) { }
 })();

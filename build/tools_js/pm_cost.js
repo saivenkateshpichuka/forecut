@@ -4,7 +4,7 @@
    PMC.cost()   - fabric, trims, making, overheads, margins and MRP with the Indian GST band for garments */
 (function () {
   var C = window.PMC = {}, PM = window.PM;
-  var SMV = { anarkali: 40, angrakha: 30, sherwani: 60, bandhgala: 50, salwar: 14, patiala: 18, churidar: 14, gharara: 22, bodice: 10, kurta: 18, shirt: 22, tshirt: 9, hoodie: 16, blouse: 20, top: 12, dress: 20, jacket: 34, skirt: 12, lehenga: 32, trousers: 20 };
+  var SMV = { anarkali: 40, angrakha: 30, sherwani: 60, bandhgala: 50, salwar: 14, patiala: 18, churidar: 14, gharara: 22, bodice: 10, kurta: 18, shirt: 22, tshirt: 9, hoodie: 16, blouse: 20, top: 12, dress: 20, jacket: 34, skirt: 12, lehenga: 32, trousers: 20, blazer: 75, coat: 85, bomber: 38, jeans: 26, jumpsuit: 32, shirtdress: 30, polo: 14, tank: 7 };
   C.SMV = SMV;
   function area(p) { var a = 0; for (var i = 0, n = p.length; i < n; i++) { var q = p[i], r = p[(i + 1) % n]; a += q[0] * r[1] - r[0] * q[1]; } return Math.abs(a) / 2; }
   function refl(p, a, b) { var dx = b[0] - a[0], dy = b[1] - a[1], l2 = dx * dx + dy * dy || 1; return p.map(function (q) { var t = ((q[0] - a[0]) * dx + (q[1] - a[1]) * dy) / l2, fx = a[0] + t * dx, fy = a[1] + t * dy; return [2 * fx - q[0], 2 * fy - q[1]]; }); }
