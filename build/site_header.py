@@ -17,7 +17,8 @@ MENU = [
     ], ('ss27.html', 'SS27 forecast', 'The waist returns, handcraft goes everyday and a luminous blue leads.', 'img/hero-ss27.webp')),
     ('Insight', 'insight', [
         ('Read', [('reports.html', 'Reports', 'Ready-to-use trend and market reports'), ('journal.html', 'Journal', 'Analysis and practical guides'),
-                  ('celebrity-style.html', 'Celebrity style', 'Weekly red-carpet watch')]),
+                  ('celebrity-style.html', 'Celebrity style', 'Weekly red-carpet watch'),
+                  ('how-to-choose-a-fashion-trend-forecasting-service.html', 'Choosing a forecasting service', 'Free vs paid, global vs India')]),
         ('More regions', [('region-south-america.html', 'South America', ''), ('region-africa.html', 'Africa', ''),
                           ('region-oceania.html', 'Oceania', ''), ('method.html', 'How we forecast', 'Our method and sources')]),
     ], None),

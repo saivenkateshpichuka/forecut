@@ -162,6 +162,10 @@ def block(fn, title, desc, path):
     if fn in ARTS:
         a = ARTS[fn]
         b.append('<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@type": "Article", "headline": a['title'], "description": a['desc'], "image": BASE + 'img/' + a['hero'] + '.webp', "datePublished": a.get("date", JD.DATE), "dateModified": a.get("date", JD.DATE), "author": {"@type": "Organization", "name": "Forecut Editorial", "url": BASE + 'about.html'}, "publisher": {"@id": BASE + "#org"}, "mainEntityOfPage": url, "inLanguage": "en-IN"}, ensure_ascii=False) + '</script>')
+    if fn in ARTS and isinstance(ARTS[fn].get('body'), list):
+        _qa = [re.match(r'<b>([^<]*\?)</b>\s*(.*)', x[1], re.S) for x in ARTS[fn]['body'] if x[0] == 'p']
+        _qa = [(m.group(1), re.sub(r'<[^>]+>', '', m.group(2))) for m in _qa if m]
+        if len(_qa) >= 2: b.append('<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in _qa]}, ensure_ascii=False) + '</script>')
     b.append('<style>html{scroll-behavior:smooth}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}</style>')
     b.append('<script type="module" src="/auth.js"></script>')
     b.append('<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Forecut"><meta name="apple-mobile-web-app-status-bar-style" content="default">')
@@ -243,7 +247,7 @@ for fn, (title, desc, path) in pages.items():
     open(p, 'w').write(h)
 if not os.environ.get('ONLY') or os.environ.get('SITEMAP'):
     today = datetime.date.today().isoformat()
-    pri = {'index.html': '1.0', 'tools.html': '0.95', 'pattern-maker.html': '0.95', 'textile-processing-studio.html': '0.9', 'tech-pack-builder.html': '0.9', 'trend-to-style.html': '0.9', 'reports.html': '0.9', 'ss27.html': '0.9', 'regions.html': '0.9', 'india.html': '0.9', 'journal.html': '0.8', 'couture.html': '0.8', 'fabrics.html': '0.8', 'colour.html': '0.8', 'about.html': '0.5', 'contact.html': '0.4', 'terms.html': '0.1', 'privacy.html': '0.1'}
+    pri = {'index.html': '1.0', 'how-to-choose-a-fashion-trend-forecasting-service.html': '0.9', 'tools.html': '0.95', 'pattern-maker.html': '0.95', 'textile-processing-studio.html': '0.9', 'tech-pack-builder.html': '0.9', 'trend-to-style.html': '0.9', 'reports.html': '0.9', 'ss27.html': '0.9', 'regions.html': '0.9', 'india.html': '0.9', 'journal.html': '0.8', 'couture.html': '0.8', 'fabrics.html': '0.8', 'colour.html': '0.8', 'about.html': '0.5', 'contact.html': '0.4', 'terms.html': '0.1', 'privacy.html': '0.1'}
     def page_images(fn):
         h = open(os.path.join(R, fn)).read() if os.path.exists(os.path.join(R, fn)) else ''
         out, seen = [], set()
