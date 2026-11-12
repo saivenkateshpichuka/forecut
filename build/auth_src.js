@@ -81,7 +81,7 @@ function unlock() {
   const sn = document.querySelector('#seasons .hint'); if (sn) sn.textContent = 'You have member access to every season. Thanks for joining Forecut early.';
 }
 onAuthStateChanged(auth, (u) => {
-  if (u) { unlock(); const cta = document.querySelector('#fc-header ~ .hero .cta a[href*="account"]'); if (cta) { cta.textContent = 'My saved details'; cta.href = '/account.html#saved'; } } else if (wasMember) { location.reload(); return; }
+  if (u) { unlock(); const cta = document.querySelector('header.hero#top .cta a[href*="account"]'); if (cta) { cta.textContent = 'My saved details'; cta.href = '/account.html#saved'; } } else if (wasMember) { location.reload(); return; }
   wasMember = !!u;
   if (!w) return;
   if (!u) { w.innerHTML = isAccount ? '' : `<a class="fcin" href="/account.html?next=${encodeURIComponent(location.pathname + location.hash)}">Sign in</a>`; return; }

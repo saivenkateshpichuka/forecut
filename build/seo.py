@@ -19,7 +19,7 @@ for fn, t, d in [('about.html', 'About Forecut · Global Fashion Trend Forecasti
 for fn, t, d in [('textile-processing-studio.html', 'Textile Processing Studio · Dye Recipes, Processing Costs & Colour Blends · Forecut', 'Search dyes by class and colour, build a dye recipe and batch cost, preview fibre colour blends such as cotton-polyester mélange, and price dyeing, printing, washing and finishing per kg and per metre. For Forecut members.'),
                  ('tools.html', 'Fashion Design & Production Tools · 16 Tools in Garment-Process Order · Forecut', 'Sixteen tools for designers and apparel brands, in the order a garment is made: plan the collection, colour and fabric, pattern and fit, sampling and tech pack, costing and production, labels, listing and export. Free for Forecut members.'),
                  ('textile-calculator.html', 'Textile Calculator · Yarn Count, GSM, Warp & Weft, Knitting, Garment Costing · Forecut', 'Textile calculator for Forecut members: 27 calculators for yarn count (Ne, Nm, tex, denier and 11 more), GSM, warp and weft, reed, knitting, fabric consumption, marker, thread, SMV, costing to MRP, dyeing and units.'),
-                 ('pattern-maker.html', 'Pattern Maker · Block Patterns for Kurta, Shirt, Blouse, Skirt, Lehenga & Trousers · Forecut', 'Draft block patterns for garments in womenswear, menswear, kidswear and unisex from your measurements or a Forecut detail, with automatic fit checks and true-scale PDF, DXF, SVG and PNG downloads. For Forecut members.')]:
+                 ('pattern-maker.html', 'Pattern Maker · Editable Western & Indian Patterns: Blazer, Jeans, Shirt, Dress, Kurta, Blouse · Forecut', 'Draft and edit patterns for Western and Indian garments in womenswear, menswear, kidswear and unisex from your measurements or a Forecut detail, move points and walk seams on screen, with automatic fit checks and true-scale PDF, DXF, SVG and PNG downloads. For Forecut members.')]:
     if os.path.exists(os.path.join(R, fn)): pages[fn] = (t, d, fn)  # tools are published only once their pages exist in the site root
 import journal_data as JD
 pages['journal.html'] = ('Forecut Journal · Indian Fashion Trend Analysis & Guides', 'Analysis and practical guides on Indian and global fashion trends: festive and wedding wear, handloom, footwear, Gen Z fusion and colour, with rupee price bands.', 'journal.html')
@@ -124,7 +124,7 @@ def clip(t, n=158):
     return cut[:dot + 1] if dot > 90 else cut[:cut.rfind(' ')].rstrip(',;:–- ') + '…'
 
 
-NOINDEX = {'account.html', 'india-reference-library.html', 'search.html', '404.html', 'offline.html'}
+NOINDEX = {'account.html', 'india-reference-library.html', 'search.html', '404.html', 'offline.html', 'terms.html', 'privacy.html'}  # legal pages stay reachable but out of Google results and sitelinks
 NOADS = NOINDEX | {'contact.html', 'terms.html', 'privacy.html'}
 ADS_OK = {}
 
@@ -172,6 +172,7 @@ def block(fn, title, desc, path):
     b.append('<!--/seo-->'); return '\n'.join(b)
 # large inline scripts shared by several pages (the season pages' sketch engine) go to one hashed file that the browser caches once
 import hashlib as _hl, collections as _co
+import site_header as SH
 _SHARED = _co.Counter()
 for _f in pages:
     _pp = os.path.join(R, _f)
@@ -237,11 +238,12 @@ for fn, (title, desc, path) in pages.items():
     h = h.replace('</body>', _nav + '</body>', 1) if '</body>' in h else h + _nav
     # owner's rule: pages show the photo only; flat sketches stay inside the detail viewer's "Flat sketch" button
     h = re.sub(r'(<img[^>]*?\ssrc="img/)([a-z0-9-]+)(\.webp")', lambda m: m.group(1) + (m.group(2) + '-photo' if not m.group(2).endswith('-photo') and os.path.exists(os.path.join(R, 'img', m.group(2) + '-photo.webp')) else m.group(2)) + m.group(3), h)
+    h = SH.apply(h, fn)
     h = externalise(h)
     open(p, 'w').write(h)
 if not os.environ.get('ONLY') or os.environ.get('SITEMAP'):
     today = datetime.date.today().isoformat()
-    pri = {'index.html': '1.0', 'india.html': '0.9', 'journal.html': '0.8', 'couture.html': '0.8', 'fabrics.html': '0.8', 'colour.html': '0.8', 'about.html': '0.5', 'contact.html': '0.4', 'terms.html': '0.2', 'privacy.html': '0.2'}
+    pri = {'index.html': '1.0', 'tools.html': '0.95', 'pattern-maker.html': '0.95', 'textile-processing-studio.html': '0.9', 'tech-pack-builder.html': '0.9', 'trend-to-style.html': '0.9', 'reports.html': '0.9', 'ss27.html': '0.9', 'regions.html': '0.9', 'india.html': '0.9', 'journal.html': '0.8', 'couture.html': '0.8', 'fabrics.html': '0.8', 'colour.html': '0.8', 'about.html': '0.5', 'contact.html': '0.4', 'terms.html': '0.1', 'privacy.html': '0.1'}
     def page_images(fn):
         h = open(os.path.join(R, fn)).read() if os.path.exists(os.path.join(R, fn)) else ''
         out, seen = [], set()
