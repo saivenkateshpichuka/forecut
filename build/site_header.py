@@ -56,11 +56,11 @@ def html(active=''):
             '<header class="fs-head" id="fc-site"><div class="fs-in">'
             f'<a class="fs-logo" href="/" aria-label="Forecut home">{LOGO}<span>FORECUT</span></a>'
             '<nav class="fs-nav" aria-label="Main"><ul>' + ''.join(nav) + '</ul></nav>'
-            '<div class="fs-act"><a class="fs-search" href="/search.html" aria-label="Search Forecut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg></a>'
-            '<span id="fc-account-slot"><a href="/account.html#signin">Sign in</a></span>'
+            '<div class="fs-act"><div id="fc-install-slot" hidden></div><a class="fs-search" href="/search.html" aria-label="Search Forecut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg></a>'
+            '<a class="fs-price" href="/index.html#pricing">Pricing</a><span id="fc-account-slot"><a href="/account.html#signin">Sign in</a></span>'
             '<a class="fs-cta" href="/account.html#signup">Start free trial</a>'
             '<button type="button" class="fs-burger" aria-expanded="false" aria-label="Open menu"><i></i><i></i><i></i></button></div>'
-            '</div><div id="fc-install-slot" hidden></div></header>' + JS + '<!--/sitehead-->')
+            '</div></header>' + JS + '<!--/sitehead-->')
 
 
 CSS = r'''<style id="fs-css">
@@ -95,6 +95,9 @@ html{overflow-x:clip}body{margin-top:0!important;padding-top:0!important}.fs-str
 html.fc-member .fs-cta,html.fc-member .fs-strip{display:none}
 .fs-burger{all:unset;cursor:pointer;display:none;width:26px;padding:6px 0}.fs-burger i{display:block;height:2px;background:#111;margin:5px 0}
 #fc-account-slot .fc-account-label{display:none}
+#fc-install-slot .fcinst{all:unset;cursor:pointer;font:600 13px 'DM Sans',sans-serif;color:#111;white-space:nowrap;border-bottom:1.5px solid #111;margin:0}
+@media (max-width:1250px){#fc-install-slot{display:none!important}}
+@media (max-width:760px){.fs-price{display:none}}
 @media (min-width:1101px){.fs-it:hover .fs-mega{display:block}.fs-it:hover .fs-tb{border-bottom-color:#111}}
 @media (max-width:1100px){
  .fs-head>.fs-in{height:60px;gap:12px}.fs-logo{font-size:17px}.fs-burger{display:block}.fs-cta{padding:9px 12px;font-size:12.5px}
