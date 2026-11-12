@@ -1,0 +1,29 @@
+{
+ "id": "/forecut-decoration-cost-estimator",
+ "name": "Forecut Embroidery & Print Cost",
+ "short_name": "Embroidery &",
+ "description": "Decoration cost per piece",
+ "start_url": "/decoration-cost-estimator.html?source=app",
+ "scope": "/",
+ "display": "standalone",
+ "theme_color": "#214538",
+ "background_color": "#f7f4ee",
+ "icons": [
+  {
+   "src": "/apps/studio-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/apps/studio-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/apps/studio-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

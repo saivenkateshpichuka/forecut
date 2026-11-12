@@ -1,0 +1,29 @@
+{
+ "id": "/forecut-export-market-checker",
+ "name": "Forecut Export Market Checker",
+ "short_name": "Export Market",
+ "description": "Rules and dates by country",
+ "start_url": "/export-market-checker.html?source=app",
+ "scope": "/",
+ "display": "standalone",
+ "theme_color": "#214538",
+ "background_color": "#f7f4ee",
+ "icons": [
+  {
+   "src": "/apps/studio-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/apps/studio-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/apps/studio-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

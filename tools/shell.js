@@ -7,7 +7,6 @@
       ['trend-to-style', 'Trend to Style Brief', 'Turn a trend detail into a style brief']]],
     ['Colour and fabric', [
       ['swatchsmith', 'Colour Palette Builder', 'Season palettes and swatch sheets'],
-      ['fabric-finder', 'Fabric Finder', 'Choose fabric by weight, stretch and drape'],
       ['textile-calculator', 'Textile Calculator', 'Yarn, GSM, weaving, knitting and costing'],
       ['textile-processing-studio', 'Textile Processing Studio', 'Dyeing, processing and colour blends']]],
     ['Pattern and fit', [

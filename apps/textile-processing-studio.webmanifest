@@ -1,0 +1,29 @@
+{
+ "id": "/forecut-textile-processing-studio",
+ "name": "Forecut Textile Processing Studio",
+ "short_name": "Textile Processing",
+ "description": "Dyeing, processing and colour blends",
+ "start_url": "/textile-processing-studio.html?source=app",
+ "scope": "/",
+ "display": "standalone",
+ "theme_color": "#214538",
+ "background_color": "#f7f4ee",
+ "icons": [
+  {
+   "src": "/apps/studio-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/apps/studio-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/apps/studio-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

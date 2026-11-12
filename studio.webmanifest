@@ -1,0 +1,55 @@
+{
+ "id": "/forecut-studio",
+ "name": "Forecut Studio",
+ "short_name": "Forecut Studio",
+ "description": "Every Forecut tool for designers and apparel brands, in garment-process order.",
+ "start_url": "/tools.html?source=studio-app",
+ "scope": "/",
+ "display": "standalone",
+ "theme_color": "#214538",
+ "background_color": "#f7f4ee",
+ "icons": [
+  {
+   "src": "/apps/studio-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/apps/studio-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/apps/studio-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ],
+ "shortcuts": [
+  {
+   "name": "Collection Planner",
+   "url": "/rangeboard.html?source=studio-app"
+  },
+  {
+   "name": "Pattern Maker",
+   "url": "/pattern-maker.html?source=studio-app"
+  },
+  {
+   "name": "Textile Processing Studio",
+   "url": "/textile-processing-studio.html?source=studio-app"
+  },
+  {
+   "name": "Price & Margin Calculator",
+   "url": "/pricefold.html?source=studio-app"
+  },
+  {
+   "name": "Tech Pack Builder",
+   "url": "/tech-pack-builder.html?source=studio-app"
+  },
+  {
+   "name": "Textile Calculator",
+   "url": "/textile-calculator.html?source=studio-app"
+  }
+ ]
+}

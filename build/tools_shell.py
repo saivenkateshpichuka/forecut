@@ -12,7 +12,6 @@ NAMES = {
     'rangeboard': ('Collection Planner', 'Plan styles, sizes, quantities and drops', '01 Plan the collection'),
     'trend-to-style': ('Trend to Style Brief', 'Turn a trend detail into a style brief', '01 Plan the collection'),
     'swatchsmith': ('Colour Palette Builder', 'Season palettes and swatch sheets', '02 Colour and fabric'),
-    'fabric-finder': ('Fabric Finder', 'Choose fabric by weight, stretch and drape', '02 Colour and fabric'),
     'textile-calculator': ('Textile Calculator', 'Yarn, GSM, weaving, knitting and costing', '02 Colour and fabric'),
     'textile-processing-studio': ('Textile Processing Studio', 'Dyeing, processing and colour blends', '02 Colour and fabric'),
     'pattern-maker': ('Pattern Maker', 'Draft and grade garment patterns', '03 Pattern and fit'),
@@ -44,8 +43,11 @@ def title(slug):
     return NAMES[slug][0]
 
 
-def head_links():
-    return (f'<link rel="stylesheet" href="tools/shell.css?v={VER}">'
+def head_links(slug=None):
+    man = f'<link rel="manifest" href="apps/{slug}.webmanifest">' if slug else ''
+    return (man + '<link rel="apple-touch-icon" href="apps/studio-192.png">'
+            f'<link rel="stylesheet" href="tools/shell.css?v={VER}">'
+            f'<script defer src="tools/install.js?v={VER}"></script>'
             f'<script defer src="tools/shell.js?v={VER}"></script><script defer src="tools/gate.js?v={VER}"></script>'
             '<script type="module" src="auth.js"></script>')
 
@@ -82,6 +84,9 @@ def title_row(slug, desc, workspace_note, print_label='Print / PDF', extra_butto
     return (f'<div class="fx-title"><div><span class="fx-kicker">Step {escape(stage)}</span>'
             f'<h1>{escape(n)}<span>{escape(l)}</span></h1><p>{escape(desc)}</p></div>'
             f'<div class="fx-actions no-print">{extra_buttons}<button id="print" type="button">{escape(print_label)}</button>'
+            '<details class="fx-ws fx-app-menu"><summary>Get the app <span aria-hidden="true">▾</span></summary><div class="fx-ws-pop">'
+            f'<button type="button" data-fx-install="tool">Install {escape(n)}<small>Just this tool, on your desktop or phone</small></button>'
+            '<button type="button" data-fx-install="studio">Install Forecut Studio<small>Every Forecut tool in one app</small></button></div></details>'
             '<details class="fx-ws"><summary>Workspace <span aria-hidden="true">▾</span></summary><div class="fx-ws-pop">'
             '<label>Collection name<input id="collectionName" maxlength="100" value="My collection"></label>'
             '<button id="backup" type="button">Download backup</button><button id="restore" type="button">Restore backup</button>'

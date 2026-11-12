@@ -133,7 +133,6 @@ Social: https://www.instagram.com/forecut.in/, https://www.linkedin.com/company/
 - [Trend-to-style Builder | Forecut](https://forecut.in/trend-to-style.html): Turn a trend detail into a practical, editable style brief.
 - [Tech Pack Builder | Forecut](https://forecut.in/tech-pack-builder.html): Bring sketches, callouts, materials and measurements into a supplier-ready document.
 - [Size Chart Builder | Forecut](https://forecut.in/size-chart-builder.html): Grade your measurements across sizes with your own steps and tolerances.
-- [Fabric Finder | Forecut](https://forecut.in/fabric-finder.html): Compare fabric examples by construction, weight, stretch and drape.
 - [Export Market Checker | Forecut](https://forecut.in/export-market-checker.html): Organise destination research with official sources and an export checklist.
 - [Product Description Writer | Forecut](https://forecut.in/product-description-writer.html): Turn verified product facts into editable English or Hindi product copy.
 - [Embroidery & Print Cost Estimator | Forecut](https://forecut.in/decoration-cost-estimator.html): Estimate decoration cost, setup allocation and embroidery batch time.
