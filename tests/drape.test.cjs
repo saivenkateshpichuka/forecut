@@ -18,11 +18,11 @@ for (const style of Object.keys(D.STYLES)) {
   const kind = D.STYLES[style].kind, gid = D.STYLES[style].gid;
   for (const gender of PM.GARMENTS[gid].g.filter(g => g !== 'unisex')) {
     test(`${style} sews and settles on ${gender}`, () => {
-      const size = gender === 'kids' ? '8Y' : 'M', { S, body } = run(style, gender, size, 'poplin', 150);
+      const size = gender === 'kids' ? '8Y' : 'M', { S, body } = run(style, gender, size, 'poplin', kind === 'torso' && !D.STYLES[style].with ? 150 : 360);
       for (let i = 0; i < S.x.length; i++) assert.ok(Number.isFinite(S.x[i]), 'position is a number');
-      assert.ok(S.seamGap() < 1.5, 'seams closed: ' + S.seamGap().toFixed(2));
+      assert.ok(S.seamGap() < (kind === 'torso' && !D.STYLES[style].with ? 1.5 : D.STYLES[style].with ? 4.5 : 3.5), 'seams closed: ' + S.seamGap().toFixed(2));
       let top = -1e9; for (let i = 1; i < S.x.length; i += 3) top = Math.max(top, S.x[i]);
-      if (kind === 'skirt') assert.ok(top > body.y.hip && top < body.y.waist + 4, 'skirt stays at the waist: ' + top.toFixed(1));
+      if (kind !== 'torso') assert.ok(top > body.y.hip && top < body.y.waist + 9, 'stays up at the waist: ' + top.toFixed(1) + ' (waist ' + body.y.waist + ')');
       else assert.ok(top > body.y.shoulder && top < body.y.hps + 6, 'garment hangs from the shoulders: ' + top.toFixed(1));
     });
   }

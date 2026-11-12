@@ -14,6 +14,12 @@ const COLOURS = [['#f3efe6', 'Ecru'], ['#1f2a44', 'Navy'], ['#b5462f', 'Brick'],
 const NECK = [['round', 'Round'], ['crew', 'Crew'], ['deep', 'Deep round'], ['ushape', 'U-neck'], ['v', 'V-neck'], ['boat', 'Boat'], ['square', 'Square']];
 const SLEEVE = { plain: 'Set-in sleeve', tee: 'T-shirt sleeve', puff: 'Puff sleeve', bell: 'Bell sleeve', cap: 'Cap sleeve', none: 'Sleeveless' };
 const SLEEVES = { tshirt: ['tee', 'none'], top: ['plain', 'puff', 'bell', 'cap', 'none'], kurta: ['plain', 'bell', 'puff', 'cap', 'none'], dress: ['plain', 'puff', 'bell', 'cap', 'none'] };
+const GROUPS = [['Tops and dresses', ['tshirt', 'top', 'tank', 'sweat', 'kurta', 'dress']], ['Skirts', ['aline', 'pencil', 'circle', 'gathered', 'kalis', 'lehenga']],
+  ['Trousers and Indian bottoms', ['trousers', 'jeans', 'churidar', 'salwar', 'patiala', 'gharara']], ['Sets', ['kurtaset', 'kurtachuri']]];
+const LEG = [['straight', 'Straight'], ['tapered', 'Tapered'], ['wide', 'Wide-leg'], ['palazzo', 'Palazzo'], ['barrel', 'Barrel'], ['jogger', 'Jogger'], ['shorts', 'Shorts']];
+const PFIT = [['trouser', 'Trouser (hangs straight)'], ['slack', 'Slack (closer)'], ['jean', 'Jean (contoured)']];
+const FULL = [['slim', 'Slim'], ['regular', 'Regular'], ['full', 'Full (Punjabi)']];
+const CIRC = [['0.25', 'Quarter circle'], ['0.5', 'Half circle'], ['1', 'Full circle']];
 const SLEN = [['cap', 'Cap'], ['short', 'Short'], ['elbow', 'Elbow'], ['3q', 'Three-quarter'], ['full', 'Full']];
 const GENDER = { women: 'Female', men: 'Male', kids: 'Kids', unisex: 'Unisex' };
 const TONES = [['form', '#d8d2c8', 'Grey form'], ['t1', '#efd3bd', 'Light'], ['t2', '#d9a988', 'Light medium'], ['t3', '#b98260', 'Medium'], ['t4', '#8a5a3c', 'Medium deep'], ['t5', '#5e3b27', 'Deep']];
@@ -21,7 +27,7 @@ const MEAS = [['height', 'Height'], ['bust', 'Bust / chest'], ['waist', 'Waist']
 const SEAMC = ['#c4572f', '#2f6f8f', '#7a5c99', '#3d8a5a', '#b08a1e', '#a23b72', '#4a7d84', '#8c6d3f', '#5b6bbf', '#9c4f2f', '#3f7f3f', '#7f3f6f', '#2f8f7f', '#8f2f3f', '#6f6f2f', '#2f4f8f', '#b2672b', '#6a8f2f'];
 
 let S = load();
-try { const q = new URLSearchParams(location.search); if (D.STYLES[q.get('style')]) { S.style = q.get('style'); S.opts = {}; S.meas = {}; } if (GENDER[q.get('gender')]) S.gender = q.get('gender'); if (q.get('size')) S.size = q.get('size'); if (q.get('o')) { const o = JSON.parse(q.get('o')); S.opts = {}; ['len', 'ease', 'neck', 'sleeve', 'slen', 'flare', 'slit', 'slen2'].forEach(k => { const v = o[k]; if (v === undefined) return; if (/^[\d.]+$/.test(String(v))) S.opts[k] = Math.min(200, +v); else if ((k === 'neck' && NECK.some(n => n[0] === v)) || (k === 'sleeve' && SLEEVE[v]) || (k === 'slen' && SLEN.some(n => n[0] === v))) S.opts[k] = v; }); } if (q.get('m')) { const mm = JSON.parse(q.get('m')); S.meas = {}; MEAS.forEach(k => { if (+mm[k[0]] > 0) S.meas[k[0]] = +mm[k[0]]; }); } if (q.get('style')) history.replaceState(null, '', location.pathname); } catch (e) { }
+try { const q = new URLSearchParams(location.search); if (D.STYLES[q.get('style')]) { S.style = q.get('style'); S.opts = {}; S.meas = {}; } if (GENDER[q.get('gender')]) S.gender = q.get('gender'); if (q.get('size')) S.size = q.get('size'); if (q.get('o')) { const o = JSON.parse(q.get('o')); S.opts = {}; ['len', 'ease', 'neck', 'sleeve', 'slen', 'flare', 'slit', 'slen2', 'leg', 'pfit', 'tlen', 'mohri', 'fullness', 'ruch', 'gfull', 'panels', 'hemc', 'circle'].forEach(k => { const v = o[k]; if (v === undefined) return; if (/^[\d.]+$/.test(String(v))) S.opts[k] = Math.min(700, +v); else if ((k === 'neck' && NECK.some(n => n[0] === v)) || (k === 'sleeve' && SLEEVE[v]) || (k === 'slen' && SLEN.some(n => n[0] === v)) || (k === 'leg' && LEG.some(n => n[0] === v)) || (k === 'pfit' && PFIT.some(n => n[0] === v)) || (k === 'fullness' && FULL.some(n => n[0] === v))) S.opts[k] = v; }); } if (q.get('m')) { const mm = JSON.parse(q.get('m')); S.meas = {}; MEAS.forEach(k => { if (+mm[k[0]] > 0) S.meas[k[0]] = +mm[k[0]]; }); } if (q.get('style')) history.replaceState(null, '', location.pathname); } catch (e) { }
 function defaults() { return { style: 'tshirt', gender: 'women', size: 'M', fabric: 'jersey', colour: '#7c8ea3', opts: {}, meas: {}, fit: 'off', bodyOn: true, seamsOn: true, quality: 'std', tone: 'form', tool: 'pull' }; }
 function load() { try { const v = JSON.parse(localStorage.getItem(KEY) || 'null'); if (v && D.STYLES[v.style]) return Object.assign(defaults(), v); } catch (e) { } return defaults(); }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
@@ -81,7 +87,7 @@ function optVal(k) { return Object.assign(baseOpts(), S.opts)[k]; }
 function rng(k, lo, hi) { const b = baseOpts()[k]; return [Math.round(b * lo), Math.round(b * hi)]; }
 
 function renderControls() {
-  $('#drStyle').innerHTML = Object.keys(D.STYLES).map(k => opt(k, D.STYLES[k].n, S.style)).join('');
+  $('#drStyle').innerHTML = GROUPS.map(gr => `<optgroup label="${gr[0]}">${gr[1].filter(k => D.STYLES[k]).map(k => opt(k, D.STYLES[k].n, S.style)).join('')}</optgroup>`).join('');
   if (!genders().includes(S.gender)) S.gender = genders()[0];
   if (!sizes().includes(S.size)) S.size = sizes()[Math.min(2, sizes().length - 1)];
   $('#drGender').innerHTML = genders().map(g => opt(g, GENDER[g], S.gender)).join('');
@@ -102,10 +108,23 @@ function renderControls() {
     h.push(`<label>Ease at chest <output>${optVal('ease')} cm</output><input type="range" data-o="ease" min="0" max="30" step="1" value="${optVal('ease')}"></label>`);
     if (G.o.includes('flare')) h.push(`<label>Flare at hem, each side <output>${optVal('flare')} cm</output><input type="range" data-o="flare" min="0" max="20" step="1" value="${optVal('flare')}"></label>`);
     if (G.o.includes('slit')) h.push(`<label>Side slit <output>${optVal('slit')} cm</output><input type="range" data-o="slit" min="0" max="50" step="1" value="${optVal('slit')}"></label>`);
+  } else if (st.kind === 'pants' || st.kind === 'salwar') {
+    const sel = (k, l, list) => h.push(`<label>${l}<select data-o="${k}">${list.map(n => opt(n[0], n[1], optVal(k))).join('')}</select></label>`);
+    const rngI = (k, l, lo, hi, step, unit) => h.push(`<label>${l} <output>${optVal(k)}${unit === undefined ? ' cm' : unit}</output><input type="range" data-o="${k}" min="${lo}" max="${hi}" step="${step || 1}" value="${optVal(k)}"></label>`);
+    if (G.o.includes('leg')) sel('leg', 'Leg shape', LEG);
+    if (G.o.includes('pfit')) sel('pfit', 'Fit at crotch', PFIT);
+    if (G.o.includes('fullness')) sel('fullness', 'Fullness', FULL);
+    if (G.o.includes('mohri')) rngI('mohri', 'Leg opening (mohri)', 24, 60);
+    if (G.o.includes('ruch')) rngI('ruch', 'Extra length to ruche', 0, 40);
+    if (G.o.includes('gfull')) rngI('gfull', 'Flare fullness (× knee)', 2, 5, .5, '×');
+    if (G.o.includes('tlen')) { const full = Math.round(baseMeas().outseam - 2); h.push(`<label>Length, waist to hem <output>${+optVal('tlen') || full} cm</output><input type="range" data-o="tlen" min="${Math.round(full * .35)}" max="${full}" step="1" value="${+optVal('tlen') || full}"></label>`); }
   } else {
     const sr = rng('slen2', .6, 1.55);
     h.push(`<label>Skirt length <output>${optVal('slen2')} cm</output><input type="range" data-o="slen2" min="${sr[0]}" max="${sr[1]}" step="1" value="${optVal('slen2')}"></label>`);
     if (S.style === 'aline') h.push(`<label>Flare at hem, each side <output>${optVal('flare')} cm</output><input type="range" data-o="flare" min="2" max="20" step="1" value="${optVal('flare')}"></label>`);
+    if (S.style === 'circle') h.push(`<label>Circle<select data-o="circle">${CIRC.map(n => opt(n[0], n[1], String(optVal('circle')))).join('')}</select></label>`);
+    if (S.style === 'kalis' || S.style === 'lehenga') h.push(`<label>Panels (kalis) <output>${optVal('panels')}</output><input type="range" data-o="panels" min="4" max="24" step="2" value="${optVal('panels')}"></label>`);
+    if (S.style === 'lehenga') h.push(`<label>Hem circumference <output>${optVal('hemc')} cm</output><input type="range" data-o="hemc" min="200" max="600" step="10" value="${optVal('hemc')}"></label>`);
   }
   $('#drOpts').innerHTML = h.join('');
   const m = baseMeas(); m.height = +(S.meas || {}).height || (lastBody ? Math.round(lastBody.height) : '');
@@ -125,7 +144,7 @@ $('#drGender').addEventListener('change', e => { S.gender = e.target.value; S.me
 $('#drSize').addEventListener('change', e => { S.size = e.target.value; S.meas = {}; save(); renderControls(); rebuild(); });
 $('#drFabric').addEventListener('change', e => { S.fabric = e.target.value; save(); $('#drFabNote').textContent = D.FABRICS[S.fabric].note; applyMaterial(); if (worker && built) { worker.postMessage({ cmd: 'fabric', fabric: S.fabric }); status('Draping in ' + D.FABRICS[S.fabric].n.toLowerCase() + '…', 'run'); } });
 $('#drQuality').addEventListener('change', e => { S.quality = e.target.value; save(); rebuild(); });
-$('#drOpts').addEventListener('input', e => { const k = e.target.dataset.o; if (!k) return; const v = e.target.type === 'range' ? +e.target.value : e.target.value; S.opts[k] = v; const o = e.target.parentNode.querySelector('output'); if (o) o.textContent = v + ' cm'; save(); if (e.target.tagName === 'SELECT') { renderControls(); rebuild(); } else later(rebuild); });
+$('#drOpts').addEventListener('input', e => { const k = e.target.dataset.o; if (!k) return; const v = e.target.type === 'range' ? +e.target.value : e.target.value; S.opts[k] = v; const o = e.target.parentNode.querySelector('output'); if (o) o.textContent = v + (k === 'gfull' ? '×' : k === 'panels' ? '' : ' cm'); save(); if (e.target.tagName === 'SELECT') { renderControls(); rebuild(); } else later(rebuild); });
 $('#drMeas').addEventListener('input', e => { const k = e.target.dataset.m; if (!k) return; S.meas[k] = +e.target.value; save(); later(rebuild, 600); });
 $('#drMeasReset').addEventListener('click', () => { S.meas = {}; save(); renderControls(); rebuild(); });
 $('#drSw').addEventListener('click', e => { const c = e.target.dataset && e.target.dataset.c; if (!c) return; S.colour = c; save(); $$('#drSw button').forEach(b => b.setAttribute('aria-checked', b.dataset.c === c)); $('#drColour').value = c; applyMaterial(); });
@@ -269,9 +288,9 @@ let camDist = 330;
 
 /* ---------- 2D pattern view ---------- */
 function drawPieces(d) {
-  const P = d.panels.filter(p => p.name !== 'SL'), seamColour = {};
+  const P = d.panels.filter(p => !/^(SL|FL|BL|GFL|GBL|SWL|CF-1|KB|P[1-9]\d*|C[1-9])$/.test(p.name)), seamColour = {};
   d.seams.forEach((sm, i) => { const c = SEAMC[i % SEAMC.length]; seamColour[sm[0][0] + '|' + sm[0][1]] = c; seamColour[sm[1][0] + '|' + sm[1][1]] = c; });
-  const names = { F: 'Front', B: 'Back', SR: 'Sleeve' }, boxes = [];
+  const names = { F: 'Front', B: 'Back', SR: 'Sleeve', FR: 'Front leg', BR: 'Back leg', GFR: 'Flare', GBR: 'Flare', SWR: 'Leg', KF: 'Kali', CF1: 'Ankle band', P0: 'Panel', C0: 'Circle piece' }, multi = { SR: 2, FR: 2, BR: 2, GFR: 2, GBR: 2, SWR: 2, KF: 2, CF1: 2 }, boxes = [];
   P.forEach(p => { let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; p.segs.forEach(s => s.pts.forEach(q => { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); })); boxes.push({ x0, x1, y0, y1 }); });
   let ox = 0, maxH = 0; const place = boxes.map(b => { const o = ox - b.x0; ox += b.x1 - b.x0 + 8; maxH = Math.max(maxH, b.y1 - b.y0); return o; });
   const W = ox - 8, H = maxH + 12;
@@ -281,7 +300,7 @@ function drawPieces(d) {
     const all = []; p.segs.forEach((s, i) => s.pts.forEach((q, j) => { if (i && !j) return; all.push(q); }));
     svg += `<path data-pi="${pi}" class="dr-pc${pi === selPanel ? ' on' : ''}" d="M${all.map(q => (q[0] + dx).toFixed(1) + ' ' + (q[1] + dy).toFixed(1)).join('L')}Z"><title>Click to move or rotate this piece in 3D</title></path>`;
     p.segs.forEach(s => { const c = seamColour[pi + '|' + s.key]; svg += `<polyline points="${s.pts.map(q => (q[0] + dx).toFixed(1) + ',' + (q[1] + dy).toFixed(1)).join(' ')}" fill="none" stroke="${c || '#6a6157'}" stroke-width="${c ? 1.3 : .7}" stroke-linejoin="round"${c ? '' : ' stroke-dasharray="2 1.2"'}/>`; });
-    svg += `<text x="${(b.x0 + b.x1) / 2 + dx}" y="${(b.y0 + b.y1) / 2 + dy}" text-anchor="middle" font-size="4.2" fill="#6a6157">${names[p.name] || p.name}${p.name === 'SR' ? ' ×2' : ''}</text>`;
+    svg += `<text x="${(b.x0 + b.x1) / 2 + dx}" y="${(b.y0 + b.y1) / 2 + dy}" text-anchor="middle" font-size="4.2" fill="#6a6157">${names[p.name] || p.name}${multi[p.name] ? ' ×' + multi[p.name] : p.name === 'P0' ? ' ×' + d.panels.filter(q => /^P\d+$/.test(q.name)).length : p.name === 'C0' ? ' ×' + d.panels.filter(q => /^C\d+$/.test(q.name)).length : ''}</text>`;
   });
   svg += '</svg>';
   $('#drPieces').innerHTML = svg + '<p class="dr-note">Front and back are shown opened out from the fold. Dashed edges are hems and necklines. Click a piece to move it in 3D.</p>';
