@@ -19,10 +19,12 @@ User-agent: CCBot
 Allow: /
 Disallow: /build/
 Disallow: /images/
+Disallow: /dev/
 
 User-agent: *
 Allow: /
 Disallow: /build/
 Disallow: /images/
+Disallow: /dev/
 
 Sitemap: https://forecut.in/sitemap.xml
