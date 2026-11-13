@@ -338,7 +338,7 @@ bodyMat.onBeforeCompile = sh => { // underwear drawn per pixel from heights, so 
       float pants = step(.5, vEl) * step(vW.y, pt) * step(cut, vW.y);
       float bra = step(.5, vEl) * step(bl, vW.y) * step(vW.y, bh) * step(.01, bh - bl);
       float u = max(pants, bra); diffuseColor.rgb = mix(skin, cloth, u);
-      if (vW.z > 1.0) { vec2 lu = vec2(vW.x / logoW + .5, (logoC - vW.y) / (logoW * .25) + .5); if (lu.x > 0. && lu.x < 1. && lu.y > 0. && lu.y < 1.) diffuseColor.rgb = mix(diffuseColor.rgb, logoCol, texture2D(logoMap, lu).a * .9); }`);
+      if (vW.z > 1.0) { vec2 lu = vec2(.5 - vW.x / logoW, (logoC - vW.y) / (logoW * .25) + .5); if (lu.x > 0. && lu.x < 1. && lu.y > 0. && lu.y < 1.) diffuseColor.rgb = mix(diffuseColor.rgb, logoCol, texture2D(logoMap, lu).a * .9); }`);
 };
 function buildBody(body) {
   bodyGroup.clear();
