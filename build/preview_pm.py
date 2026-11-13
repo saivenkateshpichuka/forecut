@@ -12,7 +12,8 @@ s = re.sub(r'<script[^>]*(adsbygoogle|auth\.js|install\.js)[^>]*></script>', '',
 s = re.sub(r'<link[^>]*(manifest|preload|canonical|icon)[^>]*>', '', s)
 s = re.sub(r'<link rel="stylesheet" href="tools/shell\.css[^"]*">', lambda m: '<style>' + css + '</style>', s)
 s = re.sub(r'url\((fonts/(?!source-serif-4-italic)[^)]+)\)', font, s)
-s = s.replace('<head>', '<head><base target="_blank">', 1)
+s = re.sub(r'<meta name="robots"[^>]*>', '', s)
+s = s.replace('<head>', '<head><meta name="robots" content="noindex,nofollow">', 1)
 s = s.replace('<body', '<body data-preview="dev"', 1)
 banner = '<div style="position:fixed;left:8px;bottom:8px;z-index:3000;background:#e08a5e;color:#1b1d20;font:600 11px DM Sans,sans-serif;padding:3px 8px;border-radius:4px;pointer-events:none">Development preview</div>'
 s = s.replace('</body>', banner + '</body>', 1)
