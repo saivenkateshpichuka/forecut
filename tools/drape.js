@@ -327,11 +327,11 @@ const floor = new THREE.Mesh(new THREE.CircleGeometry(160, 64), new THREE.MeshSt
 floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
 const bodyGroup = new THREE.Group(); scene.add(bodyGroup);
 const bodyMat = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: .5, metalness: 0 });
-{ const c = document.createElement('canvas'); c.width = 1024; c.height = 256; const g = c.getContext('2d'); g.fillStyle = '#fff'; g.font = '700 150px "DM Sans", Arial, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; if ('letterSpacing' in g) g.letterSpacing = '28px'; g.fillText('FORECUT', 512, 134);
-  const t = new THREE.CanvasTexture(c); t.anisotropy = 4; bodyU.logoMap.value = t; document.fonts && document.fonts.ready.then(() => { g.clearRect(0, 0, 1024, 256); g.fillText('FORECUT', 512, 134); t.needsUpdate = true; dirty = true; }); }
+const LOGO = (() => { const c = document.createElement('canvas'); c.width = 1024; c.height = 256; const g = c.getContext('2d'); g.fillStyle = '#fff'; g.font = '700 150px "DM Sans", Arial, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; if ('letterSpacing' in g) g.letterSpacing = '28px'; g.fillText('FORECUT', 512, 134);
+  const t = new THREE.CanvasTexture(c); t.anisotropy = 4; if (document.fonts) document.fonts.ready.then(() => { g.clearRect(0, 0, 1024, 256); g.fillText('FORECUT', 512, 134); t.needsUpdate = true; dirty = true; }); return t; })();
 
 const UNDER = { form: '#cfcbc4', white: '#efede8', black: '#34322f', t1: '#3b3f46', t2: '#3b3f46', t3: '#2f3237', t4: '#e9e4dc', t5: '#e9e4dc' };
-const bodyU = { logoMap: { value: null }, logoC: { value: 0 }, logoW: { value: 14 }, logoCol: { value: new THREE.Color('#6a645b') }, skin: { value: new THREE.Color() }, cloth: { value: new THREE.Color() }, pt: { value: 0 }, lc: { value: 0 }, lr: { value: 0 }, hh: { value: 1 }, bl: { value: 0 }, bh: { value: 0 } };
+const bodyU = { logoMap: { value: LOGO }, logoC: { value: 0 }, logoW: { value: 14 }, logoCol: { value: new THREE.Color('#6a645b') }, skin: { value: new THREE.Color() }, cloth: { value: new THREE.Color() }, pt: { value: 0 }, lc: { value: 0 }, lr: { value: 0 }, hh: { value: 1 }, bl: { value: 0 }, bh: { value: 0 } };
 bodyMat.onBeforeCompile = sh => { // underwear drawn per pixel from heights, so its edges are clean
   Object.assign(sh.uniforms, bodyU);
   sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float elig; varying float vEl; varying vec3 vW;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvEl = elig; vW = (modelMatrix * vec4(position, 1.0)).xyz;');
