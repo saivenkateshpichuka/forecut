@@ -256,9 +256,17 @@
         if (ST.tool === 'edit' && !faint && (isSel || segTouches(pc, i))) ['h1', 'h2'].forEach(function (k) { if (!nd[k]) return; var e = W2S(L2W(pc, [nd.x + nd[k][0], nd.y + nd[k][1]])); h += '<path class="ps-hl" d="M' + f1(s[0]) + ' ' + f1(s[1]) + 'L' + f1(e[0]) + ' ' + f1(e[1]) + '"/><circle class="ps-hd" data-pc="' + pc.id + '" data-n="' + i + '" data-h="' + k + '" cx="' + f1(e[0]) + '" cy="' + f1(e[1]) + '" r="4.5"/>'; });
         h += nd.smooth ? '<circle class="ps-pt' + (isSel ? ' on' : '') + (faint ? ' fa' : '') + '" data-pc="' + pc.id + '" data-n="' + i + '" cx="' + f1(s[0]) + '" cy="' + f1(s[1]) + '" r="' + (faint ? 3 : 4.5) + '"/>' : '<rect class="ps-pt' + (isSel ? ' on' : '') + (faint ? ' fa' : '') + '" data-pc="' + pc.id + '" data-n="' + i + '" x="' + f1(s[0] - (faint ? 3 : 4.5)) + '" y="' + f1(s[1] - (faint ? 3 : 4.5)) + '" width="' + (faint ? 6 : 9) + '" height="' + (faint ? 6 : 9) + '"/>'; });
     });
+    h += hoverHTML() + xfHTML();
     if (ST.hover) { var s2 = W2S(ST.hover.p); h += '<circle class="ps-snap" cx="' + f1(s2[0]) + '" cy="' + f1(s2[1]) + '" r="6"/>' + (ST.hover.k ? '<text class="ps-sk" x="' + f1(s2[0] + 9) + '" y="' + f1(s2[1] - 8) + '">' + esc(ST.hover.k) + '</text>' : ''); }
     if (ST.live) { var L = ST.live, x = L.at[0] + 16, y = L.at[1] + 22, w = Math.max(60, L.t.length * 6.6 + 12); h += '<g class="ps-live"><rect x="' + f1(x) + '" y="' + f1(y - 14) + '" width="' + f1(w) + '" height="20" rx="4"/><text x="' + f1(x + 6) + '" y="' + f1(y) + '">' + esc(L.t) + '</text></g>'; }
     ptsG.innerHTML = h;
+  }
+  function edgeScreen(pc, seg) { var G = geo(pc, true), pts = G.segs[seg] || []; return pts.map(function (q2) { return W2S(L2W(pc, q2)); }); }
+  function hoverHTML() {
+    var h = '', lab = function (p, t) { var w = t.length * 6.4 + 12; return '<g class="ps-live ps-elab"><rect x="' + f1(p[0] + 12) + '" y="' + f1(p[1] - 30) + '" width="' + f1(w) + '" height="19" rx="4"/><text x="' + f1(p[0] + 18) + '" y="' + f1(p[1] - 16) + '">' + esc(t) + '</text></g>'; };
+    if (ST.hovE && !drag) { var E = ST.hovE, P2 = edgeScreen(E.pc, E.seg); h += '<path class="ps-hov" d="M' + P2.map(function (q2) { return f1(q2[0]) + ' ' + f1(q2[1]); }).join('L') + '"/>' + lab(E.at, 'Edge ' + (E.seg + 1) + ' · ' + F(E.L) + (ST.tool === 'edit' ? '' : ' · at ' + F(E.s))); }
+    if (ST.seg && pcById(ST.seg.pc) && !drag) { var pc = pcById(ST.seg.pc), s = ST.seg.i, L = C.segLen(pc, s), mp = W2S(L2W(pc, C.pointAt(pc, s, C.tAt(pc, s, L / 2)))); h += lab([mp[0] - 12, mp[1] + 40], F(L)); }
+    return h;
   }
   function drawGrid() {
     var g = q('#ps-grid'); if (!V().grid) { g.innerHTML = ''; return; }
@@ -584,7 +592,7 @@
       else if (['cat', 'size', 'fabric', 'notes', 'pair'].indexOf(k) >= 0) p[k] = val; });
   }
   function pivotOf(pcs) { var b = [1e9, 1e9, -1e9, -1e9]; pcs.forEach(function (pc) { var bb = C.bbox(pc); b[0] = Math.min(b[0], bb[0] + pc.x); b[1] = Math.min(b[1], bb[1] + pc.y); b[2] = Math.max(b[2], bb[2] + pc.x); b[3] = Math.max(b[3], bb[3] + pc.y); }); var p = ST.pivot || 'c'; return p === 'xy' && ST.pv ? ST.pv : p === 'tl' ? [b[0], b[1]] : p === 'tr' ? [b[2], b[1]] : p === 'bl' ? [b[0], b[3]] : p === 'br' ? [b[2], b[3]] : [(b[0] + b[2]) / 2, (b[1] + b[3]) / 2]; }
-  function xfSel(label, mk) { var pcs = selected().filter(function (p) { return !p.locked; }); if (!pcs.length) return toast('Select an unlocked piece first.', 1); var pv = pivotOf(pcs); act(label, function () { pcs.forEach(function (pc) { var m = mk(pv[0] - pc.x, pv[1] - pc.y); C.transformPiece(pc, m); }); }); }
+  function xfSel(label, mk, ang) { var pcs = selected().filter(function (p) { return !p.locked; }); if (!pcs.length) return toast('Select an unlocked piece first.', 1); var pv = pivotOf(pcs); act(label, function () { pcs.forEach(function (pc) { var m = mk(pv[0] - pc.x, pv[1] - pc.y); xfAll(pc, m, ang); }); }); }
   function bboxW(pc) { var b = C.bbox(pc); return [b[0] + pc.x, b[1] + pc.y, b[2] + pc.x, b[3] + pc.y]; }
 
   /* ---------- actions ---------- */
@@ -617,6 +625,8 @@
       case 'cwdel': return act('Delete colourway', function () { P.colourways = P.colourways.filter(function (c) { return c.id !== P.cw; }); P.cw = P.colourways[0].id; });
       case 'bomcsv': { var B = C.bom(P), csv = [['Type', 'Item', 'Description', 'Quantity', 'Unit', 'Colour', 'Colourway']].concat(B.map(function (r) { return [r.kind, r.item, r.desc, r.qty, r.unit, r.colour, cwNow().name]; })).map(function (r) { return r.map(function (v) { v = String(v == null ? '' : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(','); }).join('\n'); dl(fname('bom.csv'), csv, 'text/csv'); return toast('BOM downloaded (' + B.length + ' lines).'); }
       case 'settings': return settingsModal();
+      case 'polynext': return ST.draft && ST.draft.pts && ST.draft.pts.length ? polyNext() : null;
+      case 'polyclose': return finishPoly();
     }
     switch (a) {
       case 'new': return confirmDiscard(function () { newProject(); });
@@ -695,7 +705,7 @@
     else if (t === 'ellipse') h = '<b>Ellipse</b>' + optNum('ew', o.ew, 'Width') + optNum('eh', o.eh, 'Height') + btn('mkell', 'Create', 'pri') + '<small>or drag on the canvas; Shift for a circle</small>';
     else if (t === 'spiral') { var iss = C.spiralCheck(o.r0, o.turns, o.grow, o.sw); h = '<b>Spiral</b>' + optNum('r0', o.r0, 'Inner radius') + '<label>Turns <input type="number" step=".25" min=".25" max="6" data-o="turns" value="' + o.turns + '"></label>' + optNum('grow', o.grow, 'Spacing per turn') + optNum('sw', o.sw, 'Strip width') + '<label>Direction <select data-o="dir"><option value="cw"' + (o.dir === 'cw' ? ' selected' : '') + '>Clockwise</option><option value="ccw"' + (o.dir === 'ccw' ? ' selected' : '') + '>Anticlockwise</option></select></label>' + btn('mkspiral', 'Create', 'pri') + (iss.length ? '<em class="bad">' + esc(iss[0]) + '</em>' : '<small>Outer edge ' + F(spiralLen(o)) + '</small>'); }
     else if (t === 'trace') h = '<b>Trace</b>' + optNum('fw', o.fw || 4, 'Facing width') + '<small>Click an edge for a facing, or inside an internal shape to trace it as a piece.</small>';
-    else if (t === 'poly') h = '<b>Polygon</b><small>Click to place points; drag to curve. Enter or click the first point to close. Backspace undoes the last point.</small>';
+    else if (t === 'poly') h = '<b>Polygon</b>' + (ST.draft && ST.draft.pts && ST.draft.pts.length ? btn('polynext', 'Next point by length and angle…') + btn('polyclose', 'Close shape') : '') + '<small>Click to place points; drag to curve. Enter or click the first point to close. Backspace undoes the last point.</small>';
     else if (t === 'measure') h = '<b>Measure</b><small>' + (ST.meas.length > 1 ? 'Total ' + F(C.measure.poly(ST.meas)) + (ST.meas.length > 2 ? ' · angle at the last bend ' + C.measure.angle(ST.meas[ST.meas.length - 3], ST.meas[ST.meas.length - 2], ST.meas[ST.meas.length - 1]).toFixed(1) + '°' : '') : 'Click points to measure. Click an edge to read its length along the curve.') + '</small>' + (ST.meas.length ? btn('mclear', 'Clear') : '');
     else if (t) h = '<b>' + esc(TOOL[t].n) + '</b><small>' + esc(TOOL[t].tip) + '</small>';
     optsEl.innerHTML = h;
@@ -712,6 +722,152 @@
     act('Create ' + pc.name, function () { P.pieces.push(pc); ST.sel = [pc.id]; });
   }
 
+  /* ---------- right-click menus, exact-value dialogs, copy and paste ---------- */
+  var ctxEl = null;
+  function ctxClose() { if (ctxEl) { ctxEl.remove(); ctxEl = null; } }
+  function ctxMenu(x, y, title, items) {
+    ctxClose(); ctxEl = mk('div', 'ps-ctx', (title ? '<div class="ps-ctxh">' + esc(title) + '</div>' : '') + items.map(function (it, i) { return it === '-' ? '<hr>' : '<button type="button" data-ci="' + i + '"' + (it[3] ? ' disabled' : '') + '><span>' + esc(it[0]) + '</span>' + (it[2] ? '<kbd>' + it[2] + '</kbd>' : '') + '</button>'; }).join(''));
+    ctxEl.setAttribute('role', 'menu'); document.body.appendChild(ctxEl);
+    var r = ctxEl.getBoundingClientRect(); ctxEl.style.left = Math.max(4, Math.min(x, innerWidth - r.width - 6)) + 'px'; ctxEl.style.top = Math.max(4, Math.min(y, innerHeight - r.height - 6)) + 'px';
+    ctxEl.addEventListener('click', function (e) { var b = e.target.closest('[data-ci]'); if (!b || b.disabled) return; var it = items[+b.dataset.ci]; ctxClose(); it[1](); });
+    ctxEl.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+  }
+  document.addEventListener('pointerdown', function (e) { if (ctxEl && !ctxEl.contains(e.target)) ctxClose(); }, true);
+  /* a small dialog of number fields; values are typed in the current unit unless a field says otherwise */
+  function askNums(title, fields, ok, note) {
+    modal('<h4>' + esc(title) + '</h4>' + fields.map(function (f) { return '<label class="ps-r"><span>' + esc(f.l) + '</span>' + (f.opts ? '<select data-q="' + f.k + '">' + f.opts.map(function (o) { return '<option value="' + o[0] + '"' + (String(o[0]) === String(f.v) ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join('') + '</select>' : '<span class="ps-u"><input type="number" step="any" data-q="' + f.k + '" value="' + (f.u === 'raw' || f.u === 'deg' || f.u === 'pct' ? f.v : U(f.v)) + '"><i>' + (f.u === 'deg' ? '°' : f.u === 'pct' ? '%' : f.u === 'raw' ? (f.unit || '') : P.unit) + '</i></span>') + '</label>'; }).join('')
+      + (note ? '<p class="ps-n">' + note + '</p>' : '') + '<div class="ps-bs"><button type="button" class="ps-b pri" id="ps-qok">OK</button><button type="button" class="ps-b" data-a="mclose">Cancel</button></div>', function (m) {
+        var go = function () { var v = {}; fields.forEach(function (f) { var el = m.querySelector('[data-q=' + f.k + ']'); v[f.k] = f.opts ? el.value : f.u === 'raw' || f.u === 'deg' || f.u === 'pct' ? +el.value : CM(el.value); }); closeModal(); ok(v); };
+        q('#ps-qok').onclick = go; m.querySelectorAll('input').forEach(function (el) { el.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); go(); } }); }); var f0 = m.querySelector('input'); if (f0) { f0.focus(); f0.select(); } });
+  }
+  /* transform a piece and everything placed on it by point (buttons, buttonholes, graphics) */
+  function xfAll(pc, m, ang) {
+    C.transformPiece(pc, m);
+    ['button', 'hole', 'graphic'].forEach(function (k) { P.trims[k].forEach(function (r) { if (r.pc !== pc.id) return; r.at = C.apply(m, r.at); if (ang) { if (k === 'graphic') r.rot = ((+r.rot || 0) + ang) % 360; if (k === 'hole') r.ang = ((+r.ang || 0) + ang) % 360; } }); });
+  }
+  /* change the length of an edge by moving its end, its start, or both ends equally, keeping the line's direction */
+  function changeLength(pc, seg, target, mode) {
+    var N = pc.nodes, n = N.length, ia = seg, ib = (seg + 1) % n, A = N[ia], B = N[ib], dir = [B.x - A.x, B.y - A.y], dl = Math.hypot(dir[0], dir[1]) || 1; dir = [dir[0] / dl, dir[1] / dl];
+    var a0 = [A.x, A.y], b0 = [B.x, B.y], f = function (d) { var da = mode === 'start' ? d : mode === 'both' ? d / 2 : 0, db = mode === 'end' ? d : mode === 'both' ? d / 2 : 0; A.x = a0[0] - dir[0] * da; A.y = a0[1] - dir[1] * da; B.x = b0[0] + dir[0] * db; B.y = b0[1] + dir[1] * db; return C.segLen(pc, seg) - target; };
+    var d = target - C.segLen(pc, seg), e = f(d); for (var it = 0; it < 12 && Math.abs(e) > 1e-5; it++) { var e2 = f(d + 1e-3), g = (e2 - e) / 1e-3 || 1; d -= e / g; e = f(d); }
+    return Math.abs(e) < .01;
+  }
+  function pieceCopy(src, dx, dy) { var c = C.clone(src); c.id = C.uid('pc'); c.nodes.forEach(function (nd) { nd.id = C.uid('p'); }); c.link = null; c.x = (c.x || 0) + dx; c.y = (c.y || 0) + dy; return c; }
+  function copySel() { var pcs = selected(); if (!pcs.length) return toast('Select pieces to copy.', 1); ST.clip = { pcs: C.clone(pcs), trims: {} }; ['button', 'hole', 'graphic'].forEach(function (k) { ST.clip.trims[k] = C.clone(P.trims[k].filter(function (r) { return ST.sel.indexOf(r.pc) >= 0; })); }); toast(pcs.length + ' piece' + (pcs.length > 1 ? 's' : '') + ' copied. Ctrl V pastes.'); }
+  function paste(at) {
+    if (!ST.clip) return toast('Nothing copied yet.', 1); var cl = ST.clip, b = [1e9, 1e9]; cl.pcs.forEach(function (pc) { var bb = C.bbox(pc); b[0] = Math.min(b[0], bb[0] + pc.x); b[1] = Math.min(b[1], bb[1] + pc.y); });
+    var dx = at ? at[0] - b[0] : 3, dy = at ? at[1] - b[1] : 3;
+    act('Paste', function () { var map = {}; ST.sel = cl.pcs.map(function (pc) { var c = pieceCopy(pc, dx, dy); map[pc.id] = c.id; P.pieces.push(c); return c.id; }); Object.keys(cl.trims).forEach(function (k) { cl.trims[k].forEach(function (r) { var c = C.clone(r); c.id = C.uid(k.slice(0, 2)); c.pc = map[r.pc]; P.trims[k].push(c); }); }); });
+  }
+  function pointMenu(e, pc, i) {
+    var nd = pc.nodes[i], n = pc.nodes.length;
+    ST.node = { pc: pc.id, idx: [i] }; ST.seg = null; ST.sel = [pc.id]; refresh();
+    ctxMenu(e.clientX, e.clientY, 'Point ' + (i + 1) + ' · ' + pc.name, [
+      ['Move to (exact position)…', function () { askNums('Move point to', [{ k: 'x', l: 'X', v: nd.x + pc.x }, { k: 'y', l: 'Y', v: nd.y + pc.y }], function (v) { act('Move point', function () { nd.x = v.x - pc.x; nd.y = v.y - pc.y; }); }); }],
+      ['Move by…', function () { askNums('Move point by', [{ k: 'dx', l: 'Across (X)', v: 0 }, { k: 'dy', l: 'Down (Y)', v: 0 }, { k: 'd', l: 'or a distance', v: 0 }, { k: 'a', l: 'at an angle', v: 0, u: 'deg' }], function (v) { var dx = v.dx, dy = v.dy; if (v.d) { dx = Math.cos(v.a * Math.PI / 180) * v.d; dy = -Math.sin(v.a * Math.PI / 180) * v.d; } act('Move point', function () { C.moveNodes(pc, [i], dx, dy); }); }, 'Angle 0° is to the right, 90° is up. A distance overrides X and Y.'); }],
+      '-',
+      [nd.smooth ? 'Make a corner point' : 'Make a smooth (curve) point', function () { act('Point type', function () { nd.smooth = !nd.smooth; if (nd.smooth) C.smooth(pc, [(i - 1 + n) % n, i], 1, 180); else { nd.h1 = nd.h2 = null; } }); }],
+      ['Straighten both edges', function () { act('Straighten', function () { C.toLine(pc, (i - 1 + n) % n); C.toLine(pc, i); }); }],
+      ['Add a notch here', function () { act('Add notch', function () { pc.notches.push({ id: C.uid('nt'), seg: i, mode: 'dist', v: 0, from: 'start', type: 'single', depth: P.settings.notchDepth || .6 }); }); }],
+      '-',
+      ['Delete point', function () { if (n <= 3) return toast('A piece needs at least three points.', 1); act('Delete point', function () { C.deleteNode(pc, i); ST.node = null; }); }, 'Del', n <= 3]
+    ]);
+  }
+  function segMenu(e, pc, s, at) {
+    var L = C.segLen(pc, s), k = C.ctrl(pc, s);
+    ST.seg = { pc: pc.id, i: s }; ST.node = null; ST.sel = [pc.id]; refresh();
+    var trimOn = function (kind, extra) { return function () { act('Add ' + kind, function () { var r = Object.assign({ id: C.uid(kind.slice(0, 2)), pc: pc.id, seg: s, a: 0, b: null }, extra); P.trims[kind].push(r); ST.trim = { k: kind, id: r.id }; ST.seg = null; ST.tab = 'trims'; }); }; };
+    ctxMenu(e.clientX, e.clientY, 'Edge ' + (s + 1) + ' · ' + F(L) + ' · ' + pc.name, [
+      ['Change length…', function () { askNums('Change length', [{ k: 'L', l: 'New length', v: L }, { k: 'm', l: 'Keep fixed', v: 'start', opts: [['start', 'The start: move the end'], ['end', 'The end: move the start'], ['both', 'The middle: move both ends']] }], function (v) { if (!(v.L > 0)) return toast('Enter a length above zero.', 1); var ok; act('Change length', function () { ok = changeLength(pc, s, v.L, v.m === 'start' ? 'end' : v.m === 'end' ? 'start' : 'both'); }); toast(ok ? 'Edge ' + (s + 1) + ' is now ' + F(C.segLen(pc, s)) + '. The edges next to it moved with it.' : 'That length could not be reached exactly; check the edge.', !ok); }, 'The line keeps its direction; the neighbouring edges follow the moved point.'); }],
+      ['Split into two…', function () { askNums('Split into two', [{ k: 'a', l: 'First part', v: L / 2 }], function (v) { if (!(v.a > 0 && v.a < L)) return toast('Enter a length between 0 and ' + F(L) + '.', 1); act('Split edge', function () { C.splitAtDist(pc, s, v.a); }); }, 'The second part is the rest of the edge.'); }],
+      ['Divide into equal parts…', function () { askNums('Divide into equal parts', [{ k: 'n', l: 'Parts', v: 2, u: 'raw' }], function (v) { var n2 = Math.round(v.n); if (!(n2 >= 2 && n2 <= 20)) return toast('Use 2 to 20 parts.', 1); act('Divide edge', function () { C.divideSeg(pc, s, n2); }); }); }],
+      ['Add point here', function () { if (!at) return; act('Add point', function () { C.splitSeg(pc, s, at.t); }); }, '', !at],
+      [k.curved ? 'Make straight' : 'Make a curve', function () { act(k.curved ? 'Make straight' : 'Make a curve', function () { if (k.curved) C.toLine(pc, s); else C.curvature(pc, s, Math.max(.3, L * .05)); }); }],
+      ['Offset as internal line…', function () { askNums('Offset as internal line', [{ k: 'd', l: 'Distance inside the edge', v: 2 }], function (v) { act('Offset line', function () { var it = { id: C.uid('in'), kind: 'line', pts: C.rangePts(pc, s, 0, null, v.d), purpose: 'guide', style: 'dashed', label: 'Offset ' + F(v.d), visible: true }; pc.internals.push(it); ST.it = it.id; ST.seg = null; }); }, 'Use it for facings, hem fold lines or placement guides.'); }],
+      '-',
+      ['Add a notch here', function () { if (!at) return; act('Add notch', function () { var nt = { id: C.uid('nt'), seg: s, mode: 'dist', v: +at.s.toFixed(3), from: 'start', type: 'single', depth: P.settings.notchDepth || .6 }; pc.notches.push(nt); ST.notch = nt.id; ST.seg = null; }); }, '', !at],
+      ['Notch at the middle', function () { act('Add notch', function () { pc.notches.push({ id: C.uid('nt'), seg: s, mode: 'mid', v: 0, from: 'start', type: 'single', depth: P.settings.notchDepth || .6 }); }); }],
+      [s === pc.fold ? 'Not on the fold' : 'Cut on the fold', function () { act('Fold edge', function () { pc.fold = s === pc.fold ? -1 : s; }); }],
+      [pc.hems.indexOf(s) >= 0 ? 'Not a hem' : 'Mark as a hem', function () { act('Hem edge', function () { var j = pc.hems.indexOf(s); if (j >= 0) pc.hems.splice(j, 1); else pc.hems.push(s); }); }],
+      ['Seam allowance for this edge…', function () { askNums('Seam allowance for edge ' + (s + 1), [{ k: 'w', l: 'Allowance', v: C.saOf(pc, s) }], function (v) { act('Edge seam allowance', function () { pc.sa.edges[s] = Math.max(0, v.w); }); }); }],
+      '-',
+      ['Sew this edge to…', function () { setTool('sew'); ST.pick = [{ pc: pc.id, seg: s, s: at ? at.s : 0, t: at ? at.s / L : 0 }]; draw(); toast('Now click the edge it is sewn to, near the end that meets.'); }],
+      ['Topstitch this edge', function () { var pr = tsPreset(); trimOn('tstitch', { preset: pr.id, spi: pr.spi, tex: pr.tex, rows: pr.rows, gap: pr.gap, off: pr.off, colour: pr.colour })(); }],
+      ['Zipper on this edge', trimOn('zip', { type: 'Coil', gauge: 5, sep: false, colour: '#2b2b2b' })],
+      ['Piping on this edge', trimOn('piping', { w: .4, colour: '#7a2f2f', fab: '' })],
+      ['Binding on this edge', trimOn('binding', { w: 1, type: 'Double fold', colour: '#3a5a8c', fab: '' })],
+      ['Seam tape on this edge', trimOn('tape', { w: 1, type: 'Stay tape', colour: '#d9c27a' })]
+    ]);
+  }
+  function pieceMenu(e, pc, w) {
+    if (ST.sel.indexOf(pc.id) < 0) ST.sel = [pc.id]; ST.node = ST.seg = ST.notch = ST.it = ST.seam = ST.trim = null; refresh();
+    var pcs = selected(), many = pcs.length > 1, flip = function (h) { return function () { xfSel(h ? 'Flip horizontally' : 'Flip vertically', function (px, py) { return h ? C.M.mirX(px) : C.M.mirY(py); }); }; }, rot = function (a) { return function () { xfSel('Rotate ' + a + '°', function (px, py) { return C.M.rot(a, px, py); }, a); }; };
+    ctxMenu(e.clientX, e.clientY, many ? pcs.length + ' pieces' : pc.name, [
+      ['Copy', copySel, 'Ctrl C'], ['Paste', function () { paste(w); }, 'Ctrl V', !ST.clip], ['Duplicate', function () { doAct('dup'); }, 'Ctrl D'],
+      ['Symmetric copy (linked, mirrored)', function () { doAct('mirrorcopy'); }, '', many], ['Linked copy', function () { doAct('linked'); }, '', many],
+      '-', ['Flip horizontally', flip(true)], ['Flip vertically', flip(false)], ['Rotate 90° clockwise', rot(90)], ['Rotate 90° anticlockwise', rot(-90)], ['Rotate or scale exactly…', function () { askNums('Rotate and scale', [{ k: 'a', l: 'Rotate', v: 0, u: 'deg' }, { k: 'sx', l: 'Width', v: 100, u: 'pct' }, { k: 'sy', l: 'Height', v: 100, u: 'pct' }], function (v) { if (v.a) xfSel('Rotate', function (px, py) { return C.M.rot(v.a, px, py); }, v.a); if (v.sx !== 100 || v.sy !== 100) { if (!(v.sx > 0 && v.sy > 0)) return toast('Scale must be above 0%.', 1); xfSel('Scale', function (px, py) { return C.M.scale(v.sx / 100, v.sy / 100, px, py); }); } }, 'About the centre of the selection. Scaling changes the shape; it is not grading.'); }],
+      ['Unfold (open the fold)', function () { doAct('unfold'); }, '', many || pc.fold < 0],
+      '-', ['Give a fabric…', function () { ST.tab = 'fabric'; refresh(); toast(P.fabrics.length ? 'Pick a fabric in the Fabric tab, then click Give to selected.' : 'Add a fabric in the Fabric tab first.'); }],
+      ['Bring to front', function () { act('Bring to front', function () { pcs.forEach(function (p) { P.pieces.splice(P.pieces.indexOf(p), 1); P.pieces.push(p); }); }); }], ['Send to back', function () { act('Send to back', function () { pcs.slice().reverse().forEach(function (p) { P.pieces.splice(P.pieces.indexOf(p), 1); P.pieces.unshift(p); }); }); }],
+      [pc.locked ? 'Unlock' : 'Lock', function () { act('Lock', function () { pcs.forEach(function (p) { p.locked = !pc.locked; }); }); }], ['Hide', function () { act('Hide', function () { pcs.forEach(function (p) { p.hidden = true; }); ST.sel = []; }); }],
+      '-', ['Delete', function () { doAct('del'); }, 'Del']
+    ]);
+  }
+  function canvasMenu(e, w) {
+    ctxMenu(e.clientX, e.clientY, '', [
+      ['Paste here', function () { paste(w); }, 'Ctrl V', !ST.clip],
+      ['New rectangle here…', function () { askNums('New rectangle', [{ k: 'w', l: 'Width', v: 20 }, { k: 'h', l: 'Height', v: 30 }], function (v) { if (!(v.w > 0 && v.h > 0)) return toast('Width and height must be above zero.', 1); act('New rectangle', function () { var r = C.rect(w[0], w[1], v.w, v.h, { name: 'Piece ' + (P.pieces.length + 1) }); P.pieces.push(r); ST.sel = [r.id]; }); }); }],
+      ['New circle here…', function () { askNums('New circle or ellipse', [{ k: 'w', l: 'Width', v: 20 }, { k: 'h', l: 'Height', v: 20 }], function (v) { if (!(v.w > 0 && v.h > 0)) return toast('Width and height must be above zero.', 1); act('New ellipse', function () { var r = C.ellipse(w[0] + v.w / 2, w[1] + v.h / 2, v.w / 2, v.h / 2, 0, { name: 'Piece ' + (P.pieces.length + 1) }); P.pieces.push(r); ST.sel = [r.id]; }); }); }],
+      '-', ['Select all', function () { doAct('selall'); }, 'Ctrl A'], ['Fit all pieces', fit, '0'], [(V().grid ? 'Hide' : 'Show') + ' grid', function () { act('View', function () { V().grid = !V().grid; }); }], ['Snap ' + (V().snap ? 'off' : 'on'), function () { act('View', function () { V().snap = !V().snap; }); }]
+    ]);
+  }
+  function onCtx(e) {
+    e.preventDefault(); if (!ON) return; var w = S2W(e), t = e.target, ds = t.dataset || {};
+    if (drag && (drag.k === 'nodes' || drag.k === 'move')) { var d = drag; drag = null; ST.live = null; var hh = H.mark(); H.swap(JSON.parse(d.mark)); refresh(); void hh;
+      return askNums(d.k === 'move' ? 'Move pieces by' : 'Move by', [{ k: 'dx', l: 'Across (X)', v: 0 }, { k: 'dy', l: 'Down (Y)', v: 0 }], function (v) { if (d.k === 'move') act('Move', function () { d.pcs.forEach(function (o) { var pc = pcById(o[0].id); pc.x += v.dx; pc.y += v.dy; }); }); else { var pc = pcById(d.pc.id), idx = d.idx || ST.node.idx; act('Move point', function () { C.moveNodes(pc, idx, v.dx, v.dy); }); } }); }
+    if (ST.draft && ST.tool === 'poly' && ST.draft.pts.length) return polyNext();
+    if (t.closest && t.closest('[data-tr]')) { var tp = t.closest('[data-tr]').getAttribute('data-tr').split('|'); ST.trim = { k: tp[0], id: tp[1] }; ST.tab = 'trims'; refresh(); return ctxMenu(e.clientX, e.clientY, trimLabel(tp[0], trimOf(ST.trim)), [['Delete', function () { doAct('trdel'); }, 'Del']]); }
+    if (ds.sw) { ST.seam = ds.sw; ST.tab = 'sewing'; refresh(); return ctxMenu(e.clientX, e.clientY, 'Seam', [['Flip (untwist)', function () { doAct('swflip'); }], ['Delete seam', function () { doAct('swdel'); }]]); }
+    if (ds.n != null && ds.pc) return pointMenu(e, pcById(ds.pc), +ds.n);
+    var ne = nearestEdge(w); if (ne) return segMenu(e, ne.pc, ne.seg, ne);
+    var pc = pieceAt(w); if (pc) return pieceMenu(e, pc, w);
+    canvasMenu(e, w);
+  }
+  function polyNext() {
+    var d = ST.draft, last = d.pts[d.pts.length - 1].p, prev = d.pts.length > 1 ? d.pts[d.pts.length - 2].p : null, a0 = prev ? Math.atan2(-(last[1] - prev[1]), last[0] - prev[0]) * 180 / Math.PI : 0;
+    askNums('Next point', [{ k: 'L', l: 'Length', v: 10 }, { k: 'a', l: 'Angle', v: Math.round(a0), u: 'deg' }], function (v) { if (!(v.L > 0)) return toast('Enter a length above zero.', 1); var r = v.a * Math.PI / 180; d.pts.push({ p: [last[0] + Math.cos(r) * v.L, last[1] - Math.sin(r) * v.L], h: null }); ST.draft = d; drawOver(); opts(); status(); }, 'Angle 0° is to the right, 90° is up, 180° is to the left, 270° is down.');
+  }
+  /* the transform box: handles at the corners and sides scale, the round handle above rotates, the cross is the pivot */
+  function xfBox() {
+    if (ST.tool !== 'select') return null; var key = ST.sel.join(','); if (ST.pvFor !== key) { ST.pvFor = key; ST.pvW = null; } var pcs = selected().filter(function (p) { return !p.locked && !p.hidden; }); if (!pcs.length) return null;
+    var b = [1e9, 1e9, -1e9, -1e9]; pcs.forEach(function (pc) { var bb = bboxW(pc); b[0] = Math.min(b[0], bb[0]); b[1] = Math.min(b[1], bb[1]); b[2] = Math.max(b[2], bb[2]); b[3] = Math.max(b[3], bb[3]); });
+    return { b: b, pcs: pcs, pv: ST.pvW || [(b[0] + b[2]) / 2, (b[1] + b[3]) / 2] };
+  }
+  function xfHTML() {
+    var X = drag && drag.k === 'xf' ? drag.box : xfBox(); if (!X) return ''; var a = W2S([X.b[0], X.b[1]]), c = W2S([X.b[2], X.b[3]]), m = [(a[0] + c[0]) / 2, (a[1] + c[1]) / 2], pv = W2S(X.pv), h = '';
+    h += '<path class="ps-xfb" d="M' + f1(a[0]) + ' ' + f1(a[1]) + 'H' + f1(c[0]) + 'V' + f1(c[1]) + 'H' + f1(a[0]) + 'Z"/><path class="ps-xfl" d="M' + f1(m[0]) + ' ' + f1(a[1]) + 'V' + f1(a[1] - 24) + '"/>';
+    [['nw', a[0], a[1]], ['n', m[0], a[1]], ['ne', c[0], a[1]], ['e', c[0], m[1]], ['se', c[0], c[1]], ['s', m[0], c[1]], ['sw', a[0], c[1]], ['w', a[0], m[1]]].forEach(function (k) { h += '<rect class="ps-xfh" data-xf="' + k[0] + '" x="' + f1(k[1] - 4.5) + '" y="' + f1(k[2] - 4.5) + '" width="9" height="9"/>'; });
+    h += '<circle class="ps-xfr" data-xf="rot" cx="' + f1(m[0]) + '" cy="' + f1(a[1] - 26) + '" r="6"/><g class="ps-xfp" data-xf="pv"><circle cx="' + f1(pv[0]) + '" cy="' + f1(pv[1]) + '" r="7" data-xf="pv"/><path d="M' + f1(pv[0] - 10) + ' ' + f1(pv[1]) + 'H' + f1(pv[0] + 10) + 'M' + f1(pv[0]) + ' ' + f1(pv[1] - 10) + 'V' + f1(pv[1] + 10) + '"/></g>';
+    return h;
+  }
+  function xfStart(e, h, w) {
+    var X = xfBox(); if (!X) return false; var b = X.b, start = X.pcs.map(function (pc) { return C.clone(pc); }), tr = {}; ['button', 'hole', 'graphic'].forEach(function (k) { tr[k] = C.clone(P.trims[k]); });
+    var hx = { nw: [b[0], b[1]], n: [(b[0] + b[2]) / 2, b[1]], ne: [b[2], b[1]], e: [b[2], (b[1] + b[3]) / 2], se: [b[2], b[3]], s: [(b[0] + b[2]) / 2, b[3]], sw: [b[0], b[3]], w: [b[0], (b[1] + b[3]) / 2] }, opp = { nw: 'se', n: 's', ne: 'sw', e: 'w', se: 'nw', s: 'n', sw: 'ne', w: 'e' };
+    startDrag({ k: 'xf', h: h, a: w, box: X, start: start, tr: tr, mark: H.mark(), hp: hx[h], an: hx[opp[h]] }); return true;
+  }
+  function xfMove(e, w, sx) {
+    var d = drag, X = d.box, m, ang = 0, lab = '';
+    if (d.h === 'pv') { ST.pvW = w; d.box = Object.assign({}, X, { pv: w }); drawPts(); return; }
+    if (d.h === 'rot') { var a0 = Math.atan2(d.a[1] - X.pv[1], d.a[0] - X.pv[0]), a1 = Math.atan2(w[1] - X.pv[1], w[0] - X.pv[0]); ang = (a1 - a0) * 180 / Math.PI; if (e.shiftKey) ang = Math.round(ang / 15) * 15; lab = ang.toFixed(1) + '°'; }
+    else { var an = e.altKey ? X.pv : d.an, hp = d.hp, kx = /e|w/.test(d.h), ky = /n|s/.test(d.h), sxv = kx ? (w[0] - an[0]) / ((hp[0] - an[0]) || 1e-9) : 1, syv = ky ? (w[1] - an[1]) / ((hp[1] - an[1]) || 1e-9) : 1;
+      if (kx && ky && !e.shiftKey) { var u = (Math.abs(sxv) + Math.abs(syv)) / 2; sxv = u * Math.sign(sxv || 1); syv = u * Math.sign(syv || 1); }
+      d.sc = [sxv, syv, an]; lab = (kx ? Math.round(sxv * 1000) / 10 + '% wide' : '') + (kx && ky ? ' · ' : '') + (ky ? Math.round(syv * 1000) / 10 + '% high' : ''); }
+    ['button', 'hole', 'graphic'].forEach(function (k) { P.trims[k] = C.clone(d.tr[k]); });
+    X.pcs.forEach(function (pc, i) { var s0 = d.start[i]; Object.keys(s0).forEach(function (k) { pc[k] = C.clone(s0[k]); }); var px = pc.x || 0, py = pc.y || 0;
+      m = d.h === 'rot' ? C.M.rot(ang, X.pv[0] - px, X.pv[1] - py) : C.M.scale(d.sc[0], d.sc[1], d.sc[2][0] - px, d.sc[2][1] - py); xfAll(pc, m, d.h === 'rot' ? ang : 0); drawPiece(pc, true); });
+    d.moved = true; d.ang = ang; ST.live = { at: sx, t: lab + (d.h !== 'rot' ? ' · scale is not grading' : '') }; drawPts();
+  }
+
   /* ---------- pointer handling ----------
      Moves are processed once per animation frame. While dragging, only the piece being changed is redrawn and checked quickly;
      the full checks (crossing outlines, overlapping allowances) run when the mouse is released. */
@@ -720,8 +876,9 @@
   function down(e) {
     if (e.button === 1 || space || ST.tool === 'pan') { drag = { k: 'pan', x: e.clientX, y: e.clientY, tx: ST.tx, ty: ST.ty }; svg.setPointerCapture(e.pointerId); e.preventDefault(); return; }
     if (e.button !== 0) return;
-    svg.focus({ preventScroll: true }); var w = S2W(e), t = e.target, ds = t.dataset || {}, pc = ds.pc ? pcById(ds.pc) : null, sn = snap(w, null, e);
+    svg.focus({ preventScroll: true }); ctxClose(); var w = S2W(e), t = e.target, ds = t.dataset || {}, pc = ds.pc ? pcById(ds.pc) : null, sn = snap(w, null, e);
     svg.setPointerCapture(e.pointerId);
+    if (ds.xf && ST.tool === 'select') { if (e.detail === 2 && ds.xf === 'pv') { ST.pvW = null; drawPts(); return; } if (xfStart(e, ds.xf, w)) return; }
     switch (ST.tool) {
       case 'select': {
         if (ds.nt) { ST.notch = ds.nt; ST.node = ST.seg = ST.it = null; refresh(); return; }
@@ -801,6 +958,7 @@
       if (ST.tool === 'measure' && ST.meas.length) { ST.mcur = e.shiftKey ? constrain(ST.meas[ST.meas.length - 1], hov ? hov.p : w) : hov ? hov.p : w; var lm = ST.meas[ST.meas.length - 1]; ST.live = { at: sx, t: F(C.dist(lm, ST.mcur)) + ' · ' + (Math.atan2(-(ST.mcur[1] - lm[1]), ST.mcur[0] - lm[0]) * 180 / Math.PI).toFixed(1) + '°' }; }
       else if (ST.tool === 'poly' && ST.draft && ST.draft.pts.length) { var lp = ST.draft.pts[ST.draft.pts.length - 1].p, c = ST.draft.cur; ST.live = { at: sx, t: F(C.dist(lp, c)) + ' · ' + (Math.atan2(-(c[1] - lp[1]), c[0] - lp[0]) * 180 / Math.PI).toFixed(1) + '°' }; }
       else ST.live = null;
+      ST.hovE = (ST.tool === 'edit' || PICK.indexOf(ST.tool) >= 0) && !(ST.draft) ? nearestEdge(w) : null; if (ST.hovE) ST.hovE.at = sx;
       status(); drawOver(); drawPts(); drawRulers(); return;
     }
     var d = drag;
@@ -810,6 +968,7 @@
       if (V().snap && !e.altKey) { var g = gridStep(), cx = d.corner[0] + dx, cy = d.corner[1] + dy; dx += Math.round(cx / g) * g - cx; dy += Math.round(cy / g) * g - cy; }
       if (e.shiftKey) { if (Math.abs(dx) > Math.abs(dy)) dy = 0; else dx = 0; }
       d.pcs.forEach(function (o) { o[0].x = o[1] + dx; o[0].y = o[2] + dy; placeG(o[0]); }); d.moved = true; ST.live = { at: sx, t: 'Δ ' + F(dx) + ', ' + F(dy) }; drawPts(); status(); return; }
+    if (d.k === 'xf') { xfMove(e, w, sx); return; }
     if (d.k === 'trim') { var sn4 = snap(w, null, e), lq = W2L(d.pc, sn4.p), dd0 = [lq[0] - (d.a[0] - d.pc.x), lq[1] - (d.a[1] - d.pc.y)]; d.r.at = [d.at0[0] + dd0[0], d.at0[1] + dd0[1]]; d.moved = true; ST.live = { at: sx, t: 'X ' + F(d.r.at[0]) + '  Y ' + F(d.r.at[1]) }; drawPiece(d.pc, true); drawPts(); return; }
     if (d.k === 'nodes') { var pc = d.pc, idx = d.idx || ST.node.idx, want = [w[0] - d.off[0], w[1] - d.off[1]], sn = snap(want, { pc: pc, idx: idx }, e), tgt = sn.p, st0 = d.start[d.lead];
       if (e.shiftKey) tgt = constrain(L2W(pc, st0), tgt);
@@ -835,6 +994,7 @@
         if (d.k === 'marq') P.pieces.forEach(function (pc) { if (pc.hidden) return; var b = bboxW(pc); if (b[0] >= m[0] && b[2] <= m[2] && b[1] >= m[1] && b[3] <= m[3] && ST.sel.indexOf(pc.id) < 0) ST.sel.push(pc.id); });
         else { var hitN = null; P.pieces.forEach(function (pc) { if (pc.hidden || pc.locked) return; var ids = []; pc.nodes.forEach(function (nd, i) { var q2 = L2W(pc, [nd.x, nd.y]); if (q2[0] >= m[0] && q2[0] <= m[2] && q2[1] >= m[1] && q2[1] <= m[3]) ids.push(i); }); if (ids.length && !hitN) hitN = { pc: pc.id, idx: ids }; }); if (hitN) { ST.node = hitN; ST.sel = [hitN.pc]; } } }
       refresh(); return; }
+    if (d.k === 'xf') { if (d.moved) H.commit(d.h === 'rot' ? 'Rotate ' + (d.ang || 0).toFixed(1) + '°' : d.h === 'pv' ? 'Pivot' : 'Scale', d.mark); refresh(); return; }
     if (d.k === 'trim') { if (d.moved) H.commit('Move ' + ST.trim.k, d.mark); refresh(); return; }
     if ((d.k === 'move' || d.k === 'nodes' || d.k === 'handle' || d.k === 'curv') && d.moved) { var label = { move: 'Move', nodes: 'Move point', handle: 'Reshape curve', curv: 'Edit curvature' }[d.k]; H.commit(label, d.mark); ST.hover = null; if (d.pc) { var iss = geo(d.pc).issues; if (iss.some(function (x) { return x.k === 'cross'; })) toast(iss.filter(function (x) { return x.k === 'cross'; })[0].msg + ' Undo with Ctrl Z.', 1); } refresh(); return; }
     if (d.k === 'move' || d.k === 'nodes' || d.k === 'handle' || d.k === 'curv') { drawPts(); return; }
@@ -898,9 +1058,11 @@
     if (mod && e.key.toLowerCase() === 'n') { e.preventDefault(); doAct('new'); return; }
     if (typing) return;
     if (mod && e.key.toLowerCase() === 'd') { e.preventDefault(); if (ST.sel.length) doAct('dup'); return; }
+    if (mod && e.key.toLowerCase() === 'c') { e.preventDefault(); copySel(); return; }
+    if (mod && e.key.toLowerCase() === 'v') { e.preventDefault(); paste(ST.cursor); return; }
     if (mod && e.key.toLowerCase() === 'a') { e.preventDefault(); ST.sel = P.pieces.filter(function (p) { return !p.hidden; }).map(function (p) { return p.id; }); refresh(); return; }
     if (e.key === ' ') { space = true; svg.style.cursor = 'grab'; e.preventDefault(); return; }
-    if (e.key === 'Escape') { if (q('#ps-modal').hidden === false) { closeModal(); return; } ST.draft = null; ST.meas = []; ST.cut = []; ST.walk = []; ST.pick = []; ST.node = ST.seg = ST.notch = ST.it = ST.seam = ST.trim = ST.fab = ST.psel = null; opts(); refresh(); return; }
+    if (e.key === 'Escape') { if (ctxEl) { ctxClose(); return; } if (q('#ps-modal').hidden === false) { closeModal(); return; } ST.draft = null; ST.meas = []; ST.cut = []; ST.walk = []; ST.pick = []; ST.node = ST.seg = ST.notch = ST.it = ST.seam = ST.trim = ST.fab = ST.psel = null; opts(); refresh(); return; }
     if (e.key === 'Enter') { if (ST.tool === 'poly' && ST.draft) finishPoly(); else if (ST.tool === 'iline' && ST.draft) finishILine(); return; }
     if (e.key === 'Backspace' && ST.draft && ST.draft.pts) { ST.draft.pts.pop(); if (!ST.draft.pts.length) ST.draft = null; drawOver(); status(); e.preventDefault(); return; }
     if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); if (ST.node) doAct('ndel'); else if (ST.notch) doAct('ntdel'); else if (ST.it) doAct('itdel'); else if (ST.sel.length) doAct('del'); return; }
@@ -1054,7 +1216,7 @@
     propsEl.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.matches('input[type=number],input:not([type])')) { e.target.blur(); } });
     optsEl.addEventListener('change', function (e) { var k = e.target.dataset.o; if (!k) return; ST.o[k] = k === 'dir' ? e.target.value : k === 'turns' ? +e.target.value : CM(e.target.value); opts(); });
     barEl.addEventListener('change', function (e) { var v = e.target.dataset.v; if (!v) return; act('View', function () { V()[v] = e.target.checked; }); });
-    svg.addEventListener('pointerdown', down); svg.addEventListener('pointermove', moveQ); svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', function () { drag = null; ST.live = null; drawPts(); }); svg.addEventListener('dblclick', dbl); svg.addEventListener('wheel', wheel, { passive: false });
+    svg.addEventListener('pointerdown', down); svg.addEventListener('pointermove', moveQ); svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', function () { drag = null; ST.live = null; drawPts(); }); svg.addEventListener('dblclick', dbl); svg.addEventListener('contextmenu', onCtx); svg.addEventListener('wheel', wheel, { passive: false });
     svg.addEventListener('pointerleave', function () { if (drag) return; ST.cursor = null; ST.hover = null; ST.live = null; status(); drawPts(); drawRulers(); });
     window.addEventListener('keydown', key, true); window.addEventListener('keyup', function (e) { if (e.key === ' ' && ON) { space = false; svg.style.cursor = ''; } }, true);
     var ro = window.ResizeObserver ? new ResizeObserver(function () { if (ON) drawView(); }) : null; if (ro) ro.observe(svg); else window.addEventListener('resize', function () { if (ON) drawView(); });
@@ -1204,6 +1366,9 @@
     '.ps-puk{fill:none;stroke:#7a6a5a;stroke-width:1.2;cursor:pointer}.ps-btn{cursor:move}.ps-btn circle:first-child{stroke:#1c1f22;stroke-width:.05}.ps-bh{fill:#1c1f22;opacity:.6}.ps-hole{cursor:move}',
     '.ps-gfx{cursor:move}.ps-gfx .ps-gb{fill:none;stroke:transparent;stroke-width:1}.ps-gfx:hover .ps-gb,.ps-gfx[data-on] .ps-gb{stroke:#e08a5e;stroke-dasharray:4 3}',
     '[data-tr][data-on] {filter:drop-shadow(0 0 1.5px #e08a5e)}',
+    '.ps-ctx{position:fixed;z-index:2050;min-width:230px;max-width:320px;background:#2a2e33;color:#e8e6e1;border:1px solid #3a3f46;border-radius:6px;box-shadow:0 14px 34px rgba(0,0,0,.5);padding:4px;font:12.5px "DM Sans",sans-serif;max-height:80vh;overflow:auto}.ps-ctxh{padding:5px 9px 6px;color:#e08a5e;font:600 10.5px "DM Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid #3a3f46;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ps-ctx button{display:flex;justify-content:space-between;gap:12px;width:100%;background:none;border:0;color:inherit;text-align:left;padding:5px 9px;border-radius:4px;cursor:pointer;font:inherit}.ps-ctx button:hover:not(:disabled){background:#33383e}.ps-ctx button:disabled{opacity:.4;cursor:default}.ps-ctx kbd{font:11px ui-monospace,Menlo,monospace;color:#6f757c}.ps-ctx hr{border:0;border-top:1px solid #3a3f46;margin:3px 0}',
+    '#ps-pts .ps-hov{fill:none;stroke:#e08a5e;stroke-width:3;opacity:.75;pointer-events:none}#ps-pts .ps-elab rect{stroke:#6f757c}',
+    '#ps-pts .ps-xfb{fill:none;stroke:#e3b341;stroke-width:1;stroke-dasharray:5 3;pointer-events:none}#ps-pts .ps-xfl{stroke:#e3b341;stroke-width:1;pointer-events:none}#ps-pts .ps-xfh{fill:#fff;stroke:#7a5a10;stroke-width:1.2;cursor:nwse-resize}#ps-pts .ps-xfh[data-xf=n],#ps-pts .ps-xfh[data-xf=s]{cursor:ns-resize}#ps-pts .ps-xfh[data-xf=e],#ps-pts .ps-xfh[data-xf=w]{cursor:ew-resize}#ps-pts .ps-xfh[data-xf=ne],#ps-pts .ps-xfh[data-xf=sw]{cursor:nesw-resize}#ps-pts .ps-xfr{fill:#e3b341;stroke:#7a5a10;stroke-width:1.2;cursor:grab}#ps-pts .ps-xfp circle{fill:rgba(227,179,65,.15);stroke:#e3b341;stroke-width:1.2;cursor:move}#ps-pts .ps-xfp path{stroke:#e3b341;stroke-width:1;pointer-events:none}',
     '.ps-tip{position:fixed;z-index:2100;max-width:260px;background:#121315;color:#e8e6e1;border:1px solid #3a3f46;padding:7px 9px;border-radius:5px;font:12px/1.45 "DM Sans",sans-serif;pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.45)}',
     '@media (max-width:980px){.pbody.cad{grid-template-columns:1fr}.pbody.cad .pc{height:72vh;height:72svh}.pbody.cad .ps-tools{display:flex;flex-wrap:wrap;gap:2px}.pbody.cad .ps-tg{display:flex;flex-wrap:wrap;border:0;padding:0}.pbody.cad .ps-tg small,.pbody.cad #ps-tsearch,.pbody.cad .ps-tb span,.pbody.cad .ps-tb kbd{display:none}.pbody.cad .ps-tb{width:38px;height:38px;justify-content:center;padding:0}.ps-name,.ps-saved{display:none}}'
   ].join('\n');
