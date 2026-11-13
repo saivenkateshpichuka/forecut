@@ -94,3 +94,10 @@ test('studio tools: pin holds a point, tack joins two, freeze holds a piece, int
   S.freeze(k, false); S.stiffen(k, 10); assert.ok(S.BA.some(v => v < S.fab.bend / 5), 'interfacing stiffens'); S.elastic(ids.slice(0, 20), .7); assert.equal(S.rings[S.rings.length - 1].user, 1); S.clearElastic(); assert.ok(!S.rings.some(r => r.user));
   S.pucker(.04); let short = 0; for (let j = 0; j < S.E.length; j += 3) if (S.E[j + 2] < S.E0[j + 2] - 1e-6) short++; assert.ok(short > 10, 'seam edges eased'); S.pucker(0);
 });
+test('quad mesh and simulation settings: a quad grid sews, fewer steps and no self-collision still settle', () => {
+  const m = PM.CHARTS.women.M, body = bodies.womenM || (bodies.womenM = D.body(m, 'women', AV, 'M'));
+  const G = D.assemble(PM, 'tshirt', 'women', body.m, {}, body); G.meshType = 'quad'; const M = D.mesh(G, 3, Del); M.sim = { sub: 8, self: false, grav: 900, air: .5 };
+  const S = new D.Sim(M, body, D.FABRICS.jersey); assert.equal(S.sub, 8); assert.equal(S.selfOn, false);
+  for (let f = 0; f < 200 && !S.settled; f++) S.step(1 / 60);
+  for (let i = 0; i < S.x.length; i++) assert.ok(Number.isFinite(S.x[i])); assert.ok(S.seamGap() < 2, 'quad seams closed ' + S.seamGap().toFixed(2));
+});

@@ -22,7 +22,7 @@ function build2(q) {
   } else postMessage({ type: 'body', gen: gen, same: true });
   var m = body.m;
   var G = FCDrape.assemble(PM, q.style, q.gender, m, q.opts, body);
-  M = FCDrape.mesh(G, q.h || 2.3, Delaunator);
+  G.meshType = q.meshType; M = FCDrape.mesh(G, q.h || 2.3, Delaunator); M.sim = q.sim || {};
   sim = new FCDrape.Sim(M, body, q.fab || FCDrape.FABRICS[q.fabric] || FCDrape.FABRICS.poplin);
   var panels = G.panels.map(function (P) { return { name: P.name, segs: P.segs.map(function (s) { return { key: s.key, pts: s.pts }; }) }; });
   var seamLines = [];
@@ -48,7 +48,7 @@ onmessage = function (e) {
     if (q.cmd === 'build') build(q);
     else if (q.cmd === 'ack') { if (q.gen === gen) tick(); }
     else if (q.cmd === 'fabric' && sim) { // keep the current shape, re-settle in the new fabric
-      var keep = sim.x; sim = new FCDrape.Sim(M, body, q.fab || FCDrape.FABRICS[q.fabric]); sim.x.set(keep); sim.t = 1.3; running = true; tick();
+      if (q.sim) M.sim = q.sim; var keep = sim.x; sim = new FCDrape.Sim(M, body, q.fab || FCDrape.FABRICS[q.fabric]); sim.x.set(keep); sim.t = 1.3; running = true; tick();
     } else if (q.cmd === 'grab' && sim) { sim.startGrab(q.i, q.r); kick(); }
     else if (q.cmd === 'drag' && sim) { sim.moveGrab(q.t); kick(); }
     else if (q.cmd === 'release' && sim) { sim.endGrab(); kick(); }

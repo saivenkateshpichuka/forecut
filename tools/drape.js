@@ -48,7 +48,8 @@ app.innerHTML = `<div class="dr" id="drRoot">
     <div class="dr-pane" data-pane="garment">
       <label>Style<select id="drStyle"></select></label><div id="drOpts" class="dr-opts"></div>
       <div class="dr-acts"><button type="button" class="dr-p" id="drSew">Sew and drape again</button><button type="button" id="drPause">Pause</button>
-        <label class="dr-q">Detail<select id="drQuality"><option value="fast">Fast</option><option value="std">Standard</option><option value="fine">Fine</option></select></label></div>
+        <label class="dr-q">Accuracy<select id="drQuality"><option value="fast">Fast</option><option value="std">Balanced</option><option value="fine">Accurate</option><option value="custom">Custom</option></select></label></div>
+      <details class="dr-sim" id="drSimBox"><summary>Mesh and simulation</summary><div id="drSim" class="dr-props"></div></details>
     </div>
     <div class="dr-pane" data-pane="avatar" hidden>
       <div class="dr-two"><label>Body<select id="drGender"></select></label><label>Size<select id="drSize"></select></label></div>
@@ -81,7 +82,7 @@ app.innerHTML = `<div class="dr" id="drRoot">
       <div class="dr-seg" id="drViews"><button data-v="front" aria-pressed="true">Front</button><button data-v="q">¾</button><button data-v="side">Side</button><button data-v="back">Back</button></div>
       <details class="dr-menu" id="drShow"><summary>Show <span aria-hidden="true">▾</span></summary><div class="dr-pop">
         <div class="dr-seg dr-col" id="drFit"><button data-f="off">Fabric</button><button data-f="fit">Fit map</button><button data-f="strain">Stretch map</button></div>
-        <label class="dr-chk"><input type="checkbox" id="drBody"> Avatar</label><label class="dr-chk"><input type="checkbox" id="drSeams"> Seam lines</label><label class="dr-chk"><input type="checkbox" id="drShowLines"> Avatar reference lines</label><label class="dr-chk"><input type="checkbox" id="drShowPts"> Arrangement points</label><label class="dr-chk"><input type="checkbox" id="drShowJoints"> Joints</label><hr><button type="button" class="dr-mi" id="drHD">Save HD image</button><button type="button" class="dr-mi" id="drTurn">Record turntable video</button><button type="button" class="dr-mi" id="drClear">Remove pins, tacks and elastic</button></div></details>
+        <label class="dr-chk"><input type="checkbox" id="drBody"> Avatar</label><label class="dr-chk"><input type="checkbox" id="drSeams"> Seam lines</label><label class="dr-chk"><input type="checkbox" id="drWire"> Mesh wireframe</label><label class="dr-chk"><input type="checkbox" id="drShowLines"> Avatar reference lines</label><label class="dr-chk"><input type="checkbox" id="drShowPts"> Arrangement points</label><label class="dr-chk"><input type="checkbox" id="drShowJoints"> Joints</label><hr><button type="button" class="dr-mi" id="drHD">Save HD image</button><button type="button" class="dr-mi" id="drTurn">Record turntable video</button><button type="button" class="dr-mi" id="drClear">Remove pins, tacks and elastic</button></div></details>
       <div class="dr-seg" id="drTool" aria-label="Mouse tool"><button data-t="pull" title="Drag the fabric to pull it, as you would on a real garment">Pull</button><button data-t="pin" title="Click the cloth to pin it where it is; click a pin to remove it">Pin</button><button data-t="tack" title="Click two points of the cloth to tack them together">Tack</button><button data-t="move" title="Click a piece to move, rotate, freeze or stiffen it">Piece</button></div>
       <div class="dr-seg" id="drGz" hidden><button data-g="translate" aria-pressed="true" title="Move (W)">Move</button><button data-g="rotate" title="Rotate (E)">Rotate</button><button data-g="freeze" title="Hold this piece still while the rest drapes">Freeze</button><button data-g="stiff" title="Interfacing: make this piece stiffer, like a fused collar or facing">Interfacing</button><button data-g="elastic" title="Gather the hem of this piece with elastic">Elastic hem</button><button data-g="done" title="Finish (Esc)">Done</button></div>
       <span class="dr-sp"></span>
@@ -129,6 +130,10 @@ function fabName() { return fab().n + (S.fabOv && Object.keys(S.fabOv).length ? 
 const PRINTS = [['solid', 'Solid'], ['stripe', 'Stripes'], ['pin', 'Pinstripe'], ['band', 'Horizontal bands'], ['gingham', 'Gingham'], ['check', 'Check / tartan'], ['dots', 'Polka dots'], ['buti', 'Buti motifs'], ['chevron', 'Chevron'], ['ikat', 'Ikat']];
 function cws() { if (!S.cws || !S.cws.length) S.cws = [{ name: 'Colourway 1', c1: S.colour || '#7c8ea3', c2: '#f3efe6', print: 'solid', scale: 2 }]; if (!(S.cw >= 0 && S.cw < S.cws.length)) S.cw = 0; return S.cws; }
 function cw() { return cws()[S.cw]; }
+const PRESET = { fast: { h: 3, sub: 8 }, std: { h: 2.3, sub: 14 }, fine: { h: 1.6, sub: 22 } };
+const SIMP = [['h', 'Particle distance (mesh density)', 1.2, 5, .1, ' cm', 'Smaller means a finer mesh: more detail in folds, slower'], ['sub', 'Solver steps per frame', 4, 30, 1, '', 'More steps: stiffer, more exact cloth, slower'], ['th', 'Collision thickness', 1, 8, .5, ' mm', 'Gap kept between the cloth and the avatar'], ['grav', 'Gravity', 50, 150, 5, '%', 'Lower lets light fabrics float; higher settles faster'], ['air', 'Air resistance', 0, 2, .1, '×', 'How much the air slows the cloth']];
+function simset() { const q = S.quality in PRESET ? PRESET[S.quality] : {}; return Object.assign({ h: 2.3, sub: 14, th: 3, grav: 100, air: 1, self: true, mesh: 'tri' }, S.simset || {}, S.quality in PRESET ? q : {}); }
+function simMsg() { const z = simset(); return { sub: z.sub, th: S.quality === 'custom' ? z.th / 10 : 0, self: !!z.self, grav: 981 * z.grav / 100, air: z.air }; }
 function trims() { return S.trims || (S.trims = { btn: 'horn', zip: 'metal', top: true, thread: 'tone' }); }
 
 /* ---------- controls ---------- */
@@ -205,12 +210,14 @@ function renderControls() {
   $('#drPose').innerHTML = [['arm', 'Arms out from the body (shoulders)', 20, 80, 1, '°'], ['elbow', 'Elbow bend', 0, 60, 1, '°'], ['legs', 'Legs apart (hips)', 0, 15, 1, '°']].map(p => `<label>${p[1]} <output>${+PO[p[0]] || (p[0] === 'arm' ? 46 : 0)}${p[5]}</output><input type="range" data-pose="${p[0]}" min="${p[2]}" max="${p[3]}" step="${p[4]}" value="${+PO[p[0]] || (p[0] === 'arm' ? 46 : 0)}"></label>`).join('');
   $('#drLines').innerHTML = LINES.map(l => `<label class="dr-chk"><input type="checkbox" data-line="${l[0]}"${(S.lines || {})[l[0]] ? ' checked' : ''}><i style="background:${l[2]}"></i>${l[1]}</label>`).join('');
   $('#drShowLines').checked = !!S.showLines; $('#drShowPts').checked = !!S.showPts; $('#drShowJoints').checked = !!S.showJoints;
+  const Z = simset();
+  $('#drSim').innerHTML = `<label>Mesh<select data-sim="mesh">${opt('tri', 'Triangles', Z.mesh)}${opt('quad', 'Quads', Z.mesh)}</select></label>` + SIMP.map(p => `<label title="${p[6]}">${p[1]} <output>${(+Z[p[0]]).toString()}${p[5]}</output><input type="range" data-sim="${p[0]}" min="${p[2]}" max="${p[3]}" step="${p[4]}" value="${Z[p[0]]}"></label>`).join('') + `<label class="dr-chk"><input type="checkbox" data-sim="self"${Z.self ? ' checked' : ''}> Cloth collides with itself</label><p class="dr-note">${(lastMesh ? lastMesh.verts : 0) ? lastMesh.verts.toLocaleString() + ' particles in this garment. ' : ''}Accuracy presets set the mesh density and steps; change any value for Custom.</p>`;
   renderFabric(); renderColour();
   $$('#drTool button').forEach(b => b.setAttribute('aria-pressed', b.dataset.t === S.tool));
   $$('#drViews button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === view));
   $$('#drFit button').forEach(b => b.setAttribute('aria-pressed', b.dataset.f === S.fit));
   $$('#drUnits button').forEach(b => b.setAttribute('aria-pressed', b.dataset.u === S.unit));
-  $('#drBody').checked = S.bodyOn; $('#drSeams').checked = S.seamsOn;
+  $('#drBody').checked = S.bodyOn; $('#drSeams').checked = S.seamsOn; $('#drWire').checked = !!S.wire;
   sides();
 }
 function renderFabric() {
@@ -243,7 +250,7 @@ function $$(s, r) { return Array.from((r || document).querySelectorAll(s)); }
 
 let tmr = 0;
 function later(fn, ms) { clearTimeout(tmr); tmr = setTimeout(fn, ms || 350); }
-function refab() { save(); applyMaterial(); if (worker && built) { worker.postMessage({ cmd: 'fabric', fab: D.phys(fab()), gen }); status('Draping in ' + fabName().toLowerCase() + '…', 'run'); } }
+function refab() { save(); applyMaterial(); if (worker && built) { worker.postMessage({ cmd: 'fabric', fab: D.phys(fab()), sim: simMsg(), gen }); status('Draping in ' + fabName().toLowerCase() + '…', 'run'); } }
 $('.dr-tabs').addEventListener('click', e => { const t = e.target.dataset.tab; if (!t) return; S.tab = t; save(); renderControls(); });
 $('#drStyle').addEventListener('change', e => { S.style = e.target.value; S.opts = {}; save(); renderControls(); rebuild(); });
 $('#drGender').addEventListener('change', e => { S.body = e.target.value; syncG(); S.meas = {}; S.opts = {}; save(); renderControls(); rebuild(); });
@@ -253,7 +260,9 @@ $('#drProps').addEventListener('input', e => { const k = e.target.dataset.p; if 
 $('#drFabReset').addEventListener('click', () => { S.fabOv = {}; renderFabric(); refab(); });
 $('#drFabSave').addEventListener('click', () => { const n = $('#drFabName').value.trim() || fab().n + ' (mine)', id = 'my' + Date.now().toString(36); myFabs()[id] = Object.assign(fab(), { n, g: 'My fabrics', note: 'Your own fabric, based on ' + baseFab().n.toLowerCase() + '.' }); S.fabric = id; S.fabOv = {}; $('#drFabName').value = ''; renderFabric(); refab(); status('Saved “' + n + '” to My fabrics', 'ok'); });
 $('#drFabDel').addEventListener('click', () => { if (!myFabs()[S.fabric]) return; delete myFabs()[S.fabric]; S.fabric = 'jersey'; S.fabOv = {}; renderFabric(); refab(); });
-$('#drQuality').addEventListener('change', e => { S.quality = e.target.value; save(); rebuild(); });
+$('#drQuality').addEventListener('change', e => { if (e.target.value === 'custom') { S.simset = simset(); S.quality = 'custom'; save(); renderControls(); return; } S.quality = e.target.value; S.simset = Object.assign({}, S.simset || {}, PRESET[S.quality]); save(); renderControls(); rebuild(); });
+$('#drSim').addEventListener('input', e => { const k = e.target.dataset.sim; if (!k) return; S.simset = simset(); S.quality = 'custom'; $('#drQuality').value = 'custom'; S.simset[k] = e.target.type === 'checkbox' ? e.target.checked : e.target.tagName === 'SELECT' ? e.target.value : +e.target.value; const p = SIMP.find(q => q[0] === k), o = e.target.parentNode.querySelector('output'); if (o && p) o.textContent = e.target.value + p[5]; save();
+  if (k === 'h' || k === 'mesh') later(rebuild, 500); else if (worker && built) { worker.postMessage({ cmd: 'fabric', fab: D.phys(fab()), sim: simMsg(), gen }); status('Re-draping with the new settings…', 'run'); } });
 $('#drOpts').addEventListener('input', e => { if (e.target.dataset.x === 'pucker') { S.pucker = +e.target.value; e.target.parentNode.querySelector('output').textContent = S.pucker + '%'; save(); if (worker && built) worker.postMessage({ cmd: 'pucker', a: S.pucker / 100, gen }); return; } const tk = e.target.dataset.t; if (tk) { trims()[tk] = e.target.type === 'checkbox' ? e.target.checked : e.target.value; save(); trimLook(); return; } const k = e.target.dataset.o; if (!k) return; const v = e.target.type === 'range' ? +e.target.value : e.target.value; S.opts[k] = v; const o = e.target.parentNode.querySelector('output'); if (o) o.textContent = outTxt(k, v); save(); if (e.target.tagName === 'SELECT') { renderControls(); rebuild(); } else later(rebuild); });
 $('#drMeas').addEventListener('input', e => { const k = e.target.dataset.m; if (!k || !(+e.target.value > 0)) return; S.meas[k] = Math.round(fromU(+e.target.value) * 10) / 10; save(); later(rebuild, 600); });
 $('#drPose').addEventListener('input', e => { const k = e.target.dataset.pose; if (!k) return; S.pose = S.pose || {}; S.pose[k] = +e.target.value; e.target.parentNode.querySelector('output').textContent = e.target.value + '°'; save(); later(rebuild, 700); });
@@ -291,6 +300,7 @@ $('#drPause').addEventListener('click', e => { if (!worker) return; paused = !pa
 $('#drViews').addEventListener('click', e => { const v = e.target.dataset.v; if (v) setView(v, true); });
 $('#drFit').addEventListener('click', e => { const f = e.target.dataset.f; if (!f) return; S.fit = f; save(); $$('#drFit button').forEach(b => b.setAttribute('aria-pressed', b.dataset.f === f)); paintFit(); });
 $('#drBody').addEventListener('change', e => { S.bodyOn = e.target.checked; save(); bodyGroup.visible = S.bodyOn; dirty = true; });
+$('#drWire').addEventListener('change', e => { S.wire = e.target.checked; save(); if (wireMesh) wireMesh.visible = S.wire; dirty = true; });
 $('#drSeams').addEventListener('change', e => { S.seamsOn = e.target.checked; save(); if (seamMesh) seamMesh.visible = S.seamsOn; dirty = true; });
 document.addEventListener('click', e => { const d = $('#drShow'); if (d.open && !d.contains(e.target)) d.open = false; });
 function sides() { const r = $('#drRoot'); r.classList.toggle('nol', !!S.hideL); r.classList.toggle('nor', !!S.hideR); $('#drHideL').setAttribute('aria-pressed', !!S.hideL); $('#drHideR').setAttribute('aria-pressed', !!S.hideR); $('#drHideL').title = (S.hideL ? 'Show' : 'Hide') + ' the left panel'; $('#drHideR').title = (S.hideR ? 'Show' : 'Hide') + ' the right panel'; }
@@ -496,7 +506,7 @@ function drawFabPrev() { // a small swatch of the fabric in the current colourwa
   g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1;
   const gr = g.createLinearGradient(0, 0, W, W); gr.addColorStop(0, 'rgba(255,255,255,' + (.08 + (+f.sheen || 0) * .35) + ')'); gr.addColorStop(.5, 'rgba(255,255,255,0)'); gr.addColorStop(1, 'rgba(0,0,0,.12)'); g.fillStyle = gr; g.fillRect(0, 0, W, W);
 }
-let PS = {}, pins = [], tackA = null, tackLines = [];
+let wireMesh = null, PS = {}, pins = [], tackA = null, tackLines = [];
 let garMesh = null, seamMesh = null, seamMat = null, posAttr = null, colAttr = null, lastGap = null, lastStrain = null, panelOf = null, selPanel = -1, lastMesh = null;
 function buildGarment(d) {
   if (garMesh) { scene.remove(garMesh); garMesh.geometry.dispose(); }
@@ -512,6 +522,9 @@ function buildGarment(d) {
   const sg = new THREE.BufferGeometry(); sg.setAttribute('position', posAttr); sg.setIndex(li);
   seamMat = seamMat || new THREE.LineBasicMaterial({ color: '#333' });
   seamMesh = new THREE.LineSegments(sg, seamMat); seamMesh.visible = S.seamsOn; scene.add(seamMesh);
+  if (wireMesh) { scene.remove(wireMesh); wireMesh.geometry.dispose(); }
+  { const seen = new Set(), li = [], quad = simset().mesh === 'quad', T = d.tri, U = d.uv; for (let t = 0; t < T.length; t += 3) for (let e = 0; e < 3; e++) { const a = T[t + e], b = T[t + (e + 1) % 3], k = a < b ? a * 1e6 + b : b * 1e6 + a; if (seen.has(k)) continue; seen.add(k); if (quad && Math.abs(U[2 * a] - U[2 * b]) > .25 && Math.abs(U[2 * a + 1] - U[2 * b + 1]) > .25) continue; li.push(a, b); }
+    const wg = new THREE.BufferGeometry(); wg.setAttribute('position', posAttr); wg.setIndex(li); wireMesh = new THREE.LineSegments(wg, new THREE.LineBasicMaterial({ color: '#1f2a44', transparent: true, opacity: .45 })); wireMesh.visible = !!S.wire; wireMesh.frustumCulled = false; scene.add(wireMesh); }
   lastGap = lastStrain = null; applyMaterial(); buildTrims(d); drawMarks();
 }
 /* ---------- trims: buttons, buttonholes, zip teeth and topstitching, riding on the cloth ---------- */
@@ -664,7 +677,7 @@ function rebuild() {
   gen++; built = false; paused = false; $('#drPause').textContent = 'Pause';
   const m = baseMeas(), opts = Object.assign(baseOpts(), S.opts);
   status(lastBody ? 'Cutting and sewing the pieces…' : 'Loading the avatar…', 'run');
-  worker.postMessage({ cmd: 'build', gen, style: S.style, gender: S.gender, body: S.body, pose: S.pose || {}, size: S.size, height: +(S.meas || {}).height || 0, m, opts, fabric: S.fabric, fab: D.phys(fab()), h: { fast: 3, std: 2.3, fine: 1.8 }[S.quality] || 2.3 });
+  worker.postMessage({ cmd: 'build', gen, style: S.style, gender: S.gender, body: S.body, pose: S.pose || {}, size: S.size, height: +(S.meas || {}).height || 0, m, opts, fabric: S.fabric, fab: D.phys(fab()), sim: simMsg(), meshType: simset().mesh, h: simset().h });
 }
 function onMsg(e) {
   const d = e.data; if (d.gen !== gen) return;

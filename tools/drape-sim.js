@@ -729,8 +729,8 @@
       });
       // interior points on a triangular grid
       var minx = 1e9, maxx = -1e9, miny = 1e9, maxy = -1e9; B.forEach(function (q) { minx = Math.min(minx, q[0]); maxx = Math.max(maxx, q[0]); miny = Math.min(miny, q[1]); maxy = Math.max(maxy, q[1]); });
-      var pts = B.slice(), dy = h * .866, row = 0;
-      for (var y = miny + dy * .5; y < maxy; y += dy, row++) for (var x = minx + (row % 2 ? h * .5 : 0); x < maxx; x += h) {
+      var quad = G.meshType === 'quad', pts = B.slice(), dy = quad ? h : h * .866, row = 0;
+      for (var y = miny + dy * .5; y < maxy; y += dy, row++) for (var x = minx + (!quad && row % 2 ? h * .5 : quad ? h * .5 : 0); x < maxx; x += h) {
         if (!inPoly(x, y, B)) continue;
         var md = 1e9; for (var i = 0; i < B.length; i++) { var dd = segDist(x, y, B[i], B[(i + 1) % B.length]); if (dd < md) md = dd; if (md < h * .55) break; }
         if (md >= h * .55) pts.push([x, y]);
@@ -880,7 +880,7 @@
     this.EA = EA;
     this.E = new Float32Array(E); this.E0 = new Float32Array(E); this.B = new Float32Array(Bn); this.BA = new Float32Array(Bn.length / 3).fill(fab.bend); this.userT = 0; this.S = M.seams; this.Tt = M.teth ? M.teth.slice() : new Float32Array(0);
     for (i = 0; i < this.Tt.length; i += 3) { var ta0 = 3 * this.Tt[i], tb0 = 3 * this.Tt[i + 1]; this.Tt[i + 2] = Math.max(this.Tt[i + 2], Math.hypot(M.x[ta0] - M.x[tb0], M.x[ta0 + 1] - M.x[tb0 + 1], M.x[ta0 + 2] - M.x[tb0 + 2])); } /* never pull tighter than where the piece starts */ this.rings = M.rings || [];
-    this.t = 0; this.sub = 14; this.th = Math.min(.6, .27 + fab.thick * .03); this.settled = false; this.calm = 0; this.tWake = 0; this.grip = new Uint8Array(n); (M.rings || []).forEach(function (rg) { rg.ids.forEach(function (k) { this.grip[k] = 1; }, this); }, this);
+    var SO = (M.sim || {}); this.t = 0; this.sub = Math.max(4, Math.min(40, +SO.sub || 14)); this.th = SO.th > 0 ? SO.th : Math.min(.6, .27 + fab.thick * .03); this.selfOn = SO.self !== false; this.grav = SO.grav > 0 ? SO.grav : 981; this.airK = SO.air >= 0 && SO.air !== undefined ? SO.air : 1; this.settled = false; this.calm = 0; this.tWake = 0; this.grip = new Uint8Array(n); (M.rings || []).forEach(function (rg) { rg.ids.forEach(function (k) { this.grip[k] = 1; }, this); }, this);
     // self-collision: points sewn together (same group) or close on the same flat piece never push each other apart
     var grp = new Int32Array(n); for (i = 0; i < n; i++) grp[i] = i;
     function root(a) { while (grp[a] !== a) { grp[a] = grp[grp[a]]; a = grp[a]; } return a; }
@@ -897,9 +897,9 @@
     var E = this.E, Bn = this.B, S = this.S, body = this.body, th = this.th, nrm = [0, 0, 0], nrm2 = [0, 0, 0];
     var EA = this.EA, idt2 = 1 / (dt * dt), aB = fab.bend * idt2, mu = fab.fric, i, j;
     this.normals();
-    var nr = this.nrm, air = Math.exp(-260 / fab.gsm * dt), G = this.grab;
+    var nr = this.nrm, air = Math.exp(-260 * this.airK / fab.gsm * dt), G = this.grab;
     for (var s = 0; s < sub; s++) {
-      var tt = this.t, gScale = tt < .7 ? 0 : Math.min(1, (tt - .7) / .5), g = -981 * gScale * dt, rest = Math.max(0, Math.min(1, (tt - this.tWake - (this.tWake ? 1.5 : 2.5)) / 3)), damp = tt < .7 ? .985 : this.grab || this.pinned ? .997 : .9985 - .0075 * rest; // settle: more damping as the drape comes to rest
+      var tt = this.t, gScale = tt < .7 ? 0 : Math.min(1, (tt - .7) / .5), g = -this.grav * gScale * dt, rest = Math.max(0, Math.min(1, (tt - this.tWake - (this.tWake ? 1.5 : 2.5)) / 3)), damp = tt < .7 ? .985 : this.grab || this.pinned ? .997 : .9985 - .0075 * rest; // settle: more damping as the drape comes to rest
       var sewMax = tt < .7 ? .25 : 1.5;
       for (i = 0; i < n; i++) { var i3 = 3 * i; p[i3] = x[i3]; p[i3 + 1] = x[i3 + 1]; p[i3 + 2] = x[i3 + 2]; if (!w[i]) continue;
         v[i3 + 1] += g; v[i3] *= damp; v[i3 + 1] *= damp; v[i3 + 2] *= damp;
@@ -942,7 +942,7 @@
         if (circ > rg.len * 1.01) { var sc = circ > rg.len * 1.3 ? Math.max(.985, rg.len * 1.01 / circ) : rg.len * 1.01 / circ;
           for (q = 0; q < ids.length; q++) { var qi = 3 * ids[q]; if (!w[ids[q]]) continue; x[qi] = cx0 + (x[qi] - cx0) * sc; x[qi + 2] = cz0 + (x[qi + 2] - cz0) * sc; if (rg.tilt) x[qi + 1] = cy0 + (x[qi + 1] - cy0) * sc; } }
       }
-      if (s % 3 === 0 && tt > 1.1) this.selfCollide();
+      if (this.selfOn && s % 3 === 0 && tt > 1.1) this.selfCollide();
       // body
       for (i = 0; i < n; i++) {
         var k3 = 3 * i;
