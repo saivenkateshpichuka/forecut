@@ -80,3 +80,19 @@ test('BOM: fabric from cut areas (fold pieces doubled), trims counted, zipper le
   near(fab.qty, +(area / (145 * .8) / 100).toFixed(2), .011); assert.equal(B.find(r => r.kind === 'Button').qty, 2); assert.match(B.find(r => r.kind === 'Zipper').desc, /13"/);
   near(C.rangeLen(a, { seg: 1, a: 10, b: 30 }), 20); near(C.rangeLen(a, { seg: 1, a: 0, b: null }), 70);
 });
+test('slash and spread: parallel adds a strip, pivot opens a wedge; pleats add their intake and mark lines', () => {
+  const r = C.rect(0, 0, 20, 30), A0 = C.area(r);
+  const par = C.slash(r, { seg: 0, t: .5 }, { seg: 2, t: .5 }, { mode: 'parallel', amt: 4 }); const p1 = JSON.parse(JSON.stringify(r)); C.applyReshape(p1, par); near(C.area(p1), A0 + 4 * 30, .01); assert.equal(C.validate(p1).length, 0);
+  const piv = C.slash(r, { seg: 0, t: .5 }, { seg: 2, t: .5 }, { mode: 'pivot', amt: 6, hinge: 'first' }); const p2 = JSON.parse(JSON.stringify(r)); C.applyReshape(p2, piv); near(C.area(p2), A0 + 6 * 30 / 2, 1.5); assert.equal(C.validate(p2).length, 0);
+  const pl = C.pleat(r, { seg: 0, t: .3 }, { seg: 2, t: .7 }, { type: 'box', depth: 2 }); near(pl.intake, 8); assert.equal(pl.lines.length, 3);
+  const p3 = JSON.parse(JSON.stringify(r)); p3.hems = [2]; C.applyReshape(p3, pl); assert.equal(p3.hems.length, 2); // the hem stays a hem on both sides of the pleat
+});
+test('darts: added into the edge, legs equal, transfer keeps the closed shape', () => {
+  const r = C.rect(0, 0, 40, 30), res = C.addDart(r, 2, 20, [20, 18], 3); const p = JSON.parse(JSON.stringify(r)); C.applyReshape(p, res); p.darts.push(res.dart);
+  const I = C.dartInfo(p, res.dart); near(I.width, 3, 1e-6); near(I.leg1, I.leg2, 1e-6); near(I.length, 12, 1e-6);
+  const perim = pc => { let t = 0; for (let k = 0; k < C.segCount(pc); k++) t += C.segLen(pc, k); return t; }, before = perim(p) - I.leg1 - I.leg2;
+  const mv = C.moveDart(p, res.dart, 1, .4); assert.ok(!mv.err, mv.err); const q = JSON.parse(JSON.stringify(p)); C.applyReshape(q, mv);
+  const I2 = C.dartInfo(q, mv.dart); assert.ok(I2); near(I2.angle, I.angle, 1e-6); near(perim(q) - I2.leg1 - I2.leg2, before, 1e-6);
+  const f = C.fillDart(q, mv.dart); const z = JSON.parse(JSON.stringify(q)); C.applyReshape(z, f); assert.equal(z.nodes.length, q.nodes.length - 1);
+  assert.equal(C.dartFold(p, res.dart).length, 3);
+});

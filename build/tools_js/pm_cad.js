@@ -362,6 +362,97 @@
     return rows;
   };
 
+  /* ---------- reshaping operations that rebuild the outline: darts, dart transfer, slash and spread, pleats ----------
+     Edge settings (seam allowance overrides, hems, fold) and notches are remembered as points before the change and
+     put back on whichever new edge they land on, so they survive the rebuild. */
+  C.nearestSeg = function (pc, p) { var best = null; for (var s = 0; s < C.segCount(pc); s++) { var pts = C.segPts(pc, s, .1), acc = 0; for (var j = 1; j < pts.length; j++) { var a = pts[j - 1], b = pts[j], vx = b[0] - a[0], vy = b[1] - a[1], LL = vx * vx + vy * vy, L = Math.sqrt(LL), t = LL ? Math.max(0, Math.min(1, ((p[0] - a[0]) * vx + (p[1] - a[1]) * vy) / LL)) : 0, d = Math.hypot(a[0] + vx * t - p[0], a[1] + vy * t - p[1]); if (!best || d < best.d) best = { seg: s, d: d, s: acc + L * t }; acc += L; } } return best; };
+  C.anchors = function (pc) {
+    var A = { segs: [], notches: [] };
+    for (var k = 0; k < C.segCount(pc); k++) { var L = C.segLen(pc, k); [.1, .5, .9].forEach(function (f) { A.segs.push({ k: k, s: L * f, mid: C.pointAt(pc, k, C.tAt(pc, k, L * f)), sa: pc.sa.edges[k], hem: pc.hems.indexOf(k) >= 0, fold: pc.fold === k && f === .5 }); }); }
+    pc.notches.forEach(function (nt) { if (nt.seg >= C.segCount(pc)) return; var r = C.notchPos(pc, nt); A.notches.push({ nt: nt, p: r.p, k: nt.seg, s: r.s }); });
+    return A;
+  };
+  C.reattach = function (pc, A, map) {
+    var e = {}, hems = [], fold = -1;
+    A.segs.forEach(function (a) { var p = map(a.mid, a.k, a.s), ne = C.nearestSeg(pc, p); if (!ne || ne.d > .3) return; if (a.sa != null) e[ne.seg] = a.sa; if (a.hem && hems.indexOf(ne.seg) < 0) hems.push(ne.seg); if (a.fold) fold = ne.seg; });
+    pc.sa.edges = e; pc.hems = hems; pc.fold = fold;
+    pc.notches = A.notches.map(function (n) { var p = map(n.p, n.k, n.s), ne = C.nearestSeg(pc, p); if (!ne || ne.d > .3) return null; var nt = JSON.parse(JSON.stringify(n.nt)); nt.seg = ne.seg; nt.mode = 'dist'; nt.from = 'start'; nt.v = +ne.s.toFixed(3); return nt; }).filter(Boolean);
+  };
+  /* index of a node at (seg, t): an existing node when within 0.5 mm, otherwise a new one made by splitting */
+  function nodeAt(pc, seg, t) { var n = pc.nodes.length, L = C.segLen(pc, seg), s = C.arc(pc, seg, t); if (s < .05) return { i: seg, split: false }; if (L - s < .05) return { i: (seg + 1) % n, split: false }; C.splitSeg(pc, seg, t); return { i: seg + 1, split: true }; }
+  /* split a (cloned) outline at two outline points; A runs n1 -> n2 forward, B runs n2 -> n1 forward */
+  function splitOutline(w, a, b) {
+    var first = a.seg > b.seg || (a.seg === b.seg && a.t > b.t) ? b : a, second = first === a ? b : a;
+    var r2 = nodeAt(w, second.seg, second.t), n2 = w.nodes[r2.i], t1 = first.seg === second.seg && r2.split ? first.t / second.t : first.t, r1 = nodeAt(w, first.seg, t1), n1 = w.nodes[r1.i];
+    if (first !== a) { var tmp = n1; n1 = n2; n2 = tmp; }
+    var N = w.nodes, i1 = N.indexOf(n1), i2 = N.indexOf(n2), A = [], B = [], i; if (i1 === i2) return null;
+    for (i = i1; ; i = (i + 1) % N.length) { A.push(N[i]); if (i === i2) break; } for (i = i2; ; i = (i + 1) % N.length) { B.push(N[i]); if (i === i1) break; }
+    return { A: A, B: B, n1: n1, n2: n2 };
+  }
+  function cpNode(nd, m, fresh) { var c = JSON.parse(JSON.stringify(nd)); if (fresh) c.id = uid('p'); if (m) { var q = ap(m, [c.x, c.y]); c.x = q[0]; c.y = q[1]; c.h1 = av(m, c.h1); c.h2 = av(m, c.h2); } return c; }
+  function centroid(nodes) { var x = 0, y = 0; nodes.forEach(function (n) { x += n.x; y += n.y; }); return [x / nodes.length, y / nodes.length]; }
+  /* slash along the line between two outline points and spread: 'parallel' moves the far side straight out, 'pivot' turns it about one end */
+  C.slash = function (pc, a, b, o) {
+    var w = JSON.parse(JSON.stringify(pc)), r = splitOutline(w, a, b); if (!r) return { err: 'Pick two different points on the outline.' };
+    var P1 = [r.n1.x, r.n1.y], P2 = [r.n2.x, r.n2.y], dir = nrm(sub(P2, P1)), nor = [-dir[1], dir[0]], cb = centroid(r.B.slice(1, -1).length ? r.B.slice(1, -1) : r.B), sg = Math.sign((cb[0] - P1[0]) * nor[0] + (cb[1] - P1[1]) * nor[1]) || 1; nor = [nor[0] * sg, nor[1] * sg];
+    var amt = +o.amt || 0, m, hingeFirst = o.hinge !== 'second';
+    if (o.mode === 'pivot') { var hg = hingeFirst ? P1 : P2, ot = hingeFirst ? P2 : P1, R = dist(hg, ot); if (amt >= 2 * R) return { err: 'The spread is wider than the slash line is long.' }; var ang = 2 * Math.asin(amt / (2 * R)) * 180 / Math.PI; m = C.M.rot(ang, hg[0], hg[1]); var qq = ap(m, ot); if ((qq[0] - ot[0]) * nor[0] + (qq[1] - ot[1]) * nor[1] < 0) m = C.M.rot(-ang, hg[0], hg[1]); }
+    else m = C.M.tr(nor[0] * amt, nor[1] * amt);
+    var A2 = r.A.map(function (n) { return cpNode(n); }), B2 = r.B.map(function (n, i) { return cpNode(n, m, i === 0 || i === r.B.length - 1); });
+    A2[0].h1 = null; A2[A2.length - 1].h2 = null; B2[0].h1 = null; B2[B2.length - 1].h2 = null; A2[0].smooth = A2[A2.length - 1].smooth = B2[0].smooth = B2[B2.length - 1].smooth = false;
+    if (o.mode === 'pivot') { if (hingeFirst) { A2[0].h1 = r.B[r.B.length - 1].h1 ? av(m, r.B[r.B.length - 1].h1) : null; B2.pop(); } else { A2[A2.length - 1].h2 = B2[0].h2; B2.shift(); } }
+    var side = function (p) { return (p[0] - P1[0]) * nor[0] + (p[1] - P1[1]) * nor[1] > 1e-6; };
+    return { nodes: A2.concat(B2), map: function (p) { return side(p) ? ap(m, p) : p; }, P1: P1, P2: P2, nor: nor, m: m };
+  };
+  C.applyReshape = function (pc, res) { var A = C.anchors(pc); pc.nodes = res.nodes; C.reattach(pc, A, res.map);
+    pc.internals.forEach(function (it) { if (it.pts) it.pts = it.pts.map(function (p) { return res.map(p, -1); }); if (it.c) it.c = res.map(it.c, -1); });
+    if (pc.grain && res.moveGrain) { pc.grain.a = res.map(pc.grain.a, -1); pc.grain.b = res.map(pc.grain.b, -1); } };
+  /* pleats: spread parallel by the pleat intake and mark the fold and placement lines */
+  C.pleat = function (pc, a, b, o) {
+    var d = +o.depth || 0, type = o.type || 'knife', intake = type === 'knife' ? 2 * d : 4 * d, res = C.slash(pc, a, b, { mode: 'parallel', amt: intake }); if (res.err) return res;
+    var L = function (k) { return [[res.P1[0] + res.nor[0] * k, res.P1[1] + res.nor[1] * k], [res.P2[0] + res.nor[0] * k, res.P2[1] + res.nor[1] * k]]; }, lines = [], mk = function (k, purpose, label) { lines.push({ id: uid('in'), kind: 'line', pts: L(k), purpose: purpose, style: purpose === 'fold' ? 'solid' : 'dashed', label: label, visible: true, pleat: 1 }); };
+    if (type === 'knife') { var fl = o.flip ? 0 : intake, pl = o.flip ? intake : 0; mk(fl, 'fold', 'Pleat fold'); mk(pl, 'placement', 'Pleat placement'); mk(d, 'guide', 'Pleat inside fold (' + (o.flip ? 'fold towards the other side' : 'fold towards the placement line') + ')'); }
+    else { mk(0, 'fold', type === 'box' ? 'Box pleat fold' : 'Inverted pleat fold'); mk(intake, 'fold', type === 'box' ? 'Box pleat fold' : 'Inverted pleat fold'); mk(2 * d, 'placement', 'Pleat centre: bring both folds here'); }
+    res.lines = lines; res.intake = intake; return res;
+  };
+  /* darts cut into the outline: a V from the edge to the apex, with the legs as two new edges */
+  C.addDart = function (pc, seg, s, apex, width) {
+    var w = JSON.parse(JSON.stringify(pc)), L = C.segLen(w, seg); if (!(width > 0) || width > L - .4) return { err: 'The dart is wider than the edge.' };
+    var s0 = Math.max(.2, s - width / 2), s1 = Math.min(L - .2, s0 + width); s0 = s1 - width;
+    var t0 = C.tAt(w, seg, s0), t1 = C.tAt(w, seg, s1), r1 = nodeAt(w, seg, t1), nb = w.nodes[r1.i], r0 = nodeAt(w, seg, r1.split ? t0 / t1 : t0), na = w.nodes[r0.i];
+    var ap2 = node(apex[0], apex[1]); na.h2 = null; nb.h1 = null; na.smooth = nb.smooth = false;
+    w.nodes.splice(w.nodes.indexOf(na) + 1, 0, ap2);
+    var nodes = w.nodes.map(function (n) { return n; });
+    return { nodes: nodes, map: function (p) { return p; }, dart: { id: uid('dt'), kind: 'outline', l1: na.id, apex: ap2.id, l2: nb.id, drill: true } };
+  };
+  function node(x, y) { return C.node(x, y); }
+  C.dartInfo = function (pc, d) { if (d.kind !== 'outline') return null; var N = pc.nodes, ids = N.map(function (n) { return n.id; }), i1 = ids.indexOf(d.l1), ia = ids.indexOf(d.apex), i2 = ids.indexOf(d.l2); if (i1 < 0 || ia < 0 || i2 < 0) return null; var n = N.length; if ((i1 + 1) % n !== ia || (ia + 1) % n !== i2) return null;
+    var A = N[ia], P1 = N[i1], P2 = N[i2], l1 = dist([P1.x, P1.y], [A.x, A.y]), l2 = dist([P2.x, P2.y], [A.x, A.y]), mid = [(P1.x + P2.x) / 2, (P1.y + P2.y) / 2], ang = Math.acos(Math.max(-1, Math.min(1, ((P1.x - A.x) * (P2.x - A.x) + (P1.y - A.y) * (P2.y - A.y)) / (l1 * l2 || 1)))) * 180 / Math.PI;
+    return { i1: i1, ia: ia, i2: i2, apex: [A.x, A.y], p1: [P1.x, P1.y], p2: [P2.x, P2.y], leg1: l1, leg2: l2, width: dist([P1.x, P1.y], [P2.x, P2.y]), length: dist(mid, [A.x, A.y]), mid: mid, angle: ang }; };
+  /* folding preview: the edge after the dart turned about the apex, so the seamline can be trued across the closed dart */
+  C.dartFold = function (pc, d) { var I = C.dartInfo(pc, d); if (!I) return null; var N = pc.nodes, n = N.length, a1 = Math.atan2(I.p1[1] - I.apex[1], I.p1[0] - I.apex[0]), a2 = Math.atan2(I.p2[1] - I.apex[1], I.p2[0] - I.apex[0]), m = C.M.rot((a1 - a2) * 180 / Math.PI, I.apex[0], I.apex[1]), prev = N[(I.i1 - 1 + n) % n], next = N[(I.i2 + 1) % n];
+    return [[prev.x, prev.y], I.p1, ap(m, [next.x, next.y])]; };
+  /* move (transfer) a dart to another point on the outline: the part between the old and new positions turns about the apex */
+  C.moveDart = function (pc, d, seg, t) {
+    var I = C.dartInfo(pc, d); if (!I) return { err: 'This dart was changed and can no longer be moved. Remove it and add it again.' };
+    var w = JSON.parse(JSON.stringify(pc)), A0 = C.anchors(pc), segN = seg, sN = C.arc(pc, seg, t);
+    if (seg === I.i1 || seg === I.ia) return { err: 'Pick a point on the outline away from the dart.' };
+    var r = nodeAt(w, seg, t), Nn = w.nodes[r.i], N = w.nodes, ids = N.map(function (n) { return n.id; }), i1 = ids.indexOf(d.l1), ia = ids.indexOf(d.apex), i2 = ids.indexOf(d.l2), iN = N.indexOf(Nn), n = N.length;
+    if (iN === i1 || iN === ia || iN === i2) return { err: 'Pick a point on the outline away from the dart.' };
+    var a1 = Math.atan2(I.p1[1] - I.apex[1], I.p1[0] - I.apex[0]), a2 = Math.atan2(I.p2[1] - I.apex[1], I.p2[0] - I.apex[0]), m = C.M.rot((a1 - a2) * 180 / Math.PI, I.apex[0], I.apex[1]), out = [], k, i;
+    var first = cpNode(N[i1]); first.h2 = N[i2].h2 ? av(m, N[i2].h2) : null; out.push(first);                // the old legs meet at leg 1
+    for (k = 1; ; k++) { i = (i2 + k) % n; if (i === iN) break; out.push(cpNode(N[i], m)); }                 // the turned part
+    var nr = cpNode(N[iN], m, true); nr.h2 = null; nr.smooth = false; out.push(nr);                              // new leg 1 (turned copy of the new point)
+    var apx = node(I.apex[0], I.apex[1]); out.push(apx);
+    var nn = cpNode(N[iN]); nn.h1 = null; nn.smooth = false; out.push(nn);                                 // new leg 2 (the point where it was)
+    for (k = 1; ; k++) { i = (iN + k) % n; if (i === i1) break; out.push(cpNode(N[i])); }
+    var rot = function (k2, s2) { var x = k2; if (x < 0) return false; var span = (segN - I.i2 + n0) % n0; var off = (x - I.i2 + n0) % n0; return off < span || (off === span && s2 < sN); }, n0 = pc.nodes.length;
+    return { nodes: out, map: function (p, k2, s2) { return rot(k2, s2) ? ap(m, p) : p; }, dart: { id: uid('dt'), kind: 'outline', l1: nr.id, apex: apx.id, l2: nn.id, drill: d.drill !== false }, anchors: A0 };
+  };
+  /* fill a dart in: the apex point goes and the legs' ends are joined straight */
+  C.fillDart = function (pc, d) { var I = C.dartInfo(pc, d); if (!I) return { err: 'This dart was changed; delete its apex point with Edit pattern instead.' }; var nodes = pc.nodes.filter(function (n, i) { return i !== I.ia; }).map(function (n) { return JSON.parse(JSON.stringify(n)); }); return { nodes: nodes, map: function (p) { return p; } }; };
+
+
   /* ---------- seam allowance: the cutting line from the seamline ---------- */
   C.saOf = function (pc, i) { if (i === pc.fold) return 0; if (pc.sa.edges[i] != null) return +pc.sa.edges[i]; return pc.hems.indexOf(i) >= 0 ? +pc.sa.hem : +pc.sa.def; };
   function lineX(p, d, q, e) { var den = d[0] * e[1] - d[1] * e[0]; if (Math.abs(den) < 1e-9) return null; var t = ((q[0] - p[0]) * e[1] - (q[1] - p[1]) * e[0]) / den; return [p[0] + d[0] * t, p[1] + d[1] * t]; }
