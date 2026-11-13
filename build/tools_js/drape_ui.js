@@ -40,7 +40,7 @@ const app = $('#app');
 app.innerHTML = `<div class="dr" id="drRoot">
   <aside class="dr-ctl" aria-label="Garment, avatar, fabric and colourways">
     <div class="dr-tabs" role="tablist">
-      <button type="button" role="tab" data-tab="garment">Garment</button><button type="button" role="tab" data-tab="avatar">Avatar</button><button type="button" role="tab" data-tab="fabric">Fabric</button><button type="button" role="tab" data-tab="colour">Colourways</button>
+      <button type="button" role="tab" data-tab="garment">Garment</button><button type="button" role="tab" data-tab="avatar">Avatar</button><button type="button" role="tab" data-tab="fabric">Fabric</button><button type="button" role="tab" data-tab="colour">Colour</button><button type="button" role="tab" data-tab="graphic">Graphics</button><button type="button" role="tab" data-tab="trim">Trims</button>
     </div>
     <div class="dr-pane" data-pane="garment">
       <label>Style<select id="drStyle"></select></label><div id="drOpts" class="dr-opts"></div>
@@ -61,7 +61,14 @@ app.innerHTML = `<div class="dr" id="drRoot">
       <div id="drProps" class="dr-props"></div>
       <div class="dr-save"><input id="drFabName" maxlength="40" placeholder="Name for your fabric"><button type="button" id="drFabSave">Save as new fabric</button></div>
       <div class="dr-row"><button type="button" class="dr-link" id="drFabReset">Reset properties</button><button type="button" class="dr-link" id="drFabDel" hidden>Delete this fabric</button></div>
+      <h3>Texture maps</h3><div id="drMaps" class="dr-maps"></div><input type="file" id="drMapFile" accept="image/*" hidden>
     </div>
+    <div class="dr-pane" data-pane="graphic" hidden>
+      <p class="dr-note">Add a logo, print or text to any piece. Click the cloth to place it, then size and turn it here.</p>
+      <div class="dr-row"><button type="button" id="drGAdd">Add image</button><button type="button" id="drGText">Add text</button><input type="file" id="drGFile" accept="image/*" hidden></div>
+      <div id="drGList" class="dr-cws"></div><div id="drGEdit" class="dr-props"></div>
+    </div>
+    <div class="dr-pane" data-pane="trim" hidden><div id="drTrimPane"></div></div>
     <div class="dr-pane" data-pane="colour" hidden>
       <div class="dr-cws" id="drCws"></div>
       <div class="dr-row"><button type="button" id="drCwAdd">Add colourway</button><button type="button" class="dr-link" id="drCwDel">Delete</button></div>
@@ -131,6 +138,9 @@ const PRESET = { fast: { h: 3, sub: 8 }, std: { h: 2.3, sub: 14 }, fine: { h: 1.
 const SIMP = [['h', 'Particle distance (mesh density)', 1.2, 5, .1, ' cm', 'Smaller means a finer mesh: more detail in folds, slower'], ['sub', 'Solver steps per frame', 4, 30, 1, '', 'More steps: stiffer, more exact cloth, slower'], ['th', 'Collision thickness', 1, 8, .5, ' mm', 'Gap kept between the cloth and the avatar'], ['grav', 'Gravity', 50, 150, 5, '%', 'Lower lets light fabrics float; higher settles faster'], ['air', 'Air resistance', 0, 2, .1, '×', 'How much the air slows the cloth']];
 function simset() { const q = S.quality in PRESET ? PRESET[S.quality] : {}; return Object.assign({ h: 2.3, sub: 14, th: 3, grav: 100, air: 1, self: true, mesh: 'tri' }, S.simset || {}, S.quality in PRESET ? q : {}); }
 function simMsg() { const z = simset(); return { sub: z.sub, th: S.quality === 'custom' ? z.th / 10 : 0, self: !!z.self, grav: 981 * z.grav / 100, air: z.air }; }
+const MAPS = [['map', 'Base colour'], ['normalMap', 'Normal'], ['roughnessMap', 'Roughness'], ['alphaMap', 'Opacity'], ['displacementMap', 'Displacement']];
+function maps() { return S.maps || (S.maps = {}); }
+function readImg(file, max, png) { return new Promise((res, rej) => { const fr = new FileReader(); fr.onload = () => { const im = new Image(); im.onload = () => { const k = Math.min(1, max / Math.max(im.width, im.height)), c = document.createElement('canvas'); c.width = Math.max(1, Math.round(im.width * k)); c.height = Math.max(1, Math.round(im.height * k)); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); res(c.toDataURL(png ? 'image/png' : 'image/jpeg', .9)); }; im.onerror = rej; im.src = fr.result; }; fr.onerror = rej; fr.readAsDataURL(file); }); }
 function trims() { return S.trims || (S.trims = { btn: 'horn', zip: 'metal', top: true, thread: 'tone' }); }
 
 /* ---------- controls ---------- */
@@ -209,7 +219,7 @@ function renderControls() {
   $('#drShowLines').checked = !!S.showLines; $('#drShowPts').checked = !!S.showPts; $('#drShowJoints').checked = !!S.showJoints;
   const Z = simset();
   $('#drSim').innerHTML = `<label>Mesh<select data-sim="mesh">${opt('tri', 'Triangles', Z.mesh)}${opt('quad', 'Quads', Z.mesh)}</select></label>` + SIMP.map(p => `<label title="${p[6]}">${p[1]} <output>${(+Z[p[0]]).toString()}${p[5]}</output><input type="range" data-sim="${p[0]}" min="${p[2]}" max="${p[3]}" step="${p[4]}" value="${Z[p[0]]}"></label>`).join('') + `<label class="dr-chk"><input type="checkbox" data-sim="self"${Z.self ? ' checked' : ''}> Cloth collides with itself</label><p class="dr-note">${(lastMesh ? lastMesh.verts : 0) ? lastMesh.verts.toLocaleString() + ' particles in this garment. ' : ''}Accuracy presets set the mesh density and steps; change any value for Custom.</p>`;
-  renderFabric(); renderColour();
+  renderFabric(); renderColour(); renderMaps(); renderGraphics(); if (typeof renderTrimPane === 'function') renderTrimPane();
   $$('#drTool button').forEach(b => b.setAttribute('aria-pressed', b.dataset.t === S.tool));
   $$('#drViews button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === view));
   $$('#drFit button').forEach(b => b.setAttribute('aria-pressed', b.dataset.f === S.fit));
@@ -230,6 +240,15 @@ function renderFabric() {
   $('#drFabDel').hidden = !myFabs()[S.fabric];
   drawFabPrev();
 }
+function renderMaps() {
+  const M = maps(); $('#drMaps').innerHTML = MAPS.map(([k, l]) => { const m = M[k]; return `<div class="dr-map"><span class="dr-mthumb"${m ? ` style="background-image:url(${m.src})"` : ''}></span><div><b>${l}</b>${m ? `<label>Tile <output>${L(m.tile)}</output><input type="range" data-mk="${k}" data-mp="tile" min="1" max="60" step="0.5" value="${m.tile}"></label><label>Turn <output>${m.rot}°</output><input type="range" data-mk="${k}" data-mp="rot" min="0" max="180" step="5" value="${m.rot}"></label><label>Strength <output>${m.str}</output><input type="range" data-mk="${k}" data-mp="str" min="0" max="${k === 'displacementMap' ? 1 : 2}" step="0.05" value="${m.str}"></label><button type="button" class="dr-link" data-mdel="${k}">Remove</button>` : `<button type="button" class="dr-link" data-madd="${k}">Add map…</button>`}</div></div>`; }).join('') + '<p class="dr-note">Maps repeat at the tile size you set, in real cm on the pattern. A base colour map replaces the colourway colour; normal, roughness, opacity and displacement change the surface.</p>';
+}
+let mapAdd = null;
+$('#drMaps').addEventListener('click', e => { const a = e.target.dataset.madd, d = e.target.dataset.mdel; if (a) { mapAdd = a; $('#drMapFile').click(); } if (d) { delete maps()[d]; save(); renderMaps(); applyMaterial(); } });
+$('#drMapFile').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (!f || !mapAdd) return; readImg(f, 1024, /normal|alpha/.test(mapAdd)).then(src => { maps()[mapAdd] = { src, tile: 10, rot: 0, str: mapAdd === 'displacementMap' ? .2 : 1 }; try { save(); } catch (er) {} renderMaps(); applyMaterial(); }).catch(() => status('Could not read that image', 'err')); });
+$('#drMaps').addEventListener('input', e => { const k = e.target.dataset.mk, q = e.target.dataset.mp; if (!k) return; maps()[k][q] = +e.target.value; e.target.parentNode.querySelector('output').textContent = q === 'tile' ? L(+e.target.value) : q === 'rot' ? e.target.value + '°' : e.target.value; save(); applyMaterial(); });
+const userTex = {};
+function userMap(k) { const m = maps()[k]; if (!m) return null; let u = userTex[k]; if (!u || u.src !== m.src) { if (u) u.t.dispose(); const t = new THREE.TextureLoader().load(m.src, () => { dirty = true; }); t.wrapS = t.wrapT = THREE.RepeatWrapping; if (k === 'map') t.colorSpace = THREE.SRGBColorSpace; u = userTex[k] = { src: m.src, t }; } u.t.repeat.set(1 / m.tile, 1 / m.tile); u.t.rotation = m.rot * Math.PI / 180; u.t.center.set(.5, .5); return u.t; }
 function fmtP(p, v) { v = +v || 0; return (p[4] < 1 ? (+v.toFixed(2)).toString() : Math.round(v)) + p[5]; }
 function renderColour() {
   const c = cw();
@@ -491,6 +510,12 @@ function applyMaterial() {
   if (!pile) { m.roughness = Math.max(.18, m.roughness * (1 - .65 * sh)); m.specularIntensity = .5 + sh * .5; } else m.specularIntensity = .3;
   const op = Math.max(.3, Math.min(1, +f.op || 1)); m.alphaMap = k === 'net' && plain ? netAlpha() : null; m.alphaTest = m.alphaMap ? .5 : 0;
   m.transparent = op < .99 && plain; m.opacity = m.transparent ? op : 1; m.depthWrite = !m.transparent;
+  if (plain) { const M = maps(), bm = userMap('map'); if (bm) { m.map = bm; m.color.set('#ffffff'); }
+    const nm = userMap('normalMap'); m.normalMap = nm; if (nm) m.normalScale.set(M.normalMap.str, M.normalMap.str);
+    const rm = userMap('roughnessMap'); m.roughnessMap = rm; if (rm) m.roughness = Math.min(1, M.roughnessMap.str);
+    const am = userMap('alphaMap'); if (am) { m.alphaMap = am; m.transparent = true; m.opacity = Math.min(1, M.alphaMap.str); m.depthWrite = false; m.alphaTest = 0; }
+    const dm = userMap('displacementMap'); m.displacementMap = dm; m.displacementScale = dm ? M.displacementMap.str : 0; m.displacementBias = dm ? -M.displacementMap.str / 2 : 0;
+  } else { m.normalMap = m.roughnessMap = m.displacementMap = null; }
   m.vertexColors = !plain || selPanel >= 0; m.needsUpdate = true;
   if (seamMat) seamMat.color.set(new THREE.Color(p.c1).multiplyScalar(.55));
   drawFabPrev(); if (typeof trimLook === 'function' && TR) trimLook(); dirty = true;
@@ -522,8 +547,58 @@ function buildGarment(d) {
   if (wireMesh) { scene.remove(wireMesh); wireMesh.geometry.dispose(); }
   { const seen = new Set(), li = [], quad = simset().mesh === 'quad', T = d.tri, U = d.uv; for (let t = 0; t < T.length; t += 3) for (let e = 0; e < 3; e++) { const a = T[t + e], b = T[t + (e + 1) % 3], k = a < b ? a * 1e6 + b : b * 1e6 + a; if (seen.has(k)) continue; seen.add(k); if (quad && Math.abs(U[2 * a] - U[2 * b]) > .25 && Math.abs(U[2 * a + 1] - U[2 * b + 1]) > .25) continue; li.push(a, b); }
     const wg = new THREE.BufferGeometry(); wg.setAttribute('position', posAttr); wg.setIndex(li); wireMesh = new THREE.LineSegments(wg, new THREE.LineBasicMaterial({ color: '#1f2a44', transparent: true, opacity: .45 })); wireMesh.visible = !!S.wire; wireMesh.frustumCulled = false; scene.add(wireMesh); }
-  lastGap = lastStrain = null; applyMaterial(); buildTrims(d); drawMarks();
+  lastGap = lastStrain = null; applyMaterial(); buildTrims(d); drawMarks(); buildGraphics(); renderGraphics();
 }
+/* ---------- graphics on the cloth: a decal mesh sharing the garment's moving points ---------- */
+const SURF = { print: 'Print (matte)', rubber: 'Rubber / puff print', foil: 'Foil', emb: 'Embroidery', flock: 'Flock', patch: 'Woven patch' };
+const gGroup = new THREE.Group(); scene.add(gGroup); let gSel = -1, gPlace = false;
+function gList() { return S.graphics || (S.graphics = []); }
+function gTexture(g) { if (g.kind === 'text') { const c = document.createElement('canvas'), x = c.getContext('2d'), fs = 160; x.font = `${g.bold ? 700 : 500} ${fs}px ${g.font || 'DM Sans'}, sans-serif`; const w = Math.max(10, x.measureText(g.text || 'Text').width); c.width = Math.ceil(w + 60); c.height = fs + 60; x.font = `${g.bold ? 700 : 500} ${fs}px ${g.font || 'DM Sans'}, sans-serif`; x.fillStyle = '#fff'; x.textBaseline = 'middle'; x.textAlign = 'center'; x.fillText(g.text || 'Text', c.width / 2, c.height / 2 + 6); const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.userData = { aspect: c.height / c.width }; return t; }
+  const t = new THREE.TextureLoader().load(g.src, tx => { tx.userData = { aspect: tx.image.height / tx.image.width }; buildGraphics(); }); t.colorSpace = THREE.SRGBColorSpace; return t; }
+const gTex = {};
+function buildGraphics() {
+  gGroup.children.forEach(m => { m.geometry.dispose(); m.material.dispose(); }); gGroup.clear(); if (!lastMesh || !posAttr) return;
+  const d = lastMesh;
+  gList().forEach((g, gi) => {
+    if (g.panel == null || g.panel >= d.panels.length || d.panels[g.panel].name !== g.pname) return;
+    const key = g.kind === 'text' ? 'T' + gi + (g.text || '') + (g.font || '') + (g.bold ? 1 : 0) : g.src; if (!gTex[gi] || gTex[gi].key !== key) { if (gTex[gi]) gTex[gi].t.dispose(); gTex[gi] = { key, t: gTexture(g) }; }
+    const t = gTex[gi].t, asp = (t.userData && t.userData.aspect) || 1, w = g.w, h = w * asp, a = -g.rot * Math.PI / 180, ca = Math.cos(a), sa = Math.sin(a), n = d.uv.length / 2;
+    const uv = new Float32Array(n * 2), idx = []; for (let i = 0; i < n; i++) { if (d.panel[i] !== g.panel) continue; const du = d.uv[2 * i] - g.u, dv = d.uv[2 * i + 1] - g.v, x = (du * ca - dv * sa) / w + .5, y = 1 - ((du * sa + dv * ca) / h + .5); uv[2 * i] = x; uv[2 * i + 1] = y; }
+    for (let k = 0; k < d.tri.length; k += 3) { const A = d.tri[k], B = d.tri[k + 1], C = d.tri[k + 2]; if (d.panel[A] !== g.panel) continue; const xs = [uv[2 * A], uv[2 * B], uv[2 * C]], ys = [uv[2 * A + 1], uv[2 * B + 1], uv[2 * C + 1]]; if (Math.max(...xs) < 0 || Math.min(...xs) > 1 || Math.max(...ys) < 0 || Math.min(...ys) > 1) continue; idx.push(A, B, C); }
+    if (!idx.length) return;
+    const geo = new THREE.BufferGeometry(); geo.setAttribute('position', posAttr); geo.setAttribute('normal', garMesh.geometry.attributes.normal); geo.setAttribute('uv', new THREE.BufferAttribute(uv, 2)); geo.setIndex(idx);
+    t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping;
+    const sf = g.surf || 'print', mat = new THREE.MeshPhysicalMaterial({ map: t, color: g.col || '#ffffff', transparent: true, opacity: g.op == null ? 1 : g.op, alphaTest: .04, depthWrite: false, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4,
+      roughness: { print: .85, rubber: .45, foil: .22, emb: .9, flock: 1, patch: .8 }[sf], metalness: sf === 'foil' ? .95 : 0, sheen: sf === 'flock' ? 1 : sf === 'emb' ? .4 : 0, sheenColor: new THREE.Color(g.col || '#fff'), clearcoat: sf === 'rubber' ? .5 : 0 });
+    if (sf === 'rubber' || sf === 'emb' || sf === 'patch') { mat.bumpMap = sf === 'emb' ? bumpTex('satin') : t; mat.bumpScale = sf === 'rubber' ? 3 : 1.2; }
+    const ms = new THREE.Mesh(geo, mat); ms.frustumCulled = false; ms.renderOrder = 2; ms.castShadow = false; gGroup.add(ms);
+  });
+  dirty = true;
+}
+function renderGraphics() {
+  const L2 = gList(), names = lastMesh ? lastMesh.panels.map((p, i) => [i, p.name]) : [];
+  $('#drGList').innerHTML = L2.map((g, i) => `<button type="button" class="dr-cwc" aria-pressed="${i === gSel}" data-gi="${i}"><i style="background:${g.kind === 'text' ? g.col : '#ddd'} ${g.kind === 'image' ? `url(${g.src}) center/cover` : ''}"></i><span>${esc(g.kind === 'text' ? '“' + (g.text || '') + '”' : g.name || 'Image')}</span></button>`).join('') || '<p class="dr-note">No graphics yet.</p>';
+  const g = L2[gSel]; if (!g) { $('#drGEdit').innerHTML = ''; return; }
+  const sl = (k, l, lo, hi, st, v, u) => `<label>${l} <output>${u === 'cm' ? L(v) : v + (u || '')}</output><input type="range" data-gk="${k}" min="${lo}" max="${hi}" step="${st}" value="${v}"></label>`;
+  $('#drGEdit').innerHTML = (g.kind === 'text' ? `<label>Text<input data-gk="text" value="${esc(g.text || '')}" maxlength="40"></label><label>Font<select data-gk="font">${['DM Sans', 'Georgia', 'Courier New', 'Impact', 'Brush Script MT', 'Arial'].map(f => opt(f, f, g.font || 'DM Sans')).join('')}</select></label><label class="dr-chk"><input type="checkbox" data-gk="bold"${g.bold ? ' checked' : ''}> Bold</label>` : '') +
+    `<label>Piece<select data-gk="panel">${names.map(n => opt(n[0], (n[1].replace(/^F$/, 'Front').replace(/^FR$/, 'Front (right)').replace(/^FL$/, 'Front (left)').replace(/^B$/, 'Back').replace(/^SR$/, 'Sleeve (left)').replace(/^SL$/, 'Sleeve (right)')), g.panel)).join('')}</select></label>` +
+    `<button type="button" class="dr-link" id="drGPlace">${gPlace ? 'Click the cloth to place it…' : 'Place by clicking the cloth'}</button>` +
+    sl('w', 'Size (width)', 1, 60, .5, g.w, 'cm') + sl('rot', 'Rotation', -180, 180, 1, g.rot, '°') + sl('op', 'Opacity', .1, 1, .05, g.op == null ? 1 : g.op) +
+    `<label class="dr-cc">Colour <input type="color" data-gk="col" value="${g.col || '#ffffff'}"></label><label>Surface<select data-gk="surf">${Object.keys(SURF).map(k => opt(k, SURF[k], g.surf || 'print')).join('')}</select></label>` +
+    `<div class="dr-row"><button type="button" class="dr-link" id="drGDup">Duplicate</button><button type="button" class="dr-link" id="drGDel">Delete</button></div>`;
+}
+function newG(o) { const L2 = gList(), pi = lastMesh ? Math.max(0, lastMesh.panels.findIndex(p => /^(F|FR|FL)$/.test(p.name))) : 0, P = lastMesh ? lastMesh.panels[pi] : null; let cu = 0, cv = 20;
+  if (P) { let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; P.segs.forEach(sg => sg.pts.forEach(q => { x0 = Math.min(x0, q[0]); x1 = Math.max(x1, q[0]); y0 = Math.min(y0, q[1]); y1 = Math.max(y1, q[1]); })); cu = P.name === 'FR' ? Math.max(4, (x0 + x1) / 2) : P.name === 'FL' ? Math.min(-4, (x0 + x1) / 2) : 0; cv = y0 + (y1 - y0) * .3; }
+  L2.push(Object.assign({ panel: pi, pname: P ? P.name : 'F', u: cu, v: cv, w: 12, rot: 0, op: 1, col: '#ffffff', surf: 'print' }, o)); gSel = L2.length - 1; try { save(); } catch (e) { status('That image is too large to keep in this browser', 'err'); } renderGraphics(); buildGraphics(); }
+$('#drGAdd').addEventListener('click', () => $('#drGFile').click());
+$('#drGFile').addEventListener('change', e => { const f = e.target.files[0]; e.target.value = ''; if (!f) return; readImg(f, 1024, true).then(src => newG({ kind: 'image', src, name: f.name.replace(/\.[^.]+$/, '').slice(0, 30) })).catch(() => status('Could not read that image', 'err')); });
+$('#drGText').addEventListener('click', () => newG({ kind: 'text', text: 'FORECUT', font: 'DM Sans', bold: true, col: '#1f2a44', w: 14 }));
+$('#drGList').addEventListener('click', e => { const b = e.target.closest('[data-gi]'); if (!b) return; gSel = +b.dataset.gi; renderGraphics(); });
+$('#drGEdit').addEventListener('input', e => { const k = e.target.dataset.gk, g = gList()[gSel]; if (!k || !g) return; let v = e.target.type === 'checkbox' ? e.target.checked : e.target.type === 'range' || k === 'panel' ? +e.target.value : e.target.value;
+  if (k === 'panel') { g.pname = lastMesh.panels[v].name; } g[k] = v; const o = e.target.parentNode.querySelector('output'); if (o) o.textContent = k === 'w' ? L(v) : k === 'rot' ? v + '°' : v; save(); buildGraphics(); if (k === 'text') renderGraphics(); });
+$('#drGEdit').addEventListener('click', e => { const g = gList()[gSel]; if (!g) return; if (e.target.id === 'drGPlace') { gPlace = !gPlace; renderGraphics(); status(gPlace ? 'Click the cloth where the graphic should go' : '', gPlace ? 'run' : ''); }
+  if (e.target.id === 'drGDel') { gList().splice(gSel, 1); delete gTex[gSel]; gSel = -1; save(); renderGraphics(); buildGraphics(); }
+  if (e.target.id === 'drGDup') { const c = JSON.parse(JSON.stringify(g)); c.u += 3; c.v += 3; gList().push(c); gSel = gList().length - 1; save(); renderGraphics(); buildGraphics(); } });
 /* ---------- trims: buttons, buttonholes, zip teeth and topstitching, riding on the cloth ---------- */
 const trimGroup = new THREE.Group(); scene.add(trimGroup);
 let TR = null; // { btn:[{loc, hole, closed}], holes, teeth:[loc...], tops:[[locA, locB]...] }
@@ -552,7 +627,7 @@ const btnMat = new THREE.MeshPhysicalMaterial({ color: '#4a3426', roughness: .45
 const zipMat = new THREE.MeshStandardMaterial({ color: '#b9b9b9', metalness: .85, roughness: .32 }), topMat = new THREE.LineBasicMaterial({ color: '#333' });
 function buildTrims(d) {
   trimGroup.clear(); TR = null; const st = style();
-  if (!d.buttons || (!d.buttons.length && !d.zip && !(d.tops || []).length)) return;
+  if (!d.buttons && !(S.tUser || {}).lines) return;
   const triCache = {}, tris = pi => triCache[pi] || (triCache[pi] = panelTris(d, pi));
   TR = { btn: [], teeth: [], tops: [], vertical: st.gid === 'shirt' || st.gid === 'shirtdress' || st.gid === 'blouse' || st.gid === 'polo' };
   (d.buttons || []).forEach(b => { TR.btn.push({ on: locate(d, tris(b.closed ? b.over : b.under), b.c[0], b.c[1]), hole: b.over !== b.under ? locate(d, tris(b.over), b.c[0], b.c[1]) : null, small: b.small, closed: b.closed }); });
@@ -565,18 +640,7 @@ function buildTrims(d) {
   function resampleE(pts, step) { const out = [pts[0]]; let acc = 0; for (let i = 1; i < pts.length; i++) { const a = pts[i - 1], b = pts[i], L = Math.hypot(b[0] - a[0], b[1] - a[1]); let t = step - acc; while (t <= L) { out.push([a[0] + (b[0] - a[0]) * t / L, a[1] + (b[1] - a[1]) * t / L]); t += step; } acc = (acc + L) % step; } return out; }
   if (d.zip) [[d.zip.p, d.zip.key, 1], [d.zip.q, d.zip.qkey, d.zip.closed ? 0 : 1]].forEach(z => { if (!z[2]) return; const e = edgePts(z[0], z[1]); if (!e) return; resampleE(e, .62).forEach(q => TR.teeth.push(locate(d, tris(z[0]), q[0], q[1]))); });
   if (TR.teeth.length) { TR.zMesh = new THREE.InstancedMesh(toothGeo, zipMat, TR.teeth.length); trimGroup.add(TR.zMesh); const e = edgePts(d.zip.p, d.zip.key); const top = e[0][1] < e[e.length - 1][1] ? e[0] : e[e.length - 1]; TR.pull = locate(d, tris(d.zip.p), top[0], top[1] + 1.2); TR.pMesh = new THREE.Mesh(pullGeo, zipMat); trimGroup.add(TR.pMesh); }
-  (d.tops || []).forEach(([pi, key]) => { // 0.6 cm in from the edge, short stitches
-    const e = edgePts(pi, key); if (!e) return; const outline = []; P[pi].segs.forEach((sg, i) => sg.pts.forEach((q, j) => { if (i && !j) return; outline.push(q); }));
-    const ins = (x, y) => { let c = false; for (let i = 0, j = outline.length - 1; i < outline.length; j = i++) { const a = outline[i], b = outline[j]; if ((a[1] > y) !== (b[1] > y) && x < (b[0] - a[0]) * (y - a[1]) / (b[1] - a[1]) + a[0]) c = !c; } return c; };
-    const pts = resampleE(e, .4);
-    for (let i = 0; i + 1 < pts.length; i += 1) {
-      const a = pts[i], b = pts[i + 1], dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L * .6, ny = dx / L * .6, sg = ins((a[0] + b[0]) / 2 + nx, (a[1] + b[1]) / 2 + ny) ? 1 : -1;
-      const A = [a[0] + nx * sg, a[1] + ny * sg], B = [a[0] + dx * .7 + nx * sg, a[1] + dy * .7 + ny * sg];
-      if (!ins(A[0], A[1]) || !ins(B[0], B[1])) continue;
-      TR.tops.push([locate(d, tris(pi), A[0], A[1]), locate(d, tris(pi), B[0], B[1])]);
-    }
-  });
-  if (TR.tops.length) { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(TR.tops.length * 6), 3)); TR.tMesh = new THREE.LineSegments(g, topMat); TR.tMesh.frustumCulled = false; trimGroup.add(TR.tMesh); }
+  TR.d = d; TR.tris = tris; TR.edgePts = edgePts; TR.resampleE = resampleE; buildStitches(); buildUserTrims(); buildBinds();
   trimLook(); updateTrims();
 }
 const markGroup = new THREE.Group(); scene.add(markGroup); markGroup.renderOrder = 9;
@@ -585,17 +649,158 @@ function drawMarks() { markGroup.clear(); pins.forEach(i => { const m = new THRE
 function updateMarks() { if (!posAttr) return; const a = posAttr.array; markGroup.children.forEach(m => { const i = m.userData.i; m.position.set(a[3 * i], a[3 * i + 1], a[3 * i + 2]); }); dirty = true; }
 function updateTrims() { updateMarks();
   if (!TR || !garMesh || !garMesh.geometry.attributes.normal) return;
-  TR.btn.forEach((b, i) => { if (b.on) { frameAt(b.on, .12, TR.vertical); if (b.small) _m.scale(_s.set(.8, .8, .8)); TR.bMesh.setMatrixAt(i, _m); } if (b.hole && !b.closed) { frameAt(b.hole, .05, TR.vertical); TR.hMesh.setMatrixAt(i, _m); } else { _m.makeScale(0, 0, 0); TR.hMesh.setMatrixAt(i, _m); } });
+  TR.btn.forEach((b, i) => { if (b.on) { frameAt(b.on, .12, TR.vertical); const bs = (trims().bsize || 12) / 12 * (b.small ? .8 : 1) * (b.size ? b.size / 12 : 1); _m.scale(_s.set(bs, bs, bs)); TR.bMesh.setMatrixAt(i, _m); } if (b.hole && !b.closed) { frameAt(b.hole, .05, b.vert != null ? b.vert : TR.vertical); const hs = (trims().bsize || 12) / 12; _m.scale(_s.set(hs, 1, 1)); TR.hMesh.setMatrixAt(i, _m); } else { _m.makeScale(0, 0, 0); TR.hMesh.setMatrixAt(i, _m); } });
   if (TR.bMesh) { TR.bMesh.instanceMatrix.needsUpdate = true; TR.hMesh.instanceMatrix.needsUpdate = true; TR.bMesh.computeBoundingSphere(); TR.hMesh.computeBoundingSphere(); }
   if (TR.zMesh) { TR.teeth.forEach((L, i) => { frameAt(L, .12, false); TR.zMesh.setMatrixAt(i, _m); }); TR.zMesh.instanceMatrix.needsUpdate = true; TR.zMesh.computeBoundingSphere(); if (TR.pull) { frameAt(TR.pull, .35, false); TR.pMesh.matrixAutoUpdate = false; TR.pMesh.matrix.copy(_m); } }
+  updateStitches(); updateBinds();
   if (TR.tMesh) { const a = TR.tMesh.geometry.attributes.position.array; TR.tops.forEach((pr, i) => { at(pr[0], .07); a[6 * i] = _p.x; a[6 * i + 1] = _p.y; a[6 * i + 2] = _p.z; at(pr[1], .07); a[6 * i + 3] = _p.x; a[6 * i + 4] = _p.y; a[6 * i + 5] = _p.z; }); TR.tMesh.geometry.attributes.position.needsUpdate = true; TR.tMesh.geometry.computeBoundingSphere(); }
 }
 function trimLook() {
   const T = trims(), b = BTN[T.btn] || BTN.horn, p = cw();
   btnMat.color.set(T.btn === 'self' ? p.c1 : b[1]); btnMat.roughness = b[2]; btnMat.metalness = T.btn === 'metal' ? .8 : 0; btnMat.clearcoat = T.btn === 'self' || T.btn === 'wood' ? 0 : .6; btnMat.needsUpdate = true;
   zipMat.color.set({ metal: '#bdbdbd', plastic: mixHex(p.c1, '#000000', .25), brass: '#9c7a3c' }[T.zip] || '#bdbdbd'); zipMat.metalness = T.zip === 'plastic' ? 0 : .85; zipMat.roughness = T.zip === 'plastic' ? .5 : .32; zipMat.needsUpdate = true;
-  topMat.color.set(T.thread === 'contrast' ? p.c2 : mixHex(p.c1, '#000000', .35)); if (TR && TR.tMesh) TR.tMesh.visible = !!T.top;
+  if (TR) buildStitches();
   dirty = true;
+}
+/* ---------- trims workshop: topstitching, buttons, buttonholes, zips, binding, piping ---------- */
+const ST_T = { single: 'Single', double: 'Double needle', triple: 'Triple needle', zigzag: 'Zigzag', chain: 'Chain stitch', cover: 'Cover stitch' };
+const TH_T = { matte: 'Matte cotton', shiny: 'Shiny polyester', metal: 'Metallic' };
+function tUser() { const t = S.tUser || (S.tUser = {}); ['lines', 'btns', 'holes', 'zips', 'binds'].forEach(k => { t[k] = t[k] || []; }); return t; }
+function topDef() { const T = trims(); return Object.assign({ type: 'single', len: 3, dist: 6, gap: 6, th: .35, col: '', tex: 'matte' }, T.topDef || {}); }
+const stitchGeo = new THREE.CylinderGeometry(.5, .5, 1, 6, 1), stitchMats = { matte: new THREE.MeshStandardMaterial({ roughness: .85 }), shiny: new THREE.MeshPhysicalMaterial({ roughness: .3, clearcoat: .6 }), metal: new THREE.MeshStandardMaterial({ roughness: .25, metalness: .9 }) };
+function lineSpecs() { // every topstitch line: the garment's own (when topstitching is on) plus the ones added here
+  const d = TR && TR.d; if (!d) return []; const out = [], def = topDef(), p = cw();
+  if (trims().top) (d.tops || []).forEach(([pi, key]) => out.push(Object.assign({}, def, { pi, key, auto: 1 })));
+  tUser().lines.forEach(l => { if (d.panels[l.pi] && d.panels[l.pi].name === l.pname) out.push(l); });
+  out.forEach(l => { l.colour = l.col || (trims().thread === 'contrast' ? p.c2 : mixHex(p.c1, '#000000', .35)); }); return out;
+}
+function buildStitches() {
+  if (!TR || !TR.d) return; (TR.stMeshes || []).forEach(m => { trimGroup.remove(m); m.dispose && m.dispose(); }); TR.stMeshes = []; TR.st = { matte: [], shiny: [], metal: [] };
+  const d = TR.d;
+  lineSpecs().forEach(l => {
+    const e = TR.edgePts(l.pi, l.key); if (!e) return; const outline = []; d.panels[l.pi].segs.forEach((sg, i) => sg.pts.forEach((q, j) => { if (i && !j) return; outline.push(q); }));
+    const ins = (x, y) => { let c = false; for (let i = 0, j = outline.length - 1; i < outline.length; j = i++) { const a = outline[i], b = outline[j]; if ((a[1] > y) !== (b[1] > y) && x < (b[0] - a[0]) * (y - a[1]) / (b[1] - a[1]) + a[0]) c = !c; } return c; };
+    const len = Math.max(.1, l.len / 10), rows = { single: [0], double: [0, 1], triple: [0, 1, 2], zigzag: [0], chain: [0], cover: [0, 1] }[l.type] || [0], pts = TR.resampleE(e, len), list = TR.st[l.tex] || TR.st.matte, colr = new THREE.Color(l.colour);
+    rows.forEach(r => { for (let i = 0; i + 1 < pts.length; i++) {
+      const a = pts[i], b = pts[i + 1], dx = b[0] - a[0], dy = b[1] - a[1], L0 = Math.hypot(dx, dy) || 1, nx = -dy / L0, ny = dx / L0, dd = (l.dist + r * l.gap) / 10, sg = ins((a[0] + b[0]) / 2 + nx * dd, (a[1] + b[1]) / 2 + ny * dd) ? 1 : -1;
+      let A = [a[0] + nx * dd * sg, a[1] + ny * dd * sg], B = [a[0] + dx * (l.type === 'chain' ? .92 : .72) + nx * dd * sg, a[1] + dy * (l.type === 'chain' ? .92 : .72) + ny * dd * sg];
+      if (l.type === 'zigzag') { const z = (l.gap / 20) * (i % 2 ? 1 : -1); A = [A[0] - nx * z * sg, A[1] - ny * z * sg]; B = [a[0] + dx + nx * (dd + z) * sg, a[1] + dy + ny * (dd + z) * sg]; }
+      if (!ins(A[0], A[1]) || !ins(B[0], B[1])) continue;
+      list.push({ A: locate(d, TR.tris(l.pi), A[0], A[1]), B: locate(d, TR.tris(l.pi), B[0], B[1]), th: (l.th || .35) / 10 * (l.type === 'chain' ? 1.4 : 1), c: colr });
+    } });
+  });
+  Object.keys(TR.st).forEach(k => { const L2 = TR.st[k]; if (!L2.length) return; const m = new THREE.InstancedMesh(stitchGeo, stitchMats[k], L2.length); L2.forEach((q, i) => m.setColorAt(i, q.c)); m.frustumCulled = false; m.userData.k = k; trimGroup.add(m); TR.stMeshes.push(m); });
+  updateStitches(); dirty = true;
+}
+const _a = new THREE.Vector3(), _b = new THREE.Vector3(), _y = new THREE.Vector3(0, 1, 0);
+function updateStitches() {
+  if (!TR || !TR.stMeshes || !posAttr) return;
+  TR.stMeshes.forEach(m => { const L2 = TR.st[m.userData.k]; L2.forEach((q, i) => { if (!q.A || !q.B) return; _a.copy(at(q.A, .05 + q.th / 2)); _b.copy(at(q.B, .05 + q.th / 2)); const dir = _b.clone().sub(_a), ln = dir.length() || .01; _q.setFromUnitVectors(_y, dir.multiplyScalar(1 / ln)); _m.compose(_a.add(_b).multiplyScalar(.5), _q, _s.set(q.th, ln, q.th)); m.setMatrixAt(i, _m); }); m.instanceMatrix.needsUpdate = true; });
+}
+function nearestVert(pi, u, v) { const d = lastMesh; let bi = -1, bd = 1e9; for (let i = 0; i < d.panel.length; i++) { if (d.panel[i] !== pi) continue; const q = Math.hypot(d.uv[2 * i] - u, d.uv[2 * i + 1] - v); if (q < bd) { bd = q; bi = i; } } return bi; }
+function buildUserTrims() { // buttons and buttonholes placed by hand
+  const d = TR.d, U = tUser(); if (!U.btns.length && !U.holes.length) return;
+  const ok = x => d.panels[x.pi] && d.panels[x.pi].name === x.pname;
+  U.btns.filter(ok).forEach(b => { const h = b.hole != null && U.holes[b.hole] && ok(U.holes[b.hole]) ? U.holes[b.hole] : null; TR.btn.push({ on: h ? locate(d, TR.tris(h.pi), h.u, h.v) : locate(d, TR.tris(b.pi), b.u, b.v), hole: null, size: b.size || 12, closed: !!h }); });
+  U.holes.filter(ok).forEach(h => { const used = U.btns.some(b => b.hole === U.holes.indexOf(h)); TR.btn.push({ on: null, hole: locate(d, TR.tris(h.pi), h.u, h.v), closed: used, vert: h.dir === 'v' }); });
+  if (TR.bMesh) { trimGroup.remove(TR.bMesh); trimGroup.remove(TR.hMesh); }
+  TR.bMesh = new THREE.InstancedMesh(btnGeo, btnMat, TR.btn.length); TR.bMesh.castShadow = true; trimGroup.add(TR.bMesh); TR.hMesh = new THREE.InstancedMesh(holeGeo, holeMat, TR.btn.length); trimGroup.add(TR.hMesh);
+  TR.btn.forEach((b, i) => { if (!b.on) { _m.makeScale(0, 0, 0); TR.bMesh.setMatrixAt(i, _m); } });
+}
+const ZIPS = { metal: ['Metal teeth', '#bdbdbd', .85], coil: ['Nylon coil', '#2a2a2a', 0], plastic: ['Moulded plastic', '', 0], brass: ['Antique brass', '#9c7a3c', .85] };
+function buildZipsUser() { // teeth along each user zip, both edges
+  const d = TR.d; TR.uz = []; tUser().zips.forEach(z => { if (!d.panels[z.a[0]] || d.panels[z.a[0]].name !== z.an || !d.panels[z.b[0]] || d.panels[z.b[0]].name !== z.bn) return; const L2 = [];
+    [z.a, z.b].forEach(ed => { const e = TR.edgePts(ed[0], ed[1]); if (e) TR.resampleE(e, .55).forEach(q => L2.push(locate(d, TR.tris(ed[0]), q[0], q[1]))); });
+    const m = new THREE.InstancedMesh(toothGeo, new THREE.MeshStandardMaterial({ color: z.teeth === 'plastic' ? z.tape : ZIPS[z.teeth][1], metalness: ZIPS[z.teeth][2], roughness: .35 }), L2.length); m.frustumCulled = false; trimGroup.add(m); TR.uz.push({ m, L: L2 }); });
+}
+/* binding and piping: tubes that follow an edge as the cloth moves */
+function buildBinds() {
+  (TR.bd || []).forEach(o => { trimGroup.remove(o.mesh); o.mesh.geometry.dispose(); }); TR.bd = []; buildZipsUser(); const d = TR.d;
+  tUser().binds.forEach(bd => {
+    if (!d.panels[bd.pi] || d.panels[bd.pi].name !== bd.pname) return; const e = TR.edgePts(bd.pi, bd.key); if (!e) return;
+    const outline = []; d.panels[bd.pi].segs.forEach((sg, i) => sg.pts.forEach((q, j) => { if (i && !j) return; outline.push(q); }));
+    const ins = (x, y) => { let c = false; for (let i = 0, j = outline.length - 1; i < outline.length; j = i++) { const a = outline[i], b = outline[j]; if ((a[1] > y) !== (b[1] > y) && x < (b[0] - a[0]) * (y - a[1]) / (b[1] - a[1]) + a[0]) c = !c; } return c; };
+    const pts = TR.resampleE(e, .5), smp = []; for (let i = 0; i < pts.length; i++) { const a = pts[Math.max(0, i - 1)], b = pts[Math.min(pts.length - 1, i + 1)], dx = b[0] - a[0], dy = b[1] - a[1], L0 = Math.hypot(dx, dy) || 1; let nx = -dy / L0, ny = dx / L0; if (!ins(pts[i][0] + nx * .4, pts[i][1] + ny * .4)) { nx = -nx; ny = -ny; }
+      const pe = [pts[i][0] + nx * .05, pts[i][1] + ny * .05]; smp.push({ e: locate(d, TR.tris(bd.pi), pe[0], pe[1]), i: locate(d, TR.tris(bd.pi), pts[i][0] + nx * .8, pts[i][1] + ny * .8) }); }
+    const M2 = 12, N = smp.length, pos = new Float32Array(N * M2 * 3), idx = []; for (let i = 0; i + 1 < N; i++) for (let k = 0; k < M2; k++) { const a = i * M2 + k, b = i * M2 + (k + 1) % M2, c = a + M2, dd = b + M2; idx.push(a, c, b, b, c, dd); }
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setIndex(idx);
+    const tk = bd.tex || 'plain', mat = new THREE.MeshPhysicalMaterial({ side: THREE.DoubleSide, color: bd.col || cw().c2, roughness: tk === 'satin' ? .3 : tk === 'leather' ? .5 : .85, bumpMap: bumpTex(tk), bumpScale: .4, sheen: tk === 'velvet' ? 1 : 0, sheenColor: new THREE.Color(bd.col || '#fff'), clearcoat: tk === 'leather' ? .3 : 0 });
+    const mesh = new THREE.Mesh(g, mat); mesh.castShadow = true; mesh.frustumCulled = false; trimGroup.add(mesh); TR.bd.push({ mesh, smp, bd, M2 });
+  });
+  updateBinds();
+}
+const _e = new THREE.Vector3(), _in = new THREE.Vector3(), _nn = new THREE.Vector3();
+function updateBinds() {
+  if (!TR || !posAttr) return;
+  (TR.uz || []).forEach(z => { z.L.forEach((Lc, i) => { frameAt(Lc, .12, false); z.m.setMatrixAt(i, _m); }); z.m.instanceMatrix.needsUpdate = true; });
+  (TR.bd || []).forEach(o => { const P = o.mesh.geometry.attributes.position.array, bd = o.bd, w = (bd.w || 12) / 10, th = (bd.th || 1.2) / 10, pip = bd.kind === 'piping', M2 = o.M2;
+    o.smp.forEach((sp, i) => { if (!sp.e || !sp.i) return; _e.copy(at(sp.e, 0)); _nn.copy(_n); _in.copy(at(sp.i, 0)).sub(_e).normalize(); const c = _e.clone();
+      if (pip) c.addScaledVector(_in, -(w / 2) + (bd.off || 0) / 10); else c.addScaledVector(_in, w / 2 - th);
+      for (let k = 0; k < M2; k++) { const t = k / M2 * Math.PI * 2, ca = Math.cos(t), sa = Math.sin(t), ra = pip ? w / 2 : w / 2, rb = pip ? w / 2 : th + .12, q = 3 * (i * M2 + k); P[q] = c.x + _in.x * ca * ra + _nn.x * sa * rb; P[q + 1] = c.y + _in.y * ca * ra + _nn.y * sa * rb; P[q + 2] = c.z + _in.z * ca * ra + _nn.z * sa * rb; } });
+    o.mesh.geometry.attributes.position.needsUpdate = true; o.mesh.geometry.computeVertexNormals(); });
+}
+/* the Trims tab */
+let pickEdge = null, tSel = null, trimClick = null;
+function edgeName(pi, key) { const n = lastMesh && lastMesh.panels[pi] ? lastMesh.panels[pi].name : ''; const P = { F: 'Front', FR: 'Right front', FL: 'Left front', B: 'Back', SR: 'Left sleeve', SL: 'Right sleeve', BAND: 'Band', COL: 'Collar', KC: 'Collar', HB: 'Hem band', PK: 'Pocket' }[n] || n; const E = key.replace(/\.(R|L)$/, ' ($1)').replace(/^cf/, 'front edge').replace(/^hem\d*/, 'hem').replace(/^neck/, 'neckline').replace(/^arm/, 'armhole').replace(/^side/, 'side seam').replace(/^sh/, 'shoulder').replace(/^top/, 'top edge').replace(/^out/, 'outer edge'); return P + ' · ' + E; }
+function renderTrimPane() {
+  const el = $('#drTrimPane'); if (!el) return; const U = tUser(), def = topDef(), T = trims(), sel = tSel;
+  const sl = (g, k, l, lo, hi, st, v, u) => `<label>${l} <output>${v}${u}</output><input type="range" data-tg="${g}" data-tk="${k}" min="${lo}" max="${hi}" step="${st}" value="${v}"></label>`;
+  const stEd = (g, l) => `<label>Stitch<select data-tg="${g}" data-tk="type">${Object.keys(ST_T).map(k => opt(k, ST_T[k], l.type)).join('')}</select></label>` + sl(g, 'len', 'Stitch length', 1, 8, .5, l.len, ' mm') + sl(g, 'dist', 'Distance from edge', 1, 30, .5, l.dist, ' mm') + sl(g, 'gap', 'Gap between rows', 2, 12, .5, l.gap, ' mm') + sl(g, 'th', 'Thread thickness', .15, 1.2, .05, l.th, ' mm') + `<label class="dr-cc">Thread colour <input type="color" data-tg="${g}" data-tk="col" value="${l.col || '#333333'}"></label><label>Thread<select data-tg="${g}" data-tk="tex">${Object.keys(TH_T).map(k => opt(k, TH_T[k], l.tex)).join('')}</select></label>`;
+  let h = `<h3>Topstitching</h3><label class="dr-chk"><input type="checkbox" data-tg="auto" data-tk="on"${T.top ? ' checked' : ''}> Garment topstitching (front edges, hems, collars)</label>` + (T.top ? `<details${sel === 'def' ? ' open' : ''}><summary>Edit the garment topstitching</summary>${stEd('def', def)}</details>` : '') +
+    `<div class="dr-row"><button type="button" data-ta="addline"${pickEdge === 'line' ? ' aria-pressed="true"' : ''}>${pickEdge === 'line' ? 'Click an edge in Pattern pieces…' : 'Add topstitch to an edge'}</button></div>` +
+    U.lines.map((l, i) => `<div class="dr-ti${sel === 'line' + i ? ' on' : ''}"><button type="button" class="dr-link" data-ta="selline" data-i="${i}">${esc(edgeName(l.pi, l.key))} · ${ST_T[l.type]}</button><button type="button" class="dr-x" data-ta="delline" data-i="${i}" aria-label="Remove">×</button>${sel === 'line' + i ? stEd('line' + i, l) : ''}</div>`).join('');
+  h += `<h3>Buttons and buttonholes</h3>` + sl('btn', 'bsize', 'Button size', 8, 30, 1, T.bsize || 12, ' mm') + `<label>Style<select data-tg="btn" data-tk="btn">${Object.keys(BTN).map(k => opt(k, BTN[k][0], T.btn)).join('')}</select></label>` +
+    `<div class="dr-row"><button type="button" data-ta="addbtn"${trimClick === 'btn' ? ' aria-pressed="true"' : ''}>${trimClick === 'btn' ? 'Click the cloth…' : 'Place a button'}</button><button type="button" data-ta="addhole"${trimClick === 'hole' ? ' aria-pressed="true"' : ''}>${trimClick === 'hole' ? 'Click the cloth…' : 'Place a buttonhole'}</button></div>` +
+    U.btns.map((b, i) => `<div class="dr-ti"><span>Button ${i + 1}${b.hole != null ? ' · fastened' : ''}</span><button type="button" class="dr-link" data-ta="${b.hole != null ? 'unfasten' : 'fasten'}" data-i="${i}">${b.hole != null ? 'Unfasten' : 'Fasten to nearest buttonhole'}</button><button type="button" class="dr-x" data-ta="delbtn" data-i="${i}">×</button></div>`).join('') +
+    U.holes.map((o, i) => `<div class="dr-ti"><span>Buttonhole ${i + 1}</span><button type="button" class="dr-link" data-ta="holedir" data-i="${i}">${o.dir === 'v' ? 'Vertical' : 'Horizontal'}</button><button type="button" class="dr-x" data-ta="delhole" data-i="${i}">×</button></div>`).join('');
+  h += `<h3>Zippers</h3><div class="dr-row"><button type="button" data-ta="addzip"${pickEdge === 'zipA' || pickEdge === 'zipB' ? ' aria-pressed="true"' : ''}>${pickEdge === 'zipA' ? 'Click the first edge…' : pickEdge === 'zipB' ? 'Click the second edge…' : 'Add a zipper between two edges'}</button></div>` +
+    U.zips.map((z, i) => `<div class="dr-ti"><span>${esc(edgeName(z.a[0], z.a[1]))} ↔ ${esc(edgeName(z.b[0], z.b[1]))}</span><label>Teeth<select data-tg="zip${i}" data-tk="teeth">${Object.keys(ZIPS).map(k => opt(k, ZIPS[k][0], z.teeth)).join('')}</select></label><label class="dr-cc">Tape colour <input type="color" data-tg="zip${i}" data-tk="tape" value="${z.tape || '#222222'}"></label><button type="button" class="dr-link" data-ta="${z.closed ? 'unzip' : 'dozip'}" data-i="${i}">${z.closed ? 'Open the zip' : 'Close the zip'}</button><button type="button" class="dr-x" data-ta="delzip" data-i="${i}">×</button></div>`).join('');
+  h += `<h3>Binding and piping</h3><div class="dr-row"><button type="button" data-ta="addbind"${pickEdge === 'binding' ? ' aria-pressed="true"' : ''}>${pickEdge === 'binding' ? 'Click an edge…' : 'Add binding'}</button><button type="button" data-ta="addpipe"${pickEdge === 'piping' ? ' aria-pressed="true"' : ''}>${pickEdge === 'piping' ? 'Click an edge…' : 'Add piping'}</button></div>` +
+    U.binds.map((bd, i) => `<div class="dr-ti${sel === 'bind' + i ? ' on' : ''}"><button type="button" class="dr-link" data-ta="selbind" data-i="${i}">${bd.kind === 'piping' ? 'Piping' : 'Binding'} · ${esc(edgeName(bd.pi, bd.key))}</button><button type="button" class="dr-x" data-ta="delbind" data-i="${i}">×</button>${sel === 'bind' + i ? sl('bind' + i, 'w', bd.kind === 'piping' ? 'Cord diameter' : 'Width (each side)', 2, 40, .5, bd.w, ' mm') + (bd.kind === 'piping' ? sl('bind' + i, 'off', 'Shift into the seam', -5, 5, .5, bd.off || 0, ' mm') : sl('bind' + i, 'th', 'Thickness', .4, 4, .1, bd.th, ' mm')) + `<label class="dr-cc">Colour <input type="color" data-tg="bind${i}" data-tk="col" value="${bd.col || '#222222'}"></label><label>Texture<select data-tg="bind${i}" data-tk="tex">${['plain', 'satin', 'velvet', 'leather', 'knit', 'twill'].map(k => opt(k, TEXN[k], bd.tex || 'plain')).join('')}</select></label>` : ''}</div>`).join('');
+  el.innerHTML = h + '<p class="dr-note">Edges are picked in the Pattern pieces panel on the right. Buttons and buttonholes are placed by clicking the cloth.</p>';
+}
+function trimChanged(rebuildTrims) { save(); renderTrimPane(); if (rebuildTrims && TR && TR.d) { buildStitches(); buildBinds(); } dirty = true; }
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('[data-ta]'); if (!b || !$('#drTrimPane').contains(b)) return; const a = b.dataset.ta, i = +b.dataset.i, U = tUser();
+  if (a === 'addline') { pickEdge = pickEdge === 'line' ? null : 'line'; S.hideR = false; sides(); }
+  if (a === 'addzip') { pickEdge = pickEdge ? null : 'zipA'; S.hideR = false; sides(); }
+  if (a === 'addbind') { pickEdge = pickEdge === 'binding' ? null : 'binding'; S.hideR = false; sides(); }
+  if (a === 'addpipe') { pickEdge = pickEdge === 'piping' ? null : 'piping'; S.hideR = false; sides(); }
+  if (a === 'selline') tSel = tSel === 'line' + i ? null : 'line' + i; if (a === 'selbind') tSel = tSel === 'bind' + i ? null : 'bind' + i;
+  if (a === 'delline') { U.lines.splice(i, 1); tSel = null; return trimChanged(true); }
+  if (a === 'delbind') { U.binds.splice(i, 1); tSel = null; return trimChanged(true); }
+  if (a === 'addbtn') trimClick = trimClick === 'btn' ? null : 'btn'; if (a === 'addhole') trimClick = trimClick === 'hole' ? null : 'hole';
+  if (a === 'delbtn') { if (U.btns[i].pair && worker) worker.postMessage({ cmd: 'untackPairs', pairs: U.btns[i].pair, gen }); U.btns.splice(i, 1); save(); return rebuildTrimsOnly(); }
+  if (a === 'delhole') { U.btns.forEach(bt => { if (bt.hole === i) bt.hole = null; else if (bt.hole > i) bt.hole--; }); U.holes.splice(i, 1); save(); return rebuildTrimsOnly(); }
+  if (a === 'holedir') { U.holes[i].dir = U.holes[i].dir === 'v' ? 'h' : 'v'; save(); return rebuildTrimsOnly(); }
+  if (a === 'fasten') { const bt = U.btns[i], X = posAttr.array, bi = nearestVert(bt.pi, bt.u, bt.v); let best = -1, bd = 1e9; U.holes.forEach((o, k) => { if (U.btns.some(z => z.hole === k)) return; const hi = nearestVert(o.pi, o.u, o.v); if (hi < 0) return; const dd = Math.hypot(X[3 * bi] - X[3 * hi], X[3 * bi + 1] - X[3 * hi + 1], X[3 * bi + 2] - X[3 * hi + 2]); if (dd < bd) { bd = dd; best = k; } });
+    if (best < 0) { status('Place a buttonhole first', 'err'); return; } const hi = nearestVert(U.holes[best].pi, U.holes[best].u, U.holes[best].v); bt.hole = best; bt.pair = [bi, hi]; worker.postMessage({ cmd: 'tack', a: bi, b: hi, gen }); paused = false; save(); return rebuildTrimsOnly(); }
+  if (a === 'unfasten') { const bt = U.btns[i]; if (bt.pair) worker.postMessage({ cmd: 'untackPairs', pairs: bt.pair, gen }); bt.hole = null; bt.pair = null; paused = false; save(); return rebuildTrimsOnly(); }
+  if (a === 'dozip') { const z = U.zips[i]; worker.postMessage({ cmd: 'zip', a: z.a, b: z.b, id: i, gen }); z.closed = true; paused = false; }
+  if (a === 'unzip') { const z = U.zips[i]; if (z.pairs) worker.postMessage({ cmd: 'untackPairs', pairs: z.pairs, gen }); z.closed = false; z.pairs = null; paused = false; }
+  if (a === 'delzip') { const z = U.zips[i]; if (z.pairs) worker.postMessage({ cmd: 'untackPairs', pairs: z.pairs, gen }); U.zips.splice(i, 1); save(); renderTrimPane(); return rebuildTrimsOnly(); }
+  save(); renderTrimPane(); drawPieces(lastMesh);
+});
+function rebuildTrimsOnly() { renderTrimPane(); if (lastMesh) { buildTrims(lastMesh); } dirty = true; }
+document.addEventListener('input', e => {
+  const g = e.target.dataset && e.target.dataset.tg, k = e.target.dataset && e.target.dataset.tk; if (!g || !$('#drTrimPane').contains(e.target)) return;
+  const v = e.target.type === 'checkbox' ? e.target.checked : e.target.type === 'range' ? +e.target.value : e.target.value, U = tUser(), T = trims();
+  if (g === 'auto') { T.top = v; return trimChanged(true); }
+  if (g === 'def') { T.topDef = Object.assign(topDef(), { [k]: v }); tSel = 'def'; }
+  else if (g === 'btn') { T[k] = v; save(); trimLook(); const o = e.target.parentNode.querySelector('output'); if (o) o.textContent = v + ' mm'; updateTrims(); dirty = true; return; }
+  else if (/^line/.test(g)) U.lines[+g.slice(4)][k] = v;
+  else if (/^bind/.test(g)) U.binds[+g.slice(4)][k] = v;
+  else if (/^zip/.test(g)) U.zips[+g.slice(3)][k] = v;
+  const o = e.target.parentNode.querySelector('output'); if (o) o.textContent = v + (e.target.parentNode.textContent.includes('mm') ? ' mm' : '');
+  save(); if (TR && TR.d) { if (/^bind|^zip/.test(g)) buildBinds(); else buildStitches(); } if (e.target.tagName === 'SELECT' || e.target.type === 'color') renderTrimPane(); dirty = true;
+});
+function onEdgePick(pi, key) {
+  const U = tUser(), name = lastMesh.panels[pi].name;
+  if (pickEdge === 'line') { const d0 = topDef(); U.lines.push({ pi, pname: name, key, type: d0.type, len: d0.len, dist: d0.dist, gap: d0.gap, th: d0.th, col: '', tex: d0.tex }); tSel = 'line' + (U.lines.length - 1); pickEdge = null; }
+  else if (pickEdge === 'binding' || pickEdge === 'piping') { U.binds.push({ pi, pname: name, key, kind: pickEdge, w: pickEdge === 'piping' ? 4 : 10, th: 1.2, col: cw().c2, tex: pickEdge === 'piping' ? 'satin' : 'plain' }); tSel = 'bind' + (U.binds.length - 1); pickEdge = null; }
+  else if (pickEdge === 'zipA') { U._za = [pi, key, name]; pickEdge = 'zipB'; status('Now click the second edge', 'run'); renderTrimPane(); return; }
+  else if (pickEdge === 'zipB' && U._za) { const z = { a: [U._za[0], U._za[1]], an: U._za[2], b: [pi, key], bn: name, teeth: 'metal', tape: '#222222', closed: true }; delete U._za; U.zips.push(z); pickEdge = null; worker.postMessage({ cmd: 'zip', a: z.a, b: z.b, id: U.zips.length - 1, gen }); paused = false; }
+  trimChanged(true); drawPieces(lastMesh);
 }
 function ramp(stops, v) { for (let i = 1; i < stops.length; i++) if (v <= stops[i][0]) { const a = stops[i - 1], b = stops[i], t = Math.max(0, (v - a[0]) / (b[0] - a[0])); return [0, 1, 2].map(k => a[1][k] + (b[1][k] - a[1][k]) * t); } return stops[stops.length - 1][1]; }
 const FITR = [[-1, [.82, .18, .16]], [.45, [.85, .25, .18]], [1.2, [.96, .62, .2]], [2.5, [.96, .9, .45]], [4.5, [.45, .76, .52]], [8, [.3, .55, .8]], [99, [.3, .55, .8]]];
@@ -649,6 +854,7 @@ function drawPieces(d) {
     const all = []; p.segs.forEach((s, i) => s.pts.forEach((q, j) => { if (i && !j) return; all.push(q); }));
     svg += `<path data-pi="${pi}" class="dr-pc${pi === selPanel ? ' on' : ''}" d="M${all.map(q => (q[0] + dx).toFixed(1) + ' ' + (q[1] + dy).toFixed(1)).join('L')}Z"><title>Click to move or rotate this piece in 3D</title></path>`;
     p.segs.forEach(s => { const c = seamColour[pi + '|' + s.key]; svg += `<polyline points="${s.pts.map(q => (q[0] + dx).toFixed(1) + ',' + (q[1] + dy).toFixed(1)).join(' ')}" fill="none" stroke="${c || '#6a6157'}" stroke-width="${c ? 1.3 : .7}" stroke-linejoin="round"${c ? '' : ' stroke-dasharray="2 1.2"'}/>`; });
+    if (pickEdge) p.segs.forEach(sg => { svg += `<polyline class="dr-edge" data-epi="${pi}" data-ekey="${sg.key}" points="${sg.pts.map(q => (q[0] + dx).toFixed(1) + ',' + (q[1] + dy).toFixed(1)).join(' ')}"><title>${esc(edgeName(pi, sg.key))}</title></polyline>`; });
     svg += `<text x="${(b.x0 + b.x1) / 2 + dx}" y="${(b.y0 + b.y1) / 2 + dy}" text-anchor="middle" font-size="4.2" fill="#6a6157">${names[p.name] || p.name}${multi[p.name] ? ' ×' + multi[p.name] : p.name === 'P0' ? ' ×' + d.panels.filter(q => /^P\d+$/.test(q.name)).length : p.name === 'C0' ? ' ×' + d.panels.filter(q => /^C\d+$/.test(q.name)).length : ''}</text>`;
   });
   svg += '</svg>';
@@ -679,12 +885,13 @@ function rebuild() {
 function onMsg(e) {
   const d = e.data; if (d.gen !== gen) return;
   if (d.type === 'error') { status(d.message, 'err'); return; }
+  if (d.type === 'zipped') { const z = tUser().zips[d.id]; if (z) { z.pairs = d.pairs; save(); } return; }
   if (d.type === 'body') {
     if (!d.same) { lastBody = d; curBody = d; buildBody(d); const hi = $('#drMeas [data-m=height]'); if (hi && !(+(S.meas || {}).height)) hi.value = Math.round(d.height); }
     status('Cutting and sewing the pieces…', 'run'); return;
   }
   if (d.type === 'mesh') {
-    built = true; panelOf = d.panel; lastMesh = d; selPanel = -1; PS = {}; pins = []; tackA = null; tackLines = []; if (+S.pucker) worker.postMessage({ cmd: 'pucker', a: S.pucker / 100, gen }); tc.detach(); $('#drGz').hidden = true; buildGarment(d); drawPieces(d); drawTable(d, baseMeas()); fitTarget(curBody, d); setView(view, false);
+    built = true; panelOf = d.panel; lastMesh = d; selPanel = -1; PS = {}; pins = []; tackA = null; tackLines = []; setTimeout(() => { const U = tUser(); U.zips.forEach((z, i) => { z.pairs = null; if (z.closed && d.panels[z.a[0]] && d.panels[z.a[0]].name === z.an) worker.postMessage({ cmd: 'zip', a: z.a, b: z.b, id: i, gen }); }); U.btns.forEach(bt => { bt.pair = null; if (bt.hole != null && U.holes[bt.hole]) { const h = U.holes[bt.hole], bi = nearestVert(bt.pi, bt.u, bt.v), hi = nearestVert(h.pi, h.u, h.v); if (bi >= 0 && hi >= 0) { bt.pair = [bi, hi]; worker.postMessage({ cmd: 'tack', a: bi, b: hi, gen }); } } }); }, 0); if (+S.pucker) worker.postMessage({ cmd: 'pucker', a: S.pucker / 100, gen }); tc.detach(); $('#drGz').hidden = true; buildGarment(d); drawPieces(d); drawTable(d, baseMeas()); fitTarget(curBody, d); setView(view, false);
     $('#drPM').href = 'pattern-maker.html'; return;
   }
   if (d.type === 'frame') {
@@ -771,7 +978,7 @@ function selectPanel(pi) {
   $$('#drPieces .dr-pc').forEach(p => p.classList.toggle('on', +p.dataset.pi === pi || (pi >= 0 && lastMesh && lastMesh.panels[pi] && lastMesh.panels[pi].name === 'SL' && lastMesh.panels[+p.dataset.pi].name === 'SR')));
   paintFit(); dirty = true;
 }
-$('#drPieces').addEventListener('click', e => { const p = e.target.closest('[data-pi]'); if (p) selectPanel(+p.dataset.pi); });
+$('#drPieces').addEventListener('click', e => { const ed = e.target.closest('[data-epi]'); if (ed && pickEdge) { onEdgePick(+ed.dataset.epi, ed.dataset.ekey); return; } const p = e.target.closest('[data-pi]'); if (p) selectPanel(+p.dataset.pi); });
 
 /* ---------- pull the fabric with the mouse ---------- */
 const ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), view3d = $('.dr-view');
@@ -797,6 +1004,8 @@ view3d.addEventListener('pointerdown', e => {
     if (hj) { e.stopPropagation(); S.tab = 'avatar'; S.hideL = false; save(); renderControls(); const el = $('#drPose'); if (el) el.scrollIntoView({ block: 'center' }); status('Joint: ' + hj.object.userData.joint.replace(/-/g, ' ') + ' · use the pose sliders', 'ok'); return; } }
   if (!built || !worker) return;
   const pk = pickVertex(e); if (!pk) return;
+  if (trimClick) { e.stopPropagation(); const U = tUser(), i = pk.i, pi = panelOf[i], o = { pi, pname: lastMesh.panels[pi].name, u: lastMesh.uv[2 * i], v: lastMesh.uv[2 * i + 1] }; if (trimClick === 'btn') U.btns.push(Object.assign(o, { size: trims().bsize || 12 })); else U.holes.push(Object.assign(o, { dir: TR && TR.vertical ? 'v' : 'h' })); trimClick = null; save(); rebuildTrimsOnly(); status('Placed', 'ok'); return; }
+  if (gPlace && gList()[gSel]) { e.stopPropagation(); const g = gList()[gSel], i = pk.i; g.panel = panelOf[i]; g.pname = lastMesh.panels[g.panel].name; g.u = lastMesh.uv[2 * i]; g.v = lastMesh.uv[2 * i + 1]; gPlace = false; save(); renderGraphics(); buildGraphics(); status('Graphic placed', 'ok'); return; }
   if (S.tool === 'move') { e.stopPropagation(); selectPanel(panelOf[pk.i]); return; }
   if (S.tool === 'pin') { e.stopPropagation(); const at2 = pins.findIndex(q => q === pk.i || Math.hypot(posAttr.array[3 * q] - pk.point.x, posAttr.array[3 * q + 1] - pk.point.y, posAttr.array[3 * q + 2] - pk.point.z) < 1.5); if (at2 >= 0) { worker.postMessage({ cmd: 'pin', i: pins[at2], on: false, gen }); pins.splice(at2, 1); } else { pins.push(pk.i); worker.postMessage({ cmd: 'pin', i: pk.i, on: true, gen }); } paused = false; drawMarks(); return; }
   if (S.tool === 'tack') { e.stopPropagation(); if (tackA == null) { tackA = pk.i; status('First point chosen · click the second point', 'run'); drawMarks(); return; } if (pk.i !== tackA) { tackLines.push([tackA, pk.i]); worker.postMessage({ cmd: 'tack', a: tackA, b: pk.i, gen }); paused = false; } tackA = null; drawMarks(); return; }

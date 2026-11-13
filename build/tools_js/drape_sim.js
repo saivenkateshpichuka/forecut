@@ -1035,6 +1035,8 @@
   Sim.prototype.pin = function (i, on) { this.keepW(); this.w[i] = on ? 0 : this.w0[i]; this.wake(); };
   Sim.prototype.freeze = function (pi, on) { this.keepW(); for (var i = 0; i < this.n; i++) if (this.panel[i] === pi) { this.w[i] = on ? 0 : this.w0[i]; this.v[3 * i] = this.v[3 * i + 1] = this.v[3 * i + 2] = 0; } this.wake(); };
   Sim.prototype.tack = function (a, b) { var S = new Uint32Array(this.S.length + 2); S.set(this.S); S[this.S.length] = a; S[this.S.length + 1] = b; this.S = S; this.userT++; this.onSeam[a] = this.onSeam[b] = 1; this.wake(); };
+  Sim.prototype.untack = function (pairs) { var keep = [], S = this.S, base = S.length - 2 * this.userT, i, j, drop = {}; for (i = 0; i < pairs.length; i += 2) drop[pairs[i] + '_' + pairs[i + 1]] = 1;
+    for (j = base; j < S.length; j += 2) if (!drop[S[j] + '_' + S[j + 1]]) keep.push(S[j], S[j + 1]); var N = new Uint32Array(base + keep.length); N.set(S.subarray(0, base)); N.set(keep, base); this.S = N; this.userT = keep.length / 2; this.wake(); };
   Sim.prototype.clearTacks = function () { if (!this.userT) return; this.S = this.S.slice(0, this.S.length - 2 * this.userT); this.userT = 0; this.wake(); };
   Sim.prototype.stiffen = function (pi, k) { var B = this.B, P = this.panel; for (var j = 0; j < B.length; j += 3) if (P[B[j]] === pi && P[B[j + 1]] === pi) this.BA[j / 3] = this.fab.bend / (k || 1); this.wake(); };
   Sim.prototype.elastic = function (ids, ratio) { var L = 0, x = this.x; for (var q = 1; q < ids.length; q++) { var a = 3 * ids[q - 1], b = 3 * ids[q]; L += Math.hypot(this.M.uv[2 * ids[q]] - this.M.uv[2 * ids[q - 1]], this.M.uv[2 * ids[q] + 1] - this.M.uv[2 * ids[q - 1] + 1]); } void x;

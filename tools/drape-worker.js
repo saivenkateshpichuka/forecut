@@ -2,12 +2,12 @@
 /* Forecut 3D Drape Studio: runs the sewing and draping off the page's main thread. */
 /* global importScripts, PM, FCDrape, Delaunator */
 self.window = self;
-importScripts('pm-engine.js?v=fx-20261113e', 'drape-sim.js?v=fx-20261113e', 'vendor/delaunator.min.js');
+importScripts('pm-engine.js?v=fx-20261113f', 'drape-sim.js?v=fx-20261113f', 'vendor/delaunator.min.js');
 var sim = null, M = null, body = null, running = false, gen = 0, frames = 0;
 
 var AV = null, AVP = null, bodyKey = '';
 function avatars() {
-  if (!AVP) AVP = Promise.all([fetch('avatar/avatars.bin?v=fx-20261113e').then(function (r) { return r.arrayBuffer(); }), fetch('avatar/avatars.json?v=fx-20261113e').then(function (r) { return r.json(); })])
+  if (!AVP) AVP = Promise.all([fetch('avatar/avatars.bin?v=fx-20261113f').then(function (r) { return r.arrayBuffer(); }), fetch('avatar/avatars.json?v=fx-20261113f').then(function (r) { return r.json(); })])
     .then(function (x) { AV = FCDrape.loadAvatars(x[0], x[1]); return AV; });
   return AVP;
 }
@@ -60,6 +60,11 @@ onmessage = function (e) {
     else if (q.cmd === 'freeze' && sim) { sim.freeze(q.panel, q.on); kick(); }
     else if (q.cmd === 'tack' && sim) { sim.tack(q.a, q.b); kick(); }
     else if (q.cmd === 'untack' && sim) { sim.clearTacks(); kick(); }
+    else if (q.cmd === 'untackPairs' && sim) { sim.untack(q.pairs); kick(); }
+    else if (q.cmd === 'zip' && sim) { var A = (M.segIdx[q.a[0] + '|' + q.a[1]] || []).slice(), B = (M.segIdx[q.b[0] + '|' + q.b[1]] || []).slice(), X = sim.x, pr = [];
+      if (A.length && B.length) { var dd = function (i, j) { return Math.hypot(X[3 * i] - X[3 * j], X[3 * i + 1] - X[3 * j + 1], X[3 * i + 2] - X[3 * j + 2]); }; if (dd(A[0], B[0]) + dd(A[A.length - 1], B[B.length - 1]) > dd(A[0], B[B.length - 1]) + dd(A[A.length - 1], B[0])) B.reverse();
+        var n = Math.max(A.length, B.length); for (var k = 0; k < n; k++) { var ia = A[Math.round(k * (A.length - 1) / Math.max(1, n - 1))], ib = B[Math.round(k * (B.length - 1) / Math.max(1, n - 1))]; sim.tack(ia, ib); pr.push(ia, ib); } }
+      postMessage({ type: 'zipped', gen: gen, id: q.id, pairs: pr }); kick(); }
     else if (q.cmd === 'stiff' && sim) { sim.stiffen(q.panel, q.k); kick(); }
     else if (q.cmd === 'elastic' && sim) { var ids = []; (q.keys || []).forEach(function (k) { (M.segIdx[q.panel + '|' + k] || []).forEach(function (i) { if (ids.indexOf(i) < 0) ids.push(i); }); }); if (ids.length > 2) { sim.elastic(ids, q.ratio); kick(); } }
     else if (q.cmd === 'unelastic' && sim) { sim.clearElastic(); kick(); }
