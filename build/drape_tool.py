@@ -25,7 +25,10 @@ def scripts(v):
 def build():
     v = T.VER
     scripts(v)
-    start = ('<script>(function(){var ok=window.matchMedia&&matchMedia("(min-width: 1024px) and (pointer: fine)").matches&&!/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);'
+    soon = ('<div class="dr-desk"><img src="tools/covers/3d-drape-studio-640.webp" alt="" width="640" height="360"><h2>3D Drape Studio is coming soon</h2>'
+            '<p>Sew your patterns onto mannequins in every size, drape them in real fabrics and check the fit in 3D, right in your browser. We are finishing it now.</p>'
+            '<a href="pattern-maker.html">Use Pattern Maker meanwhile</a></div>')
+    start = ('<script>(function(){if(!/[?&]preview(=|&|$)/.test(location.search)){document.body.classList.add("dr-mobile");var a0=document.getElementById("app");if(a0){a0.removeAttribute("data-fx-gate");a0.innerHTML=\'' + soon + '\';}return;}var ok=window.matchMedia&&matchMedia("(min-width: 1024px) and (pointer: fine)").matches&&!/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);'
              'if(ok){var s=document.createElement("script");s.type="module";s.src="tools/drape.js?v=' + v + '";document.head.appendChild(s);return;}'
              'document.body.classList.add("dr-mobile");var a=document.getElementById("app");if(a){a.removeAttribute("data-fx-gate");a.innerHTML=\'<div class="dr-desk"><img src="tools/covers/3d-drape-studio-640.webp" alt="" width="640" height="360"><h2>Open 3D Drape Studio on a desktop</h2>'
              '<p>The 3D view needs a desktop or laptop screen, a mouse or trackpad, and the extra graphics power of a computer. Open this page on your computer to sew and drape your patterns in 3D.</p>'
