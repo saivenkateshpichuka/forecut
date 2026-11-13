@@ -90,7 +90,7 @@
   C.newPiece = function (nodes, o) {
     o = o || {};
     var pc = { id: uid('pc'), name: o.name || '', auto: !o.name, nodes: nodes, closed: true, x: 0, y: 0, cat: o.cat || '', dept: o.dept || '', size: o.size || '', qty: o.qty || 1, pair: !!o.pair, fabric: o.fabric || '', fold: o.fold == null ? -1 : o.fold, hems: o.hems || [], notes: o.notes || '',
-      sa: { def: o.sa == null ? 1 : o.sa, hem: o.hemSA == null ? 2.5 : o.hemSA, edges: {}, corner: {}, showSeam: true, showCut: true }, notches: [], internals: [], darts: [], pleats: [], grain: null, link: null, grade: {}, hidden: false, locked: false };
+      sa: { def: o.sa == null ? (C.defaults && C.defaults.sa != null ? C.defaults.sa : 1) : o.sa, hem: o.hemSA == null ? (C.defaults && C.defaults.hem != null ? C.defaults.hem : 2.5) : o.hemSA, edges: {}, corner: {}, showSeam: true, showCut: true }, notches: [], internals: [], darts: [], pleats: [], grain: null, link: null, grade: {}, hidden: false, locked: false };
     if (!pc.grain) { var b = C.bbox(pc), cx = (b[0] + b[2]) / 2; pc.grain = { a: [cx, b[1] + (b[3] - b[1]) * .2], b: [cx, b[1] + (b[3] - b[1]) * .8] }; }
     return pc;
   };
@@ -250,7 +250,7 @@
     pc.notches.forEach(function (nt) { nt.seg = map(nt.seg); if (nt.mode === 'pct') nt.v = 100 - nt.v; else nt.from = nt.from === 'end' ? 'start' : 'end'; });
     var e = {}; Object.keys(pc.sa.edges).forEach(function (k) { e[map(+k)] = pc.sa.edges[k]; }); pc.sa.edges = e;
     pc.hems = pc.hems.map(map); if (pc.fold >= 0) pc.fold = map(pc.fold);
-    pc._reversed = !pc._reversed;
+    pc._reversed = !pc._reversed; (pc._sewShift = pc._sewShift || []).push(['rev', S]);
   };
   C.clone = function (o) { return JSON.parse(JSON.stringify(o)); };
   C.duplicate = function (pc, mode) { // 'copy' independent, 'linked' moves together in shape, 'mirror' a linked reflected copy
@@ -314,6 +314,52 @@
     var pts = it.kind === 'ellipse' ? null : it.pts, f;
     if (it.kind === 'ellipse') f = C.ellipse(it.c[0], it.c[1], it.r[0], it.r[1], 0, {}); else if (pts && pts.length > 2) f = C.newPiece(pts.map(function (q) { return C.node(q[0], q[1]); }), {}); else return null;
     f.name = it.label || (it.purpose === 'pocket' ? 'Pocket' : 'Traced piece'); f.size = pc.size; f.fabric = pc.fabric; f.sa.def = pc.sa.def; f.x = pc.x; f.y = pc.y; return f;
+  };
+
+
+  /* ---------- production data: sewing, fabrics, colourways, trims ---------- */
+  C.TRIMS = ['button', 'hole', 'zip', 'piping', 'binding', 'tstitch', 'pucker', 'tape', 'graphic'];
+  C.normalize = function (p) {
+    p.sewing = p.sewing || []; p.fabrics = p.fabrics || []; p.trims = p.trims || {}; C.TRIMS.forEach(function (k) { p.trims[k] = p.trims[k] || []; });
+    if (!p.colourways || !p.colourways.length) p.colourways = [{ id: 'cw1', name: 'Colourway 1', c: {} }]; p.cw = p.cw || p.colourways[0].id;
+    p.presets = p.presets || {}; p.presets.tstitch = p.presets.tstitch || [
+      { id: 'ts1', name: 'Single needle, 12 SPI', spi: 12, tex: 30, rows: 1, gap: .64, off: .15, colour: '#2b2b2b' },
+      { id: 'ts2', name: 'Twin needle, 10 SPI', spi: 10, tex: 40, rows: 2, gap: .64, off: .2, colour: '#2b2b2b' },
+      { id: 'ts3', name: 'Denim, heavy thread, 8 SPI', spi: 8, tex: 80, rows: 2, gap: .64, off: .2, colour: '#c8892a' },
+      { id: 'ts4', name: 'Edge stitch, 14 SPI', spi: 14, tex: 30, rows: 1, gap: 0, off: .1, colour: '#2b2b2b' }];
+    p.settings = p.settings || { notchDepth: .6, waste: 5, efficiency: 80, threadRatio: 2.6 };
+    p.view = p.view || {}; ['sewing', 'trims', 'graphics'].forEach(function (k) { if (p.view[k] == null) p.view[k] = true; });
+    p.app = C.APP; return p;
+  };
+  /* a part of an edge from distance a to b (cm along the edge, either order), offset inside the piece by 'off' (cm, negative = outside) */
+  C.rangePts = function (pc, seg, a, b, off) {
+    var L = C.segLen(pc, seg), s0 = Math.max(0, Math.min(L, Math.min(a, b == null ? L : b))), s1 = Math.max(0, Math.min(L, Math.max(a, b == null ? L : b))), n = Math.max(2, Math.ceil((s1 - s0) / .3) + 1), out = [], sg = areaOf(C.flat(pc, .5).pts) > 0 ? -1 : 1;
+    for (var i = 0; i < n; i++) { var s = s0 + (s1 - s0) * i / (n - 1), t = C.tAt(pc, seg, s), q = C.pointAt(pc, seg, t), tg = C.tangentAt(pc, seg, t); out.push(off ? [q[0] + tg[1] * sg * off, q[1] - tg[0] * sg * off] : q); }
+    return out;
+  };
+  C.rangeLen = function (pc, r) { var L = C.segLen(pc, r.seg), a = r.a == null ? 0 : r.a, b = r.b == null ? L : r.b; return Math.abs(Math.min(L, b) - Math.min(L, a)); };
+  /* a seam joins part of one edge to part of another; each side runs from 'a' to 'b' (b < a means against the edge's direction) */
+  C.seamLens = function (p, sw) { var A = byId(p, sw.A.pc), B = byId(p, sw.B.pc); if (!A || !B) return null; var la = C.rangeLen(A, sw.A), lb = C.rangeLen(B, sw.B); return { a: la, b: lb, diff: la - lb, plan: +sw.ease || 0, ok: Math.abs(la - lb - (+sw.ease || 0)) <= .3 }; };
+  function byId(p, id) { for (var i = 0; i < p.pieces.length; i++) if (p.pieces[i].id === id) return p.pieces[i]; return null; }
+  C.byId = byId;
+  /* thread from Tex: for display only; Tex is a weight (g per 1000 m), so the visual width is an estimate from a typical density */
+  C.threadDia = function (tex) { return Math.sqrt(tex / 1000 / 1.38 / Math.PI) * 2 * 10; }; // mm, polyester density 1.38 g/cm3, solid-fibre estimate
+  /* bill of materials */
+  C.bom = function (p) {
+    C.normalize(p); var rows = [], st = p.settings, cw = p.colourways.filter(function (c) { return c.id === p.cw; })[0] || p.colourways[0];
+    var byFab = {};
+    p.pieces.forEach(function (pc) { if (pc.hidden) return; var cut = C.cutLine(pc, true).pts, area = Math.abs(areaOf(cut)), n = (pc.qty || 1) * (pc.fold >= 0 ? 2 : 1), key = pc.fabric || 'Unassigned'; (byFab[key] = byFab[key] || { area: 0, pcs: 0, names: [] }); byFab[key].area += area * n; byFab[key].pcs += (pc.qty || 1); byFab[key].names.push(pc.name); });
+    Object.keys(byFab).forEach(function (k) { var f = p.fabrics.filter(function (x) { return x.id === k; })[0], w = f && +f.width || 150, eff = (+st.efficiency || 80) / 100, m = byFab[k].area / (w * eff) / 100;
+      rows.push({ kind: 'Fabric', item: f ? f.name : k, desc: (f ? (f.comp || f.type || '') + (f.gsm ? ' · ' + f.gsm + ' gsm' : '') + ' · ' + w + ' cm wide · ' : '') + byFab[k].pcs + ' pieces: ' + byFab[k].names.join(', '), qty: +m.toFixed(2), unit: 'm', colour: f ? (cw.c[f.id] || f.colour || '') : '', note: 'Estimate at ' + (+st.efficiency || 80) + '% marker efficiency; confirm with a marker' }); });
+    var T = p.trims, waste = 1 + (+st.waste || 0) / 100, len = function (list) { return list.reduce(function (s, r) { var pc = byId(p, r.pc); return s + (pc ? C.rangeLen(pc, r) * ((pc.qty || 1)) : 0); }, 0); };
+    var grp = function (list, key) { var g = {}; list.forEach(function (r) { var k = key(r); (g[k] = g[k] || []).push(r); }); return g; };
+    var btn = grp(T.button, function (r) { return (r.size || 1.5) + '|' + (r.holes || 4) + '|' + (r.mat || 'Polyester'); }); Object.keys(btn).forEach(function (k) { var r = btn[k][0], q = btn[k].reduce(function (s, b) { var pc = byId(p, b.pc); return s + (pc ? pc.qty || 1 : 1); }, 0); rows.push({ kind: 'Button', item: (r.name || 'Button') + ' ' + Math.round((r.size || 1.5) * 10) + ' mm', desc: (r.holes || 4) + ' holes · ' + (r.mat || 'Polyester') + ' · ' + Math.round((r.size || 1.5) * 10 / .635) + 'L', qty: q, unit: 'pcs', colour: cw.c['button:' + r.id] || r.colour || '' }); });
+    if (T.hole.length) rows.push({ kind: 'Buttonhole', item: 'Buttonholes', desc: T.hole.map(function (h) { return Math.round((h.len || 1.8) * 10) + ' mm'; }).filter(function (v, i, a) { return a.indexOf(v) === i; }).join(', ') + ' · machine sewn', qty: T.hole.reduce(function (s, h) { var pc = byId(p, h.pc); return s + (pc ? pc.qty || 1 : 1); }, 0), unit: 'pcs', colour: '' });
+    T.zip.forEach(function (z) { var pc = byId(p, z.pc), L = pc ? C.rangeLen(pc, z) : 0, inch = Math.ceil(L / 2.54); rows.push({ kind: 'Zipper', item: (z.type || 'Coil') + ' zipper #' + (z.gauge || 5), desc: 'Closed length ' + inch + '" (' + L.toFixed(1) + ' cm) on ' + (pc ? pc.name : '?') + (z.sep ? ' · open-end' : ''), qty: pc ? pc.qty || 1 : 1, unit: 'pcs', colour: cw.c['zip:' + z.id] || z.colour || '' }); });
+    [['piping', 'Piping'], ['binding', 'Binding'], ['tape', 'Seam tape']].forEach(function (kk) { var list = T[kk[0]]; if (!list.length) return; var g = grp(list, function (r) { return (r.w || 1) + '|' + (r.type || '') + '|' + (r.fab || ''); }); Object.keys(g).forEach(function (k) { var r = g[k][0], L = len(g[k]) * waste; rows.push({ kind: kk[1], item: kk[1] + ' ' + Math.round((r.w || 1) * 10) + ' mm' + (r.type ? ' · ' + r.type : ''), desc: g[k].length + ' runs, ' + (+st.waste || 0) + '% added for joins', qty: +(L / 100).toFixed(2), unit: 'm', colour: cw.c[kk[0] + ':' + r.id] || r.colour || '' }); }); });
+    if (T.tstitch.length) { var g2 = grp(T.tstitch, function (r) { return (r.tex || 30) + '|' + (r.colour || ''); }); Object.keys(g2).forEach(function (k) { var r = g2[k][0], L = g2[k].reduce(function (s, x) { var pc = byId(p, x.pc); return s + (pc ? C.rangeLen(pc, x) * (pc.qty || 1) * (x.rows || 1) : 0); }, 0) * (+st.threadRatio || 2.6); rows.push({ kind: 'Thread', item: 'Topstitch thread Tex ' + (r.tex || 30), desc: 'Topstitching only, at ' + (+st.threadRatio || 2.6) + ' × seam length (lockstitch, needle and bobbin)', qty: +(L / 100).toFixed(1), unit: 'm', colour: cw.c['tstitch:' + r.id] || r.colour || '' }); }); }
+    var gx = p.trims.graphic || []; gx.forEach(function (g) { var pc = byId(p, g.pc); rows.push({ kind: 'Artwork', item: g.name || 'Graphic', desc: (g.method || 'Print') + ' · ' + (+g.w || 0).toFixed(1) + ' × ' + (+g.h || 0).toFixed(1) + ' cm on ' + (pc ? pc.name : '?'), qty: pc ? pc.qty || 1 : 1, unit: 'pcs', colour: '' }); });
+    return rows;
   };
 
   /* ---------- seam allowance: the cutting line from the seamline ---------- */

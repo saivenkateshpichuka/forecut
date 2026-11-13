@@ -71,3 +71,12 @@ test('fast crossing check agrees with the brute-force check', () => {
     let brute = 0; for (let i = 0; i < 12; i++) for (let j = i + 2; j < 12; j++) { if (i === 0 && j === 11) continue; const a = P[i], b = P[(i + 1) % 12], c = P[j], d = P[(j + 1) % 12], r = [b[0] - a[0], b[1] - a[1]], s = [d[0] - c[0], d[1] - c[1]], den = r[0] * s[1] - r[1] * s[0]; if (!den) continue; const t = ((c[0] - a[0]) * s[1] - (c[1] - a[1]) * s[0]) / den, u = ((c[0] - a[0]) * r[1] - (c[1] - a[1]) * r[0]) / den; if (t > 1e-6 && t < 1 - 1e-6 && u > 1e-6 && u < 1 - 1e-6) brute++; }
     assert.equal(C.selfHits(P).length, Math.min(brute, 21) > 20 ? C.selfHits(P).length : brute); }
 });
+test('BOM: fabric from cut areas (fold pieces doubled), trims counted, zipper length rounded up to whole inches', () => {
+  const p = C.normalize(C.newProject()), a = C.rect(0, 0, 50, 70, { name: 'Front', qty: 1 }); a.fold = 3; a.fabric = 'f1'; p.pieces.push(a);
+  p.fabrics.push({ id: 'f1', name: 'Poplin', width: 145, gsm: 115 });
+  p.trims.button.push({ id: 'b1', pc: a.id, at: [5, 5], size: 1.5, holes: 4 }, { id: 'b2', pc: a.id, at: [5, 15], size: 1.5, holes: 4 });
+  p.trims.zip.push({ id: 'z1', pc: a.id, seg: 1, a: 0, b: 30.6, type: 'Coil', gauge: 5 });
+  const B = C.bom(p), fab = B.find(r => r.kind === 'Fabric'), cut = C.cutLine(a).pts, area = Math.abs(C.areaOf(cut)) * 2;
+  near(fab.qty, +(area / (145 * .8) / 100).toFixed(2), .011); assert.equal(B.find(r => r.kind === 'Button').qty, 2); assert.match(B.find(r => r.kind === 'Zipper').desc, /13"/);
+  near(C.rangeLen(a, { seg: 1, a: 10, b: 30 }), 20); near(C.rangeLen(a, { seg: 1, a: 0, b: null }), 70);
+});
