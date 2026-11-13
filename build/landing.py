@@ -23,7 +23,7 @@ N_DETAILS = sum(len(v) for v in M.values()) + N_INDIA
 ST = {'e': ('emerge', 'Emerging'), 'r': ('rise', 'Rising'), 'p': ('peak', 'Peaking'), 'f': ('fade', 'Fading')}
 POS = {'e': .16, 'r': .36, 'p': .55, 'f': .80}
 
-# the signature: photo + lifecycle curve with a "now" dot + colour chip with its Pantone TCX code
+# the signature: photo + lifecycle curve with a "now" dot + colour chip with its HEX code
 HERO = [('Peplum blouses', ['peplum-blouses-photo'], '#2f6fe0', 'Luminous blue'),
         ('Asymmetric wrap closures', ['asymmetric-wrap-closures-ss27-photo', 'asymmetric-wrap-closures-photo'], '#ef6fa7', 'Pop pink'),
         ('Barrel-leg cargo jeans', ['barrel-leg-cargo-jeans-ss27-photo', 'barrel-leg-cargo-jeans-photo'], '#b57552', 'Clay')]
@@ -121,13 +121,13 @@ def launch_strip():
 
 
 AUD = [
-    ('d2c', 'D2C brands', 'Plan your next drop with data, not guesswork.', 'Forecasts with Pantone TCX codes your production team can use today.',
+    ('d2c', 'D2C brands', 'Plan your next drop with data, not guesswork.', 'Forecasts with named colours and HEX codes your production team can use today.',
      ['Which styles and colours are Rising for your next drop', 'Colour stories with TCX codes for your dyeing unit', 'Sale and occasion timing for every market you sell in'], 'Individual or Enterprise', ('Sign in free', 'account.html#signup'), ('See pricing', '#pricing')),
     ('exp', 'Exporters', 'Walk into every buyer meeting with what\'s next.', 'Core items, details and colours for SS27 and beyond, as downloadable PDFs.',
      ['Core Item Updates and season reports to share with buyers', 'Details to sample early, with photos and construction notes', 'Region pages for each buyer market'], 'Enterprise', ('Book a 15-minute demo', 'mailto:hello@forecut.in?subject=Forecut%20demo'), ('See pricing', '#pricing')),
     ('des', 'Designers', 'Your next collection, one season ahead.', 'Colours, crafts and silhouettes from AW26 to AW28, plus Festive and Summer for India.',
      ['Couture, fabric and colour guides', 'Lifecycle stage on every detail', 'Downloadable detail cards for your mood boards'], 'Individual', ('Sign in free', 'account.html#signup'), ('Explore SS27', 'ss27.html')),
-    ('stu', 'Students', 'Professional trend research for your projects.', 'Free to start. A photo and a Pantone TCX code for every detail.',
+    ('stu', 'Students', 'Professional trend research for your projects.', 'Free to start. A photo and a lifecycle status for every detail.',
      ['Every season and region to research', 'Methodology you can cite', 'Student plan with a college ID'], 'Student', ('Sign in free', 'account.html#signup'), ('See all details', 'search.html')),
 ]
 
@@ -167,7 +167,7 @@ def pricing():
         <div class="pr y">₹2,999<small> / year</small></div><div class="pr m" hidden>₹499<small> / month</small></div>
         <span class="fx y" data-inr="2999"></span><span class="fx m" data-inr="499" data-mo hidden></span>
         <p class="plsub y">Save 50% compared with paying monthly.</p><p class="plsub m" hidden>Cancel any time.</p>
-        <ul><li>Every season (AW26 to AW28), Resort, Pre-Fall and all six regions</li><li>India Festive and Summer reports</li><li>PDF downloads and detail cards as PNG or PDF</li><li>Pantone TCX on every colour</li><li>Ad-free, with weekly updates</li></ul>
+        <ul><li>Every season (AW26 to AW28), Resort, Pre-Fall and all six regions</li><li>India Festive and Summer reports</li><li>PDF downloads and detail cards as PNG or PDF</li><li>Named colours with HEX codes</li><li>Ad-free, with weekly updates</li></ul>
         <a class="btn tc" href="account.html#signup">Get full access</a></div>
       <div class="pl"><span class="plk">Teams</span><h3>Enterprise</h3><div class="pr">₹19,999<small> / year</small></div><span class="fx" data-inr="19999"></span>
         <p class="plsub">For 10 users, one login each.</p>

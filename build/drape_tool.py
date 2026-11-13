@@ -37,7 +37,7 @@ def build():
             f'<link rel="stylesheet" href="fonts/fonts.css">{T.head_links(SLUG)}<link rel="stylesheet" href="tools/drape.css?v={v}">'
             f'<link rel="modulepreload" href="tools/vendor/three.module.min.js"></head>'
             f'{T.body_open(SLUG)}<main id="main" class="fx-main">'
-            f'{T.title_row(SLUG, DESC, "Your garment, size, fabric and colour are saved in this browser. Download a backup to move them to another computer.", print_label="Save image", extra_buttons=chr(60) + "button id=" + chr(34) + "fxExample" + chr(34) + " type=" + chr(34) + "button" + chr(34) + ">Try a kurta" + chr(60) + "/button>")}'
+            f'{T.title_row(SLUG, '', "Your garment, size, fabric and colour are saved in this browser. Download a backup to move them to another computer.", print_label="Save image", extra_buttons=chr(60) + "button id=" + chr(34) + "fxExample" + chr(34) + " type=" + chr(34) + "button" + chr(34) + ">Try a kurta" + chr(60) + "/button>")}'
             f'<div id="status" role="status" aria-live="polite"></div><div id="app" class="fx-app" data-fx-gate></div>{start}'
             f'<noscript>Turn on JavaScript to use this tool.</noscript>'
             f'{T.foot("Forecut · The 3D view is a preview for proportion and fit direction. Fabric behaviour is estimated from typical weights, not lab tests. Always sew a sample before production.")}'

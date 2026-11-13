@@ -10,7 +10,8 @@ MENU = [
     ('Forecasts', 'forecasts', [
         ('Seasons', [('ss27.html', 'SS27', 'Next season forecast'), ('aw26.html', 'AW26', 'In stores now'),
                      ('resort-27.html', 'Resort 27', 'Cruise · Nov–Jan'), ('pre-fall-27.html', 'Pre-Fall 27', 'Outlook · May–Jul'),
-                     ('aw27.html', 'AW27', 'Early outlook')]),
+                     ('aw27.html', 'AW27', 'Early outlook'), ('ss28.html', 'SS28', 'Long-range projection'),
+                     ('aw28.html', 'AW28', 'Long-range projection')]),
         ('Regions', [('regions.html', 'All regions', 'Global forecast, read by market'), ('region-asia.html', 'Asia', ''),
                      ('region-europe.html', 'Europe', ''), ('region-north-america.html', 'North America', ''),
                      ('india.html', 'India', 'Festive and summer seasons')]),

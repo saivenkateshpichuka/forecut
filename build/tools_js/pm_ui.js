@@ -303,6 +303,20 @@
   $('#pm-grid').onchange = function () { draw(true); };
   $('#pm-tilesb').onclick = function () { TILES = !TILES; this.setAttribute('aria-pressed', TILES); draw(true); if (TILES) toast($('#pm-tilecount').textContent); };
   $('#pm-qa').onclick = function () { $('.rt button[data-t=checks]').click(); };
+  /* hide or show the side panels so the sheet can use the full width */
+  (function () {
+    var pb = $('.pbody'), st = {}; try { st = JSON.parse(localStorage.getItem('pm-sides') || '{}'); } catch (e) {}
+    function set(k, v) {
+      var b = $(k === 'l' ? '#pm-hidel' : '#pm-hider'), side = k === 'l' ? 'left' : 'right';
+      pb.classList.toggle('no' + k, v); b.setAttribute('aria-pressed', v);
+      b.title = (v ? 'Show the ' : 'Hide the ') + side + ' panel'; b.setAttribute('aria-label', b.title);
+      st[k] = v; try { localStorage.setItem('pm-sides', JSON.stringify(st)); } catch (e) {}
+    }
+    if (!pb || !$('#pm-hidel')) return;
+    set('l', !!st.l); set('r', !!st.r);
+    $('#pm-hidel').onclick = function () { set('l', !pb.classList.contains('nol')); };
+    $('#pm-hider').onclick = function () { set('r', !pb.classList.contains('nor')); };
+  })();
   /* right panel tabs */
   $$('.rt button').forEach(function (b) { b.onclick = function () { $$('.rt button').forEach(function (x) { x.setAttribute('aria-selected', x === b); }); $$('.pr [data-tp]').forEach(function (p) { p.hidden = p.dataset.tp !== b.dataset.t; }); }; });
   /* export menu */

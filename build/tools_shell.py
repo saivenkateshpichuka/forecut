@@ -83,7 +83,7 @@ def body_open(slug, extra_attrs=''):
 def title_row(slug, desc, workspace_note, print_label='Print / PDF', extra_buttons=''):
     n, l, stage = NAMES[slug]
     return (f'<div class="fx-title"><div><span class="fx-kicker">Step {escape(stage)}</span>'
-            f'<h1>{escape(n)}<span>{escape(l)}</span></h1><p>{escape(desc)}</p></div>'
+            f'<h1>{escape(n)}<span>{escape(l)}</span></h1>' + (f'<p>{escape(desc)}</p>' if desc else '') + '</div>'
             f'<div class="fx-actions no-print">{extra_buttons}<button id="print" type="button">{escape(print_label)}</button>'
             '<details class="fx-ws fx-app-menu"><summary>Get the app <span aria-hidden="true">▾</span></summary><div class="fx-ws-pop">'
             f'<button type="button" data-fx-install="tool">Install {escape(n)}<small>Just this tool, on your desktop or phone</small></button>'
