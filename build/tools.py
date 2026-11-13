@@ -440,6 +440,6 @@ pm = (PMCSS + '<link rel="manifest" href="apps/pattern-maker.webmanifest"><link 
       '<p>These are block patterns for samples and first toiles. Make a toile, check the fit and correct it before cutting good fabric or going to production.</p></div></div></details>')
 open(OUT + 'pm-link.js', 'w').write('window.FC_PM_LINKS=' + json.dumps({d[0]: PM_NAMES[d[3]] for d in PMD}) + ';' + JS('pm_link.js'))
 page('pattern-maker.html', 'Pattern Maker · Draft Kurta, Shirt, Blouse, Dress, Trousers & More · Forecut', pm,
-     'window.PM_DETAILS=' + json.dumps(PMD) + ';' + JS('pm_engine.js') + JS('pm_export.js') + JS('pm_views.js') + JS('pm_cost.js') + JS('pm_ui.js') + JS('pm_edit.js'), auth=True)
+     'window.PM_DETAILS=' + json.dumps(PMD) + ';' + JS('pm_engine.js') + JS('pm_export.js') + JS('pm_views.js') + JS('pm_cost.js') + JS('pm_ui.js') + JS('pm_edit.js') + JS('pm_cad.js') + JS('pm_studio.js'), auth=True)
 
 print('tools preview ok', 3)
