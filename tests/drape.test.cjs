@@ -23,7 +23,7 @@ for (const style of Object.keys(D.STYLES)) {
       assert.ok(S.seamGap() < (J ? 5 : kind === 'torso' && !D.STYLES[style].with ? 1.5 : D.STYLES[style].with ? 4.5 : 3.5), 'seams closed: ' + S.seamGap().toFixed(2));
       let top = -1e9; for (let i = 1; i < S.x.length; i += 3) top = Math.max(top, S.x[i]);
       if (kind !== 'torso') assert.ok(top > body.y.hip && top < body.y.waist + 9, 'stays up at the waist: ' + top.toFixed(1) + ' (waist ' + body.y.waist + ')');
-      else assert.ok(top > body.y.shoulder && top < body.y.hps + (style === 'hoodie' ? 16 : 6), 'garment hangs from the shoulders: ' + top.toFixed(1));
+      else { let crown = -1e9; for (let i = 1; i < body.pos.length; i += 3) crown = Math.max(crown, body.pos[i]); assert.ok(top > body.y.shoulder && top < (style === 'hoodie' ? crown + 3 : body.y.hps + 6), 'garment hangs from the shoulders (a hood may sit over the head): ' + top.toFixed(1)); }
     });
   }
 }

@@ -878,7 +878,7 @@
     for (i = 0; i < EA.length; i++) { var ea = E[3 * i], eb = E[3 * i + 1], du = uv[2 * eb] - uv[2 * ea], dv = uv[2 * eb + 1] - uv[2 * ea + 1], LL = du * du + dv * dv || 1, cw = du * du / LL, cl = dv * dv / LL;
       EA[i] = (fab.sw * cw + fab.sl * cl + fab.sb * .4 * 4 * cw * cl) * 1e-7; }
     this.EA = EA;
-    this.E = new Float32Array(E); this.E0 = new Float32Array(E); this.B = new Float32Array(Bn); this.BA = new Float32Array(Bn.length / 3).fill(fab.bend); this.userT = 0; this.S = M.seams; this.Tt = M.teth ? M.teth.slice() : new Float32Array(0);
+    this.E = new Float32Array(E); this.E0 = new Float32Array(E); this.B = new Float32Array(Bn); this.BA = new Float64Array(Bn.length / 3).fill(fab.bend); this.userT = 0; this.S = M.seams; this.Tt = M.teth ? M.teth.slice() : new Float32Array(0);
     for (i = 0; i < this.Tt.length; i += 3) { var ta0 = 3 * this.Tt[i], tb0 = 3 * this.Tt[i + 1]; this.Tt[i + 2] = Math.max(this.Tt[i + 2], Math.hypot(M.x[ta0] - M.x[tb0], M.x[ta0 + 1] - M.x[tb0 + 1], M.x[ta0 + 2] - M.x[tb0 + 2])); } /* never pull tighter than where the piece starts */ this.rings = M.rings || [];
     var SO = (M.sim || {}); this.t = 0; this.sub = Math.max(4, Math.min(40, +SO.sub || 14)); this.th = SO.th > 0 ? SO.th : Math.min(.6, .27 + fab.thick * .03); this.selfOn = SO.self !== false; this.grav = SO.grav > 0 ? SO.grav : 981; this.airK = SO.air >= 0 && SO.air !== undefined ? SO.air : 1; this.settled = false; this.calm = 0; this.tWake = 0; this.grip = new Uint8Array(n); (M.rings || []).forEach(function (rg) { rg.ids.forEach(function (k) { this.grip[k] = 1; }, this); }, this);
     // self-collision: points sewn together (same group) or close on the same flat piece never push each other apart
