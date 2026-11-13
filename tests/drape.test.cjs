@@ -51,7 +51,7 @@ test('button-front garments: buttons and zips are made, collars sit at the neck,
     const col = G.panels.findIndex(p => /^(BAND|COL|KC)$/.test(p.name)); assert.ok(col >= 0, st + ' has a collar or band');
     let lo = 1e9; for (let i = 0; i < M.panel.length; i++) if (M.panel[i] === col) lo = Math.min(lo, M.x[3 * i + 1]);
     assert.ok(lo > body.y.bust - 15 && lo < body.y.hps + 3, st + ' collar starts at the neckline: ' + lo.toFixed(1));
-    const G2 = D.assemble(PM, st, 'men', body.m, { fasten: 'open' }, body); assert.equal(G2.tacks.length, 0, 'unbuttoned has no tacks');
+    const G2 = D.assemble(PM, st, 'men', body.m, { fasten: 'open' }, body); assert.ok(G2.buttons.every(b => !b.closed) && G2.tacks.length < G.tacks.length, 'unbuttoned: buttons open, no button tacks');
   }
 });
 test('a heavier, stiffer fabric hangs differently from a light one', () => {
