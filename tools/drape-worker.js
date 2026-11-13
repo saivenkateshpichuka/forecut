@@ -2,12 +2,12 @@
 /* Forecut 3D Drape Studio: runs the sewing and draping off the page's main thread. */
 /* global importScripts, PM, FCDrape, Delaunator */
 self.window = self;
-importScripts('pm-engine.js?v=fx-20261113c', 'drape-sim.js?v=fx-20261113c', 'vendor/delaunator.min.js');
+importScripts('pm-engine.js?v=fx-20261113d', 'drape-sim.js?v=fx-20261113d', 'vendor/delaunator.min.js');
 var sim = null, M = null, body = null, running = false, gen = 0, frames = 0;
 
 var AV = null, AVP = null, bodyKey = '';
 function avatars() {
-  if (!AVP) AVP = Promise.all([fetch('avatar/avatars.bin?v=fx-20261113c').then(function (r) { return r.arrayBuffer(); }), fetch('avatar/avatars.json?v=fx-20261113c').then(function (r) { return r.json(); })])
+  if (!AVP) AVP = Promise.all([fetch('avatar/avatars.bin?v=fx-20261113d').then(function (r) { return r.arrayBuffer(); }), fetch('avatar/avatars.json?v=fx-20261113d').then(function (r) { return r.json(); })])
     .then(function (x) { AV = FCDrape.loadAvatars(x[0], x[1]); return AV; });
   return AVP;
 }
@@ -56,6 +56,14 @@ onmessage = function (e) {
     else if (q.cmd === 'pstart' && sim) { sim.startPanel(q.panel); kick(); }
     else if (q.cmd === 'pmove' && sim) { sim.movePanel(q.e); kick(); }
     else if (q.cmd === 'pend' && sim) { sim.endPanel(); kick(); }
+    else if (q.cmd === 'pin' && sim) { sim.pin(q.i, q.on); kick(); }
+    else if (q.cmd === 'freeze' && sim) { sim.freeze(q.panel, q.on); kick(); }
+    else if (q.cmd === 'tack' && sim) { sim.tack(q.a, q.b); kick(); }
+    else if (q.cmd === 'untack' && sim) { sim.clearTacks(); kick(); }
+    else if (q.cmd === 'stiff' && sim) { sim.stiffen(q.panel, q.k); kick(); }
+    else if (q.cmd === 'elastic' && sim) { var ids = []; (q.keys || []).forEach(function (k) { (M.segIdx[q.panel + '|' + k] || []).forEach(function (i) { if (ids.indexOf(i) < 0) ids.push(i); }); }); if (ids.length > 2) { sim.elastic(ids, q.ratio); kick(); } }
+    else if (q.cmd === 'unelastic' && sim) { sim.clearElastic(); kick(); }
+    else if (q.cmd === 'pucker' && sim) { sim.pucker(q.a); kick(); }
     else if (q.cmd === 'pause') running = false;
     else if (q.cmd === 'resume' && sim && !sim.settled) { running = true; tick(); }
   } catch (err) { postMessage({ type: 'error', gen: q.gen || gen, message: String(err && err.message || err) }); }

@@ -10,9 +10,9 @@ const KEY = 'fc-tool-drape';
 const COLOURS = [['#f3efe6', 'Ecru'], ['#1f2a44', 'Navy'], ['#b5462f', 'Brick'], ['#2f5d50', 'Bottle green'], ['#d9a441', 'Turmeric'], ['#c9a7b6', 'Dusty rose'], ['#7c8ea3', 'Chambray'], ['#242424', 'Black']];
 const NECK = [['round', 'Round'], ['crew', 'Crew'], ['deep', 'Deep round'], ['ushape', 'U-neck'], ['v', 'V-neck'], ['boat', 'Boat'], ['square', 'Square']];
 const SLEEVE = { plain: 'Set-in sleeve', tee: 'T-shirt sleeve', puff: 'Puff sleeve', bell: 'Bell sleeve', cap: 'Cap sleeve', none: 'Sleeveless' };
-const SLEEVES = { tshirt: ['tee', 'none'], top: ['plain', 'puff', 'bell', 'cap', 'none'], kurta: ['plain', 'bell', 'puff', 'cap', 'none'], dress: ['plain', 'puff', 'bell', 'cap', 'none'], shirt: ['shirt', 'plain'], shirtdress: ['shirt', 'plain'], blouse: ['plain', 'puff', 'cap', 'none'] };
+const SLEEVES = { tshirt: ['tee', 'none'], top: ['plain', 'puff', 'bell', 'cap', 'none'], kurta: ['plain', 'bell', 'puff', 'cap', 'none'], dress: ['plain', 'puff', 'bell', 'cap', 'none'], shirt: ['shirt', 'plain'], shirtdress: ['shirt', 'plain'], blouse: ['plain', 'puff', 'cap', 'none'], bodice: ['plain', 'none'] };
 SLEEVE.shirt = 'Shirt sleeve';
-const GROUPS = [['Tops and dresses', ['tshirt', 'top', 'tank', 'sweat', 'kurta', 'dress']], ['Skirts', ['aline', 'pencil', 'circle', 'gathered', 'kalis', 'lehenga']],
+const GROUPS = [['Tops and dresses', ['tshirt', 'top', 'peplum', 'tank', 'bodice', 'sweat', 'hoodie', 'kurta', 'dress', 'frock']], ['Dresses, Anarkali and jumpsuits', ['anarkali', 'jumpsuit']], ['Skirts', ['aline', 'pencil', 'circle', 'gathered', 'kalis', 'lehenga']],
   ['Shirts and jackets', ['shirt', 'shirtdress', 'blouse', 'polo', 'jacket', 'bandhgala', 'sherwani', 'blazer', 'coat', 'bomber']],
   ['Trousers and Indian bottoms', ['trousers', 'jeans', 'churidar', 'salwar', 'patiala', 'gharara']], ['Sets', ['kurtaset', 'kurtachuri']]];
 const BTN = { horn: ['Horn', '#4a3426', .45], pearl: ['Pearl', '#efe9df', .25], metal: ['Metal', '#b8a067', .3], wood: ['Wood', '#8a5a34', .7], self: ['Covered in the fabric', '', .8], black: ['Black', '#1c1c1c', .35] };
@@ -73,9 +73,9 @@ app.innerHTML = `<div class="dr" id="drRoot">
       <div class="dr-seg" id="drViews"><button data-v="front" aria-pressed="true">Front</button><button data-v="q">¾</button><button data-v="side">Side</button><button data-v="back">Back</button></div>
       <details class="dr-menu" id="drShow"><summary>Show <span aria-hidden="true">▾</span></summary><div class="dr-pop">
         <div class="dr-seg dr-col" id="drFit"><button data-f="off">Fabric</button><button data-f="fit">Fit map</button><button data-f="strain">Stretch map</button></div>
-        <label class="dr-chk"><input type="checkbox" id="drBody"> Avatar</label><label class="dr-chk"><input type="checkbox" id="drSeams"> Seam lines</label></div></details>
-      <div class="dr-seg" id="drTool" aria-label="Mouse tool"><button data-t="pull" title="Drag the fabric to pull it, as you would on a real garment">Pull</button><button data-t="move" title="Click a piece, then move or rotate it with the gizmo">Move piece</button></div>
-      <div class="dr-seg" id="drGz" hidden><button data-g="translate" aria-pressed="true" title="Move (W)">Move</button><button data-g="rotate" title="Rotate (E)">Rotate</button><button data-g="done" title="Finish (Esc)">Done</button></div>
+        <label class="dr-chk"><input type="checkbox" id="drBody"> Avatar</label><label class="dr-chk"><input type="checkbox" id="drSeams"> Seam lines</label><hr><button type="button" class="dr-mi" id="drHD">Save HD image</button><button type="button" class="dr-mi" id="drTurn">Record turntable video</button><button type="button" class="dr-mi" id="drClear">Remove pins, tacks and elastic</button></div></details>
+      <div class="dr-seg" id="drTool" aria-label="Mouse tool"><button data-t="pull" title="Drag the fabric to pull it, as you would on a real garment">Pull</button><button data-t="pin" title="Click the cloth to pin it where it is; click a pin to remove it">Pin</button><button data-t="tack" title="Click two points of the cloth to tack them together">Tack</button><button data-t="move" title="Click a piece to move, rotate, freeze or stiffen it">Piece</button></div>
+      <div class="dr-seg" id="drGz" hidden><button data-g="translate" aria-pressed="true" title="Move (W)">Move</button><button data-g="rotate" title="Rotate (E)">Rotate</button><button data-g="freeze" title="Hold this piece still while the rest drapes">Freeze</button><button data-g="stiff" title="Interfacing: make this piece stiffer, like a fused collar or facing">Interfacing</button><button data-g="elastic" title="Gather the hem of this piece with elastic">Elastic hem</button><button data-g="done" title="Finish (Esc)">Done</button></div>
       <span class="dr-sp"></span>
       <div class="dr-seg" id="drUnits" aria-label="Units"><button data-u="cm">cm</button><button data-u="mm">mm</button><button data-u="in">in</button></div>
       <button type="button" class="dr-ic" id="drFull" aria-pressed="false" title="Full window (F)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5"/></svg></button>
@@ -186,6 +186,7 @@ function renderControls() {
   const T = trims(), hasBtn = st.kind === 'torso' && (st.open || st.gid === 'polo') && !st.zip;
   if (st.kind === 'torso' && (st.open || st.gid === 'polo')) h.push(`<h3>Trims</h3>` + (hasBtn ? `<label>Buttons<select data-t="btn">${Object.keys(BTN).map(k => opt(k, BTN[k][0], T.btn)).join('')}</select></label>` : '') + (st.zip ? `<label>Zip<select data-t="zip">${opt('metal', 'Metal teeth', T.zip)}${opt('plastic', 'Moulded plastic', T.zip)}${opt('brass', 'Antique brass', T.zip)}</select></label>` : '') +
     `<label class="dr-chk"><input type="checkbox" data-t="top"${T.top ? ' checked' : ''}> Topstitching</label><label>Thread<select data-t="thread">${opt('tone', 'Tone on tone', T.thread)}${opt('contrast', 'Contrast (second colour)', T.thread)}</select></label>`);
+  h.push(`<label>Seam puckering <output>${(+S.pucker || 0)}%</output><input type="range" data-x="pucker" min="0" max="6" step="0.5" value="${+S.pucker || 0}"></label>`);
   $('#drOpts').innerHTML = h.join('');
   const m = baseMeas(); m.height = +(S.meas || {}).height || (lastBody ? Math.round(lastBody.height) : '');
   const us = (UNIT[S.unit] || UNIT.cm)[2];
@@ -240,7 +241,7 @@ $('#drFabReset').addEventListener('click', () => { S.fabOv = {}; renderFabric();
 $('#drFabSave').addEventListener('click', () => { const n = $('#drFabName').value.trim() || fab().n + ' (mine)', id = 'my' + Date.now().toString(36); myFabs()[id] = Object.assign(fab(), { n, g: 'My fabrics', note: 'Your own fabric, based on ' + baseFab().n.toLowerCase() + '.' }); S.fabric = id; S.fabOv = {}; $('#drFabName').value = ''; renderFabric(); refab(); status('Saved “' + n + '” to My fabrics', 'ok'); });
 $('#drFabDel').addEventListener('click', () => { if (!myFabs()[S.fabric]) return; delete myFabs()[S.fabric]; S.fabric = 'jersey'; S.fabOv = {}; renderFabric(); refab(); });
 $('#drQuality').addEventListener('change', e => { S.quality = e.target.value; save(); rebuild(); });
-$('#drOpts').addEventListener('input', e => { const tk = e.target.dataset.t; if (tk) { trims()[tk] = e.target.type === 'checkbox' ? e.target.checked : e.target.value; save(); trimLook(); return; } const k = e.target.dataset.o; if (!k) return; const v = e.target.type === 'range' ? +e.target.value : e.target.value; S.opts[k] = v; const o = e.target.parentNode.querySelector('output'); if (o) o.textContent = outTxt(k, v); save(); if (e.target.tagName === 'SELECT') { renderControls(); rebuild(); } else later(rebuild); });
+$('#drOpts').addEventListener('input', e => { if (e.target.dataset.x === 'pucker') { S.pucker = +e.target.value; e.target.parentNode.querySelector('output').textContent = S.pucker + '%'; save(); if (worker && built) worker.postMessage({ cmd: 'pucker', a: S.pucker / 100, gen }); return; } const tk = e.target.dataset.t; if (tk) { trims()[tk] = e.target.type === 'checkbox' ? e.target.checked : e.target.value; save(); trimLook(); return; } const k = e.target.dataset.o; if (!k) return; const v = e.target.type === 'range' ? +e.target.value : e.target.value; S.opts[k] = v; const o = e.target.parentNode.querySelector('output'); if (o) o.textContent = outTxt(k, v); save(); if (e.target.tagName === 'SELECT') { renderControls(); rebuild(); } else later(rebuild); });
 $('#drMeas').addEventListener('input', e => { const k = e.target.dataset.m; if (!k || !(+e.target.value > 0)) return; S.meas[k] = Math.round(fromU(+e.target.value) * 10) / 10; save(); later(rebuild, 600); });
 $('#drMeasReset').addEventListener('click', () => { S.meas = {}; save(); renderControls(); rebuild(); });
 function setCw(k, v) { cw()[k] = v; S.colour = cw().c1; save(); renderColour(); applyMaterial(); }
@@ -257,8 +258,13 @@ $('#drCwDel').addEventListener('click', () => { if (cws().length < 2) return; cw
 $('#drUnits').addEventListener('click', e => { const u = e.target.dataset.u; if (!u) return; S.unit = u; save(); renderControls(); if (lastMesh) drawTable(lastMesh, baseMeas()); });
 $('#drSew').addEventListener('click', () => rebuild());
 $('#drTone').addEventListener('click', e => { const t = e.target.dataset && e.target.dataset.tone; if (!t) return; S.tone = t; save(); $$('#drTone button').forEach(b => b.setAttribute('aria-checked', b.dataset.tone === t)); tintBody(); });
-$('#drTool').addEventListener('click', e => { const t = e.target.dataset.t; if (!t) return; S.tool = t; save(); $$('#drTool button').forEach(b => b.setAttribute('aria-pressed', b.dataset.t === t)); if (t === 'pull') selectPanel(-1); $('#drHint').textContent = t === 'move' ? 'Click a piece to move or rotate it · Drag the background to turn' : 'Drag the fabric to pull it · Drag the background to turn · Scroll to zoom · Right-drag to pan'; });
-$('#drGz').addEventListener('click', e => { const g = e.target.dataset.g; if (!g) return; if (g === 'done') { selectPanel(-1); return; } tc.setMode(g); $$('#drGz button').forEach(b => b.setAttribute('aria-pressed', b.dataset.g === g)); });
+$('#drTool').addEventListener('click', e => { const t = e.target.dataset.t; if (!t) return; S.tool = t; save(); $$('#drTool button').forEach(b => b.setAttribute('aria-pressed', b.dataset.t === t)); if (t === 'pull') selectPanel(-1); tackA = null; $('#drHint').textContent = { move: 'Click a piece to move, rotate, freeze or stiffen it · Drag the background to turn', pin: 'Click the cloth to pin it · Click a pin to remove it', tack: 'Click a point, then a second point, to tack them together' }[t] || 'Drag the fabric to pull it · Drag the background to turn · Scroll to zoom · Right-drag to pan'; });
+$('#drGz').addEventListener('click', e => { const g = e.target.dataset.g; if (!g) return; if (g === 'done') { selectPanel(-1); return; }
+  if (g === 'freeze' || g === 'stiff' || g === 'elastic') { const k = selPanel, on = !(PS[g] && PS[g][k]); (PS[g] = PS[g] || {})[k] = on; e.target.setAttribute('aria-pressed', on);
+    if (g === 'freeze') worker.postMessage({ cmd: 'freeze', panel: k, on, gen });
+    if (g === 'stiff') worker.postMessage({ cmd: 'stiff', panel: k, k: on ? 10 : 1, gen });
+    if (g === 'elastic') { if (on) { const keys = (lastMesh.panels[k].segs || []).map(q => q.key).filter(q => /hem/.test(q)); if (!keys.length) { status('This piece has no hem for elastic', 'err'); PS.elastic[k] = false; e.target.setAttribute('aria-pressed', false); return; } worker.postMessage({ cmd: 'elastic', panel: k, keys, ratio: .78, gen }); } else worker.postMessage({ cmd: 'unelastic', gen }); }
+    paused = false; status({ freeze: on ? 'Piece frozen' : 'Piece free again', stiff: on ? 'Interfacing added to this piece' : 'Interfacing removed', elastic: on ? 'Elastic in the hem' : 'Elastic removed' }[g], 'run'); return; } tc.setMode(g); $$('#drGz button').forEach(b => b.setAttribute('aria-pressed', b.dataset.g === g)); });
 window.addEventListener('keydown', e => {
   if (/INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
   if ((e.key === 'f' || e.key === 'F') && !e.metaKey && !e.ctrlKey) { full(!document.body.classList.contains('dr-full')); return; }
@@ -421,6 +427,7 @@ function drawFabPrev() { // a small swatch of the fabric in the current colourwa
   g.globalCompositeOperation = 'source-over'; g.globalAlpha = 1;
   const gr = g.createLinearGradient(0, 0, W, W); gr.addColorStop(0, 'rgba(255,255,255,' + (.08 + (+f.sheen || 0) * .35) + ')'); gr.addColorStop(.5, 'rgba(255,255,255,0)'); gr.addColorStop(1, 'rgba(0,0,0,.12)'); g.fillStyle = gr; g.fillRect(0, 0, W, W);
 }
+let PS = {}, pins = [], tackA = null, tackLines = [];
 let garMesh = null, seamMesh = null, seamMat = null, posAttr = null, colAttr = null, lastGap = null, lastStrain = null, panelOf = null, selPanel = -1, lastMesh = null;
 function buildGarment(d) {
   if (garMesh) { scene.remove(garMesh); garMesh.geometry.dispose(); }
@@ -436,7 +443,7 @@ function buildGarment(d) {
   const sg = new THREE.BufferGeometry(); sg.setAttribute('position', posAttr); sg.setIndex(li);
   seamMat = seamMat || new THREE.LineBasicMaterial({ color: '#333' });
   seamMesh = new THREE.LineSegments(sg, seamMat); seamMesh.visible = S.seamsOn; scene.add(seamMesh);
-  lastGap = lastStrain = null; applyMaterial(); buildTrims(d);
+  lastGap = lastStrain = null; applyMaterial(); buildTrims(d); drawMarks();
 }
 /* ---------- trims: buttons, buttonholes, zip teeth and topstitching, riding on the cloth ---------- */
 const trimGroup = new THREE.Group(); scene.add(trimGroup);
@@ -493,7 +500,11 @@ function buildTrims(d) {
   if (TR.tops.length) { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(TR.tops.length * 6), 3)); TR.tMesh = new THREE.LineSegments(g, topMat); TR.tMesh.frustumCulled = false; trimGroup.add(TR.tMesh); }
   trimLook(); updateTrims();
 }
-function updateTrims() {
+const markGroup = new THREE.Group(); scene.add(markGroup); markGroup.renderOrder = 9;
+const pinMat = new THREE.MeshBasicMaterial({ color: '#c4572f', depthTest: false }), pinGeo = new THREE.SphereGeometry(.8, 14, 10), tackMat = new THREE.MeshBasicMaterial({ color: '#2f6f8f', depthTest: false });
+function drawMarks() { markGroup.clear(); pins.forEach(i => { const m = new THREE.Mesh(pinGeo, pinMat); m.userData.i = i; m.renderOrder = 9; markGroup.add(m); }); tackLines.forEach(t => t.forEach(i => { const m = new THREE.Mesh(pinGeo, tackMat); m.scale.setScalar(.7); m.userData.i = i; m.renderOrder = 9; markGroup.add(m); })); if (tackA != null) { const m = new THREE.Mesh(pinGeo, tackMat); m.userData.i = tackA; markGroup.add(m); } updateMarks(); }
+function updateMarks() { if (!posAttr) return; const a = posAttr.array; markGroup.children.forEach(m => { const i = m.userData.i; m.position.set(a[3 * i], a[3 * i + 1], a[3 * i + 2]); }); dirty = true; }
+function updateTrims() { updateMarks();
   if (!TR || !garMesh || !garMesh.geometry.attributes.normal) return;
   TR.btn.forEach((b, i) => { if (b.on) { frameAt(b.on, .12, TR.vertical); if (b.small) _m.scale(_s.set(.8, .8, .8)); TR.bMesh.setMatrixAt(i, _m); } if (b.hole && !b.closed) { frameAt(b.hole, .05, TR.vertical); TR.hMesh.setMatrixAt(i, _m); } else { _m.makeScale(0, 0, 0); TR.hMesh.setMatrixAt(i, _m); } });
   if (TR.bMesh) { TR.bMesh.instanceMatrix.needsUpdate = true; TR.hMesh.instanceMatrix.needsUpdate = true; TR.bMesh.computeBoundingSphere(); TR.hMesh.computeBoundingSphere(); }
@@ -594,7 +605,7 @@ function onMsg(e) {
     status('Cutting and sewing the pieces…', 'run'); return;
   }
   if (d.type === 'mesh') {
-    built = true; panelOf = d.panel; lastMesh = d; selPanel = -1; tc.detach(); $('#drGz').hidden = true; buildGarment(d); drawPieces(d); drawTable(d, baseMeas()); fitTarget(curBody, d); setView(view, false);
+    built = true; panelOf = d.panel; lastMesh = d; selPanel = -1; PS = {}; pins = []; tackA = null; tackLines = []; if (+S.pucker) worker.postMessage({ cmd: 'pucker', a: S.pucker / 100, gen }); tc.detach(); $('#drGz').hidden = true; buildGarment(d); drawPieces(d); drawTable(d, baseMeas()); fitTarget(curBody, d); setView(view, false);
     $('#drPM').href = 'pattern-maker.html'; return;
   }
   if (d.type === 'frame') {
@@ -609,6 +620,21 @@ function onMsg(e) {
 function size() { const r = canvas.parentNode.getBoundingClientRect(); renderer.setSize(r.width, r.height, false); camera.aspect = r.width / r.height; camera.updateProjectionMatrix(); dirty = true; }
 new ResizeObserver(size).observe(canvas.parentNode);
 function loop() { requestAnimationFrame(loop); if (controls.update()) dirty = true; if (dirty) { draw(); dirty = false; } }
+function hdImage() { // supersampled still for presentations
+  const r = canvas.getBoundingClientRect(), pr = renderer.getPixelRatio(), k = Math.min(4, 3840 / r.width); renderer.setPixelRatio(k); renderer.setSize(r.width, r.height, false); key.shadow.mapSize.set(4096, 4096);
+  markGroup.visible = false; draw(true); const a = document.createElement('a'); a.href = canvas.toDataURL('image/png'); a.download = 'forecut-3d-hd-' + S.style + '-' + (cw().name || '').replace(/\W+/g, '-').toLowerCase() + '.png'; a.click();
+  renderer.setPixelRatio(pr); size(); markGroup.visible = true; status('HD image saved', 'ok');
+}
+function turntable() { // 8 seconds, one full turn, saved as a WebM video
+  if (!canvas.captureStream || !window.MediaRecorder) { status('This browser cannot record video', 'err'); return; }
+  const st = canvas.captureStream(30), mime = ['video/webm;codecs=vp9', 'video/webm'].find(t => MediaRecorder.isTypeSupported(t)) || '', rec = new MediaRecorder(st, mime ? { mimeType: mime, videoBitsPerSecond: 8e6 } : {}), chunks = [];
+  rec.ondataavailable = e => { if (e.data.size) chunks.push(e.data); }; rec.onstop = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(chunks, { type: 'video/webm' })); a.download = 'forecut-turntable-' + S.style + '.webm'; a.click(); markGroup.visible = true; status('Turntable video saved', 'ok'); };
+  const d0 = camera.position.clone().sub(controls.target), rad = Math.hypot(d0.x, d0.z), y0 = d0.y, a0 = Math.atan2(d0.x, d0.z), t0 = performance.now(), T = 8000; markGroup.visible = false; rec.start(); status('Recording the turntable…', 'run');
+  (function spin() { const t = Math.min(1, (performance.now() - t0) / T), a = a0 + t * Math.PI * 2; camera.position.set(controls.target.x + rad * Math.sin(a), controls.target.y + y0, controls.target.z + rad * Math.cos(a)); camera.lookAt(controls.target); dirty = true; if (t < 1) requestAnimationFrame(spin); else setTimeout(() => rec.stop(), 150); })();
+}
+$('#drHD').addEventListener('click', () => { $('#drShow').open = false; hdImage(); });
+$('#drTurn').addEventListener('click', () => { $('#drShow').open = false; turntable(); });
+$('#drClear').addEventListener('click', () => { $('#drShow').open = false; if (!worker || !built) return; pins.forEach(i => worker.postMessage({ cmd: 'pin', i, on: false, gen })); pins = []; tackLines = []; tackA = null; worker.postMessage({ cmd: 'untack', gen }); worker.postMessage({ cmd: 'unelastic', gen }); PS.elastic = {}; drawMarks(); status('Pins, tacks and elastic removed', 'run'); });
 const pb = $('#print'); if (pb) pb.addEventListener('click', () => { draw(true); const a = document.createElement('a'); a.href = canvas.toDataURL('image/png'); a.download = 'forecut-3d-' + S.style + '-' + S.gender + '-' + S.size + '.png'; a.click(); });
 const bk = $('#backup'); if (bk) bk.addEventListener('click', () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(Object.assign({ v: 1, tool: 'drape' }, S), null, 1)], { type: 'application/json' })); a.download = 'forecut-3d-drape-backup.json'; a.click(); });
 const rs = $('#restore'), rf = $('#restoreFile');
@@ -660,7 +686,7 @@ function selectPanel(pi) {
   if (pi < 0 || !posAttr) { tc.detach(); $('#drGz').hidden = true; }
   else {
     const a = posAttr.array, c = new THREE.Vector3(); let k = 0; for (let i = 0; i < panelOf.length; i++) if (panelOf[i] === pi) { c.x += a[3 * i]; c.y += a[3 * i + 1]; c.z += a[3 * i + 2]; k++; }
-    pivot.position.copy(c.multiplyScalar(1 / Math.max(1, k))); pivot.rotation.set(0, 0, 0); pivot.updateMatrixWorld(); tc.attach(pivot); $('#drGz').hidden = false;
+    pivot.position.copy(c.multiplyScalar(1 / Math.max(1, k))); pivot.rotation.set(0, 0, 0); pivot.updateMatrixWorld(); tc.attach(pivot); $('#drGz').hidden = false; ['freeze', 'stiff', 'elastic'].forEach(g => $('[data-g=' + g + ']').setAttribute('aria-pressed', !!(PS[g] && PS[g][pi])));
     if (S.tool !== 'move') { S.tool = 'move'; $$('#drTool button').forEach(b => b.setAttribute('aria-pressed', b.dataset.t === 'move')); }
   }
   $$('#drPieces .dr-pc').forEach(p => p.classList.toggle('on', +p.dataset.pi === pi || (pi >= 0 && lastMesh && lastMesh.panels[pi] && lastMesh.panels[pi].name === 'SL' && lastMesh.panels[+p.dataset.pi].name === 'SR')));
@@ -687,6 +713,8 @@ view3d.addEventListener('pointerdown', e => {
   if (!built || !worker) return;
   const pk = pickVertex(e); if (!pk) return;
   if (S.tool === 'move') { e.stopPropagation(); selectPanel(panelOf[pk.i]); return; }
+  if (S.tool === 'pin') { e.stopPropagation(); const at2 = pins.findIndex(q => q === pk.i || Math.hypot(posAttr.array[3 * q] - pk.point.x, posAttr.array[3 * q + 1] - pk.point.y, posAttr.array[3 * q + 2] - pk.point.z) < 1.5); if (at2 >= 0) { worker.postMessage({ cmd: 'pin', i: pins[at2], on: false, gen }); pins.splice(at2, 1); } else { pins.push(pk.i); worker.postMessage({ cmd: 'pin', i: pk.i, on: true, gen }); } paused = false; drawMarks(); return; }
+  if (S.tool === 'tack') { e.stopPropagation(); if (tackA == null) { tackA = pk.i; status('First point chosen · click the second point', 'run'); drawMarks(); return; } if (pk.i !== tackA) { tackLines.push([tackA, pk.i]); worker.postMessage({ cmd: 'tack', a: tackA, b: pk.i, gen }); paused = false; } tackA = null; drawMarks(); return; }
   e.stopPropagation(); canvas.setPointerCapture(e.pointerId); view3d.classList.add('pulling');
   const n = new THREE.Vector3(); camera.getWorldDirection(n);
   pulling = { plane: new THREE.Plane().setFromNormalAndCoplanarPoint(n, pk.point), off: new THREE.Vector3(posAttr.array[3 * pk.i], posAttr.array[3 * pk.i + 1], posAttr.array[3 * pk.i + 2]).sub(pk.point) };

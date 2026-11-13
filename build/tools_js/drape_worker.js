@@ -55,6 +55,14 @@ onmessage = function (e) {
     else if (q.cmd === 'pstart' && sim) { sim.startPanel(q.panel); kick(); }
     else if (q.cmd === 'pmove' && sim) { sim.movePanel(q.e); kick(); }
     else if (q.cmd === 'pend' && sim) { sim.endPanel(); kick(); }
+    else if (q.cmd === 'pin' && sim) { sim.pin(q.i, q.on); kick(); }
+    else if (q.cmd === 'freeze' && sim) { sim.freeze(q.panel, q.on); kick(); }
+    else if (q.cmd === 'tack' && sim) { sim.tack(q.a, q.b); kick(); }
+    else if (q.cmd === 'untack' && sim) { sim.clearTacks(); kick(); }
+    else if (q.cmd === 'stiff' && sim) { sim.stiffen(q.panel, q.k); kick(); }
+    else if (q.cmd === 'elastic' && sim) { var ids = []; (q.keys || []).forEach(function (k) { (M.segIdx[q.panel + '|' + k] || []).forEach(function (i) { if (ids.indexOf(i) < 0) ids.push(i); }); }); if (ids.length > 2) { sim.elastic(ids, q.ratio); kick(); } }
+    else if (q.cmd === 'unelastic' && sim) { sim.clearElastic(); kick(); }
+    else if (q.cmd === 'pucker' && sim) { sim.pucker(q.a); kick(); }
     else if (q.cmd === 'pause') running = false;
     else if (q.cmd === 'resume' && sim && !sim.settled) { running = true; tick(); }
   } catch (err) { postMessage({ type: 'error', gen: q.gen || gen, message: String(err && err.message || err) }); }

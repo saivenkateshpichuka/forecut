@@ -105,3 +105,4 @@ body.dr-full .dr{position:fixed;inset:0;z-index:3000;height:100vh;max-height:non
 .dr-props label{display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:8px;margin-bottom:4px}.dr-props label output{float:none}.dr-props input[type=range]{grid-column:1/-1;margin:2px 0 4px}.dr-props select{grid-column:1/-1}
 .dr-opts label output{font-variant-numeric:tabular-nums}
 .dr input[type=range]{height:18px;padding:0}
+.dr .dr-mi{display:block;width:100%;text-align:left;border:0;background:none;padding:7px 8px;font-weight:600;font-size:12.5px;border-radius:6px}.dr .dr-mi:hover{background:#f0ece3}.dr-pop hr{border:0;border-top:1px solid var(--fx-line);margin:6px 0}#drGz{flex-wrap:wrap}

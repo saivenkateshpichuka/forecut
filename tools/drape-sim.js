@@ -238,7 +238,7 @@
     patiala: { n: 'Patiala salwar', gid: 'patiala', kind: 'salwar' },
     kurtaset: { n: 'Kurta with salwar', gid: 'kurta', kind: 'torso', with: 'salwar' },
     kurtachuri: { n: 'Kurta with churidar', gid: 'kurta', kind: 'torso', with: 'churidar' },
-    shirt: { n: 'Shirt', gid: 'shirt', kind: 'torso', open: 1, fix: { pockets: 0 } },
+    shirt: { n: 'Shirt', gid: 'shirt', kind: 'torso', open: 1 },
     shirtdress: { n: 'Shirt dress', gid: 'shirtdress', kind: 'torso', open: 1, fix: { pockets: 0 } },
     blouse: { n: 'Button-front blouse', gid: 'blouse', kind: 'torso', open: 1, fix: { opening: 1 } },
     polo: { n: 'Polo shirt', gid: 'polo', kind: 'torso' },
@@ -247,7 +247,13 @@
     sherwani: { n: 'Sherwani', gid: 'sherwani', kind: 'torso', open: 1 },
     blazer: { n: 'Blazer', gid: 'blazer', kind: 'torso', open: 1, fix: { pockets: 0 } },
     coat: { n: 'Overcoat', gid: 'coat', kind: 'torso', open: 1, fix: { pockets: 0 } },
-    bomber: { n: 'Bomber jacket', gid: 'bomber', kind: 'torso', open: 1, zip: 1 }
+    bomber: { n: 'Bomber jacket', gid: 'bomber', kind: 'torso', open: 1, zip: 1 },
+    bodice: { n: 'Fitted bodice (darts)', gid: 'bodice', kind: 'torso' },
+    peplum: { n: 'Peplum top', gid: 'top', kind: 'torso', fix: { peplum: 1 } },
+    hoodie: { n: 'Hoodie', gid: 'hoodie', kind: 'torso', fix: { hood: 1, pockets: 1 } },
+    frock: { n: 'Frock (bodice + gathered skirt)', gid: 'dress', kind: 'torso', fix: { dress: 'frock' }, def: { sleeve: 'puff' } },
+    anarkali: { n: 'Anarkali', gid: 'anarkali', kind: 'torso' },
+    jumpsuit: { n: 'Jumpsuit', gid: 'jumpsuit', kind: 'torso' }
   };
   /* bottoms: trousers and Indian pants wrap from the hips down each leg; skirts are panels round the body */
   function loopPts(segs) { var a = []; segs.forEach(function (s, i) { s.pts.forEach(function (q, j) { if (i && !j) return; a.push(q); }); }); return a; }
@@ -439,6 +445,7 @@
       var e = bk.edges, ye = yk.edges, top = ye[0].p[ye[0].p.length - 1];
       return { id: 'back', edges: [{ t: 'fold', p: [top].concat(e[0].p) }, e[1], e[2], { t: 'seam', p: e[3].p.concat(ye[3].p.slice().reverse()) }, { t: 'seam', p: ye[2].p.slice().reverse() }, { t: 'seam', p: ye[1].p.slice().reverse() }], marks: bk.marks };
     }
+    function splitLen0(pts, L) { var c = 0; for (var i = 1; i < pts.length; i++) { var d = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); if (c + d >= L) { var t = (L - c) / (d || 1), q = [pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * t, pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * t]; return [pts.slice(0, i).concat([q]), [q].concat(pts.slice(i))]; } c += d; } return [pts, [pts[pts.length - 1], pts[pts.length - 1]]]; }
     function maxU(segs) { var u = 0; segs.forEach(function (s) { s.pts.forEach(function (q) { u = Math.max(u, Math.abs(q[0])); }); }); return u; }
     var mods = { cutDarts: cutDarts, half: half, maxU: maxU };
     if (ST.kind === 'pants' || ST.kind === 'salwar' || ST.kind === 'circle' || ST.kind === 'panels') { bottoms(ST.kind, r, o, m, body, panels, seams, rings, mods); }
@@ -463,12 +470,34 @@
       if (!f || !b || b.edges[0].t !== 'fold' || (!open && f.edges[0].t !== 'fold') || f.edges.length !== 6) throw new Error('This style is not available in 3D yet.');
       var roles = ['hem', 'side', 'arm', 'sh', 'neck'];
       var slit = +o.slit || 0, Lh = f.edges[1].p[0][1];
-      var segB = half(b, roles), fronts;
-      if (open) { // two fronts, each cut with its own extension past centre front
-        var segR = f.edges.map(function (e, i) { return { key: (i ? roles[i - 1] : 'cf') + '.R', pts: e.p.map(function (q) { return q.slice(); }) }; });
-        var segL = segR.slice().reverse().map(function (sg) { return { key: sg.key.replace('.R', '.L'), pts: mirror(sg.pts) }; });
-        fronts = [segR, segL];
-      } else fronts = [half(f, roles)];
+      function rightSegs(pc, withCF) { // one side of a piece; waist darts on the hem and a bust dart on the side seam are cut out to be sewn
+        var marks = pc.marks || [], out = [];
+        pc.edges.forEach(function (e, i) {
+          if (i === 0 && !withCF) return; var role = i ? roles[i - 1] : 'cf', pts = e.p.map(function (q) { return q.slice(); });
+          if (role === 'hem') { var parts = cutDarts(pts, marks, 'hem'); if (parts.ndarts) { parts.forEach(function (q) { out.push({ key: q.key + '.R', pts: q.pts }); }); return; } }
+          out.push({ key: role + '.R', pts: pts });
+        });
+        var si = -1; out.forEach(function (q, i) { if (q.key === 'side.R') si = i; });
+        if (si >= 0) (marks || []).forEach(function (k) {
+          if (k.t !== 'dart' || !k.p || k.p.length !== 3 || out[si].key !== 'side.R') return; var sp = out[si].pts;
+          function near(q) { var bi = -1, bd = 1.6; for (var i = 0; i < sp.length; i++) { var d = Math.hypot(sp[i][0] - q[0], sp[i][1] - q[1]); if (d < bd) { bd = d; bi = i; } } if (bi < 0) { for (i = 1; i < sp.length; i++) { var dd = segDist(q[0], q[1], sp[i - 1], sp[i]); if (dd < 1.2) return i - .5; } } return bi; }
+          var i1 = near(k.p[0]), i2 = near(k.p[2]); if (i1 < 0 || i2 < 0 || i1 === i2) return;
+          var l1 = k.p[0], l2 = k.p[2]; if (i1 > i2) { var t = i1; i1 = i2; i2 = t; t = l1; l1 = l2; l2 = t; }
+          var lower = sp.slice(0, Math.ceil(i1)).concat([l1]), upper = [l2].concat(sp.slice(Math.floor(i2) + 1));
+          if (lower.length < 2 || upper.length < 2) return;
+          out.splice(si, 1, { key: 'side.R', pts: lower }, { key: 'sdA.R', pts: [l1, k.p[1]] }, { key: 'sdB.R', pts: [k.p[1], l2] }, { key: 'sideU.R', pts: upper });
+        });
+        return out;
+      }
+      function leftOf(segs) { return segs.slice().reverse().map(function (sg) { return { key: sg.key.replace('.R', '.L'), pts: mirror(sg.pts) }; }); }
+      var bR = rightSegs(b, false), segB = bR.concat(leftOf(bR)), fronts, fR = rightSegs(f, open);
+      fronts = open ? [fR, leftOf(fR)] : [fR.concat(leftOf(fR))];
+      var fSide = fR.filter(function (q) { return q.key === 'side.R'; })[0];
+      if (fR.some(function (q) { return q.key === 'sideU.R'; })) [segB].forEach(function (segs) { // back side seam split where the front bust dart sits
+        ['R', 'L'].forEach(function (sd) { for (var i = 0; i < segs.length; i++) { if (segs[i].key !== 'side.' + sd) continue; var pts = sd === 'R' ? segs[i].pts : segs[i].pts.slice().reverse(), cut = splitLen0(pts, plen(fSide.pts));
+          var lo = { key: 'side.' + sd, pts: sd === 'R' ? cut[0] : cut[0].slice().reverse() }, up = { key: 'sideU.' + sd, pts: sd === 'R' ? cut[1] : cut[1].slice().reverse() };
+          segs.splice(i, 1, sd === 'R' ? lo : up, sd === 'R' ? up : lo); break; } });
+      });
       fronts.concat([segB]).forEach(function (segs) { // open the side seams below the slit
         if (!(slit > 0 && slit < Lh * .6)) return;
         for (var i = 0; i < segs.length; i++) {
@@ -488,6 +517,10 @@
       } else { iFR = iFL = panels.length; panels.push({ name: 'F', segs: fronts[0], axis: yAxis, place: function (u, v) { var th = u / R2; return [R2 * Math.sin(th), top2 - v, R2 * Math.cos(th) + .5]; } }); }
       iB = panels.length; panels.push({ name: 'B', segs: segB, axis: yAxis, place: function (u, v) { var th = u / R2; return [R2 * Math.sin(th), top2 - v, -R2 * Math.cos(th) - .5]; } });
       seams.push([[iFR, 'side.R'], [iB, 'side.R']], [[iFL, 'side.L'], [iB, 'side.L']], [[iFR, 'sh.R'], [iB, 'sh.R']], [[iFL, 'sh.L'], [iB, 'sh.L']]);
+      if (fSide && fR.some(function (q) { return q.key === 'sideU.R'; })) seams.push([[iFR, 'sideU.R'], [iB, 'sideU.R']], [[iFL, 'sideU.L'], [iB, 'sideU.L']]);
+      [iFR, iFL, iB].filter(function (v, i, a) { return a.indexOf(v) === i; }).forEach(function (pi) { panels[pi].segs.forEach(function (sg) { var mt = /^(s?)dA(\d*)\.(R|L)$/.exec(sg.key); if (mt) seams.push([[pi, sg.key], [pi, mt[1] + 'dB' + mt[2] + '.' + mt[3]], 'auto']); }); });
+      function hemKeys(pi, sd) { return panels[pi].segs.filter(function (q) { return new RegExp('^hem\\d*\\.' + sd + '$').test(q.key); }).map(function (q) { return [pi, q.key]; }); }
+      var allHem = hemKeys(iFR, 'R').concat(hemKeys(iFL, 'L'), hemKeys(iB, 'R'), hemKeys(iB, 'L'));
       var tacks = [], buttons = [], zip = null, closed = o.fasten !== 'open';
       if (open) {
         var iO = overR ? iFR : iFL, iU = overR ? iFL : iFR;
@@ -496,7 +529,8 @@
       } else if (byId.placket) { var nd0 = f.edges[5].p[f.edges[5].p.length - 1][1]; [3, 9].forEach(function (dy) { buttons.push({ over: iFR, under: iFR, c: [0, nd0 + dy], closed: true, small: 1 }); }); }
       var tops = []; // topstitching: front edges and hems
       if (open && !ST.zip) tops.push([iFR, 'cf.R'], [iFL, 'cf.L']);
-      tops.push([iFR, 'hem.R'], [iFL, 'hem.L'], [iB, 'hem.R'], [iB, 'hem.L']);
+      var joins = [], lowerJoined = false;
+      [].push.apply(tops, allHem);
       // collars and bands, laid along the real 3D neckline and sewn to it
       function edgeOf(pi, key) { var sg = panels[pi].segs.filter(function (q) { return q.key === key; })[0]; return sg ? sg.pts : null; }
       function path3(parts) { // [[panel, pts]] in pattern units, joined into one 3D polyline from centre back outwards on the +x side
@@ -586,7 +620,51 @@
         panels.push({ name: 'HB', segs: hs, axis: yAxis, place: attach(hemPath, hemPath.L, hx / 2, function (u) { return u < hx / 2 ? -1 : 1; }, function (u) { return Math.abs(u - hx / 2); }, function (v) { return [.3, v]; }) });
         seams.push([[hi, 'hb.R'], [iB, 'hem.R'], 'auto'], [[hi, 'hb.L'], [iB, 'hem.L'], 'auto'], [[hi, 'hf.R'], [iFR, 'hem.R'], 'auto'], [[hi, 'hf.L'], [iFL, 'hem.L'], 'auto']);
         rings.push({ keys: [[hi, 'top']], len: hx });
-        tops.splice(tops.length - 4, 4);
+        tops = tops.filter(function (t) { return !/^hem/.test(t[1]); });
+      }
+      // skirt, kalis, peplum or trousers joined to the bodice at the waist (gathered where the lower part is fuller)
+      var hemTot = 0; allHem.forEach(function (k) { hemTot += plen(edgeOf(k[0], k[1])); });
+      function joinLower(kind, pcs) {
+        var r0 = rings.length; bottoms(kind, { pieces: pcs, label: r.label }, o, m, body, panels, seams, rings, mods);
+        var rg = rings[rings.length - 1]; if (rings.length === r0) return; var keys = Array.isArray(rg) ? rg : rg.keys;
+        rings[rings.length - 1] = { keys: keys, len: hemTot * 1.02, tilt: !Array.isArray(rg) && rg.tilt };
+        joins.push({ a: allHem, b: keys }); lowerJoined = true; tops = tops.filter(function (t) { return !/^hem/.test(t[1]); });
+      }
+      if (byId['sk-panel'] && gid === 'anarkali') joinLower('panels', [byId['sk-panel']]);
+      if (byId.skirt && o.dress === 'frock') { var sk = byId.skirt; joinLower('panels', [{ id: 'sk-panel', cut: 'Cut 2', edges: sk.edges, marks: [] }]); }
+      if (byId.peplum) { var pe = byId.peplum, pIn = plen(pe.edges[1].p) * 2, pOut = plen(pe.edges[3].p) * 2, pd = 18, tw = pIn / 4, bw = pOut / 4;
+        joinLower('panels', [{ id: 'sk-panel', cut: 'Cut 4', edges: [{ t: 'seam', p: [[-tw / 2, 0], [tw / 2, 0]] }, { t: 'seam', p: [[tw / 2, 0], [bw / 2, pd]] }, { t: 'hem', p: [[bw / 2, pd], [-bw / 2, pd]] }, { t: 'seam', p: [[-bw / 2, pd], [-tw / 2, 0]] }], marks: [] }]); }
+      if (byId['leg-tr-front'] && byId['leg-tr-back']) joinLower('pants', [Object.assign({}, byId['leg-tr-front'], { id: 'tr-front' }), Object.assign({}, byId['leg-tr-back'], { id: 'tr-back' })]);
+      // pockets: placed on the front and tacked along their sewn edges
+      function pocketOn(pc, fi, du, dv, mirrorIt) {
+        var segs = pc.edges[0].t === 'fold' ? (function () { var rr = pc.edges.slice(1).map(function (e, i) { return { key: 'p' + i + '.R', pts: e.p.map(function (q) { return q.slice(); }), hem: e.t === 'hem' }; }); return rr.concat(rr.slice().reverse().map(function (q) { return { key: q.key.replace('.R', '.L'), pts: mirror(q.pts), hem: q.hem }; })); })()
+          : pc.edges.map(function (e, i) { return { key: 'p' + i, pts: e.p.map(function (q) { return mirrorIt ? [-q[0], q[1]] : q.slice(); }), hem: e.t === 'hem' }; });
+        if (mirrorIt) segs = segs.reverse().map(function (q) { return { key: q.key, pts: q.pts.slice().reverse(), hem: q.hem }; });
+        var pi = panels.length, Fp = panels[fi];
+        panels.push({ name: 'PK', segs: segs.map(function (q) { return { key: q.key, pts: q.pts }; }), axis: yAxis, place: function (u, v) { var a = Fp.place(u + du, v + dv), l = Math.hypot(a[0], a[2] - (a[2] > 0 ? .5 : -.5)) || 1; return [a[0] * (l + .7) / l, a[1], a[2] + (a[2] - .5) / l * .7]; } });
+        segs.forEach(function (q) { if (q.hem) return; var L = plen(q.pts), n = Math.max(2, Math.round(L / 2)); for (var k = 0; k <= n; k++) { var t = k / n, pt = resample(q.pts, n)[k]; tacks.push([[pi, pt], [fi, [pt[0] + du, pt[1] + dv]]]); } });
+      }
+      if (byId.pocket && +o.pockets && /kangaroo|pouch/i.test(byId.pocket.comp || '') || (byId.pocket && gid === 'hoodie')) { var kp = byId.pocket, kh = 0; kp.edges.forEach(function (e) { e.p.forEach(function (q) { kh = Math.max(kh, q[1]); }); }); pocketOn(kp, iFR, 0, Lh - kh - (byId.hemband ? 0 : 3)); }
+      else if (byId.pocket && +o.pockets && open && (gid === 'shirt' || gid === 'shirtdress')) { var sp0 = byId.pocket, sw = 0; sp0.edges.forEach(function (e) { e.p.forEach(function (q) { sw = Math.max(sw, q[0]); }); }); var pf = gender === 'women' ? iFL : iFR, mir = pf === iFL; pocketOn(sp0, pf, mir ? -sw - 5 : 5, 21, false); }
+      // hood: two halves sewn up the centre back and to the neckline, lying down the back
+      if (byId.hood && o.hood !== 0 && +o.hood !== 0) {
+        var hd = byId.hood, hw = 0, hh = 0; hd.edges.forEach(function (e) { e.p.forEach(function (q) { hw = Math.max(hw, q[0]); hh = Math.max(hh, q[1]); }); });
+        var hNeck = plen(hd.edges[0].p);
+        [1, -1].forEach(function (sg) {
+          var hnF = plen(nF) / (plen(nB) + plen(nF)), segs = [];
+          hd.edges.forEach(function (e, i) { var pts = e.p.map(function (q) { return sg > 0 ? q.slice() : [-q[0], q[1]]; }), sd = sg > 0 ? '.R' : '.L';
+            if (i === 0) { var cut = splitLen0(pts, plen(pts) * hnF); segs.push({ key: 'hnf' + sd, pts: cut[0] }, { key: 'hnb' + sd, pts: cut[1] }); }
+            else segs.push({ key: ['hn', 'hb', 'ht', 'hf'][i] + sd, pts: pts }); });
+          if (sg < 0) segs = segs.reverse().map(function (q) { return { key: q.key, pts: q.pts.slice().reverse() }; });
+          panels.push({ name: sg > 0 ? 'HR' : 'HL', segs: segs, axis: yAxis, place: function (u, v) {
+            var fu = Math.abs(u) / hw, sP = (1 - fu) * neckPath.L, q = neckPath.at(sP), up = hh - v, side = sg * Math.max(1.5, Math.abs(q[0]));
+            return [side * (1 - up / hh * .3), q[1] + 1.5 - up * .5, Math.min(q[2], -3) - 2 - up * .55];
+          } });
+        });
+        var hR = panels.length - 2, hL = panels.length - 1;
+        seams.push([[hR, 'hb.R'], [hL, 'hb.L'], 'auto'], [[hR, 'ht.R'], [hL, 'ht.L'], 'auto']);
+        seams.push([[hR, 'hnb.R'], [iB, 'neck.R'], 'auto'], [[hL, 'hnb.L'], [iB, 'neck.L'], 'auto'], [[hR, 'hnf.R'], [iFR, 'neck.R'], 'auto'], [[hL, 'hnf.L'], [iFL, 'neck.L'], 'auto']);
+        void hNeck;
       }
       if (sl && o.sleeve !== 'none') {
         var cap = sl.edges[0].p, mid = 0; for (var i = 0; i < cap.length; i++) if (cap[i][1] < cap[mid][1]) mid = i;
@@ -606,10 +684,10 @@
           else seams.push([[iFL, 'arm.L'], [pi, 'capF']], [[iB, 'arm.L'], [pi, 'capB', 1]], [[pi, 'uF'], [pi, 'uB', 1]]);
         });
       }
-      var extra = { tacks: tacks, buttons: buttons, zip: zip, tops: tops };
+      var extra = { tacks: tacks, buttons: buttons, zip: zip, tops: tops, joins: joins };
     }
     if (typeof extra === 'undefined') var extra = {};
-    return { panels: panels, seams: seams, rings: rings, info: r.info, label: r.label, opts: o, tacks: extra.tacks || [], buttons: extra.buttons || [], zip: extra.zip || null, tops: extra.tops || [] };
+    return { panels: panels, seams: seams, rings: rings, info: r.info, label: r.label, opts: o, tacks: extra.tacks || [], buttons: extra.buttons || [], zip: extra.zip || null, tops: extra.tops || [], joins: extra.joins || [] };
   };
 
   /* ---------------- meshing ---------------- */
@@ -669,6 +747,16 @@
         if (dd(a[0], b[0]) + dd(a[a.length - 1], b[b.length - 1]) > dd(a[0], b[b.length - 1]) + dd(a[a.length - 1], b[0])) b.reverse();
       }
       for (var i = 0; i < a.length; i++) seamPairs.push(a[i], b[i]);
+    });
+    // joins: a waist seam between pieces with different edge counts (bodice to skirt, kalis or trousers); each point goes to the nearest one round the body, so a fuller side gathers
+    (G.joins || []).forEach(function (J) {
+      function ids(list) { var o = []; list.forEach(function (k) { (segIdx[keyOf(k[0], k[1])] || []).forEach(function (i) { if (o.indexOf(i) < 0) o.push(i); }); }); return o; }
+      var A = ids(J.a), B = ids(J.b), ang = function (i) { return Math.atan2(X[3 * i], X[3 * i + 2]); };
+      function near(i, L) { var a = ang(i), bi = -1, bd = 1e9; L.forEach(function (j) { var d = Math.abs(Math.atan2(Math.sin(ang(j) - a), Math.cos(ang(j) - a))); if (d < bd) { bd = d; bi = j; } }); return bi; }
+      var small = (A.length <= B.length ? A : B).slice(), big = (small.length === A.length && A.length <= B.length ? B : A).slice(), byA = function (p, q) { return ang(p) - ang(q); };
+      small.sort(byA); big.sort(byA); if (!small.length || !big.length) return;
+      var j0 = big.indexOf(near(small[0], big)), r = big.length / small.length; // in order round the body, spread evenly
+      small.forEach(function (i, k) { seamPairs.push(i, big[(j0 + Math.round(k * r)) % big.length]); });
     });
     // tacks: single points held together (buttons through their buttonholes)
     var tackOut = [];
@@ -773,7 +861,7 @@
     for (i = 0; i < EA.length; i++) { var ea = E[3 * i], eb = E[3 * i + 1], du = uv[2 * eb] - uv[2 * ea], dv = uv[2 * eb + 1] - uv[2 * ea + 1], LL = du * du + dv * dv || 1, cw = du * du / LL, cl = dv * dv / LL;
       EA[i] = (fab.sw * cw + fab.sl * cl + fab.sb * .4 * 4 * cw * cl) * 1e-7; }
     this.EA = EA;
-    this.E = new Float32Array(E); this.B = new Float32Array(Bn); this.S = M.seams; this.Tt = M.teth ? M.teth.slice() : new Float32Array(0);
+    this.E = new Float32Array(E); this.E0 = new Float32Array(E); this.B = new Float32Array(Bn); this.BA = new Float32Array(Bn.length / 3).fill(fab.bend); this.userT = 0; this.S = M.seams; this.Tt = M.teth ? M.teth.slice() : new Float32Array(0);
     for (i = 0; i < this.Tt.length; i += 3) { var ta0 = 3 * this.Tt[i], tb0 = 3 * this.Tt[i + 1]; this.Tt[i + 2] = Math.max(this.Tt[i + 2], Math.hypot(M.x[ta0] - M.x[tb0], M.x[ta0 + 1] - M.x[tb0 + 1], M.x[ta0 + 2] - M.x[tb0 + 2])); } /* never pull tighter than where the piece starts */ this.rings = M.rings || [];
     this.t = 0; this.sub = 14; this.th = Math.min(.6, .27 + fab.thick * .03); this.settled = false; this.calm = 0; this.tWake = 0; this.grip = new Uint8Array(n); (M.rings || []).forEach(function (rg) { rg.ids.forEach(function (k) { this.grip[k] = 1; }, this); }, this);
     // self-collision: points sewn together (same group) or close on the same flat piece never push each other apart
@@ -806,26 +894,26 @@
       // stretch
       for (j = 0; j < E.length; j += 3) {
         var a = E[j] * 3, b = E[j + 1] * 3, r = E[j + 2], wa = w[E[j]], wb = w[E[j + 1]], dx = x[b] - x[a], dy = x[b + 1] - x[a + 1], dz = x[b + 2] - x[a + 2], l = Math.sqrt(dx * dx + dy * dy + dz * dz);
-        if (l < 1e-6) continue; var C = l - r, lam = C / (wa + wb + EA[j / 3] * idt2) / l;
+        if (l < 1e-6 || wa + wb === 0) continue; var C = l - r, lam = C / (wa + wb + EA[j / 3] * idt2) / l;
         x[a] += wa * lam * dx; x[a + 1] += wa * lam * dy; x[a + 2] += wa * lam * dz; x[b] -= wb * lam * dx; x[b + 1] -= wb * lam * dy; x[b + 2] -= wb * lam * dz;
       }
       // tethers (only when stretched past the flat pattern)
       var Tt = this.Tt;
       for (j = 0; j < Tt.length; j += 3) {
         var ta = Tt[j] * 3, tb = Tt[j + 1] * 3, tr = Tt[j + 2], twa = w[Tt[j]], twb = w[Tt[j + 1]], gx = x[tb] - x[ta], gy = x[tb + 1] - x[ta + 1], gz = x[tb + 2] - x[ta + 2], tl = Math.sqrt(gx * gx + gy * gy + gz * gz);
-        if (tl <= tr * 1.01) continue; var tk = (tl - tr * 1.01) / (twa + twb) / tl;
+        if (tl <= tr * 1.01 || twa + twb === 0) continue; var tk = (tl - tr * 1.01) / (twa + twb) / tl;
         x[ta] += twa * tk * gx; x[ta + 1] += twa * tk * gy; x[ta + 2] += twa * tk * gz; x[tb] -= twb * tk * gx; x[tb + 1] -= twb * tk * gy; x[tb + 2] -= twb * tk * gz;
       }
       // bending (distance across each shared edge; it only resists folding, not stretching)
       for (j = 0; j < Bn.length; j += 3) {
         var a2 = Bn[j] * 3, b2 = Bn[j + 1] * 3, r2 = Bn[j + 2], wa2 = w[Bn[j]], wb2 = w[Bn[j + 1]], ex = x[b2] - x[a2], ey = x[b2 + 1] - x[a2 + 1], ez = x[b2 + 2] - x[a2 + 2], l2 = Math.sqrt(ex * ex + ey * ey + ez * ez);
-        if (l2 < 1e-6 || l2 > r2) continue; var lam2 = (l2 - r2) / (wa2 + wb2 + aB) / l2;
+        if (l2 < 1e-6 || l2 > r2 || wa2 + wb2 === 0) continue; var lam2 = (l2 - r2) / (wa2 + wb2 + this.BA[j / 3] * idt2) / l2;
         x[a2] += wa2 * lam2 * ex; x[a2 + 1] += wa2 * lam2 * ey; x[a2 + 2] += wa2 * lam2 * ez; x[b2] -= wb2 * lam2 * ex; x[b2 + 1] -= wb2 * lam2 * ey; x[b2 + 2] -= wb2 * lam2 * ez;
       }
       // seams: pull the matching points together, a little at a time while sewing
       for (j = 0; j < S.length; j += 2) {
         var a3 = S[j] * 3, b3 = S[j + 1] * 3, fx = x[b3] - x[a3], fy = x[b3 + 1] - x[a3 + 1], fz = x[b3 + 2] - x[a3 + 2], l3 = Math.sqrt(fx * fx + fy * fy + fz * fz);
-        if (l3 < 1e-6) continue; if (l3 > 2 && tt > .9 && tt < 3.5) { this.free[S[j]] = 1; this.free[S[j + 1]] = 1; } /* caught either side of the body: let the pair pass through to join */ var wa3 = w[S[j]], wb3 = w[S[j + 1]], ws = wa3 + wb3, mv = Math.min(l3, sewMax) / l3;
+        if (l3 < 1e-6) continue; if (l3 > 2 && tt > .9 && tt < 3.5) { this.free[S[j]] = 1; this.free[S[j + 1]] = 1; } /* caught either side of the body: let the pair pass through to join */ var wa3 = w[S[j]], wb3 = w[S[j + 1]], ws = wa3 + wb3; if (!ws) continue; var mv = Math.min(l3, sewMax) / l3;
         x[a3] += fx * mv * wa3 / ws; x[a3 + 1] += fy * mv * wa3 / ws; x[a3 + 2] += fz * mv * wa3 / ws; x[b3] -= fx * mv * wb3 / ws; x[b3 + 1] -= fy * mv * wb3 / ws; x[b3 + 2] -= fz * mv * wb3 / ws;
       }
       // waistbands: shrink the ring back towards its own centre when it has been stretched
@@ -835,13 +923,13 @@
         var ord = (ids.slice().sort(function (a, b) { return Math.atan2(x[3 * a + 2] - cz0, x[3 * a] - cx0) - Math.atan2(x[3 * b + 2] - cz0, x[3 * b] - cx0); })), circ = 0;
         for (q = 0; q < ord.length; q++) { var qa = 3 * ord[q], qb = 3 * ord[(q + 1) % ord.length]; circ += Math.hypot(x[qa] - x[qb], rg.tilt ? x[qa + 1] - x[qb + 1] : 0, x[qa + 2] - x[qb + 2]); }
         if (circ > rg.len * 1.01) { var sc = circ > rg.len * 1.3 ? Math.max(.985, rg.len * 1.01 / circ) : rg.len * 1.01 / circ;
-          for (q = 0; q < ids.length; q++) { var qi = 3 * ids[q]; x[qi] = cx0 + (x[qi] - cx0) * sc; x[qi + 2] = cz0 + (x[qi + 2] - cz0) * sc; if (rg.tilt) x[qi + 1] = cy0 + (x[qi + 1] - cy0) * sc; } }
+          for (q = 0; q < ids.length; q++) { var qi = 3 * ids[q]; if (!w[ids[q]]) continue; x[qi] = cx0 + (x[qi] - cx0) * sc; x[qi + 2] = cz0 + (x[qi + 2] - cz0) * sc; if (rg.tilt) x[qi + 1] = cy0 + (x[qi + 1] - cy0) * sc; } }
       }
       if (s % 3 === 0 && tt > 1.1) this.selfCollide();
       // body
       for (i = 0; i < n; i++) {
         var k3 = 3 * i;
-        var hitB = this.free[i] ? (this.free[i] = 0, false) : body.push(x, k3, th, nrm);
+        var hitB = !w[i] ? false : this.free[i] ? (this.free[i] = 0, false) : body.push(x, k3, th, nrm);
         if (s === sub - 1) this.gap[i] = body.dist(x[k3], x[k3 + 1], x[k3 + 2], nrm2);
         if (hitB) {
           var mx = x[k3] - p[k3], my = x[k3 + 1] - p[k3 + 1], mz = x[k3 + 2] - p[k3 + 2], dn = mx * nrm[0] + my * nrm[1] + mz * nrm[2];
@@ -917,7 +1005,7 @@
     this.wake();
   };
   Sim.prototype.endPanel = function () { var P = this.pinned; if (!P) return; P.ids.forEach(function (k, q) { this.w[k] = P.wsave[q]; this.v[3 * k] = this.v[3 * k + 1] = this.v[3 * k + 2] = 0; }, this); this.pinned = null; this.wake(); };
-  Sim.prototype.seamGap = function () { var S = this.S, x = this.x, mx = 0, nS = S.length - ((this.M.tacks || []).length); for (var j = 0; j < nS; j += 2) { var a = S[j] * 3, b = S[j + 1] * 3; mx = Math.max(mx, Math.hypot(x[a] - x[b], x[a + 1] - x[b + 1], x[a + 2] - x[b + 2])); } return mx; };
+  Sim.prototype.seamGap = function () { var S = this.S, x = this.x, mx = 0, nS = S.length - ((this.M.tacks || []).length) - 2 * this.userT; for (var j = 0; j < nS; j += 2) { var a = S[j] * 3, b = S[j + 1] * 3; mx = Math.max(mx, Math.hypot(x[a] - x[b], x[a + 1] - x[b + 1], x[a + 2] - x[b + 2])); } return mx; };
   Sim.prototype.computeStrain = function () {
     var E = this.E, x = this.x, n = this.n, s = this.strain, c = new Float32Array(n), i;
     for (i = 0; i < n; i++) s[i] = 0;
@@ -925,6 +1013,18 @@
     for (i = 0; i < n; i++) s[i] = c[i] ? s[i] / c[i] : 1;
     return s;
   };
+  /* studio tools: pin, tack, freeze, interfacing, elastic, puckering */
+  Sim.prototype.w0 = null;
+  Sim.prototype.keepW = function () { if (!this.w0) this.w0 = this.w.slice(); };
+  Sim.prototype.pin = function (i, on) { this.keepW(); this.w[i] = on ? 0 : this.w0[i]; this.wake(); };
+  Sim.prototype.freeze = function (pi, on) { this.keepW(); for (var i = 0; i < this.n; i++) if (this.panel[i] === pi) { this.w[i] = on ? 0 : this.w0[i]; this.v[3 * i] = this.v[3 * i + 1] = this.v[3 * i + 2] = 0; } this.wake(); };
+  Sim.prototype.tack = function (a, b) { var S = new Uint32Array(this.S.length + 2); S.set(this.S); S[this.S.length] = a; S[this.S.length + 1] = b; this.S = S; this.userT++; this.onSeam[a] = this.onSeam[b] = 1; this.wake(); };
+  Sim.prototype.clearTacks = function () { if (!this.userT) return; this.S = this.S.slice(0, this.S.length - 2 * this.userT); this.userT = 0; this.wake(); };
+  Sim.prototype.stiffen = function (pi, k) { var B = this.B, P = this.panel; for (var j = 0; j < B.length; j += 3) if (P[B[j]] === pi && P[B[j + 1]] === pi) this.BA[j / 3] = this.fab.bend / (k || 1); this.wake(); };
+  Sim.prototype.elastic = function (ids, ratio) { var L = 0, x = this.x; for (var q = 1; q < ids.length; q++) { var a = 3 * ids[q - 1], b = 3 * ids[q]; L += Math.hypot(this.M.uv[2 * ids[q]] - this.M.uv[2 * ids[q - 1]], this.M.uv[2 * ids[q] + 1] - this.M.uv[2 * ids[q - 1] + 1]); } void x;
+    this.rings = this.rings.concat([{ ids: ids.slice(), len: L * ratio, tilt: true, user: 1 }]); ids.forEach(function (k) { this.grip[k] = 1; }, this); this.wake(); };
+  Sim.prototype.clearElastic = function () { this.rings = this.rings.filter(function (r) { return !r.user; }); this.wake(); };
+  Sim.prototype.pucker = function (a) { var E = this.E, E0 = this.E0, sm = this.onSeam; for (var j = 0; j < E.length; j += 3) E[j + 2] = sm[E[j]] && sm[E[j + 1]] ? E0[j + 2] * (1 - a) : E0[j + 2]; this.wake(); };
   D.Sim = Sim;
   D.plen = plen;
   if (typeof module !== 'undefined' && module.exports) module.exports = D; else root.FCDrape = D;
