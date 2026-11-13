@@ -9,4 +9,4 @@ def add(html):
         if s not in P: return m.group(0)
         flats = '|'.join(f'img/{s}-f{i + 1}.webp' for i in range(P[s]))
         return f'{m.group(0)} data-photo="img/{s}-photo.webp" data-flats="{flats}"'
-    return re.sub(r'data-img="img/([a-z0-9-]+)\.webp"', rep, html)
+    return re.sub(r'data-img="img/([^"/]+)\.webp"', rep, html)
