@@ -52,3 +52,11 @@ test('undo and redo restore the project', () => {
   assert.equal(C.parse(C.serialize(p)).pieces.length, 1); assert.throws(() => C.parse('{}'));
   assert.ok(/<svg/.test(C.exportSVG(p))); assert.ok(/POLYLINE/.test(C.exportDXF(p, { unit: 'mm' })));
 });
+test('merge joins two rectangles along a shared edge into one piece', () => {
+  const a = C.rect(0, 0, 10, 20), b = C.rect(30, 5, 8, 20); const r = C.merge(a, 1, b, 3);
+  near(C.area(r.piece), 200 + 160, .5); near(r.diff, 0); assert.equal(C.validate(r.piece).length, 0); const bb = C.bbox(r.piece); near(bb[2] - bb[0], 18, .01);
+});
+test('facing along the top edge is a strip of the asked width; an internal rectangle traces to a piece', () => {
+  const a = C.rect(0, 0, 20, 30), f = C.facing(a, [0], 4); near(C.area(f), 80, .5);
+  const t = C.fromInternal(a, { kind: 'rect', pts: [[2, 2], [8, 2], [8, 9], [2, 9]], purpose: 'pocket' }); near(C.area(t), 42, .01); assert.equal(t.name, 'Pocket');
+});

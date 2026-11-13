@@ -23,6 +23,8 @@
     { g: 'Edit', id: 'curv', k: 'c', n: 'Edit curvature', tip: 'Drag an edge sideways to bend it; the end points stay where they are. A straight edge becomes a curve.', ic: 'M4 18C8 6 16 6 20 18M12 4v5' },
     { g: 'Edit', id: 'smooth', n: 'Smooth curve', tip: 'Select points or edges with Edit pattern, then click Smooth in Properties, or click an edge here to smooth its two joins. Sharp corners stay sharp. The length change is reported.', ic: 'M3 16c3-8 5-8 7-4s4 4 7-4 4 0 4 0' },
     { g: 'Edit', id: 'cut', k: 'k', n: 'Cut and split', tip: 'Click two points on the outline of a piece to cut it into two pieces along the line between them.', ic: 'M6 4l12 16M4 8c2-2 4-2 6 0M14 16c2 2 4 2 6 0' },
+    { g: 'Edit', id: 'merge', n: 'Merge pieces', tip: 'Click an edge of the first piece, then the matching edge of the second. The second piece turns to meet it and the two become one piece. The length difference is reported.', ic: 'M4 6h7v12H4zM13 6h7v12h-7M11 12h2' },
+    { g: 'Edit', id: 'trace', k: 't', n: 'Trace', tip: 'Click an edge to trace a facing of the width set above the canvas, or click inside an internal rectangle, ellipse or closed shape to trace it as a new piece (a pocket from its placement, say).', ic: 'M4 4h16v16H4zM4 9h16M8 4v5' },
     { g: 'Internal', id: 'iline', k: 'l', n: 'Internal line', tip: 'Draw a line inside a piece: a fold line, guide, placement or stitch line. Click points, double-click or press Enter to finish.', ic: 'M5 5h14v14H5zM8 15l8-6' },
     { g: 'Internal', id: 'irect', n: 'Internal rectangle', tip: 'Drag inside a piece for a pocket placement, a cut-out or a guide.', ic: 'M4 4h16v16H4zM8 9h8v6H8z' },
     { g: 'Internal', id: 'iell', n: 'Internal circle or ellipse', tip: 'Drag inside a piece for a cut-out, button or placement marking.', ic: 'M4 4h16v16H4zM12 8.5a3.5 3.5 0 110 7 3.5 3.5 0 010-7z' },
@@ -138,7 +140,7 @@
       if (v.labels) { var bb = C.bbox(pc); h += '<text class="ps-lab" x="' + f3((bb[0] + bb[2]) / 2) + '" y="' + f3((bb[1] + bb[3]) / 2) + '" font-size="' + f3(Math.max(.8, Math.min(2.2, (bb[2] - bb[0]) / 10))) + '">' + esc(pc.name || 'Piece') + '</text>'; if (pc.size || pc.qty) h += '<text class="ps-lab2" x="' + f3((bb[0] + bb[2]) / 2) + '" y="' + f3((bb[1] + bb[3]) / 2 + Math.max(1, Math.min(2.4, (bb[2] - bb[0]) / 9))) + '" font-size="' + f3(Math.max(.55, Math.min(1.3, (bb[2] - bb[0]) / 16))) + '">' + esc((pc.size ? pc.size + ' · ' : '') + 'Cut ' + pc.qty + (pc.pair ? ' pair' : '') + (pc.fold >= 0 ? ' on fold' : '')) + '</text>'; }
       if (pc.link && pc.link.on) h += '<text class="ps-link" x="' + f3(C.bbox(pc)[0]) + '" y="' + f3(C.bbox(pc)[1] - .5) + '" font-size=".9">' + (pc.link.mode === 'mirror' ? '⇋ mirrored link' : '⇄ linked') + '</text>';
       // edges for picking
-      var pick = ['edit', 'addpt', 'curv', 'smooth', 'notch', 'measure', 'walk', 'sa', 'cut'].indexOf(ST.tool) >= 0;
+      var pick = ['edit', 'addpt', 'curv', 'smooth', 'notch', 'measure', 'walk', 'sa', 'cut', 'merge', 'trace'].indexOf(ST.tool) >= 0;
       if (pick) for (var s = 0; s < C.segCount(pc); s++) { var on = ST.seg && ST.seg.pc === pc.id && ST.seg.i === s, wk = ST.walk.some(function (w) { return w.pc === pc.id && w.seg === s; }); h += '<path class="ps-eh' + (on || wk ? ' on' : '') + '" data-pc="' + pc.id + '" data-s="' + s + '" d="' + segD(pc, s) + '" stroke-width="' + f3(10 * px) + '"/>'; if (on || wk) h += '<path class="ps-eon" d="' + segD(pc, s) + '"/>'; }
       // points and handles
       var showPts = ST.tool === 'edit' && (sel || ST.node && ST.node.pc === pc.id) || v.points || ST.tool === 'cut';
@@ -187,7 +189,7 @@
     var t = TOOL[ST.tool], sel = ST.sel.length, tot = P.pieces.length, z = Math.round(ST.z / pxPerCm() * 100);
     statusEl.innerHTML = '<b>' + esc(t ? t.n : '') + '</b><span>' + esc(msg || ST.msg || hint()) + '</span><span class="ps-sp"></span>' + (ST.cursor ? '<span>X ' + U(ST.cursor[0]) + ' · Y ' + U(ST.cursor[1]) + ' ' + P.unit + '</span>' : '') + '<span>' + sel + ' of ' + tot + ' selected</span><span>' + z + '%</span><span>Snap ' + (V().snap ? 'on' : 'off') + '</span>';
   }
-  function hint() { var t = TOOL[ST.tool]; if (ST.tool === 'poly' && ST.draft) return ST.draft.pts.length + ' points. Click the first point or press Enter to close. Esc cancels.'; if (ST.tool === 'cut' && ST.cut.length) return 'Now click the second point on the same piece.'; if (ST.tool === 'walk' && ST.walk.length === 1) return 'Now click the edge it is sewn to.'; return t ? t.tip.split('. ')[0] + '.' : ''; }
+  function hint() { var t = TOOL[ST.tool]; if (ST.tool === 'poly' && ST.draft) return ST.draft.pts.length + ' points. Click the first point or press Enter to close. Esc cancels.'; if (ST.tool === 'cut' && ST.cut.length) return 'Now click the second point on the same piece.'; if (ST.tool === 'merge' && ST.walk.length === 1) return 'Now click the matching edge on the other piece.'; if (ST.tool === 'walk' && ST.walk.length === 1) return 'Now click the edge it is sewn to.'; return t ? t.tip.split('. ')[0] + '.' : ''; }
   function pxPerCm() { return 96 / 2.54; }
   function toast(t, bad) { toastEl.textContent = t; toastEl.className = 'ps-toast' + (bad ? ' bad' : ''); toastEl.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { toastEl.hidden = true; }, bad ? 6000 : 3000); }
 
@@ -261,7 +263,7 @@
   }
   function nodePanel(pc) {
     var idx = ST.node.idx, nd = pc.nodes[idx[0]], n = pc.nodes.length;
-    if (idx.length > 1) return '<h5>' + idx.length + ' points on ' + esc(pc.name) + '</h5><p class="ps-n">Drag any of them to move them together, or move them by an exact amount.</p>' + row('Move X by', num('ndx', 0)) + row('Move Y by', num('ndy', 0)) + '<div class="ps-bs">' + btn('nmove', 'Move') + btn('nsmooth', 'Smooth') + btn('ndel', 'Delete points', 'bad') + '</div>';
+    if (idx.length > 1) return '<h5>' + idx.length + ' points on ' + esc(pc.name) + '</h5><p class="ps-n">Drag any of them to move them together, or move them by an exact amount.</p>' + row('Move X by', num('ndx', 0)) + row('Move Y by', num('ndy', 0)) + '<div class="ps-bs">' + btn('nmove', 'Move') + btn('nsmooth', 'Smooth') + btn('ndel', 'Delete points', 'bad') + '</div><h5>Transform these points</h5><div class="ps-tr">' + plain('nrotv', 5, 'any', '°') + btn('nrot', 'Rotate') + '</div><div class="ps-tr">' + plain('nscv', 100, 'any', '%') + btn('nscale', 'Scale') + '</div><p class="ps-n">About the centre of the selected points. The rest of the piece stays where it is.</p>';
     var ang = C.angleAtNode(pc, idx[0]), prevL = C.segLen(pc, (idx[0] - 1 + n) % n), nextL = C.segLen(pc, idx[0]);
     return '<h5>Point ' + (idx[0] + 1) + ' of ' + n + ' · ' + esc(pc.name) + '</h5>'
       + row('X', num('nx', U(nd.x + (pc.x || 0)), C.UNITS[P.unit].step)) + row('Y', num('ny', U(nd.y + (pc.y || 0)), C.UNITS[P.unit].step))
@@ -281,7 +283,7 @@
       + '<h5>Seam allowance for this edge</h5>' + row('Allowance', num('esa', U(C.saOf(pc, i)), C.UNITS[P.unit].step, ' min="0"' + (i === pc.fold ? ' disabled' : ''))) + (sa != null ? '<p class="ps-n">This edge has its own allowance. ' + btn('esareset', 'Use the piece default') + '</p>' : '')
       + row('This edge is', selOpt('ekind', i === pc.fold ? 'fold' : pc.hems.indexOf(i) >= 0 ? 'hem' : 'seam', [['seam', 'A seam'], ['hem', 'A hem'], ['fold', 'On the fold (no allowance)']]))
       + row('Corner at its end', selOpt('ecorner', pc.sa.corner[(i + 1) % pc.nodes.length] || 'miter', [['miter', 'Meet (mitred)'], ['square', 'Squared off'], ['step', 'Stepped (each allowance square to its edge)']]))
-      + '<h5>Notches</h5><div class="ps-bs">' + btn('enotchmid', 'Notch at the middle') + '</div>';
+      + '<h5>Notches</h5><div class="ps-bs">' + btn('enotchmid', 'Notch at the middle') + '</div><h5>Facing</h5>' + row('Width', num('efw', U(ST.o && ST.o.fw || 4), C.UNITS[P.unit].step, ' min="0"')) + '<div class="ps-bs">' + btn('efacing', 'Trace a facing along this edge') + '</div>';
   }
   function notchOf(id) { for (var i = 0; i < P.pieces.length; i++) for (var j = 0; j < P.pieces[i].notches.length; j++) if (P.pieces[i].notches[j].id === id) return { pc: P.pieces[i], nt: P.pieces[i].notches[j] }; return null; }
   function itOf(id) { for (var i = 0; i < P.pieces.length; i++) for (var j = 0; j < P.pieces[i].internals.length; j++) if (P.pieces[i].internals[j].id === id) return { pc: P.pieces[i], it: P.pieces[i].internals[j] }; return null; }
@@ -300,7 +302,7 @@
       + row('Line', selOpt('itstyle', it.style || 'solid', [['solid', 'Solid'], ['dashed', 'Dashed']])) + row('Show', '<input type="checkbox" data-k="itvis"' + (it.visible !== false ? ' checked' : '') + '>', 'chk')
       + (it.kind === 'line' ? '<dl class="ps-kv"><dt>Length</dt><dd>' + F(C.measure.poly(it.pts)) + '</dd></dl>' : '') + (it.kind === 'ellipse' ? row('Width', num('itrx', U(it.r[0] * 2))) + row('Height', num('itry', U(it.r[1] * 2))) : '')
       + '<p class="ps-n">' + ({ fold: 'Fold lines are folded, not cut: they export on the INTERNAL layer.', cutout: 'Cut-outs are cut away from the piece when it is cut.', placement: 'Placement marks show where a pocket, label or trim goes.', stitch: 'Stitch lines are sewn but not cut.', pocket: 'Pocket position for the pocket bag or patch.', cutting: 'Drill holes are punched through the lay to mark the position.' }[it.purpose] || 'Guide lines help drafting and are not cut.') + '</p>'
-      + '<div class="ps-bs">' + btn('itdel', 'Delete', 'bad') + '</div>';
+      + '<div class="ps-bs">' + (it.kind !== 'line' && it.kind !== 'point' ? btn('ittrace', 'Trace to a piece') : '') + btn('itdel', 'Delete', 'bad') + '</div>';
   }
   function walkPanel() {
     var w = ST.walk, a = w[0], b = w[1], pa = pcById(a.pc), la = C.segLen(pa, a.seg);
@@ -319,7 +321,7 @@
     var val = el.type === 'checkbox' ? el.checked : el.value, pc = selected()[0];
     if (el.dataset.hem != null) return act('Set hem edges', function () { var p = selected()[0], s = +el.dataset.hem; p.hems = p.hems.filter(function (j) { return j !== s; }); if (el.checked) p.hems.push(s); });
     if (k === 'pname') return act('Rename project', function () { P.name = val || 'Untitled pattern'; });
-    if (['rot', 'scx', 'scy', 'gap', 'pvx', 'pvy', 'ease', 'ndx', 'ndy', 'sbend', 'sdist', 'sparts', 'sfrom'].indexOf(k) >= 0) { if (k === 'rot') ST.rotV = +val; if (k === 'scx') ST.scx = +val; if (k === 'scy') ST.scy = +val; if (k === 'gap') ST.gap = CM(val); if (k === 'pvx' || k === 'pvy') { ST.pv = ST.pv || [0, 0]; ST.pv[k === 'pvx' ? 0 : 1] = CM(val); } if (k === 'ease') { ST.ease = CM(val); props(); } return; }
+    if (['rot', 'scx', 'scy', 'gap', 'pvx', 'pvy', 'ease', 'ndx', 'ndy', 'sbend', 'sdist', 'sparts', 'sfrom', 'efw', 'nrotv', 'nscv'].indexOf(k) >= 0) { if (k === 'rot') ST.rotV = +val; if (k === 'scx') ST.scx = +val; if (k === 'scy') ST.scy = +val; if (k === 'gap') ST.gap = CM(val); if (k === 'pvx' || k === 'pvy') { ST.pv = ST.pv || [0, 0]; ST.pv[k === 'pvx' ? 0 : 1] = CM(val); } if (k === 'ease') { ST.ease = CM(val); props(); } return; }
     if (k === 'pivot') { ST.pivot = val; props(); return; }
     if (k === 'showSeam' || k === 'showCut') return act('Visibility', function () { V()[k === 'showSeam' ? 'seam' : 'sa'] = val; });
     if (ST.node && k && /^n/.test(k) && k !== 'name' && k !== 'notes') { var np = pcById(ST.node.pc), i = ST.node.idx[0];
@@ -392,6 +394,9 @@
       case 'esareset': return act('Edge seam allowance', function () { delete pcById(ST.seg.pc).sa.edges[ST.seg.i]; });
       case 'enotchmid': return act('Add notch', function () { var p = pcById(ST.seg.pc), nt = { id: C.uid('nt'), seg: ST.seg.i, mode: 'mid', v: 0, from: 'start', type: 'single', depth: .6 }; p.notches.push(nt); });
       case 'ntdel': return act('Delete notch', function () { var o = notchOf(ST.notch); o.pc.notches = o.pc.notches.filter(function (n) { return n.id !== ST.notch; }); ST.notch = null; });
+      case 'ittrace': var ti = itOf(ST.it); return traceIt(ti.pc, ti.it);
+      case 'efacing': var fp = pcById(ST.seg.pc), fw = CM(q('[data-k=efw]').value || 4); if (!(fw > 0)) return toast('Enter a width.', 1); ST.o.fw = fw; return act('Trace facing', function () { var f = C.facing(fp, [ST.seg.i], fw); f.x += 2; f.y += 2; P.pieces.push(f); ST.sel = [f.id]; ST.seg = null; });
+      case 'nrot': case 'nscale': var tp2 = pcById(ST.node.pc), ids = ST.node.idx, cx = 0, cy = 0; ids.forEach(function (i) { cx += tp2.nodes[i].x; cy += tp2.nodes[i].y; }); cx /= ids.length; cy /= ids.length; var mm = a === 'nrot' ? C.M.rot(+q('[data-k=nrotv]').value || 0, cx, cy) : C.M.scale((+q('[data-k=nscv]').value || 100) / 100, (+q('[data-k=nscv]').value || 100) / 100, cx, cy); return act(a === 'nrot' ? 'Rotate points' : 'Scale points', function () { C.transformNodes(tp2, ids, mm); });
       case 'itdel': return act('Delete internal', function () { var o = itOf(ST.it); o.pc.internals = o.pc.internals.filter(function (n) { return n.id !== ST.it; }); ST.it = null; });
       case 'walkclear': ST.walk = []; draw(); return props();
       case 'mkrect': case 'mkell': case 'mkspiral': return create(a);
@@ -415,10 +420,11 @@
 
   /* ---------- tool option bars (exact creation) ---------- */
   function opts() {
-    var t = ST.tool, h = '', o = ST.o = ST.o || { w: 20, h: 30, ew: 20, eh: 20, r0: 5, turns: 1.5, grow: 12, sw: 10, dir: 'cw' };
+    var t = ST.tool, h = '', o = ST.o = ST.o || { w: 20, h: 30, ew: 20, eh: 20, r0: 5, turns: 1.5, grow: 12, sw: 10, dir: 'cw', fw: 4 };
     if (t === 'rect') h = '<b>Rectangle</b>' + optNum('w', o.w, 'Width') + optNum('h', o.h, 'Height') + btn('mkrect', 'Create', 'pri') + '<small>or drag on the canvas</small>';
     else if (t === 'ellipse') h = '<b>Ellipse</b>' + optNum('ew', o.ew, 'Width') + optNum('eh', o.eh, 'Height') + btn('mkell', 'Create', 'pri') + '<small>or drag on the canvas; Shift for a circle</small>';
     else if (t === 'spiral') { var iss = C.spiralCheck(o.r0, o.turns, o.grow, o.sw); h = '<b>Spiral</b>' + optNum('r0', o.r0, 'Inner radius') + '<label>Turns <input type="number" step=".25" min=".25" max="6" data-o="turns" value="' + o.turns + '"></label>' + optNum('grow', o.grow, 'Spacing per turn') + optNum('sw', o.sw, 'Strip width') + '<label>Direction <select data-o="dir"><option value="cw"' + (o.dir === 'cw' ? ' selected' : '') + '>Clockwise</option><option value="ccw"' + (o.dir === 'ccw' ? ' selected' : '') + '>Anticlockwise</option></select></label>' + btn('mkspiral', 'Create', 'pri') + (iss.length ? '<em class="bad">' + esc(iss[0]) + '</em>' : '<small>Outer edge ' + F(spiralLen(o)) + '</small>'); }
+    else if (t === 'trace') h = '<b>Trace</b>' + optNum('fw', o.fw || 4, 'Facing width') + '<small>Click an edge for a facing, or inside an internal shape to trace it as a piece.</small>';
     else if (t === 'poly') h = '<b>Polygon</b><small>Click to place points; drag to curve. Enter or click the first point to close. Backspace undoes the last point.</small>';
     else if (t === 'measure') h = '<b>Measure</b><small>' + (ST.meas.length > 1 ? 'Total ' + F(C.measure.poly(ST.meas)) + (ST.meas.length > 2 ? ' · angle at the last bend ' + C.measure.angle(ST.meas[ST.meas.length - 3], ST.meas[ST.meas.length - 2], ST.meas[ST.meas.length - 1]).toFixed(1) + '°' : '') : 'Click points to measure. Click an edge to read its length along the curve.') + '</small>' + (ST.meas.length ? btn('mclear', 'Clear') : '');
     else if (t) h = '<b>' + esc(TOOL[t].n) + '</b><small>' + esc(TOOL[t].tip) + '</small>';
@@ -464,6 +470,8 @@
       case 'notch': { var nn = nearestEdge(w); if (!nn) return toast('Click on an edge of a piece.', 1); act('Add notch', function () { var nt = { id: C.uid('nt'), seg: nn.seg, mode: 'dist', v: +nn.s.toFixed(2), from: 'start', type: 'single', depth: .6 }; nn.pc.notches.push(nt); ST.notch = nt.id; ST.sel = [nn.pc.id]; ST.node = ST.seg = null; }); return; }
       case 'sa': case 'walk': { var ee = nearestEdge(w); if (!ee) return toast('Click on an edge of a piece.', 1); if (ST.tool === 'sa') { ST.seg = { pc: ee.pc.id, i: ee.seg }; ST.node = null; ST.sel = [ee.pc.id]; } else { if (ST.walk.length >= 2) ST.walk = []; ST.walk.push({ pc: ee.pc.id, seg: ee.seg }); } refresh(); return; }
       case 'measure': { var me = ST.meas.length === 0 && sn.k !== 'point' && sn.k !== 'midpoint' ? nearestEdge(w) : null; if (me && t.classList.contains('ps-eh')) { ST.seg = { pc: me.pc.id, i: me.seg }; ST.node = null; toast(me.pc.name + ', edge ' + (me.seg + 1) + ': ' + F(me.L) + ' along the ' + (C.ctrl(me.pc, me.seg).curved ? 'curve' : 'line') + '.'); refresh(); return; } ST.meas.push(sn.p); opts(); drawOver(); return; }
+      case 'merge': { var mg = nearestEdge(w); if (!mg) return toast('Click on an edge of a piece.', 1); if (ST.walk.length === 1 && ST.walk[0].pc === mg.pc.id) return toast('Click an edge on a different piece.', 1); ST.walk.push({ pc: mg.pc.id, seg: mg.seg }); if (ST.walk.length === 2) doMerge(); else { draw(); status(); } return; }
+      case 'trace': { var tr0 = nearestEdge(w); if (tr0 && t.classList.contains('ps-eh')) { var fw = ST.o.fw || 4; act('Trace facing', function () { var f = C.facing(tr0.pc, [tr0.seg], fw); f.x += 2; f.y += 2; P.pieces.push(f); ST.sel = [f.id]; }); toast('Facing traced, ' + F(fw) + ' wide. Move it off the piece and check it.'); return; } var tp = pieceAt(w); if (!tp) return toast('Click an edge, or inside an internal shape.', 1); var lw = W2L(tp, w), hit = tp.internals.filter(function (it) { if (it.kind === 'ellipse') return Math.pow((lw[0] - it.c[0]) / it.r[0], 2) + Math.pow((lw[1] - it.c[1]) / it.r[1], 2) <= 1; return it.pts.length > 2 && inside(it.pts, lw); })[0]; if (!hit) return toast('No internal shape here. Draw one with the Internal tools first.', 1); return traceIt(tp, hit); }
       case 'cut': { var ce2 = nearestEdge(w); if (!ce2) return toast('Click on the outline of a piece.', 1); if (ST.cut.length && ST.cut[0].pc !== ce2.pc.id) ST.cut = []; ST.cut.push({ pc: ce2.pc.id, seg: ce2.seg, t: ce2.t, p: ce2.p }); if (ST.cut.length === 2) doCut(); else drawOver(); status(); return; }
       case 'poly': {
         var d = ST.draft || (ST.draft = { kind: 'poly', pts: [] });
@@ -537,6 +545,15 @@
     });
     toast('Cut into two pieces. Each gets the default seam allowance on the new edge; notches on the old outline were not kept.');
   }
+  function doMerge() {
+    var a = ST.walk[0], b = ST.walk[1], A = pcById(a.pc), B = pcById(b.pc); ST.walk = [];
+    if (A.locked || B.locked) { draw(); return toast('Unlock both pieces first.', 1); }
+    var r = C.merge(A, a.seg, B, b.seg), v = C.validate(r.piece);
+    if (v.some(function (x) { return x.k === 'cross'; })) { draw(); return toast('Those edges cannot be merged: the joined outline would cross itself.', 1); }
+    act('Merge pieces', function () { var at = P.pieces.indexOf(A); P.pieces.splice(at, 1, r.piece); P.pieces = P.pieces.filter(function (p) { return p !== B; }); ST.sel = [r.piece.id]; });
+    toast('Merged. The edges differed by ' + F(Math.abs(r.diff)) + (Math.abs(r.diff) > .3 ? ': check the new seam line' : '') + '.' + (r.dropped ? ' Notches on the second piece were not kept.' : ''));
+  }
+  function traceIt(pc, it) { var f = C.fromInternal(pc, it); if (!f) return toast('Only closed shapes can be traced to a piece.', 1); act('Trace to a piece', function () { var b = C.bbox(pc); f.x = pc.x + (b[2] - b[0]) + 6; P.pieces.push(f); ST.sel = [f.id]; ST.it = null; }); toast('Traced "' + f.name + '" as a new piece beside ' + pc.name + '.'); }
   function wheel(e) { e.preventDefault(); var r = svg.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top; if (e.ctrlKey || e.metaKey || !e.shiftKey && Math.abs(e.deltaY) > 0 && !e.deltaX) { var f = Math.exp(-e.deltaY * .0015), z2 = Math.max(.5, Math.min(120, ST.z * f)); ST.tx = mx - (mx - ST.tx) * z2 / ST.z; ST.ty = my - (my - ST.ty) * z2 / ST.z; ST.z = z2; } else { ST.tx -= e.deltaX; ST.ty -= e.deltaY; } draw(); }
   function key(e) {
     if (!root || root.hidden) return; var tg = e.target, typing = /INPUT|TEXTAREA|SELECT/.test(tg.tagName); var mod = e.ctrlKey || e.metaKey;
@@ -557,7 +574,7 @@
     if (e.key === '0') return fit(); if (e.key === '1') return doAct('z100');
     var t = TOOLS.filter(function (x) { return x.k === e.key.toLowerCase(); })[0]; if (t) setTool(t.id);
   }
-  function setTool(id) { ST.tool = id; ST.draft = null; ST.cut = []; if (id !== 'measure') ST.meas = []; if (id !== 'walk') ST.walk = []; qa('.ps-tb').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.t === id); }); svg.dataset.tool = id; opts(); refresh(); }
+  function setTool(id) { ST.tool = id; ST.draft = null; ST.cut = []; if (id !== 'measure') ST.meas = []; if (id !== 'walk' && id !== 'merge') ST.walk = []; if (id === 'merge') ST.walk = []; qa('.ps-tb').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.t === id); }); svg.dataset.tool = id; opts(); refresh(); }
 
   /* ---------- project files ---------- */
   function newProject(o) { var np = C.newProject(o); np.unit = P.unit; H.swap(np); H.u = []; H.r = []; ST.sel = []; ST.node = ST.seg = ST.notch = ST.it = null; ST.fileName = null; ST.savedAt = 0; ST.dirty = false; ls(AUTO, null); refresh(); fit(); }

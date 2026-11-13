@@ -260,6 +260,45 @@
     var full = C.newPiece(nodes, { name: pc.name, cat: pc.cat, dept: pc.dept, qty: pc.qty, fabric: pc.fabric }); full.sa = C.clone(pc.sa); full.sa.edges = {}; full.grain = pc.grain; full.notes = pc.notes; return full;
   };
 
+
+  /* merge B onto A along edge i of A and edge j of B: B is turned and moved so the edges meet, then the outlines join and the edge disappears.
+     Both pieces are placed in the same coordinates first (their x, y offsets are applied). Returns { piece, diff } */
+  C.merge = function (A, i, B, j) {
+    var a = C.clone(A), b = C.clone(B), off = function (pc) { var dx = pc.x || 0, dy = pc.y || 0; if (dx || dy) C.transformPiece(pc, C.M.tr(dx, dy)); pc.x = pc.y = 0; };
+    off(a); off(b);
+    var sgA = areaOf(C.flat(a, .5).pts) > 0, sgB = areaOf(C.flat(b, .5).pts) > 0;
+    if (sgA !== sgB) { var nb = b.nodes.length; C.reverse(b); j = (nb - 1 - j + nb) % nb; }
+    var na = a.nodes.length, nb2 = b.nodes.length, A0 = a.nodes[i], A1 = a.nodes[(i + 1) % na], B0 = b.nodes[j], B1 = b.nodes[(j + 1) % nb2];
+    var diff = C.segLen(a, i) - C.segLen(b, j);
+    var va = [A1.x - A0.x, A1.y - A0.y], vb = [B0.x - B1.x, B0.y - B1.y], ang = (Math.atan2(va[1], va[0]) - Math.atan2(vb[1], vb[0])) * 180 / Math.PI;
+    C.transformPiece(b, C.M.rot(ang, B1.x, B1.y)); C.transformPiece(b, C.M.tr(A0.x - B1.x, A0.y - B1.y));
+    var out = [], k;
+    for (k = 1; k <= na; k++) out.push(C.clone(a.nodes[(i + k) % na])); // A[i+1] ... A[i]
+    var aEnd = out[out.length - 1]; aEnd.h2 = B1.h2 ? B1.h2.slice() : null; aEnd.smooth = false;
+    for (k = 2; k < nb2; k++) out.push(C.clone(b.nodes[(j + k) % nb2])); // B[j+2] ... B[j-1]
+    out[0].h1 = B0.h1 ? B0.h1.slice() : null; out[0].smooth = false;
+    out.forEach(function (nd) { nd.id = uid('p'); });
+    var m = C.newPiece(out, { name: a.name, cat: a.cat, dept: a.dept, size: a.size, qty: a.qty, pair: a.pair, fabric: a.fabric });
+    m.sa.def = a.sa.def; m.sa.hem = a.sa.hem; m.grain = a.grain; m.notes = a.notes; m.internals = a.internals.concat(b.internals); m.darts = a.darts.concat(b.darts);
+    a.notches.forEach(function (nt) { if (nt.seg === i) return; var s2 = (nt.seg - (i + 1) + na) % na; m.notches.push(Object.assign({}, nt, { seg: s2 })); });
+    a.hems.forEach(function (h) { if (h !== i) m.hems.push((h - (i + 1) + na) % na); });
+    b.hems.forEach(function (h) { if (h !== j) m.hems.push(na - 1 + (h - (j + 1) + nb2) % nb2); });
+    return { piece: m, diff: diff, dropped: b.notches.length };
+  };
+  /* a facing (or any traced strip) along one or more consecutive edges, 'w' wide on the inside */
+  C.facing = function (pc, segs, w) {
+    var line = []; segs.forEach(function (s, k) { var p = C.segPts(pc, s, .2); line = line.concat(k ? p.slice(1) : p); });
+    var sg = areaOf(C.flat(pc, .5).pts) > 0 ? -1 : 1, inner = line.map(function (q, k) { var a = line[Math.max(0, k - 1)], b = line[Math.min(line.length - 1, k + 1)], t = nrm(sub(b, a)); return [q[0] + t[1] * sg * w, q[1] - t[0] * sg * w]; });
+    // keep the inner line inside the piece: points that leave it are pulled back by the same distance along the bisector (simple, adequate for necklines and hems)
+    var poly = line.concat(inner.reverse()), nodes = C.fitNodes(poly, .04, true), f = C.newPiece(nodes, { name: (pc.name || 'Piece') + ' facing', cat: 'facing', size: pc.size, qty: pc.qty, pair: pc.pair, fabric: pc.fabric });
+    f.sa.def = pc.sa.def; f.x = pc.x; f.y = pc.y; if (pc.grain) f.grain = C.clone(pc.grain); return f;
+  };
+  C.fromInternal = function (pc, it) {
+    var pts = it.kind === 'ellipse' ? null : it.pts, f;
+    if (it.kind === 'ellipse') f = C.ellipse(it.c[0], it.c[1], it.r[0], it.r[1], 0, {}); else if (pts && pts.length > 2) f = C.newPiece(pts.map(function (q) { return C.node(q[0], q[1]); }), {}); else return null;
+    f.name = it.label || (it.purpose === 'pocket' ? 'Pocket' : 'Traced piece'); f.size = pc.size; f.fabric = pc.fabric; f.sa.def = pc.sa.def; f.x = pc.x; f.y = pc.y; return f;
+  };
+
   /* ---------- seam allowance: the cutting line from the seamline ---------- */
   C.saOf = function (pc, i) { if (i === pc.fold) return 0; if (pc.sa.edges[i] != null) return +pc.sa.edges[i]; return pc.hems.indexOf(i) >= 0 ? +pc.sa.hem : +pc.sa.def; };
   function lineX(p, d, q, e) { var den = d[0] * e[1] - d[1] * e[0]; if (Math.abs(den) < 1e-9) return null; var t = ((q[0] - p[0]) * e[1] - (q[1] - p[1]) * e[0]) / den; return [p[0] + d[0] * t, p[1] + d[1] * t]; }
