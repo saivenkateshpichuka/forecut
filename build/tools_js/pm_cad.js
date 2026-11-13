@@ -1,4 +1,4 @@
-/* Forecut Pattern Studio geometry engine.
+/* Forecut Pattern Maker geometry engine (Edit pieces mode).
    Units are centimetres everywhere inside; the page converts to mm or inches only for display and typing.
    A piece is a closed outline of nodes. Each segment runs from node i to node i+1 and is a straight line, or a cubic
    Bezier when either end carries a handle (h2 on the start node, h1 on the end node, both relative to their node).
@@ -378,7 +378,7 @@
   };
 
   /* ---------- project and history ---------- */
-  C.newProject = function (o) { o = o || {}; return { app: 'forecut-pattern-studio', v: 1, name: o.name || 'Untitled pattern', unit: o.unit || 'cm', pieces: [], sewing: [], sizes: { groups: [{ id: 'g1', name: 'Size group 1', base: '', list: [] }] }, fabrics: [], colourways: [], stitches: [], view: { grid: true, snap: true, rulers: true, sa: true, seam: true, notches: true, grain: true, labels: true, internals: true, points: false, sewing: true }, created: new Date().toISOString() }; };
+  C.newProject = function (o) { o = o || {}; return { app: 'forecut-pattern-maker', v: 1, name: o.name || 'Untitled pattern', unit: o.unit || 'cm', pieces: [], sewing: [], sizes: { groups: [{ id: 'g1', name: 'Size group 1', base: '', list: [] }] }, fabrics: [], colourways: [], stitches: [], view: { grid: true, snap: true, rulers: true, sa: true, seam: true, notches: true, grain: true, labels: true, internals: true, points: false, sewing: true }, created: new Date().toISOString() }; };
   C.History = function (proj, onChange) { this.p = proj; this.u = []; this.r = []; this.on = onChange || function () {}; };
   C.History.prototype.exec = function (label, fn) { var before = JSON.stringify(this.p); var res = fn(this.p); if (res === false) return false; this.u.push({ l: label, s: before }); if (this.u.length > 200) this.u.shift(); this.r = []; this.on(label); return true; };
   C.History.prototype.undo = function () { var e = this.u.pop(); if (!e) return null; this.r.push({ l: e.l, s: JSON.stringify(this.p) }); this.swap(JSON.parse(e.s)); this.on('Undo ' + e.l); return e.l; };
@@ -387,7 +387,9 @@
   C.History.prototype.commit = function (label, before) { if (before === JSON.stringify(this.p)) return false; this.u.push({ l: label, s: before }); if (this.u.length > 200) this.u.shift(); this.r = []; this.on(label); return true; };
   C.History.prototype.swap = function (np) { var p = this.p; Object.keys(p).forEach(function (k) { delete p[k]; }); Object.assign(p, np); };
   C.serialize = function (proj) { return JSON.stringify(proj); };
-  C.parse = function (txt) { var p = JSON.parse(txt); if (!p || p.app !== 'forecut-pattern-studio') throw new Error('This is not a Forecut Pattern Studio project.'); return p; };
+  C.APP = 'forecut-pattern-maker';
+  C.isProject = function (p) { return !!p && (p.app === C.APP || p.app === 'forecut-pattern-studio'); };
+  C.parse = function (txt) { var p = JSON.parse(txt); if (!C.isProject(p)) throw new Error('This is not a Forecut Pattern Maker project file.'); p.app = C.APP; return p; };
 
   /* ---------- export ---------- */
   function placed(pc, q) { return [q[0] + (pc.x || 0), q[1] + (pc.y || 0)]; }
@@ -405,7 +407,7 @@
       if (o.internals !== false) pc.internals.forEach(function (it) { if (it.visible === false) return; s += '<polyline points="' + it.pts.map(function (q) { return f(placed(pc, q)); }).join(' ') + '" stroke="#333" stroke-width=".03"' + (it.style === 'dashed' ? ' stroke-dasharray=".4 .25"' : '') + '/>'; });
       if (o.labels !== false) { var bb = C.bbox(pc), c = placed(pc, [(bb[0] + bb[2]) / 2, (bb[1] + bb[3]) / 2]); s += '<text x="' + (c[0] + ox).toFixed(2) + '" y="' + (c[1] + oy).toFixed(2) + '" font-size="1" fill="#111" stroke="none" text-anchor="middle" font-family="Arial">' + esc(pc.name || 'Piece') + '</text><text x="' + (c[0] + ox).toFixed(2) + '" y="' + (c[1] + oy + 1.3).toFixed(2) + '" font-size=".6" fill="#555" stroke="none" text-anchor="middle" font-family="Arial">' + esc((pc.size ? 'Size ' + pc.size + ' · ' : '') + 'Cut ' + pc.qty + (pc.pair ? ' (pair)' : '') + (pc.fold >= 0 ? ' · on fold' : '')) + '</text>'; }
     });
-    if (o.brand !== false) s += '<text x="' + (W - .6).toFixed(2) + '" y="' + (H - .6).toFixed(2) + '" font-size=".5" fill="#a9481f" stroke="none" text-anchor="end" font-family="Arial">Forecut Pattern Studio</text>';
+    if (o.brand !== false) s += '<text x="' + (W - .6).toFixed(2) + '" y="' + (H - .6).toFixed(2) + '" font-size=".5" fill="#a9481f" stroke="none" text-anchor="end" font-family="Arial">Forecut Pattern Maker</text>';
     if (o.square !== false) s += '<rect x=".6" y="' + (H - 5.6).toFixed(2) + '" width="5" height="5" stroke="#111" stroke-width=".03"/><text x="3.1" y="' + (H - 2.9).toFixed(2) + '" font-size=".45" text-anchor="middle" stroke="none" fill="#111" font-family="Arial">5 cm</text>';
     return s + '</g></svg>';
   };

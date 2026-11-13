@@ -12,27 +12,27 @@
 
   /* ---------- tools ---------- */
   var TOOLS = [
-    { g: 'Select', id: 'select', k: 'v', n: 'Select and transform', tip: 'Click a piece to select it, Shift-click to add more, drag to move. Drag on empty space to select with a box.', ic: 'M5 3l13 8-6 1.5L9 19z' },
-    { g: 'Select', id: 'edit', k: 'a', n: 'Edit pattern', tip: 'Select and drag points, edges and curve handles. Type exact coordinates in Properties. Double-click an edge to add a point.', ic: 'M5 5h3v3H5zM16 16h3v3h-3zM6.5 8C8 14 12 17 16 17.5' },
+    { g: 'Select', id: 'select', k: 'v', n: 'Select and transform', tip: 'Click a piece to select it, Shift-click to add more, drag to move. Drag on empty space to select with a box.', ic: 'M6 3.5v15l4.2-4 2.7 6 2.6-1.2-2.7-5.8 5.8-.3z' },
+    { g: 'Select', id: 'edit', k: 'a', n: 'Edit pattern', tip: 'Select and drag points, edges and curve handles. Type exact coordinates in Properties. Double-click an edge to add a point.', ic: 'M5 18.5c1.5-7 6.5-12 14-13M3.5 17h3v3h-3zM17.5 4h3v3h-3zM5 18.5l3-8M6.6 10.5a1.4 1.4 0 1 0 2.8 0a1.4 1.4 0 1 0 -2.8 0' },
     { g: 'Select', id: 'pan', k: 'h', n: 'Pan', tip: 'Drag to move the view. You can also hold Space, or drag with the middle mouse button.', ic: 'M8 12V6a1.5 1.5 0 013 0v5M11 11V4.5a1.5 1.5 0 013 0V11M14 11V6a1.5 1.5 0 013 0v7c0 4-2.5 7-6 7-2.5 0-4-1-5.5-3L4 13.5a1.5 1.5 0 012.5-1.5L8 14' },
-    { g: 'Draw', id: 'poly', k: 'p', n: 'Polygon', tip: 'Click to place points. Drag while placing a point to make a curve. Click the first point, double-click or press Enter to close. Backspace removes the last point, Esc cancels.', ic: 'M4 18L7 5l10 2 3 9-8 4z' },
-    { g: 'Draw', id: 'rect', k: 'r', n: 'Rectangle', tip: 'Drag to draw, or type the exact width and height in the bar above the canvas and press Create.', ic: 'M4 6h16v12H4z' },
-    { g: 'Draw', id: 'ellipse', k: 'e', n: 'Ellipse', tip: 'Drag to draw, or type the exact width and height above the canvas. Hold Shift for a circle.', ic: 'M12 5c5 0 8.5 3 8.5 7s-3.5 7-8.5 7-8.5-3-8.5-7S7 5 12 5z' },
-    { g: 'Draw', id: 'spiral', n: 'Spiral', tip: 'A spiral strip for flounces and cascades. Set the inner radius, turns, spacing and strip width above the canvas, then click where its centre goes.', ic: 'M12 12a1.5 1.5 0 113 0 3 3 0 01-6 0 4.5 4.5 0 019 0 6 6 0 01-12 0 7.5 7.5 0 0115 0' },
-    { g: 'Edit', id: 'addpt', k: '+', n: 'Add point / split edge', tip: 'Click an edge to add a point there without changing the shape. In Properties you can also split an edge into equal parts or at an exact distance.', ic: 'M4 18L20 6M12 8v8M8 12h8' },
-    { g: 'Edit', id: 'curv', k: 'c', n: 'Edit curvature', tip: 'Drag an edge sideways to bend it; the end points stay where they are. A straight edge becomes a curve.', ic: 'M4 18C8 6 16 6 20 18M12 4v5' },
-    { g: 'Edit', id: 'smooth', n: 'Smooth curve', tip: 'Select points or edges with Edit pattern, then click Smooth in Properties, or click an edge here to smooth its two joins. Sharp corners stay sharp. The length change is reported.', ic: 'M3 16c3-8 5-8 7-4s4 4 7-4 4 0 4 0' },
-    { g: 'Edit', id: 'cut', k: 'k', n: 'Cut and split', tip: 'Click two points on the outline of a piece to cut it into two pieces along the line between them.', ic: 'M6 4l12 16M4 8c2-2 4-2 6 0M14 16c2 2 4 2 6 0' },
-    { g: 'Edit', id: 'merge', n: 'Merge pieces', tip: 'Click an edge of the first piece, then the matching edge of the second. The second piece turns to meet it and the two become one piece. The length difference is reported.', ic: 'M4 6h7v12H4zM13 6h7v12h-7M11 12h2' },
-    { g: 'Edit', id: 'trace', k: 't', n: 'Trace', tip: 'Click an edge to trace a facing of the width set above the canvas, or click inside an internal rectangle, ellipse or closed shape to trace it as a new piece (a pocket from its placement, say).', ic: 'M4 4h16v16H4zM4 9h16M8 4v5' },
-    { g: 'Internal', id: 'iline', k: 'l', n: 'Internal line', tip: 'Draw a line inside a piece: a fold line, guide, placement or stitch line. Click points, double-click or press Enter to finish.', ic: 'M5 5h14v14H5zM8 15l8-6' },
-    { g: 'Internal', id: 'irect', n: 'Internal rectangle', tip: 'Drag inside a piece for a pocket placement, a cut-out or a guide.', ic: 'M4 4h16v16H4zM8 9h8v6H8z' },
-    { g: 'Internal', id: 'iell', n: 'Internal circle or ellipse', tip: 'Drag inside a piece for a cut-out, button or placement marking.', ic: 'M4 4h16v16H4zM12 8.5a3.5 3.5 0 110 7 3.5 3.5 0 010-7z' },
-    { g: 'Marks', id: 'notch', k: 'n', n: 'Notch', tip: 'Click an edge to add a notch. Set its exact position, type and depth in Properties.', ic: 'M4 18h16M12 18v-6M10 12l2 3 2-3' },
-    { g: 'Marks', id: 'grain', k: 'g', n: 'Grainline', tip: 'Drag across a piece to set its grainline. Set the exact angle and direction in Properties.', ic: 'M12 3v18M8 7l4-4 4 4M8 17l4 4 4-4' },
-    { g: 'Measure', id: 'measure', k: 'm', n: 'Measure', tip: 'Click points to measure straight distances and angles; snapping uses points and the grid. Click an edge to read its length along the curve. Esc clears.', ic: 'M3 15l12-12 6 6-12 12zM7 11l2 2M10 8l2 2M13 5l2 2' },
-    { g: 'Measure', id: 'walk', k: 'w', n: 'Seam walk', tip: 'Click the first edge, then the edge it is sewn to. The lengths, the difference and the planned ease are compared.', ic: 'M4 7h16M4 17h16M8 7l-2 10M16 7l2 10' },
-    { g: 'Seam allowance', id: 'sa', k: 's', n: 'Seam allowance', tip: 'Click an edge to set its own allowance, mark it as a hem or a fold, and choose the corner shape.', ic: 'M6 6h12v12H6zM3 3h18v18H3z' }
+    { g: 'Draw', id: 'poly', k: 'p', n: 'Polygon', tip: 'Click to place points. Drag while placing a point to make a curve. Click the first point, double-click or press Enter to close. Backspace removes the last point, Esc cancels.', ic: 'M12 3.5l8.5 6.2-3.2 9.8H6.7L3.5 9.7zM10.6 2.1h2.8v2.8h-2.8z' },
+    { g: 'Draw', id: 'rect', k: 'r', n: 'Rectangle', tip: 'Drag to draw, or type the exact width and height in the bar above the canvas and press Create.', ic: 'M4 6.5h16v11H4z' },
+    { g: 'Draw', id: 'ellipse', k: 'e', n: 'Ellipse', tip: 'Drag to draw, or type the exact width and height above the canvas. Hold Shift for a circle.', ic: 'M3.5 12a8.5 6 0 1 0 17 0a8.5 6 0 1 0-17 0' },
+    { g: 'Draw', id: 'spiral', n: 'Spiral', tip: 'A spiral strip for flounces and cascades. Set the inner radius, turns, spacing and strip width above the canvas, then click where its centre goes.', ic: 'M12 12.5a1 1 0 0 1 1-1 2 2 0 0 1 2 2 3 3 0 0 1-3 3 4 4 0 0 1-4-4 5 5 0 0 1 5-5 6 6 0 0 1 6 6 7 7 0 0 1-7 7' },
+    { g: 'Edit', id: 'addpt', k: '+', n: 'Add point / split edge', tip: 'Click an edge to add a point there without changing the shape. In Properties you can also split an edge into equal parts or at an exact distance.', ic: 'M3 16h7M14 16h7M10.5 14.5h3v3h-3zM12 3.5v7M8.5 7h7' },
+    { g: 'Edit', id: 'curv', k: 'c', n: 'Edit curvature', tip: 'Drag an edge sideways to bend it; the end points stay where they are. A straight edge becomes a curve.', ic: 'M4 18.5C7 8.5 17 8.5 20 18.5M12 12.5V4M9.5 6.5L12 4l2.5 2.5M2.5 17h3v3h-3zM18.5 17h3v3h-3z' },
+    { g: 'Edit', id: 'smooth', n: 'Smooth curve', tip: 'Select points or edges with Edit pattern, then click Smooth in Properties, or click an edge here to smooth its two joins. Sharp corners stay sharp. The length change is reported.', ic: 'M3 15l4-7 4 6M13 14c2.5-7 5.5-7 8-2M11 14h2' },
+    { g: 'Edit', id: 'cut', k: 'k', n: 'Cut and split', tip: 'Click two points on the outline of a piece to cut it into two pieces along the line between them.', ic: 'M4.0 6.5a2.5 2.5 0 1 0 5.0 0a2.5 2.5 0 1 0 -5.0 0M4.0 17.5a2.5 2.5 0 1 0 5.0 0a2.5 2.5 0 1 0 -5.0 0M8.7 8L20.5 17.5M8.7 16L20.5 6.5' },
+    { g: 'Edit', id: 'merge', n: 'Merge pieces', tip: 'Click an edge of the first piece, then the matching edge of the second. The second piece turns to meet it and the two become one piece. The length difference is reported.', ic: 'M3 5h6v14H3zM15 5h6v14h-6zM10.5 9l2 3-2 3M13.5 9l-2 3 2 3' },
+    { g: 'Edit', id: 'trace', k: 't', n: 'Trace', tip: 'Click an edge to trace a facing of the width set above the canvas, or click inside an internal rectangle, ellipse or closed shape to trace it as a new piece (a pocket from its placement, say).', ic: 'M4 4h16v16H4zM4 9h16M7.5 6.5h9' },
+    { g: 'Internal', id: 'iline', k: 'l', n: 'Internal line', tip: 'Draw a line inside a piece: a fold line, guide, placement or stitch line. Click points, double-click or press Enter to finish.', ic: 'M3.5 3.5h17v17h-17zM7.5 16.5l9-9M6 15h3v3H6zM15 6h3v3h-3z' },
+    { g: 'Internal', id: 'irect', n: 'Internal rectangle', tip: 'Drag inside a piece for a pocket placement, a cut-out or a guide.', ic: 'M3.5 3.5h17v17h-17zM7.5 8.5h9v7h-9z' },
+    { g: 'Internal', id: 'iell', n: 'Internal circle or ellipse', tip: 'Drag inside a piece for a cut-out, button or placement marking.', ic: 'M3.5 3.5h17v17h-17zM7.8 12a4.2 4.2 0 1 0 8.4 0a4.2 4.2 0 1 0 -8.4 0' },
+    { g: 'Marks', id: 'notch', k: 'n', n: 'Notch', tip: 'Click an edge to add a notch. Set its exact position, type and depth in Properties.', ic: 'M3 6h7.5L12 9.5 13.5 6H21v12H3z' },
+    { g: 'Marks', id: 'grain', k: 'g', n: 'Grainline', tip: 'Drag across a piece to set its grainline. Set the exact angle and direction in Properties.', ic: 'M12 3v18M8.5 6.5L12 3l3.5 3.5M8.5 17.5L12 21l3.5-3.5' },
+    { g: 'Measure', id: 'measure', k: 'm', n: 'Measure', tip: 'Click points to measure straight distances and angles; snapping uses points and the grid. Click an edge to read its length along the curve. Esc clears.', ic: 'M3.5 15.5l12-12 5 5-12 12zM7 12l2 2M9.5 9.5l1.5 1.5M12 7l2 2' },
+    { g: 'Measure', id: 'walk', k: 'w', n: 'Seam walk', tip: 'Click the first edge, then the edge it is sewn to. The lengths, the difference and the planned ease are compared.', ic: 'M3 7.5c6-3.5 12-3.5 18 0M3 16.5c6 3.5 12 3.5 18 0M7 7v10M12 6v12M17 7v10' },
+    { g: 'Seam allowance', id: 'sa', k: 's', n: 'Seam allowance', tip: 'Click an edge to set its own allowance, mark it as a hem or a fold, and choose the corner shape.', ic: 'M7.5 7.5h9v9h-9zM3.5 3.5h17v17h-17zM16.5 16.5l4 4' }
   ];
   var TOOL = {}; TOOLS.forEach(function (t) { TOOL[t.id] = t; });
 
@@ -676,7 +676,7 @@
       m.onclick = function (e) { var o = e.target.closest('[data-open]'), r = e.target.closest('[data-rm]'); if (o) confirmDiscard(function () { load(L[o.dataset.open].p); closeModal(); toast('Opened "' + L[o.dataset.open].name + '".'); }); if (r) { var L2 = lib(); delete L2[r.dataset.rm]; ls(LIB, L2); closeModal(); openLib(); } };
     });
   }
-  function load(p) { if (!p || p.app !== 'forecut-pattern-studio') return toast('That is not a Pattern Studio project.', 1); H.swap(C.clone(p)); H.u = []; H.r = []; ST.sel = []; ST.node = ST.seg = ST.notch = ST.it = null; ST.dirty = false; ST.savedAt = Date.now(); refresh(); fit(); }
+  function load(p) { if (!C.isProject(p)) return toast('That is not a Pattern Maker project.', 1); H.swap(C.clone(p)); H.u = []; H.r = []; ST.sel = []; ST.node = ST.seg = ST.notch = ST.it = null; ST.dirty = false; ST.savedAt = Date.now(); refresh(); fit(); }
   function confirmDiscard(fn) { if (!ST.dirty || !P.pieces.length) return fn(); modal('<h4>Unsaved changes</h4><p>This project has changes that are not saved to a project yet. They are kept in autosave until you start something else.</p><div class="ps-bs"><button type="button" class="ps-b pri" id="ps-dsave">Save first</button><button type="button" class="ps-b bad" id="ps-dgo">Discard and continue</button><button type="button" class="ps-b" data-a="mclose">Cancel</button></div>', function () { q('#ps-dsave').onclick = function () { closeModal(); save(false); }; q('#ps-dgo').onclick = function () { closeModal(); ST.dirty = false; fn(); }; }); }
   function modal(html, after) { var m = q('#ps-modal'); m.innerHTML = '<div class="ps-mbox" role="dialog" aria-modal="true">' + html + '</div>'; m.hidden = false; m.onclick = null; if (after) after(m); var f = m.querySelector('input,button'); if (f) f.focus(); }
   function closeModal() { var m = q('#ps-modal'); m.hidden = true; m.innerHTML = ''; }
@@ -755,7 +755,7 @@
       sc.push({ k: 'text', x: c[0], y: c[1], s: fs, t: pc.name || 'Piece', b: 1, a: 'middle', L: 'TEXT' }, { k: 'text', x: c[0], y: c[1] + fs * 1.2, s: fs * .6, t: (pc.size ? 'Size ' + pc.size + ' · ' : '') + 'Cut ' + pc.qty + (pc.pair ? ' (mirrored pair)' : '') + (pc.fold >= 0 ? ' · on fold' : '') + (pc.fabric ? ' · ' + pc.fabric : ''), a: 'middle', L: 'TEXT' }, { k: 'text', x: c[0], y: c[1] + fs * 2, s: fs * .5, t: 'SA ' + C.fmt(pc.sa.def, P.unit) + (pc.hems.length ? ', hem ' + C.fmt(pc.sa.hem, P.unit) : ''), a: 'middle', L: 'TEXT' });
     });
     sc.push({ k: 'poly', p: [[1, Hh - 6.5], [6, Hh - 6.5], [6, Hh - 1.5], [1, Hh - 1.5]], c: 1, w: .06, L: 'MARK' }, { k: 'text', x: 3.5, y: Hh - 3.7, s: .7, t: '5 cm square', a: 'middle', L: 'TEXT' });
-    sc.push({ k: 'text', x: 7.5, y: Hh - 4.6, s: 1.1, t: P.name + ' · ' + pcs.length + ' pieces', b: 1, L: 'TEXT' }, { k: 'text', x: 7.5, y: Hh - 3, s: .7, t: 'Forecut Pattern Studio · ' + new Date().toISOString().slice(0, 10) + ' · print at 100% and check the 5 cm square', col: '#a9481f', L: 'BRAND' });
+    sc.push({ k: 'text', x: 7.5, y: Hh - 4.6, s: 1.1, t: P.name + ' · ' + pcs.length + ' pieces', b: 1, L: 'TEXT' }, { k: 'text', x: 7.5, y: Hh - 3, s: .7, t: 'Forecut Pattern Maker · ' + new Date().toISOString().slice(0, 10) + ' · print at 100% and check the 5 cm square', col: '#a9481f', L: 'BRAND' });
     return { sc: sc, W: Math.max(W, 40), H: Hh };
   }
   function exportAs(a) {
@@ -796,6 +796,9 @@
     q('#ps-file').addEventListener('change', function () { var f = this.files[0]; this.value = ''; if (!f) return; f.text().then(function (t) { try { var p = C.parse(t); confirmDiscard(function () { load(p); P.lib = null; ST.fileName = f.name; toast('Opened ' + f.name + '. Save it to keep it in this browser.'); }); } catch (err) { toast(err.message || 'Could not read that file.', 1); } }); });
     q('#ps-dxf').addEventListener('change', function () { var f = this.files[0]; this.value = ''; if (!f) return; f.text().then(function (t) { importDXF(t, f.name); }); });
     window.addEventListener('beforeunload', function () { if (ST.dirty) autosave(); });
+    // in Edit pieces, Pattern Maker's Export menu exports the edited pieces
+    var XMAP = { 'pm-dl-svg': 'xsvg', 'pm-dl-dxf': 'xdxf', 'pm-dl-pdf': 'xpdft', 'pm-dl-pdf2': 'xpdf', 'pm-dl-png': 'xpng' };
+    document.addEventListener('click', function (e) { if (!ON) return; var b = e.target.closest('[id^=pm-dl-]'); if (!b) return; e.preventDefault(); e.stopImmediatePropagation(); var m = document.getElementById('pm-menu'); if (m) m.hidden = true; var eb = document.getElementById('pm-exp'); if (eb) eb.setAttribute('aria-expanded', 'false'); if (XMAP[b.id]) exportAs(XMAP[b.id]); else toast('This export is made from the draft. Switch to Draft to download it; the edited pieces export as SVG, DXF, PDF and PNG.', 1); }, true);
     // the units switch of Pattern Maker drives the editor too
     document.addEventListener('click', function (e) { if (e.target.closest('#pm-units [data-u]')) setTimeout(function () { P.unit = unitNow(); if (ON) { opts(); refresh(); } }, 0); });
     // collapsing the left panel in edit mode keeps the tools as an icon rail
@@ -849,7 +852,7 @@
     '.ps-modes{display:inline-flex;background:var(--bg);border:1px solid var(--ln);border-radius:4px;padding:1px;margin:0 4px}.ps-modes button{border:0;background:none;color:var(--mu);font:600 11.5px "DM Sans",sans-serif;padding:3px 9px;border-radius:3px;cursor:pointer;white-space:nowrap}.ps-modes button[aria-pressed=true]{background:var(--ac);color:#1b1d20}.ps-modes button:hover:not([aria-pressed=true]){color:var(--tx)}',
     '.pbody.cad{grid-template-columns:200px minmax(0,1fr) 300px}',
     '.pbody.cad .pl>:not(.ps-tools),.pbody.cad .pr>:not(.ps-side),.pbody.cad .pc>.stg,.pbody.cad .pc>.sbar,.pbody.cad #pm-edpanel{display:none!important}',
-    '.pbody.cad .ctl>:not(.pside):not(.ps-modes):not(.ps-bar){display:none!important}',
+    '.pbody.cad .ctl>:not(.pside):not(.ps-modes):not(.ps-bar):not(#pm-3db){display:none!important}',
     '.pbody.cad .ps-tools{display:block;padding:6px 6px 20px}.pbody.cad .ps-bar{display:flex;align-items:center;gap:3px;flex:1;min-width:0;flex-wrap:nowrap}.pbody.cad .ps-center{display:flex;flex-direction:column;flex:1;min-height:0;position:relative}.pbody.cad .ps-side{display:block}',
     '@media (min-width:981px){.pbody.cad.nol{grid-template-columns:48px minmax(0,1fr) 300px}.pbody.cad.nor{grid-template-columns:200px minmax(0,1fr)}.pbody.cad.nol.nor{grid-template-columns:48px minmax(0,1fr)}.pbody.cad.nol .pl{display:block}',
     ' .pbody.cad.nol .ps-tb span,.pbody.cad.nol .ps-tb kbd,.pbody.cad.nol .ps-tg small,.pbody.cad.nol #ps-tsearch{display:none}.pbody.cad.nol .ps-tb{justify-content:center;padding:0}.pbody.cad.nol .ps-tools{padding:4px 3px}}',
@@ -857,7 +860,7 @@
     '.ps-tg{padding:5px 0 3px;border-top:1px solid var(--ln)}.ps-tg:first-of-type{border-top:0}.ps-tg small{display:block;font:600 9.5px "DM Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding:2px 6px 3px}',
     '.ps-tb{display:flex;align-items:center;gap:8px;width:100%;height:28px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:none;color:var(--mu);font:12.5px "DM Sans",sans-serif;text-align:left;cursor:pointer}.ps-tb span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ps-tb kbd{font:600 10px ui-monospace,Menlo,monospace;color:var(--dim)}',
     '.ps-tb:hover{background:var(--p2);color:var(--tx)}.ps-tb[aria-pressed=true]{background:var(--p3);border-color:var(--ln);color:var(--tx)}.ps-tb[aria-pressed=true] svg{stroke:var(--ac)}',
-    '.ps-tb svg,.ps-bar svg,.ps-modes svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.ps-bar .ps-mb svg{width:12px;height:12px}',
+    '.ps-tb svg,.ps-bar svg,.ps-modes svg{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.ps-bar .ps-mb svg{width:12px;height:12px}',
     '.ps-menu{position:relative}.ps-dd{position:absolute;top:30px;left:0;min-width:260px;background:var(--p2);color:var(--tx);border:1px solid var(--ln);border-radius:6px;box-shadow:0 12px 30px rgba(0,0,0,.45);padding:5px;z-index:60}',
     '.ps-dd button{display:flex;justify-content:space-between;gap:12px;width:100%;text-align:left;background:none;border:0;color:var(--tx);padding:6px 9px;border-radius:4px;cursor:pointer;font:12.5px "DM Sans",sans-serif}.ps-dd button:hover{background:var(--p3)}.ps-dd kbd{font:11px ui-monospace,Menlo,monospace;color:var(--dim)}.ps-dd hr{border:0;border-top:1px solid var(--ln);margin:4px 0}.ps-dd label{display:flex;gap:8px;align-items:center;padding:5px 9px;cursor:pointer;font:12.5px "DM Sans",sans-serif}',
     '.ps-zl{min-width:50px;font:600 12px ui-monospace,Menlo,monospace!important;color:var(--tx)!important}',
@@ -916,5 +919,5 @@
   ].join('\n');
   document.head.appendChild(css);
 
-  window.FCStudio = { open: function () { setEdit(true); }, close: function () { setEdit(false); }, setEdit: setEdit, geo: geo, snap: snap, nearestEdge: nearestEdge, P: function () { return P; }, H: H, act: act, setTool: setTool, ST: ST, fit: fit, importDXF: importDXF, parseDXF: parseDXF, scene: scene, fromDraft: fromDraft };
+  window.PMEdit = window.FCStudio = { open: function () { setEdit(true); }, close: function () { setEdit(false); }, setEdit: setEdit, geo: geo, snap: snap, nearestEdge: nearestEdge, P: function () { return P; }, H: H, act: act, setTool: setTool, ST: ST, fit: fit, importDXF: importDXF, parseDXF: parseDXF, scene: scene, fromDraft: fromDraft };
 })();
