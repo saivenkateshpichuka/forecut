@@ -27,6 +27,21 @@ for (const style of Object.keys(D.STYLES)) {
     });
   }
 }
+test('every fabric in the library drapes a dress and a gathered skirt', () => {
+  for (const f of Object.keys(D.FABRICS)) for (const st of ['dress', 'gathered']) {
+    const { S, body } = run(st, 'women', 'M', f, st === 'dress' ? 150 : 360);
+    for (let i = 0; i < S.x.length; i++) assert.ok(Number.isFinite(S.x[i]), f + ' ' + st + ' position is a number');
+    assert.ok(S.seamGap() < (st === 'dress' ? 1.5 : 3.5), f + ' ' + st + ' seams closed: ' + S.seamGap().toFixed(2));
+  }
+});
+test('a custom fabric (any numbers a user types) drapes without blowing up', () => {
+  const { S } = run('aline', 'women', 'M', 'poplin', 1); const M = S.M, body = S.body;
+  for (const f of [{ gsm: 30, sw: 100, sl: 100, sb: 20, stiff: 0, fric: 0, thick: .05 }, { gsm: 900, sw: 0, sl: 0, sb: 0, stiff: 100, fric: 1, thick: 6 }]) {
+    const s2 = new D.Sim(D.mesh(D.assemble(PM, 'aline', 'women', body.m, {}, body), 3, Del), body, f);
+    for (let k = 0; k < 200 && !s2.settled; k++) s2.step(1 / 60);
+    for (let i = 0; i < s2.x.length; i++) assert.ok(Number.isFinite(s2.x[i]), 'finite');
+  }
+});
 test('a heavier, stiffer fabric hangs differently from a light one', () => {
   const a = run('dress', 'women', 'M', 'georgette', 200).S, b = run('dress', 'women', 'M', 'denim', 200).S;
   let d = 0; for (let i = 0; i < a.x.length; i++) d = Math.max(d, Math.abs(a.x[i] - b.x[i]));

@@ -565,20 +565,61 @@
   };
 
   /* ---------------- fabrics ---------------- */
+  /* Fabric library. Every fabric is described the way a fabric spec sheet does:
+     gsm weight; sw / sl = stretch across (weft) and along (warp, the grain) in %; sb = extra give on the bias in %;
+     stiff = bending stiffness 0 (limp) to 100 (board-like); fric = friction on the body; thick = mm;
+     rough / sheen / op = how it looks (surface roughness, sheen 0..1, opacity); tex = the surface texture. */
+  function F(g, n, gsm, sw, sl, sb, stiff, fric, thick, rough, sheen, tex, note, op) { return { g: g, n: n, gsm: gsm, sw: sw, sl: sl, sb: sb, stiff: stiff, fric: fric, thick: thick, rough: rough, sheen: sheen, tex: tex, note: note, op: op || 1 }; }
   D.FABRICS = {
-    poplin: { n: 'Cotton poplin', gsm: 115, stretch: 0, bend: 6e-5, fric: .45, rough: .78, note: 'Crisp woven, holds its shape' },
-    jersey: { n: 'Cotton jersey', gsm: 170, stretch: 4e-6, bend: 2.2e-4, fric: .5, rough: .86, note: 'Soft knit with some stretch' },
-    linen: { n: 'Linen', gsm: 160, stretch: 0, bend: 3e-5, fric: .5, rough: .9, note: 'Firm woven, stands away from the body' },
-    rayon: { n: 'Rayon challis', gsm: 125, stretch: 0, bend: 4e-4, fric: .35, rough: .7, note: 'Fluid woven, drapes close' },
-    crepe: { n: 'Silk crepe', gsm: 95, stretch: 0, bend: 6e-4, fric: .3, rough: .55, note: 'Light and fluid' },
-    georgette: { n: 'Georgette / chiffon', gsm: 70, stretch: 0, bend: 1.4e-3, fric: .3, rough: .6, note: 'Very light, soft folds' },
-    denim: { n: 'Light denim (8 oz)', gsm: 270, stretch: 0, bend: 1.2e-5, fric: .55, rough: .92, note: 'Heavy, stiff woven' },
-    fleece: { n: 'Fleece-back knit', gsm: 300, stretch: 6e-6, bend: 5e-5, fric: .6, rough: .95, note: 'Thick knit, rounded folds' }
+    poplin: F('Cotton and linen', 'Cotton poplin', 115, 0, 0, 1.5, 60, .45, .22, .78, 0, 'poplin', 'Crisp woven, holds its shape'),
+    jersey: F('Knits', 'Cotton jersey', 170, 40, 25, 0, 39, .5, .55, .86, 0, 'knit', 'Soft knit with some stretch'),
+    linen: F('Cotton and linen', 'Linen', 160, 0, 0, 3, 71, .5, .35, .9, 0, 'linen', 'Firm woven, stands away from the body'),
+    rayon: F('Silk and fluid', 'Rayon challis', 125, 0, 0, 4, 29, .35, .25, .7, .1, 'plain', 'Fluid woven, drapes close'),
+    crepe: F('Silk and fluid', 'Silk crepe', 95, 0, 0, 4, 22, .3, .2, .55, .25, 'crepe', 'Light and fluid'),
+    georgette: F('Silk and fluid', 'Georgette / chiffon', 70, 0, 0, 5, 10, .3, .15, .6, .15, 'chiffon', 'Very light, soft folds', .82),
+    denim: F('Denim and heavy', 'Light denim (8 oz)', 270, 0, 0, 1.5, 85, .55, .5, .92, 0, 'denim', 'Heavy, stiff woven'),
+    fleece: F('Knits', 'Fleece-back knit', 300, 60, 30, 0, 63, .6, 2.5, .95, 0, 'fleece', 'Thick knit, rounded folds'),
+    voile: F('Cotton and linen', 'Cotton voile / mulmul', 65, 0, 0, 4, 30, .4, .15, .8, 0, 'plain', 'Sheer and airy, soft gathers', .86),
+    cambric: F('Cotton and linen', 'Cotton cambric', 100, 0, 0, 2, 52, .45, .2, .8, 0, 'poplin', 'Smooth, light shirting'),
+    oxford: F('Cotton and linen', 'Oxford shirting', 140, 0, 0, 2, 62, .5, .3, .85, 0, 'oxford', 'Basket weave shirting, soft body'),
+    chambray: F('Cotton and linen', 'Chambray', 125, 0, 0, 2, 56, .48, .25, .84, 0, 'chambray', 'Light denim-look plain weave'),
+    flannel: F('Cotton and linen', 'Cotton flannel', 170, 0, 0, 3, 50, .6, .6, .96, 0, 'brushed', 'Brushed, soft and warm'),
+    khadi: F('Cotton and linen', 'Khadi', 140, 0, 0, 3, 58, .55, .35, .92, 0, 'slub', 'Handspun, uneven slub texture'),
+    twill: F('Denim and heavy', 'Cotton twill / chino', 230, 0, 0, 1.5, 78, .5, .45, .88, 0, 'twill', 'Firm diagonal weave for trousers'),
+    canvas: F('Denim and heavy', 'Canvas / duck', 340, 0, 0, 1, 92, .55, .6, .93, 0, 'canvas', 'Very stiff, holds its shape'),
+    denim12: F('Denim and heavy', 'Denim (12 oz)', 400, 0, 0, 1, 90, .55, .7, .93, 0, 'denim', 'Classic jeans weight'),
+    sdenim: F('Denim and heavy', 'Stretch denim', 330, 22, 0, 1, 80, .55, .6, .92, 0, 'denim', 'Denim with elastane across the width'),
+    cord: F('Denim and heavy', 'Corduroy', 280, 0, 0, 2, 74, .6, 1.2, .9, .2, 'cord', 'Raised wales, warm and soft'),
+    satin: F('Silk and fluid', 'Satin / charmeuse', 90, 0, 0, 5, 20, .25, .2, .3, .6, 'satin', 'Smooth, high sheen, liquid drape'),
+    organza: F('Silk and fluid', 'Organza', 45, 0, 0, 1.5, 62, .3, .1, .45, .3, 'plain', 'Sheer and crisp, stands out', .62),
+    taffeta: F('Silk and fluid', 'Taffeta', 90, 0, 0, 1.5, 70, .3, .2, .4, .45, 'satin', 'Crisp, rustling, holds volume'),
+    vcrepe: F('Silk and fluid', 'Viscose crepe', 140, 0, 0, 4, 30, .35, .3, .7, .1, 'crepe', 'Weighty and fluid'),
+    pcrepe: F('Silk and fluid', 'Polyester crepe', 120, 0, 0, 3, 34, .32, .25, .65, .15, 'crepe', 'Easy-care crepe, smooth drape'),
+    suiting: F('Wool', 'Wool suiting', 260, 0, 0, 2, 72, .5, .45, .85, .05, 'twill', 'Tailoring weight, clean lines'),
+    wflannel: F('Wool', 'Wool flannel', 300, 0, 0, 2, 68, .6, .8, .97, 0, 'brushed', 'Soft brushed wool'),
+    melton: F('Wool', 'Melton / coating', 520, 0, 0, 1, 90, .6, 2, .97, 0, 'brushed', 'Dense coat cloth'),
+    tweed: F('Wool', 'Tweed', 420, 0, 0, 1.5, 84, .65, 1.6, .97, 0, 'tweed', 'Flecked, textured wool'),
+    rib: F('Knits', 'Rib knit', 220, 80, 30, 0, 32, .55, .9, .88, 0, 'rib', 'Very stretchy across, hugs the body'),
+    interlock: F('Knits', 'Interlock', 220, 45, 25, 0, 45, .5, .8, .85, 0, 'knit', 'Smooth both sides, firmer than jersey'),
+    terry: F('Knits', 'French terry', 280, 45, 25, 0, 55, .6, 1.6, .92, 0, 'knit', 'Looped back, sweatshirt weight'),
+    ponte: F('Knits', 'Ponte', 300, 35, 20, 0, 60, .5, 1.2, .8, .05, 'knit', 'Stable double knit, smooth face'),
+    scuba: F('Knits', 'Scuba / neoprene', 330, 30, 25, 0, 82, .5, 2, .6, .1, 'smooth', 'Spongy and sculptural'),
+    brocade: F('Indian and occasion', 'Brocade / Banarasi', 200, 0, 0, 1.5, 78, .4, .45, .45, .5, 'brocade', 'Woven motifs with zari, stiff'),
+    chanderi: F('Indian and occasion', 'Chanderi', 70, 0, 0, 2, 45, .35, .15, .5, .35, 'plain', 'Sheer with a soft sheen', .8),
+    velvet: F('Indian and occasion', 'Velvet', 300, 0, 0, 3, 48, .7, 1.5, .95, .9, 'velvet', 'Rich pile, deep colour'),
+    net: F('Indian and occasion', 'Net / tulle', 40, 10, 10, 6, 40, .3, .1, .7, 0, 'net', 'Open mesh for layers and dupattas', .5),
+    leather: F('Indian and occasion', 'Faux leather', 450, 3, 3, 1, 94, .6, 1, .55, .2, 'leather', 'Very stiff, smooth grain')
+  };
+  /* turn a fabric description into solver settings */
+  D.phys = function (f) {
+    f = f || D.FABRICS.poplin;
+    var bend = f.bend != null ? f.bend : Math.pow(10, -2.6 - Math.max(0, Math.min(100, +f.stiff || 0)) / 100 * 2.7);
+    return { gsm: Math.max(20, +f.gsm || 120), sw: Math.max(0, +f.sw || 0), sl: Math.max(0, +f.sl || 0), sb: Math.max(0, +f.sb || 0), bend: bend, fric: Math.max(0, Math.min(1, f.fric == null ? .45 : +f.fric)), thick: Math.max(.05, Math.min(6, +f.thick || .3)) };
   };
 
   /* ---------------- solver ---------------- */
   function Sim(M, body, fab, h) {
-    var n = this.n = M.x.length / 3; this.M = M; this.body = body; this.fab = fab;
+    var n = this.n = M.x.length / 3; this.M = M; this.body = body; fab = this.fab = D.phys(fab);
     this.x = M.x; this.p = new Float32Array(n * 3); this.v = new Float32Array(n * 3); this.w = new Float32Array(n);
     var mass = new Float32Array(n), dens = fab.gsm / 10000, tri = M.tri, uv = M.uv, i;
     var edges = {}, E = [], Bn = [];
@@ -591,24 +632,29 @@
     function rest(a, b) { return Math.hypot(uv[2 * a] - uv[2 * b], uv[2 * a + 1] - uv[2 * b + 1]); }
     for (var k in edges) { var e = edges[k]; E.push(e[0], e[1], rest(e[0], e[1])); if (e[3] >= 0) Bn.push(e[2], e[3], rest(e[2], e[3])); }
     for (i = 0; i < n; i++) this.w[i] = mass[i] > 0 ? 1 / mass[i] : 0;
+    // stretch compliance per edge from its direction on the pattern: the grain runs down the piece (pattern y)
+    var EA = new Float32Array(E.length / 3);
+    for (i = 0; i < EA.length; i++) { var ea = E[3 * i], eb = E[3 * i + 1], du = uv[2 * eb] - uv[2 * ea], dv = uv[2 * eb + 1] - uv[2 * ea + 1], LL = du * du + dv * dv || 1, cw = du * du / LL, cl = dv * dv / LL;
+      EA[i] = (fab.sw * cw + fab.sl * cl + fab.sb * .4 * 4 * cw * cl) * 1e-7; }
+    this.EA = EA;
     this.E = new Float32Array(E); this.B = new Float32Array(Bn); this.S = M.seams; this.Tt = M.teth ? M.teth.slice() : new Float32Array(0);
     for (i = 0; i < this.Tt.length; i += 3) { var ta0 = 3 * this.Tt[i], tb0 = 3 * this.Tt[i + 1]; this.Tt[i + 2] = Math.max(this.Tt[i + 2], Math.hypot(M.x[ta0] - M.x[tb0], M.x[ta0 + 1] - M.x[tb0 + 1], M.x[ta0 + 2] - M.x[tb0 + 2])); } /* never pull tighter than where the piece starts */ this.rings = M.rings || [];
-    this.t = 0; this.sub = 14; this.th = .32; this.settled = false; this.calm = 0; this.tWake = 0; this.grip = new Uint8Array(n); (M.rings || []).forEach(function (rg) { rg.ids.forEach(function (k) { this.grip[k] = 1; }, this); }, this);
+    this.t = 0; this.sub = 14; this.th = Math.min(.6, .27 + fab.thick * .03); this.settled = false; this.calm = 0; this.tWake = 0; this.grip = new Uint8Array(n); (M.rings || []).forEach(function (rg) { rg.ids.forEach(function (k) { this.grip[k] = 1; }, this); }, this);
     // self-collision: points sewn together (same group) or close on the same flat piece never push each other apart
     var grp = new Int32Array(n); for (i = 0; i < n; i++) grp[i] = i;
     function root(a) { while (grp[a] !== a) { grp[a] = grp[grp[a]]; a = grp[a]; } return a; }
     for (i = 0; i < M.seams.length; i += 2) { var ra = root(M.seams[i]), rb2 = root(M.seams[i + 1]); if (ra !== rb2) grp[ra] = rb2; }
     for (i = 0; i < n; i++) grp[i] = root(i);
     var onSeam = new Uint8Array(n); for (i = 0; i < M.seams.length; i++) onSeam[M.seams[i]] = 1;
-    this.onSeam = onSeam; this.grp = grp; this.panel = M.panel; this.selfR = .75; this.HS = 1 << 14; this.head = new Int32Array(this.HS); this.next = new Int32Array(n);
-    this.nrm = new Float32Array(n * 3); this.grab = null; this.pinned = null;
+    this.onSeam = onSeam; this.grp = grp; this.panel = M.panel; this.selfR = Math.min(1.1, .7 + fab.thick * .08); this.HS = 1 << 14; this.head = new Int32Array(this.HS); this.next = new Int32Array(n);
+    this.nrm = new Float32Array(n * 3); this.grab = null; this.pinned = null; this.free = new Uint8Array(n);
     // per-vertex gap to the body, for the fit map
     this.gap = new Float32Array(n); this.strain = new Float32Array(n);
   }
   Sim.prototype.step = function (frameDt) {
     var n = this.n, x = this.x, p = this.p, v = this.v, w = this.w, sub = this.sub, dt = Math.min(frameDt, 1 / 30) / sub, fab = this.fab;
     var E = this.E, Bn = this.B, S = this.S, body = this.body, th = this.th, nrm = [0, 0, 0], nrm2 = [0, 0, 0];
-    var aS = fab.stretch / (dt * dt), aB = fab.bend / (dt * dt), mu = fab.fric, i, j;
+    var EA = this.EA, idt2 = 1 / (dt * dt), aB = fab.bend * idt2, mu = fab.fric, i, j;
     this.normals();
     var nr = this.nrm, air = Math.exp(-260 / fab.gsm * dt), G = this.grab;
     for (var s = 0; s < sub; s++) {
@@ -624,7 +670,7 @@
       // stretch
       for (j = 0; j < E.length; j += 3) {
         var a = E[j] * 3, b = E[j + 1] * 3, r = E[j + 2], wa = w[E[j]], wb = w[E[j + 1]], dx = x[b] - x[a], dy = x[b + 1] - x[a + 1], dz = x[b + 2] - x[a + 2], l = Math.sqrt(dx * dx + dy * dy + dz * dz);
-        if (l < 1e-6) continue; var C = l - r, lam = C / (wa + wb + aS) / l;
+        if (l < 1e-6) continue; var C = l - r, lam = C / (wa + wb + EA[j / 3] * idt2) / l;
         x[a] += wa * lam * dx; x[a + 1] += wa * lam * dy; x[a + 2] += wa * lam * dz; x[b] -= wb * lam * dx; x[b + 1] -= wb * lam * dy; x[b + 2] -= wb * lam * dz;
       }
       // tethers (only when stretched past the flat pattern)
@@ -643,7 +689,7 @@
       // seams: pull the matching points together, a little at a time while sewing
       for (j = 0; j < S.length; j += 2) {
         var a3 = S[j] * 3, b3 = S[j + 1] * 3, fx = x[b3] - x[a3], fy = x[b3 + 1] - x[a3 + 1], fz = x[b3 + 2] - x[a3 + 2], l3 = Math.sqrt(fx * fx + fy * fy + fz * fz);
-        if (l3 < 1e-6) continue; var wa3 = w[S[j]], wb3 = w[S[j + 1]], ws = wa3 + wb3, mv = Math.min(l3, sewMax) / l3;
+        if (l3 < 1e-6) continue; if (l3 > 2 && tt > .9 && tt < 3.5) { this.free[S[j]] = 1; this.free[S[j + 1]] = 1; } /* caught either side of the body: let the pair pass through to join */ var wa3 = w[S[j]], wb3 = w[S[j + 1]], ws = wa3 + wb3, mv = Math.min(l3, sewMax) / l3;
         x[a3] += fx * mv * wa3 / ws; x[a3 + 1] += fy * mv * wa3 / ws; x[a3 + 2] += fz * mv * wa3 / ws; x[b3] -= fx * mv * wb3 / ws; x[b3 + 1] -= fy * mv * wb3 / ws; x[b3 + 2] -= fz * mv * wb3 / ws;
       }
       // waistbands: shrink the ring back towards its own centre when it has been stretched
@@ -659,7 +705,7 @@
       // body
       for (i = 0; i < n; i++) {
         var k3 = 3 * i;
-        var hitB = body.push(x, k3, th, nrm);
+        var hitB = this.free[i] ? (this.free[i] = 0, false) : body.push(x, k3, th, nrm);
         if (s === sub - 1) this.gap[i] = body.dist(x[k3], x[k3 + 1], x[k3 + 2], nrm2);
         if (hitB) {
           var mx = x[k3] - p[k3], my = x[k3 + 1] - p[k3 + 1], mz = x[k3 + 2] - p[k3 + 2], dn = mx * nrm[0] + my * nrm[1] + mz * nrm[2];
@@ -692,7 +738,7 @@
   };
   // cloth against cloth: keep points of different layers at least selfR apart (spatial hash)
   Sim.prototype.selfCollide = function () {
-    var sm = this.onSeam, x = this.x, n = this.n, R = this.selfR, R2 = R * R, inv = 1 / R, HS = this.HS, M1 = HS - 1, head = this.head, next = this.next, grp = this.grp, uv = this.M.uv, pan = this.panel, w = this.w, i;
+    var sm = this.onSeam, gp = this.grip, x = this.x, n = this.n, R = this.selfR, R2 = R * R, inv = 1 / R, HS = this.HS, M1 = HS - 1, head = this.head, next = this.next, grp = this.grp, uv = this.M.uv, pan = this.panel, w = this.w, i;
     head.fill(-1);
     function h(ix, iy, iz) { return ((ix * 92837111) ^ (iy * 689287499) ^ (iz * 283923481)) & M1; }
     for (i = 0; i < n; i++) { var c = h(Math.floor(x[3 * i] * inv), Math.floor(x[3 * i + 1] * inv), Math.floor(x[3 * i + 2] * inv)); next[i] = head[c]; head[c] = i; }
@@ -700,7 +746,7 @@
       var k = 3 * i, ix = Math.floor(x[k] * inv), iy = Math.floor(x[k + 1] * inv), iz = Math.floor(x[k + 2] * inv);
       for (var a = -1; a <= 1; a++) for (var b = -1; b <= 1; b++) for (var c2 = -1; c2 <= 1; c2++) {
         for (var j = head[h(ix + a, iy + b, iz + c2)]; j >= 0; j = next[j]) {
-          if (j <= i || grp[i] === grp[j] || (sm[i] && sm[j])) continue;
+          if (j <= i || grp[i] === grp[j] || (sm[i] && sm[j]) || gp[i] || gp[j]) continue; /* waistband edges hold gathers packed tight */
           var q = 3 * j, dx = x[q] - x[k], dy = x[q + 1] - x[k + 1], dz = x[q + 2] - x[k + 2], d2 = dx * dx + dy * dy + dz * dz;
           if (d2 >= R2 || d2 < 1e-10) continue;
           if (pan[i] === pan[j]) { var du = uv[2 * i] - uv[2 * j], dv = uv[2 * i + 1] - uv[2 * j + 1]; if (du * du + dv * dv < 9) continue; }
