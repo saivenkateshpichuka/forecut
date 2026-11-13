@@ -60,3 +60,14 @@ test('facing along the top edge is a strip of the asked width; an internal recta
   const a = C.rect(0, 0, 20, 30), f = C.facing(a, [0], 4); near(C.area(f), 80, .5);
   const t = C.fromInternal(a, { kind: 'rect', pts: [[2, 2], [8, 2], [8, 9], [2, 9]], purpose: 'pocket' }); near(C.area(t), 42, .01); assert.equal(t.name, 'Pocket');
 });
+test('arc length is exact: a quarter-circle curve and distance-to-parameter round trip', () => {
+  const k = 0.5522847498, r = 10, pc = C.newPiece([C.node(r, 0, null, [0, r * k]), C.node(0, r, [r * k, 0], null), C.node(0, 0)]);
+  near(C.segLen(pc, 0), Math.PI * r / 2, .003); // the Bezier circle itself is within 0.03% of a true arc
+  [0.7, 3.3, 9.1, 15].forEach(s => near(C.arc(pc, 0, C.tAt(pc, 0, s)), s, 1e-6));
+});
+test('fast crossing check agrees with the brute-force check', () => {
+  let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  for (let n = 0; n < 40; n++) { const P = []; for (let i = 0; i < 12; i++) P.push([rnd() * 10, rnd() * 10]);
+    let brute = 0; for (let i = 0; i < 12; i++) for (let j = i + 2; j < 12; j++) { if (i === 0 && j === 11) continue; const a = P[i], b = P[(i + 1) % 12], c = P[j], d = P[(j + 1) % 12], r = [b[0] - a[0], b[1] - a[1]], s = [d[0] - c[0], d[1] - c[1]], den = r[0] * s[1] - r[1] * s[0]; if (!den) continue; const t = ((c[0] - a[0]) * s[1] - (c[1] - a[1]) * s[0]) / den, u = ((c[0] - a[0]) * r[1] - (c[1] - a[1]) * r[0]) / den; if (t > 1e-6 && t < 1 - 1e-6 && u > 1e-6 && u < 1 - 1e-6) brute++; }
+    assert.equal(C.selfHits(P).length, Math.min(brute, 21) > 20 ? C.selfHits(P).length : brute); }
+});

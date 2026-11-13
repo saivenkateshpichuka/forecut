@@ -1991,8 +1991,8 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
 
   // stage button
   var anchor = $('#pm-markb'); if (!anchor) return;
-  var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'ib'; btn.id = 'pm-editb'; btn.setAttribute('aria-pressed', 'false'); btn.title = 'Edit the pattern: move points, reshape curves, walk seams, add notches';
-  btn.innerHTML = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg><span>Edit</span>';
+  var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'ib'; btn.id = 'pm-editb'; btn.setAttribute('aria-pressed', 'false'); btn.title = 'Adjust the draft for every size: lengthen, widen, slash and spread, pleats, darts, notches and drill holes. For free editing of points and curves, switch to Edit pieces.';
+  btn.innerHTML = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg><span>Adjust</span>';
   anchor.after(btn);
   // desktop: open the current garment in 3D Drape Studio
   var D3 = { tshirt: 'tshirt', top: 'top', tank: 'tank', hoodie: 'sweat', kurta: 'kurta', dress: 'dress', skirt: 'skirt', trousers: 'trousers', jeans: 'jeans', churidar: 'churidar', salwar: 'salwar', patiala: 'patiala', gharara: 'gharara', lehenga: 'lehenga', shirt: 'shirt', shirtdress: 'shirtdress', blouse: 'blouse', polo: 'polo', jacket: 'jacket', bandhgala: 'bandhgala', sherwani: 'sherwani', blazer: 'blazer', coat: 'coat', bomber: 'bomber', bodice: 'bodice', anarkali: 'anarkali', jumpsuit: 'jumpsuit' };
@@ -2198,9 +2198,18 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
   };
   /* arc-length table of a segment: [[t, s]...] */
   function lut(k, n) { var out = [[0, 0]], prev = k.p0, s = 0; for (var j = 1; j <= n; j++) { var t = j / n, q = bez(k.p0, k.p1, k.p2, k.p3, t); s += dist(prev, q); out.push([t, s]); prev = q; } return out; }
-  C.segLen = function (pc, i) { var k = C.ctrl(pc, i); if (!k.curved) return dist(k.p0, k.p3); var T = lut(k, 160); return T[T.length - 1][1]; };
+  /* exact arc length: 8-point Gauss-Legendre on 8 sub-intervals (error far below 0.001 mm on pattern curves) */
+  var GX = [-.9602898564975363, -.7966664774136267, -.5255324099163290, -.1834346424956498, .1834346424956498, .5255324099163290, .7966664774136267, .9602898564975363],
+    GW = [.1012285362903763, .2223810344533745, .3137066458778873, .3626837833783620, .3626837833783620, .3137066458778873, .2223810344533745, .1012285362903763];
+  function glen(k, t0, t1) { var h = (t1 - t0) / 2, m = (t1 + t0) / 2, s = 0; for (var i = 0; i < 8; i++) { var d = bezD(k.p0, k.p1, k.p2, k.p3, m + h * GX[i]); s += GW[i] * Math.hypot(d[0], d[1]); } return s * h; }
+  function arcTo(k, t) { var n = Math.max(1, Math.ceil(t * 8)), s = 0; for (var i = 0; i < n; i++) s += glen(k, t * i / n, t * (i + 1) / n); return s; }
+  C.arc = function (pc, i, t) { var k = C.ctrl(pc, i); return k.curved ? arcTo(k, t) : dist(k.p0, k.p3) * t; };
+  C.segLen = function (pc, i) { var k = C.ctrl(pc, i); if (!k.curved) return dist(k.p0, k.p3); return arcTo(k, 1); };
   /* parameter t at a distance along the segment */
-  C.tAt = function (pc, i, s) { var k = C.ctrl(pc, i); if (!k.curved) { var L = dist(k.p0, k.p3); return L ? Math.max(0, Math.min(1, s / L)) : 0; } var T = lut(k, 200), L2 = T[T.length - 1][1]; s = Math.max(0, Math.min(L2, s)); for (var j = 1; j < T.length; j++) if (T[j][1] >= s) { var f = (s - T[j - 1][1]) / ((T[j][1] - T[j - 1][1]) || 1); return T[j - 1][0] + (T[j][0] - T[j - 1][0]) * f; } return 1; };
+  C.tAt = function (pc, i, s) { var k = C.ctrl(pc, i); if (!k.curved) { var L = dist(k.p0, k.p3); return L ? Math.max(0, Math.min(1, s / L)) : 0; }
+    var L2 = arcTo(k, 1); if (s <= 0) return 0; if (s >= L2) return 1; var lo = 0, hi = 1, t = s / L2;
+    for (var it = 0; it < 30; it++) { var f = arcTo(k, t) - s; if (Math.abs(f) < 1e-7) break; if (f > 0) hi = t; else lo = t; var d = bezD(k.p0, k.p1, k.p2, k.p3, t), sp = Math.hypot(d[0], d[1]), tn = sp > 1e-9 ? t - f / sp : -1; t = tn > lo && tn < hi ? tn : (lo + hi) / 2; }
+    return t; };
   C.pointAt = function (pc, i, t) { var k = C.ctrl(pc, i); return bez(k.p0, k.p1, k.p2, k.p3, t); };
   C.tangentAt = function (pc, i, t) { var k = C.ctrl(pc, i), d = bezD(k.p0, k.p1, k.p2, k.p3, t), l = Math.hypot(d[0], d[1]) || 1; return [d[0] / l, d[1] / l]; };
   /* the whole outline as one flat polygon, remembering which segment each point belongs to */
@@ -2218,12 +2227,20 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
 
   /* ---------- validation ---------- */
   function segX(a, b, c, d) { var r = [b[0] - a[0], b[1] - a[1]], s = [d[0] - c[0], d[1] - c[1]], den = r[0] * s[1] - r[1] * s[0]; if (Math.abs(den) < EPS) return null; var t = ((c[0] - a[0]) * s[1] - (c[1] - a[1]) * s[0]) / den, u = ((c[0] - a[0]) * r[1] - (c[1] - a[1]) * r[0]) / den; return t > 1e-6 && t < 1 - 1e-6 && u > 1e-6 && u < 1 - 1e-6 ? [a[0] + r[0] * t, a[1] + r[1] * t] : null; }
-  C.selfHits = function (P) { var hits = [], n = P.length; for (var i = 0; i < n; i++) for (var j = i + 2; j < n; j++) { if (i === 0 && j === n - 1) continue; var x = segX(P[i], P[(i + 1) % n], P[j], P[(j + 1) % n]); if (x) hits.push(x); if (hits.length > 20) return hits; } return hits; };
-  C.validate = function (pc) {
+  C.selfHits = function (P, closed) { // sweep over x: only segments whose x ranges overlap are tested
+    var n = P.length, m = closed === false ? n - 1 : n, S = [], hits = [], act = [], i;
+    for (i = 0; i < m; i++) { var a = P[i], b = P[(i + 1) % n]; S.push([Math.min(a[0], b[0]), Math.max(a[0], b[0]), i, Math.min(a[1], b[1]), Math.max(a[1], b[1])]); }
+    S.sort(function (u, v) { return u[0] - v[0]; });
+    for (var k = 0; k < S.length; k++) { var s = S[k]; act = act.filter(function (t) { return t[1] >= s[0]; });
+      for (var j = 0; j < act.length; j++) { var t = act[j], a1 = s[2], b1 = t[2], df = Math.abs(a1 - b1); if (df === 1 || (closed !== false && df === n - 1)) continue; if (t[4] < s[3] || t[3] > s[4]) continue;
+        var x = segX(P[a1], P[(a1 + 1) % n], P[b1], P[(b1 + 1) % n]); if (x) { hits.push(x); if (hits.length > 20) return hits; } }
+      act.push(s); }
+    return hits; };
+  C.validate = function (pc, fast) {
     var issues = [], n = C.segCount(pc);
     if (pc.nodes.length < 3 && pc.closed !== false) issues.push({ k: 'few', msg: 'A piece needs at least three points.' });
     for (var i = 0; i < n; i++) if (C.segLen(pc, i) < .05) issues.push({ k: 'zero', seg: i, msg: 'Edge ' + (i + 1) + ' has no length: two points sit on top of each other.' });
-    var f = C.flat(pc, .4).pts; if (C.selfHits(f).length) issues.push({ k: 'cross', msg: 'The outline crosses itself. Move the points so the edges do not cross.' });
+    var f = C.flat(pc, .4).pts; if (!fast && C.selfHits(f).length) issues.push({ k: 'cross', msg: 'The outline crosses itself. Move the points so the edges do not cross.' });
     if (pc.closed !== false && Math.abs(areaOf(f)) < .5) issues.push({ k: 'flat', msg: 'The outline has no area.' });
     return issues;
   };
@@ -2462,7 +2479,7 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
   /* ---------- seam allowance: the cutting line from the seamline ---------- */
   C.saOf = function (pc, i) { if (i === pc.fold) return 0; if (pc.sa.edges[i] != null) return +pc.sa.edges[i]; return pc.hems.indexOf(i) >= 0 ? +pc.sa.hem : +pc.sa.def; };
   function lineX(p, d, q, e) { var den = d[0] * e[1] - d[1] * e[0]; if (Math.abs(den) < 1e-9) return null; var t = ((q[0] - p[0]) * e[1] - (q[1] - p[1]) * e[0]) / den; return [p[0] + d[0] * t, p[1] + d[1] * t]; }
-  C.cutLine = function (pc) {
+  C.cutLine = function (pc, fast) {
     var n = C.segCount(pc), F = C.flat(pc, .2), P = F.pts, sgn = areaOf(P) > 0 ? -1 : 1, out = [], warn = [];
     var offs = [];
     for (var i = 0; i < n; i++) { var d = C.saOf(pc, i), pts = C.segPts(pc, i, .2), o = [];
@@ -2478,7 +2495,7 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
       else if (corner === 'step') { out.push(aEnd); out.push(bStart); }
       else out.push(x);
     }
-    if (C.selfHits(out).length) warn.push('The seam allowance overlaps itself, usually round a tight curve or a sharp corner. Reduce the allowance there or change the corner treatment.');
+    if (!fast && C.selfHits(out).length) warn.push('The seam allowance overlaps itself, usually round a tight curve or a sharp corner. Reduce the allowance there or change the corner treatment.');
     return { pts: out, warn: warn };
   };
 
@@ -2568,12 +2585,12 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
 
   if (typeof module !== 'undefined' && module.exports) module.exports = C; else root.FCCad = C;
 })(typeof self !== 'undefined' ? self : this);
-/* Forecut Pattern Studio: a full-window workspace for drawing, editing and preparing pattern pieces.
+/* Forecut Pattern Maker, Edit pieces mode: draw, edit and prepare pattern pieces inside Pattern Maker.
    Needs pm_cad.js (FCCad) and pm_export.js (PMX). Geometry is in centimetres; the screen shows the chosen unit. */
 (function () {
   'use strict';
   var C = window.FCCad, X = window.PMX; if (!C) return;
-  var AUTO = 'fc-ps-auto', LIB = 'fc-ps-lib', PREF = 'fc-ps-pref', NS = 'http://www.w3.org/2000/svg';
+  var AUTO = 'fc-ps-auto', LIB = 'fc-ps-lib', NS = 'http://www.w3.org/2000/svg';
   var PREVIEW = /[?&]preview(=|&|$)/.test(location.search);
   function ls(k, v) { try { if (v === undefined) return JSON.parse(localStorage.getItem(k) || 'null'); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); } catch (e) { return null; } }
   function esc(t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
@@ -2607,51 +2624,54 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
   var TOOL = {}; TOOLS.forEach(function (t) { TOOL[t.id] = t; });
 
   /* ---------- state ---------- */
-  var P = C.newProject(), H = new C.History(P, onChange), pref = ls(PREF) || {};
-  if (pref.unit) P.unit = pref.unit;
-  var ST = { tool: 'select', sel: [], node: null, seg: null, z: 8, tx: 60, ty: 60, draft: null, meas: [], walk: [], hover: null, mode: '2d', fileName: null, savedAt: 0, dirty: false, cut: [] };
-  var root, svg, world, rx, ry, statusEl, propsEl, objsEl, optsEl, toastEl, timer;
+  var P = C.newProject(), H = new C.History(P, onChange);
+  var ST = { tool: 'select', sel: [], node: null, seg: null, z: 8, tx: 60, ty: 60, draft: null, meas: [], walk: [], hover: null, fileName: null, savedAt: 0, dirty: false, cut: [], gstep: 1 };
+  var ON = false, started = false, app, pb, toolsEl, modesEl, barEl, centerEl, sideEl, modalEl, tipEl, parts = [];
+  var svg, world, ptsG, rx, ry, statusEl, propsEl, objsEl, optsEl, toastEl, timer;
 
-  /* ---------- build the window ---------- */
+  /* ---------- build: the editor lives inside Pattern Maker (tools in the left panel, canvas in the middle, pieces and properties on the right) ---------- */
+  function mk(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html) e.innerHTML = html; return e; }
   function build() {
-    if (root) return;
-    root = document.createElement('div'); root.id = 'ps'; root.hidden = true; root.setAttribute('role', 'application'); root.setAttribute('aria-label', 'Forecut Pattern Studio');
+    if (toolsEl) return true;
+    app = document.getElementById('pm-app'); pb = app && app.querySelector('.pbody'); if (!pb) return false;
+    var pl = pb.querySelector('.pl'), pcol = pb.querySelector('.pc'), pr = pb.querySelector('.pr'), ctl = pcol.querySelector('.ctl'), hidel = document.getElementById('pm-hidel');
     var groups = []; TOOLS.forEach(function (t) { if (groups.indexOf(t.g) < 0) groups.push(t.g); });
-    root.innerHTML =
-      '<div class="ps-top"><span class="ps-brand"><i></i>FORECUT PATTERN STUDIO</span>'
-      + '<div class="ps-menu"><button type="button" class="ps-mb" data-m="file">File</button><div class="ps-dd" data-mm="file" hidden>'
-      + '<button type="button" data-a="new">New project<kbd>Ctrl N</kbd></button><button type="button" data-a="open">Open saved project…<kbd>Ctrl O</kbd></button><button type="button" data-a="openfile">Open project file…</button><hr>'
+    toolsEl = mk('nav', 'ps-tools', '<input type="search" id="ps-tsearch" placeholder="Find a tool" aria-label="Find a tool">'
+      + groups.map(function (g) { return '<div class="ps-tg"><small>' + g + '</small>' + TOOLS.filter(function (t) { return t.g === g; }).map(function (t) { return '<button type="button" class="ps-tb" data-t="' + t.id + '" aria-label="' + esc(t.n) + '" data-tip="' + esc(t.n + (t.k ? ' (' + t.k.toUpperCase() + ')' : '') + '. ' + t.tip) + '">' + I(t.ic) + '<span>' + esc(t.n) + '</span>' + (t.k ? '<kbd>' + t.k.toUpperCase() + '</kbd>' : '') + '</button>'; }).join('') + '</div>'; }).join(''));
+    toolsEl.setAttribute('aria-label', 'Editing tools'); pl.insertBefore(toolsEl, pl.firstChild);
+    modesEl = mk('div', 'ps-modes', '<button type="button" data-pmode="draft" title="Draft: choose the garment, style, size and measurements">Draft</button><button type="button" data-pmode="edit" title="Edit pieces: move points, reshape curves, add notches, seam allowances and more">Edit pieces</button>');
+    modesEl.setAttribute('role', 'group'); modesEl.setAttribute('aria-label', 'Mode'); ctl.insertBefore(modesEl, hidel ? hidel.nextSibling : ctl.firstChild);
+    barEl = mk('div', 'ps-bar',
+      '<div class="ps-menu"><button type="button" class="ib ps-mb" data-m="file">File' + I('M7 10l5 5 5-5') + '</button><div class="ps-dd" data-mm="file" hidden>'
+      + '<button type="button" data-a="new">New blank project<kbd>Ctrl N</kbd></button><button type="button" data-a="open">Open saved project…<kbd>Ctrl O</kbd></button><button type="button" data-a="openfile">Open project file…</button><hr>'
       + '<button type="button" data-a="save">Save<kbd>Ctrl S</kbd></button><button type="button" data-a="saveas">Save as…</button><button type="button" data-a="savefile">Download project file</button><hr>'
-      + '<button type="button" data-a="fromdraft">Bring in the Pattern Maker draft</button><button type="button" data-a="importdxf">Import DXF…</button><hr>'
+      + '<button type="button" data-a="fromdraft">Bring in the current draft</button><button type="button" data-a="importdxf">Import DXF…</button><hr>'
       + '<button type="button" data-a="xsvg">Export SVG (true scale)</button><button type="button" data-a="xdxf">Export DXF</button><button type="button" data-a="xpdft">Export PDF, A4 tiles</button><button type="button" data-a="xpdf">Export PDF, full size</button><button type="button" data-a="xpng">Export PNG</button></div></div>'
-      + '<div class="ps-menu"><button type="button" class="ps-mb" data-m="view">View</button><div class="ps-dd" data-mm="view" hidden>'
-      + [['grid', 'Grid'], ['snap', 'Snap to grid and points'], ['rulers', 'Rulers'], ['sa', 'Seam allowance (cutting line)'], ['seam', 'Seamline'], ['notches', 'Notches'], ['grain', 'Grainlines'], ['internals', 'Internal lines and shapes'], ['labels', 'Piece names'], ['points', 'Points on all pieces']].map(function (v) { return '<label><input type="checkbox" data-v="' + v[0] + '"> ' + v[1] + '</label>'; }).join('')
-      + '<hr><button type="button" data-a="fit">Fit all pieces<kbd>0</kbd></button><button type="button" data-a="z100">Actual size (100%)<kbd>1</kbd></button></div></div>'
-      + '<input class="ps-name" id="ps-name" aria-label="Project name" maxlength="80">'
-      + '<span class="ps-saved" id="ps-saved"></span>'
-      + '<button type="button" class="ps-ib" data-a="undo" title="Undo (Ctrl Z)" aria-label="Undo">' + I('M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-3') + '</button><button type="button" class="ps-ib" data-a="redo" title="Redo (Ctrl Shift Z)" aria-label="Redo">' + I('M15 14l5-5-5-5M20 9H10a6 6 0 000 12h3') + '</button>'
-      + '<span class="ps-sp"></span>'
-      + '<div class="ps-seg" id="ps-mode" role="group" aria-label="Workspace mode"><button type="button" data-mode="2d">2D Pattern</button><button type="button" data-mode="3d">3D Garment</button><button type="button" data-mode="split">Split view</button></div>'
-      + '<div class="ps-seg" id="ps-units" role="group" aria-label="Units"><button type="button" data-u="mm">mm</button><button type="button" data-u="cm">cm</button><button type="button" data-u="in">in</button></div>'
-      + '<button type="button" class="ps-close" data-a="close" title="Back to Pattern Maker">Close</button></div>'
-      + '<div class="ps-body"><nav class="ps-tools" aria-label="Tools"><input type="search" id="ps-tsearch" placeholder="Find a tool" aria-label="Find a tool">'
-      + groups.map(function (g) { return '<div class="ps-tg"><small>' + g + '</small>' + TOOLS.filter(function (t) { return t.g === g; }).map(function (t) { return '<button type="button" class="ps-tb" data-t="' + t.id + '" aria-label="' + esc(t.n) + '" data-tip="' + esc(t.n + (t.k ? ' (' + t.k.toUpperCase() + ')' : '') + '. ' + t.tip) + '">' + I(t.ic) + '<span>' + esc(t.n) + '</span></button>'; }).join('') + '</div>'; }).join('')
-      + '</nav><aside class="ps-objs" aria-label="Objects"><h6>Pieces</h6><div id="ps-objs"></div><div class="ps-objb"><button type="button" data-a="rect10">+ Rectangle</button><button type="button" data-a="fromdraft">+ From draft</button></div></aside>'
-      + '<main class="ps-main"><div class="ps-opts" id="ps-opts"></div><div class="ps-stage"><canvas class="ps-rx" id="ps-rx"></canvas><canvas class="ps-ry" id="ps-ry"></canvas><div class="ps-corner" id="ps-ucorner"></div>'
-      + '<svg id="ps-svg" xmlns="' + NS + '" tabindex="0" aria-label="Pattern canvas"><g id="ps-grid"></g><g id="ps-world"></g><g id="ps-over"></g></svg>'
-      + '<div class="ps-3d" id="ps-3d" hidden><div><b>3D Garment view is coming soon</b><p>Your pieces, seam allowances and notches are kept in this project, so they will open in 3D when it launches. Keep working in 2D for now.</p></div></div>'
-      + '<div class="ps-tip" id="ps-tip" hidden></div></div></main>'
-      + '<aside class="ps-props" id="ps-props" aria-label="Properties"></aside></div>'
-      + '<div class="ps-status" id="ps-status"></div><p class="ps-toast" id="ps-toast" role="status" hidden></p><div class="ps-modal" id="ps-modal" hidden></div>'
-      + '<input type="file" id="ps-file" accept=".json,.fcpattern,application/json" hidden><input type="file" id="ps-dxf" accept=".dxf" hidden>';
-    document.body.appendChild(root);
-    svg = q('#ps-svg'); world = q('#ps-world'); rx = q('#ps-rx'); ry = q('#ps-ry'); statusEl = q('#ps-status'); propsEl = q('#ps-props'); objsEl = q('#ps-objs'); optsEl = q('#ps-opts'); toastEl = q('#ps-toast');
+      + '<div class="ps-menu"><button type="button" class="ib ps-mb" data-m="view">View' + I('M7 10l5 5 5-5') + '</button><div class="ps-dd" data-mm="view" hidden>'
+      + [['grid', 'Grid'], ['snap', 'Snap to points, edges and grid (hold Alt to switch off)'], ['rulers', 'Rulers'], ['sa', 'Seam allowance (cutting line)'], ['seam', 'Seamline'], ['notches', 'Notches'], ['grain', 'Grainlines'], ['internals', 'Internal lines and shapes'], ['labels', 'Piece names'], ['points', 'Points on all pieces']].map(function (v) { return '<label><input type="checkbox" data-v="' + v[0] + '"> ' + v[1] + '</label>'; }).join('')
+      + '</div></div><span class="sep"></span>'
+      + '<button type="button" class="ib" data-a="undo" title="Undo (Ctrl Z)" aria-label="Undo">' + I('M9 14L4 9l5-5M4 9h10a6 6 0 010 12h-3') + '</button><button type="button" class="ib" data-a="redo" title="Redo (Ctrl Shift Z)" aria-label="Redo">' + I('M15 14l5-5-5-5M20 9H10a6 6 0 000 12h3') + '</button><span class="sep"></span>'
+      + '<button type="button" class="ib" data-a="zout" title="Zoom out" aria-label="Zoom out">' + I('M5 12h14') + '</button><button type="button" class="ib ps-zl" data-a="z100" title="Actual size (1)" id="ps-zl">100%</button><button type="button" class="ib" data-a="zin" title="Zoom in" aria-label="Zoom in">' + I('M5 12h14M12 5v14') + '</button><button type="button" class="ib" data-a="fit" title="Fit all pieces (0)">' + I('M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5') + '<span>Fit</span></button><span class="sep"></span>'
+      + '<input class="ps-name" id="ps-name" aria-label="Project name" maxlength="80"><span class="ps-saved" id="ps-saved"></span>');
+    ctl.insertBefore(barEl, modesEl.nextSibling);
+    centerEl = mk('div', 'ps-center', '<div class="ps-banner" id="ps-banner" hidden></div><div class="ps-opts" id="ps-opts"></div><div class="ps-stage"><div class="ps-corner" id="ps-ucorner"></div><canvas class="ps-rx" id="ps-rx" aria-hidden="true"></canvas><canvas class="ps-ry" id="ps-ry" aria-hidden="true"></canvas>'
+      + '<svg id="ps-svg" xmlns="' + NS + '" tabindex="0" aria-label="Pattern editing canvas"><g id="ps-grid"></g><g id="ps-world"></g><g id="ps-over"></g><g id="ps-pts"></g></svg><p class="ps-toast" id="ps-toast" role="status" hidden></p></div><div class="ps-status" id="ps-status"></div>');
+    pcol.insertBefore(centerEl, ctl.nextSibling);
+    sideEl = mk('div', 'ps-side', '<details class="ps-sec" open><summary>Pieces <span id="ps-count"></span></summary><div id="ps-objs"></div><div class="ps-objb"><button type="button" class="ps-b" data-a="rect10">+ Rectangle</button><button type="button" class="ps-b" data-a="fromdraft">+ Draft pieces</button></div></details>'
+      + '<details class="ps-sec" open><summary>Properties</summary><div id="ps-props"></div></details>');
+    pr.insertBefore(sideEl, pr.firstChild);
+    modalEl = mk('div', 'ps-host', '<div class="ps-modal" id="ps-modal" hidden></div><div class="ps-tip" id="ps-tip" hidden></div><input type="file" id="ps-file" accept=".json,.fcpattern,application/json" hidden><input type="file" id="ps-dxf" accept=".dxf" hidden>');
+    document.body.appendChild(modalEl);
+    parts = [toolsEl, modesEl, barEl, centerEl, sideEl, modalEl];
+    svg = q('#ps-svg'); world = q('#ps-world'); ptsG = q('#ps-pts'); rx = q('#ps-rx'); ry = q('#ps-ry'); statusEl = q('#ps-status'); propsEl = q('#ps-props'); objsEl = q('#ps-objs'); optsEl = q('#ps-opts'); toastEl = q('#ps-toast'); tipEl = q('#ps-tip');
     wire();
+    return true;
   }
-  function q(s) { return root.querySelector(s); }
-  function qa(s) { return Array.prototype.slice.call(root.querySelectorAll(s)); }
+  function q(s) { for (var i = 0; i < parts.length; i++) { var p = parts[i]; if (p.matches(s)) return p; var r = p.querySelector(s); if (r) return r; } return null; }
+  function qa(s) { var o = []; parts.forEach(function (p) { o = o.concat(Array.prototype.slice.call(p.querySelectorAll(s))); }); return o; }
 
   /* ---------- units and view ---------- */
+  function unitNow() { var S = window.PMUI && PMUI.S && PMUI.S(); return (S && S.unit) || P.unit || 'cm'; }
   function U(cm) { return C.toU(cm, P.unit); }
   function F(cm) { return C.fmt(cm, P.unit); }
   function CM(v) { return C.fromU(+v, P.unit); }
@@ -2661,107 +2681,149 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
   function pcById(id) { for (var i = 0; i < P.pieces.length; i++) if (P.pieces[i].id === id) return P.pieces[i]; return null; }
   function L2W(pc, p) { return [p[0] + (pc.x || 0), p[1] + (pc.y || 0)]; }
   function W2L(pc, p) { return [p[0] - (pc.x || 0), p[1] - (pc.y || 0)]; }
-  function gridStep() { return P.unit === 'in' ? 2.54 / 4 : P.unit === 'mm' ? .5 : 1; }
+  /* grid steps that read well in each unit; the finest one at least 7 px apart is drawn and snapped to */
+  var STEPS = { cm: [.1, .5, 1, 5, 10, 50, 100], mm: [.1, .5, 1, 5, 10, 50, 100], in: [2.54 / 16, 2.54 / 8, 2.54 / 4, 2.54, 2.54 * 4, 2.54 * 12, 2.54 * 36] };
+  function gridSteps() { var L = STEPS[P.unit] || STEPS.cm; for (var i = 0; i < L.length - 1; i++) if (L[i] * ST.z >= 7) return [L[i], L[i + 1]]; return [L[L.length - 2], L[L.length - 1]]; }
+  function gridStep() { return gridSteps()[0]; }
+  function nudgeStep(big) { return P.unit === 'in' ? 2.54 / (big ? 4 : 16) : big ? 1 : .1; }
 
-  /* ---------- snapping ---------- */
-  function snap(w, skip) {
-    if (!V().snap) return { p: w };
+  /* ---------- cached geometry: each piece is flattened, offset and checked once per change, not on every frame ---------- */
+  var GEO = {};
+  function sigOf(pc) { return JSON.stringify([pc.nodes, pc.sa, pc.hems, pc.fold, pc.closed]); }
+  function geo(pc, fast) {
+    var sg = sigOf(pc), g = GEO[pc.id];
+    if (!g || g.sig !== sg) {
+      var keep = g && g.issues; g = GEO[pc.id] = { sig: sg, segs: [], flat: [] };
+      for (var s = 0; s < C.segCount(pc); s++) { var p = C.segPts(pc, s, .15); g.segs.push(p); g.flat = g.flat.concat(s ? p.slice(1, p.length) : p.slice(0, p.length)); }
+      if (pc.closed !== false && g.flat.length > 1) g.flat.pop();
+      g.sign = C.areaOf(g.flat) > 0 ? -1 : 1; g.issues = keep || [];
+    }
+    if (!fast && !g.full) { g.cut = C.cutLine(pc); g.issues = C.validate(pc); g.full = true; }
+    else if (fast && !g.cut) g.cut = C.cutLine(pc, true);
+    return g;
+  }
+  function mids(pc) { var g = geo(pc, true); if (!g.mids) { g.mids = []; for (var s = 0; s < C.segCount(pc); s++) g.mids.push(C.pointAt(pc, s, C.tAt(pc, s, C.segLen(pc, s) / 2))); } return g.mids; }
+
+  /* ---------- snapping: points, then midpoints, then the nearest edge, then the grid (only when close to it) ---------- */
+  function snap(w, skip, e) {
+    if (!V().snap || (e && e.altKey)) return { p: w, k: '' };
     var best = null, R = 9 / ST.z;
-    P.pieces.forEach(function (pc) { if (pc.hidden) return; pc.nodes.forEach(function (nd, i) { if (skip && skip.pc === pc && skip.idx.indexOf(i) >= 0) return; var p = L2W(pc, [nd.x, nd.y]), d = C.dist(p, w); if (d < R && (!best || d < best.d)) best = { d: d, p: p, k: 'point' }; });
-      for (var s = 0; s < C.segCount(pc); s++) { if (skip && skip.pc === pc) continue; var m = L2W(pc, C.pointAt(pc, s, C.tAt(pc, s, C.segLen(pc, s) / 2))), d2 = C.dist(m, w); if (d2 < R && (!best || d2 < best.d)) best = { d: d2, p: m, k: 'midpoint' }; } });
+    P.pieces.forEach(function (pc) { if (pc.hidden) return; var same = skip && skip.pc === pc;
+      pc.nodes.forEach(function (nd, i) { if (same && skip.idx.indexOf(i) >= 0) return; var p = L2W(pc, [nd.x, nd.y]), d = C.dist(p, w); if (d < R && (!best || d < best.d)) best = { d: d, p: p, k: 'point' }; });
+      if (same) return; var M = mids(pc); for (var s = 0; s < M.length; s++) { var m = L2W(pc, M[s]), d2 = C.dist(m, w); if (d2 < R * .8 && (!best || d2 < best.d)) best = { d: d2, p: m, k: 'midpoint' }; } });
     if (best) return best;
-    var g = gridStep(); return { p: [Math.round(w[0] / g) * g, Math.round(w[1] / g) * g], k: 'grid' };
+    var ne = nearestEdge(w, null, skip && skip.pc, 7 / ST.z); if (ne) return { p: L2W(ne.pc, ne.p), k: 'edge', e: ne };
+    var g = gridStep(), gx = Math.round(w[0] / g) * g, gy = Math.round(w[1] / g) * g, ax = Math.abs(gx - w[0]) < R * .6, ay = Math.abs(gy - w[1]) < R * .6;
+    return { p: [ax ? gx : w[0], ay ? gy : w[1]], k: ax && ay ? 'grid' : ax || ay ? 'grid line' : '' };
   }
-  /* nearest point on any edge */
-  function nearestEdge(w, only) {
+  /* nearest point on any edge, from the cached flattened edges */
+  function nearestEdge(w, only, skipPc, rad) {
     var best = null;
-    P.pieces.forEach(function (pc) { if (pc.hidden || (only && pc !== only)) return; var l = W2L(pc, w);
-      for (var s = 0; s < C.segCount(pc); s++) { var pts = C.segPts(pc, s, .1), acc = 0; for (var j = 1; j < pts.length; j++) { var a = pts[j - 1], b = pts[j], L = C.dist(a, b), vx = b[0] - a[0], vy = b[1] - a[1], t = Math.max(0, Math.min(1, ((l[0] - a[0]) * vx + (l[1] - a[1]) * vy) / (L * L || 1))), qx = a[0] + vx * t, qy = a[1] + vy * t, d = Math.hypot(qx - l[0], qy - l[1]); if (!best || d < best.d) best = { d: d, pc: pc, seg: s, s: acc + L * t, p: [qx, qy] }; acc += L; } } });
-    if (best) { best.t = C.tAt(best.pc, best.seg, best.s); best.L = C.segLen(best.pc, best.seg); }
-    return best && best.d < 10 / ST.z ? best : null;
+    P.pieces.forEach(function (pc) { if (pc.hidden || (only && pc !== only) || pc === skipPc) return; var l = W2L(pc, w), G = geo(pc, true);
+      for (var s = 0; s < G.segs.length; s++) { var pts = G.segs[s], acc = 0; for (var j = 1; j < pts.length; j++) { var a = pts[j - 1], b = pts[j], vx = b[0] - a[0], vy = b[1] - a[1], LL = vx * vx + vy * vy, L = Math.sqrt(LL), t = LL ? Math.max(0, Math.min(1, ((l[0] - a[0]) * vx + (l[1] - a[1]) * vy) / LL)) : 0, qx = a[0] + vx * t, qy = a[1] + vy * t, d = Math.hypot(qx - l[0], qy - l[1]); if (!best || d < best.d) best = { d: d, pc: pc, seg: s, j: j, f: t, p: [qx, qy] }; acc += L; } } });
+    if (!best || best.d >= (rad || 10 / ST.z)) return null;
+    // exact parameter and distance along the curve for the picked point
+    var pts2 = geo(best.pc, true).segs[best.seg], t0 = (best.j - 1 + best.f) / (pts2.length - 1), k = C.ctrl(best.pc, best.seg);
+    if (k.curved) { for (var it = 0; it < 6; it++) { var q2 = C.pointAt(best.pc, best.seg, t0), dd = C.tangentAt(best.pc, best.seg, t0), dv = [q2[0] - best.p[0], q2[1] - best.p[1]], sp = (function () { var a = C.pointAt(best.pc, best.seg, Math.min(1, t0 + 1e-4)), b = C.pointAt(best.pc, best.seg, Math.max(0, t0 - 1e-4)); return C.dist(a, b) / (Math.min(1, t0 + 1e-4) - Math.max(0, t0 - 1e-4)); })(); t0 = Math.max(0, Math.min(1, t0 - (dv[0] * dd[0] + dv[1] * dd[1]) / (sp || 1))); } best.p = C.pointAt(best.pc, best.seg, t0); }
+    else { t0 = best.f !== undefined ? (best.j - 1 + best.f) : t0; }
+    best.t = t0; best.L = C.segLen(best.pc, best.seg); best.s = C.arc(best.pc, best.seg, t0);
+    return best;
   }
-  function pieceAt(w) { for (var i = P.pieces.length - 1; i >= 0; i--) { var pc = P.pieces[i]; if (pc.hidden) continue; if (inside(V().sa ? C.cutLine(pc).pts : C.flat(pc, .5).pts, W2L(pc, w))) return pc; } return null; }
+  function pieceAt(w) { for (var i = P.pieces.length - 1; i >= 0; i--) { var pc = P.pieces[i]; if (pc.hidden) continue; var g = geo(pc, true); if (inside(V().sa && g.cut ? g.cut.pts : g.flat, W2L(pc, w))) return pc; } return null; }
   function inside(poly, p) { var c = false; for (var i = 0, j = poly.length - 1; i < poly.length; j = i++) { var a = poly[i], b = poly[j]; if ((a[1] > p[1]) !== (b[1] > p[1]) && p[0] < (b[0] - a[0]) * (p[1] - a[1]) / (b[1] - a[1]) + a[0]) c = !c; } return c; }
 
-  /* ---------- drawing ---------- */
+  /* ---------- drawing ----------
+     Pieces are drawn in pattern units under one transform, so panning and zooming only change that transform.
+     Points, handles and the snap marker are drawn in screen pixels on top, so they stay the same size at any zoom. */
   function pathD(pc, close) { var n = C.segCount(pc), N = pc.nodes; if (!N.length) return ''; var d = 'M' + N[0].x.toFixed(3) + ' ' + N[0].y.toFixed(3); for (var i = 0; i < n; i++) { var k = C.ctrl(pc, i); d += k.curved ? 'C' + k.p1.map(f3).join(' ') + ' ' + k.p2.map(f3).join(' ') + ' ' + k.p3.map(f3).join(' ') : 'L' + k.p3.map(f3).join(' '); } return d + (close !== false && pc.closed !== false ? 'Z' : ''); }
   function segD(pc, i) { var k = C.ctrl(pc, i); return 'M' + k.p0.map(f3).join(' ') + (k.curved ? 'C' + k.p1.map(f3).join(' ') + ' ' + k.p2.map(f3).join(' ') + ' ' + k.p3.map(f3).join(' ') : 'L' + k.p3.map(f3).join(' ')); }
   function f3(v) { return v.toFixed(3); }
+  function f1(v) { return v.toFixed(1); }
   function polyD(P2) { return P2.length ? 'M' + P2.map(function (q) { return f3(q[0]) + ' ' + f3(q[1]); }).join('L') + 'Z' : ''; }
-  function draw() {
-    if (!root || root.hidden) return;
-    var v = V(), z = ST.z, h = '', px = 1 / z;
-    world.setAttribute('transform', 'translate(' + ST.tx + ' ' + ST.ty + ') scale(' + z + ')');
-    q('#ps-grid').setAttribute('transform', world.getAttribute('transform')); q('#ps-over').setAttribute('transform', world.getAttribute('transform'));
-    drawGrid();
-    P.pieces.forEach(function (pc) {
-      if (pc.hidden) return;
-      var sel = ST.sel.indexOf(pc.id) >= 0, issues = C.validate(pc), bad = issues.length > 0, cl = v.sa ? C.cutLine(pc) : null;
-      h += '<g class="ps-pc' + (sel ? ' sel' : '') + (bad ? ' bad' : '') + (pc.locked ? ' lock' : '') + '" data-pc="' + pc.id + '" transform="translate(' + f3(pc.x || 0) + ' ' + f3(pc.y || 0) + ')">';
-      if (cl) h += '<path class="ps-cut" d="' + polyD(cl.pts) + '"/>';
-      h += '<path class="ps-seam' + (v.seam ? '' : ' nos') + (cl ? '' : ' solo') + '" d="' + pathD(pc) + '"/>';
-      if (pc.fold >= 0 && pc.fold < C.segCount(pc)) h += '<path class="ps-fold" d="' + segD(pc, pc.fold) + '"/>';
-      if (v.internals) pc.internals.forEach(function (it) { if (it.visible === false) return; var cls = 'ps-int ' + (it.style === 'dashed' ? 'dash ' : '') + (it.purpose || ''); if (it.kind === 'point') h += '<circle class="' + cls + '" cx="' + f3(it.pts[0][0]) + '" cy="' + f3(it.pts[0][1]) + '" r="' + (.25) + '"/>'; else if (it.kind === 'ellipse') h += '<ellipse class="' + cls + '" cx="' + f3(it.c[0]) + '" cy="' + f3(it.c[1]) + '" rx="' + f3(it.r[0]) + '" ry="' + f3(it.r[1]) + '"/>'; else h += '<path class="' + cls + '" d="M' + it.pts.map(function (q2) { return f3(q2[0]) + ' ' + f3(q2[1]); }).join('L') + (it.kind === 'rect' ? 'Z' : '') + '"/>'; });
-      pc.darts.forEach(function (d) { if (d.l1) h += '<path class="ps-int" d="M' + d.l1.map(f3).join(' ') + 'L' + d.apex.map(f3).join(' ') + 'L' + d.l2.map(f3).join(' ') + '"/>'; else if (d.pts) h += '<path class="ps-int" d="M' + d.pts.map(function (q2) { return q2.map(f3).join(' '); }).join('L') + 'Z"/>'; });
-      if (v.notches) { var sg = C.areaOf(C.flat(pc, .5).pts) > 0 ? -1 : 1; pc.notches.forEach(function (nt) { if (nt.seg >= C.segCount(pc)) return; var r = C.notchPos(pc, nt), nv = [-r.tan[1] * sg, r.tan[0] * sg], d0 = v.sa ? C.saOf(pc, nt.seg) : 0, dep = nt.depth || .6, mk = function (off) { var b = [r.p[0] + r.tan[0] * off, r.p[1] + r.tan[1] * off], a = [b[0] + nv[0] * d0, b[1] + nv[1] * d0], e = [a[0] - nv[0] * dep, a[1] - nv[1] * dep]; return nt.type === 'v' ? 'M' + (a[0] + r.tan[0] * .25).toFixed(3) + ' ' + (a[1] + r.tan[1] * .25).toFixed(3) + 'L' + e.map(f3).join(' ') + 'L' + (a[0] - r.tan[0] * .25).toFixed(3) + ' ' + (a[1] - r.tan[1] * .25).toFixed(3) : 'M' + a.map(f3).join(' ') + 'L' + e.map(f3).join(' ') + (nt.type === 't' ? 'M' + (e[0] + r.tan[0] * .3).toFixed(3) + ' ' + (e[1] + r.tan[1] * .3).toFixed(3) + 'L' + (e[0] - r.tan[0] * .3).toFixed(3) + ' ' + (e[1] - r.tan[1] * .3).toFixed(3) : ''); };
-        h += '<path class="ps-notch' + (ST.notch === nt.id ? ' on' : '') + '" data-nt="' + nt.id + '" d="' + mk(0) + (nt.type === 'double' ? mk(.35) : '') + '"/>'; }); }
-      if (v.grain && pc.grain) { var a = pc.grain.a, b = pc.grain.b, gd = C.dist(a, b) || 1, u = [(b[0] - a[0]) / gd, (b[1] - a[1]) / gd], nn = [-u[1], u[0]], ar = function (p, s) { return 'M' + (p[0] - u[0] * s * .8 + nn[0] * .4).toFixed(3) + ' ' + (p[1] - u[1] * s * .8 + nn[1] * .4).toFixed(3) + 'L' + p.map(f3).join(' ') + 'L' + (p[0] - u[0] * s * .8 - nn[0] * .4).toFixed(3) + ' ' + (p[1] - u[1] * s * .8 - nn[1] * .4).toFixed(3); };
-        h += '<path class="ps-grain" d="M' + a.map(f3).join(' ') + 'L' + b.map(f3).join(' ') + ar(b, 1) + (pc.grainDir === 'one' ? '' : ar(a, -1)) + '"/>'; }
-      if (v.labels) { var bb = C.bbox(pc); h += '<text class="ps-lab" x="' + f3((bb[0] + bb[2]) / 2) + '" y="' + f3((bb[1] + bb[3]) / 2) + '" font-size="' + f3(Math.max(.8, Math.min(2.2, (bb[2] - bb[0]) / 10))) + '">' + esc(pc.name || 'Piece') + '</text>'; if (pc.size || pc.qty) h += '<text class="ps-lab2" x="' + f3((bb[0] + bb[2]) / 2) + '" y="' + f3((bb[1] + bb[3]) / 2 + Math.max(1, Math.min(2.4, (bb[2] - bb[0]) / 9))) + '" font-size="' + f3(Math.max(.55, Math.min(1.3, (bb[2] - bb[0]) / 16))) + '">' + esc((pc.size ? pc.size + ' · ' : '') + 'Cut ' + pc.qty + (pc.pair ? ' pair' : '') + (pc.fold >= 0 ? ' on fold' : '')) + '</text>'; }
-      if (pc.link && pc.link.on) h += '<text class="ps-link" x="' + f3(C.bbox(pc)[0]) + '" y="' + f3(C.bbox(pc)[1] - .5) + '" font-size=".9">' + (pc.link.mode === 'mirror' ? '⇋ mirrored link' : '⇄ linked') + '</text>';
-      // edges for picking
-      var pick = ['edit', 'addpt', 'curv', 'smooth', 'notch', 'measure', 'walk', 'sa', 'cut', 'merge', 'trace'].indexOf(ST.tool) >= 0;
-      if (pick) for (var s = 0; s < C.segCount(pc); s++) { var on = ST.seg && ST.seg.pc === pc.id && ST.seg.i === s, wk = ST.walk.some(function (w) { return w.pc === pc.id && w.seg === s; }); h += '<path class="ps-eh' + (on || wk ? ' on' : '') + '" data-pc="' + pc.id + '" data-s="' + s + '" d="' + segD(pc, s) + '" stroke-width="' + f3(10 * px) + '"/>'; if (on || wk) h += '<path class="ps-eon" d="' + segD(pc, s) + '"/>'; }
-      // points and handles
-      var showPts = ST.tool === 'edit' && (sel || ST.node && ST.node.pc === pc.id) || v.points || ST.tool === 'cut';
-      if (showPts) pc.nodes.forEach(function (nd, i) { var isSel = ST.node && ST.node.pc === pc.id && ST.node.idx.indexOf(i) >= 0, r = 4 * px;
-        if (ST.tool === 'edit' && (isSel || segTouches(pc, i))) ['h1', 'h2'].forEach(function (k) { if (!nd[k]) return; var hx = nd.x + nd[k][0], hy = nd.y + nd[k][1]; h += '<path class="ps-hl" d="M' + f3(nd.x) + ' ' + f3(nd.y) + 'L' + f3(hx) + ' ' + f3(hy) + '"/><circle class="ps-hd" data-pc="' + pc.id + '" data-n="' + i + '" data-h="' + k + '" cx="' + f3(hx) + '" cy="' + f3(hy) + '" r="' + f3(3.5 * px) + '"/>'; });
-        h += '<rect class="ps-pt' + (isSel ? ' on' : '') + (nd.smooth ? ' sm' : '') + '" data-pc="' + pc.id + '" data-n="' + i + '" x="' + f3(nd.x - r) + '" y="' + f3(nd.y - r) + '" width="' + f3(2 * r) + '" height="' + f3(2 * r) + '"/>'; });
-      h += '</g>';
-    });
-    world.innerHTML = h; drawOver(); drawRulers(); status();
+  var PICK = ['edit', 'addpt', 'curv', 'smooth', 'notch', 'measure', 'walk', 'sa', 'cut', 'merge', 'trace'];
+  function pieceHTML(pc, fast) {
+    var v = V(), sel = ST.sel.indexOf(pc.id) >= 0, G = geo(pc, fast), bad = G.issues.length > 0, cl = v.sa ? G.cut : null, h = '';
+    h += '<g class="ps-pc' + (sel ? ' sel' : '') + (bad ? ' bad' : '') + (pc.locked ? ' lock' : '') + '" data-pc="' + pc.id + '" transform="translate(' + f3(pc.x || 0) + ' ' + f3(pc.y || 0) + ')">';
+    if (cl) h += '<path class="ps-cut" d="' + polyD(cl.pts) + '"/>';
+    h += '<path class="ps-seam' + (v.seam ? '' : ' nos') + (cl ? '' : ' solo') + '" d="' + pathD(pc) + '"/>';
+    if (pc.fold >= 0 && pc.fold < C.segCount(pc)) h += '<path class="ps-fold" d="' + segD(pc, pc.fold) + '"/>';
+    if (v.internals) pc.internals.forEach(function (it) { if (it.visible === false) return; var cls = 'ps-int ' + (it.style === 'dashed' ? 'dash ' : '') + (it.purpose || '') + (ST.it === it.id ? ' on' : ''); if (it.kind === 'point') h += '<circle class="' + cls + '" cx="' + f3(it.pts[0][0]) + '" cy="' + f3(it.pts[0][1]) + '" r=".25"/>'; else if (it.kind === 'ellipse') h += '<ellipse class="' + cls + '" cx="' + f3(it.c[0]) + '" cy="' + f3(it.c[1]) + '" rx="' + f3(it.r[0]) + '" ry="' + f3(it.r[1]) + '"/>'; else h += '<path class="' + cls + '" d="M' + it.pts.map(function (q2) { return f3(q2[0]) + ' ' + f3(q2[1]); }).join('L') + (it.kind === 'rect' ? 'Z' : '') + '"/>'; });
+    pc.darts.forEach(function (d) { if (d.l1) h += '<path class="ps-int" d="M' + d.l1.map(f3).join(' ') + 'L' + d.apex.map(f3).join(' ') + 'L' + d.l2.map(f3).join(' ') + '"/>'; else if (d.pts) h += '<path class="ps-int" d="M' + d.pts.map(function (q2) { return q2.map(f3).join(' '); }).join('L') + 'Z"/>'; });
+    if (v.notches) { var sg = G.sign; pc.notches.forEach(function (nt) { if (nt.seg >= C.segCount(pc)) return; var r = C.notchPos(pc, nt), nv = [-r.tan[1] * sg, r.tan[0] * sg], d0 = v.sa ? C.saOf(pc, nt.seg) : 0, dep = nt.depth || .6, mkn = function (off) { var b = [r.p[0] + r.tan[0] * off, r.p[1] + r.tan[1] * off], a = [b[0] + nv[0] * d0, b[1] + nv[1] * d0], e = [a[0] - nv[0] * dep, a[1] - nv[1] * dep]; return nt.type === 'v' ? 'M' + f3(a[0] + r.tan[0] * .25) + ' ' + f3(a[1] + r.tan[1] * .25) + 'L' + e.map(f3).join(' ') + 'L' + f3(a[0] - r.tan[0] * .25) + ' ' + f3(a[1] - r.tan[1] * .25) : 'M' + a.map(f3).join(' ') + 'L' + e.map(f3).join(' ') + (nt.type === 't' ? 'M' + f3(e[0] + r.tan[0] * .3) + ' ' + f3(e[1] + r.tan[1] * .3) + 'L' + f3(e[0] - r.tan[0] * .3) + ' ' + f3(e[1] - r.tan[1] * .3) : ''); };
+      h += '<path class="ps-notch' + (ST.notch === nt.id ? ' on' : '') + '" data-nt="' + nt.id + '" d="' + mkn(0) + (nt.type === 'double' ? mkn(.35) : '') + '"/>'; }); }
+    if (v.grain && pc.grain) { var a = pc.grain.a, b = pc.grain.b, gd = C.dist(a, b) || 1, u = [(b[0] - a[0]) / gd, (b[1] - a[1]) / gd], nn = [-u[1], u[0]], ar = function (p, s) { return 'M' + f3(p[0] - u[0] * s * .8 + nn[0] * .4) + ' ' + f3(p[1] - u[1] * s * .8 + nn[1] * .4) + 'L' + p.map(f3).join(' ') + 'L' + f3(p[0] - u[0] * s * .8 - nn[0] * .4) + ' ' + f3(p[1] - u[1] * s * .8 - nn[1] * .4); };
+      h += '<path class="ps-grain" d="M' + a.map(f3).join(' ') + 'L' + b.map(f3).join(' ') + ar(b, 1) + (pc.grainDir === 'one' ? '' : ar(a, -1)) + '"/>'; }
+    if (v.labels) { var bb = C.bbox(pc), fs = Math.max(.8, Math.min(2.2, (bb[2] - bb[0]) / 10)); h += '<text class="ps-lab" x="' + f3((bb[0] + bb[2]) / 2) + '" y="' + f3((bb[1] + bb[3]) / 2) + '" font-size="' + f3(fs) + '">' + esc(pc.name || 'Piece') + '</text><text class="ps-lab2" x="' + f3((bb[0] + bb[2]) / 2) + '" y="' + f3((bb[1] + bb[3]) / 2 + fs * 1.15) + '" font-size="' + f3(fs * .6) + '">' + esc((pc.size ? pc.size + ' · ' : '') + 'Cut ' + pc.qty + (pc.pair ? ' pair' : '') + (pc.fold >= 0 ? ' on fold' : '')) + '</text>';
+      if (pc.link && pc.link.on) h += '<text class="ps-link" x="' + f3(bb[0]) + '" y="' + f3(bb[1] - .5) + '" font-size=".9">' + (pc.link.mode === 'mirror' ? '⇋ mirrored link' : '⇄ linked') + '</text>'; }
+    if (PICK.indexOf(ST.tool) >= 0) for (var s = 0; s < C.segCount(pc); s++) { var on = ST.seg && ST.seg.pc === pc.id && ST.seg.i === s, wk = ST.walk.some(function (w) { return w.pc === pc.id && w.seg === s; }); h += '<path class="ps-eh" data-pc="' + pc.id + '" data-s="' + s + '" d="' + segD(pc, s) + '"/>'; if (on || wk) h += '<path class="ps-eon" d="' + segD(pc, s) + '"/>'; }
+    return h + '</g>';
+  }
+  function draw() { if (!ON) return; world.innerHTML = P.pieces.filter(function (pc) { return !pc.hidden; }).map(function (pc) { return pieceHTML(pc); }).join(''); drawView(); status(); }
+  function drawPiece(pc, fast) { var old = world.querySelector('g[data-pc="' + pc.id + '"]'), h = pc.hidden ? '' : pieceHTML(pc, fast); if (old) { if (h) old.insertAdjacentHTML('afterend', h); old.remove(); } else if (h) world.insertAdjacentHTML('beforeend', h); }
+  function placeG(pc) { var g = world.querySelector('g[data-pc="' + pc.id + '"]'); if (g) g.setAttribute('transform', 'translate(' + f3(pc.x || 0) + ' ' + f3(pc.y || 0) + ')'); }
+  function drawView() {
+    if (!ON) return; var tr = 'translate(' + ST.tx.toFixed(2) + ' ' + ST.ty.toFixed(2) + ') scale(' + ST.z + ')';
+    world.setAttribute('transform', tr); q('#ps-grid').setAttribute('transform', tr); q('#ps-over').setAttribute('transform', tr);
+    drawGrid(); drawOver(); drawPts(); drawRulers(); var zl = q('#ps-zl'); if (zl) zl.textContent = Math.round(ST.z / pxPerCm() * 100) + '%';
   }
   function segTouches(pc, i) { if (!ST.seg || ST.seg.pc !== pc.id) return false; var n = pc.nodes.length; return ST.seg.i === i || (ST.seg.i + 1) % n === i; }
+  function drawPts() {
+    var h = '', v = V();
+    P.pieces.forEach(function (pc) {
+      if (pc.hidden) return; var sel = ST.sel.indexOf(pc.id) >= 0, show = ST.tool === 'edit' && (sel || ST.node && ST.node.pc === pc.id) || v.points || ST.tool === 'cut' || (ST.tool === 'edit' && ST.sel.length === 0);
+      if (!show) return; var faint = ST.tool === 'edit' && !sel && !(ST.node && ST.node.pc === pc.id);
+      pc.nodes.forEach(function (nd, i) { var isSel = ST.node && ST.node.pc === pc.id && ST.node.idx.indexOf(i) >= 0, s = W2S(L2W(pc, [nd.x, nd.y]));
+        if (ST.tool === 'edit' && !faint && (isSel || segTouches(pc, i))) ['h1', 'h2'].forEach(function (k) { if (!nd[k]) return; var e = W2S(L2W(pc, [nd.x + nd[k][0], nd.y + nd[k][1]])); h += '<path class="ps-hl" d="M' + f1(s[0]) + ' ' + f1(s[1]) + 'L' + f1(e[0]) + ' ' + f1(e[1]) + '"/><circle class="ps-hd" data-pc="' + pc.id + '" data-n="' + i + '" data-h="' + k + '" cx="' + f1(e[0]) + '" cy="' + f1(e[1]) + '" r="4.5"/>'; });
+        h += nd.smooth ? '<circle class="ps-pt' + (isSel ? ' on' : '') + (faint ? ' fa' : '') + '" data-pc="' + pc.id + '" data-n="' + i + '" cx="' + f1(s[0]) + '" cy="' + f1(s[1]) + '" r="' + (faint ? 3 : 4.5) + '"/>' : '<rect class="ps-pt' + (isSel ? ' on' : '') + (faint ? ' fa' : '') + '" data-pc="' + pc.id + '" data-n="' + i + '" x="' + f1(s[0] - (faint ? 3 : 4.5)) + '" y="' + f1(s[1] - (faint ? 3 : 4.5)) + '" width="' + (faint ? 6 : 9) + '" height="' + (faint ? 6 : 9) + '"/>'; });
+    });
+    if (ST.hover) { var s2 = W2S(ST.hover.p); h += '<circle class="ps-snap" cx="' + f1(s2[0]) + '" cy="' + f1(s2[1]) + '" r="6"/>' + (ST.hover.k ? '<text class="ps-sk" x="' + f1(s2[0] + 9) + '" y="' + f1(s2[1] - 8) + '">' + esc(ST.hover.k) + '</text>' : ''); }
+    if (ST.live) { var L = ST.live, x = L.at[0] + 16, y = L.at[1] + 22, w = Math.max(60, L.t.length * 6.6 + 12); h += '<g class="ps-live"><rect x="' + f1(x) + '" y="' + f1(y - 14) + '" width="' + f1(w) + '" height="20" rx="4"/><text x="' + f1(x + 6) + '" y="' + f1(y) + '">' + esc(L.t) + '</text></g>'; }
+    ptsG.innerHTML = h;
+  }
   function drawGrid() {
     var g = q('#ps-grid'); if (!V().grid) { g.innerHTML = ''; return; }
-    var r = svg.getBoundingClientRect(), st = gridStep(), z = ST.z; while (st * z < 6) st *= P.unit === 'in' ? 2 : 5;
-    var x0 = Math.floor(-ST.tx / z / st) * st, x1 = (r.width - ST.tx) / z, y0 = Math.floor(-ST.ty / z / st) * st, y1 = (r.height - ST.ty) / z, maj = P.unit === 'in' ? 2.54 : P.unit === 'mm' ? 1 : 5, h = '';
-    if ((x1 - x0) / st > 600) { g.innerHTML = ''; return; }
-    for (var x = x0; x <= x1; x += st) h += '<path class="' + (Math.abs(x / maj - Math.round(x / maj)) < 1e-6 ? 'gM' : 'gm') + '" d="M' + f3(x) + ' ' + f3(y0) + 'V' + f3(y1) + '"/>';
-    for (var y = y0; y <= y1; y += st) h += '<path class="' + (Math.abs(y / maj - Math.round(y / maj)) < 1e-6 ? 'gM' : 'gm') + '" d="M' + f3(x0) + ' ' + f3(y) + 'H' + f3(x1) + '"/>';
+    var r = svg.getBoundingClientRect(), S = gridSteps(), st = S[0], maj = S[1], z = ST.z; ST.gstep = st;
+    var x0 = Math.floor(-ST.tx / z / st) * st, x1 = (r.width - ST.tx) / z, y0 = Math.floor(-ST.ty / z / st) * st, y1 = (r.height - ST.ty) / z, h = '';
+    if ((x1 - x0) / st > 800 || (y1 - y0) / st > 800) { g.innerHTML = ''; return; }
+    var isM = function (v) { var k = v / maj; return Math.abs(k - Math.round(k)) < 1e-6; };
+    for (var x = x0; x <= x1; x += st) h += '<path class="' + (isM(x) ? 'gM' : 'gm') + '" d="M' + f3(x) + ' ' + f3(y0) + 'V' + f3(y1) + '"/>';
+    for (var y = y0; y <= y1; y += st) h += '<path class="' + (isM(y) ? 'gM' : 'gm') + '" d="M' + f3(x0) + ' ' + f3(y) + 'H' + f3(x1) + '"/>';
+    h += '<path class="g0" d="M0 ' + f3(y0) + 'V' + f3(y1) + 'M' + f3(x0) + ' 0H' + f3(x1) + '"/>';
     g.innerHTML = h;
   }
   function drawOver() {
     var o = q('#ps-over'), h = '', px = 1 / ST.z, d = ST.draft;
-    if (d && d.pts && d.pts.length) { var pp = d.pts.concat(d.cur ? [{ p: d.cur }] : []); h += '<path class="ps-dr" d="M' + pp.map(function (e) { return e.p.map(f3).join(' '); }).join('L') + '"/>'; d.pts.forEach(function (e, i) { h += '<rect class="ps-pt' + (i === 0 ? ' on' : '') + '" x="' + f3(e.p[0] - 4 * px) + '" y="' + f3(e.p[1] - 4 * px) + '" width="' + f3(8 * px) + '" height="' + f3(8 * px) + '"/>'; }); }
+    if (d && d.pts && d.pts.length) { var pp = d.pts.concat(d.cur ? [{ p: d.cur }] : []); h += '<path class="ps-dr" d="M' + pp.map(function (e) { return e.p.map(f3).join(' '); }).join('L') + '"/>'; d.pts.forEach(function (e, i) { h += '<rect class="ps-dpt' + (i === 0 ? ' on' : '') + '" x="' + f3(e.p[0] - 4 * px) + '" y="' + f3(e.p[1] - 4 * px) + '" width="' + f3(8 * px) + '" height="' + f3(8 * px) + '"/>'; }); }
     if (d && d.box) { var b = d.box; if (d.kind === 'ellipse' || d.kind === 'iell') h += '<ellipse class="ps-dr" cx="' + f3((b[0] + b[2]) / 2) + '" cy="' + f3((b[1] + b[3]) / 2) + '" rx="' + f3(Math.abs(b[2] - b[0]) / 2) + '" ry="' + f3(Math.abs(b[3] - b[1]) / 2) + '"/>'; else h += '<path class="ps-dr" d="M' + f3(b[0]) + ' ' + f3(b[1]) + 'H' + f3(b[2]) + 'V' + f3(b[3]) + 'H' + f3(b[0]) + 'Z"/>'; }
     if (d && d.line) h += '<path class="ps-dr" d="M' + d.line[0].map(f3).join(' ') + 'L' + d.line[1].map(f3).join(' ') + '"/>';
     if (ST.marq) { var m = ST.marq; h += '<path class="ps-marq" d="M' + f3(m[0]) + ' ' + f3(m[1]) + 'H' + f3(m[2]) + 'V' + f3(m[3]) + 'H' + f3(m[0]) + 'Z"/>'; }
-    if (ST.meas.length) { h += '<path class="ps-ms" d="M' + ST.meas.map(function (p) { return p.map(f3).join(' '); }).join('L') + '"/>'; ST.meas.forEach(function (p, i) { h += '<circle class="ps-msp" cx="' + f3(p[0]) + '" cy="' + f3(p[1]) + '" r="' + f3(3 * px) + '"/>'; if (i) { var a = ST.meas[i - 1]; h += '<text class="ps-mt" x="' + f3((a[0] + p[0]) / 2) + '" y="' + f3((a[1] + p[1]) / 2 - 6 * px) + '" font-size="' + f3(12 * px) + '">' + esc(F(C.dist(a, p))) + '</text>'; } }); }
+    if (ST.meas.length) { var M = ST.meas.concat(ST.mcur ? [ST.mcur] : []); h += '<path class="ps-ms" d="M' + M.map(function (p) { return p.map(f3).join(' '); }).join('L') + '"/>'; M.forEach(function (p, i) { h += '<circle class="ps-msp" cx="' + f3(p[0]) + '" cy="' + f3(p[1]) + '" r="' + f3(3 * px) + '"/>'; if (i) { var a = M[i - 1]; h += '<text class="ps-mt" x="' + f3((a[0] + p[0]) / 2) + '" y="' + f3((a[1] + p[1]) / 2 - 6 * px) + '" font-size="' + f3(12 * px) + '">' + esc(F(C.dist(a, p))) + '</text>'; } }); }
     if (ST.cut.length) ST.cut.forEach(function (c) { var pc = pcById(c.pc), w = L2W(pc, c.p); h += '<circle class="ps-msp" cx="' + f3(w[0]) + '" cy="' + f3(w[1]) + '" r="' + f3(5 * px) + '"/>'; });
-    if (ST.hover) h += '<circle class="ps-snap" cx="' + f3(ST.hover[0]) + '" cy="' + f3(ST.hover[1]) + '" r="' + f3(5 * px) + '"/>';
     o.innerHTML = h;
   }
+  var CV = null;
   function drawRulers() {
-    var on = V().rulers !== false; rx.hidden = ry.hidden = q('#ps-ucorner').hidden = !on; root.classList.toggle('noru', !on); if (!on) return;
-    var dpr = window.devicePixelRatio || 1;
+    var on = V().rulers !== false; centerEl.classList.toggle('noru', !on); if (!on) return;
+    if (!CV) { var cs = getComputedStyle(app); CV = { bg: cs.getPropertyValue('--p1').trim() || '#212428', tk: cs.getPropertyValue('--dim').trim() || '#6f757c', tx: cs.getPropertyValue('--mu').trim() || '#9da3aa', ac: cs.getPropertyValue('--ac').trim() || '#e08a5e' }; }
+    var dpr = window.devicePixelRatio || 1, S = gridSteps(), st = S[0], maj = S[1], R = svg.getBoundingClientRect(), LS = STEPS[P.unit] || STEPS.cm, lab = LS[LS.length - 1]; for (var li = 0; li < LS.length; li++) if (LS[li] * ST.z >= (P.unit === 'mm' ? 56 : 44) && LS[li] >= maj - 1e-9) { lab = LS[li]; break; }
     [[rx, 'x'], [ry, 'y']].forEach(function (A) {
-      var c = A[0], r = c.getBoundingClientRect(), W = r.width, Hh = r.height; c.width = W * dpr; c.height = Hh * dpr; var g = c.getContext('2d'); g.scale(dpr, dpr); g.fillStyle = '#f6f1ea'; g.fillRect(0, 0, W, Hh); g.strokeStyle = '#8a7f74'; g.fillStyle = '#5b5148'; g.font = '10px system-ui'; g.lineWidth = 1;
-      var unit = P.unit === 'in' ? 2.54 : P.unit === 'mm' ? .1 : 1, step = unit; while (step * ST.z < 8) step *= (P.unit === 'in' ? 2 : step / unit < 1 ? 10 : (String(Math.round(step / unit))[0] === '1' ? 5 : 2)); var lab = step * 5;
-      var off = A[1] === 'x' ? ST.tx - 24 : ST.ty - 24, len = A[1] === 'x' ? W : Hh, a0 = Math.floor(-off / ST.z / step) * step;
-      for (var v = a0; v * ST.z + off < len; v += step) { var s = Math.round(v * ST.z + off) + .5, k = Math.round(v / step), big = k % 5 === 0; g.beginPath(); if (A[1] === 'x') { g.moveTo(s, Hh); g.lineTo(s, Hh - (big ? 10 : 5)); } else { g.moveTo(W, s); g.lineTo(W - (big ? 10 : 5), s); } g.stroke();
-        if (big) { var t = String(+(C.toU(v, P.unit)).toFixed(P.unit === 'in' ? 2 : P.unit === 'mm' ? 0 : 1)); if (A[1] === 'x') g.fillText(t, s + 2, 10); else { g.save(); g.translate(10, s - 2); g.rotate(-Math.PI / 2); g.fillText(t, 0, 0); g.restore(); } } }
-      void lab;
+      var c = A[0], r = c.getBoundingClientRect(), W = r.width, Hh = r.height; if (!W || !Hh) return; c.width = Math.round(W * dpr); c.height = Math.round(Hh * dpr); var g = c.getContext('2d'); g.setTransform(dpr, 0, 0, dpr, 0, 0); g.fillStyle = CV.bg; g.fillRect(0, 0, W, Hh); g.strokeStyle = CV.tk; g.fillStyle = CV.tx; g.font = '10px ui-monospace,Menlo,monospace'; g.lineWidth = 1;
+      var off = A[1] === 'x' ? ST.tx + (R.left - r.left) : ST.ty + (R.top - r.top), len = A[1] === 'x' ? W : Hh, v0 = Math.floor(-off / ST.z / st) * st;
+      g.beginPath();
+      for (var v = v0; v * ST.z + off < len; v += st) { var s = Math.round(v * ST.z + off) + .5, k = v / maj, big = Math.abs(k - Math.round(k)) < 1e-6; if (A[1] === 'x') { g.moveTo(s, Hh); g.lineTo(s, Hh - (big ? 9 : 4)); } else { g.moveTo(W, s); g.lineTo(W - (big ? 9 : 4), s); }
+        var kl = v / lab; if (Math.abs(kl - Math.round(kl)) < 1e-6) { var t = String(+C.toU(v, P.unit).toFixed(P.unit === 'in' ? 2 : P.unit === 'mm' ? 0 : 1)); if (A[1] === 'x') g.fillText(t, s + 3, 10); else { g.save(); g.translate(10, s - 3); g.rotate(-Math.PI / 2); g.fillText(t, 0, 0); g.restore(); } } }
+      g.stroke();
+      if (ST.cursor) { var cpos = (A[1] === 'x' ? ST.cursor[0] : ST.cursor[1]) * ST.z + off; g.strokeStyle = CV.ac; g.beginPath(); if (A[1] === 'x') { g.moveTo(cpos, 0); g.lineTo(cpos, Hh); } else { g.moveTo(0, cpos); g.lineTo(W, cpos); } g.stroke(); }
     });
     q('#ps-ucorner').textContent = P.unit;
   }
   function status(msg) {
-    var t = TOOL[ST.tool], sel = ST.sel.length, tot = P.pieces.length, z = Math.round(ST.z / pxPerCm() * 100);
-    statusEl.innerHTML = '<b>' + esc(t ? t.n : '') + '</b><span>' + esc(msg || ST.msg || hint()) + '</span><span class="ps-sp"></span>' + (ST.cursor ? '<span>X ' + U(ST.cursor[0]) + ' · Y ' + U(ST.cursor[1]) + ' ' + P.unit + '</span>' : '') + '<span>' + sel + ' of ' + tot + ' selected</span><span>' + z + '%</span><span>Snap ' + (V().snap ? 'on' : 'off') + '</span>';
+    if (!statusEl) return; var t = TOOL[ST.tool], sel = ST.sel.length, tot = P.pieces.length;
+    statusEl.innerHTML = '<b>' + esc(t ? t.n : '') + '</b><span class="ps-hint">' + esc(msg || hint()) + '</span><span class="ps-sp"></span>' + (ST.cursor ? '<span class="xy">X ' + U(ST.cursor[0]) + '  Y ' + U(ST.cursor[1]) + ' ' + P.unit + '</span>' : '') + '<span>' + sel + ' / ' + tot + ' selected</span><span>Snap ' + (V().snap ? 'on' : 'off') + '</span>';
   }
   function hint() { var t = TOOL[ST.tool]; if (ST.tool === 'poly' && ST.draft) return ST.draft.pts.length + ' points. Click the first point or press Enter to close. Esc cancels.'; if (ST.tool === 'cut' && ST.cut.length) return 'Now click the second point on the same piece.'; if (ST.tool === 'merge' && ST.walk.length === 1) return 'Now click the matching edge on the other piece.'; if (ST.tool === 'walk' && ST.walk.length === 1) return 'Now click the edge it is sewn to.'; return t ? t.tip.split('. ')[0] + '.' : ''; }
   function pxPerCm() { return 96 / 2.54; }
-  function toast(t, bad) { toastEl.textContent = t; toastEl.className = 'ps-toast' + (bad ? ' bad' : ''); toastEl.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { toastEl.hidden = true; }, bad ? 6000 : 3000); }
+  function toast(t, bad) { if (!toastEl) return; toastEl.textContent = t; toastEl.className = 'ps-toast' + (bad ? ' bad' : ''); toastEl.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(function () { toastEl.hidden = true; }, bad ? 6000 : 3200); }
 
   /* ---------- change handling ---------- */
   function onChange() { syncLinks(); ST.dirty = true; clearTimeout(timer); timer = setTimeout(autosave, 700); }
@@ -2769,13 +2831,13 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
   function autosave() { ls(AUTO, { t: Date.now(), p: P, file: ST.fileName }); savedLabel(); }
   function savedLabel() { var el = q('#ps-saved'); if (!el) return; el.textContent = ST.dirty ? (ST.savedAt ? 'Autosaved · changes not saved to a project' : 'Autosaved') : (ST.savedAt ? 'Saved' : ''); }
   function act(label, fn) { var ok = H.exec(label, fn); if (ok !== false) refresh(); return ok; }
-  function refresh() { draw(); objects(); props(); q('#ps-name').value = P.name; qa('#ps-units button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.u === P.unit); }); qa('[data-v]').forEach(function (c) { c.checked = V()[c.dataset.v] !== false; }); q('[data-a=undo]').disabled = !H.u.length; q('[data-a=redo]').disabled = !H.r.length; savedLabel(); }
+  function refresh() { draw(); objects(); props(); q('#ps-name').value = P.name; qa('[data-v]').forEach(function (c) { c.checked = V()[c.dataset.v] !== false; }); q('[data-a=undo]').disabled = !H.u.length; q('[data-a=redo]').disabled = !H.r.length; savedLabel(); }
   function selected() { return ST.sel.map(pcById).filter(Boolean); }
 
   /* ---------- objects panel ---------- */
   function objects() {
     if (!P.pieces.length) { objsEl.innerHTML = '<p class="ps-empty">No pieces yet. Draw one with the Draw tools, add a rectangle, or bring in the Pattern Maker draft.</p>'; return; }
-    objsEl.innerHTML = P.pieces.map(function (pc) { var on = ST.sel.indexOf(pc.id) >= 0, bad = C.validate(pc).length;
+    objsEl.innerHTML = P.pieces.map(function (pc) { var on = ST.sel.indexOf(pc.id) >= 0, bad = geo(pc).issues.length;
       return '<div class="ps-ob' + (on ? ' on' : '') + '" data-pc="' + pc.id + '"><button type="button" class="ps-eye" data-a="vis" data-pc="' + pc.id + '" aria-pressed="' + !pc.hidden + '" title="' + (pc.hidden ? 'Show' : 'Hide') + '">' + (pc.hidden ? '◌' : '●') + '</button><span class="ps-on">' + esc(pc.name || 'Piece') + (bad ? ' <i title="Has problems: see Properties">!</i>' : '') + (pc.link && pc.link.on ? ' <i class="lk" title="Linked copy">⇄</i>' : '') + '</span><button type="button" class="ps-lk" data-a="lock" data-pc="' + pc.id + '" aria-pressed="' + !!pc.locked + '" title="' + (pc.locked ? 'Unlock' : 'Lock') + '">' + (pc.locked ? '🔒' : '·') + '</button></div>'
         + (on && pc.internals.length ? '<div class="ps-obs">' + pc.internals.map(function (it) { return '<div data-it="' + it.id + '" data-pc="' + pc.id + '" class="' + (ST.it === it.id ? 'on' : '') + '">' + esc((it.label || it.purpose || it.kind) + ' · ' + it.kind) + '</div>'; }).join('') + '</div>' : ''); }).join('');
   }
@@ -2933,10 +2995,14 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
       case 'importdxf': return q('#ps-dxf').click();
       case 'xsvg': case 'xdxf': case 'xpdf': case 'xpdft': case 'xpng': return exportAs(a);
       case 'fit': return fit();
-      case 'z100': ST.z = pxPerCm(); return draw();
+      case 'z100': zoomAt(pxPerCm()); return;
+      case 'zin': zoomAt(ST.z * 1.25); return;
+      case 'zout': zoomAt(ST.z / 1.25); return;
+      case 'draftreplace': return bringDraft('replace');
+      case 'draftadd': return bringDraft('add');
+      case 'draftkeep': return act('Keep my edits', function () { P.draft = { sig: draftSig(), name: draftName() }; }), banner();
       case 'undo': if (H.undo()) { tidySel(); refresh(); toast('Undone.'); } return;
       case 'redo': if (H.redo()) { tidySel(); refresh(); toast('Redone.'); } return;
-      case 'close': return close();
       case 'rect10': return act('Add rectangle', function () { var c = viewCentre(), r = C.rect(c[0] - 10, c[1] - 15, 20, 30, { name: 'Piece ' + (P.pieces.length + 1) }); P.pieces.push(r); ST.sel = [r.id]; });
       case 'vis': return act('Show or hide', function () { var p = pcById(el.dataset.pc); p.hidden = !p.hidden; if (p.hidden) ST.sel = ST.sel.filter(function (i) { return i !== p.id; }); });
       case 'lock': return act('Lock', function () { var p = pcById(el.dataset.pc); p.locked = !p.locked; });
@@ -2986,7 +3052,7 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
   }
   function tidySel() { ST.sel = ST.sel.filter(pcById); if (ST.node && !pcById(ST.node.pc)) ST.node = null; if (ST.seg && !pcById(ST.seg.pc)) ST.seg = null; if (ST.node) { var p = pcById(ST.node.pc); ST.node.idx = ST.node.idx.filter(function (i) { return i < p.nodes.length; }); if (!ST.node.idx.length) ST.node = null; } if (ST.seg && ST.seg.i >= C.segCount(pcById(ST.seg.pc))) ST.seg = null; if (ST.notch && !notchOf(ST.notch)) ST.notch = null; if (ST.it && !itOf(ST.it)) ST.it = null; }
   function viewCentre() { var r = svg.getBoundingClientRect(); return [(r.width / 2 - ST.tx) / ST.z, (r.height / 2 - ST.ty) / ST.z]; }
-  function fit() { var b = [1e9, 1e9, -1e9, -1e9], any = false; P.pieces.forEach(function (pc) { if (pc.hidden) return; any = true; var cl = C.cutLine(pc).pts; cl.forEach(function (q2) { b[0] = Math.min(b[0], q2[0] + pc.x); b[1] = Math.min(b[1], q2[1] + pc.y); b[2] = Math.max(b[2], q2[0] + pc.x); b[3] = Math.max(b[3], q2[1] + pc.y); }); }); if (!any) b = [0, 0, 60, 40]; var r = svg.getBoundingClientRect(), W = r.width || 800, Hh = r.height || 600; ST.z = Math.max(.5, Math.min(80, Math.min((W - 80) / (b[2] - b[0] || 1), (Hh - 80) / (b[3] - b[1] || 1)))); ST.tx = (W - (b[2] - b[0]) * ST.z) / 2 - b[0] * ST.z; ST.ty = (Hh - (b[3] - b[1]) * ST.z) / 2 - b[1] * ST.z; draw(); }
+  function fit() { var b = [1e9, 1e9, -1e9, -1e9], any = false; P.pieces.forEach(function (pc) { if (pc.hidden) return; any = true; var cl = geo(pc).cut.pts; cl.forEach(function (q2) { b[0] = Math.min(b[0], q2[0] + pc.x); b[1] = Math.min(b[1], q2[1] + pc.y); b[2] = Math.max(b[2], q2[0] + pc.x); b[3] = Math.max(b[3], q2[1] + pc.y); }); }); if (!any) b = [0, 0, 60, 40]; var r = svg.getBoundingClientRect(), W = r.width || 800, Hh = r.height || 600; ST.z = Math.max(.5, Math.min(80, Math.min((W - 80) / (b[2] - b[0] || 1), (Hh - 80) / (b[3] - b[1] || 1)))); ST.tx = (W - (b[2] - b[0]) * ST.z) / 2 - b[0] * ST.z; ST.ty = (Hh - (b[3] - b[1]) * ST.z) / 2 - b[1] * ST.z; drawView(); }
 
   /* ---------- tool option bars (exact creation) ---------- */
   function opts() {
@@ -3012,78 +3078,112 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
     act('Create ' + pc.name, function () { P.pieces.push(pc); ST.sel = [pc.id]; });
   }
 
-  /* ---------- pointer handling ---------- */
-  var drag = null, space = false;
+  /* ---------- pointer handling ----------
+     Moves are processed once per animation frame. While dragging, only the piece being changed is redrawn and checked quickly;
+     the full checks (crossing outlines, overlapping allowances) run when the mouse is released. */
+  var drag = null, space = false, pend = null, praf = 0;
+  function startDrag(o) { drag = o; ST.live = null; }
   function down(e) {
     if (e.button === 1 || space || ST.tool === 'pan') { drag = { k: 'pan', x: e.clientX, y: e.clientY, tx: ST.tx, ty: ST.ty }; svg.setPointerCapture(e.pointerId); e.preventDefault(); return; }
     if (e.button !== 0) return;
-    svg.focus(); var w = S2W(e), t = e.target, ds = t.dataset || {}, pc = ds.pc ? pcById(ds.pc) : null, sn = snap(w);
+    svg.focus({ preventScroll: true }); var w = S2W(e), t = e.target, ds = t.dataset || {}, pc = ds.pc ? pcById(ds.pc) : null, sn = snap(w, null, e);
     svg.setPointerCapture(e.pointerId);
     switch (ST.tool) {
       case 'select': {
-        var hit = pc || pieceAt(w);
         if (ds.nt) { ST.notch = ds.nt; ST.node = ST.seg = ST.it = null; refresh(); return; }
-        if (!hit) { if (!e.shiftKey) ST.sel = []; ST.notch = ST.it = null; drag = { k: 'marq', a: w }; refresh(); return; }
+        var hit = (pc && !ds.n ? pc : null) || pieceAt(w);
+        if (!hit) { if (!e.shiftKey) ST.sel = []; ST.notch = ST.it = null; startDrag({ k: 'marq', a: w }); refresh(); return; }
         if (e.shiftKey) { var i = ST.sel.indexOf(hit.id); if (i >= 0) ST.sel.splice(i, 1); else ST.sel.push(hit.id); } else if (ST.sel.indexOf(hit.id) < 0) ST.sel = [hit.id];
         ST.notch = ST.it = ST.node = ST.seg = null;
-        var mv = selected().filter(function (p) { return !p.locked; }); drag = { k: 'move', a: w, mark: H.mark(), pcs: mv.map(function (p) { return [p, p.x, p.y]; }) }; refresh(); return;
+        var mv = selected().filter(function (p) { return !p.locked; }), b0 = mv.length ? bboxW(mv[0]) : [0, 0];
+        startDrag({ k: 'move', a: w, mark: H.mark(), corner: [b0[0], b0[1]], pcs: mv.map(function (p) { return [p, p.x, p.y]; }) }); refresh(); return;
       }
       case 'edit': {
-        if (ds.h && pc) { drag = { k: 'handle', pc: pc, n: +ds.n, h: ds.h, mark: H.mark() }; return; }
-        if (ds.n != null && pc) { var n = +ds.n; if (e.shiftKey && ST.node && ST.node.pc === pc.id) { var j = ST.node.idx.indexOf(n); if (j >= 0) ST.node.idx.splice(j, 1); else ST.node.idx.push(n); } else if (!ST.node || ST.node.pc !== pc.id || ST.node.idx.indexOf(n) < 0) ST.node = { pc: pc.id, idx: [n] }; ST.seg = null; ST.sel = [pc.id]; if (pc.locked) { refresh(); return; } drag = { k: 'nodes', pc: pc, a: w, mark: H.mark(), start: pc.nodes.map(function (nd) { return [nd.x, nd.y]; }) }; refresh(); return; }
-        if (ds.s != null && pc) { ST.seg = { pc: pc.id, i: +ds.s }; ST.node = null; ST.sel = [pc.id]; if (!pc.locked) drag = { k: 'nodes', pc: pc, a: w, mark: H.mark(), start: pc.nodes.map(function (nd) { return [nd.x, nd.y]; }), idx: [+ds.s, (+ds.s + 1) % pc.nodes.length] }; refresh(); return; }
-        var hp = pieceAt(w); ST.node = ST.seg = null; ST.sel = hp ? [hp.id] : []; refresh(); return;
+        if (ds.h && pc) { if (pc.locked) return toast('Unlock the piece first.', 1); startDrag({ k: 'handle', pc: pc, n: +ds.n, h: ds.h, mark: H.mark() }); return; }
+        if (ds.n != null && pc) { var n = +ds.n; if (e.shiftKey && ST.node && ST.node.pc === pc.id) { var j = ST.node.idx.indexOf(n); if (j >= 0) ST.node.idx.splice(j, 1); else ST.node.idx.push(n); } else if (!ST.node || ST.node.pc !== pc.id || ST.node.idx.indexOf(n) < 0) ST.node = { pc: pc.id, idx: [n] };
+          ST.seg = null; ST.sel = [pc.id]; if (pc.locked) { refresh(); return; } var lead = pc.nodes[n]; startDrag({ k: 'nodes', pc: pc, a: w, lead: n, off: [w[0] - (lead.x + pc.x), w[1] - (lead.y + pc.y)], mark: H.mark(), start: pc.nodes.map(function (nd) { return [nd.x, nd.y]; }) }); refresh(); return; }
+        if (ds.s != null && pc) { ST.seg = { pc: pc.id, i: +ds.s }; ST.node = null; ST.sel = [pc.id]; if (!pc.locked) startDrag({ k: 'nodes', pc: pc, a: w, lead: +ds.s, off: [w[0] - (pc.nodes[+ds.s].x + pc.x), w[1] - (pc.nodes[+ds.s].y + pc.y)], mark: H.mark(), start: pc.nodes.map(function (nd) { return [nd.x, nd.y]; }), idx: [+ds.s, (+ds.s + 1) % pc.nodes.length], seg: +ds.s }); refresh(); return; }
+        var hp = pieceAt(w); ST.node = ST.seg = null; ST.sel = hp ? [hp.id] : []; if (!hp) startDrag({ k: 'marqn', a: w }); refresh(); return;
       }
-      case 'addpt': { var ne = nearestEdge(w); if (!ne) return; if (ne.pc.locked) return toast('Unlock the piece first.', 1); act('Add point', function () { var nd = C.splitSeg(ne.pc, ne.seg, ne.t); ST.node = { pc: ne.pc.id, idx: [ne.pc.nodes.indexOf(nd)] }; ST.sel = [ne.pc.id]; }); return; }
-      case 'curv': { var ce = nearestEdge(w); if (!ce || ce.pc.locked) return; var k0 = C.ctrl(ce.pc, ce.seg); drag = { k: 'curv', pc: ce.pc, seg: ce.seg, a: w, mark: H.mark(), h2: ce.pc.nodes[ce.seg].h2, h1: ce.pc.nodes[(ce.seg + 1) % ce.pc.nodes.length].h1, k: 'curv', chord: [k0.p0, k0.p3] }; ST.seg = { pc: ce.pc.id, i: ce.seg }; ST.sel = [ce.pc.id]; refresh(); return; }
+      case 'addpt': { var ne = nearestEdge(w); if (!ne) return; if (ne.pc.locked) return toast('Unlock the piece first.', 1); act('Add point', function () { var nd = C.splitSeg(ne.pc, ne.seg, ne.t); ST.node = { pc: ne.pc.id, idx: [ne.pc.nodes.indexOf(nd)] }; ST.sel = [ne.pc.id]; }); toast('Point added ' + F(ne.s) + ' from the start of the edge.'); return; }
+      case 'curv': { var ce = nearestEdge(w); if (!ce || ce.pc.locked) return; var k0 = C.ctrl(ce.pc, ce.seg); startDrag({ k: 'curv', pc: ce.pc, seg: ce.seg, a: w, mark: H.mark(), h2: ce.pc.nodes[ce.seg].h2, h1: ce.pc.nodes[(ce.seg + 1) % ce.pc.nodes.length].h1, chord: [k0.p0, k0.p3], L0: C.segLen(ce.pc, ce.seg) }); ST.seg = { pc: ce.pc.id, i: ce.seg }; ST.sel = [ce.pc.id]; refresh(); return; }
       case 'smooth': { var se = nearestEdge(w); if (!se) return; act('Smooth curve', function () { var n2 = se.pc.nodes.length, r = C.smooth(se.pc, [(se.seg - 1 + n2) % n2, se.seg, (se.seg + 1) % n2], 1, 35); toast('Smoothed. Length change ' + (r.change >= 0 ? '+' : '−') + F(Math.abs(r.change)) + '. Sharp corners were kept.'); }); return; }
-      case 'notch': { var nn = nearestEdge(w); if (!nn) return toast('Click on an edge of a piece.', 1); act('Add notch', function () { var nt = { id: C.uid('nt'), seg: nn.seg, mode: 'dist', v: +nn.s.toFixed(2), from: 'start', type: 'single', depth: .6 }; nn.pc.notches.push(nt); ST.notch = nt.id; ST.sel = [nn.pc.id]; ST.node = ST.seg = null; }); return; }
+      case 'notch': { var nn = nearestEdge(w); if (!nn) return toast('Click on an edge of a piece.', 1); act('Add notch', function () { var nt = { id: C.uid('nt'), seg: nn.seg, mode: 'dist', v: +nn.s.toFixed(3), from: 'start', type: 'single', depth: .6 }; nn.pc.notches.push(nt); ST.notch = nt.id; ST.sel = [nn.pc.id]; ST.node = ST.seg = null; }); return; }
       case 'sa': case 'walk': { var ee = nearestEdge(w); if (!ee) return toast('Click on an edge of a piece.', 1); if (ST.tool === 'sa') { ST.seg = { pc: ee.pc.id, i: ee.seg }; ST.node = null; ST.sel = [ee.pc.id]; } else { if (ST.walk.length >= 2) ST.walk = []; ST.walk.push({ pc: ee.pc.id, seg: ee.seg }); } refresh(); return; }
-      case 'measure': { var me = ST.meas.length === 0 && sn.k !== 'point' && sn.k !== 'midpoint' ? nearestEdge(w) : null; if (me && t.classList.contains('ps-eh')) { ST.seg = { pc: me.pc.id, i: me.seg }; ST.node = null; toast(me.pc.name + ', edge ' + (me.seg + 1) + ': ' + F(me.L) + ' along the ' + (C.ctrl(me.pc, me.seg).curved ? 'curve' : 'line') + '.'); refresh(); return; } ST.meas.push(sn.p); opts(); drawOver(); return; }
+      case 'measure': { if (!ST.meas.length && t.classList.contains('ps-eh') && sn.k !== 'point' && sn.k !== 'midpoint') { var me = nearestEdge(w); if (me) { ST.seg = { pc: me.pc.id, i: me.seg }; ST.node = null; toast(me.pc.name + ', edge ' + (me.seg + 1) + ': ' + F(me.L) + ' along the ' + (C.ctrl(me.pc, me.seg).curved ? 'curve' : 'line') + '.'); refresh(); return; } } ST.meas.push(sn.p); opts(); drawOver(); return; }
       case 'merge': { var mg = nearestEdge(w); if (!mg) return toast('Click on an edge of a piece.', 1); if (ST.walk.length === 1 && ST.walk[0].pc === mg.pc.id) return toast('Click an edge on a different piece.', 1); ST.walk.push({ pc: mg.pc.id, seg: mg.seg }); if (ST.walk.length === 2) doMerge(); else { draw(); status(); } return; }
-      case 'trace': { var tr0 = nearestEdge(w); if (tr0 && t.classList.contains('ps-eh')) { var fw = ST.o.fw || 4; act('Trace facing', function () { var f = C.facing(tr0.pc, [tr0.seg], fw); f.x += 2; f.y += 2; P.pieces.push(f); ST.sel = [f.id]; }); toast('Facing traced, ' + F(fw) + ' wide. Move it off the piece and check it.'); return; } var tp = pieceAt(w); if (!tp) return toast('Click an edge, or inside an internal shape.', 1); var lw = W2L(tp, w), hit = tp.internals.filter(function (it) { if (it.kind === 'ellipse') return Math.pow((lw[0] - it.c[0]) / it.r[0], 2) + Math.pow((lw[1] - it.c[1]) / it.r[1], 2) <= 1; return it.pts.length > 2 && inside(it.pts, lw); })[0]; if (!hit) return toast('No internal shape here. Draw one with the Internal tools first.', 1); return traceIt(tp, hit); }
+      case 'trace': { var tr0 = nearestEdge(w); if (tr0 && t.classList.contains('ps-eh')) { var fw = ST.o.fw || 4; act('Trace facing', function () { var f = C.facing(tr0.pc, [tr0.seg], fw); f.x += 2; f.y += 2; P.pieces.push(f); ST.sel = [f.id]; }); toast('Facing traced, ' + F(fw) + ' wide. Move it off the piece and check it.'); return; } var tp = pieceAt(w); if (!tp) return toast('Click an edge, or inside an internal shape.', 1); var lw = W2L(tp, w), hit2 = tp.internals.filter(function (it) { if (it.kind === 'ellipse') return Math.pow((lw[0] - it.c[0]) / it.r[0], 2) + Math.pow((lw[1] - it.c[1]) / it.r[1], 2) <= 1; return it.pts.length > 2 && inside(it.pts, lw); })[0]; if (!hit2) return toast('No internal shape here. Draw one with the Internal tools first.', 1); return traceIt(tp, hit2); }
       case 'cut': { var ce2 = nearestEdge(w); if (!ce2) return toast('Click on the outline of a piece.', 1); if (ST.cut.length && ST.cut[0].pc !== ce2.pc.id) ST.cut = []; ST.cut.push({ pc: ce2.pc.id, seg: ce2.seg, t: ce2.t, p: ce2.p }); if (ST.cut.length === 2) doCut(); else drawOver(); status(); return; }
       case 'poly': {
         var d = ST.draft || (ST.draft = { kind: 'poly', pts: [] });
-        if (d.pts.length > 2 && C.dist(sn.p, d.pts[0].p) < 8 / ST.z) { finishPoly(); return; }
-        d.pts.push({ p: sn.p, h: null }); drag = { k: 'polyh', e: d.pts[d.pts.length - 1] }; opts(); drawOver(); status(); return;
+        if (d.pts.length > 2 && C.dist(sn.p, d.pts[0].p) < 9 / ST.z) { finishPoly(); return; }
+        d.pts.push({ p: sn.p, h: null }); startDrag({ k: 'polyh', e: d.pts[d.pts.length - 1] }); opts(); drawOver(); status(); return;
       }
-      case 'rect': case 'ellipse': drag = { k: 'box', a: sn.p, kind: ST.tool }; ST.draft = { kind: ST.tool, box: [sn.p[0], sn.p[1], sn.p[0], sn.p[1]] }; return;
+      case 'rect': case 'ellipse': startDrag({ k: 'box', a: sn.p, kind: ST.tool }); ST.draft = { kind: ST.tool, box: [sn.p[0], sn.p[1], sn.p[0], sn.p[1]] }; return;
       case 'spiral': create('mkspiral', sn.p); return;
       case 'iline': case 'irect': case 'iell': {
         var host = ST.draft && ST.draft.host ? pcById(ST.draft.host) : pieceAt(w); if (!host) return toast('Start inside a piece.', 1);
         if (ST.tool === 'iline') { var dd = ST.draft || (ST.draft = { kind: 'iline', host: host.id, pts: [] }); dd.pts.push({ p: sn.p }); drawOver(); return; }
-        drag = { k: 'box', a: sn.p, kind: ST.tool, host: host.id }; ST.draft = { kind: ST.tool, host: host.id, box: [sn.p[0], sn.p[1], sn.p[0], sn.p[1]] }; return;
+        startDrag({ k: 'box', a: sn.p, kind: ST.tool, host: host.id }); ST.draft = { kind: ST.tool, host: host.id, box: [sn.p[0], sn.p[1], sn.p[0], sn.p[1]] }; return;
       }
-      case 'grain': { var gp = pieceAt(w); if (!gp) return toast('Drag across a piece.', 1); drag = { k: 'grain', pc: gp, a: sn.p }; ST.draft = { line: [sn.p, sn.p] }; return; }
+      case 'grain': { var gp = pieceAt(w); if (!gp) return toast('Drag across a piece.', 1); startDrag({ k: 'grain', pc: gp, a: sn.p }); ST.draft = { line: [sn.p, sn.p] }; return; }
     }
   }
+  function moveQ(e) { pend = e; if (!praf) praf = requestAnimationFrame(function () { praf = 0; var ev = pend; pend = null; if (ev) move(ev); }); }
+  function constrain(a, p) { var dx = p[0] - a[0], dy = p[1] - a[1], ang = Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) * Math.PI / 4, l = Math.hypot(dx, dy) * Math.cos(Math.atan2(dy, dx) - ang); return [a[0] + Math.cos(ang) * l, a[1] + Math.sin(ang) * l]; }
+  function redrawLinked(pc) { P.pieces.forEach(function (o) { if (o.link && o.link.on && o.link.to === pc.id) drawPiece(o, true); }); }
   function move(e) {
-    var w = S2W(e); ST.cursor = w;
-    if (!drag) { var hov = ['poly', 'rect', 'ellipse', 'measure', 'iline', 'irect', 'iell', 'grain', 'spiral'].indexOf(ST.tool) >= 0 ? snap(w) : null; ST.hover = hov && hov.k !== 'grid' ? hov.p : null; if (ST.draft && ST.draft.pts) ST.draft.cur = hov ? hov.p : w; if (ST.tool === 'poly' && ST.draft && ST.draft.pts.length) { var lp = ST.draft.pts[ST.draft.pts.length - 1].p, c = ST.draft.cur; status('Length ' + F(C.dist(lp, c)) + ' · angle ' + (Math.atan2(-(c[1] - lp[1]), c[0] - lp[0]) * 180 / Math.PI).toFixed(1) + '°'); } else status(); drawOver(); return; }
+    var w = S2W(e), sx = W2S(w); ST.cursor = w;
+    if (!drag) {
+      var wants = ['poly', 'rect', 'ellipse', 'measure', 'iline', 'irect', 'iell', 'grain', 'spiral', 'cut', 'notch', 'addpt'].indexOf(ST.tool) >= 0, hov = wants ? snap(w, null, e) : null;
+      if (hov && (ST.tool === 'cut' || ST.tool === 'notch' || ST.tool === 'addpt')) { var ne = nearestEdge(w); hov = ne ? { p: L2W(ne.pc, ne.p), k: F(ne.s) + ' of ' + F(ne.L) } : null; }
+      ST.hover = hov && hov.k ? hov : null;
+      if (ST.draft && ST.draft.pts) ST.draft.cur = e.shiftKey && ST.draft.pts.length ? constrain(ST.draft.pts[ST.draft.pts.length - 1].p, hov ? hov.p : w) : hov ? hov.p : w;
+      if (ST.tool === 'measure' && ST.meas.length) { ST.mcur = e.shiftKey ? constrain(ST.meas[ST.meas.length - 1], hov ? hov.p : w) : hov ? hov.p : w; var lm = ST.meas[ST.meas.length - 1]; ST.live = { at: sx, t: F(C.dist(lm, ST.mcur)) + ' · ' + (Math.atan2(-(ST.mcur[1] - lm[1]), ST.mcur[0] - lm[0]) * 180 / Math.PI).toFixed(1) + '°' }; }
+      else if (ST.tool === 'poly' && ST.draft && ST.draft.pts.length) { var lp = ST.draft.pts[ST.draft.pts.length - 1].p, c = ST.draft.cur; ST.live = { at: sx, t: F(C.dist(lp, c)) + ' · ' + (Math.atan2(-(c[1] - lp[1]), c[0] - lp[0]) * 180 / Math.PI).toFixed(1) + '°' }; }
+      else ST.live = null;
+      status(); drawOver(); drawPts(); drawRulers(); return;
+    }
     var d = drag;
-    if (d.k === 'pan') { ST.tx = d.tx + e.clientX - d.x; ST.ty = d.ty + e.clientY - d.y; draw(); return; }
-    if (d.k === 'marq') { ST.marq = [Math.min(d.a[0], w[0]), Math.min(d.a[1], w[1]), Math.max(d.a[0], w[0]), Math.max(d.a[1], w[1])]; drawOver(); return; }
-    if (d.k === 'move') { var dx = w[0] - d.a[0], dy = w[1] - d.a[1]; if (V().snap && d.pcs.length) { var g = gridStep(); dx = Math.round(dx / g) * g; dy = Math.round(dy / g) * g; } d.pcs.forEach(function (o) { o[0].x = o[1] + dx; o[0].y = o[2] + dy; }); d.moved = true; draw(); status('Moved ' + F(dx) + ', ' + F(dy)); return; }
-    if (d.k === 'nodes') { var pc = d.pc, idx = d.idx || ST.node.idx, sn = snap(w, { pc: pc, idx: idx }), lead = d.idx ? d.start[idx[0]] : d.start[ST.node.idx[0]], a = d.idx ? d.a : null, ddx, ddy;
-      if (d.idx) { ddx = w[0] - a[0]; ddy = w[1] - a[1]; } else { var tgt = W2L(pc, sn.p); ddx = tgt[0] - lead[0]; ddy = tgt[1] - lead[1]; if (e.shiftKey) { if (Math.abs(ddx) > Math.abs(ddy)) ddy = 0; else ddx = 0; } }
-      idx.forEach(function (i) { pc.nodes[i].x = d.start[i][0] + ddx; pc.nodes[i].y = d.start[i][1] + ddy; }); d.moved = true; syncLinks(); draw(); status('Moved ' + F(ddx) + ', ' + F(ddy)); return; }
-    if (d.k === 'handle') { var nd = d.pc.nodes[d.n], l = W2L(d.pc, w), v = [l[0] - nd.x, l[1] - nd.y]; nd[d.h] = v; var o = d.h === 'h1' ? 'h2' : 'h1'; if (nd.smooth && nd[o] && !e.altKey) { var ol = Math.hypot(nd[o][0], nd[o][1]), vl = Math.hypot(v[0], v[1]) || 1; nd[o] = [-v[0] / vl * ol, -v[1] / vl * ol]; } d.moved = true; syncLinks(); draw(); return; }
-    if (d.k === 'curv') { var ch = d.chord, cd = [ch[1][0] - ch[0][0], ch[1][1] - ch[0][1]], cl = Math.hypot(cd[0], cd[1]) || 1, nx = -cd[1] / cl, ny = cd[0] / cl, lw = W2L(d.pc, w), la = W2L(d.pc, d.a), off = (lw[0] - la[0]) * nx + (lw[1] - la[1]) * ny, pc2 = d.pc, a2 = pc2.nodes[d.seg], b2 = pc2.nodes[(d.seg + 1) % pc2.nodes.length], k4 = off * 4 / 3, base2 = d.h2 || [cd[0] / 3, cd[1] / 3], base1 = d.h1 || [-cd[0] / 3, -cd[1] / 3]; a2.h2 = [base2[0] + nx * k4, base2[1] + ny * k4]; b2.h1 = [base1[0] + nx * k4, base1[1] + ny * k4]; d.moved = true; syncLinks(); draw(); status('Bend ' + F(off) + ' · edge ' + F(C.segLen(pc2, d.seg))); return; }
-    if (d.k === 'polyh') { var e2 = d.e, hv = [w[0] - e2.p[0], w[1] - e2.p[1]]; if (Math.hypot(hv[0], hv[1]) * ST.z > 4) e2.h = hv; return; }
-    if (d.k === 'box') { var sn2 = snap(w), b = [d.a[0], d.a[1], sn2.p[0], sn2.p[1]]; if (e.shiftKey && (d.kind === 'ellipse' || d.kind === 'rect')) { var s = Math.max(Math.abs(b[2] - b[0]), Math.abs(b[3] - b[1])); b[2] = b[0] + s * Math.sign(b[2] - b[0] || 1); b[3] = b[1] + s * Math.sign(b[3] - b[1] || 1); } ST.draft.box = b; status(F(Math.abs(b[2] - b[0])) + ' × ' + F(Math.abs(b[3] - b[1]))); drawOver(); return; }
-    if (d.k === 'grain') { var sn3 = snap(w), p = sn3.p; if (e.shiftKey) { var gx = p[0] - d.a[0], gy = p[1] - d.a[1], ang = Math.round(Math.atan2(gy, gx) / (Math.PI / 4)) * Math.PI / 4, gl = Math.hypot(gx, gy); p = [d.a[0] + Math.cos(ang) * gl, d.a[1] + Math.sin(ang) * gl]; } ST.draft.line = [d.a, p]; drawOver(); return; }
+    if (d.k === 'pan') { ST.tx = d.tx + e.clientX - d.x; ST.ty = d.ty + e.clientY - d.y; drawView(); return; }
+    if (d.k === 'marq' || d.k === 'marqn') { ST.marq = [Math.min(d.a[0], w[0]), Math.min(d.a[1], w[1]), Math.max(d.a[0], w[0]), Math.max(d.a[1], w[1])]; drawOver(); return; }
+    if (d.k === 'move') { var dx = w[0] - d.a[0], dy = w[1] - d.a[1];
+      if (V().snap && !e.altKey) { var g = gridStep(), cx = d.corner[0] + dx, cy = d.corner[1] + dy; dx += Math.round(cx / g) * g - cx; dy += Math.round(cy / g) * g - cy; }
+      if (e.shiftKey) { if (Math.abs(dx) > Math.abs(dy)) dy = 0; else dx = 0; }
+      d.pcs.forEach(function (o) { o[0].x = o[1] + dx; o[0].y = o[2] + dy; placeG(o[0]); }); d.moved = true; ST.live = { at: sx, t: 'Δ ' + F(dx) + ', ' + F(dy) }; drawPts(); status(); return; }
+    if (d.k === 'nodes') { var pc = d.pc, idx = d.idx || ST.node.idx, want = [w[0] - d.off[0], w[1] - d.off[1]], sn = snap(want, { pc: pc, idx: idx }, e), tgt = sn.p, st0 = d.start[d.lead];
+      if (e.shiftKey) tgt = constrain(L2W(pc, st0), tgt);
+      var tl = W2L(pc, tgt), ddx = tl[0] - st0[0], ddy = tl[1] - st0[1];
+      idx.forEach(function (i) { pc.nodes[i].x = d.start[i][0] + ddx; pc.nodes[i].y = d.start[i][1] + ddy; }); d.moved = true; syncLinks();
+      var n = pc.nodes.length, info;
+      if (d.seg != null) info = 'Δ ' + F(ddx) + ', ' + F(ddy) + ' · edges ' + F(C.segLen(pc, (d.seg - 1 + n) % n)) + ' | ' + F(C.segLen(pc, (d.seg + 1) % n));
+      else info = 'Δ ' + F(ddx) + ', ' + F(ddy) + ' · edges ' + F(C.segLen(pc, (d.lead - 1 + n) % n)) + ' | ' + F(C.segLen(pc, d.lead));
+      ST.hover = sn.k ? { p: tgt, k: sn.k } : null; ST.live = { at: sx, t: info }; drawPiece(pc, true); redrawLinked(pc); drawPts(); status(); return; }
+    if (d.k === 'handle') { var nd = d.pc.nodes[d.n], l = W2L(d.pc, w), v = [l[0] - nd.x, l[1] - nd.y]; if (e.shiftKey) { var hv = constrain([0, 0], v); v = hv; } nd[d.h] = v; var o = d.h === 'h1' ? 'h2' : 'h1'; if (nd.smooth && nd[o] && !e.altKey) { var ol = Math.hypot(nd[o][0], nd[o][1]), vl = Math.hypot(v[0], v[1]) || 1; nd[o] = [-v[0] / vl * ol, -v[1] / vl * ol]; } d.moved = true; syncLinks();
+      var nn2 = d.pc.nodes.length, sgi = d.h === 'h2' ? d.n : (d.n - 1 + nn2) % nn2; ST.live = { at: sx, t: 'Edge ' + (sgi + 1) + ': ' + F(C.segLen(d.pc, sgi)) + (nd.smooth && !e.altKey ? ' · smooth' : '') }; drawPiece(d.pc, true); redrawLinked(d.pc); drawPts(); return; }
+    if (d.k === 'curv') { var ch = d.chord, cd = [ch[1][0] - ch[0][0], ch[1][1] - ch[0][1]], cl = Math.hypot(cd[0], cd[1]) || 1, nx = -cd[1] / cl, ny = cd[0] / cl, lw = W2L(d.pc, w), la = W2L(d.pc, d.a), off = (lw[0] - la[0]) * nx + (lw[1] - la[1]) * ny, pc2 = d.pc, a2 = pc2.nodes[d.seg], b2 = pc2.nodes[(d.seg + 1) % pc2.nodes.length], k4 = off * 4 / 3, base2 = d.h2 || [cd[0] / 3, cd[1] / 3], base1 = d.h1 || [-cd[0] / 3, -cd[1] / 3]; a2.h2 = [base2[0] + nx * k4, base2[1] + ny * k4]; b2.h1 = [base1[0] + nx * k4, base1[1] + ny * k4]; d.moved = true; syncLinks();
+      var Ln = C.segLen(pc2, d.seg); ST.live = { at: sx, t: 'Bend ' + F(off) + ' · edge ' + F(Ln) + ' (' + (Ln - d.L0 >= 0 ? '+' : '−') + F(Math.abs(Ln - d.L0)) + ')' }; drawPiece(pc2, true); redrawLinked(pc2); drawPts(); return; }
+    if (d.k === 'polyh') { var e2 = d.e, hv2 = [w[0] - e2.p[0], w[1] - e2.p[1]]; if (Math.hypot(hv2[0], hv2[1]) * ST.z > 4) e2.h = hv2; return; }
+    if (d.k === 'box') { var sn2 = snap(w, null, e), b = [d.a[0], d.a[1], sn2.p[0], sn2.p[1]]; if (e.shiftKey && (d.kind === 'ellipse' || d.kind === 'rect' || d.kind === 'iell' || d.kind === 'irect')) { var s = Math.max(Math.abs(b[2] - b[0]), Math.abs(b[3] - b[1])); b[2] = b[0] + s * Math.sign(b[2] - b[0] || 1); b[3] = b[1] + s * Math.sign(b[3] - b[1] || 1); } ST.draft.box = b; ST.hover = sn2.k ? sn2 : null; ST.live = { at: sx, t: F(Math.abs(b[2] - b[0])) + ' × ' + F(Math.abs(b[3] - b[1])) }; drawOver(); drawPts(); return; }
+    if (d.k === 'grain') { var sn3 = snap(w, null, e), p = sn3.p; if (e.shiftKey) p = constrain(d.a, p); ST.draft.line = [d.a, p]; ST.live = { at: sx, t: F(C.dist(d.a, p)) + ' · ' + (Math.atan2(-(p[1] - d.a[1]), p[0] - d.a[0]) * 180 / Math.PI).toFixed(1) + '°' }; drawOver(); drawPts(); return; }
   }
   function up(e) {
-    var d = drag; drag = null; if (!d) return;
-    if (d.k === 'marq') { var m = ST.marq; ST.marq = null; if (m && (m[2] - m[0]) * ST.z > 3) { P.pieces.forEach(function (pc) { if (pc.hidden) return; var b = bboxW(pc); if (b[0] >= m[0] && b[2] <= m[2] && b[1] >= m[1] && b[3] <= m[3] && ST.sel.indexOf(pc.id) < 0) ST.sel.push(pc.id); }); } refresh(); return; }
-    if ((d.k === 'move' || d.k === 'nodes' || d.k === 'handle' || d.k === 'curv') && d.moved) { var label = { move: 'Move', nodes: 'Move point', handle: 'Reshape curve', curv: 'Edit curvature' }[d.k]; H.commit(label, d.mark); if (d.pc) { var iss = C.validate(d.pc); if (iss.some(function (x) { return x.k === 'cross'; })) toast(iss.filter(function (x) { return x.k === 'cross'; })[0].msg + ' Undo with Ctrl Z.', 1); } refresh(); return; }
-    if (d.k === 'box') { var b = ST.draft.box, w = Math.abs(b[2] - b[0]), h = Math.abs(b[3] - b[1]), x0 = Math.min(b[0], b[2]), y0 = Math.min(b[1], b[3]); ST.draft = null; if (w * ST.z < 4 || h * ST.z < 4) { drawOver(); if (d.kind === 'rect' || d.kind === 'ellipse') create(d.kind === 'rect' ? 'mkrect' : 'mkell', b.slice(0, 2)); return; }
+    if (pend) { var ev = pend; pend = null; move(ev); }
+    var d = drag; drag = null; ST.live = null; if (!d) return;
+    if (d.k === 'pan') { drawPts(); return; }
+    if (d.k === 'marq' || d.k === 'marqn') { var m = ST.marq; ST.marq = null; if (m && (m[2] - m[0]) * ST.z > 3) {
+        if (d.k === 'marq') P.pieces.forEach(function (pc) { if (pc.hidden) return; var b = bboxW(pc); if (b[0] >= m[0] && b[2] <= m[2] && b[1] >= m[1] && b[3] <= m[3] && ST.sel.indexOf(pc.id) < 0) ST.sel.push(pc.id); });
+        else { var hitN = null; P.pieces.forEach(function (pc) { if (pc.hidden || pc.locked) return; var ids = []; pc.nodes.forEach(function (nd, i) { var q2 = L2W(pc, [nd.x, nd.y]); if (q2[0] >= m[0] && q2[0] <= m[2] && q2[1] >= m[1] && q2[1] <= m[3]) ids.push(i); }); if (ids.length && !hitN) hitN = { pc: pc.id, idx: ids }; }); if (hitN) { ST.node = hitN; ST.sel = [hitN.pc]; } } }
+      refresh(); return; }
+    if ((d.k === 'move' || d.k === 'nodes' || d.k === 'handle' || d.k === 'curv') && d.moved) { var label = { move: 'Move', nodes: 'Move point', handle: 'Reshape curve', curv: 'Edit curvature' }[d.k]; H.commit(label, d.mark); ST.hover = null; if (d.pc) { var iss = geo(d.pc).issues; if (iss.some(function (x) { return x.k === 'cross'; })) toast(iss.filter(function (x) { return x.k === 'cross'; })[0].msg + ' Undo with Ctrl Z.', 1); } refresh(); return; }
+    if (d.k === 'move' || d.k === 'nodes' || d.k === 'handle' || d.k === 'curv') { drawPts(); return; }
+    if (d.k === 'box') { var b = ST.draft.box, w = Math.abs(b[2] - b[0]), h = Math.abs(b[3] - b[1]), x0 = Math.min(b[0], b[2]), y0 = Math.min(b[1], b[3]); ST.draft = null; ST.hover = null; if (w * ST.z < 4 || h * ST.z < 4) { drawOver(); drawPts(); if (d.kind === 'rect' || d.kind === 'ellipse') create(d.kind === 'rect' ? 'mkrect' : 'mkell', b.slice(0, 2)); return; }
       if (d.kind === 'rect') act('Draw rectangle', function () { var r = C.rect(x0, y0, w, h, { name: 'Piece ' + (P.pieces.length + 1) }); P.pieces.push(r); ST.sel = [r.id]; });
       else if (d.kind === 'ellipse') act('Draw ellipse', function () { var r = C.ellipse(x0 + w / 2, y0 + h / 2, w / 2, h / 2, 0, { name: 'Piece ' + (P.pieces.length + 1) }); r.sa.def = Math.min(1, Math.min(w, h) / 6); P.pieces.push(r); ST.sel = [r.id]; });
       else { var host = pcById(d.host), a = W2L(host, [x0, y0]); act('Add internal shape', function () { var it = d.kind === 'irect' ? { id: C.uid('in'), kind: 'rect', pts: [a, [a[0] + w, a[1]], [a[0] + w, a[1] + h], [a[0], a[1] + h]], purpose: 'placement', style: 'solid', label: '', visible: true } : { id: C.uid('in'), kind: 'ellipse', c: [a[0] + w / 2, a[1] + h / 2], r: [w / 2, h / 2], pts: [[a[0] + w / 2, a[1] + h / 2]], purpose: 'placement', style: 'solid', label: '', visible: true }; host.internals.push(it); ST.it = it.id; ST.sel = [host.id]; }); }
       return; }
-    if (d.k === 'grain') { var ln = ST.draft.line; ST.draft = null; if (C.dist(ln[0], ln[1]) * ST.z < 6) { drawOver(); return; } act('Set grainline', function () { d.pc.grain = { a: W2L(d.pc, ln[0]), b: W2L(d.pc, ln[1]) }; ST.sel = [d.pc.id]; }); return; }
+    if (d.k === 'grain') { var ln = ST.draft.line; ST.draft = null; if (C.dist(ln[0], ln[1]) * ST.z < 6) { drawOver(); drawPts(); return; } act('Set grainline', function () { d.pc.grain = { a: W2L(d.pc, ln[0]), b: W2L(d.pc, ln[1]) }; ST.sel = [d.pc.id]; }); return; }
+    drawPts();
   }
   function dbl(e) {
     if (ST.tool === 'poly' && ST.draft) { ST.draft.pts.pop(); finishPoly(); return; }
@@ -3124,9 +3224,12 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
     toast('Merged. The edges differed by ' + F(Math.abs(r.diff)) + (Math.abs(r.diff) > .3 ? ': check the new seam line' : '') + '.' + (r.dropped ? ' Notches on the second piece were not kept.' : ''));
   }
   function traceIt(pc, it) { var f = C.fromInternal(pc, it); if (!f) return toast('Only closed shapes can be traced to a piece.', 1); act('Trace to a piece', function () { var b = C.bbox(pc); f.x = pc.x + (b[2] - b[0]) + 6; P.pieces.push(f); ST.sel = [f.id]; ST.it = null; }); toast('Traced "' + f.name + '" as a new piece beside ' + pc.name + '.'); }
-  function wheel(e) { e.preventDefault(); var r = svg.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top; if (e.ctrlKey || e.metaKey || !e.shiftKey && Math.abs(e.deltaY) > 0 && !e.deltaX) { var f = Math.exp(-e.deltaY * .0015), z2 = Math.max(.5, Math.min(120, ST.z * f)); ST.tx = mx - (mx - ST.tx) * z2 / ST.z; ST.ty = my - (my - ST.ty) * z2 / ST.z; ST.z = z2; } else { ST.tx -= e.deltaX; ST.ty -= e.deltaY; } draw(); }
+  function wheel(e) { e.preventDefault(); var r = svg.getBoundingClientRect(), mx = e.clientX - r.left, my = e.clientY - r.top; if (e.ctrlKey || e.metaKey || !e.shiftKey && Math.abs(e.deltaY) > 0 && !e.deltaX) { var f = Math.exp(-e.deltaY * .0015), z2 = Math.max(.5, Math.min(120, ST.z * f)); ST.tx = mx - (mx - ST.tx) * z2 / ST.z; ST.ty = my - (my - ST.ty) * z2 / ST.z; ST.z = z2; } else { ST.tx -= e.deltaX; ST.ty -= e.deltaY; } drawView(); }
+  function zoomAt(z2, mx, my) { var r = svg.getBoundingClientRect(); if (mx == null) { mx = r.width / 2; my = r.height / 2; } z2 = Math.max(.5, Math.min(160, z2)); ST.tx = mx - (mx - ST.tx) * z2 / ST.z; ST.ty = my - (my - ST.ty) * z2 / ST.z; ST.z = z2; drawView(); }
   function key(e) {
-    if (!root || root.hidden) return; var tg = e.target, typing = /INPUT|TEXTAREA|SELECT/.test(tg.tagName); var mod = e.ctrlKey || e.metaKey;
+    if (!ON) return; var tg = e.target, typing = /INPUT|TEXTAREA|SELECT/.test(tg.tagName) || tg.isContentEditable; var mod = e.ctrlKey || e.metaKey;
+    if (q('#ps-modal').hidden === false && e.key !== 'Escape') return;
+    if (!typing || mod) e.stopPropagation();
     if (mod && e.key.toLowerCase() === 'z') { e.preventDefault(); doAct(e.shiftKey ? 'redo' : 'undo'); return; }
     if (mod && e.key.toLowerCase() === 'y') { e.preventDefault(); doAct('redo'); return; }
     if (mod && e.key.toLowerCase() === 's') { e.preventDefault(); doAct(e.shiftKey ? 'saveas' : 'save'); return; }
@@ -3140,7 +3243,7 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
     if (e.key === 'Enter') { if (ST.tool === 'poly' && ST.draft) finishPoly(); else if (ST.tool === 'iline' && ST.draft) finishILine(); return; }
     if (e.key === 'Backspace' && ST.draft && ST.draft.pts) { ST.draft.pts.pop(); if (!ST.draft.pts.length) ST.draft = null; drawOver(); status(); e.preventDefault(); return; }
     if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); if (ST.node) doAct('ndel'); else if (ST.notch) doAct('ntdel'); else if (ST.it) doAct('itdel'); else if (ST.sel.length) doAct('del'); return; }
-    if (/^Arrow/.test(e.key)) { e.preventDefault(); var st = gridStep() * (e.shiftKey ? 10 : 1), dx = e.key === 'ArrowLeft' ? -st : e.key === 'ArrowRight' ? st : 0, dy = e.key === 'ArrowUp' ? -st : e.key === 'ArrowDown' ? st : 0; if (ST.node) act('Nudge points', function () { C.moveNodes(pcById(ST.node.pc), ST.node.idx, dx, dy); }); else if (ST.sel.length) act('Nudge', function () { selected().forEach(function (p) { if (!p.locked) { p.x += dx; p.y += dy; } }); }); return; }
+    if (/^Arrow/.test(e.key)) { e.preventDefault(); var st = nudgeStep(e.shiftKey), dx = e.key === 'ArrowLeft' ? -st : e.key === 'ArrowRight' ? st : 0, dy = e.key === 'ArrowUp' ? -st : e.key === 'ArrowDown' ? st : 0; if (ST.node) act('Nudge points', function () { C.moveNodes(pcById(ST.node.pc), ST.node.idx, dx, dy); }); else if (ST.sel.length) act('Nudge', function () { selected().forEach(function (p) { if (!p.locked) { p.x += dx; p.y += dy; } }); }); return; }
     if (e.key === '0') return fit(); if (e.key === '1') return doAct('z100');
     var t = TOOLS.filter(function (x) { return x.k === e.key.toLowerCase(); })[0]; if (t) setTool(t.id);
   }
@@ -3168,13 +3271,9 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
 
   /* ---------- bring in a draft ---------- */
   function fromDraft() {
-    var UI = window.PMUI, last = UI && UI.last && UI.last(); if (!last || !last.r) return toast('Draft a garment in Pattern Maker first.', 1);
-    var s = UI.S(), pcs = C.fromDraft(last.r, { size: s.size === 'custom' ? 'Custom' : s.size, sa: s.sa, hem: s.hemA, dept: s.gender });
-    var x = 0; pcs.forEach(function (pc, i) { var st = (s.pc || {})[last.r.pieces[i].id] || {}; if (st.on === false) { pc._skip = 1; return; } if (st.sa != null) pc.sa.def = st.sa; if (st.hem != null) pc.sa.hem = st.hem; if (st.name) pc.name = st.name; var b = C.bbox(pc); pc.x = x - b[0] + 2; pc.y = 2 - b[1]; x += b[2] - b[0] + 5; });
-    pcs = pcs.filter(function (pc) { return !pc._skip; });
-    var add = function () { act('Bring in draft', function () { pcs.forEach(function (pc) { P.pieces.push(pc); }); if (!P.pieces.length || P.name === 'Untitled pattern') P.name = (last.r.label || 'Pattern') + ' · ' + (s.size === 'custom' ? 'custom' : s.size); ST.sel = pcs.map(function (p) { return p.id; }); }); fit(); var bad = pcs.filter(function (p) { return C.validate(p).length; }); toast(pcs.length + ' pieces brought in as editable outlines' + (bad.length ? '. ' + bad.length + ' need a look: see the ! in Pieces.' : '.')); };
-    if (P.pieces.length) modal('<h4>Bring in the draft</h4><p>Add the ' + pcs.length + ' pieces of ' + esc(last.r.label || 'the draft') + ' to this project, or start a new project with them?</p><div class="ps-bs"><button type="button" class="ps-b pri" id="ps-fadd">Add to this project</button><button type="button" class="ps-b" id="ps-fnew">New project</button><button type="button" class="ps-b" data-a="mclose">Cancel</button></div>', function () { q('#ps-fadd').onclick = function () { closeModal(); add(); }; q('#ps-fnew').onclick = function () { closeModal(); confirmDiscard(function () { newProject(); add(); }); }; });
-    else add();
+    var UI = window.PMUI, last = UI && UI.last && UI.last(); if (!last || !last.r) return toast('Choose a garment in Draft first.', 1);
+    if (!P.pieces.length) return bringDraft('new');
+    modal('<h4>Bring in the draft</h4><p>' + esc(draftName()) + ': replace the pieces you have, or add the draft pieces beside them?</p><div class="ps-bs"><button type="button" class="ps-b pri" id="ps-fadd">Add beside</button><button type="button" class="ps-b" id="ps-frep">Replace my pieces</button><button type="button" class="ps-b" data-a="mclose">Cancel</button></div>', function () { q('#ps-fadd').onclick = function () { closeModal(); bringDraft('add'); }; q('#ps-frep').onclick = function () { closeModal(); bringDraft('replace'); }; });
   }
 
   /* ---------- DXF import ---------- */
@@ -3256,133 +3355,154 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
     if (a === 'xpng') X.png(X.svg(s.sc, s.W, s.H, P.unit, { title: P.name }), s.W, s.H, function (b) { dl(fname('png'), b); toast('PNG downloaded.'); });
   }
 
-  /* ---------- modes ---------- */
-  function setMode(m) { ST.mode = m; qa('#ps-mode button').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.mode === m); }); var three = q('#ps-3d'); three.hidden = m === '2d'; root.classList.toggle('m3d', m === '3d'); root.classList.toggle('msplit', m === 'split'); setTimeout(draw, 30); }
-
   /* ---------- wiring ---------- */
+  function onClick(e) {
+    var mb = e.target.closest('.ps-mb'); if (mb) { var dd = q('[data-mm=' + mb.dataset.m + ']'), was = dd.hidden; qa('.ps-dd').forEach(function (x) { x.hidden = true; }); dd.hidden = !was; e.stopPropagation(); return; }
+    if (!e.target.closest('.ps-dd')) qa('.ps-dd').forEach(function (x) { x.hidden = true; });
+    var pm = e.target.closest('[data-pmode]'); if (pm) return setEdit(pm.dataset.pmode === 'edit');
+    var tb = e.target.closest('.ps-tb'); if (tb) return setTool(tb.dataset.t);
+    var a = e.target.closest('[data-a]'); if (a) { qa('.ps-dd').forEach(function (x) { x.hidden = true; }); if (a.dataset.a === 'mclose') return closeModal(); if (a.dataset.a === 'mclear') { ST.meas = []; ST.mcur = null; opts(); return drawOver(); } return doAct(a.dataset.a, a); }
+    var ob = e.target.closest('.ps-ob'); if (ob) { var id = ob.dataset.pc; if (e.shiftKey) { var i = ST.sel.indexOf(id); if (i >= 0) ST.sel.splice(i, 1); else ST.sel.push(id); } else ST.sel = [id]; ST.node = ST.seg = ST.notch = ST.it = null; return refresh(); }
+    var it = e.target.closest('[data-it]'); if (it) { ST.it = it.dataset.it; ST.sel = [it.dataset.pc]; ST.node = ST.seg = ST.notch = null; return refresh(); }
+  }
   function wire() {
-    root.addEventListener('click', function (e) {
-      var mb = e.target.closest('.ps-mb'); if (mb) { var dd = q('[data-mm=' + mb.dataset.m + ']'), was = dd.hidden; qa('.ps-dd').forEach(function (x) { x.hidden = true; }); dd.hidden = !was; e.stopPropagation(); return; }
-      if (!e.target.closest('.ps-dd')) qa('.ps-dd').forEach(function (x) { x.hidden = true; });
-      var tb = e.target.closest('.ps-tb'); if (tb) return setTool(tb.dataset.t);
-      var a = e.target.closest('[data-a]'); if (a) { qa('.ps-dd').forEach(function (x) { x.hidden = true; }); if (a.dataset.a === 'mclose') return closeModal(); if (a.dataset.a === 'mclear') { ST.meas = []; opts(); return drawOver(); } return doAct(a.dataset.a, a); }
-      var u = e.target.closest('[data-u]'); if (u && u.closest('#ps-units')) { P.unit = u.dataset.u; pref.unit = P.unit; ls(PREF, pref); opts(); return refresh(); }
-      var md = e.target.closest('[data-mode]'); if (md) return setMode(md.dataset.mode);
-      var ob = e.target.closest('.ps-ob'); if (ob) { var id = ob.dataset.pc; if (e.shiftKey) { var i = ST.sel.indexOf(id); if (i >= 0) ST.sel.splice(i, 1); else ST.sel.push(id); } else ST.sel = [id]; ST.node = ST.seg = ST.notch = ST.it = null; return refresh(); }
-      var it = e.target.closest('[data-it]'); if (it) { ST.it = it.dataset.it; ST.sel = [it.dataset.pc]; ST.node = ST.seg = ST.notch = null; return refresh(); }
-    });
+    parts.forEach(function (p) { p.addEventListener('click', onClick); });
+    document.addEventListener('click', function (e) { if (!e.target.closest('.ps-menu')) qa('.ps-dd').forEach(function (x) { x.hidden = true; }); });
     q('#ps-name').addEventListener('change', function () { var v = this.value.trim() || 'Untitled pattern'; act('Rename project', function () { P.name = v; }); });
     propsEl.addEventListener('change', onProp);
+    propsEl.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.matches('input[type=number],input:not([type])')) { e.target.blur(); } });
     optsEl.addEventListener('change', function (e) { var k = e.target.dataset.o; if (!k) return; ST.o[k] = k === 'dir' ? e.target.value : k === 'turns' ? +e.target.value : CM(e.target.value); opts(); });
-    root.addEventListener('change', function (e) { var v = e.target.dataset.v; if (!v) return; act('View', function () { V()[v] = e.target.checked; }); });
-    svg.addEventListener('pointerdown', down); svg.addEventListener('pointermove', move); svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', function () { drag = null; }); svg.addEventListener('dblclick', dbl); svg.addEventListener('wheel', wheel, { passive: false });
-    svg.addEventListener('pointerleave', function () { ST.cursor = null; ST.hover = null; status(); drawOver(); });
-    document.addEventListener('keydown', key); document.addEventListener('keyup', function (e) { if (e.key === ' ') { space = false; svg.style.cursor = ''; } });
-    window.addEventListener('resize', function () { if (!root.hidden) draw(); });
-    q('#ps-tsearch').addEventListener('input', function () { var s = this.value.trim().toLowerCase(); qa('.ps-tb').forEach(function (b) { var t = TOOL[b.dataset.t]; b.hidden = s && (t.n + ' ' + t.g + ' ' + t.tip).toLowerCase().indexOf(s) < 0; }); qa('.ps-tg').forEach(function (g) { g.hidden = !g.querySelector('.ps-tb:not([hidden])'); }); });
-    var tip = q('#ps-tip'); root.addEventListener('pointerover', function (e) { var b = e.target.closest('[data-tip]'); if (!b) { tip.hidden = true; return; } var r = b.getBoundingClientRect(), R = root.getBoundingClientRect(); tip.textContent = b.dataset.tip; tip.hidden = false; tip.style.left = (r.right - R.left + 8) + 'px'; tip.style.top = Math.max(4, r.top - R.top) + 'px'; });
-    root.addEventListener('pointerout', function (e) { if (e.target.closest('[data-tip]')) tip.hidden = true; });
+    barEl.addEventListener('change', function (e) { var v = e.target.dataset.v; if (!v) return; act('View', function () { V()[v] = e.target.checked; }); });
+    svg.addEventListener('pointerdown', down); svg.addEventListener('pointermove', moveQ); svg.addEventListener('pointerup', up); svg.addEventListener('pointercancel', function () { drag = null; ST.live = null; drawPts(); }); svg.addEventListener('dblclick', dbl); svg.addEventListener('wheel', wheel, { passive: false });
+    svg.addEventListener('pointerleave', function () { if (drag) return; ST.cursor = null; ST.hover = null; ST.live = null; status(); drawPts(); drawRulers(); });
+    window.addEventListener('keydown', key, true); window.addEventListener('keyup', function (e) { if (e.key === ' ' && ON) { space = false; svg.style.cursor = ''; } }, true);
+    var ro = window.ResizeObserver ? new ResizeObserver(function () { if (ON) drawView(); }) : null; if (ro) ro.observe(svg); else window.addEventListener('resize', function () { if (ON) drawView(); });
+    q('#ps-tsearch').addEventListener('input', function () { var s = this.value.trim().toLowerCase(); qa('.ps-tb').forEach(function (b) { var t = TOOL[b.dataset.t]; b.hidden = !!s && (t.n + ' ' + t.g + ' ' + t.tip).toLowerCase().indexOf(s) < 0; }); qa('.ps-tg').forEach(function (g) { g.hidden = !g.querySelector('.ps-tb:not([hidden])'); }); });
+    q('#ps-tsearch').addEventListener('keydown', function (e) { if (e.key === 'Enter') { var b = qa('.ps-tb').filter(function (x) { return !x.hidden; })[0]; if (b) { setTool(b.dataset.t); this.blur(); } } });
+    parts.forEach(function (p) { p.addEventListener('pointerover', function (e) { var b = e.target.closest('[data-tip]'); if (!b) { tipEl.hidden = true; return; } var r = b.getBoundingClientRect(); tipEl.textContent = b.dataset.tip; tipEl.hidden = false; var x = r.right + 8; if (x + 270 > innerWidth) x = Math.max(8, r.left - 278); tipEl.style.left = x + 'px'; tipEl.style.top = Math.min(innerHeight - 90, Math.max(4, r.top)) + 'px'; }); p.addEventListener('pointerout', function (e) { if (e.target.closest('[data-tip]')) tipEl.hidden = true; }); });
     q('#ps-file').addEventListener('change', function () { var f = this.files[0]; this.value = ''; if (!f) return; f.text().then(function (t) { try { var p = C.parse(t); confirmDiscard(function () { load(p); P.lib = null; ST.fileName = f.name; toast('Opened ' + f.name + '. Save it to keep it in this browser.'); }); } catch (err) { toast(err.message || 'Could not read that file.', 1); } }); });
     q('#ps-dxf').addEventListener('change', function () { var f = this.files[0]; this.value = ''; if (!f) return; f.text().then(function (t) { importDXF(t, f.name); }); });
-    window.addEventListener('beforeunload', function () { if (!root.hidden && ST.dirty) autosave(); });
+    window.addEventListener('beforeunload', function () { if (ST.dirty) autosave(); });
+    // the units switch of Pattern Maker drives the editor too
+    document.addEventListener('click', function (e) { if (e.target.closest('#pm-units [data-u]')) setTimeout(function () { P.unit = unitNow(); if (ON) { opts(); refresh(); } }, 0); });
+    // collapsing the left panel in edit mode keeps the tools as an icon rail
+    var hl = document.getElementById('pm-hidel'); if (hl) hl.addEventListener('click', function () { if (ON) setTimeout(drawView, 30); });
+    var hr = document.getElementById('pm-hider'); if (hr) hr.addEventListener('click', function () { if (ON) setTimeout(drawView, 30); });
   }
 
-  /* ---------- open and close ---------- */
-  function open(opt) {
-    build(); root.hidden = false; document.documentElement.classList.add('ps-open'); setTool(ST.tool || 'select'); setMode('2d');
-    var a = ls(AUTO), canDraft = !!(window.PMUI && PMUI.last && PMUI.last());
-    if (a && a.p && a.p.pieces && a.p.pieces.length && !P.pieces.length) { modal('<h4>Recover your work?</h4><p>Pattern Studio found unsaved work from ' + new Date(a.t).toLocaleString() + ': "' + esc(a.p.name) + '", ' + a.p.pieces.length + ' pieces.</p><div class="ps-bs"><button type="button" class="ps-b pri" id="ps-rec">Recover</button>' + (opt && opt.draft && canDraft ? '<button type="button" class="ps-b" id="ps-dr">Start from the current draft</button>' : '') + '<button type="button" class="ps-b bad" id="ps-disc">Discard</button></div>', function () { q('#ps-rec').onclick = function () { closeModal(); load(a.p); ST.dirty = true; toast('Recovered. Save it to keep it.'); }; var dr = q('#ps-dr'); if (dr) dr.onclick = function () { closeModal(); ls(AUTO, null); fromDraft(); }; q('#ps-disc').onclick = function () { closeModal(); ls(AUTO, null); }; }); }
-    else if (opt && opt.draft && canDraft) fromDraft();
-    refresh(); setTimeout(fit, 30);
+  /* ---------- Draft and Edit modes ---------- */
+  function draftSig() { var S = window.PMUI && PMUI.S && PMUI.S(); if (!S) return ''; return JSON.stringify([S.gid, S.gender, S.size, S.o, S.size === 'custom' ? S.m : 0, S.sa, S.hemA, S.pc, S.adj]); }
+  function draftName() { var UI = window.PMUI, last = UI && UI.last && UI.last(), S = UI && UI.S && UI.S(); return ((last && last.r && last.r.label) || 'Draft') + (S ? ' · ' + (S.size === 'custom' ? 'custom' : S.size) : ''); }
+  function banner() {
+    var b = q('#ps-banner'); if (!b) return; var sig = draftSig(), changed = P.draft && sig && P.draft.sig !== sig && P.pieces.length;
+    b.hidden = !changed; if (!changed) return;
+    b.innerHTML = '<span>The draft has changed since these pieces were brought in (' + esc(P.draft.name) + ' → ' + esc(draftName()) + ').</span><button type="button" class="ps-b pri" data-a="draftreplace">Replace with the new draft</button><button type="button" class="ps-b" data-a="draftadd">Add it alongside</button><button type="button" class="ps-b" data-a="draftkeep">Keep my edits</button>';
   }
-  function close() { if (ST.dirty) autosave(); root.hidden = true; document.documentElement.classList.remove('ps-open'); }
-
-  /* entry button in Pattern Maker */
-  function addEntry() {
-    var anchor = document.getElementById('pm-zfit'); if (!anchor || document.getElementById('pm-studiob')) return;
-    var b = document.createElement('button'); b.type = 'button'; b.className = 'ib'; b.id = 'pm-studiob'; b.title = 'Open Pattern Studio: draw and edit pieces freely, starting from this draft';
-    b.innerHTML = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18v14H3zM7 15l3-6 3 4 2-2 3 4"/></svg><span>Studio</span>';
-    var ed = document.getElementById('pm-3db') || document.getElementById('pm-editb') || anchor; ed.after(b);
-    b.addEventListener('click', function () { build(); open({ draft: P.pieces.length === 0 }); });
+  function setEdit(on) {
+    if (on && !build()) return;
+    if (!toolsEl) return;
+    if (on && document.getElementById('pm-editb') && document.getElementById('pm-editb').getAttribute('aria-pressed') === 'true') document.getElementById('pm-editb').click();
+    ON = on; pb.classList.toggle('cad', on); qa('[data-pmode]').forEach(function (b) { b.setAttribute('aria-pressed', (b.dataset.pmode === 'edit') === on); });
+    try { localStorage.setItem('pm-mode', on ? 'edit' : 'draft'); } catch (e) {}
+    if (!on) { tipEl.hidden = true; if (ST.dirty) autosave(); var z = document.getElementById('pm-zfit'); if (z) setTimeout(function () { z.click(); }, 30); return; }
+    P.unit = unitNow();
+    if (!started) { started = true; var a = ls(AUTO);
+      if (a && a.p && a.p.pieces && a.p.pieces.length) { H.swap(C.clone(a.p)); P.unit = unitNow(); ST.dirty = true; setTimeout(function () { toast('Your last edits were restored. File › Save keeps them as a project.'); }, 200); }
+      else if (window.PMUI && PMUI.last && PMUI.last()) bringDraft('new', true);
+      setTool(ST.tool); requestAnimationFrame(function () { fit(); banner(); }); return; }
+    setTool(ST.tool); banner(); requestAnimationFrame(drawView);
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { setTimeout(addEntry, 50); }); else setTimeout(addEntry, 50);
-  if (/[#&]studio\b/.test(location.hash)) setTimeout(function () { var app = document.getElementById('pm-app'); if (app && !app.hidden) open(); }, 600);
+  function bringDraft(how, quiet) {
+    var UI = window.PMUI, last = UI && UI.last && UI.last(); if (!last || !last.r) return toast('Choose a garment in Draft first.', 1);
+    var s = UI.S(), pcs = C.fromDraft(last.r, { size: s.size === 'custom' ? 'Custom' : s.size, sa: s.sa, hem: s.hemA, dept: s.gender });
+    var x = 0, keep = []; pcs.forEach(function (pc, i) { var st = (s.pc || {})[last.r.pieces[i].id] || {}; if (st.on === false) return; if (st.sa != null) pc.sa.def = st.sa; if (st.hem != null) pc.sa.hem = st.hem; if (st.name) pc.name = st.name; var b = C.bbox(pc); pc.x = x - b[0] + 2; pc.y = 2 - b[1]; x += b[2] - b[0] + 5; keep.push(pc); }); pcs = keep;
+    var info = { sig: draftSig(), name: draftName() };
+    var doIt = function () {
+      if (how === 'add') { var bx = 0; P.pieces.forEach(function (p) { var b = bboxW(p); bx = Math.max(bx, b[3]); }); pcs.forEach(function (pc) { pc.y += bx + 6; }); }
+      if (how === 'replace' || how === 'new') P.pieces = [];
+      pcs.forEach(function (pc) { P.pieces.push(pc); }); P.draft = info; if (how !== 'add' && (P.name === 'Untitled pattern' || how === 'new')) P.name = info.name; ST.sel = []; ST.node = ST.seg = ST.notch = ST.it = null; };
+    if (quiet) { doIt(); refresh(); return; }
+    act(how === 'replace' ? 'Replace with the new draft' : 'Bring in the draft', doIt); fit(); banner();
+    var bad = pcs.filter(function (p) { return C.validate(p).length; }); toast(pcs.length + ' pieces brought in' + (bad.length ? '. ' + bad.length + ' need a look: see the ! in Pieces.' : '.'));
+  }
+  function initMode() { var want = false; try { want = localStorage.getItem('pm-mode') === 'edit'; } catch (e) {} if (!want) return; var n = 0, t = setInterval(function () { n++; var a = document.getElementById('pm-app'); if (a && !a.hidden && window.PMUI && PMUI.last && PMUI.last()) { clearInterval(t); setEdit(true); } else if (n > 80) clearInterval(t); }, 250); }
+  function addModes() { if (!build()) return; qa('[data-pmode]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.pmode === 'draft'); }); initMode(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { setTimeout(addModes, 60); }); else setTimeout(addModes, 60);
 
-  /* ---------- styles ---------- */
+  /* ---------- styles (Pattern Maker's dark workspace; the canvas is a cutting table with paper pieces) ---------- */
   var css = document.createElement('style');
   css.textContent = [
-    'html.ps-open,html.ps-open body{overflow:hidden}',
-    '#ps{position:fixed;inset:0;z-index:1000;display:grid;grid-template-rows:44px 1fr 26px;background:#efe9e1;color:#1c1714;font:13px/1.35 system-ui,-apple-system,"Segoe UI",sans-serif;--ac:#a9481f;--ln:#d8cfc3;--pn:#fbf8f4}',
-    '#ps[hidden]{display:none}',
-    '#ps button{font:inherit;color:inherit}',
-    '.ps-top{display:flex;align-items:center;gap:6px;padding:0 10px;background:#1c1714;color:#f4eee6}',
-    '.ps-brand{display:flex;align-items:center;gap:7px;font-weight:700;letter-spacing:.08em;font-size:11px;margin-right:6px;white-space:nowrap}.ps-brand i{width:9px;height:9px;background:var(--ac);display:inline-block}',
-    '.ps-menu{position:relative}.ps-mb{background:none;border:0;padding:6px 9px;border-radius:4px;cursor:pointer;color:#f4eee6!important}.ps-mb:hover{background:#3a312b}',
-    '.ps-dd{position:absolute;top:34px;left:0;min-width:250px;background:#fff;color:#1c1714;border:1px solid var(--ln);border-radius:6px;box-shadow:0 10px 30px #0003;padding:5px;z-index:5}',
-    '.ps-dd button{display:flex;justify-content:space-between;width:100%;text-align:left;background:none;border:0;padding:6px 9px;border-radius:4px;cursor:pointer}.ps-dd button:hover{background:#f3ece4}.ps-dd kbd{font:11px system-ui;color:#8a7f74}.ps-dd hr{border:0;border-top:1px solid var(--ln);margin:4px 0}.ps-dd label{display:flex;gap:7px;padding:5px 9px;cursor:pointer}',
-    '.ps-name{background:#2c2520;border:1px solid #3a312b;color:#f4eee6;border-radius:4px;padding:4px 8px;min-width:120px;width:220px;font:inherit}',
-    '.ps-saved{font-size:11px;color:#b9ada0;white-space:nowrap}',
-    '.ps-ib{background:none;border:0;width:30px;height:30px;border-radius:4px;cursor:pointer;display:grid;place-items:center;color:#f4eee6!important}.ps-ib:hover{background:#3a312b}.ps-ib:disabled{opacity:.35;cursor:default}.ps-ib svg,.ps-tb svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}',
-    '.ps-sp{flex:1}',
-    '.ps-seg{display:flex;background:#2c2520;border-radius:5px;padding:2px}.ps-seg button{background:none;border:0;padding:4px 9px;border-radius:4px;cursor:pointer;color:#cfc4b8!important;font-size:12px}.ps-seg button[aria-pressed=true]{background:#f4eee6;color:#1c1714!important}',
-    '.ps-close{background:var(--ac);border:0;border-radius:4px;padding:6px 12px;cursor:pointer;color:#fff!important;font-weight:600}',
-    '.ps-body{display:grid;grid-template-columns:64px 200px 1fr 290px;min-height:0}',
-    '.ps-tools{background:var(--pn);border-right:1px solid var(--ln);overflow:auto;padding:6px 4px;scrollbar-width:thin}',
-    '.ps-tools input{width:100%;box-sizing:border-box;font:11px system-ui;padding:4px;border:1px solid var(--ln);border-radius:4px;margin-bottom:4px}',
-    '.ps-tg{border-top:1px solid var(--ln);padding:4px 0}.ps-tg small{display:block;font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:#8a7f74;text-align:center;margin-bottom:2px}',
-    '.ps-tb{display:grid;place-items:center;width:100%;height:36px;background:none;border:0;border-radius:5px;cursor:pointer}.ps-tb span{position:absolute;left:-9999px}.ps-tb:hover{background:#efe6db}.ps-tb[aria-pressed=true]{background:#1c1714;color:#fff!important}',
-    '.ps-objs{background:var(--pn);border-right:1px solid var(--ln);overflow:auto;padding:8px}.ps-objs h6{margin:0 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#6b625a}',
-    '.ps-ob{display:flex;align-items:center;gap:4px;padding:4px 5px;border-radius:4px;cursor:pointer}.ps-ob:hover{background:#f1e9df}.ps-ob.on{background:#1c1714;color:#fff}.ps-on{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ps-on i{font-style:normal;color:#d6452f;font-weight:700}.ps-on i.lk{color:var(--ac)}',
-    '.ps-eye,.ps-lk{background:none;border:0;cursor:pointer;width:20px;padding:0;font-size:11px}',
-    '.ps-obs{margin:0 0 4px 22px;font-size:12px}.ps-obs div{padding:2px 5px;border-radius:3px;cursor:pointer;color:#5b5148}.ps-obs div.on{background:#efe0d2}',
-    '.ps-objb{display:flex;gap:4px;margin-top:8px}.ps-objb button{flex:1;font-size:11px!important;background:#fff;border:1px solid var(--ln);border-radius:4px;padding:4px;cursor:pointer}',
-    '.ps-empty{color:#6b625a;font-size:12px}',
-    '.ps-main{display:grid;grid-template-rows:auto 1fr;min-width:0;min-height:0}',
-    '.ps-opts{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:5px 10px;background:#fff;border-bottom:1px solid var(--ln);min-height:34px;box-sizing:border-box;font-size:12px}.ps-opts b{font-size:12px}.ps-opts small{color:#6b625a}.ps-opts label{display:flex;align-items:center;gap:4px}.ps-opts em.bad{color:#b3261e;font-style:normal}',
-    '.ps-stage{position:relative;min-height:0;overflow:hidden;display:grid;grid-template-columns:24px 1fr;grid-template-rows:24px 1fr}',
-    '#ps.noru .ps-stage{grid-template-columns:0 1fr;grid-template-rows:0 1fr}',
-    '.ps-rx{grid-column:2;grid-row:1;width:100%;height:24px}.ps-ry{grid-column:1;grid-row:2;width:24px;height:100%}.ps-corner{grid-column:1;grid-row:1;background:#f6f1ea;font-size:9px;display:grid;place-items:center;color:#6b625a;border-right:1px solid var(--ln);border-bottom:1px solid var(--ln)}',
-    '#ps-svg{grid-column:2;grid-row:2;width:100%;height:100%;background:#fdfbf8;outline:0;touch-action:none;cursor:default}',
-    '#ps-svg[data-tool=poly],#ps-svg[data-tool=rect],#ps-svg[data-tool=ellipse],#ps-svg[data-tool=measure],#ps-svg[data-tool=iline],#ps-svg[data-tool=irect],#ps-svg[data-tool=iell],#ps-svg[data-tool=grain],#ps-svg[data-tool=spiral],#ps-svg[data-tool=cut]{cursor:crosshair}#ps-svg[data-tool=pan]{cursor:grab}',
-    '#ps-svg *{vector-effect:non-scaling-stroke}',
-    '#ps-grid .gm{stroke:#eee6dc;stroke-width:1}#ps-grid .gM{stroke:#ddd1c3;stroke-width:1}',
-    '.ps-cut{fill:#fffdf9;stroke:#1c1714;stroke-width:1.4}.ps-seam{fill:none;stroke:#6b625a;stroke-width:1;stroke-dasharray:5 3}.ps-seam.solo{fill:#fffdf9;stroke:#1c1714;stroke-dasharray:none;stroke-width:1.4}.ps-seam.nos{stroke:none}',
-    '.ps-pc.sel .ps-cut,.ps-pc.sel .ps-seam.solo{fill:#fbefe5;stroke:var(--ac);stroke-width:2}.ps-pc.bad .ps-cut,.ps-pc.bad .ps-seam.solo{stroke:#d6452f}.ps-pc.lock{opacity:.85}',
-    '.ps-fold{fill:none;stroke:var(--ac);stroke-width:2;stroke-dasharray:10 3 2 3}',
-    '.ps-int{fill:none;stroke:#3d6b8c;stroke-width:1.1}.ps-int.dash{stroke-dasharray:6 4}.ps-int.cutout{stroke:#d6452f}.ps-int.fold{stroke:var(--ac)}',
-    '.ps-notch{fill:none;stroke:#1c1714;stroke-width:1.6}.ps-notch.on{stroke:var(--ac);stroke-width:3}',
-    '.ps-grain{fill:none;stroke:#1c1714;stroke-width:1.1}',
-    '.ps-lab{fill:#1c1714;text-anchor:middle;font-weight:600;pointer-events:none}.ps-lab2{fill:#6b625a;text-anchor:middle;pointer-events:none}.ps-link{fill:var(--ac);pointer-events:none}',
-    '.ps-eh{fill:none;stroke:transparent;cursor:pointer}.ps-eh:hover{stroke:#a9481f33}.ps-eon{fill:none;stroke:var(--ac);stroke-width:3;pointer-events:none}',
-    '.ps-pt{fill:#fff;stroke:#1c1714;stroke-width:1.2;cursor:move}.ps-pt.sm{rx:50%}.ps-pt.on{fill:var(--ac);stroke:var(--ac)}',
-    '.ps-hl{stroke:#3d6b8c;stroke-width:1;pointer-events:none}.ps-hd{fill:#3d6b8c;stroke:#fff;stroke-width:1;cursor:pointer}',
-    '.ps-dr{fill:#a9481f14;stroke:var(--ac);stroke-width:1.4;stroke-dasharray:4 3}.ps-marq{fill:#3d6b8c14;stroke:#3d6b8c;stroke-width:1;stroke-dasharray:3 3}',
-    '.ps-ms{fill:none;stroke:#0b7a52;stroke-width:1.6}.ps-msp{fill:#0b7a52}.ps-mt{fill:#0b7a52;font-weight:700;paint-order:stroke;stroke:#fff;stroke-width:3;text-anchor:middle}.ps-snap{fill:none;stroke:#0b7a52;stroke-width:1.6}',
-    '.ps-3d{position:absolute;inset:0;display:grid;place-items:center;background:#f6f1ea;z-index:2;text-align:center;padding:20px}.ps-3d b{font-size:16px}.ps-3d p{max-width:380px;color:#5b5148}',
-    '#ps.msplit .ps-3d{left:50%;border-left:1px solid var(--ln)}',
-    '.ps-tip{position:absolute;z-index:9;max-width:260px;background:#1c1714;color:#f4eee6;padding:7px 9px;border-radius:5px;font-size:12px;pointer-events:none;box-shadow:0 6px 18px #0004}',
-    '.ps-props{background:var(--pn);border-left:1px solid var(--ln);overflow:auto;padding:10px 12px 30px}',
-    '.ps-props h5{margin:14px 0 6px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:#6b625a}.ps-props h5:first-child{margin-top:0}',
-    '.ps-r{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:4px 0}.ps-r>span:first-child{color:#3d3530;font-size:12px}.ps-r.wide{flex-direction:column;align-items:stretch}.ps-r input:not([type=checkbox]),.ps-r select,.ps-r textarea{font:inherit;padding:4px 6px;border:1px solid var(--ln);border-radius:4px;background:#fff;max-width:150px;box-sizing:border-box}.ps-r.wide input,.ps-r.wide textarea{max-width:none;width:100%}',
-    '.ps-u{display:inline-flex;align-items:center;border:1px solid var(--ln);border-radius:4px;background:#fff}.ps-u input{border:0!important;width:72px;padding:4px 6px;font:inherit;background:none}.ps-u i{font-style:normal;color:#8a7f74;font-size:11px;padding-right:6px}',
-    '.ps-bs{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0}.ps-b{background:#fff;border:1px solid var(--ln);border-radius:4px;padding:5px 9px;cursor:pointer;font-size:12px!important}.ps-b:hover{border-color:#1c1714}.ps-b.pri{background:#1c1714;color:#fff!important;border-color:#1c1714}.ps-b.bad{color:#b3261e!important}',
-    '.ps-tr{display:flex;gap:5px;align-items:center;margin:5px 0}',
-    '.ps-n{color:#6b625a;font-size:12px;margin:6px 0}',
-    '.ps-kv{display:grid;grid-template-columns:1fr auto;gap:3px 10px;margin:4px 0;font-size:12px}.ps-kv dt{color:#6b625a}.ps-kv dd{margin:0;text-align:right;font-variant-numeric:tabular-nums}',
-    '.ps-kb{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;font-size:12px}.ps-kb dt{font-weight:600}.ps-kb dd{margin:0;color:#5b5148}',
-    '.ps-chips{display:flex;flex-wrap:wrap;gap:4px}.ps-chips label{display:flex;gap:3px;align-items:center;font-size:11px;border:1px solid var(--ln);border-radius:10px;padding:1px 7px;background:#fff}',
-    '.ps-warn{background:#fdecea;border:1px solid #f1b9b1;border-radius:5px;padding:4px 8px;margin:6px 0}.ps-warn p{margin:4px 0;color:#8c1d13;font-size:12px}',
-    '.ps-check{padding:6px 8px;border-radius:5px;font-size:12px}.ps-check.ok{background:#e6f4ec;color:#0b5d3b}.ps-check.no{background:#fdf0e3;color:#8a4b0b}',
-    '.ps-status{display:flex;align-items:center;gap:14px;padding:0 10px;background:#fff;border-top:1px solid var(--ln);font-size:12px;color:#5b5148;white-space:nowrap;overflow:hidden}.ps-status b{color:#1c1714}',
-    '.ps-toast{position:absolute;left:50%;bottom:40px;transform:translateX(-50%);background:#1c1714;color:#fff;padding:9px 14px;border-radius:6px;max-width:520px;box-shadow:0 8px 24px #0004;z-index:20;margin:0}.ps-toast.bad{background:#8c1d13}',
-    '.ps-modal{position:absolute;inset:0;background:#1c171466;display:grid;place-items:center;z-index:30}.ps-modal[hidden]{display:none}.ps-mbox{background:#fff;border-radius:8px;padding:16px 18px;width:min(520px,92vw);max-height:80vh;overflow:auto;box-shadow:0 20px 50px #0005}.ps-mbox h4{margin:0 0 8px;font-size:15px}',
-    '.ps-list>div{display:flex;gap:6px;margin:5px 0}.ps-list .ps-b:first-child{flex:1;text-align:left;display:flex;flex-direction:column}.ps-list small{color:#6b625a}',
+    '.ps-tools,.ps-bar,.ps-center,.ps-side{display:none}',
+    '.ps-modes{display:inline-flex;background:var(--bg);border:1px solid var(--ln);border-radius:4px;padding:1px;margin:0 4px}.ps-modes button{border:0;background:none;color:var(--mu);font:600 11.5px "DM Sans",sans-serif;padding:3px 9px;border-radius:3px;cursor:pointer;white-space:nowrap}.ps-modes button[aria-pressed=true]{background:var(--ac);color:#1b1d20}.ps-modes button:hover:not([aria-pressed=true]){color:var(--tx)}',
+    '.pbody.cad{grid-template-columns:200px minmax(0,1fr) 300px}',
+    '.pbody.cad .pl>:not(.ps-tools),.pbody.cad .pr>:not(.ps-side),.pbody.cad .pc>.stg,.pbody.cad .pc>.sbar,.pbody.cad #pm-edpanel{display:none!important}',
+    '.pbody.cad .ctl>:not(.pside):not(.ps-modes):not(.ps-bar){display:none!important}',
+    '.pbody.cad .ps-tools{display:block;padding:6px 6px 20px}.pbody.cad .ps-bar{display:flex;align-items:center;gap:3px;flex:1;min-width:0;flex-wrap:nowrap}.pbody.cad .ps-center{display:flex;flex-direction:column;flex:1;min-height:0;position:relative}.pbody.cad .ps-side{display:block}',
+    '@media (min-width:981px){.pbody.cad.nol{grid-template-columns:48px minmax(0,1fr) 300px}.pbody.cad.nor{grid-template-columns:200px minmax(0,1fr)}.pbody.cad.nol.nor{grid-template-columns:48px minmax(0,1fr)}.pbody.cad.nol .pl{display:block}',
+    ' .pbody.cad.nol .ps-tb span,.pbody.cad.nol .ps-tb kbd,.pbody.cad.nol .ps-tg small,.pbody.cad.nol #ps-tsearch{display:none}.pbody.cad.nol .ps-tb{justify-content:center;padding:0}.pbody.cad.nol .ps-tools{padding:4px 3px}}',
+    '#ps-tsearch{width:100%;box-sizing:border-box;background:var(--bg);border:1px solid var(--ln);color:var(--tx);border-radius:4px;padding:5px 7px;font:12px "DM Sans",sans-serif;margin-bottom:4px}',
+    '.ps-tg{padding:5px 0 3px;border-top:1px solid var(--ln)}.ps-tg:first-of-type{border-top:0}.ps-tg small{display:block;font:600 9.5px "DM Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding:2px 6px 3px}',
+    '.ps-tb{display:flex;align-items:center;gap:8px;width:100%;height:28px;padding:0 6px;border:1px solid transparent;border-radius:4px;background:none;color:var(--mu);font:12.5px "DM Sans",sans-serif;text-align:left;cursor:pointer}.ps-tb span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ps-tb kbd{font:600 10px ui-monospace,Menlo,monospace;color:var(--dim)}',
+    '.ps-tb:hover{background:var(--p2);color:var(--tx)}.ps-tb[aria-pressed=true]{background:var(--p3);border-color:var(--ln);color:var(--tx)}.ps-tb[aria-pressed=true] svg{stroke:var(--ac)}',
+    '.ps-tb svg,.ps-bar svg,.ps-modes svg{width:17px;height:17px;flex:none;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}.ps-bar .ps-mb svg{width:12px;height:12px}',
+    '.ps-menu{position:relative}.ps-dd{position:absolute;top:30px;left:0;min-width:260px;background:var(--p2);color:var(--tx);border:1px solid var(--ln);border-radius:6px;box-shadow:0 12px 30px rgba(0,0,0,.45);padding:5px;z-index:60}',
+    '.ps-dd button{display:flex;justify-content:space-between;gap:12px;width:100%;text-align:left;background:none;border:0;color:var(--tx);padding:6px 9px;border-radius:4px;cursor:pointer;font:12.5px "DM Sans",sans-serif}.ps-dd button:hover{background:var(--p3)}.ps-dd kbd{font:11px ui-monospace,Menlo,monospace;color:var(--dim)}.ps-dd hr{border:0;border-top:1px solid var(--ln);margin:4px 0}.ps-dd label{display:flex;gap:8px;align-items:center;padding:5px 9px;cursor:pointer;font:12.5px "DM Sans",sans-serif}',
+    '.ps-zl{min-width:50px;font:600 12px ui-monospace,Menlo,monospace!important;color:var(--tx)!important}',
+    '.ps-bar .ps-name{background:var(--bg);border:1px solid var(--ln);color:var(--tx);border-radius:4px;padding:3px 8px;flex:0 1 200px;width:200px;min-width:80px;height:24px;box-sizing:border-box;font:12.5px "DM Sans",sans-serif;margin:0 0 0 2px}',
+    '.ps-saved{flex:0 1 auto;min-width:0;font:11px "DM Sans",sans-serif;color:var(--dim);white-space:nowrap;margin-left:6px;overflow:hidden;text-overflow:ellipsis}',
+    '.ps-banner{display:flex;align-items:center;flex-wrap:wrap;gap:8px;padding:6px 10px;background:#3a3226;border-bottom:1px solid #121315;color:#f0d9b8;font:12.5px "DM Sans",sans-serif}.ps-banner[hidden]{display:none}.ps-banner span{flex:1 1 280px}',
+    '.ps-opts{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:5px 10px;background:var(--p1);border-bottom:1px solid #121315;min-height:32px;box-sizing:border-box;font:12px "DM Sans",sans-serif;color:var(--mu)}.ps-opts b{color:var(--tx);font-weight:600}.ps-opts small{color:var(--mu);font-size:12px}.ps-opts label{display:flex;align-items:center;gap:5px}.ps-opts em.bad{color:#ff8a7a;font-style:normal}',
+    '.ps-stage{position:relative;flex:1;min-height:0;display:grid;grid-template-columns:22px minmax(0,1fr);grid-template-rows:22px minmax(0,1fr)}.ps-center.noru .ps-stage{grid-template-columns:0 minmax(0,1fr);grid-template-rows:0 minmax(0,1fr)}.ps-center.noru canvas,.ps-center.noru .ps-corner{display:none}',
+    '.ps-rx{grid-column:2;grid-row:1;width:100%;height:22px;display:block;border-bottom:1px solid #121315}.ps-ry{grid-column:1;grid-row:2;width:22px;height:100%;display:block;border-right:1px solid #121315}.ps-corner{grid-column:1;grid-row:1;background:var(--p1);font:600 9px ui-monospace,Menlo,monospace;display:grid;place-items:center;color:var(--dim);border-right:1px solid #121315;border-bottom:1px solid #121315}',
+    '#ps-svg{grid-column:2;grid-row:2;width:100%;height:100%;display:block;background:var(--stage);outline:0;touch-action:none;cursor:default;user-select:none;-webkit-user-select:none}',
+    '#ps-svg[data-tool=poly],#ps-svg[data-tool=rect],#ps-svg[data-tool=ellipse],#ps-svg[data-tool=measure],#ps-svg[data-tool=iline],#ps-svg[data-tool=irect],#ps-svg[data-tool=iell],#ps-svg[data-tool=grain],#ps-svg[data-tool=spiral],#ps-svg[data-tool=cut],#ps-svg[data-tool=notch],#ps-svg[data-tool=addpt]{cursor:crosshair}#ps-svg[data-tool=pan]{cursor:grab}',
+    '#ps-world *,#ps-grid *,#ps-over *{vector-effect:non-scaling-stroke}',
+    '#ps-grid .gm{stroke:rgba(255,255,255,.045);stroke-width:1}#ps-grid .gM{stroke:rgba(255,255,255,.1);stroke-width:1}#ps-grid .g0{stroke:rgba(224,138,94,.35);stroke-width:1}',
+    '.ps-cut{fill:var(--paper);stroke:#1c1f22;stroke-width:1.5}.ps-seam{fill:none;stroke:#6b7178;stroke-width:1;stroke-dasharray:5 3}.ps-seam.solo{fill:var(--paper);stroke:#1c1f22;stroke-dasharray:none;stroke-width:1.5}.ps-seam.nos{stroke:none}',
+    '.ps-pc.sel .ps-cut,.ps-pc.sel .ps-seam.solo{fill:#fff3ea;stroke:#c45f2f;stroke-width:2}.ps-pc.bad .ps-cut,.ps-pc.bad .ps-seam.solo{stroke:#d6452f;stroke-width:2}.ps-pc.lock{opacity:.8}',
+    '.ps-fold{fill:none;stroke:#c45f2f;stroke-width:2;stroke-dasharray:10 3 2 3}',
+    '.ps-int{fill:none;stroke:#2f6690;stroke-width:1.2}.ps-int.dash{stroke-dasharray:6 4}.ps-int.cutout{stroke:#d6452f}.ps-int.fold{stroke:#c45f2f}.ps-int.on{stroke-width:2.6}',
+    '.ps-notch{fill:none;stroke:#1c1f22;stroke-width:1.6}.ps-notch.on{stroke:#c45f2f;stroke-width:3}',
+    '.ps-grain{fill:none;stroke:#1c1f22;stroke-width:1.1}',
+    '.ps-lab{fill:#1c1f22;text-anchor:middle;font-weight:600;font-family:"DM Sans",sans-serif;pointer-events:none}.ps-lab2{fill:#5b6168;text-anchor:middle;font-family:"DM Sans",sans-serif;pointer-events:none}.ps-link{fill:#e08a5e;font-family:"DM Sans",sans-serif;pointer-events:none}',
+    '.ps-eh{fill:none;stroke:transparent;stroke-width:12;cursor:pointer;pointer-events:stroke}.ps-eh:hover{stroke:rgba(224,138,94,.35)}.ps-eon{fill:none;stroke:#e08a5e;stroke-width:3.2;pointer-events:none}',
+    '#ps-pts .ps-pt{fill:#fff;stroke:#1c1f22;stroke-width:1.4;cursor:move}#ps-pts .ps-pt.on{fill:#e08a5e;stroke:#7a3412}#ps-pts .ps-pt.fa{fill:rgba(255,255,255,.75);stroke:#5b6168;stroke-width:1}#ps-pts .ps-pt:hover{stroke:#e08a5e;stroke-width:2}',
+    '#ps-pts .ps-hl{stroke:#2f6690;stroke-width:1;pointer-events:none}#ps-pts .ps-hd{fill:#2f6690;stroke:#fff;stroke-width:1.2;cursor:pointer}#ps-pts .ps-hd:hover{fill:#e08a5e}',
+    '.ps-dr{fill:rgba(224,138,94,.12);stroke:#e08a5e;stroke-width:1.5;stroke-dasharray:5 3}.ps-dpt{fill:#fff;stroke:#e08a5e;stroke-width:1.2}.ps-dpt.on{fill:#e08a5e}.ps-marq{fill:rgba(111,191,142,.08);stroke:#6fbf8e;stroke-width:1;stroke-dasharray:4 3}',
+    '.ps-ms{fill:none;stroke:#6fbf8e;stroke-width:1.8}.ps-msp{fill:#6fbf8e}.ps-mt{fill:#1b1d20;font-weight:700;font-family:ui-monospace,Menlo,monospace;paint-order:stroke;stroke:#bfe8cf;stroke-width:4px;text-anchor:middle}',
+    '#ps-pts .ps-snap{fill:none;stroke:#6fbf8e;stroke-width:2;pointer-events:none}#ps-pts .ps-sk{fill:#bfe8cf;font:600 10.5px "DM Sans",sans-serif;paint-order:stroke;stroke:#1b1d20;stroke-width:3px;pointer-events:none}',
+    '#ps-pts .ps-live{pointer-events:none}#ps-pts .ps-live rect{fill:#1b1d20;stroke:#e08a5e;stroke-width:1;opacity:.94}#ps-pts .ps-live text{fill:#f3efe8;font:600 11.5px ui-monospace,Menlo,monospace}',
+    '.ps-toast{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);background:#121315;color:#f3efe8;border:1px solid var(--ln);padding:8px 14px;border-radius:6px;max-width:min(560px,90%);box-shadow:0 8px 24px rgba(0,0,0,.45);z-index:20;margin:0;font:13px/1.45 "DM Sans",sans-serif;pointer-events:none}.ps-toast.bad{border-color:#d6452f;background:#3a1a16}',
+    '.ps-status{display:flex;gap:14px;align-items:center;padding:4px 10px;border-top:1px solid #121315;background:var(--bg);font:11px ui-monospace,Menlo,monospace;color:var(--mu);white-space:nowrap;overflow:hidden}.ps-status b{color:var(--tx);font-weight:600}.ps-status .ps-hint{overflow:hidden;text-overflow:ellipsis;font-family:"DM Sans",sans-serif;font-size:11.5px}.ps-status .xy{color:var(--ac2)}.ps-sp{flex:1}',
+    '.ps-side{color:var(--tx);font:13px "DM Sans",sans-serif}.ps-sec{border-bottom:1px solid #121315}.ps-sec>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:6px;padding:9px 12px;font:600 10.5px "DM Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--mu);background:var(--p1);position:sticky;top:0;z-index:2}.ps-sec>summary::-webkit-details-marker{display:none}.ps-sec>summary::after{content:"";margin-left:auto;width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg);transition:transform .15s}.ps-sec:not([open])>summary::after{transform:rotate(-45deg)}.ps-sec>summary span{color:var(--dim);letter-spacing:0}',
+    '#ps-objs{padding:4px 8px;max-height:34vh;overflow:auto}#ps-props{padding:4px 12px 24px}',
+    '.ps-ob{display:flex;align-items:center;gap:4px;padding:3px 5px;border-radius:4px;cursor:pointer;color:var(--mu)}.ps-ob:hover{background:var(--p2);color:var(--tx)}.ps-ob.on{background:var(--p3);color:var(--tx);box-shadow:inset 2px 0 0 var(--ac)}.ps-on{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px}.ps-on i{font-style:normal;color:#ff8a7a;font-weight:700}.ps-on i.lk{color:var(--ac)}',
+    '.ps-eye,.ps-lk{background:none;border:0;cursor:pointer;width:20px;padding:0;font-size:11px;color:var(--mu)}',
+    '.ps-obs{margin:0 0 4px 24px;font-size:12px}.ps-obs div{padding:2px 6px;border-radius:3px;cursor:pointer;color:var(--mu)}.ps-obs div.on{background:var(--p3);color:var(--tx)}',
+    '.ps-objb{display:flex;gap:5px;padding:4px 8px 10px}.ps-objb .ps-b{flex:1}',
+    '.ps-empty{color:var(--mu);font-size:12px;margin:6px 0}',
+    '#ps-props h5{margin:14px 0 6px;font:600 10px "DM Sans",sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--ac)}#ps-props h5:first-child{margin-top:6px}',
+    '.ps-r{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:5px 0}.ps-r>span:first-child{color:var(--mu);font-size:12px}.ps-r.wide{flex-direction:column;align-items:stretch}',
+    '.ps-side input:not([type=checkbox]),.ps-side select,.ps-side textarea,.ps-opts input,.ps-opts select,.ps-mbox input,.ps-mbox select{font:12.5px "DM Sans",sans-serif;padding:4px 6px;border:1px solid var(--ln);border-radius:4px;background:var(--bg);color:var(--tx);max-width:150px;box-sizing:border-box}.ps-r.wide input,.ps-r.wide textarea{max-width:none;width:100%}',
+    '.ps-side input:focus,.ps-side select:focus,.ps-opts input:focus{outline:0;border-color:var(--ac)}',
+    '.ps-u{display:inline-flex;align-items:center;border:1px solid var(--ln);border-radius:4px;background:var(--bg)}.ps-u input{border:0!important;width:76px;padding:4px 6px;background:none!important;text-align:right;font-variant-numeric:tabular-nums}.ps-u i{font-style:normal;color:var(--dim);font-size:10.5px;padding-right:6px}',
+    '.ps-bs{display:flex;flex-wrap:wrap;gap:5px;margin:7px 0}.ps-b{background:var(--p2);border:1px solid var(--ln);border-radius:4px;padding:4px 9px;cursor:pointer;font:12px "DM Sans",sans-serif;color:var(--tx)}.ps-b:hover{border-color:var(--mu)}.ps-b.pri{background:var(--ac);color:#1b1d20;border-color:var(--ac);font-weight:600}.ps-b.bad{color:#ff8a7a}',
+    '.ps-tr{display:flex;gap:5px;align-items:center;margin:6px 0}',
+    '.ps-n{color:var(--mu);font-size:12px;line-height:1.45;margin:6px 0}',
+    '.ps-kv{display:grid;grid-template-columns:1fr auto;gap:4px 10px;margin:4px 0;font-size:12px}.ps-kv dt{color:var(--mu)}.ps-kv dd{margin:0;text-align:right;font:600 12px ui-monospace,Menlo,monospace;color:var(--tx)}',
+    '.ps-kb{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;font-size:12px}.ps-kb dt{font:600 11px ui-monospace,Menlo,monospace;color:var(--tx)}.ps-kb dd{margin:0;color:var(--mu)}',
+    '.ps-chips{display:flex;flex-wrap:wrap;gap:4px}.ps-chips label{display:flex;gap:3px;align-items:center;font-size:11px;border:1px solid var(--ln);border-radius:10px;padding:1px 7px;background:var(--bg);color:var(--mu)}',
+    '.ps-warn{background:#3a1a16;border:1px solid #7a2c22;border-radius:5px;padding:4px 8px;margin:6px 0}.ps-warn p{margin:4px 0;color:#ffb4a8;font-size:12px}',
+    '.ps-check{padding:6px 8px;border-radius:5px;font-size:12px}.ps-check.ok{background:#1d3a2a;color:#9fe0b8}.ps-check.no{background:#3a3020;color:#f0d29b}',
+    '.ps-modal{position:fixed;inset:0;background:rgba(10,11,12,.6);display:grid;place-items:center;z-index:2000}.ps-modal[hidden]{display:none}.ps-mbox{background:var(--p1,#212428);color:var(--tx,#e8e6e1);border:1px solid var(--ln,#3a3f46);border-radius:8px;padding:16px 18px;width:min(540px,92vw);max-height:80vh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,.55);font:13px/1.5 "DM Sans",sans-serif}.ps-mbox h4{margin:0 0 8px;font-size:15px}.ps-mbox p{margin:6px 0}',
+    '.ps-host{--bg:#1b1d20;--p1:#212428;--p2:#2a2e33;--p3:#33383e;--ln:#3a3f46;--tx:#e8e6e1;--mu:#9da3aa;--dim:#6f757c;--ac:#e08a5e}',
+    '.ps-list>div{display:flex;gap:6px;margin:5px 0}.ps-list .ps-b:first-child{flex:1;text-align:left;display:flex;flex-direction:column}.ps-list small{color:var(--mu)}',
     '.ps-tab{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}.ps-tab th,.ps-tab td{border-bottom:1px solid var(--ln);padding:4px;text-align:left}',
-    '@media (max-width:1100px){.ps-body{grid-template-columns:56px 0 1fr 260px}.ps-objs{display:none}.ps-name{width:130px}.ps-saved{display:none}}',
-    '@media (max-width:760px){.ps-body{grid-template-columns:52px 1fr}.ps-props{position:absolute;right:0;top:44px;bottom:26px;width:min(300px,80vw);z-index:4;box-shadow:-6px 0 20px #0002}.ps-brand{display:none}.ps-seg#ps-mode{display:none}}'
+    '.ps-tip{position:fixed;z-index:2100;max-width:260px;background:#121315;color:#e8e6e1;border:1px solid #3a3f46;padding:7px 9px;border-radius:5px;font:12px/1.45 "DM Sans",sans-serif;pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.45)}',
+    '@media (max-width:980px){.pbody.cad{grid-template-columns:1fr}.pbody.cad .pc{height:72vh;height:72svh}.pbody.cad .ps-tools{display:flex;flex-wrap:wrap;gap:2px}.pbody.cad .ps-tg{display:flex;flex-wrap:wrap;border:0;padding:0}.pbody.cad .ps-tg small,.pbody.cad #ps-tsearch,.pbody.cad .ps-tb span,.pbody.cad .ps-tb kbd{display:none}.pbody.cad .ps-tb{width:38px;height:38px;justify-content:center;padding:0}.ps-name,.ps-saved{display:none}}'
   ].join('\n');
   document.head.appendChild(css);
 
-  window.FCStudio = { open: open, close: close, P: function () { return P; }, H: H, act: act, setTool: setTool, ST: ST, fit: fit, importDXF: importDXF, parseDXF: parseDXF, scene: scene, fromDraft: fromDraft };
+  window.FCStudio = { open: function () { setEdit(true); }, close: function () { setEdit(false); }, setEdit: setEdit, geo: geo, snap: snap, nearestEdge: nearestEdge, P: function () { return P; }, H: H, act: act, setTool: setTool, ST: ST, fit: fit, importDXF: importDXF, parseDXF: parseDXF, scene: scene, fromDraft: fromDraft };
 })();
 </script><script type="module" src="auth.js"></script></div></body></html>

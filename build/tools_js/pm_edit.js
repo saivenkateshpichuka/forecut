@@ -10,8 +10,8 @@
 
   // stage button
   var anchor = $('#pm-markb'); if (!anchor) return;
-  var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'ib'; btn.id = 'pm-editb'; btn.setAttribute('aria-pressed', 'false'); btn.title = 'Edit the pattern: move points, reshape curves, walk seams, add notches';
-  btn.innerHTML = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg><span>Edit</span>';
+  var btn = document.createElement('button'); btn.type = 'button'; btn.className = 'ib'; btn.id = 'pm-editb'; btn.setAttribute('aria-pressed', 'false'); btn.title = 'Adjust the draft for every size: lengthen, widen, slash and spread, pleats, darts, notches and drill holes. For free editing of points and curves, switch to Edit pieces.';
+  btn.innerHTML = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 6l3 3"/></svg><span>Adjust</span>';
   anchor.after(btn);
   // desktop: open the current garment in 3D Drape Studio
   var D3 = { tshirt: 'tshirt', top: 'top', tank: 'tank', hoodie: 'sweat', kurta: 'kurta', dress: 'dress', skirt: 'skirt', trousers: 'trousers', jeans: 'jeans', churidar: 'churidar', salwar: 'salwar', patiala: 'patiala', gharara: 'gharara', lehenga: 'lehenga', shirt: 'shirt', shirtdress: 'shirtdress', blouse: 'blouse', polo: 'polo', jacket: 'jacket', bandhgala: 'bandhgala', sherwani: 'sherwani', blazer: 'blazer', coat: 'coat', bomber: 'bomber', bodice: 'bodice', anarkali: 'anarkali', jumpsuit: 'jumpsuit' };

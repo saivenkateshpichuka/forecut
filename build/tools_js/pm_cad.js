@@ -38,9 +38,18 @@
   };
   /* arc-length table of a segment: [[t, s]...] */
   function lut(k, n) { var out = [[0, 0]], prev = k.p0, s = 0; for (var j = 1; j <= n; j++) { var t = j / n, q = bez(k.p0, k.p1, k.p2, k.p3, t); s += dist(prev, q); out.push([t, s]); prev = q; } return out; }
-  C.segLen = function (pc, i) { var k = C.ctrl(pc, i); if (!k.curved) return dist(k.p0, k.p3); var T = lut(k, 160); return T[T.length - 1][1]; };
+  /* exact arc length: 8-point Gauss-Legendre on 8 sub-intervals (error far below 0.001 mm on pattern curves) */
+  var GX = [-.9602898564975363, -.7966664774136267, -.5255324099163290, -.1834346424956498, .1834346424956498, .5255324099163290, .7966664774136267, .9602898564975363],
+    GW = [.1012285362903763, .2223810344533745, .3137066458778873, .3626837833783620, .3626837833783620, .3137066458778873, .2223810344533745, .1012285362903763];
+  function glen(k, t0, t1) { var h = (t1 - t0) / 2, m = (t1 + t0) / 2, s = 0; for (var i = 0; i < 8; i++) { var d = bezD(k.p0, k.p1, k.p2, k.p3, m + h * GX[i]); s += GW[i] * Math.hypot(d[0], d[1]); } return s * h; }
+  function arcTo(k, t) { var n = Math.max(1, Math.ceil(t * 8)), s = 0; for (var i = 0; i < n; i++) s += glen(k, t * i / n, t * (i + 1) / n); return s; }
+  C.arc = function (pc, i, t) { var k = C.ctrl(pc, i); return k.curved ? arcTo(k, t) : dist(k.p0, k.p3) * t; };
+  C.segLen = function (pc, i) { var k = C.ctrl(pc, i); if (!k.curved) return dist(k.p0, k.p3); return arcTo(k, 1); };
   /* parameter t at a distance along the segment */
-  C.tAt = function (pc, i, s) { var k = C.ctrl(pc, i); if (!k.curved) { var L = dist(k.p0, k.p3); return L ? Math.max(0, Math.min(1, s / L)) : 0; } var T = lut(k, 200), L2 = T[T.length - 1][1]; s = Math.max(0, Math.min(L2, s)); for (var j = 1; j < T.length; j++) if (T[j][1] >= s) { var f = (s - T[j - 1][1]) / ((T[j][1] - T[j - 1][1]) || 1); return T[j - 1][0] + (T[j][0] - T[j - 1][0]) * f; } return 1; };
+  C.tAt = function (pc, i, s) { var k = C.ctrl(pc, i); if (!k.curved) { var L = dist(k.p0, k.p3); return L ? Math.max(0, Math.min(1, s / L)) : 0; }
+    var L2 = arcTo(k, 1); if (s <= 0) return 0; if (s >= L2) return 1; var lo = 0, hi = 1, t = s / L2;
+    for (var it = 0; it < 30; it++) { var f = arcTo(k, t) - s; if (Math.abs(f) < 1e-7) break; if (f > 0) hi = t; else lo = t; var d = bezD(k.p0, k.p1, k.p2, k.p3, t), sp = Math.hypot(d[0], d[1]), tn = sp > 1e-9 ? t - f / sp : -1; t = tn > lo && tn < hi ? tn : (lo + hi) / 2; }
+    return t; };
   C.pointAt = function (pc, i, t) { var k = C.ctrl(pc, i); return bez(k.p0, k.p1, k.p2, k.p3, t); };
   C.tangentAt = function (pc, i, t) { var k = C.ctrl(pc, i), d = bezD(k.p0, k.p1, k.p2, k.p3, t), l = Math.hypot(d[0], d[1]) || 1; return [d[0] / l, d[1] / l]; };
   /* the whole outline as one flat polygon, remembering which segment each point belongs to */
@@ -58,12 +67,20 @@
 
   /* ---------- validation ---------- */
   function segX(a, b, c, d) { var r = [b[0] - a[0], b[1] - a[1]], s = [d[0] - c[0], d[1] - c[1]], den = r[0] * s[1] - r[1] * s[0]; if (Math.abs(den) < EPS) return null; var t = ((c[0] - a[0]) * s[1] - (c[1] - a[1]) * s[0]) / den, u = ((c[0] - a[0]) * r[1] - (c[1] - a[1]) * r[0]) / den; return t > 1e-6 && t < 1 - 1e-6 && u > 1e-6 && u < 1 - 1e-6 ? [a[0] + r[0] * t, a[1] + r[1] * t] : null; }
-  C.selfHits = function (P) { var hits = [], n = P.length; for (var i = 0; i < n; i++) for (var j = i + 2; j < n; j++) { if (i === 0 && j === n - 1) continue; var x = segX(P[i], P[(i + 1) % n], P[j], P[(j + 1) % n]); if (x) hits.push(x); if (hits.length > 20) return hits; } return hits; };
-  C.validate = function (pc) {
+  C.selfHits = function (P, closed) { // sweep over x: only segments whose x ranges overlap are tested
+    var n = P.length, m = closed === false ? n - 1 : n, S = [], hits = [], act = [], i;
+    for (i = 0; i < m; i++) { var a = P[i], b = P[(i + 1) % n]; S.push([Math.min(a[0], b[0]), Math.max(a[0], b[0]), i, Math.min(a[1], b[1]), Math.max(a[1], b[1])]); }
+    S.sort(function (u, v) { return u[0] - v[0]; });
+    for (var k = 0; k < S.length; k++) { var s = S[k]; act = act.filter(function (t) { return t[1] >= s[0]; });
+      for (var j = 0; j < act.length; j++) { var t = act[j], a1 = s[2], b1 = t[2], df = Math.abs(a1 - b1); if (df === 1 || (closed !== false && df === n - 1)) continue; if (t[4] < s[3] || t[3] > s[4]) continue;
+        var x = segX(P[a1], P[(a1 + 1) % n], P[b1], P[(b1 + 1) % n]); if (x) { hits.push(x); if (hits.length > 20) return hits; } }
+      act.push(s); }
+    return hits; };
+  C.validate = function (pc, fast) {
     var issues = [], n = C.segCount(pc);
     if (pc.nodes.length < 3 && pc.closed !== false) issues.push({ k: 'few', msg: 'A piece needs at least three points.' });
     for (var i = 0; i < n; i++) if (C.segLen(pc, i) < .05) issues.push({ k: 'zero', seg: i, msg: 'Edge ' + (i + 1) + ' has no length: two points sit on top of each other.' });
-    var f = C.flat(pc, .4).pts; if (C.selfHits(f).length) issues.push({ k: 'cross', msg: 'The outline crosses itself. Move the points so the edges do not cross.' });
+    var f = C.flat(pc, .4).pts; if (!fast && C.selfHits(f).length) issues.push({ k: 'cross', msg: 'The outline crosses itself. Move the points so the edges do not cross.' });
     if (pc.closed !== false && Math.abs(areaOf(f)) < .5) issues.push({ k: 'flat', msg: 'The outline has no area.' });
     return issues;
   };
@@ -302,7 +319,7 @@
   /* ---------- seam allowance: the cutting line from the seamline ---------- */
   C.saOf = function (pc, i) { if (i === pc.fold) return 0; if (pc.sa.edges[i] != null) return +pc.sa.edges[i]; return pc.hems.indexOf(i) >= 0 ? +pc.sa.hem : +pc.sa.def; };
   function lineX(p, d, q, e) { var den = d[0] * e[1] - d[1] * e[0]; if (Math.abs(den) < 1e-9) return null; var t = ((q[0] - p[0]) * e[1] - (q[1] - p[1]) * e[0]) / den; return [p[0] + d[0] * t, p[1] + d[1] * t]; }
-  C.cutLine = function (pc) {
+  C.cutLine = function (pc, fast) {
     var n = C.segCount(pc), F = C.flat(pc, .2), P = F.pts, sgn = areaOf(P) > 0 ? -1 : 1, out = [], warn = [];
     var offs = [];
     for (var i = 0; i < n; i++) { var d = C.saOf(pc, i), pts = C.segPts(pc, i, .2), o = [];
@@ -318,7 +335,7 @@
       else if (corner === 'step') { out.push(aEnd); out.push(bStart); }
       else out.push(x);
     }
-    if (C.selfHits(out).length) warn.push('The seam allowance overlaps itself, usually round a tight curve or a sharp corner. Reduce the allowance there or change the corner treatment.');
+    if (!fast && C.selfHits(out).length) warn.push('The seam allowance overlaps itself, usually round a tight curve or a sharp corner. Reduce the allowance there or change the corner treatment.');
     return { pts: out, warn: warn };
   };
 
