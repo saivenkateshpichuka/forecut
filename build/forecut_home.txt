@@ -566,7 +566,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
     <div class="hxt">
       <span class="hxlive"><i></i><!--HEROTAG--></span>
       <h1>Know what the world will wear next.</h1>
-      <p class="lede">Garments, details, colours and fabrics tracked from Emerging to Fading, read for your season, your region and your calendar, with HEX colour codes your team can use on Monday morning.</p>
+      <p class="lede">Garments, details, colours and fabrics tracked from Emerging to Fading, read for your season, your region and your calendar, with Pantone TCX and HEX codes your team can use on Monday morning.</p>
       <div class="cta">
         <a class="btn" href="https://forecut.in/account.html#signup">Sign in free</a>
         <a class="btn ghost" href="ss27.html">Explore SS27</a>
