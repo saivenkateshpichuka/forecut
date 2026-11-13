@@ -172,6 +172,7 @@
         if (k.t === 'notch') { var c3 = k.c, best = null, bd = 1e9; for (var q = 1; q < outl.length; q++) { var A = outl[q - 1], Bp = outl[q], vx = Bp[0] - A[0], vy = Bp[1] - A[1], t = Math.max(0, Math.min(1, ((c3[0] - A[0]) * vx + (c3[1] - A[1]) * vy) / (vx * vx + vy * vy || 1))), px = A[0] + vx * t, py = A[1] + vy * t, dd = Math.hypot(px - c3[0], py - c3[1]); if (dd < bd) { bd = dd; best = [px, py, vx, vy]; } }
           if (best) { var l = Math.hypot(best[2], best[3]) || 1, nx = best[3] / l, ny = -best[2] / l, inside = pip([best[0] + nx * .3, best[1] + ny * .3], outl); if (inside) { nx = -nx; ny = -ny; } var cnt = k.n || 1; for (var z = 0; z < cnt; z++) { var off = (z - (cnt - 1) / 2) * .5, ox = best[0] + best[2] / l * off, oy = best[1] + best[3] / l * off; sc.push({ k: 'poly', p: [T([ox - nx * .25, oy - ny * .25]), T([ox + nx * (Math.max(sa, .4) + .2), oy + ny * (Math.max(sa, .4) + .2)])], w: .07, L: 'MARK' }); PCd.notches.push(T([ox + nx * sa, oy + ny * sa])); } } }
         if (k.t === 'text') sc.push({ k: 'text', x: k.c[0] + dx, y: k.c[1] + dy, s: .8, t: k.s, a: 'middle', col: '#6e6259', L: 'TEXT' });
+        if (k.t === 'drill') { drill(T(k.c)); PCd.drills.push(T(k.c)); }
       });
       p.edges.forEach(function (e) { if (e.t === 'fold') PCd.fold = [T(e.p[0]), T(e.p[e.p.length - 1])]; });
       if (p.grain) PCd.grain = [T(p.grain[0]), T(p.grain[1])];
@@ -519,7 +520,7 @@
   var TOILE = {}; // filled only from real sewn samples: 'kurta-women': 'size M, 12 Jan 2027, fit model …'
   var qs = new URLSearchParams(location.search), qd = qs.get('detail');
   if (qd) { var d = DET.filter(function (x) { return x[0].toLowerCase() === qd.toLowerCase(); })[0]; if (d) { S.gender = d[2]; S.gid = d[3]; resetMeas(); resetOpts(); Object.keys(d[4]).forEach(function (k) { S.o[k] = d[4][k]; }); S.detail = d[0]; S.pc = {}; } }
-  window.PMUI = { S: function () { return S; }, draw: function () { draw(); }, last: function () { return last; }, U: U, key: editKey, toast: function (t) { try { toast(t); } catch (e) {} }, unit: function () { return S.unit; } };
+  window.PMUI = { S: function () { return S; }, draw: function () { draw(); }, last: function () { return last; }, U: U, cm: cm, key: editKey, toast: function (t) { try { toast(t); } catch (e) {} }, unit: function () { return S.unit; } };
   ui(true); lang();
   try { if (/[?&]pack=1/.test(location.search) && S.detail) { var bn = document.createElement('div'); bn.className = 'spk'; bn.innerHTML = '<b>Style pack for ' + S.detail + '</b><span>Pattern, costing and tech pack are ready.</span><button type="button" class="xbtn pri" id="pm-spk">Open tech pack</button><button type="button" class="xbtn" id="pm-spkx">Close</button>'; $('.pbar').after(bn); $('#pm-spk').onclick = function () { $('#pm-dl-tech').click(); }; $('#pm-spkx').onclick = function () { bn.remove(); }; } } catch (e) { }
 })();

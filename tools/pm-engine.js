@@ -564,7 +564,25 @@
       var ops = edits[pc.id]; if (!ops || !ops.length) return pc;
       var c = Object.assign({}, pc, { edges: pc.edges.map(function (e) { return { t: e.t, p: e.p.map(function (q) { return q.slice(); }) }; }), marks: pc.marks.slice(), edited: true });
       var n = c.edges.length;
+      function xf(fn) { // move every point of the piece, its marks and grain line
+        c.edges.forEach(function (e) { e.p.forEach(function (q) { var r2 = fn(q); q[0] = r2[0]; q[1] = r2[1]; }); });
+        c.marks = c.marks.map(function (k) { var m = Object.assign({}, k); if (k.p) m.p = k.p.map(function (q) { return fn(q.slice()); }); if (k.c) m.c = fn(k.c.slice()); return m; });
+        if (c.grain) c.grain = c.grain.map(function (q) { return fn(q.slice()); });
+      }
       ops.forEach(function (op) {
+        if (op.k === 'len') { xf(function (q) { return q[1] > op.y ? [q[0], q[1] + op.d] : q; }); var xs = []; c.edges.forEach(function (e) { for (var i = 1; i < e.p.length; i++) { var a = e.p[i - 1], b = e.p[i]; if ((a[1] - op.y) * (b[1] - op.y) <= 0 && a[1] !== b[1]) xs.push(a[0] + (b[0] - a[0]) * (op.y - a[1]) / (b[1] - a[1])); } }); if (xs.length > 1) c.marks.push({ t: 'line', p: [[Math.min.apply(null, xs), op.y], [Math.max.apply(null, xs), op.y]], lab: (op.d >= 0 ? 'lengthened ' : 'shortened ') + Math.abs(op.d).toFixed(1), dash: 1, user: 1 }); return; }
+        if (op.k === 'wid') { xf(function (q) { return q[0] > op.x ? [q[0] + op.d, q[1]] : q; }); return; }
+        if (op.k === 'pleat') { xf(function (q) { return q[0] > op.x ? [q[0] + op.d, q[1]] : q; }); var ys = []; c.edges.forEach(function (e) { e.p.forEach(function (q) { ys.push(q[1]); }); }); var y0 = Math.min.apply(null, ys), y1 = y0 + Math.min(12, (Math.max.apply(null, ys) - y0) * .25);
+          c.marks.push({ t: 'line', p: [[op.x, y0], [op.x, y1]], lab: 'pleat', dash: 1, user: 1 }, { t: 'line', p: [[op.x + op.d, y0], [op.x + op.d, y1]], dash: 1, user: 1 }, { t: 'line', p: [[op.x + op.d * .2, y0 + 2], [op.x + op.d * .8, y0 + 2]], lab: 'fold →', user: 1 }); return; }
+        if (op.k === 'spread') { // slash from b to the hinge a, and swing the far side open by op.d at b
+          var ax = op.a[0], ay = op.a[1], bx = op.b[0] - ax, by = op.b[1] - ay, L2 = Math.hypot(bx, by) || 1, ang = (op.d / L2) * (op.dir || 1), cs = Math.cos(ang), sn = Math.sin(ang);
+          xf(function (q) { var qx = q[0] - ax, qy = q[1] - ay; if (bx * qy - by * qx <= 0) return q; return [ax + qx * cs - qy * sn, ay + qx * sn + qy * cs]; });
+          c.marks.push({ t: 'line', p: [op.a.slice(), op.b.slice()], lab: 'slash and spread ' + Math.abs(op.d).toFixed(1), dash: 1, user: 1 }); return; }
+        if (op.k === 'drill') { c.marks.push({ t: 'drill', c: op.c.slice(), user: 1 }); return; }
+        if (op.k === 'dart') { var e1 = c.edges[op.e]; if (!e1) return; var cl1 = cumLen(e1.p), L1 = cl1[cl1.length - 1] || 1, w = op.w / L1, p1 = PM.edgePoint(e1.p, Math.max(0, op.t - w / 2)), p2 = PM.edgePoint(e1.p, Math.min(1, op.t + w / 2)), mid = PM.edgePoint(e1.p, op.t);
+          var tx = p2[0] - p1[0], ty = p2[1] - p1[1], tl = Math.hypot(tx, ty) || 1, nx = -ty / tl, ny = tx / tl, cxm = 0, cym = 0, nn = 0; c.edges.forEach(function (e) { e.p.forEach(function (q) { cxm += q[0]; cym += q[1]; nn++; }); }); cxm /= nn; cym /= nn;
+          if ((cxm - mid[0]) * nx + (cym - mid[1]) * ny < 0) { nx = -nx; ny = -ny; }
+          c.marks.push({ t: 'dart', p: [p1, [mid[0] + nx * op.l, mid[1] + ny * op.l], p2], lab: 'dart ' + op.w.toFixed(1), user: 1 }); return; }
         if (op.e == null || op.e >= n) return;
         if (op.k === 'notch') { var e0 = c.edges[op.e]; c.marks.push({ t: 'notch', c: PM.edgePoint(e0.p, op.t), n: 1, user: 1 }); return; }
         if (op.k === 'corner') { // vertex shared by the end of edge e-1 and the start of edge e

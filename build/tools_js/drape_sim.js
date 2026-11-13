@@ -236,7 +236,17 @@
     salwar: { n: 'Salwar', gid: 'salwar', kind: 'salwar' },
     patiala: { n: 'Patiala salwar', gid: 'patiala', kind: 'salwar' },
     kurtaset: { n: 'Kurta with salwar', gid: 'kurta', kind: 'torso', with: 'salwar' },
-    kurtachuri: { n: 'Kurta with churidar', gid: 'kurta', kind: 'torso', with: 'churidar' }
+    kurtachuri: { n: 'Kurta with churidar', gid: 'kurta', kind: 'torso', with: 'churidar' },
+    shirt: { n: 'Shirt', gid: 'shirt', kind: 'torso', open: 1, fix: { pockets: 0 } },
+    shirtdress: { n: 'Shirt dress', gid: 'shirtdress', kind: 'torso', open: 1, fix: { pockets: 0 } },
+    blouse: { n: 'Button-front blouse', gid: 'blouse', kind: 'torso', open: 1, fix: { opening: 1 } },
+    polo: { n: 'Polo shirt', gid: 'polo', kind: 'torso' },
+    jacket: { n: 'Nehru jacket / waistcoat', gid: 'jacket', kind: 'torso', open: 1, fix: { pockets: 0 } },
+    bandhgala: { n: 'Bandhgala', gid: 'bandhgala', kind: 'torso', open: 1, fix: { pockets: 0 } },
+    sherwani: { n: 'Sherwani', gid: 'sherwani', kind: 'torso', open: 1 },
+    blazer: { n: 'Blazer', gid: 'blazer', kind: 'torso', open: 1, fix: { pockets: 0 } },
+    coat: { n: 'Overcoat', gid: 'coat', kind: 'torso', open: 1, fix: { pockets: 0 } },
+    bomber: { n: 'Bomber jacket', gid: 'bomber', kind: 'torso', open: 1, zip: 1 }
   };
   /* bottoms: trousers and Indian pants wrap from the hips down each leg; skirts are panels round the body */
   function loopPts(segs) { var a = []; segs.forEach(function (s, i) { s.pts.forEach(function (q, j) { if (i && !j) return; a.push(q); }); }); return a; }
@@ -424,6 +434,10 @@
       for (; j < pts.length; j++) cur.push(pts[j]); out.push({ key: role + n, pts: cur });
       out.ndarts = n; return out;
     }
+    function mergeYoke(bk, yk) { // a shirt back and its yoke as one piece (the box pleat stays as a small step at the armhole)
+      var e = bk.edges, ye = yk.edges, top = ye[0].p[ye[0].p.length - 1];
+      return { id: 'back', edges: [{ t: 'fold', p: [top].concat(e[0].p) }, e[1], e[2], { t: 'seam', p: e[3].p.concat(ye[3].p.slice().reverse()) }, { t: 'seam', p: ye[2].p.slice().reverse() }, { t: 'seam', p: ye[1].p.slice().reverse() }], marks: bk.marks };
+    }
     function maxU(segs) { var u = 0; segs.forEach(function (s) { s.pts.forEach(function (q) { u = Math.max(u, Math.abs(q[0])); }); }); return u; }
     var mods = { cutDarts: cutDarts, half: half, maxU: maxU };
     if (ST.kind === 'pants' || ST.kind === 'salwar' || ST.kind === 'circle' || ST.kind === 'panels') { bottoms(ST.kind, r, o, m, body, panels, seams, rings, mods); }
@@ -443,11 +457,18 @@
       if (ST.with) { var rb = PM.build(ST.with, gender, m, Object.assign({}, PM.GARMENTS[ST.with].d, ST.with === 'churidar' ? {} : { fullness: 'regular' })); bottoms(ST.with === 'churidar' ? 'pants' : 'salwar', rb, PM.GARMENTS[ST.with].d, m, body, panels, seams, rings, mods); }
       var P0 = panels.length, lay = ST.with ? 2.6 : 0;
       var f = byId.front, b = byId.back, sl = byId.sleeve;
-      if (!f || !b || f.edges[0].t !== 'fold') throw new Error('This style is not available in 3D yet.');
+      if (f && b && byId.yoke && b.edges.length === 5) b = mergeYoke(b, byId.yoke);
+      var open = !!(f && f.edges[0].t !== 'fold');
+      if (!f || !b || b.edges[0].t !== 'fold' || (!open && f.edges[0].t !== 'fold') || f.edges.length !== 6) throw new Error('This style is not available in 3D yet.');
       var roles = ['hem', 'side', 'arm', 'sh', 'neck'];
       var slit = +o.slit || 0, Lh = f.edges[1].p[0][1];
-      var segF = half(f, roles), segB = half(b, roles);
-      [segF, segB].forEach(function (segs) { // open the side seams below the slit
+      var segB = half(b, roles), fronts;
+      if (open) { // two fronts, each cut with its own extension past centre front
+        var segR = f.edges.map(function (e, i) { return { key: (i ? roles[i - 1] : 'cf') + '.R', pts: e.p.map(function (q) { return q.slice(); }) }; });
+        var segL = segR.slice().reverse().map(function (sg) { return { key: sg.key.replace('.R', '.L'), pts: mirror(sg.pts) }; });
+        fronts = [segR, segL];
+      } else fronts = [half(f, roles)];
+      fronts.concat([segB]).forEach(function (segs) { // open the side seams below the slit
         if (!(slit > 0 && slit < Lh * .6)) return;
         for (var i = 0; i < segs.length; i++) {
           var s = segs[i]; if (s.key !== 'side.R' && s.key !== 'side.L') continue;
@@ -457,10 +478,115 @@
           segs.splice(i, 1, right ? lower : upper, right ? upper : lower); i++;
         }
       });
-      var len = Lh, R2 = Math.max(body.maxA(Math.max(0, by.hps - len - 4), by.hps) + 3.2 + lay, Math.max(maxU(segF), maxU(segB)) / 1.42), top2 = by.hps + 1.5;
-      panels.push({ name: 'F', segs: segF, axis: yAxis, place: function (u, v) { var th = u / R2; return [R2 * Math.sin(th), top2 - v, R2 * Math.cos(th) + .5]; } });
-      panels.push({ name: 'B', segs: segB, axis: yAxis, place: function (u, v) { var th = u / R2; return [R2 * Math.sin(th), top2 - v, -R2 * Math.cos(th) - .5]; } });
-      seams.push([[P0, 'side.R'], [P0 + 1, 'side.R']], [[P0, 'side.L'], [P0 + 1, 'side.L']], [[P0, 'sh.R'], [P0 + 1, 'sh.R']], [[P0, 'sh.L'], [P0 + 1, 'sh.L']]);
+      var mu = maxU(segB); fronts.forEach(function (sg) { mu = Math.max(mu, maxU(sg)); });
+      var len = Lh, R2 = Math.max(body.maxA(Math.max(0, by.hps - len - 4), by.hps) + 3.2 + lay, mu / 1.42), top2 = by.hps + 1.5;
+      var iFR, iFL, iB, overR = gender !== 'women'; // men, kids and unisex lap left over right; women right over left
+      if (open) {
+        iFR = panels.length; panels.push({ name: 'FR', segs: fronts[0], axis: yAxis, place: function (u, v) { var r0 = R2 + (overR ? .9 : 0), th = u / R2; return [r0 * Math.sin(th), top2 - v, r0 * Math.cos(th) + .5]; } });
+        iFL = panels.length; panels.push({ name: 'FL', segs: fronts[1], axis: yAxis, place: function (u, v) { var r0 = R2 + (overR ? 0 : .9), th = u / R2; return [r0 * Math.sin(th), top2 - v, r0 * Math.cos(th) + .5]; } });
+      } else { iFR = iFL = panels.length; panels.push({ name: 'F', segs: fronts[0], axis: yAxis, place: function (u, v) { var th = u / R2; return [R2 * Math.sin(th), top2 - v, R2 * Math.cos(th) + .5]; } }); }
+      iB = panels.length; panels.push({ name: 'B', segs: segB, axis: yAxis, place: function (u, v) { var th = u / R2; return [R2 * Math.sin(th), top2 - v, -R2 * Math.cos(th) - .5]; } });
+      seams.push([[iFR, 'side.R'], [iB, 'side.R']], [[iFL, 'side.L'], [iB, 'side.L']], [[iFR, 'sh.R'], [iB, 'sh.R']], [[iFL, 'sh.L'], [iB, 'sh.L']]);
+      var tacks = [], buttons = [], zip = null, closed = o.fasten !== 'open';
+      if (open) {
+        var iO = overR ? iFR : iFL, iU = overR ? iFL : iFR;
+        if (ST.zip) { zip = { p: iFR, key: 'cf.R', q: iFL, qkey: 'cf.L', closed: closed }; if (closed) seams.push([[iFR, 'cf.R'], [iFL, 'cf.L'], 'auto']); }
+        (f.marks || []).forEach(function (k) { if (k.t !== 'button') return; buttons.push({ over: iO, under: iU, c: [0, k.c[1]], closed: closed }); if (closed) tacks.push([[iO, [0, k.c[1]]], [iU, [0, k.c[1]]]]); });
+      } else if (byId.placket) { var nd0 = f.edges[5].p[f.edges[5].p.length - 1][1]; [3, 9].forEach(function (dy) { buttons.push({ over: iFR, under: iFR, c: [0, nd0 + dy], closed: true, small: 1 }); }); }
+      var tops = []; // topstitching: front edges and hems
+      if (open && !ST.zip) tops.push([iFR, 'cf.R'], [iFL, 'cf.L']);
+      tops.push([iFR, 'hem.R'], [iFL, 'hem.L'], [iB, 'hem.R'], [iB, 'hem.L']);
+      // collars and bands, laid along the real 3D neckline and sewn to it
+      function edgeOf(pi, key) { var sg = panels[pi].segs.filter(function (q) { return q.key === key; })[0]; return sg ? sg.pts : null; }
+      function path3(parts) { // [[panel, pts]] in pattern units, joined into one 3D polyline from centre back outwards on the +x side
+        var P3 = [], cum = [0];
+        parts.forEach(function (pp) { pp[1].forEach(function (q, k) { if (P3.length && k === 0) return; var x3 = panels[pp[0]].place(q[0], q[1]); if (P3.length) cum.push(cum[cum.length - 1] + Math.hypot(x3[0] - P3[P3.length - 1][0], x3[1] - P3[P3.length - 1][1], x3[2] - P3[P3.length - 1][2])); P3.push(x3); }); });
+        var L = cum[cum.length - 1] || 1;
+        return { L: L, at: function (s) { s = Math.max(0, Math.min(L, s)); var j = 1; while (j < cum.length - 1 && cum[j] < s) j++; var t = (s - cum[j - 1]) / ((cum[j] - cum[j - 1]) || 1), A = P3[j - 1], B2 = P3[j]; return [A[0] + (B2[0] - A[0]) * t, A[1] + (B2[1] - A[1]) * t, A[2] + (B2[2] - A[2]) * t]; } };
+      }
+      function rev(p) { return p.slice().reverse(); }
+      var nB = edgeOf(iB, 'neck.R'), nF = edgeOf(iFR, 'neck.R');
+      function ringPath(halfLen, yAt, clear) { // half a ring round the body from centre back (theta 0) to centre front (pi), kept just off the skin
+        var rn = halfLen / PI, nP = 48, P3 = [], cum = [0], g3 = [0, 0, 0];
+        for (var k = 0; k <= nP; k++) { var th = PI * k / nP, q = [rn * Math.sin(th), yAt(th), -rn * Math.cos(th) * 1.08];
+          for (var it = 0; it < 12 && body.dist(q[0], q[1], q[2], g3) < clear; it++) { var dd = body.dist(q[0], q[1], q[2], g3); q[0] += g3[0] * (clear - dd + .05); q[2] += g3[2] * (clear - dd + .05); }
+          if (k) cum.push(cum[k - 1] + Math.hypot(q[0] - P3[k - 1][0], q[1] - P3[k - 1][1], q[2] - P3[k - 1][2])); P3.push(q); }
+        var L = cum[nP];
+        return { L: L, at: function (s) { s = Math.max(0, Math.min(L, s)); var j = 1; while (j < nP && cum[j] < s) j++; var t = (s - cum[j - 1]) / ((cum[j] - cum[j - 1]) || 1), A = P3[j - 1], B2 = P3[j]; return [A[0] + (B2[0] - A[0]) * t, A[1] + (B2[1] - A[1]) * t, A[2] + (B2[2] - A[2]) * t]; } };
+      }
+      var bdep = Math.min(nB[0][1], nB[nB.length - 1][1]) === 0 ? Math.max(nB[0][1], nB[nB.length - 1][1]) : 2, fdep = Math.max(nF[0][1], nF[nF.length - 1][1]);
+      var neckPath = ringPath(plen(nB) + plen(nF), function (th) { var u = (1 - Math.cos(th)) / 2; return top2 - .8 - (bdep + (fdep - bdep) * Math.pow(u, fdep > 12 ? 1.6 : 1)); }, .9);
+      var backFrac = plen(nB) / (plen(nB) + plen(nF));
+      function outDir(q) { var l = Math.hypot(q[0], q[2]) || 1; return [q[0] / l, 0, q[2] / l]; }
+      function attach(path, pathLen, bottomLen, sgnOf, sOf, shape) { // a collar point (u, v): along the path by arc length, then up and over by shape(v)
+        return function (u, v) { var sg = sgnOf(u), sP = Math.min(pathLen, sOf(u) * pathLen / bottomLen), q = path.at(sP), od = outDir(q), d = shape(v); return [sg * (q[0] + od[0] * d[0]), q[1] + d[1], q[2] + od[2] * d[0]]; };
+      }
+      function attachFall(path, bottomLen, sgnOf, sOf, standAt, out0) { // stand up to standAt(f), then fall away from the neckline (down at the back, sideways along a V front)
+        return function (u, v) {
+          var sg = sgnOf(u), sP = Math.min(path.L, sOf(u) * path.L / bottomLen), f = sP / path.L, q = path.at(sP), a = path.at(Math.max(0, sP - .6)), b2 = path.at(Math.min(path.L, sP + .6));
+          var t = [b2[0] - a[0], b2[1] - a[1], b2[2] - a[2]], tl = Math.hypot(t[0], t[1], t[2]) || 1; t = [t[0] / tl, t[1] / tl, t[2] / tl];
+          var n = outDir(q), l = [-(t[1] * n[2] - t[2] * n[1]), -(t[2] * n[0] - t[0] * n[2]), -(t[0] * n[1] - t[1] * n[0])], ll = Math.hypot(l[0], l[1], l[2]) || 1; l = [l[0] / ll, l[1] / ll, l[2] / ll];
+          var st = standAt(f), r, y, x0, z0;
+          if (v <= st) { r = out0; x0 = q[0] + n[0] * r; z0 = q[2] + n[2] * r; y = q[1] + v; }
+          else { var w = v - st; r = out0 + .5 + w * .12; x0 = q[0] + n[0] * r + l[0] * w; z0 = q[2] + n[2] * r + l[2] * w; y = q[1] + st + l[1] * w; }
+          return [sg * x0, y, z0];
+        };
+      }
+      function splitLen(pts, L) { var c = 0; for (var i = 1; i < pts.length; i++) { var d = Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]); if (c + d >= L) { var t = (L - c) / (d || 1), q = [pts[i - 1][0] + (pts[i][0] - pts[i - 1][0]) * t, pts[i - 1][1] + (pts[i][1] - pts[i - 1][1]) * t]; return [pts.slice(0, i).concat([q]), [q].concat(pts.slice(i))]; } c += d; } return [pts, [pts[pts.length - 1]]]; }
+      function halfCollar(pc, ib, roles2, frac) { // a piece cut on the centre-back fold; its edge ib sews to the neckline (split into back and front parts)
+        var right = [];
+        for (var i = 1; i < pc.edges.length; i++) {
+          var pts = pc.edges[i].p.map(function (q) { return q.slice(); });
+          if (i !== ib) { right.push({ key: roles2[i - 1] + '.R', pts: pts }); continue; }
+          var fromCB = Math.abs(pts[0][0]) < Math.abs(pts[pts.length - 1][0]), pp = fromCB ? pts : rev(pts), cut = splitLen(pp, plen(pp) * frac);
+          if (fromCB) right.push({ key: 'nb.R', pts: cut[0] }, { key: 'nf.R', pts: cut[1] }); else right.push({ key: 'nf.R', pts: rev(cut[1]) }, { key: 'nb.R', pts: rev(cut[0]) });
+        }
+        var left = right.slice().reverse().map(function (sg) { return { key: sg.key.replace('.R', '.L'), pts: mirror(sg.pts) }; });
+        return right.concat(left);
+      }
+      function rectCollar(Lr, H, frac) { // a full-length strip: bottom edge runs from the left front round the back to the right front
+        var h2 = Lr / 2, a1 = h2 * (1 - frac);
+        return [{ key: 'endL', pts: [[0, H], [0, 0]] }, { key: 'nf.L', pts: [[0, 0], [a1, 0]] }, { key: 'nb.L', pts: [[a1, 0], [h2, 0]] }, { key: 'nb.R', pts: [[h2, 0], [Lr - a1, 0]] }, { key: 'nf.R', pts: [[Lr - a1, 0], [Lr, 0]] }, { key: 'endR', pts: [[Lr, 0], [Lr, H]] }, { key: 'top', pts: [[Lr, H], [0, H]] }];
+      }
+      function sewNeck(pi) { seams.push([[pi, 'nb.R'], [iB, 'neck.R'], 'auto'], [[pi, 'nb.L'], [iB, 'neck.L'], 'auto'], [[pi, 'nf.R'], [iFR, 'neck.R'], 'auto'], [[pi, 'nf.L'], [iFL, 'neck.L'], 'auto']); }
+      function bottomLen(segs) { var Lb = 0; segs.forEach(function (sg) { if (/^n[bf]\.R$/.test(sg.key)) Lb += plen(sg.pts); }); return Lb || 1; }
+      var halfSgn = function (u) { return u < 0 ? -1 : 1; }, halfS = function (u) { return Math.abs(u); };
+      var stand = function (h0) { return function (v) { return [.45, Math.max(0, v) + h0]; }; };
+      var fall = function (st, out0) { return function (v) { return v <= st ? [out0 + .2 * v / st, v] : [out0 + .25 + (v - st) * .32, st - (v - st) * .92]; }; };
+      var band = byId.band, col = byId.collar, bandTop = null;
+      if (band) {
+        var bs = halfCollar(band, 3, ['top', 'end'], backFrac), bi = panels.length, bL = bottomLen(bs);
+        panels.push({ name: 'BAND', segs: bs, axis: yAxis, place: attach(neckPath, neckPath.L, bL, halfSgn, halfS, stand(0)) }); sewNeck(bi);
+        var bH = plen(band.edges[0].p); bandTop = { pi: bi, h: bH, bL: bL }; tops.push([bi, 'top.R'], [bi, 'top.L']);
+      }
+      if (col && col.edges.length === 4) {
+        if (bandTop) { // shirt collar on its band: bottom edge sews to the band's top edge
+          var cs = halfCollar(col, 1, ['bot', 'end', 'out'], 1).map(function (sg) { return { key: sg.key.replace('nb.', 'bot.'), pts: sg.pts }; }).filter(function (sg) { return !/^nf\./.test(sg.key) || plen(sg.pts) > .01; });
+          var ci = panels.length, cL = 0; cs.forEach(function (sg) { if (sg.key === 'bot.R') cL = plen(sg.pts); });
+          var bT = bandTop.h, bandPath = { L: neckPath.L, at: function (sP) { var q = neckPath.at(sP); return [q[0], q[1] + bT, q[2]]; } };
+          panels.push({ name: 'COL', segs: cs, axis: yAxis, crease: 1.4, place: attachFall(bandPath, cL, halfSgn, halfS, function () { return 1.4; }, .7) });
+          seams.push([[ci, 'bot.R'], [bandTop.pi, 'top.R'], 'auto'], [[ci, 'bot.L'], [bandTop.pi, 'top.L'], 'auto']); tops.push([ci, 'out.R'], [ci, 'out.L']);
+        } else { // tailored collar sewn straight to the neckline (blazer, coat)
+          var ts = halfCollar(col, 1, ['bot', 'end', 'out'], backFrac), ti = panels.length, tL = bottomLen(ts);
+          var bfr = backFrac; panels.push({ name: 'COL', segs: ts, axis: yAxis, crease: 2.6, place: attachFall(neckPath, tL, halfSgn, halfS, function (f) { var k = Math.max(0, Math.min(1, (f - bfr) / .3)); return 2.6 - 2.2 * k * k * (3 - 2 * k); }, .5) }); sewNeck(ti); tops.push([ti, 'out.R'], [ti, 'out.L']);
+        }
+      }
+      var kc = byId.knitcollar || byId.collarrib;
+      if (kc) { // polo knit collar (stands then falls) or bomber rib collar (folded double, so half its cut depth)
+        var kx = 0, ky = 0; kc.edges.forEach(function (e) { e.p.forEach(function (q) { kx = Math.max(kx, q[0]); ky = Math.max(ky, q[1]); }); });
+        var rib = !!byId.collarrib, kH = rib ? ky / 2 : ky, ks = rectCollar(kx, kH, backFrac), ki = panels.length;
+        panels.push({ name: 'KC', segs: ks, axis: yAxis, crease: rib ? null : 2.8, place: attach(neckPath, neckPath.L, kx / 2, function (u) { return u < kx / 2 ? -1 : 1; }, function (u) { return Math.abs(u - kx / 2); }, rib ? stand(0) : fall(2.8, .5)) }); sewNeck(ki);
+      }
+      if (byId.hemband) { // rib hem band, folded double
+        var hb = byId.hemband, hx = 0, hy = 0; hb.edges.forEach(function (e) { e.p.forEach(function (q) { hx = Math.max(hx, q[0]); hy = Math.max(hy, q[1]); }); });
+        var hFr = edgeOf(iFR, 'hem.R'), hBk = edgeOf(iB, 'hem.R');
+        var hemPath = ringPath(plen(hBk) + plen(hFr), function () { return top2 - Lh + .5; }, 1.2);
+        var hFrac = plen(hBk) / (plen(hBk) + plen(hFr)), hs = rectCollar(hx, hy / 2, hFrac).map(function (sg) { return { key: sg.key.replace(/^n([bf])/, 'h$1'), pts: sg.pts.map(function (q) { return [q[0], -q[1]]; }) }; }), hi = panels.length;
+        panels.push({ name: 'HB', segs: hs, axis: yAxis, place: attach(hemPath, hemPath.L, hx / 2, function (u) { return u < hx / 2 ? -1 : 1; }, function (u) { return Math.abs(u - hx / 2); }, function (v) { return [.3, v]; }) });
+        seams.push([[hi, 'hb.R'], [iB, 'hem.R'], 'auto'], [[hi, 'hb.L'], [iB, 'hem.L'], 'auto'], [[hi, 'hf.R'], [iFR, 'hem.R'], 'auto'], [[hi, 'hf.L'], [iFL, 'hem.L'], 'auto']);
+        rings.push({ keys: [[hi, 'top']], len: hx });
+        tops.splice(tops.length - 4, 4);
+      }
       if (sl && o.sleeve !== 'none') {
         var cap = sl.edges[0].p, mid = 0; for (var i = 0; i < cap.length; i++) if (cap[i][1] < cap[mid][1]) mid = i;
         var capB = cap.slice(0, mid + 1), capF = cap.slice(mid), bw = Math.abs(cap[0][0]);
@@ -474,12 +600,15 @@
             return [J.J[0] + J.d[0] * s + J.up[0] * c, J.J[1] + J.d[1] * s + J.up[1] * c, J.J[2] + J.d[2] * s + J.up[2] * c + sn + .5];
           } });
           var pi = panels.length - 1;
-          if (J.s > 0) seams.push([[P0, 'arm.R'], [pi, 'capF', 1]], [[P0 + 1, 'arm.R'], [pi, 'capB']], [[pi, 'uF'], [pi, 'uB', 1]]);
-          else seams.push([[P0, 'arm.L'], [pi, 'capF']], [[P0 + 1, 'arm.L'], [pi, 'capB', 1]], [[pi, 'uF'], [pi, 'uB', 1]]);
+          if (byId.cuff) { var cx = 0, cy = 0; byId.cuff.edges.forEach(function (e) { e.p.forEach(function (q) { cx = Math.max(cx, q[0]); cy = Math.max(cy, q[1]); }); }); rings.push({ keys: [[pi, 'hem']], len: Math.max(cx, cy) * (byId.cuff.edges.length && /rib/.test(byId.cuff.cut || '') ? 1 : .92), tilt: true }); }
+          if (J.s > 0) seams.push([[iFR, 'arm.R'], [pi, 'capF', 1]], [[iB, 'arm.R'], [pi, 'capB']], [[pi, 'uF'], [pi, 'uB', 1]]);
+          else seams.push([[iFL, 'arm.L'], [pi, 'capF']], [[iB, 'arm.L'], [pi, 'capB', 1]], [[pi, 'uF'], [pi, 'uB', 1]]);
         });
       }
+      var extra = { tacks: tacks, buttons: buttons, zip: zip, tops: tops };
     }
-    return { panels: panels, seams: seams, rings: rings, info: r.info, label: r.label, opts: o };
+    if (typeof extra === 'undefined') var extra = {};
+    return { panels: panels, seams: seams, rings: rings, info: r.info, label: r.label, opts: o, tacks: extra.tacks || [], buttons: extra.buttons || [], zip: extra.zip || null, tops: extra.tops || [] };
   };
 
   /* ---------------- meshing ---------------- */
@@ -540,6 +669,12 @@
       }
       for (var i = 0; i < a.length; i++) seamPairs.push(a[i], b[i]);
     });
+    // tacks: single points held together (buttons through their buttonholes)
+    var tackOut = [];
+    (G.tacks || []).forEach(function (tk) {
+      var ids = tk.map(function (e) { var P = polys[e[0]], bi = -1, bd = 1e9; for (var i = 0; i < P.n; i++) { var k = P.base + i, d = Math.hypot(UV[2 * k] - e[1][0], UV[2 * k + 1] - e[1][1]); if (d < bd) { bd = d; bi = k; } } return bi; });
+      if (ids[0] >= 0 && ids[1] >= 0) { seamPairs.push(ids[0], ids[1]); tackOut.push(ids[0], ids[1]); }
+    });
     // long-range tethers: a flat panel can bend but never get longer than its pattern, so cap far-apart pairs at their flat distance
     var teth = [], seed = 7; function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
     polys.forEach(function (P) {
@@ -561,7 +696,7 @@
       });
     });
     var ringsOut = (G.rings || []).map(function (rg0) { var rg = Array.isArray(rg0) ? rg0 : rg0.keys, ids = [], L = 0; rg.forEach(function (k) { var a = segIdx[keyOf(k[0], k[1])]; for (var i = 0; i < a.length; i++) { if (ids.indexOf(a[i]) < 0) ids.push(a[i]); if (i) L += Math.hypot(UV[2 * a[i]] - UV[2 * a[i - 1]], UV[2 * a[i] + 1] - UV[2 * a[i - 1] + 1]); } }); return { ids: ids, len: rg0.len || L, tilt: !!rg0.tilt }; });
-    return { rings: ringsOut, x: new Float32Array(X), uv: new Float32Array(UV), tri: new Uint32Array(T), panel: new Uint8Array(panelOf), seams: new Uint32Array(seamPairs), segIdx: segIdx, teth: new Float32Array(teth), polys: polys };
+    return { rings: ringsOut, x: new Float32Array(X), uv: new Float32Array(UV), tri: new Uint32Array(T), panel: new Uint8Array(panelOf), seams: new Uint32Array(seamPairs), segIdx: segIdx, teth: new Float32Array(teth), polys: polys, tacks: tackOut, crease: G.panels.map(function (P) { return P.crease == null ? null : P.crease; }) };
   };
 
   /* ---------------- fabrics ---------------- */
@@ -630,7 +765,7 @@
       [[a, b, c], [b, c, a], [c, a, b]].forEach(function (e) { var k = key(e[0], e[1]); if (edges[k] === undefined) { edges[k] = [e[0], e[1], e[2], -1]; } else edges[k][3] = e[2]; });
     }
     function rest(a, b) { return Math.hypot(uv[2 * a] - uv[2 * b], uv[2 * a + 1] - uv[2 * b + 1]); }
-    for (var k in edges) { var e = edges[k]; E.push(e[0], e[1], rest(e[0], e[1])); if (e[3] >= 0) Bn.push(e[2], e[3], rest(e[2], e[3])); }
+    var CR = M.crease || []; for (var k in edges) { var e = edges[k]; E.push(e[0], e[1], rest(e[0], e[1])); if (e[3] < 0) continue; var cr = CR[M.panel[e[2]]]; if (cr != null && (uv[2 * e[2] + 1] - cr) * (uv[2 * e[3] + 1] - cr) < 0) continue; /* a fold line (collar roll) bends freely */ Bn.push(e[2], e[3], rest(e[2], e[3])); }
     for (i = 0; i < n; i++) this.w[i] = mass[i] > 0 ? 1 / mass[i] : 0;
     // stretch compliance per edge from its direction on the pattern: the grain runs down the piece (pattern y)
     var EA = new Float32Array(E.length / 3);
@@ -781,7 +916,7 @@
     this.wake();
   };
   Sim.prototype.endPanel = function () { var P = this.pinned; if (!P) return; P.ids.forEach(function (k, q) { this.w[k] = P.wsave[q]; this.v[3 * k] = this.v[3 * k + 1] = this.v[3 * k + 2] = 0; }, this); this.pinned = null; this.wake(); };
-  Sim.prototype.seamGap = function () { var S = this.S, x = this.x, mx = 0; for (var j = 0; j < S.length; j += 2) { var a = S[j] * 3, b = S[j + 1] * 3; mx = Math.max(mx, Math.hypot(x[a] - x[b], x[a + 1] - x[b + 1], x[a + 2] - x[b + 2])); } return mx; };
+  Sim.prototype.seamGap = function () { var S = this.S, x = this.x, mx = 0, nS = S.length - ((this.M.tacks || []).length); for (var j = 0; j < nS; j += 2) { var a = S[j] * 3, b = S[j + 1] * 3; mx = Math.max(mx, Math.hypot(x[a] - x[b], x[a + 1] - x[b + 1], x[a + 2] - x[b + 2])); } return mx; };
   Sim.prototype.computeStrain = function () {
     var E = this.E, x = this.x, n = this.n, s = this.strain, c = new Float32Array(n), i;
     for (i = 0; i < n; i++) s[i] = 0;

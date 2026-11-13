@@ -1,21 +1,24 @@
 /* Forecut. Built from build/tools_js; edit there. */
-import './pm-engine.js?v=fx-20261113b';
-import './drape-sim.js?v=fx-20261113b';
+import './pm-engine.js?v=fx-20261113c';
+import './drape-sim.js?v=fx-20261113c';
 /* Forecut 3D Drape Studio: page, controls, 3D view and 2D pattern view. Desktop only. */
 import * as THREE from './vendor/three.module.min.js';
 import { OrbitControls } from './vendor/OrbitControls.js';
 import { TransformControls } from './vendor/TransformControls.js';
 
-const PM = window.PM, D = window.FCDrape, V = 'fx-20261113b';
+const PM = window.PM, D = window.FCDrape, V = 'fx-20261113c';
 const $ = (s, r) => (r || document).querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const KEY = 'fc-tool-drape';
 const COLOURS = [['#f3efe6', 'Ecru'], ['#1f2a44', 'Navy'], ['#b5462f', 'Brick'], ['#2f5d50', 'Bottle green'], ['#d9a441', 'Turmeric'], ['#c9a7b6', 'Dusty rose'], ['#7c8ea3', 'Chambray'], ['#242424', 'Black']];
 const NECK = [['round', 'Round'], ['crew', 'Crew'], ['deep', 'Deep round'], ['ushape', 'U-neck'], ['v', 'V-neck'], ['boat', 'Boat'], ['square', 'Square']];
 const SLEEVE = { plain: 'Set-in sleeve', tee: 'T-shirt sleeve', puff: 'Puff sleeve', bell: 'Bell sleeve', cap: 'Cap sleeve', none: 'Sleeveless' };
-const SLEEVES = { tshirt: ['tee', 'none'], top: ['plain', 'puff', 'bell', 'cap', 'none'], kurta: ['plain', 'bell', 'puff', 'cap', 'none'], dress: ['plain', 'puff', 'bell', 'cap', 'none'] };
+const SLEEVES = { tshirt: ['tee', 'none'], top: ['plain', 'puff', 'bell', 'cap', 'none'], kurta: ['plain', 'bell', 'puff', 'cap', 'none'], dress: ['plain', 'puff', 'bell', 'cap', 'none'], shirt: ['shirt', 'plain'], shirtdress: ['shirt', 'plain'], blouse: ['plain', 'puff', 'cap', 'none'] };
+SLEEVE.shirt = 'Shirt sleeve';
 const GROUPS = [['Tops and dresses', ['tshirt', 'top', 'tank', 'sweat', 'kurta', 'dress']], ['Skirts', ['aline', 'pencil', 'circle', 'gathered', 'kalis', 'lehenga']],
+  ['Shirts and jackets', ['shirt', 'shirtdress', 'blouse', 'polo', 'jacket', 'bandhgala', 'sherwani', 'blazer', 'coat', 'bomber']],
   ['Trousers and Indian bottoms', ['trousers', 'jeans', 'churidar', 'salwar', 'patiala', 'gharara']], ['Sets', ['kurtaset', 'kurtachuri']]];
+const BTN = { horn: ['Horn', '#4a3426', .45], pearl: ['Pearl', '#efe9df', .25], metal: ['Metal', '#b8a067', .3], wood: ['Wood', '#8a5a34', .7], self: ['Covered in the fabric', '', .8], black: ['Black', '#1c1c1c', .35] };
 const LEG = [['straight', 'Straight'], ['tapered', 'Tapered'], ['wide', 'Wide-leg'], ['palazzo', 'Palazzo'], ['barrel', 'Barrel'], ['jogger', 'Jogger'], ['shorts', 'Shorts']];
 const PFIT = [['trouser', 'Trouser (hangs straight)'], ['slack', 'Slack (closer)'], ['jean', 'Jean (contoured)']];
 const FULL = [['slim', 'Slim'], ['regular', 'Regular'], ['full', 'Full (Punjabi)']];
@@ -28,7 +31,7 @@ const SEAMC = ['#c4572f', '#2f6f8f', '#7a5c99', '#3d8a5a', '#b08a1e', '#a23b72',
 
 let S = load();
 try { const q = new URLSearchParams(location.search); if (D.STYLES[q.get('style')]) { S.style = q.get('style'); S.opts = {}; S.meas = {}; } if (GENDER[q.get('gender')]) S.gender = q.get('gender'); if (q.get('size')) S.size = q.get('size'); if (q.get('o')) { const o = JSON.parse(q.get('o')); S.opts = {}; ['len', 'ease', 'neck', 'sleeve', 'slen', 'flare', 'slit', 'slen2', 'leg', 'pfit', 'tlen', 'mohri', 'fullness', 'ruch', 'gfull', 'panels', 'hemc', 'circle'].forEach(k => { const v = o[k]; if (v === undefined) return; if (/^[\d.]+$/.test(String(v))) S.opts[k] = Math.min(700, +v); else if ((k === 'neck' && NECK.some(n => n[0] === v)) || (k === 'sleeve' && SLEEVE[v]) || (k === 'slen' && SLEN.some(n => n[0] === v)) || (k === 'leg' && LEG.some(n => n[0] === v)) || (k === 'pfit' && PFIT.some(n => n[0] === v)) || (k === 'fullness' && FULL.some(n => n[0] === v))) S.opts[k] = v; }); } if (q.get('m')) { const mm = JSON.parse(q.get('m')); S.meas = {}; MEAS.forEach(k => { if (+mm[k[0]] > 0) S.meas[k[0]] = +mm[k[0]]; }); } if (q.get('style')) history.replaceState(null, '', location.pathname); } catch (e) { }
-function defaults() { return { style: 'tshirt', gender: 'women', size: 'M', fabric: 'jersey', colour: '#7c8ea3', opts: {}, meas: {}, fit: 'off', bodyOn: true, seamsOn: true, quality: 'std', tone: 'form', tool: 'pull', unit: 'cm', tab: 'garment', fabOv: {}, myFabrics: {}, cws: null, cw: 0, hideL: false, hideR: false }; }
+function defaults() { return { style: 'tshirt', gender: 'women', size: 'M', fabric: 'jersey', colour: '#7c8ea3', opts: {}, meas: {}, fit: 'off', bodyOn: true, seamsOn: true, quality: 'std', tone: 'form', tool: 'pull', unit: 'cm', tab: 'garment', fabOv: {}, myFabrics: {}, cws: null, cw: 0, hideL: false, hideR: false, trims: { btn: 'horn', zip: 'metal', top: true, thread: 'tone' } }; }
 function load() { try { const v = JSON.parse(localStorage.getItem(KEY) || 'null'); if (v && D.STYLES[v.style]) { const o = Object.assign(defaults(), v); if (!D.FABRICS[o.fabric] && !(o.myFabrics || {})[o.fabric]) o.fabric = 'jersey'; return o; } } catch (e) { } return defaults(); }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
 
@@ -121,6 +124,7 @@ function fabName() { return fab().n + (S.fabOv && Object.keys(S.fabOv).length ? 
 const PRINTS = [['solid', 'Solid'], ['stripe', 'Stripes'], ['pin', 'Pinstripe'], ['band', 'Horizontal bands'], ['gingham', 'Gingham'], ['check', 'Check / tartan'], ['dots', 'Polka dots'], ['buti', 'Buti motifs'], ['chevron', 'Chevron'], ['ikat', 'Ikat']];
 function cws() { if (!S.cws || !S.cws.length) S.cws = [{ name: 'Colourway 1', c1: S.colour || '#7c8ea3', c2: '#f3efe6', print: 'solid', scale: 2 }]; if (!(S.cw >= 0 && S.cw < S.cws.length)) S.cw = 0; return S.cws; }
 function cw() { return cws()[S.cw]; }
+function trims() { return S.trims || (S.trims = { btn: 'horn', zip: 'metal', top: true, thread: 'tone' }); }
 
 /* ---------- controls ---------- */
 function opt(v, l, cur) { return `<option value="${esc(v)}"${String(v) === String(cur) ? ' selected' : ''}>${esc(l)}</option>`; }
@@ -155,7 +159,8 @@ function renderControls() {
   $('#drQuality').value = S.quality;
   const st = style(), G = gar(), h = [];
   if (st.kind === 'torso') {
-    h.push(`<label>Neckline<select data-o="neck">${NECK.map(n => opt(n[0], n[1], optVal('neck'))).join('')}</select></label>`);
+    if (G.o.includes('neck')) h.push(`<label>Neckline<select data-o="neck">${NECK.map(n => opt(n[0], n[1], optVal('neck'))).join('')}</select></label>`);
+    if (st.open) h.push(`<label>${st.zip ? 'Zip' : 'Front'}<select data-o="fasten">${opt('closed', st.zip ? 'Zipped up' : 'Buttoned', optVal('fasten') || 'closed')}${opt('open', st.zip ? 'Unzipped' : 'Unbuttoned', optVal('fasten'))}</select></label>`);
     const sl = SLEEVES[st.gid];
     if (sl) h.push(`<label>Sleeve<select data-o="sleeve">${sl.map(k => opt(k, SLEEVE[k], optVal('sleeve'))).join('')}</select></label>`);
     if (G.o.includes('slen') && optVal('sleeve') !== 'none') h.push(`<label>Sleeve length<select data-o="slen">${SLEN.map(n => opt(n[0], n[1], optVal('slen'))).join('')}</select></label>`);
@@ -181,6 +186,9 @@ function renderControls() {
     if (S.style === 'kalis' || S.style === 'lehenga') h.push(slider('panels', 'Panels (kalis)', 4, 24, 2, optVal('panels')));
     if (S.style === 'lehenga') h.push(slider('hemc', 'Hem circumference', 200, 600, 10, optVal('hemc')));
   }
+  const T = trims(), hasBtn = st.kind === 'torso' && (st.open || st.gid === 'polo') && !st.zip;
+  if (st.kind === 'torso' && (st.open || st.gid === 'polo')) h.push(`<h3>Trims</h3>` + (hasBtn ? `<label>Buttons<select data-t="btn">${Object.keys(BTN).map(k => opt(k, BTN[k][0], T.btn)).join('')}</select></label>` : '') + (st.zip ? `<label>Zip<select data-t="zip">${opt('metal', 'Metal teeth', T.zip)}${opt('plastic', 'Moulded plastic', T.zip)}${opt('brass', 'Antique brass', T.zip)}</select></label>` : '') +
+    `<label class="dr-chk"><input type="checkbox" data-t="top"${T.top ? ' checked' : ''}> Topstitching</label><label>Thread<select data-t="thread">${opt('tone', 'Tone on tone', T.thread)}${opt('contrast', 'Contrast (second colour)', T.thread)}</select></label>`);
   $('#drOpts').innerHTML = h.join('');
   const m = baseMeas(); m.height = +(S.meas || {}).height || (lastBody ? Math.round(lastBody.height) : '');
   const us = (UNIT[S.unit] || UNIT.cm)[2];
@@ -235,7 +243,7 @@ $('#drFabReset').addEventListener('click', () => { S.fabOv = {}; renderFabric();
 $('#drFabSave').addEventListener('click', () => { const n = $('#drFabName').value.trim() || fab().n + ' (mine)', id = 'my' + Date.now().toString(36); myFabs()[id] = Object.assign(fab(), { n, g: 'My fabrics', note: 'Your own fabric, based on ' + baseFab().n.toLowerCase() + '.' }); S.fabric = id; S.fabOv = {}; $('#drFabName').value = ''; renderFabric(); refab(); status('Saved “' + n + '” to My fabrics', 'ok'); });
 $('#drFabDel').addEventListener('click', () => { if (!myFabs()[S.fabric]) return; delete myFabs()[S.fabric]; S.fabric = 'jersey'; S.fabOv = {}; renderFabric(); refab(); });
 $('#drQuality').addEventListener('change', e => { S.quality = e.target.value; save(); rebuild(); });
-$('#drOpts').addEventListener('input', e => { const k = e.target.dataset.o; if (!k) return; const v = e.target.type === 'range' ? +e.target.value : e.target.value; S.opts[k] = v; const o = e.target.parentNode.querySelector('output'); if (o) o.textContent = outTxt(k, v); save(); if (e.target.tagName === 'SELECT') { renderControls(); rebuild(); } else later(rebuild); });
+$('#drOpts').addEventListener('input', e => { const tk = e.target.dataset.t; if (tk) { trims()[tk] = e.target.type === 'checkbox' ? e.target.checked : e.target.value; save(); trimLook(); return; } const k = e.target.dataset.o; if (!k) return; const v = e.target.type === 'range' ? +e.target.value : e.target.value; S.opts[k] = v; const o = e.target.parentNode.querySelector('output'); if (o) o.textContent = outTxt(k, v); save(); if (e.target.tagName === 'SELECT') { renderControls(); rebuild(); } else later(rebuild); });
 $('#drMeas').addEventListener('input', e => { const k = e.target.dataset.m; if (!k || !(+e.target.value > 0)) return; S.meas[k] = Math.round(fromU(+e.target.value) * 10) / 10; save(); later(rebuild, 600); });
 $('#drMeasReset').addEventListener('click', () => { S.meas = {}; save(); renderControls(); rebuild(); });
 function setCw(k, v) { cw()[k] = v; S.colour = cw().c1; save(); renderColour(); applyMaterial(); }
@@ -286,6 +294,11 @@ const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true; controls.dampingFactor = .09; controls.minDistance = 60; controls.maxDistance = 900; controls.maxPolarAngle = Math.PI * .92;
 controls.addEventListener('change', () => { dirty = true; });
 scene.add(new THREE.HemisphereLight(0xfffaf2, 0xb9ad9c, 1.45));
+{ // a soft studio for reflections (buttons, zips, satin, leather)
+  const env = new THREE.Scene(), box = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 10), new THREE.MeshBasicMaterial({ color: '#8d877d', side: THREE.BackSide })); env.add(box);
+  [[0, 4.9, 0, 6, 6, '#ffffff'], [4.9, 1, 2, 3, 5, '#f4efe6'], [-4.9, 1.5, -1, 2.5, 4, '#dfe6f2']].forEach(([x, y, z, w, h, c]) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: c, side: THREE.DoubleSide })); m.position.set(x, y, z); m.lookAt(0, 0, 0); env.add(m); });
+  const pm = new THREE.PMREMGenerator(renderer); scene.environment = pm.fromScene(env, .04).texture; scene.environmentIntensity = .45;
+}
 const key = new THREE.DirectionalLight(0xffffff, 2.1); key.position.set(120, 260, 220); key.castShadow = true;
 key.shadow.mapSize.set(4096, 4096); Object.assign(key.shadow.camera, { left: -110, right: 110, top: 200, bottom: -20, near: 50, far: 700 }); key.shadow.bias = -.0008; key.shadow.normalBias = 1.4;
 scene.add(key);
@@ -401,7 +414,7 @@ function applyMaterial() {
   m.transparent = op < .99 && plain; m.opacity = m.transparent ? op : 1; m.depthWrite = !m.transparent;
   m.vertexColors = !plain || selPanel >= 0; m.needsUpdate = true;
   if (seamMat) seamMat.color.set(new THREE.Color(p.c1).multiplyScalar(.55));
-  drawFabPrev(); dirty = true;
+  drawFabPrev(); if (typeof trimLook === 'function' && TR) trimLook(); dirty = true;
 }
 function drawFabPrev() { // a small swatch of the fabric in the current colourway
   const c = $('#drFabPrev'); if (!c) return; const g = c.getContext('2d'), f = fab(), p = cw(), W = c.width, k = f.tex || 'plain';
@@ -426,7 +439,76 @@ function buildGarment(d) {
   const sg = new THREE.BufferGeometry(); sg.setAttribute('position', posAttr); sg.setIndex(li);
   seamMat = seamMat || new THREE.LineBasicMaterial({ color: '#333' });
   seamMesh = new THREE.LineSegments(sg, seamMat); seamMesh.visible = S.seamsOn; scene.add(seamMesh);
-  lastGap = lastStrain = null; applyMaterial();
+  lastGap = lastStrain = null; applyMaterial(); buildTrims(d);
+}
+/* ---------- trims: buttons, buttonholes, zip teeth and topstitching, riding on the cloth ---------- */
+const trimGroup = new THREE.Group(); scene.add(trimGroup);
+let TR = null; // { btn:[{loc, hole, closed}], holes, teeth:[loc...], tops:[[locA, locB]...] }
+function panelTris(d, pi) { const out = []; for (let t = 0; t < d.tri.length; t += 3) if (d.panel[d.tri[t]] === pi) out.push(t); return out; }
+function locate(d, tris, u, v) { // barycentric spot on the flat pattern, so it follows the cloth exactly
+  let best = null, bd = 1e9;
+  for (const t of tris) {
+    const a = d.tri[t], b = d.tri[t + 1], c = d.tri[t + 2], ax = d.uv[2 * a], ay = d.uv[2 * a + 1], bx = d.uv[2 * b], by = d.uv[2 * b + 1], cx = d.uv[2 * c], cy = d.uv[2 * c + 1];
+    const den = (by - cy) * (ax - cx) + (cx - bx) * (ay - cy); if (Math.abs(den) < 1e-9) continue;
+    let l1 = ((by - cy) * (u - cx) + (cx - bx) * (v - cy)) / den, l2 = ((cy - ay) * (u - cx) + (ax - cx) * (v - cy)) / den, l3 = 1 - l1 - l2;
+    const out = Math.max(0, -l1) + Math.max(0, -l2) + Math.max(0, -l3);
+    if (out < bd) { bd = out; l1 = Math.max(0, l1); l2 = Math.max(0, l2); l3 = Math.max(0, l3); const sm = l1 + l2 + l3; best = [a, b, c, l1 / sm, l2 / sm, l3 / sm]; if (out === 0) break; }
+  }
+  return best;
+}
+const _p = new THREE.Vector3(), _n = new THREE.Vector3(), _up = new THREE.Vector3(), _t = new THREE.Vector3(), _m = new THREE.Matrix4(), _q = new THREE.Quaternion(), _s = new THREE.Vector3(1, 1, 1);
+function at(L, off) { const x = posAttr.array, nr = garMesh.geometry.attributes.normal.array; _p.set(0, 0, 0); _n.set(0, 0, 0);
+  for (let k = 0; k < 3; k++) { const i = L[k], w = L[3 + k]; _p.x += x[3 * i] * w; _p.y += x[3 * i + 1] * w; _p.z += x[3 * i + 2] * w; _n.x += nr[3 * i] * w; _n.y += nr[3 * i + 1] * w; _n.z += nr[3 * i + 2] * w; }
+  _n.normalize(); _p.addScaledVector(_n, off || 0); return _p; }
+function frameAt(L, off, vertical) { // a matrix sitting on the cloth: y along the surface normal, x across (vertical holes: x up the body)
+  at(L, off); _up.set(0, 1, 0).addScaledVector(_n, -_n.y).normalize(); if (!vertical) _up.cross(_n).normalize();
+  _t.crossVectors(_up, _n).normalize(); _m.makeBasis(_up, _n, _t); _m.setPosition(_p); return _m; }
+const btnGeo = (() => { const pts = [[0, .16], [.38, .2], [.52, .26], [.62, .16], [.64, 0], [.56, -.06], [0, -.06]].map(q => new THREE.Vector2(q[0], q[1])); return new THREE.LatheGeometry(pts, 24); })();
+const holeGeo = new THREE.BoxGeometry(1.7, .06, .28), toothGeo = new THREE.BoxGeometry(.62, .22, .3), pullGeo = new THREE.BoxGeometry(.9, .25, 2.4);
+const btnMat = new THREE.MeshPhysicalMaterial({ color: '#4a3426', roughness: .45, clearcoat: .6, clearcoatRoughness: .3 }), holeMat = new THREE.MeshStandardMaterial({ color: '#1b1b1b', roughness: .9 });
+const zipMat = new THREE.MeshStandardMaterial({ color: '#b9b9b9', metalness: .85, roughness: .32 }), topMat = new THREE.LineBasicMaterial({ color: '#333' });
+function buildTrims(d) {
+  trimGroup.clear(); TR = null; const st = style();
+  if (!d.buttons || (!d.buttons.length && !d.zip && !(d.tops || []).length)) return;
+  const triCache = {}, tris = pi => triCache[pi] || (triCache[pi] = panelTris(d, pi));
+  TR = { btn: [], teeth: [], tops: [], vertical: st.gid === 'shirt' || st.gid === 'shirtdress' || st.gid === 'blouse' || st.gid === 'polo' };
+  (d.buttons || []).forEach(b => { TR.btn.push({ on: locate(d, tris(b.closed ? b.over : b.under), b.c[0], b.c[1]), hole: b.over !== b.under ? locate(d, tris(b.over), b.c[0], b.c[1]) : null, small: b.small, closed: b.closed }); });
+  if (TR.btn.length) {
+    TR.bMesh = new THREE.InstancedMesh(btnGeo, btnMat, TR.btn.length); TR.bMesh.castShadow = true; trimGroup.add(TR.bMesh);
+    TR.hMesh = new THREE.InstancedMesh(holeGeo, holeMat, TR.btn.length); trimGroup.add(TR.hMesh);
+  }
+  const P = d.panels;
+  function edgePts(pi, key) { const sg = P[pi] && P[pi].segs.find(q => q.key === key); return sg ? sg.pts : null; }
+  function resampleE(pts, step) { const out = [pts[0]]; let acc = 0; for (let i = 1; i < pts.length; i++) { const a = pts[i - 1], b = pts[i], L = Math.hypot(b[0] - a[0], b[1] - a[1]); let t = step - acc; while (t <= L) { out.push([a[0] + (b[0] - a[0]) * t / L, a[1] + (b[1] - a[1]) * t / L]); t += step; } acc = (acc + L) % step; } return out; }
+  if (d.zip) [[d.zip.p, d.zip.key, 1], [d.zip.q, d.zip.qkey, d.zip.closed ? 0 : 1]].forEach(z => { if (!z[2]) return; const e = edgePts(z[0], z[1]); if (!e) return; resampleE(e, .62).forEach(q => TR.teeth.push(locate(d, tris(z[0]), q[0], q[1]))); });
+  if (TR.teeth.length) { TR.zMesh = new THREE.InstancedMesh(toothGeo, zipMat, TR.teeth.length); trimGroup.add(TR.zMesh); const e = edgePts(d.zip.p, d.zip.key); const top = e[0][1] < e[e.length - 1][1] ? e[0] : e[e.length - 1]; TR.pull = locate(d, tris(d.zip.p), top[0], top[1] + 1.2); TR.pMesh = new THREE.Mesh(pullGeo, zipMat); trimGroup.add(TR.pMesh); }
+  (d.tops || []).forEach(([pi, key]) => { // 0.6 cm in from the edge, short stitches
+    const e = edgePts(pi, key); if (!e) return; const outline = []; P[pi].segs.forEach((sg, i) => sg.pts.forEach((q, j) => { if (i && !j) return; outline.push(q); }));
+    const ins = (x, y) => { let c = false; for (let i = 0, j = outline.length - 1; i < outline.length; j = i++) { const a = outline[i], b = outline[j]; if ((a[1] > y) !== (b[1] > y) && x < (b[0] - a[0]) * (y - a[1]) / (b[1] - a[1]) + a[0]) c = !c; } return c; };
+    const pts = resampleE(e, .4);
+    for (let i = 0; i + 1 < pts.length; i += 1) {
+      const a = pts[i], b = pts[i + 1], dx = b[0] - a[0], dy = b[1] - a[1], L = Math.hypot(dx, dy) || 1, nx = -dy / L * .6, ny = dx / L * .6, sg = ins((a[0] + b[0]) / 2 + nx, (a[1] + b[1]) / 2 + ny) ? 1 : -1;
+      const A = [a[0] + nx * sg, a[1] + ny * sg], B = [a[0] + dx * .7 + nx * sg, a[1] + dy * .7 + ny * sg];
+      if (!ins(A[0], A[1]) || !ins(B[0], B[1])) continue;
+      TR.tops.push([locate(d, tris(pi), A[0], A[1]), locate(d, tris(pi), B[0], B[1])]);
+    }
+  });
+  if (TR.tops.length) { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(TR.tops.length * 6), 3)); TR.tMesh = new THREE.LineSegments(g, topMat); TR.tMesh.frustumCulled = false; trimGroup.add(TR.tMesh); }
+  trimLook(); updateTrims();
+}
+function updateTrims() {
+  if (!TR || !garMesh || !garMesh.geometry.attributes.normal) return;
+  TR.btn.forEach((b, i) => { if (b.on) { frameAt(b.on, .12, TR.vertical); if (b.small) _m.scale(_s.set(.8, .8, .8)); TR.bMesh.setMatrixAt(i, _m); } if (b.hole && !b.closed) { frameAt(b.hole, .05, TR.vertical); TR.hMesh.setMatrixAt(i, _m); } else { _m.makeScale(0, 0, 0); TR.hMesh.setMatrixAt(i, _m); } });
+  if (TR.bMesh) { TR.bMesh.instanceMatrix.needsUpdate = true; TR.hMesh.instanceMatrix.needsUpdate = true; TR.bMesh.computeBoundingSphere(); TR.hMesh.computeBoundingSphere(); }
+  if (TR.zMesh) { TR.teeth.forEach((L, i) => { frameAt(L, .12, false); TR.zMesh.setMatrixAt(i, _m); }); TR.zMesh.instanceMatrix.needsUpdate = true; TR.zMesh.computeBoundingSphere(); if (TR.pull) { frameAt(TR.pull, .35, false); TR.pMesh.matrixAutoUpdate = false; TR.pMesh.matrix.copy(_m); } }
+  if (TR.tMesh) { const a = TR.tMesh.geometry.attributes.position.array; TR.tops.forEach((pr, i) => { at(pr[0], .07); a[6 * i] = _p.x; a[6 * i + 1] = _p.y; a[6 * i + 2] = _p.z; at(pr[1], .07); a[6 * i + 3] = _p.x; a[6 * i + 4] = _p.y; a[6 * i + 5] = _p.z; }); TR.tMesh.geometry.attributes.position.needsUpdate = true; TR.tMesh.geometry.computeBoundingSphere(); }
+}
+function trimLook() {
+  const T = trims(), b = BTN[T.btn] || BTN.horn, p = cw();
+  btnMat.color.set(T.btn === 'self' ? p.c1 : b[1]); btnMat.roughness = b[2]; btnMat.metalness = T.btn === 'metal' ? .8 : 0; btnMat.clearcoat = T.btn === 'self' || T.btn === 'wood' ? 0 : .6; btnMat.needsUpdate = true;
+  zipMat.color.set({ metal: '#bdbdbd', plastic: mixHex(p.c1, '#000000', .25), brass: '#9c7a3c' }[T.zip] || '#bdbdbd'); zipMat.metalness = T.zip === 'plastic' ? 0 : .85; zipMat.roughness = T.zip === 'plastic' ? .5 : .32; zipMat.needsUpdate = true;
+  topMat.color.set(T.thread === 'contrast' ? p.c2 : mixHex(p.c1, '#000000', .35)); if (TR && TR.tMesh) TR.tMesh.visible = !!T.top;
+  dirty = true;
 }
 function ramp(stops, v) { for (let i = 1; i < stops.length; i++) if (v <= stops[i][0]) { const a = stops[i - 1], b = stops[i], t = Math.max(0, (v - a[0]) / (b[0] - a[0])); return [0, 1, 2].map(k => a[1][k] + (b[1][k] - a[1][k]) * t); } return stops[stops.length - 1][1]; }
 const FITR = [[-1, [.82, .18, .16]], [.45, [.85, .25, .18]], [1.2, [.96, .62, .2]], [2.5, [.96, .9, .45]], [4.5, [.45, .76, .52]], [8, [.3, .55, .8]], [99, [.3, .55, .8]]];
@@ -519,9 +601,9 @@ function onMsg(e) {
     $('#drPM').href = 'pattern-maker.html'; return;
   }
   if (d.type === 'frame') {
-    posAttr.array.set(d.x); posAttr.needsUpdate = true; garMesh.geometry.computeVertexNormals(); garMesh.geometry.computeBoundingSphere(); dirty = true;
+    posAttr.array.set(d.x); posAttr.needsUpdate = true; garMesh.geometry.computeVertexNormals(); garMesh.geometry.computeBoundingSphere(); updateTrims(); dirty = true;
     if (d.gap) { lastGap = d.gap; lastStrain = d.strain; if (S.fit !== 'off') paintFit(); }
-    status(d.done ? 'Settled · ' + fabName() : pulling ? 'Pulling the fabric…' : moving ? 'Moving the piece…' : d.t < .7 ? 'Sewing the seams…' : 'Draping…', d.done ? 'ok' : 'run');
+    status(d.done ? 'Settled · ' + fabName() + (d.tackGap > 1.5 ? ' · the front pulls open by ' + L(d.tackGap) + ' at a button: add ease at the chest or bust shaping' : '') : pulling ? 'Pulling the fabric…' : moving ? 'Moving the piece…' : d.t < .7 ? 'Sewing the seams…' : 'Draping…', d.done ? 'ok' : 'run');
     if (!d.done && !paused) requestAnimationFrame(() => worker.postMessage({ cmd: 'ack', gen }));
   }
 }

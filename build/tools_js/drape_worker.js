@@ -27,7 +27,7 @@ function build2(q) {
   var panels = G.panels.map(function (P) { return { name: P.name, segs: P.segs.map(function (s) { return { key: s.key, pts: s.pts }; }) }; });
   var seamLines = [];
   G.seams.forEach(function (sm) { [sm[0], sm[1]].forEach(function (e) { seamLines.push(M.segIdx[e[0] + '|' + e[1]]); }); });
-  postMessage({ type: 'mesh', gen: gen, x: M.x.slice(), uv: M.uv, tri: M.tri, panels: panels, seams: G.seams, seamLines: seamLines, info: G.info, label: G.label, opts: G.opts, verts: sim.n, panel: M.panel });
+  postMessage({ type: 'mesh', gen: gen, x: M.x.slice(), uv: M.uv, tri: M.tri, panels: panels, seams: G.seams, seamLines: seamLines, info: G.info, label: G.label, opts: G.opts, verts: sim.n, panel: M.panel, buttons: G.buttons, zip: G.zip, tops: G.tops });
   running = true; frames = 0;
   tick();
 }
@@ -38,6 +38,7 @@ function tick() {
   do { sim.step(1 / 60); steps++; frames++; } while (!sim.settled && Date.now() - t0 < 6 && steps < 2);
   var done = sim.settled, msg = { type: 'frame', gen: gen, x: sim.x.slice(), t: sim.t, done: done };
   if (done || frames % 15 === 0) { msg.gap = sim.gap.slice(); msg.strain = sim.computeStrain().slice(); }
+  if (done && M.tacks && M.tacks.length) { var tg = 0, X = sim.x; for (var j = 0; j < M.tacks.length; j += 2) { var a = 3 * M.tacks[j], b = 3 * M.tacks[j + 1]; tg = Math.max(tg, Math.hypot(X[a] - X[b], X[a + 1] - X[b + 1], X[a + 2] - X[b + 2])); } msg.tackGap = tg; }
   postMessage(msg);
   if (done) running = false;
 }

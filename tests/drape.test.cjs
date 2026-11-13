@@ -42,6 +42,18 @@ test('a custom fabric (any numbers a user types) drapes without blowing up', () 
     for (let i = 0; i < s2.x.length; i++) assert.ok(Number.isFinite(s2.x[i]), 'finite');
   }
 });
+test('button-front garments: buttons and zips are made, collars sit at the neck, and opening the front drops the tacks', () => {
+  for (const st of ['shirt', 'blazer', 'bandhgala', 'polo', 'bomber']) {
+    const m = PM.CHARTS.men.M, body = bodies.menM || (bodies.menM = D.body(m, 'men', AV, 'M'));
+    const G = D.assemble(PM, st, 'men', body.m, {}, body), M = D.mesh(G, 3, Del);
+    if (st === 'bomber') assert.ok(G.zip && G.zip.closed, 'bomber has a closed zip'); else assert.ok(G.buttons.length >= 2, st + ' has buttons');
+    if (st !== 'polo' && st !== 'bomber') assert.ok(M.tacks.length >= 4, st + ' buttons hold the fronts');
+    const col = G.panels.findIndex(p => /^(BAND|COL|KC)$/.test(p.name)); assert.ok(col >= 0, st + ' has a collar or band');
+    let lo = 1e9; for (let i = 0; i < M.panel.length; i++) if (M.panel[i] === col) lo = Math.min(lo, M.x[3 * i + 1]);
+    assert.ok(lo > body.y.bust - 15 && lo < body.y.hps + 3, st + ' collar starts at the neckline: ' + lo.toFixed(1));
+    const G2 = D.assemble(PM, st, 'men', body.m, { fasten: 'open' }, body); assert.equal(G2.tacks.length, 0, 'unbuttoned has no tacks');
+  }
+});
 test('a heavier, stiffer fabric hangs differently from a light one', () => {
   const a = run('dress', 'women', 'M', 'georgette', 200).S, b = run('dress', 'women', 'M', 'denim', 200).S;
   let d = 0; for (let i = 0; i < a.x.length; i++) d = Math.max(d, Math.abs(a.x[i] - b.x[i]));
