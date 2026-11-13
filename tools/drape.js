@@ -1,12 +1,12 @@
 /* Forecut. Built from build/tools_js; edit there. */
-import './pm-engine.js?v=fx-20261113d';
-import './drape-sim.js?v=fx-20261113d';
+import './pm-engine.js?v=fx-20261113e';
+import './drape-sim.js?v=fx-20261113e';
 /* Forecut 3D Drape Studio: page, controls, 3D view and 2D pattern view. Desktop only. */
 import * as THREE from './vendor/three.module.min.js';
 import { OrbitControls } from './vendor/OrbitControls.js';
 import { TransformControls } from './vendor/TransformControls.js';
 
-const PM = window.PM, D = window.FCDrape, V = 'fx-20261113d';
+const PM = window.PM, D = window.FCDrape, V = 'fx-20261113e';
 const $ = (s, r) => (r || document).querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const KEY = 'fc-tool-drape';
@@ -25,14 +25,17 @@ const FULL = [['slim', 'Slim'], ['regular', 'Regular'], ['full', 'Full (Punjabi)
 const CIRC = [['0.25', 'Quarter circle'], ['0.5', 'Half circle'], ['1', 'Full circle']];
 const SLEN = [['cap', 'Cap'], ['short', 'Short'], ['elbow', 'Elbow'], ['3q', 'Three-quarter'], ['full', 'Full']];
 const GENDER = { women: 'Female', men: 'Male', kids: 'Kids', unisex: 'Unisex' };
-const TONES = [['form', '#d8d2c8', 'Grey form'], ['t1', '#efd3bd', 'Light'], ['t2', '#d9a988', 'Light medium'], ['t3', '#b98260', 'Medium'], ['t4', '#8a5a3c', 'Medium deep'], ['t5', '#5e3b27', 'Deep']];
+const BODIES = [['women', 'Adult female'], ['men', 'Adult male'], ['girl', 'Girl'], ['boy', 'Boy'], ['tgirl', 'Toddler girl'], ['tboy', 'Toddler boy']];
+function chartOf(b) { b = b || S.body; return b === 'women' || b === 'men' ? b : /^t/.test(b) ? 'toddler' : 'kids'; }
+function syncG() { S.gender = S.body === 'women' ? 'women' : S.body === 'men' ? 'men' : 'kids'; }
+const TONES = [['form', '#cfcbc4', 'Mannequin grey'], ['white', '#efede8', 'Mannequin white'], ['black', '#34322f', 'Mannequin black'], ['t1', '#efd3bd', 'Light'], ['t2', '#d9a988', 'Light medium'], ['t3', '#b98260', 'Medium'], ['t4', '#8a5a3c', 'Medium deep'], ['t5', '#5e3b27', 'Deep']];
 const MEAS = [['height', 'Height'], ['bust', 'Bust / chest'], ['waist', 'Waist'], ['hip', 'Hip'], ['shoulder', 'Shoulder width'], ['nape', 'Back length (nape to waist)'], ['bicep', 'Upper arm']];
 const SEAMC = ['#c4572f', '#2f6f8f', '#7a5c99', '#3d8a5a', '#b08a1e', '#a23b72', '#4a7d84', '#8c6d3f', '#5b6bbf', '#9c4f2f', '#3f7f3f', '#7f3f6f', '#2f8f7f', '#8f2f3f', '#6f6f2f', '#2f4f8f', '#b2672b', '#6a8f2f'];
 
 let S = load();
-try { const q = new URLSearchParams(location.search); if (D.STYLES[q.get('style')]) { S.style = q.get('style'); S.opts = {}; S.meas = {}; } if (GENDER[q.get('gender')]) S.gender = q.get('gender'); if (q.get('size')) S.size = q.get('size'); if (q.get('o')) { const o = JSON.parse(q.get('o')); S.opts = {}; ['len', 'ease', 'neck', 'sleeve', 'slen', 'flare', 'slit', 'slen2', 'leg', 'pfit', 'tlen', 'mohri', 'fullness', 'ruch', 'gfull', 'panels', 'hemc', 'circle'].forEach(k => { const v = o[k]; if (v === undefined) return; if (/^[\d.]+$/.test(String(v))) S.opts[k] = Math.min(700, +v); else if ((k === 'neck' && NECK.some(n => n[0] === v)) || (k === 'sleeve' && SLEEVE[v]) || (k === 'slen' && SLEN.some(n => n[0] === v)) || (k === 'leg' && LEG.some(n => n[0] === v)) || (k === 'pfit' && PFIT.some(n => n[0] === v)) || (k === 'fullness' && FULL.some(n => n[0] === v))) S.opts[k] = v; }); } if (q.get('m')) { const mm = JSON.parse(q.get('m')); S.meas = {}; MEAS.forEach(k => { if (+mm[k[0]] > 0) S.meas[k[0]] = +mm[k[0]]; }); } if (q.get('style')) history.replaceState(null, '', location.pathname); } catch (e) { }
-function defaults() { return { style: 'tshirt', gender: 'women', size: 'M', fabric: 'jersey', colour: '#7c8ea3', opts: {}, meas: {}, fit: 'off', bodyOn: true, seamsOn: true, quality: 'std', tone: 'form', tool: 'pull', unit: 'cm', tab: 'garment', fabOv: {}, myFabrics: {}, cws: null, cw: 0, hideL: false, hideR: false, trims: { btn: 'horn', zip: 'metal', top: true, thread: 'tone' } }; }
-function load() { try { const v = JSON.parse(localStorage.getItem(KEY) || 'null'); if (v && D.STYLES[v.style]) { const o = Object.assign(defaults(), v); if (!D.FABRICS[o.fabric] && !(o.myFabrics || {})[o.fabric]) o.fabric = 'jersey'; return o; } } catch (e) { } return defaults(); }
+try { const q = new URLSearchParams(location.search); if (D.STYLES[q.get('style')]) { S.style = q.get('style'); S.opts = {}; S.meas = {}; } if (GENDER[q.get('gender')]) { S.gender = q.get('gender'); S.body = S.gender === 'kids' ? 'girl' : S.gender === 'unisex' ? 'men' : S.gender; } if (q.get('size')) S.size = q.get('size'); if (q.get('o')) { const o = JSON.parse(q.get('o')); S.opts = {}; ['len', 'ease', 'neck', 'sleeve', 'slen', 'flare', 'slit', 'slen2', 'leg', 'pfit', 'tlen', 'mohri', 'fullness', 'ruch', 'gfull', 'panels', 'hemc', 'circle'].forEach(k => { const v = o[k]; if (v === undefined) return; if (/^[\d.]+$/.test(String(v))) S.opts[k] = Math.min(700, +v); else if ((k === 'neck' && NECK.some(n => n[0] === v)) || (k === 'sleeve' && SLEEVE[v]) || (k === 'slen' && SLEN.some(n => n[0] === v)) || (k === 'leg' && LEG.some(n => n[0] === v)) || (k === 'pfit' && PFIT.some(n => n[0] === v)) || (k === 'fullness' && FULL.some(n => n[0] === v))) S.opts[k] = v; }); } if (q.get('m')) { const mm = JSON.parse(q.get('m')); S.meas = {}; MEAS.forEach(k => { if (+mm[k[0]] > 0) S.meas[k[0]] = +mm[k[0]]; }); } if (q.get('style')) history.replaceState(null, '', location.pathname); } catch (e) { }
+function defaults() { return { style: 'tshirt', gender: 'women', size: 'M', fabric: 'jersey', colour: '#7c8ea3', opts: {}, meas: {}, fit: 'off', bodyOn: true, seamsOn: true, quality: 'std', tone: 'form', tool: 'pull', unit: 'cm', body: 'women', pose: { arm: 46, elbow: 0, legs: 0 }, lines: { shoulder: 1, cf: 1, cb: 1, bust: 1, waist: 1, hip: 1, side: 1, neck: 1, knee: 0, armhole: 0 }, showLines: false, showPts: false, showJoints: false, tab: 'garment', fabOv: {}, myFabrics: {}, cws: null, cw: 0, hideL: false, hideR: false, trims: { btn: 'horn', zip: 'metal', top: true, thread: 'tone' } }; }
+function load() { try { const v = JSON.parse(localStorage.getItem(KEY) || 'null'); if (v && D.STYLES[v.style]) { const o = Object.assign(defaults(), v); if (!o.body) o.body = o.gender === 'kids' ? 'boy' : o.gender === 'unisex' ? 'men' : o.gender; if (!D.FABRICS[o.fabric] && !(o.myFabrics || {})[o.fabric]) o.fabric = 'jersey'; return o; } } catch (e) { } return defaults(); }
 function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { } }
 
 /* ---------- layout ---------- */
@@ -51,6 +54,8 @@ app.innerHTML = `<div class="dr" id="drRoot">
       <div class="dr-two"><label>Body<select id="drGender"></select></label><label>Size<select id="drSize"></select></label></div>
       <h3>Skin tone</h3><div class="dr-sw dr-tone" id="drTone" role="radiogroup" aria-label="Avatar skin tone"></div>
       <h3>Measurements</h3><div id="drMeas" class="dr-meas"></div><button type="button" class="dr-link" id="drMeasReset">Back to the size chart</button>
+      <h3>Pose (joints)</h3><div id="drPose" class="dr-props"></div>
+      <h3>Reference lines</h3><div id="drLines" class="dr-lines"></div>
     </div>
     <div class="dr-pane" data-pane="fabric" hidden>
       <div class="dr-fabtop"><canvas id="drFabPrev" width="96" height="96" aria-hidden="true"></canvas><div><label>Fabric<select id="drFabric"></select></label><p class="dr-note" id="drFabNote"></p></div></div>
@@ -76,7 +81,7 @@ app.innerHTML = `<div class="dr" id="drRoot">
       <div class="dr-seg" id="drViews"><button data-v="front" aria-pressed="true">Front</button><button data-v="q">¾</button><button data-v="side">Side</button><button data-v="back">Back</button></div>
       <details class="dr-menu" id="drShow"><summary>Show <span aria-hidden="true">▾</span></summary><div class="dr-pop">
         <div class="dr-seg dr-col" id="drFit"><button data-f="off">Fabric</button><button data-f="fit">Fit map</button><button data-f="strain">Stretch map</button></div>
-        <label class="dr-chk"><input type="checkbox" id="drBody"> Avatar</label><label class="dr-chk"><input type="checkbox" id="drSeams"> Seam lines</label><hr><button type="button" class="dr-mi" id="drHD">Save HD image</button><button type="button" class="dr-mi" id="drTurn">Record turntable video</button><button type="button" class="dr-mi" id="drClear">Remove pins, tacks and elastic</button></div></details>
+        <label class="dr-chk"><input type="checkbox" id="drBody"> Avatar</label><label class="dr-chk"><input type="checkbox" id="drSeams"> Seam lines</label><label class="dr-chk"><input type="checkbox" id="drShowLines"> Avatar reference lines</label><label class="dr-chk"><input type="checkbox" id="drShowPts"> Arrangement points</label><label class="dr-chk"><input type="checkbox" id="drShowJoints"> Joints</label><hr><button type="button" class="dr-mi" id="drHD">Save HD image</button><button type="button" class="dr-mi" id="drTurn">Record turntable video</button><button type="button" class="dr-mi" id="drClear">Remove pins, tacks and elastic</button></div></details>
       <div class="dr-seg" id="drTool" aria-label="Mouse tool"><button data-t="pull" title="Drag the fabric to pull it, as you would on a real garment">Pull</button><button data-t="pin" title="Click the cloth to pin it where it is; click a pin to remove it">Pin</button><button data-t="tack" title="Click two points of the cloth to tack them together">Tack</button><button data-t="move" title="Click a piece to move, rotate, freeze or stiffen it">Piece</button></div>
       <div class="dr-seg" id="drGz" hidden><button data-g="translate" aria-pressed="true" title="Move (W)">Move</button><button data-g="rotate" title="Rotate (E)">Rotate</button><button data-g="freeze" title="Hold this piece still while the rest drapes">Freeze</button><button data-g="stiff" title="Interfacing: make this piece stiffer, like a fused collar or facing">Interfacing</button><button data-g="elastic" title="Gather the hem of this piece with elastic">Elastic hem</button><button data-g="done" title="Finish (Esc)">Done</button></div>
       <span class="dr-sp"></span>
@@ -131,15 +136,15 @@ function opt(v, l, cur) { return `<option value="${esc(v)}"${String(v) === Strin
 function style() { return D.STYLES[S.style]; }
 function gar() { return PM.GARMENTS[style().gid]; }
 function genders() { return gar().g.filter(g => g !== 'unisex' || !gar().g.includes('men')); }
-function sizes() { return Object.keys(PM.CHARTS[S.gender]); }
+function sizes() { const c = chartOf(); return Object.keys(PM.CHARTS[c]).filter(k => !(c === 'kids' && k === '2Y')); }
 function baseMeas() {
-  const m = Object.assign({}, PM.CHARTS[S.gender][S.size]); Object.keys(S.meas || {}).forEach(k => { if (k !== 'height' && +S.meas[k] > 0) m[k] = +S.meas[k]; });
+  const m = Object.assign({}, PM.CHARTS[chartOf()][S.size]); Object.keys(S.meas || {}).forEach(k => { if (k !== 'height' && +S.meas[k] > 0) m[k] = +S.meas[k]; });
   if (S.meas && +S.meas.bust > 0 && S.gender === 'women') m.bust_depth = Math.round((m.bust / 12 + 16.5) * 2) / 2;
   return m;
 }
 function baseOpts() { // the same starting values as Pattern Maker
   const o = Object.assign({}, gar().d, style().def || {}), gid = style().gid;
-  if (S.gender === 'kids') { if (o.len) o.len = Math.round(o.len * .62); if (o.slen2) o.slen2 = Math.round(o.slen2 * .6); if (o.ease) o.ease = Math.max(6, Math.round(o.ease * .75)); if (o.slit) o.slit = 12; }
+  const kf = /^t/.test(S.body) ? .45 : .62; if (S.gender === 'kids') { if (o.len) o.len = Math.round(o.len * kf); if (o.slen2) o.slen2 = Math.round(o.slen2 * kf * .97); if (o.ease) o.ease = Math.max(6, Math.round(o.ease * .75)); if (o.slit) o.slit = 12; }
   if (S.gender === 'men' && gid === 'kurta') o.len = 102; if (S.gender === 'men' && gid === 'tshirt') o.len = 72;
   return o;
 }
@@ -152,9 +157,10 @@ function slider(k, label, lo, hi, step, val) { return `<label>${label} <output>$
 function renderControls() {
   $$('.dr-tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === S.tab)); $$('.dr-pane').forEach(p => { p.hidden = p.dataset.pane !== S.tab; });
   $('#drStyle').innerHTML = GROUPS.map(gr => `<optgroup label="${gr[0]}">${gr[1].filter(k => D.STYLES[k]).map(k => opt(k, D.STYLES[k].n, S.style)).join('')}</optgroup>`).join('');
-  if (!genders().includes(S.gender)) S.gender = genders()[0];
+  const okB = BODIES.filter(b => genders().includes(b[0] === 'women' || b[0] === 'men' ? b[0] : 'kids') || (b[0] !== 'women' && b[0] !== 'men' ? false : gar().g.includes('unisex')));
+  if (!okB.some(b => b[0] === S.body)) S.body = okB[0][0]; syncG();
   if (!sizes().includes(S.size)) S.size = sizes()[Math.min(2, sizes().length - 1)];
-  $('#drGender').innerHTML = genders().map(g => opt(g, GENDER[g], S.gender)).join('');
+  $('#drGender').innerHTML = okB.map(b => opt(b[0], b[1], S.body)).join('');
   $('#drSize').innerHTML = sizes().map(s => opt(s, s, S.size)).join('');
   $('#drQuality').value = S.quality;
   const st = style(), G = gar(), h = [];
@@ -195,6 +201,10 @@ function renderControls() {
   const us = (UNIT[S.unit] || UNIT.cm)[2];
   $('#drMeas').innerHTML = MEAS.filter(k => st.kind === 'torso' || ['height', 'waist', 'hip'].includes(k[0])).map(k => `<label>${k[1]}<span><input type="number" step="${us}" min="0" data-m="${k[0]}" value="${m[k[0]] === '' ? '' : toU(m[k[0]])}"> ${S.unit === 'in' ? 'in' : S.unit}</span></label>`).join('');
   $('#drTone').innerHTML = TONES.map(t => `<button type="button" role="radio" aria-checked="${t[0] === S.tone}" title="${t[2]}" aria-label="${t[2]}" data-tone="${t[0]}" style="background:${t[1]}"></button>`).join('');
+  const PO = S.pose || (S.pose = { arm: 46, elbow: 0, legs: 0 });
+  $('#drPose').innerHTML = [['arm', 'Arms out from the body (shoulders)', 20, 80, 1, '°'], ['elbow', 'Elbow bend', 0, 60, 1, '°'], ['legs', 'Legs apart (hips)', 0, 15, 1, '°']].map(p => `<label>${p[1]} <output>${+PO[p[0]] || (p[0] === 'arm' ? 46 : 0)}${p[5]}</output><input type="range" data-pose="${p[0]}" min="${p[2]}" max="${p[3]}" step="${p[4]}" value="${+PO[p[0]] || (p[0] === 'arm' ? 46 : 0)}"></label>`).join('');
+  $('#drLines').innerHTML = LINES.map(l => `<label class="dr-chk"><input type="checkbox" data-line="${l[0]}"${(S.lines || {})[l[0]] ? ' checked' : ''}><i style="background:${l[2]}"></i>${l[1]}</label>`).join('');
+  $('#drShowLines').checked = !!S.showLines; $('#drShowPts').checked = !!S.showPts; $('#drShowJoints').checked = !!S.showJoints;
   renderFabric(); renderColour();
   $$('#drTool button').forEach(b => b.setAttribute('aria-pressed', b.dataset.t === S.tool));
   $$('#drViews button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === view));
@@ -236,7 +246,7 @@ function later(fn, ms) { clearTimeout(tmr); tmr = setTimeout(fn, ms || 350); }
 function refab() { save(); applyMaterial(); if (worker && built) { worker.postMessage({ cmd: 'fabric', fab: D.phys(fab()), gen }); status('Draping in ' + fabName().toLowerCase() + '…', 'run'); } }
 $('.dr-tabs').addEventListener('click', e => { const t = e.target.dataset.tab; if (!t) return; S.tab = t; save(); renderControls(); });
 $('#drStyle').addEventListener('change', e => { S.style = e.target.value; S.opts = {}; save(); renderControls(); rebuild(); });
-$('#drGender').addEventListener('change', e => { S.gender = e.target.value; S.meas = {}; S.opts = {}; save(); renderControls(); rebuild(); });
+$('#drGender').addEventListener('change', e => { S.body = e.target.value; syncG(); S.meas = {}; S.opts = {}; save(); renderControls(); rebuild(); });
 $('#drSize').addEventListener('change', e => { S.size = e.target.value; S.meas = {}; save(); renderControls(); rebuild(); });
 $('#drFabric').addEventListener('change', e => { S.fabric = e.target.value; S.fabOv = {}; renderFabric(); refab(); });
 $('#drProps').addEventListener('input', e => { const k = e.target.dataset.p; if (!k) return; S.fabOv = S.fabOv || {}; S.fabOv[k] = k === 'tex' ? e.target.value : +e.target.value; const p = PROPS.find(q => q[0] === k), o = e.target.parentNode.querySelector('output'); if (o && p) o.textContent = fmtP(p, +e.target.value); e.target.parentNode.classList.add('ov'); $('#drEdited').hidden = false; save(); applyMaterial(); drawFabPrev(); if (!['sheen', 'op', 'tex'].includes(k)) later(refab, 250); });
@@ -246,6 +256,9 @@ $('#drFabDel').addEventListener('click', () => { if (!myFabs()[S.fabric]) return
 $('#drQuality').addEventListener('change', e => { S.quality = e.target.value; save(); rebuild(); });
 $('#drOpts').addEventListener('input', e => { if (e.target.dataset.x === 'pucker') { S.pucker = +e.target.value; e.target.parentNode.querySelector('output').textContent = S.pucker + '%'; save(); if (worker && built) worker.postMessage({ cmd: 'pucker', a: S.pucker / 100, gen }); return; } const tk = e.target.dataset.t; if (tk) { trims()[tk] = e.target.type === 'checkbox' ? e.target.checked : e.target.value; save(); trimLook(); return; } const k = e.target.dataset.o; if (!k) return; const v = e.target.type === 'range' ? +e.target.value : e.target.value; S.opts[k] = v; const o = e.target.parentNode.querySelector('output'); if (o) o.textContent = outTxt(k, v); save(); if (e.target.tagName === 'SELECT') { renderControls(); rebuild(); } else later(rebuild); });
 $('#drMeas').addEventListener('input', e => { const k = e.target.dataset.m; if (!k || !(+e.target.value > 0)) return; S.meas[k] = Math.round(fromU(+e.target.value) * 10) / 10; save(); later(rebuild, 600); });
+$('#drPose').addEventListener('input', e => { const k = e.target.dataset.pose; if (!k) return; S.pose = S.pose || {}; S.pose[k] = +e.target.value; e.target.parentNode.querySelector('output').textContent = e.target.value + '°'; save(); later(rebuild, 700); });
+$('#drLines').addEventListener('change', e => { const k = e.target.dataset.line; if (!k) return; S.lines = S.lines || {}; S.lines[k] = e.target.checked ? 1 : 0; if (e.target.checked) S.showLines = true; save(); $('#drShowLines').checked = !!S.showLines; showOverlays(); });
+['Lines', 'Pts', 'Joints'].forEach(k => $('#drShow' + k).addEventListener('change', e => { S['show' + k] = e.target.checked; save(); showOverlays(); }));
 $('#drMeasReset').addEventListener('click', () => { S.meas = {}; save(); renderControls(); rebuild(); });
 function setCw(k, v) { cw()[k] = v; S.colour = cw().c1; save(); renderColour(); applyMaterial(); }
 $('#drSw').addEventListener('click', e => { const c = e.target.dataset && e.target.dataset.c; if (c) setCw('c1', c); });
@@ -313,19 +326,22 @@ const rim = new THREE.DirectionalLight(0xffffff, 1.1); rim.position.set(-80, 220
 const floor = new THREE.Mesh(new THREE.CircleGeometry(160, 64), new THREE.MeshStandardMaterial({ color: '#e3ddd2', roughness: 1 }));
 floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
 const bodyGroup = new THREE.Group(); scene.add(bodyGroup);
-const bodyMat = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: .62, metalness: 0 });
+const bodyMat = new THREE.MeshStandardMaterial({ color: '#ffffff', roughness: .5, metalness: 0 });
+{ const c = document.createElement('canvas'); c.width = 1024; c.height = 256; const g = c.getContext('2d'); g.fillStyle = '#fff'; g.font = '700 150px "DM Sans", Arial, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; if ('letterSpacing' in g) g.letterSpacing = '28px'; g.fillText('FORECUT', 512, 134);
+  const t = new THREE.CanvasTexture(c); t.anisotropy = 4; bodyU.logoMap.value = t; document.fonts && document.fonts.ready.then(() => { g.clearRect(0, 0, 1024, 256); g.fillText('FORECUT', 512, 134); t.needsUpdate = true; dirty = true; }); }
 
-const UNDER = { form: '#a9a39a', t1: '#3b3f46', t2: '#3b3f46', t3: '#2f3237', t4: '#e9e4dc', t5: '#e9e4dc' };
-const bodyU = { skin: { value: new THREE.Color() }, cloth: { value: new THREE.Color() }, pt: { value: 0 }, lc: { value: 0 }, lr: { value: 0 }, hh: { value: 1 }, bl: { value: 0 }, bh: { value: 0 } };
+const UNDER = { form: '#cfcbc4', white: '#efede8', black: '#34322f', t1: '#3b3f46', t2: '#3b3f46', t3: '#2f3237', t4: '#e9e4dc', t5: '#e9e4dc' };
+const bodyU = { logoMap: { value: null }, logoC: { value: 0 }, logoW: { value: 14 }, logoCol: { value: new THREE.Color('#6a645b') }, skin: { value: new THREE.Color() }, cloth: { value: new THREE.Color() }, pt: { value: 0 }, lc: { value: 0 }, lr: { value: 0 }, hh: { value: 1 }, bl: { value: 0 }, bh: { value: 0 } };
 bodyMat.onBeforeCompile = sh => { // underwear drawn per pixel from heights, so its edges are clean
   Object.assign(sh.uniforms, bodyU);
   sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float elig; varying float vEl; varying vec3 vW;').replace('#include <begin_vertex>', '#include <begin_vertex>\nvEl = elig; vW = (modelMatrix * vec4(position, 1.0)).xyz;');
-  sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nuniform vec3 skin; uniform vec3 cloth; uniform float pt, lc, lr, hh, bl, bh; varying float vEl; varying vec3 vW;')
+  sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nuniform vec3 skin; uniform vec3 cloth; uniform float pt, lc, lr, hh, bl, bh, logoC, logoW; uniform vec3 logoCol; uniform sampler2D logoMap; varying float vEl; varying vec3 vW;')
     .replace('#include <color_fragment>', `#include <color_fragment>
       float ax = abs(vW.x), cut = lc + lr * smoothstep(.25, .95, ax / hh);
       float pants = step(.5, vEl) * step(vW.y, pt) * step(cut, vW.y);
       float bra = step(.5, vEl) * step(bl, vW.y) * step(vW.y, bh) * step(.01, bh - bl);
-      float u = max(pants, bra); diffuseColor.rgb = mix(skin, cloth, u);`);
+      float u = max(pants, bra); diffuseColor.rgb = mix(skin, cloth, u);
+      if (vW.z > 1.0) { vec2 lu = vec2(vW.x / logoW + .5, (logoC - vW.y) / (logoW * .25) + .5); if (lu.x > 0. && lu.x < 1. && lu.y > 0. && lu.y < 1.) diffuseColor.rgb = mix(diffuseColor.rgb, logoCol, texture2D(logoMap, lu).a * .9); }`);
 };
 function buildBody(body) {
   bodyGroup.clear();
@@ -338,10 +354,60 @@ function buildBody(body) {
   const p = g.attributes.position, nr = g.attributes.normal; for (let i = 0; i < n; i++) p.setXYZ(i, p.getX(i) - nr.getX(i) * .55, p.getY(i) - nr.getY(i) * .55, p.getZ(i) - nr.getZ(i) * .55);
   const u = body.under; bodyU.pt.value = u.pantsTop; bodyU.lc.value = u.legCut; bodyU.lr.value = u.legRise; bodyU.hh.value = u.hipHalf; bodyU.bl.value = u.braLo; bodyU.bh.value = u.braHi;
   bodyMesh = new THREE.Mesh(g, bodyMat); bodyMesh.castShadow = bodyMesh.receiveShadow = true; bodyGroup.add(bodyMesh);
-  tintBody(); bodyGroup.visible = S.bodyOn;
+  const by = body.y; bodyU.logoC.value = by.bust + (by.hps - by.bust) * .45; bodyU.logoW.value = Math.max(5, body.m.bust * .15);
+  // bun for the female forms, sized from the head
+  if (/women|girl/.test(body.cat || S.body)) { let x0 = 1e9, x1 = -1e9, y1 = -1e9, z0 = 1e9; for (let i = 0; i < n; i++) { const y = body.pos[3 * i + 1]; if (y < by.neckTop) continue; x0 = Math.min(x0, body.pos[3 * i]); x1 = Math.max(x1, body.pos[3 * i]); y1 = Math.max(y1, y); z0 = Math.min(z0, body.pos[3 * i + 2]); }
+    const hw = x1 - x0, hh2 = y1 - by.neckTop, rB = hw * .26, bun = new THREE.Mesh(new THREE.SphereGeometry(rB, 32, 20), bodyMat2); bun.scale.set(1, .85, .9); bun.position.set(0, y1 - hh2 * .3, z0 + rB * .35); bun.castShadow = true; bodyGroup.add(bun);
+    const knot = new THREE.Mesh(new THREE.TorusGeometry(rB * .78, rB * .16, 12, 32), bodyMat2); knot.position.set(0, y1 - hh2 * .3, z0 + rB * .75); knot.scale.set(1, .85, 1); bodyGroup.add(knot); }
+  tintBody(); bodyGroup.visible = S.bodyOn; buildOverlays(body);
 }
+const bodyMat2 = new THREE.MeshStandardMaterial({ color: '#cfcbc4', roughness: .45 });
+/* ---------- avatar overlays: reference lines, arrangement points, joints ---------- */
+const LINES = [['shoulder', 'Shoulder lines', '#c4572f'], ['cf', 'Centre front', '#2f6f8f'], ['cb', 'Centre back', '#2f6f8f'], ['neck', 'Neckline', '#7a5c99'], ['bust', 'Bust / chest', '#b08a1e'], ['waist', 'Waist', '#3d8a5a'], ['hip', 'Hip', '#a23b72'], ['side', 'Side seams', '#4a7d84'], ['armhole', 'Armholes', '#9c4f2f'], ['knee', 'Knee', '#5b6bbf']];
+const overlay = { lines: new THREE.Group(), pts: new THREE.Group(), joints: new THREE.Group() }; Object.values(overlay).forEach(g => scene.add(g));
+let arrPts = [];
+function slicePlane(body, nx, ny, nz, d, keep, off) { // where the plane n.x = d cuts the skin: little segments, lifted off the skin
+  const P = body.pos, T = body.tri, M = body.mask, out = [];
+  for (let t = 0; t < T.length; t += 3) {
+    const ids = [T[t], T[t + 1], T[t + 2]]; if (M && ids.some(i => !M[i])) continue;
+    const dist = ids.map(i => P[3 * i] * nx + P[3 * i + 1] * ny + P[3 * i + 2] * nz - d), pts = [];
+    for (let e = 0; e < 3; e++) { const a = e, b = (e + 1) % 3; if ((dist[a] > 0) !== (dist[b] > 0)) { const u = dist[a] / (dist[a] - dist[b]), A = ids[a], B = ids[b]; pts.push([P[3 * A] + (P[3 * B] - P[3 * A]) * u, P[3 * A + 1] + (P[3 * B + 1] - P[3 * A + 1]) * u, P[3 * A + 2] + (P[3 * B + 2] - P[3 * A + 2]) * u]); } }
+    if (pts.length !== 2) continue; const mid = [(pts[0][0] + pts[1][0]) / 2, (pts[0][1] + pts[1][1]) / 2, (pts[0][2] + pts[1][2]) / 2]; if (!keep(mid)) continue;
+    const A = ids.map(i => [P[3 * i], P[3 * i + 1], P[3 * i + 2]]), ux = A[1][0] - A[0][0], uy = A[1][1] - A[0][1], uz = A[1][2] - A[0][2], vx = A[2][0] - A[0][0], vy = A[2][1] - A[0][1], vz = A[2][2] - A[0][2];
+    let cx = uy * vz - uz * vy, cy = uz * vx - ux * vz, cz = ux * vy - uy * vx; const cl = Math.hypot(cx, cy, cz) || 1; cx /= cl; cy /= cl; cz /= cl; if (cx * mid[0] + cz * mid[2] < 0 && Math.abs(cy) < .9) { cx = -cx; cy = -cy; cz = -cz; }
+    pts.forEach(q => out.push(q[0] + cx * off, q[1] + cy * off, q[2] + cz * off));
+  }
+  return out;
+}
+function buildOverlays(body) {
+  Object.values(overlay).forEach(g => g.clear()); arrPts = [];
+  const y = body.y, J = body.J || {}, off = .25, add = (key, arr, col) => { if (!arr.length) return; const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(arr), 3)); const l = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: col, depthTest: true })); l.userData.key = key; overlay.lines.add(l); };
+  const col = k => (LINES.find(q => q[0] === k) || [0, 0, '#333'])[2], torso = q => q[1] > y.crotch - 2 && q[1] < y.hps + 2;
+  const shL = J['l-shoulder'] || [15, y.shoulder, 0], shR = J['r-shoulder'] || [-15, y.shoulder, 0];
+  add('cf', slicePlane(body, 1, 0, 0, 0, q => q[2] > 0 && q[1] > y.crotch && q[1] < y.hps, off), col('cf'));
+  add('cb', slicePlane(body, 1, 0, 0, 0, q => q[2] < 0 && q[1] > y.crotch && q[1] < y.hps + 1, off), col('cb'));
+  ['bust', 'waist', 'hip'].forEach(k => add(k, slicePlane(body, 0, 1, 0, y[k], torso, off), col(k)));
+  add('neck', slicePlane(body, 0, 1, 0, y.hps - .5, q => Math.abs(q[0]) < Math.abs(shL[0]) * .55, off), col('neck'));
+  if (J['l-knee']) add('knee', slicePlane(body, 0, 1, 0, J['l-knee'][1], () => true, off), col('knee'));
+  const zs = (shL[2] + shR[2]) / 2; add('shoulder', slicePlane(body, 0, 0, 1, zs, q => q[1] > y.shoulder - 1 && Math.abs(q[0]) > 3 && Math.abs(q[0]) < Math.abs(shL[0]) + 2.5, off), col('shoulder'));
+  add('side', slicePlane(body, 0, 0, 1, zs, q => q[1] < y.shoulder - 5 && Math.abs(q[0]) > 4, off), col('side'));
+  [[shL, J['l-elbow']], [shR, J['r-elbow']]].forEach(([Sj, E]) => { if (!E) return; const d = [E[0] - Sj[0], E[1] - Sj[1], E[2] - Sj[2]], l = Math.hypot(d[0], d[1], d[2]) || 1, nrm = [d[0] / l, d[1] / l, d[2] / l], p0 = [Sj[0] + nrm[0] * 1.5, Sj[1] + nrm[1] * 1.5, Sj[2] + nrm[2] * 1.5];
+    add('armhole', slicePlane({ pos: body.pos, tri: body.tri }, nrm[0], nrm[1], nrm[2], nrm[0] * p0[0] + nrm[1] * p0[1] + nrm[2] * p0[2], q => Math.hypot(q[0] - Sj[0], q[1] - Sj[1], q[2] - Sj[2]) < 14, off), col('armhole')); });
+  // arrangement points round the body
+  const ring = (yy, rx, rz, cz) => [[0, yy, cz + rz], [0, yy, cz - rz], [rx, yy, cz], [-rx, yy, cz], [rx * .72, yy, cz + rz * .72], [-rx * .72, yy, cz + rz * .72], [rx * .72, yy, cz - rz * .72], [-rx * .72, yy, cz - rz * .72]];
+  const R0 = body.m.bust / 6.28 + 6; [[y.bust, 1], [y.waist, .9], [y.hip, 1.02]].forEach(([yy, k]) => ring(yy, R0 * k * 1.15, R0 * k, 0).forEach(p => arrPts.push(p)));
+  ['l', 'r'].forEach(sd => { const A = J[sd + '-shoulder'], H = J[sd + '-hand'], Hp = J[sd + '-upper-leg'], K = J[sd + '-knee'], An = J[sd + '-ankle'];
+    if (A && H) [.3, .7].forEach(t => { const p = [A[0] + (H[0] - A[0]) * t, A[1] + (H[1] - A[1]) * t, A[2] + (H[2] - A[2]) * t]; arrPts.push([p[0], p[1], p[2] + 7], [p[0], p[1], p[2] - 7]); });
+    if (Hp && K && An) [[Hp, K, .5], [K, An, .5]].forEach(([a, b, t]) => { const p = [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]; arrPts.push([p[0], p[1], p[2] + 9], [p[0], p[1], p[2] - 9]); }); });
+  const pg = new THREE.OctahedronGeometry(1.1), pm = new THREE.MeshBasicMaterial({ color: '#3f72c9' });
+  arrPts.forEach((p, i) => { const m = new THREE.Mesh(pg, pm); m.position.set(p[0], p[1], p[2]); m.userData.ap = i; overlay.pts.add(m); });
+  const jg = new THREE.SphereGeometry(1.3, 16, 12), jm = new THREE.MeshBasicMaterial({ color: '#d9a441', depthTest: false });
+  Object.keys(J).forEach(k => { if (k === 'head') return; const m = new THREE.Mesh(jg, jm); m.position.set(J[k][0], J[k][1], J[k][2]); m.renderOrder = 8; m.userData.joint = k; overlay.joints.add(m); });
+  showOverlays();
+}
+function showOverlays() { overlay.lines.visible = !!S.showLines; overlay.lines.children.forEach(l => { l.visible = !!(S.lines || {})[l.userData.key]; }); overlay.pts.visible = !!S.showPts; overlay.joints.visible = !!S.showJoints; dirty = true; }
 let bodyMesh = null;
-function tintBody() { const t = TONES.find(x => x[0] === S.tone) || TONES[0]; bodyU.skin.value.set(t[1]); bodyU.cloth.value.set(UNDER[t[0]]); dirty = true; }
+function tintBody() { const t = TONES.find(x => x[0] === S.tone) || TONES[0]; bodyU.skin.value.set(t[1]); bodyU.cloth.value.set(UNDER[t[0]]); bodyMat2.color.set(t[1]); bodyMat2.color.multiplyScalar(/^t/.test(t[0]) ? .35 : .93); bodyU.logoCol.value.set(t[0] === 'black' || t[0] === 't5' || t[0] === 't4' ? '#d8d3ca' : '#5f5a52'); bodyMat.roughness = /^t/.test(t[0]) ? .62 : .42; dirty = true; }
 
 /* ---------- fabric surfaces: weave / knit relief, colour detail, prints ---------- */
 const TILE = { plain: .4, poplin: .3, oxford: .5, chambray: .4, twill: .6, denim: .6, canvas: .5, linen: 1.6, slub: 2, brushed: 1.5, cord: 1.2, crepe: .8, chiffon: .5, satin: 1, velvet: 1.5, tweed: 2, brocade: 6, knit: .9, rib: .8, fleece: 1.2, net: .6, leather: 3, smooth: 2 };
@@ -598,7 +664,7 @@ function rebuild() {
   gen++; built = false; paused = false; $('#drPause').textContent = 'Pause';
   const m = baseMeas(), opts = Object.assign(baseOpts(), S.opts);
   status(lastBody ? 'Cutting and sewing the pieces…' : 'Loading the avatar…', 'run');
-  worker.postMessage({ cmd: 'build', gen, style: S.style, gender: S.gender, size: S.size, height: +(S.meas || {}).height || 0, m, opts, fabric: S.fabric, fab: D.phys(fab()), h: { fast: 3, std: 2.3, fine: 1.8 }[S.quality] || 2.3 });
+  worker.postMessage({ cmd: 'build', gen, style: S.style, gender: S.gender, body: S.body, pose: S.pose || {}, size: S.size, height: +(S.meas || {}).height || 0, m, opts, fabric: S.fabric, fab: D.phys(fab()), h: { fast: 3, std: 2.3, fine: 1.8 }[S.quality] || 2.3 });
 }
 function onMsg(e) {
   const d = e.data; if (d.gen !== gen) return;
@@ -713,6 +779,12 @@ view3d.addEventListener('pointerdown', e => {
   if (e.target !== canvas || e.button !== 0) return;
   const gz = gzHit(e); if (gz) { e.stopPropagation(); if (gz !== 'pad') lookAlong(gz); return; }
   if (tc.object && tc.axis) return; // the move gizmo handles this one
+  if (overlay.pts.visible || overlay.joints.visible) { setNDC(e); ray.setFromCamera(ndc, camera);
+    const hp = overlay.pts.visible && selPanel >= 0 ? ray.intersectObjects(overlay.pts.children, false)[0] : null;
+    if (hp && worker) { e.stopPropagation(); const p = arrPts[hp.object.userData.ap], a = posAttr.array, c = [0, 0, 0]; let k = 0; for (let i = 0; i < panelOf.length; i++) if (panelOf[i] === selPanel) { c[0] += a[3 * i]; c[1] += a[3 * i + 1]; c[2] += a[3 * i + 2]; k++; }
+      const m = new THREE.Matrix4().makeTranslation(p[0] - c[0] / k, p[1] - c[1] / k, p[2] - c[2] / k); worker.postMessage({ cmd: 'pstart', panel: selPanel, gen }); worker.postMessage({ cmd: 'pmove', e: Array.from(m.elements), gen }); worker.postMessage({ cmd: 'pend', gen }); paused = false; status('Piece moved to the arrangement point', 'run'); selectPanel(selPanel); return; }
+    const hj = overlay.joints.visible ? ray.intersectObjects(overlay.joints.children, false)[0] : null;
+    if (hj) { e.stopPropagation(); S.tab = 'avatar'; S.hideL = false; save(); renderControls(); const el = $('#drPose'); if (el) el.scrollIntoView({ block: 'center' }); status('Joint: ' + hj.object.userData.joint.replace(/-/g, ' ') + ' · use the pose sliders', 'ok'); return; } }
   if (!built || !worker) return;
   const pk = pickVertex(e); if (!pk) return;
   if (S.tool === 'move') { e.stopPropagation(); selectPanel(panelOf[pk.i]); return; }

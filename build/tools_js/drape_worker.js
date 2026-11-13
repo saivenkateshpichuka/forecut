@@ -15,10 +15,10 @@ function build(q) {
   avatars().then(function () { if (q.gen !== gen) return; try { build2(q); } catch (err) { postMessage({ type: 'error', gen: q.gen, message: String(err && err.message || err) }); } });
 }
 function build2(q) {
-  var key = JSON.stringify([q.m, q.gender, q.size, q.height]);
+  var key = JSON.stringify([q.m, q.body || q.gender, q.size, q.height, q.pose]);
   if (key !== bodyKey) {
-    body = FCDrape.body(q.m, q.gender, AV, q.size, q.height); bodyKey = key;
-    postMessage({ type: 'body', gen: gen, pos: body.pos, tri: body.tri, mask: body.mask, under: body.under, y: body.y, height: body.height, head: body.head, m: body.m });
+    body = FCDrape.body(q.m, q.body || q.gender, AV, q.size, q.height, q.pose); bodyKey = key;
+    postMessage({ type: 'body', gen: gen, pos: body.pos, tri: body.tri, mask: body.mask, under: body.under, y: body.y, height: body.height, head: body.head, m: body.m, J: body.J, cat: q.body || q.gender });
   } else postMessage({ type: 'body', gen: gen, same: true });
   var m = body.m;
   var G = FCDrape.assemble(PM, q.style, q.gender, m, q.opts, body);

@@ -2,12 +2,12 @@
 /* Forecut 3D Drape Studio: runs the sewing and draping off the page's main thread. */
 /* global importScripts, PM, FCDrape, Delaunator */
 self.window = self;
-importScripts('pm-engine.js?v=fx-20261113d', 'drape-sim.js?v=fx-20261113d', 'vendor/delaunator.min.js');
+importScripts('pm-engine.js?v=fx-20261113e', 'drape-sim.js?v=fx-20261113e', 'vendor/delaunator.min.js');
 var sim = null, M = null, body = null, running = false, gen = 0, frames = 0;
 
 var AV = null, AVP = null, bodyKey = '';
 function avatars() {
-  if (!AVP) AVP = Promise.all([fetch('avatar/avatars.bin?v=fx-20261113d').then(function (r) { return r.arrayBuffer(); }), fetch('avatar/avatars.json?v=fx-20261113d').then(function (r) { return r.json(); })])
+  if (!AVP) AVP = Promise.all([fetch('avatar/avatars.bin?v=fx-20261113e').then(function (r) { return r.arrayBuffer(); }), fetch('avatar/avatars.json?v=fx-20261113e').then(function (r) { return r.json(); })])
     .then(function (x) { AV = FCDrape.loadAvatars(x[0], x[1]); return AV; });
   return AVP;
 }
@@ -16,10 +16,10 @@ function build(q) {
   avatars().then(function () { if (q.gen !== gen) return; try { build2(q); } catch (err) { postMessage({ type: 'error', gen: q.gen, message: String(err && err.message || err) }); } });
 }
 function build2(q) {
-  var key = JSON.stringify([q.m, q.gender, q.size, q.height]);
+  var key = JSON.stringify([q.m, q.body || q.gender, q.size, q.height, q.pose]);
   if (key !== bodyKey) {
-    body = FCDrape.body(q.m, q.gender, AV, q.size, q.height); bodyKey = key;
-    postMessage({ type: 'body', gen: gen, pos: body.pos, tri: body.tri, mask: body.mask, under: body.under, y: body.y, height: body.height, head: body.head, m: body.m });
+    body = FCDrape.body(q.m, q.body || q.gender, AV, q.size, q.height, q.pose); bodyKey = key;
+    postMessage({ type: 'body', gen: gen, pos: body.pos, tri: body.tri, mask: body.mask, under: body.under, y: body.y, height: body.height, head: body.head, m: body.m, J: body.J, cat: q.body || q.gender });
   } else postMessage({ type: 'body', gen: gen, same: true });
   var m = body.m;
   var G = FCDrape.assemble(PM, q.style, q.gender, m, q.opts, body);

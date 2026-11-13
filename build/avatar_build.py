@@ -15,11 +15,18 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, 'tools', 'avatar')
 
 # size -> MakeHuman macro settings (gender 0 = female, 1 = male; weight/muscle 0..1; age in years)
-SIZES = {
-    'women': [('XS', 0, 25, .5, .30), ('S', 0, 25, .5, .38), ('M', 0, 25, .5, .46), ('L', 0, 25, .5, .56), ('XL', 0, 25, .5, .66), ('XXL', 0, 25, .5, .76)],
-    'men': [('S', 1, 25, .55, .34), ('M', 1, 25, .55, .42), ('L', 1, 25, .55, .5), ('XL', 1, 25, .55, .6), ('XXL', 1, 25, .55, .7), ('3XL', 1, 25, .55, .8)],
-    'kids': [('2Y', .5, 2, .5, .5), ('4Y', .5, 4, .5, .5), ('6Y', .5, 6, .5, .5), ('8Y', .5, 8, .5, .5), ('10Y', .5, 10, .5, .5), ('12Y', .5, 12, .5, .5)],
+# body type -> (gender 0 female / 1 male, [(age, muscle, weight)] base shapes, {size: base shape index})
+# A few base shapes per body type; every chart size maps to its nearest base, then the browser fits it exactly.
+CATS = {
+    'women': (0, [(25, .5, .30), (25, .5, .46), (25, .5, .62), (25, .5, .80)], {'XXS': 0, 'XS': 0, 'S': 1, 'M': 1, 'L': 2, 'XL': 2, 'XXL': 3, '3XL': 3, '4XL': 3}),
+    'men': (1, [(25, .55, .34), (25, .55, .5), (25, .55, .66), (25, .55, .85)], {'XS': 0, 'S': 0, 'M': 1, 'L': 1, 'XL': 2, 'XXL': 2, '3XL': 3, '4XL': 3, '5XL': 3}),
+    'girl': (0, [(5, .5, .5), (9, .5, .5), (13, .5, .5)], {'4Y': 0, '6Y': 0, '8Y': 1, '10Y': 1, '12Y': 2, '14Y': 2}),
+    'boy': (1, [(5, .5, .5), (9, .5, .5), (13, .5, .5)], {'4Y': 0, '6Y': 0, '8Y': 1, '10Y': 1, '12Y': 2, '14Y': 2}),
+    'tgirl': (0, [(1.5, .5, .55), (3.5, .5, .5)], {'12M': 0, '18M': 0, '2Y': 0, '3Y': 1, '4Y': 1}),
+    'tboy': (1, [(1.5, .5, .55), (3.5, .5, .5)], {'12M': 0, '18M': 0, '2Y': 0, '3Y': 1, '4Y': 1}),
 }
+# older saved designs use 'kids': map those sizes onto the boy and toddler-boy bases
+LEGACY = {'kids': {'2Y': ('tboy', '2Y'), '4Y': ('boy', '4Y'), '6Y': ('boy', '6Y'), '8Y': ('boy', '8Y'), '10Y': ('boy', '10Y'), '12Y': ('boy', '12Y'), '14Y': ('boy', '14Y')}}
 JOINTS = ['l-shoulder', 'l-elbow', 'l-hand', 'r-shoulder', 'r-elbow', 'r-hand', 'l-upper-leg', 'l-knee', 'l-ankle', 'r-upper-leg', 'r-knee', 'r-ankle', 'neck', 'pelvis', 'head']
 
 
@@ -106,19 +113,25 @@ def main(D):
 
     shapes, meta = [], {'n': int(n), 'tris': len(tri) // 3, 'scale': 0.01, 'shapes': {}, 'joints': JOINTS,
                         'source': 'MakeHuman base mesh and macro targets, CC0 1.0 (makehumancommunity/makehuman)'}
-    for g, lst in SIZES.items():
-        for (sz, gen, age, mus, wt) in lst:
+    for cat, (gen, bases, sizes) in CATS.items():
+        first = len(shapes)
+        joints = []
+        for (age, mus, wt) in bases:
             P = shape(gen, age, mus, wt)
-            y0 = P[used, 1].min()
-            P[:, 1] -= y0
+            P[:, 1] -= P[used, 1].min()
             js = {}
             for j in JOINTS:
                 grp = G.get('joint-' + j)
                 if grp:
                     js[j] = np.round(P[np.unique(np.array(grp))].mean(0), 2).tolist()
-            meta['shapes'][g + '|' + sz] = {'i': len(shapes), 'joints': js}
+            joints.append(js)
             shapes.append(np.round(P[used] / 0.01).astype(np.int16))
-            print(g, sz, 'height', round(P[used, 1].max(), 1))
+            print(cat, age, wt, 'height', round(P[used, 1].max(), 1))
+        for sz, bi in sizes.items():
+            meta['shapes'][cat + '|' + sz] = {'i': first + bi, 'joints': joints[bi]}
+    for cat, mp in LEGACY.items():
+        for sz, (c2, s2) in mp.items():
+            meta['shapes'][cat + '|' + sz] = meta['shapes'][c2 + '|' + s2]
     os.makedirs(OUT, exist_ok=True)
     with open(os.path.join(OUT, 'avatars.bin'), 'wb') as f:
         f.write(np.array(tri, np.uint16).tobytes())

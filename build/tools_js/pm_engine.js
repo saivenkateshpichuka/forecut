@@ -17,12 +17,27 @@
     kids: chart(['2Y', '4Y', '6Y', '8Y', '10Y', '12Y'], [[53, 57, 61, 66, 71, 76], [51, 53, 55, 58, 61, 64], [55, 60, 65, 70, 76, 82], [24, 26, 28, 30, 32, 34], [23, 26, 28, 30, 32, 34], [26, 27, 28, 29, 30, 31], [17, 18, 19, 20.5, 22, 23.5], [12, 12.5, 13, 13.5, 14, 14.5],
       [30, 35, 39, 44, 48, 52], [10, 12, 13, 14, 15, 16], [16, 17, 18, 19, 20, 21], [26, 31, 35, 39, 43, 47], [50, 60, 68, 76, 84, 90], [31, 34, 37, 40, 44, 47], [23, 25, 27, 29, 31, 33], [17, 18, 19, 20, 21, 22], [49, 51, 52, 53, 54, 55]])
   };
+  // the full size range: grade one or two sizes beyond each end with the chart's own end steps, and a toddler chart below kids
+  function grow(C, before, after) {
+    var ks = Object.keys(C), out = {}, K, i;
+    function step(a, b, n) { var m = {}; for (var k in C[a]) m[k] = Math.round((C[a][k] + (C[a][k] - C[b][k]) * n) * 2) / 2; return m; }
+    for (i = before.length - 1; i >= 0; i--) out[before[i]] = step(ks[0], ks[1], before.length - i);
+    ks.forEach(function (k) { out[k] = C[k]; });
+    for (i = 0; i < after.length; i++) out[after[i]] = step(ks[ks.length - 1], ks[ks.length - 2], i + 1);
+    return out;
+  }
+  PM.CHARTS.women = grow(PM.CHARTS.women, ['XXS'], ['3XL', '4XL']);
+  PM.CHARTS.men = grow(PM.CHARTS.men, ['XS'], ['4XL', '5XL']);
+  PM.CHARTS.kids = grow(PM.CHARTS.kids, [], ['14Y']);
+  (function () { var k = PM.CHARTS.kids['2Y'], k4 = PM.CHARTS.kids['4Y'], T = {};
+    [['12M', -1], ['18M', -.5], ['2Y', 0], ['3Y', .5], ['4Y', 1]].forEach(function (z) { var m = {}; for (var q in k) m[q] = Math.round((k[q] + (k4[q] - k[q]) * z[1] * (z[1] < 0 ? .8 : 1)) * 2) / 2; T[z[0]] = m; });
+    PM.CHARTS.toddler = T; })();
   // extra measurements, derived in proportion for every size (users can replace them with their own)
   function r5(v) { return Math.round(v * 2) / 2; }
-  ['women', 'men', 'kids'].forEach(function (g) { var C = PM.CHARTS[g]; Object.keys(C).forEach(function (sz) { var m = C[sz];
+  ['women', 'men', 'kids', 'toddler'].forEach(function (g) { var C = PM.CHARTS[g]; Object.keys(C).forEach(function (sz) { var m = C[sz];
     if (g === 'women') { m.bust_span = r5(m.bust * .2); m.bust_depth = r5(m.bust / 12 + 16.5); }
-    m.across_back = r5(m.shoulder * (g === 'men' ? .9 : g === 'kids' ? .88 : .86)); m.across_front = r5(m.across_back - (g === 'women' ? 1.5 : 1));
-    m.elbow = r5(m.bicep * .86); m.calf = r5(m.knee * (g === 'kids' ? 1 : .97)); m.inseam = r5(m.outseam - m.rise + 1); }); });
+    m.across_back = r5(m.shoulder * (g === 'men' ? .9 : g === 'kids' || g === 'toddler' ? .88 : .86)); m.across_front = r5(m.across_back - (g === 'women' ? 1.5 : 1));
+    m.elbow = r5(m.bicep * .86); m.calf = r5(m.knee * (g === 'kids' || g === 'toddler' ? 1 : .97)); m.inseam = r5(m.outseam - m.rise + 1); }); });
   PM.CHARTS.unisex = PM.CHARTS.men;
   PM.GENDER = { women: 'Womenswear', men: 'Menswear', kids: 'Kidswear', unisex: 'Unisex' };
 

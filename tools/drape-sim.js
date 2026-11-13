@@ -17,17 +17,17 @@
       shape: function (key) { var sh = meta.shapes[key]; return sh ? new Int16Array(buf, L.shape0 + sh.i * L.shapeBytes, meta.n * 3) : null; } };
   };
   var LEN = ['outseam', 'nape', 'wh', 'rise', 'knee_l', 'sleeve', 'inseam', 'bust_depth'];
-  D.body = function (m0, g, AV, size, targetH) {
-    var b = fitBody(m0, g, AV, size);
+  D.body = function (m0, g, AV, size, targetH, pose) {
+    var b = fitBody(m0, g, AV, size, pose);
     if (targetH > 60 && targetH < 230 && Math.abs(targetH - b.height) > .5) { // a taller or shorter body: scale every length, keep the girths
       var m = {}, k; for (k in m0) m[k] = m0[k]; var f = targetH / b.height; LEN.forEach(function (q) { if (m[q]) m[q] = Math.round(m[q] * f * 10) / 10; });
-      b = fitBody(m, g, AV, size);
+      b = fitBody(m, g, AV, size, pose);
     }
     buildSDF(b);
     return b;
   };
-  function fitBody(m, g, AV, size) {
-    var gk = g === 'unisex' ? 'men' : g, meta = AV.meta, key = gk + '|' + size;
+  function fitBody(m, g, AV, size, pose) {
+    pose = pose || {}; var kid = /kids|boy|girl/.test(g), gk = g === 'unisex' ? 'men' : g, meta = AV.meta, key = gk + '|' + size;
     if (!meta.shapes[key]) { // custom size: the stored shape nearest in bust and hip
       var best = null, bd = 1e9; Object.keys(meta.shapes).forEach(function (k2) { if (k2.indexOf(gk + '|') !== 0) return; best = best || k2; }); key = best;
     }
@@ -65,13 +65,30 @@
     }
     for (i = 0; i < n; i++) P[3 * i + 1] = remap(P[3 * i + 1]);
     for (q in J) J[q][1] = remap(J[q][1]);
-    var Y = { crotch: tc, waist: tw2, hps: th, hip: remap(M0.hip), bust: g === 'women' ? th - (m.bust_depth || m.bust / 12 + 16.5) : th - m.nape * (g === 'kids' ? .42 : .45), shoulder: remap(M0.shoulder) }; // bust line where the pattern puts it
+    var Y = { crotch: tc, waist: tw2, hps: th, hip: remap(M0.hip), bust: g === 'women' ? th - (m.bust_depth || m.bust / 12 + 16.5) : th - m.nape * (kid ? .42 : .45), shoulder: remap(M0.shoulder) }; // bust line where the pattern puts it
     // pose: raise both arms to the same A-pose (46 degrees from the body) so every size has room under the arm
     ['l', 'r'].forEach(function (sd) {
-      var Sj = J[sd + '-shoulder'], E = J[sd + '-elbow'], sg = sd === 'l' ? 1 : -1, a0 = Math.atan2(Math.abs(E[0] - Sj[0]), Sj[1] - E[1]), da = (46 * PI / 180 - a0) * sg;
+      var Sj = J[sd + '-shoulder'], E = J[sd + '-elbow'], sg = sd === 'l' ? 1 : -1, a0 = Math.atan2(Math.abs(E[0] - Sj[0]), Sj[1] - E[1]), da = ((+pose.arm || 46) * PI / 180 - a0) * sg;
       function rot(p, w) { var c = Math.cos(da * w), s2 = Math.sin(da * w), dx = p[0] - Sj[0], dy = p[1] - Sj[1]; return [Sj[0] + dx * c - dy * s2, Sj[1] + dx * s2 + dy * c]; }
       for (var t = 0; t < n; t++) { if (aw[t] <= 0 || (P[3 * t] > 0) !== (sg > 0)) continue; var r2 = rot([P[3 * t], P[3 * t + 1]], aw[t]); P[3 * t] = r2[0]; P[3 * t + 1] = r2[1]; }
       ['-elbow', '-hand'].forEach(function (jn) { var r3 = rot(J[sd + jn], 1); J[sd + jn][0] = r3[0]; J[sd + jn][1] = r3[1]; });
+    });
+    // elbows bend forward and legs open from the hips, when the pose asks for it
+    if (+pose.elbow) ['l', 'r'].forEach(function (sd) {
+      var Sj = J[sd + '-shoulder'], E = J[sd + '-elbow'], H = J[sd + '-hand'], sg = sd === 'l' ? 1 : -1, ax = [E[0] - Sj[0], E[1] - Sj[1], E[2] - Sj[2]], al = Math.hypot(ax[0], ax[1], ax[2]) || 1; ax = [ax[0] / al, ax[1] / al, ax[2] / al];
+      var rotAx = [-ax[1], ax[0], 0], rl = Math.hypot(rotAx[0], rotAx[1]) || 1; rotAx = [rotAx[0] / rl * sg, rotAx[1] / rl * sg, 0];
+      function rotP(p, ang) { var c = Math.cos(ang), s2 = Math.sin(ang), k = rotAx, v = [p[0] - E[0], p[1] - E[1], p[2] - E[2]], d = k[0] * v[0] + k[1] * v[1] + k[2] * v[2], cr = [k[1] * v[2] - k[2] * v[1], k[2] * v[0] - k[0] * v[2], k[0] * v[1] - k[1] * v[0]];
+        return [E[0] + v[0] * c + cr[0] * s2 + k[0] * d * (1 - c), E[1] + v[1] * c + cr[1] * s2 + k[1] * d * (1 - c), E[2] + v[2] * c + cr[2] * s2 + k[2] * d * (1 - c)]; }
+      var ang = -(+pose.elbow) * PI / 180;
+      for (var t = 0; t < n; t++) { if (aw[t] <= .2 || (P[3 * t] > 0) !== (sg > 0)) continue; var along = (P[3 * t] - E[0]) * ax[0] + (P[3 * t + 1] - E[1]) * ax[1] + (P[3 * t + 2] - E[2]) * ax[2]; if (along < -2) continue;
+        var wgt = Math.min(1, (along + 2) / 4) * aw[t], r2 = rotP([P[3 * t], P[3 * t + 1], P[3 * t + 2]], ang * wgt); P[3 * t] = r2[0]; P[3 * t + 1] = r2[1]; P[3 * t + 2] = r2[2]; }
+      var h2 = rotP(H, ang); J[sd + '-hand'] = h2;
+    });
+    if (+pose.legs) ['l', 'r'].forEach(function (sd) {
+      var Hj = J[sd + '-upper-leg'], sg = sd === 'l' ? 1 : -1, da2 = (+pose.legs) * PI / 180 * sg;
+      function rot2(p, w) { var c = Math.cos(da2 * w), s2 = Math.sin(da2 * w), dx = p[0] - Hj[0], dy = p[1] - Hj[1]; return [Hj[0] + dx * c + dy * s2, Hj[1] - dx * s2 + dy * c]; }
+      for (var t = 0; t < n; t++) { if (lw[t] <= 0 || (P[3 * t] > 0) !== (sg > 0) || P[3 * t + 1] > Hj[1] + 4) continue; var w2 = lw[t] * Math.min(1, (Hj[1] + 4 - P[3 * t + 1]) / 10), r3 = rot2([P[3 * t], P[3 * t + 1]], w2); P[3 * t] = r3[0]; P[3 * t + 1] = r3[1]; }
+      ['-knee', '-ankle'].forEach(function (jn) { var r4 = rot2(J[sd + jn], 1); J[sd + jn][0] = r4[0]; J[sd + jn][1] = r4[1]; });
     });
     // 2. girths: bust, waist and hip, scaling each torso level about its own centre (twice, to settle the blend)
     var zc = {}; function zCentre(y) { var k2 = Math.round(y); if (zc[k2] !== undefined) return zc[k2]; var lo = 1e9, hi = -1e9; for (var t = 0; t < n; t++) if (tw[t] > .8 && Math.abs(P[3 * t + 1] - y) < 1) { lo = Math.min(lo, P[3 * t + 2]); hi = Math.max(hi, P[3 * t + 2]); } return (zc[k2] = lo < hi ? (lo + hi) / 2 : 0); }
@@ -102,12 +119,12 @@
     });
     // where underwear may be drawn (not arms or head); the page draws pants and a bra from the landmarks, per pixel
     var mask = new Uint8Array(n), hipHalf = 0; for (i = 0; i < n; i++) { if (tw[i] > .6 && Math.abs(P[3 * i + 1] - Y.hip) < 1) hipHalf = Math.max(hipHalf, Math.abs(P[3 * i])); mask[i] = aw[i] < .5 && hw[i] < .5 ? 255 : 0; }
-    var men = g === 'men' || g === 'unisex', under = { pantsTop: Y.hip + (Y.waist - Y.hip) * (men ? .55 : .4), legCut: Y.crotch - (g === 'kids' ? 3 : men ? 7 : 2), legRise: men ? 0 : g === 'kids' ? 2 : 7, hipHalf: hipHalf,
-      braLo: men ? 0 : Y.bust - (g === 'kids' ? 6 : 8.5), braHi: men ? 0 : Y.bust + (g === 'kids' ? 6 : 6.5) };
+    var men = g === 'men' || g === 'unisex' || /boy/.test(g), under = { pantsTop: Y.hip + (Y.waist - Y.hip) * (men ? .55 : .4), legCut: Y.crotch - (kid ? 3 : men ? 7 : 2), legRise: men ? 0 : kid ? 2 : 7, hipHalf: hipHalf,
+      braLo: men ? 0 : Y.bust - (kid ? 6 : 8.5), braHi: men ? 0 : Y.bust + (kid ? 6 : 6.5) };
     function maxA(ya, yb) { var r = 0; for (var t = 0; t < n; t++) { if (aw[t] > .3 || hw[t] > .5) continue; var y = P[3 * t + 1]; if (y < ya || y > yb) continue; r = Math.max(r, Math.hypot(P[3 * t], P[3 * t + 2])); } return r; }
     var neckTop = Y.hps + (top - Y.hps) * .35;
     var legs = [['l', 1], ['r', -1]].map(function (sd) { return { s: sd[1], H: J[sd[0] + '-upper-leg'], K: J[sd[0] + '-knee'], A: J[sd[0] + '-ankle'] }; });
-    return { m: m, g: g, key: key, pos: P, tri: tri, mask: mask, under: under, joints: joints, legs: legs, maxA: maxA, girth: girth, height: top,
+    return { m: m, g: g, key: key, pos: P, tri: tri, mask: mask, under: under, joints: joints, legs: legs, J: J, maxA: maxA, girth: girth, height: top,
       head: { c: [0, (neckTop + top) / 2, 0], r: [9, (top - neckTop) / 2, 10] },
       y: { waist: Y.waist, hps: Y.hps, hip: Y.hip, crotch: Y.crotch, bust: Y.bust, arm: Y.shoulder - 6, shoulder: Y.shoulder, neckTop: neckTop } };
   }
