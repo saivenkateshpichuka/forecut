@@ -2736,6 +2736,96 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
     return out;
   };
 
+  /* ---------- generators and multi-step pattern techniques ---------- */
+  /* circular arc as Bezier nodes (centre c, radius r, angles in radians measured from straight down, a0 -> a1) */
+  function arcNodes(c, r, a0, a1) {
+    var m = Math.max(1, Math.ceil(Math.abs(a1 - a0) / (Math.PI / 2) - 1e-9)), d = (a1 - a0) / m, k = 4 / 3 * Math.tan(Math.abs(d) / 4) * r, sg = d > 0 ? 1 : -1, out = [];
+    for (var i = 0; i <= m; i++) { var a = a0 + d * i, p = [c[0] + r * Math.sin(a), c[1] + r * Math.cos(a)], t = [Math.cos(a) * sg, -Math.sin(a) * sg], nd = C.node(p[0], p[1], i > 0 ? [-t[0] * k, -t[1] * k] : null, i < m ? [t[0] * k, t[1] * k] : null); nd.smooth = i > 0 && i < m; out.push(nd); }
+    return out;
+  }
+  /* circle skirt: the waist is an arc of radius r = waist / angle, so a full circle has r = waist / 2pi */
+  C.circleSkirt = function (o) {
+    var f = +o.frac || 1, W = Math.max(1, (+o.waist || 70) - (+o.stretch || 0)), L = +o.len || 60, n = Math.max(1, Math.round(+o.panels || 1)), fold = !!o.fold, Phi = 2 * Math.PI * f, r = W / Phi, R = r + L, phi = Phi / n;
+    if (phi > Math.PI + 1e-9) return { err: 'One panel would be more than a half circle. Use at least ' + Math.ceil(f * 2) + ' panels, or cut on the fold.' , need: Math.ceil(f * 2) };
+    var a0 = fold ? 0 : -phi / 2, a1 = fold ? phi / 2 : phi / 2, c = [0, 0];
+    var inner = arcNodes(c, r, a0, a1), outer = arcNodes(c, R, a1, a0), m = inner.length - 1;
+    inner[m].h2 = null; outer[0].h1 = null; outer[outer.length - 1].h2 = null; inner[0].h1 = null;
+    var nodes = inner.concat(outer), hems = []; for (var i = 0; i < outer.length - 1; i++) hems.push(m + 1 + i);
+    var pc = C.newPiece(nodes, { name: o.name || (f === 1 ? 'Circle skirt' : f === .75 ? 'Three-quarter circle skirt' : f === .5 ? 'Half circle skirt' : f === .25 ? 'Quarter circle skirt' : 'Circle skirt'), qty: n, hems: hems, fold: fold ? nodes.length - 1 : -1, cat: 'Skirt' });
+    var ga = fold ? phi / 4 : (a0 + a1) / 2, gr = function (rad) { return [rad * Math.sin(ga), rad * Math.cos(ga)]; }; pc.grain = { a: gr(r + L * .15), b: gr(r + L * .85) };
+    pc.notes = 'Waist radius ' + r.toFixed(2) + ' cm (waist ' + W.toFixed(1) + ' cm ÷ ' + (Phi).toFixed(4) + '), hem ' + (R * Phi).toFixed(0) + ' cm round. Cut ' + n + (fold ? ' on the fold' : '') + '. Hang 24 hours before levelling the hem: the bias drops.';
+    var out = [pc];
+    if (o.band) { var bw = +o.band, bl = (+o.waist || 70) + 3, b = C.rect(0, 0, bl, bw * 2, { name: 'Waistband', qty: 1, cat: 'Skirt' }); b.notes = 'Finished ' + bw + ' cm wide, ' + ((+o.waist || 70)) + ' cm plus 3 cm underlap. Fold along the middle.'; b.internals.push({ id: uid('in'), kind: 'line', pts: [[0, bw], [bl, bw]], purpose: 'fold', style: 'dashed', label: 'fold', visible: true }); out.push(b); }
+    return { pieces: out, r: r, R: R, hem: R * Phi, panelAngle: phi * 180 / Math.PI };
+  };
+  /* several slashes between two edges, each spread by an equal share: parallel adds width, pivot adds flare at the second edge */
+  C.spreadMany = function (pc, segA, segB, o) {
+    var n = Math.max(1, Math.min(20, Math.round(+o.n || 3))), amt = (+o.total || 0) / n; if (!(amt > 0)) return { err: 'Enter a total spread above zero.' }; if (segA === segB) return { err: 'Pick two different edges.' };
+    var w = JSON.parse(JSON.stringify(pc)), LA = C.segLen(w, segA), LB = C.segLen(w, segB), pa = [], pb = [], k;
+    var A0 = C.pointAt(w, segA, 0), A1 = C.pointAt(w, segA, 1), B0 = C.pointAt(w, segB, 0), B1 = C.pointAt(w, segB, 1), rev = dist(A0, B0) + dist(A1, B1) > dist(A0, B1) + dist(A1, B0);
+    for (k = 1; k <= n; k++) { var fA = k / (n + 1), fB = rev ? 1 - fA : fA; pa.push(C.pointAt(w, segA, C.tAt(w, segA, LA * fA))); pb.push(C.pointAt(w, segB, C.tAt(w, segB, LB * fB))); }
+    var maps = [], ends = [], pb0mid = pb[0].slice();
+    for (k = 0; k < n; k++) {
+      var na = C.nearestSeg(w, pa[k]), nb = C.nearestSeg(w, pb[k]); if (!na || !nb || na.d > .05 || nb.d > .05) return { err: 'The slash lines could not be placed. Try fewer slashes.' };
+      var res = C.slash(w, { seg: na.seg, t: C.tAt(w, na.seg, na.s) }, { seg: nb.seg, t: C.tAt(w, nb.seg, nb.s) }, { mode: o.mode === 'parallel' ? 'parallel' : 'pivot', amt: amt, hinge: 'first' }); if (res.err) return res;
+      C.applyReshape(w, res); maps.push(res.map); ends.push(pa[k], pb[k], res.map(pa[k]), res.map(pb[k]));
+      for (var j = k + 1; j < n; j++) { pa[j] = res.map(pa[j]); pb[j] = res.map(pb[j]); }
+      for (var e = 0; e < ends.length - 4; e++) ends[e] = res.map(ends[e]);
+    }
+    var cmap = function (p, kk, ss) { var q = p; maps.forEach(function (m) { q = m(q, kk, ss); }); return q; }, N = w.nodes, nn = N.length;
+    var idx = function (p) { var b = 0, bd = 1e18; N.forEach(function (nd, i) { var d = Math.hypot(nd.x - p[0], nd.y - p[1]); if (d < bd) { bd = d; b = i; } }); return b; };
+    var chainOf = function (p0, p1, mid) { var i0 = idx(p0), i1 = idx(p1), f = [], b = [], i; for (i = i0; ; i = (i + 1) % nn) { f.push(i); if (i === i1 || f.length > nn) break; } for (i = i0; ; i = (i - 1 + nn) % nn) { b.push(i); if (i === i1 || b.length > nn) break; } var hit = function (L) { return L.some(function (k2) { return Math.hypot(N[k2].x - mid[0], N[k2].y - mid[1]) < 1e-3; }) || L.length <= 2; }; var L = hit(f) && (!hit(b) || f.length <= b.length) ? f : b.reverse(); return L.map(function (k2) { return N[k2].id; }); };
+    return { nodes: N, map: cmap, ends: ends, step: amt, n: n, chainB: chainOf(cmap(B0), cmap(B1), cmap(pb0mid)), hemB: pc.hems.indexOf(segB) >= 0, saB: pc.sa.edges[segB] };
+  };
+  /* raglan: cut the shoulder off the bodice from the neck point to the armhole point and join it to the sleeve cap */
+  C.raglan = function (body, nk, ah, sleeve, top, mt, o) {
+    o = o || {}; var w = JSON.parse(JSON.stringify(body)), r = splitOutline(w, nk, ah); if (!r) return { err: 'Pick two different points on the bodice.' };
+    var len = function (nodes) { var tmp = { nodes: nodes, closed: false }, s2 = 0; for (var i = 0; i < nodes.length - 1; i++) s2 += C.segLen(tmp, i); return s2; };
+    var cut = len(r.A) < len(r.B) ? r.A : r.B, keep = cut === r.A ? r.B : r.A; // the shoulder side is the shorter way round
+    var N = r.n1, A = r.n2; // r.A runs N ... A, r.B runs A ... N
+    var cutNA = cut === r.A ? cut : cut.slice().reverse(), PN = [N.x, N.y], PA = [A.x, A.y];
+    // shoulder tip: the point of the cut part farthest from the raglan line
+    var chord = nrm(sub(PA, PN)), far = -1, S = null; cutNA.forEach(function (nd, i) { if (i === 0 || i === cutNA.length - 1) return; var d = Math.abs((nd.x - PN[0]) * chord[1] - (nd.y - PN[1]) * chord[0]); if (d > far) { far = d; S = nd; } });
+    if (!S) return { err: 'The part between the neck and armhole points has no shoulder corner. Click the neck point, then a point low on the armhole.' };
+    // the raglan line, curved by o.curve towards the shoulder (sleeve side)
+    var cv = o.curve == null ? 1 : +o.curve, nor = [-chord[1], chord[0]], toS = (S.x - PN[0]) * nor[0] + (S.y - PN[1]) * nor[1]; if (toS < 0) nor = [-nor[0], -nor[1]];
+    var hl = dist(PN, PA) / 3, off = cv / .75, hN = [chord[0] * hl + nor[0] * off, chord[1] * hl + nor[1] * off], hA = [-chord[0] * hl + nor[0] * off, -chord[1] * hl + nor[1] * off];
+    var line = { nodes: [C.node(PN[0], PN[1], null, hN), C.node(PA[0], PA[1], hA, null)], closed: false }, linePts = C.segPts(line, 0, .3);
+    // new bodice: keep the long way round and close it with the raglan line
+    var K = keep.map(function (nd) { return cpNode(nd); }); var kA = keep[0] === A; // keep runs A ... N or N ... A
+    K[0].h1 = null; K[K.length - 1].h2 = null; K[0].smooth = K[K.length - 1].smooth = false;
+    if (kA) { K[K.length - 1].h2 = hN; K[0].h1 = hA; } else { K[K.length - 1].h2 = hA; K[0].h1 = hN; }
+    // the cut part as points: shoulder tip -> along the shoulder to the neck point -> raglan line to the armhole point
+    var tmpCut = { nodes: cutNA.map(function (nd) { return cpNode(nd); }), closed: false }; tmpCut.nodes[0].h1 = null; tmpCut.nodes[tmpCut.nodes.length - 1].h2 = null;
+    var iS = cutNA.indexOf(S), toNeck = []; for (var i = iS; i > 0; i--) toNeck = toNeck.concat(C.segPts(tmpCut, i - 1, .3).reverse().slice(i === iS ? 0 : 1));
+    var partPts = toNeck.concat(linePts.slice(1)); // S ... N ... A
+    // the sleeve: split along the line through the cap top (grainline direction, or straight down), keep the half with the matching point
+    var flat = C.flat(sleeve, .25).pts, T = C.pointAt(sleeve, top.seg, top.t), M2 = C.pointAt(sleeve, mt.seg, mt.t), gd = sleeve.grain ? nrm(sub(sleeve.grain.b, sleeve.grain.a)) : [0, 1]; if (gd[1] < 0) gd = [-gd[0], -gd[1]];
+    var sideOf = function (p) { return (p[0] - T[0]) * gd[1] - (p[1] - T[1]) * gd[0]; }, want = Math.sign(sideOf(M2)) || 1;
+    var near = function (p) { var b = 0, bd = 1e18; flat.forEach(function (q, i2) { var d = dist(p, q); if (d < bd) { bd = d; b = i2; } }); return b; }, n = flat.length, iT = near(T), iM = near(M2);
+    // walk from the matching point away from the cap top until the outline crosses the centre line
+    var walkFrom = function (iM, start) { var fw = (iT - iM + n) % n, bw = (iM - iT + n) % n, step = fw < bw ? -1 : 1, half = [start], j = iM, X = null;
+    for (var c2 = 0; c2 < n; c2++) { var j2 = (j + step + n) % n, p1 = flat[j], p2 = flat[j2], s1 = sideOf(p1) * want, s2 = sideOf(p2) * want; if (c2 > 0 || dist(p1, start) > 1e-6) half.push(p1); if (s1 > 1e-9 && s2 <= 1e-9 && c2 > 2) { var tt = s1 / (s1 - s2); X = [p1[0] + (p2[0] - p1[0]) * tt, p1[1] + (p2[1] - p1[1]) * tt]; break; } j = j2; }
+    return X ? half.concat([X]) : null; };
+    var half = walkFrom(iM, M2); if (!half) return { err: 'The sleeve centre line through the cap top could not be found. Check the sleeve has a grainline down its middle.' }; var X = half[half.length - 1];
+    // turn the cut part so its shoulder tip sits on the cap top and its armhole point lies towards the matching point
+    var PS = [S.x, S.y], th = Math.atan2(M2[1] - T[1], M2[0] - T[0]) - Math.atan2(PA[1] - PS[1], PA[0] - PS[0]), cs = Math.cos(th), sn = Math.sin(th);
+    var tf = function (p) { var dx = p[0] - PS[0], dy = p[1] - PS[1]; return [T[0] + cs * dx - sn * dy, T[1] + sn * dx + cs * dy]; };
+    var moved = partPts.map(tf), ax = sub(M2, T), crs = function (p) { return ax[0] * (p[1] - T[1]) - ax[1] * (p[0] - T[0]); }, cen = function (P) { var x = 0, y = 0; P.forEach(function (q) { x += q[0]; y += q[1]; }); return [x / P.length, y / P.length]; };
+    if (Math.sign(crs(cen(moved))) === Math.sign(crs(cen(half)))) { var al = nrm(ax); moved = moved.map(function (q) { var d = sub(q, T), t2 = d[0] * al[0] + d[1] * al[1], f2 = [T[0] + al[0] * t2, T[1] + al[1] * t2]; return [2 * f2[0] - q[0], 2 * f2[1] - q[1]]; }); } // the shoulder part sits outside the cap, so mirror it when it lands on the sleeve
+    var iE = near(moved[moved.length - 1]), h2 = walkFrom(iE, flat[iE]); if (h2 && Math.sign(sideOf(flat[iE])) === want) { half = h2; X = h2[h2.length - 1]; } // the raglan line meets the cap where the turned armhole ends
+    if (o.debug) o.debug.push({ part: partPts.map(function (q) { return q.map(function (v) { return +v.toFixed(1); }); }), moved: moved.map(function (q) { return q.map(function (v) { return +v.toFixed(1); }); }) });
+    var poly = half.concat(moved); // M2 ... X, then T(=S) ... N ... A (A lands near M2)
+    var clean = []; poly.forEach(function (q) { if (!clean.length || dist(clean[clean.length - 1], q) > .02) clean.push(q); }); if (dist(clean[0], clean[clean.length - 1]) < .02) clean.pop();
+    var sn2 = C.fitNodes(clean, .04, true); for (var dd = sn2.length - 1; dd >= 0 && sn2.length > 3; dd--) { var nx2 = sn2[(dd + 1) % sn2.length]; if (Math.hypot(sn2[dd].x - nx2.x, sn2[dd].y - nx2.y) < .08) { if (sn2[dd].h1) nx2.h1 = sn2[dd].h1; sn2.splice(dd, 1); } } var sp = C.newPiece(sn2, { name: (o.side === 'back' ? 'Back' : 'Front') + ' raglan sleeve', qty: sleeve.qty || 2, pair: true, cat: sleeve.cat || '' });
+    var hemSeg = C.nearestSeg(sp, flat[(iT + Math.floor(n / 2)) % n]); if (sleeve.hems && sleeve.hems.length && hemSeg && hemSeg.d < .5) sp.hems = [hemSeg.seg];
+    var gx = T, gy = [X[0], X[1]], gm = [(gx[0] + gy[0]) / 2, (gx[1] + gy[1]) / 2]; sp.grain = { a: [gm[0] - gd[0] * 8, gm[1] - gd[1] * 8], b: [gm[0] + gd[0] * 8, gm[1] + gd[1] * 8] };
+    var ns = C.nearestSeg(sp, moved[moved.length - 1]); if (ns) sp.notches.push({ id: uid('nt'), seg: ns.seg, mode: 'dist', v: +ns.s.toFixed(3), from: 'start', type: o.side === 'back' ? 'double' : 'single', depth: .6 });
+    sp.notes = 'Raglan from ' + (body.name || 'bodice') + ' and ' + (sleeve.name || 'sleeve') + '. The line from the cap top down the middle is the overarm seam.';
+    var shift = function (p) { return p; };
+    return { body: { nodes: K, map: shift }, sleeve: sp, A: PA, N: PN, S: PS, armhole: len(cutNA.slice(cutNA.indexOf(S))), capPart: dist(T, M2) };
+  };
+
   /* ---------- grading: each piece keeps, per size, how far each point moves from the base size ---------- */
   C.gradeSet = function (proj) { var g = proj.sizes && proj.sizes.groups && proj.sizes.groups[0]; if (!g) { proj.sizes = { groups: [{ id: 'g1', name: 'Size group 1', base: '', list: [] }] }; g = proj.sizes.groups[0]; } g.list = (g.list || []).filter(Boolean); if (g.list.length && g.list.indexOf(g.base) < 0) g.base = g.list[Math.floor(g.list.length / 2)]; return g; };
   /* the move of every point for one size; points without a rule follow their neighbours, weighted by distance along the outline */
@@ -2870,6 +2960,9 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
     { g: 'Darts and pleats', id: 'dartmv', n: 'Move dart', tip: 'Click a dart, then click where it should go on the outline. The part between the two positions turns about the apex, so the fit stays the same (pivot method).', ic: 'M3 5h4L9.5 13 12 5h3M13 18.5h8M18 15.5l3 3-3 3' },
     { g: 'Darts and pleats', id: 'pleat', n: 'Pleat', tip: 'Click two points on the outline across the piece where the pleat goes, then choose knife, box or inverted pleat and its depth. The pattern opens by the pleat intake and the fold and placement lines are marked.', ic: 'M3 7l4 10 4-10 4 10 4-10 2 5' },
     { g: 'Darts and pleats', id: 'slash', n: 'Slash and spread', tip: 'Click two points on the outline across the piece, then choose parallel (adds the same amount all along) or pivot (opens at one end only, for flare), and the amount.', ic: 'M3 4h7l-2 16H3zM14 4h7v16h-9zM10.5 12h3' },
+    { g: 'Darts and pleats', id: 'spread', n: 'Spread for flare', tip: 'Click the edge that stays the same (the waist or neckline), then the edge that opens (the hem). Choose how many slashes and the total spread: pivot adds flare at the hem only, parallel adds the same amount top and bottom.', ic: 'M8 4h8M8 4L3 20M16 4l5 16M12 4v16M10 4L7 20M14 4l3 16M3 20h18' },
+    { g: 'Sleeves and skirts', id: 'raglan', n: 'Raglan sleeve', tip: 'On the bodice click the neck point, then a point low on the armhole. On the sleeve click the top of the cap, then the cap point that meets that armhole point. The shoulder is cut off the bodice along a curved raglan line and joined to the sleeve.', ic: 'M9 3l-5 4v14h7M9 3c2 3 4 6 5 11M9 3h4l7 6-3 3-3-2' },
+    { g: 'Sleeves and skirts', id: 'circle', n: 'Circle skirt', tip: 'Makes a full, three-quarter, half or quarter circle skirt from the waist and length. The waist radius is worked out for you.', ic: 'M12 4a8 8 0 1 0 0.01 0M12 9a3 3 0 1 0 0.01 0' },
     { g: 'Sewing', id: 'sew', k: 'j', n: 'Segment sewing', tip: 'Click an edge, then the edge it is sewn to. Click each one near the ends that meet (for example both near the hem) so the seam is not twisted; Flip in Properties fixes it if it is. Matching colours show which edges are sewn and the lengths are compared.', ic: 'M4 3v18M20 3v18M7.5 7h9M7.5 12h9M7.5 17h9' },
     { g: 'Sewing', id: 'fsew', n: 'Free sewing', tip: 'Sew part of an edge to part of another: click where the seam starts and ends on the first edge, then where it starts and ends on the second. The click order sets the direction.', ic: 'M4 3v18M20 3v18M8 10h8M8 14h8M2.6 8.6h2.8v2.8H2.6zM18.6 12.6h2.8v2.8h-2.8z' },
     { g: 'Trims', id: 'button', k: 'b', n: 'Button', tip: 'Click on a piece to place a button. Set its size, holes, material and colour in Properties, and repeat it down a placket at an exact spacing.', ic: 'M4 12a8 8 0 1 0 16 0a8 8 0 1 0 -16 0M8.8 9.8a1 1 0 1 0 2 0a1 1 0 1 0 -2 0M13.2 9.8a1 1 0 1 0 2 0a1 1 0 1 0 -2 0M8.8 14.2a1 1 0 1 0 2 0a1 1 0 1 0 -2 0M13.2 14.2a1 1 0 1 0 2 0a1 1 0 1 0 -2 0' },
@@ -2895,7 +2988,7 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
   var MENUS = [
     ['file', 'File', [['new', 'New blank project', 'Ctrl N'], ['open', 'Open saved project…', 'Ctrl O'], ['openfile', 'Open project file…'], '-', ['save', 'Save', 'Ctrl S'], ['saveas', 'Save as…'], ['savefile', 'Download project file'], '-', ['fromdraft', 'Bring in the current draft'], ['importdxf', 'Import DXF…'], '-', ['xsvg', 'Export SVG (true scale)'], ['xdxf', 'Export DXF'], ['xpdft', 'Export PDF, tiles on your paper size'], ['xpdf', 'Export PDF, full size'], ['xpng', 'Export PNG'], ['bomcsv', 'Export BOM (CSV)']]],
     ['edit', 'Edit', [['undo', 'Undo', 'Ctrl Z'], ['redo', 'Redo', 'Ctrl Shift Z'], '-', ['dup', 'Duplicate', 'Ctrl D'], ['linked', 'Linked copy'], ['mirrorcopy', 'Mirrored copy'], ['del', 'Delete', 'Del'], '-', ['selall', 'Select all pieces', 'Ctrl A'], ['selnone', 'Deselect', 'Esc'], '-', ['history', 'Undo history…', 'Ctrl H']]],
-    ['pattern', 'Pattern', ['tool:select', 'tool:edit', 'tool:pan', '-', 'tool:poly', 'tool:rect', 'tool:ellipse', 'tool:spiral', '-', 'tool:addpt', 'tool:curv', 'tool:smooth', 'tool:cut', 'tool:merge', 'tool:trace', '-', 'tool:iline', 'tool:irect', 'tool:iell', 'tool:notch', 'tool:grain', 'tool:sa', '-', 'tool:dart', 'tool:dartmv', 'tool:pleat', 'tool:slash', '-', 'tool:measure']],
+    ['pattern', 'Pattern', ['tool:select', 'tool:edit', 'tool:pan', '-', 'tool:poly', 'tool:rect', 'tool:ellipse', 'tool:spiral', '-', 'tool:addpt', 'tool:curv', 'tool:smooth', 'tool:cut', 'tool:merge', 'tool:trace', '-', 'tool:iline', 'tool:irect', 'tool:iell', 'tool:notch', 'tool:grain', 'tool:sa', '-', 'tool:dart', 'tool:dartmv', 'tool:pleat', 'tool:slash', 'tool:spread', '-', 'tool:raglan', 'tool:circle', '-', 'tool:measure']],
     ['sewing', 'Sewing', ['tool:sew', 'tool:fsew', 'tool:walk', '-', ['tab:sewing', 'Sewing list and length check'], ['sewcheck', 'Check all seams'], ['sewclear', 'Delete all sewing']]],
     ['materials', 'Materials', [['tab:fabric', 'Fabric library'], ['fabnew', 'New fabric'], ['fabassign', 'Give the selected pieces a fabric'], '-', 'tool:graphic', ['tab:trims', 'Graphics and trims list']]],
     ['trims', 'Trims', ['tool:button', 'tool:hole', 'tool:zip', 'tool:piping', 'tool:binding', 'tool:tstitch', 'tool:pucker', 'tool:tape', '-', ['tab:trims', 'All trims'], ['presets', 'Topstitch presets']]],
@@ -3016,7 +3109,7 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
   function f3(v) { return v.toFixed(3); }
   function f1(v) { return v.toFixed(1); }
   function polyD(P2) { return P2.length ? 'M' + P2.map(function (q) { return f3(q[0]) + ' ' + f3(q[1]); }).join('L') + 'Z' : ''; }
-  var PICK = ['dart', 'dartmv', 'pleat', 'slash', 'edit', 'addpt', 'curv', 'smooth', 'notch', 'measure', 'walk', 'sa', 'cut', 'merge', 'trace', 'sew', 'fsew', 'zip', 'piping', 'binding', 'tstitch', 'pucker', 'tape'];
+  var PICK = ['dart', 'dartmv', 'pleat', 'slash', 'spread', 'raglan', 'edit', 'addpt', 'curv', 'smooth', 'notch', 'measure', 'walk', 'sa', 'cut', 'merge', 'trace', 'sew', 'fsew', 'zip', 'piping', 'binding', 'tstitch', 'pucker', 'tape'];
   function pieceHTML(pc, fast) {
     var v = V(), sel = ST.sel.indexOf(pc.id) >= 0, G = geo(pc, fast), bad = G.issues.length > 0, cl = v.sa ? G.cut : null, h = '';
     h += '<g class="ps-pc' + (sel ? ' sel' : '') + (bad ? ' bad' : '') + (pc.locked ? ' lock' : '') + '" data-pc="' + pc.id + '" transform="translate(' + f3(pc.x || 0) + ' ' + f3(pc.y || 0) + ')">';
@@ -3090,6 +3183,34 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
       ['button', 'hole', 'graphic'].forEach(function (k) { P.trims[k].forEach(function (r) { if (r.pc === pc.id) r.at = res.map(r.at, -1); }); });
       if (extra) extra();
     });
+  }
+  function spreadDialog(pc, segA, segB) {
+    askNums('Spread for flare', [{ k: 'mode', l: 'Spread', v: 'pivot', opts: [['pivot', 'Pivot: flare at the second edge only'], ['parallel', 'Parallel: the same amount at both edges']] }, { k: 'n', l: 'Number of slashes', v: 4, u: 'raw' }, { k: 'total', l: 'Total spread', v: 12 }, { k: 'smooth', l: 'Afterwards', v: 'smooth', opts: [['smooth', 'Smooth the opened edge into one curve'], ['keep', 'Leave the corners']] }],
+      function (v) { var n = Math.round(v.n); if (!(n >= 1 && n <= 20)) return toast('Use 1 to 20 slashes.', 1); var res = C.spreadMany(pc, segA, segB, { n: n, total: v.total, mode: v.mode }); if (res.err) return toast(res.err, 1);
+        var L0 = C.segLen(pc, segB);
+        reshape(pc, res, 'Spread for flare', function () { var ids = pc.nodes.map(function (nd) { return nd.id; }), nn = ids.length, segs = []; for (var k = 0; k < res.chainB.length - 1; k++) { var ia = ids.indexOf(res.chainB[k]), ib = ids.indexOf(res.chainB[k + 1]); if (ia < 0 || ib < 0) continue; segs.push(ib === (ia + 1) % nn ? ia : ib); }
+          if (v.smooth === 'smooth' && segs.length > 1) C.smooth(pc, segs, 1, 60);
+          segs.forEach(function (sg) { if (res.hemB && pc.hems.indexOf(sg) < 0) pc.hems.push(sg); if (res.saB != null) pc.sa.edges[sg] = res.saB; }); ST.sel = [pc.id]; });
+        var L1 = 0; pc.nodes.forEach(function () {}); toast(n + ' slash' + (n > 1 ? 'es' : '') + ', ' + F(res.step) + ' each. ' + (v.mode === 'pivot' ? 'The edge that opened grew by about ' + F(v.total) + '.' : 'The piece is ' + F(v.total) + ' wider.') + ' Check the curve and true the seams.'); void L0; void L1; },
+      'The slashes are spaced evenly between the two edges. Pivot keeps the first edge the same length, as for a flared skirt or a flared sleeve.');
+  }
+  function raglanDialog(rc) {
+    var body = pcById(rc[0].pc), sl = pcById(rc[2].pc); if (!body || !sl) return; if (body.locked || sl.locked) return toast('Unlock the pieces first.', 1);
+    askNums('Raglan sleeve', [{ k: 'side', l: 'This bodice is the', v: /back/i.test(body.name) ? 'back' : 'front', opts: [['front', 'Front'], ['back', 'Back']] }, { k: 'curve', l: 'Curve of the raglan line', v: 1 }, { k: 'keep', l: 'The set-in sleeve', v: 'keep', opts: [['keep', 'Keep it (do the other side next)'], ['hide', 'Hide it']] }],
+      function (v) { var res = C.raglan(body, rc[0], rc[1], sl, rc[2], rc[3], { side: v.side, curve: v.curve }); if (res.err) return toast(res.err, 1);
+        reshape(body, res.body, 'Raglan sleeve', function () { var sp = res.sleeve, bs = bboxW(sl), rx = -1e9; P.pieces.forEach(function (p2) { if (!p2.hidden) rx = Math.max(rx, bboxW(p2)[2]); }); var b2 = C.bbox(sp); sp.x = rx + 5 - b2[0]; sp.y = bs[1] - b2[1]; if (sl.fabric) sp.fabric = sl.fabric; P.pieces.push(sp); if (v.keep === 'hide') sl.hidden = true; ST.sel = [sp.id, body.id]; });
+        toast('Raglan ' + v.side + ' sleeve made. Armhole part ' + F(res.armhole) + ', cap part ' + F(res.capPart) + '. Smooth the shoulder line into the overarm seam and check the neckline curve.'); setTool('select'); },
+      'The bodice shoulder from the neck point to the armhole point moves onto the sleeve cap. Raise the curve to give the sleeve a softer line; 0 makes it straight.');
+  }
+  function circleDialog() {
+    var S0 = window.PMUI && PMUI.S && PMUI.S(), wst = S0 && S0.m && S0.m.waist ? S0.m.waist : 70;
+    askNums('Circle skirt', [{ k: 'frac', l: 'Circle', v: '1', opts: [['1', 'Full circle'], ['0.75', 'Three-quarter circle'], ['0.5', 'Half circle'], ['0.25', 'Quarter circle']] }, { k: 'waist', l: 'Waist', v: wst }, { k: 'len', l: 'Skirt length (without waistband)', v: 60 }, { k: 'panels', l: 'Panels', v: 2, u: 'raw' }, { k: 'fold', l: 'Cutting', v: 'no', opts: [['no', 'Each panel cut whole'], ['yes', 'Each panel cut on the fold']] }, { k: 'stretch', l: 'Take off the waist for bias stretch', v: 1 }, { k: 'band', l: 'Waistband width (0 for none)', v: 3 }],
+      function (v) { var frac = +v.frac, n = Math.round(v.panels); if (!(v.waist > 20 && v.len > 5 && n >= 1)) return toast('Enter the waist, length and at least one panel.', 1);
+        var r = C.circleSkirt({ frac: frac, waist: v.waist, len: v.len, panels: n, fold: v.fold === 'yes', stretch: v.stretch, band: v.band });
+        if (r.err) { if (r.need) { n = r.need; r = C.circleSkirt({ frac: frac, waist: v.waist, len: v.len, panels: n, fold: v.fold === 'yes', stretch: v.stretch, band: v.band }); toast('One panel cannot be more than half a circle, so ' + n + ' panels are used.'); } if (r.err) return toast(r.err, 1); }
+        act('Circle skirt', function () { var bx = 0; P.pieces.forEach(function (p) { if (!p.hidden) bx = Math.max(bx, bboxW(p)[2]); }); r.pieces.forEach(function (pc) { var b = C.bbox(pc); pc.x = bx + 5 - b[0]; pc.y = 2 - b[1]; bx += b[2] - b[0] + 5; P.pieces.push(pc); }); ST.sel = r.pieces.map(function (pc) { return pc.id; }); });
+        fit(); toast('Waist radius ' + F(r.r) + ', hem about ' + F(r.hem) + ' round. ' + n + ' panel' + (n > 1 ? 's' : '') + ' of ' + Math.round(r.panelAngle) + '°.'); },
+      'The waist radius is the waist divided by the angle of the circle (a full circle: waist ÷ 2π). Bias edges stretch, so 1 to 2 cm is usually taken off the waist.');
   }
   function slashDialog(pc, a, b) {
     askNums('Slash and spread', [{ k: 'mode', l: 'Spread', v: 'parallel', opts: [['parallel', 'Parallel: the same amount all along'], ['pivot', 'Pivot: open at one end only (flare)']] }, { k: 'amt', l: 'Amount', v: 4 }, { k: 'hinge', l: 'Pivot at', v: 'first', opts: [['first', 'The first point you clicked'], ['second', 'The second point you clicked']] }, { k: 'smooth', l: 'Afterwards', v: 'smooth', opts: [['smooth', 'Smooth the edges across the spread'], ['keep', 'Leave the corners']] }],
@@ -3374,7 +3495,7 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
       + '<div class="ps-bs">' + btn('mirh', 'Mirror ↔') + btn('mirv', 'Mirror ↕') + '</div>';
   }
   function multiPanel(pcs) {
-    return '<h5>' + pcs.length + ' pieces selected</h5><h5>Align</h5><div class="ps-bs ic">' + [['al', 'Left'], ['ac', 'Centres'], ['ar', 'Right'], ['at', 'Top'], ['am', 'Middles'], ['ab', 'Bottom']].map(function (a) { return btn('align-' + a[0], a[1]); }).join('') + '</div>'
+    return '<h5>' + pcs.length + ' pieces selected</h5><h5>Align</h5><div class="ps-bs ps-al">' + [['al', 'Left'], ['ac', 'Centres'], ['ar', 'Right'], ['at', 'Top'], ['am', 'Middles'], ['ab', 'Bottom']].map(function (a) { return btn('align-' + a[0], a[1]); }).join('') + '</div>'
       + '<h5>Distribute</h5><div class="ps-bs">' + btn('dist-h', 'Horizontally') + btn('dist-v', 'Vertically') + '</div>' + row('Gap', num('gap', U(ST.gap == null ? 3 : ST.gap))) + '<div class="ps-bs">' + btn('gap-h', 'Space in a row') + btn('gap-v', 'Space in a column') + '</div>'
       + transformPanel(null) + '<div class="ps-bs">' + btn('dup', 'Duplicate all') + btn('del', 'Delete all', 'bad') + '</div>';
   }
@@ -3605,6 +3726,8 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
     else if (t === 'spiral') { var iss = C.spiralCheck(o.r0, o.turns, o.grow, o.sw); h = '<b>Spiral</b>' + optNum('r0', o.r0, 'Inner radius') + '<label>Turns <input type="number" step=".25" min=".25" max="6" data-o="turns" value="' + o.turns + '"></label>' + optNum('grow', o.grow, 'Spacing per turn') + optNum('sw', o.sw, 'Strip width') + '<label>Direction <select data-o="dir"><option value="cw"' + (o.dir === 'cw' ? ' selected' : '') + '>Clockwise</option><option value="ccw"' + (o.dir === 'ccw' ? ' selected' : '') + '>Anticlockwise</option></select></label>' + btn('mkspiral', 'Create', 'pri') + (iss.length ? '<em class="bad">' + esc(iss[0]) + '</em>' : '<small>Outer edge ' + F(spiralLen(o)) + '</small>'); }
     else if (t === 'dart') h = '<b>Dart</b><label>Type <select data-o="dtype"><option value="edge"' + (o.dtype !== 'fisheye' ? ' selected' : '') + '>Edge dart (cut into the outline)</option><option value="fisheye"' + (o.dtype === 'fisheye' ? ' selected' : '') + '>Fisheye dart (inside the piece)</option></select></label><small>' + (o.dtype === 'fisheye' ? 'Click where the dart centre goes.' : ST.dpick ? 'Now click the dart point (apex) inside the piece.' : 'Click the edge where the dart opens, then its point inside the piece.') + '</small>';
     else if (t === 'pleat' || t === 'slash') h = '<b>' + TOOL[t].n + '</b><small>' + (ST.cut.length ? 'Now click the second point on the outline, across the piece.' : 'Click a point on the outline, then a second point across the piece.') + '</small>';
+    else if (t === 'spread') h = '<b>Spread for flare</b><small>' + (ST.cut.length ? 'Now click the edge that opens (the hem).' : 'Click the edge that stays the same (the waist), then the edge that opens.') + '</small>';
+    else if (t === 'raglan') h = '<b>Raglan sleeve</b><small>' + ['1 of 4: on the bodice, click the neck point where the raglan line starts.', '2 of 4: click a point low on the bodice armhole, where the raglan line ends (near the notch).', '3 of 4: on the sleeve, click the top of the cap.', '4 of 4: click the cap point that meets the armhole point (front side for a front bodice).'][Math.min(3, ST.cut.length)] + '</small>';
     else if (t === 'trace') h = '<b>Trace</b>' + optNum('fw', o.fw || 4, 'Facing width') + '<small>Click an edge for a facing, or inside an internal shape to trace it as a piece.</small>';
     else if (t === 'poly') h = '<b>Polygon</b>' + (ST.draft && ST.draft.pts && ST.draft.pts.length ? btn('polynext', 'Next point by length and angle…') + btn('polyclose', 'Close shape') : '') + '<small>Click to place points; drag to curve. Enter or click the first point to close. Backspace undoes the last point.</small>';
     else if (t === 'measure') h = '<b>Measure</b><small>' + (ST.meas.length > 1 ? 'Total ' + F(C.measure.poly(ST.meas)) + (ST.meas.length > 2 ? ' · angle at the last bend ' + C.measure.angle(ST.meas[ST.meas.length - 3], ST.meas[ST.meas.length - 2], ST.meas[ST.meas.length - 1]).toFixed(1) + '°' : '') : 'Click points to measure. Click an edge to read its length along the curve.') + '</small>' + (ST.meas.length ? btn('mclear', 'Clear') : '');
@@ -3816,6 +3939,12 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
       case 'measure': { if (!ST.meas.length && t.classList.contains('ps-eh') && sn.k !== 'point' && sn.k !== 'midpoint') { var me = nearestEdge(w); if (me) { ST.seg = { pc: me.pc.id, i: me.seg }; ST.node = null; toast(me.pc.name + ', edge ' + (me.seg + 1) + ': ' + F(me.L) + ' along the ' + (C.ctrl(me.pc, me.seg).curved ? 'curve' : 'line') + '.'); refresh(); return; } } ST.meas.push(sn.p); opts(); drawOver(); return; }
       case 'merge': { var mg = nearestEdge(w); if (!mg) return toast('Click on an edge of a piece.', 1); if (ST.walk.length === 1 && ST.walk[0].pc === mg.pc.id) return toast('Click an edge on a different piece.', 1); ST.walk.push({ pc: mg.pc.id, seg: mg.seg }); if (ST.walk.length === 2) doMerge(); else { draw(); status(); } return; }
       case 'trace': { var tr0 = nearestEdge(w); if (tr0 && t.classList.contains('ps-eh')) { var fw = ST.o.fw || 4; act('Trace facing', function () { var f = C.facing(tr0.pc, [tr0.seg], fw); f.x += 2; f.y += 2; P.pieces.push(f); ST.sel = [f.id]; }); toast('Facing traced, ' + F(fw) + ' wide. Move it off the piece and check it.'); return; } var tp = pieceAt(w); if (!tp) return toast('Click an edge, or inside an internal shape.', 1); var lw = W2L(tp, w), hit2 = tp.internals.filter(function (it) { if (it.kind === 'ellipse') return Math.pow((lw[0] - it.c[0]) / it.r[0], 2) + Math.pow((lw[1] - it.c[1]) / it.r[1], 2) <= 1; return it.pts.length > 2 && inside(it.pts, lw); })[0]; if (!hit2) return toast('No internal shape here. Draw one with the Internal tools first.', 1); return traceIt(tp, hit2); }
+      case 'spread': { var sp0 = nearestEdge(w); if (!sp0) return toast('Click on an edge of a piece.', 1); if (ST.cut.length && ST.cut[0].pc !== sp0.pc.id) ST.cut = []; if (ST.cut.length && ST.cut[0].seg === sp0.seg) return toast('Click a different edge: the one that opens.', 1); ST.cut.push({ pc: sp0.pc.id, seg: sp0.seg, t: sp0.t, p: sp0.p }); if (ST.cut.length === 2) { var sc2 = ST.cut; ST.cut = []; drawOver(); spreadDialog(pcById(sc2[0].pc), sc2[0].seg, sc2[1].seg); } else { drawOver(); opts(); } status(); return; }
+      case 'raglan': { var rg = nearestEdge(w); if (!rg) return toast('Click on the outline of a piece.', 1); var nc = ST.cut.length;
+        if (nc === 1 && rg.pc.id !== ST.cut[0].pc) return toast('Click the armhole point on the same bodice.', 1);
+        if (nc >= 2 && rg.pc.id === ST.cut[0].pc) return toast('Now click on the sleeve, not the bodice.', 1);
+        if (nc === 3 && rg.pc.id !== ST.cut[2].pc) return toast('Click the matching point on the same sleeve.', 1);
+        ST.cut.push({ pc: rg.pc.id, seg: rg.seg, t: rg.t, p: rg.p }); drawOver(); opts(); if (ST.cut.length === 4) { var rc = ST.cut; ST.cut = []; raglanDialog(rc); opts(); } status(); return; }
       case 'pleat': case 'slash': { var sl0 = nearestEdge(w); if (!sl0) return toast('Click on the outline of a piece.', 1); if (ST.cut.length && ST.cut[0].pc !== sl0.pc.id) ST.cut = []; ST.cut.push({ pc: sl0.pc.id, seg: sl0.seg, t: sl0.t, p: sl0.p }); if (ST.cut.length === 2) { var cc = ST.cut; ST.cut = []; drawOver(); if (ST.tool === 'pleat') pleatDialog(pcById(cc[0].pc), cc[0], cc[1]); else slashDialog(pcById(cc[0].pc), cc[0], cc[1]); } else drawOver(); status(); return; }
       case 'dart': {
         if ((ST.o && ST.o.dtype) === 'fisheye') { var fp = pieceAt(w); if (!fp) return toast('Click inside a piece where the dart centre goes.', 1); var c0 = W2L(fp, sn.p); return askNums('Fisheye dart', [{ k: 'w', l: 'Width at the widest', v: 2.5 }, { k: 'u', l: 'Length above the centre', v: 12 }, { k: 'd', l: 'Length below the centre', v: 14 }], function (v) { if (!(v.w > 0 && v.u > 0 && v.d > 0)) return toast('Enter sizes above zero.', 1); act('Add fisheye dart', function () { var it = { id: C.uid('in'), kind: 'dart', pts: [[c0[0], c0[1] - v.u], [c0[0] + v.w / 2, c0[1]], [c0[0], c0[1] + v.d], [c0[0] - v.w / 2, c0[1]]], purpose: 'dart', style: 'solid', label: 'Fisheye dart ' + F(v.w), visible: true }; fp.internals.push(it); ST.it = it.id; ST.sel = [fp.id]; }); }, 'A double-pointed dart inside the piece, as on a dress or jacket waist. It is sewn, not cut.'); }
@@ -3996,7 +4125,7 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
     if (e.key === '0') return fit(); if (e.key === '1') return doAct('z100'); if (e.key === '=') return zoomAt(ST.z * 1.25); if (e.key === '-') return zoomAt(ST.z / 1.25);
     var t = TOOLS.filter(function (x) { return x.k === e.key.toLowerCase(); })[0]; if (t) setTool(t.id);
   }
-  function setTool(id) { ST.tool = id; ST.draft = null; ST.cut = []; ST.pick = []; ST.dpick = null; ST.hovE = null; if (id !== 'measure') ST.meas = []; if (id !== 'walk' && id !== 'merge') ST.walk = []; if (id === 'merge') ST.walk = []; qa('.ps-tb').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.t === id); }); svg.dataset.tool = id; opts(); refresh(); }
+  function setTool(id) { if (id === 'circle') { if (ST.tool === 'circle') ST.tool = 'select'; return circleDialog(); } ST.tool = id; ST.draft = null; ST.cut = []; ST.pick = []; ST.dpick = null; ST.hovE = null; if (id !== 'measure') ST.meas = []; if (id !== 'walk' && id !== 'merge') ST.walk = []; if (id === 'merge') ST.walk = []; qa('.ps-tb').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.t === id); }); svg.dataset.tool = id; opts(); refresh(); }
 
   /* ---------- project files ---------- */
   function newProject(o) { var np = C.newProject(o); np.unit = P.unit; H.swap(np); H.u = []; H.r = []; ST.sel = []; ST.node = ST.seg = ST.notch = ST.it = null; ST.fileName = null; ST.savedAt = 0; ST.dirty = false; ls(AUTO, null); refresh(); fit(); }
@@ -4205,7 +4334,7 @@ window.PM_DETAILS=[["Utility vest layers", "Womenswear \u00b7 Coats & Jackets", 
     });
   }
   /* ---------- Beginner / Pro ---------- */
-  var BASIC = ['select', 'edit', 'pan', 'poly', 'rect', 'addpt', 'curv', 'cut', 'notch', 'grain', 'sa', 'dart', 'pleat', 'measure', 'sew'], LEVEL = 'pro';
+  var BASIC = ['select', 'edit', 'pan', 'poly', 'rect', 'addpt', 'curv', 'cut', 'notch', 'grain', 'sa', 'dart', 'pleat', 'slash', 'spread', 'circle', 'measure', 'sew'], LEVEL = 'pro';
   try { LEVEL = localStorage.getItem('pm-level') || 'pro'; } catch (e) {}
   function setLevel(l) { LEVEL = l === 'beginner' ? 'beginner' : 'pro'; try { localStorage.setItem('pm-level', LEVEL); } catch (e) {} var beg = LEVEL === 'beginner';
     qa('.ps-tb[data-t]').forEach(function (b) { b.hidden = beg && BASIC.indexOf(b.dataset.t) < 0; }); qa('.ps-tg').forEach(function (g) { g.hidden = !g.querySelector('.ps-tb:not([hidden])'); });

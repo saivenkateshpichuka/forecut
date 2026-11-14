@@ -110,3 +110,24 @@ test('grading: auto-grade from drafts of the same garment in each size', () => {
   const hit = C.autoGrade(pc, base[0], { S: sizes.S[0], M: sizes.M[0], L: sizes.L[0] }, 1); assert.equal(hit, pc.nodes.length);
   const gl = C.gradedPiece(pc, 'L', 'M'); pc.nodes.forEach((n, i) => { near(gl.nodes[i].x, sizes.L[0].nodes[i].x, 1e-3); near(gl.nodes[i].y, sizes.L[0].nodes[i].y, 1e-3); });
 });
+test('circle skirt: waist radius from the circle, panels and fold', () => {
+  const r = C.circleSkirt({ frac: 1, waist: 70, len: 60, panels: 2 }); near(r.r, 70 / (2 * Math.PI)); const pc = r.pieces[0];
+  let w = 0; for (let i = 0; i < C.segCount(pc); i++) if (pc.hems.indexOf(i) < 0 && i < pc.hems[0] - 1) w += C.segLen(pc, i); near(w, 35, .01); assert.equal(C.validate(pc).length, 0);
+  assert.ok(C.circleSkirt({ frac: 1, waist: 70, len: 60, panels: 1 }).err); // one panel cannot be more than a half circle
+  const h = C.circleSkirt({ frac: .5, waist: 70, len: 50, panels: 1, fold: true }); assert.ok(h.pieces[0].fold >= 0); near(h.r, 70 / Math.PI);
+});
+test('spread for flare: pivot keeps the waist, opens the hem by the total', () => {
+  const r = C.rect(0, 0, 30, 60); r.hems = [2]; const sp = C.spreadMany(r, 0, 2, { n: 3, total: 12, mode: 'pivot' }); const p = JSON.parse(JSON.stringify(r)); C.applyReshape(p, sp);
+  const ids = p.nodes.map(n => n.id); let top = 0, hem = 0; const segs = sp.chainB.slice(0, -1).map((id, k) => { const a = ids.indexOf(id), b = ids.indexOf(sp.chainB[k + 1]); return b === (a + 1) % ids.length ? a : b; });
+  segs.forEach(s => hem += C.segLen(p, s)); near(hem, 42, .3); assert.equal(C.validate(p).length, 0);
+  const q = C.spreadMany(r, 0, 2, { n: 4, total: 8, mode: 'parallel' }); const p2 = JSON.parse(JSON.stringify(r)); C.applyReshape(p2, q); const b = C.bbox(p2); near(b[2] - b[0], 38); void top;
+});
+test('raglan: the shoulder moves from the bodice onto the sleeve cap', () => {
+  const r = PM.build('top', 'women', Object.assign({}, PM.CHARTS.women.M), Object.assign({}, PM.GARMENTS.top.d, { sleeve: 'plain', slen: 'short' })), pcs = C.fromDraft(r, {});
+  const F = pcs.find(p => p.src === 'front'), S = pcs.find(p => p.src === 'sleeve'); let iN = 0; F.nodes.forEach((n, i) => { if (n.y < F.nodes[iN].y) iN = i; });
+  let iA = 0, bd = 1e9; F.nodes.forEach((n, i) => { const d = Math.hypot(n.x - 17.6, n.y - 17.5); if (d < bd) { bd = d; iA = i; } }); let iT = 0; S.nodes.forEach((n, i) => { if (n.y < S.nodes[iT].y) iT = i; });
+  let iM = 0; bd = 1e9; S.nodes.forEach((n, i) => { const d = Math.hypot(n.x - 10.5, n.y - 10.6); if (d < bd) { bd = d; iM = i; } });
+  const res = C.raglan(F, { seg: iN, t: C.tAt(F, iN, 3) }, { seg: iA, t: 0 }, S, { seg: iT, t: 0 }, { seg: iM, t: 0 }, { side: 'front' }); assert.ok(!res.err, res.err);
+  const b = JSON.parse(JSON.stringify(F)); C.applyReshape(b, res.body); assert.equal(C.validate(b).length, 0); assert.equal(C.validate(res.sleeve).length, 0);
+  assert.ok(C.area(b) < C.area(F)); assert.ok(C.area(res.sleeve) > C.area(S) / 2); assert.ok(C.bbox(res.sleeve)[1] < C.bbox(S)[1] - 5); // the neck part rises above the cap
+});

@@ -514,6 +514,96 @@
     return out;
   };
 
+  /* ---------- generators and multi-step pattern techniques ---------- */
+  /* circular arc as Bezier nodes (centre c, radius r, angles in radians measured from straight down, a0 -> a1) */
+  function arcNodes(c, r, a0, a1) {
+    var m = Math.max(1, Math.ceil(Math.abs(a1 - a0) / (Math.PI / 2) - 1e-9)), d = (a1 - a0) / m, k = 4 / 3 * Math.tan(Math.abs(d) / 4) * r, sg = d > 0 ? 1 : -1, out = [];
+    for (var i = 0; i <= m; i++) { var a = a0 + d * i, p = [c[0] + r * Math.sin(a), c[1] + r * Math.cos(a)], t = [Math.cos(a) * sg, -Math.sin(a) * sg], nd = C.node(p[0], p[1], i > 0 ? [-t[0] * k, -t[1] * k] : null, i < m ? [t[0] * k, t[1] * k] : null); nd.smooth = i > 0 && i < m; out.push(nd); }
+    return out;
+  }
+  /* circle skirt: the waist is an arc of radius r = waist / angle, so a full circle has r = waist / 2pi */
+  C.circleSkirt = function (o) {
+    var f = +o.frac || 1, W = Math.max(1, (+o.waist || 70) - (+o.stretch || 0)), L = +o.len || 60, n = Math.max(1, Math.round(+o.panels || 1)), fold = !!o.fold, Phi = 2 * Math.PI * f, r = W / Phi, R = r + L, phi = Phi / n;
+    if (phi > Math.PI + 1e-9) return { err: 'One panel would be more than a half circle. Use at least ' + Math.ceil(f * 2) + ' panels, or cut on the fold.' , need: Math.ceil(f * 2) };
+    var a0 = fold ? 0 : -phi / 2, a1 = fold ? phi / 2 : phi / 2, c = [0, 0];
+    var inner = arcNodes(c, r, a0, a1), outer = arcNodes(c, R, a1, a0), m = inner.length - 1;
+    inner[m].h2 = null; outer[0].h1 = null; outer[outer.length - 1].h2 = null; inner[0].h1 = null;
+    var nodes = inner.concat(outer), hems = []; for (var i = 0; i < outer.length - 1; i++) hems.push(m + 1 + i);
+    var pc = C.newPiece(nodes, { name: o.name || (f === 1 ? 'Circle skirt' : f === .75 ? 'Three-quarter circle skirt' : f === .5 ? 'Half circle skirt' : f === .25 ? 'Quarter circle skirt' : 'Circle skirt'), qty: n, hems: hems, fold: fold ? nodes.length - 1 : -1, cat: 'Skirt' });
+    var ga = fold ? phi / 4 : (a0 + a1) / 2, gr = function (rad) { return [rad * Math.sin(ga), rad * Math.cos(ga)]; }; pc.grain = { a: gr(r + L * .15), b: gr(r + L * .85) };
+    pc.notes = 'Waist radius ' + r.toFixed(2) + ' cm (waist ' + W.toFixed(1) + ' cm ÷ ' + (Phi).toFixed(4) + '), hem ' + (R * Phi).toFixed(0) + ' cm round. Cut ' + n + (fold ? ' on the fold' : '') + '. Hang 24 hours before levelling the hem: the bias drops.';
+    var out = [pc];
+    if (o.band) { var bw = +o.band, bl = (+o.waist || 70) + 3, b = C.rect(0, 0, bl, bw * 2, { name: 'Waistband', qty: 1, cat: 'Skirt' }); b.notes = 'Finished ' + bw + ' cm wide, ' + ((+o.waist || 70)) + ' cm plus 3 cm underlap. Fold along the middle.'; b.internals.push({ id: uid('in'), kind: 'line', pts: [[0, bw], [bl, bw]], purpose: 'fold', style: 'dashed', label: 'fold', visible: true }); out.push(b); }
+    return { pieces: out, r: r, R: R, hem: R * Phi, panelAngle: phi * 180 / Math.PI };
+  };
+  /* several slashes between two edges, each spread by an equal share: parallel adds width, pivot adds flare at the second edge */
+  C.spreadMany = function (pc, segA, segB, o) {
+    var n = Math.max(1, Math.min(20, Math.round(+o.n || 3))), amt = (+o.total || 0) / n; if (!(amt > 0)) return { err: 'Enter a total spread above zero.' }; if (segA === segB) return { err: 'Pick two different edges.' };
+    var w = JSON.parse(JSON.stringify(pc)), LA = C.segLen(w, segA), LB = C.segLen(w, segB), pa = [], pb = [], k;
+    var A0 = C.pointAt(w, segA, 0), A1 = C.pointAt(w, segA, 1), B0 = C.pointAt(w, segB, 0), B1 = C.pointAt(w, segB, 1), rev = dist(A0, B0) + dist(A1, B1) > dist(A0, B1) + dist(A1, B0);
+    for (k = 1; k <= n; k++) { var fA = k / (n + 1), fB = rev ? 1 - fA : fA; pa.push(C.pointAt(w, segA, C.tAt(w, segA, LA * fA))); pb.push(C.pointAt(w, segB, C.tAt(w, segB, LB * fB))); }
+    var maps = [], ends = [], pb0mid = pb[0].slice();
+    for (k = 0; k < n; k++) {
+      var na = C.nearestSeg(w, pa[k]), nb = C.nearestSeg(w, pb[k]); if (!na || !nb || na.d > .05 || nb.d > .05) return { err: 'The slash lines could not be placed. Try fewer slashes.' };
+      var res = C.slash(w, { seg: na.seg, t: C.tAt(w, na.seg, na.s) }, { seg: nb.seg, t: C.tAt(w, nb.seg, nb.s) }, { mode: o.mode === 'parallel' ? 'parallel' : 'pivot', amt: amt, hinge: 'first' }); if (res.err) return res;
+      C.applyReshape(w, res); maps.push(res.map); ends.push(pa[k], pb[k], res.map(pa[k]), res.map(pb[k]));
+      for (var j = k + 1; j < n; j++) { pa[j] = res.map(pa[j]); pb[j] = res.map(pb[j]); }
+      for (var e = 0; e < ends.length - 4; e++) ends[e] = res.map(ends[e]);
+    }
+    var cmap = function (p, kk, ss) { var q = p; maps.forEach(function (m) { q = m(q, kk, ss); }); return q; }, N = w.nodes, nn = N.length;
+    var idx = function (p) { var b = 0, bd = 1e18; N.forEach(function (nd, i) { var d = Math.hypot(nd.x - p[0], nd.y - p[1]); if (d < bd) { bd = d; b = i; } }); return b; };
+    var chainOf = function (p0, p1, mid) { var i0 = idx(p0), i1 = idx(p1), f = [], b = [], i; for (i = i0; ; i = (i + 1) % nn) { f.push(i); if (i === i1 || f.length > nn) break; } for (i = i0; ; i = (i - 1 + nn) % nn) { b.push(i); if (i === i1 || b.length > nn) break; } var hit = function (L) { return L.some(function (k2) { return Math.hypot(N[k2].x - mid[0], N[k2].y - mid[1]) < 1e-3; }) || L.length <= 2; }; var L = hit(f) && (!hit(b) || f.length <= b.length) ? f : b.reverse(); return L.map(function (k2) { return N[k2].id; }); };
+    return { nodes: N, map: cmap, ends: ends, step: amt, n: n, chainB: chainOf(cmap(B0), cmap(B1), cmap(pb0mid)), hemB: pc.hems.indexOf(segB) >= 0, saB: pc.sa.edges[segB] };
+  };
+  /* raglan: cut the shoulder off the bodice from the neck point to the armhole point and join it to the sleeve cap */
+  C.raglan = function (body, nk, ah, sleeve, top, mt, o) {
+    o = o || {}; var w = JSON.parse(JSON.stringify(body)), r = splitOutline(w, nk, ah); if (!r) return { err: 'Pick two different points on the bodice.' };
+    var len = function (nodes) { var tmp = { nodes: nodes, closed: false }, s2 = 0; for (var i = 0; i < nodes.length - 1; i++) s2 += C.segLen(tmp, i); return s2; };
+    var cut = len(r.A) < len(r.B) ? r.A : r.B, keep = cut === r.A ? r.B : r.A; // the shoulder side is the shorter way round
+    var N = r.n1, A = r.n2; // r.A runs N ... A, r.B runs A ... N
+    var cutNA = cut === r.A ? cut : cut.slice().reverse(), PN = [N.x, N.y], PA = [A.x, A.y];
+    // shoulder tip: the point of the cut part farthest from the raglan line
+    var chord = nrm(sub(PA, PN)), far = -1, S = null; cutNA.forEach(function (nd, i) { if (i === 0 || i === cutNA.length - 1) return; var d = Math.abs((nd.x - PN[0]) * chord[1] - (nd.y - PN[1]) * chord[0]); if (d > far) { far = d; S = nd; } });
+    if (!S) return { err: 'The part between the neck and armhole points has no shoulder corner. Click the neck point, then a point low on the armhole.' };
+    // the raglan line, curved by o.curve towards the shoulder (sleeve side)
+    var cv = o.curve == null ? 1 : +o.curve, nor = [-chord[1], chord[0]], toS = (S.x - PN[0]) * nor[0] + (S.y - PN[1]) * nor[1]; if (toS < 0) nor = [-nor[0], -nor[1]];
+    var hl = dist(PN, PA) / 3, off = cv / .75, hN = [chord[0] * hl + nor[0] * off, chord[1] * hl + nor[1] * off], hA = [-chord[0] * hl + nor[0] * off, -chord[1] * hl + nor[1] * off];
+    var line = { nodes: [C.node(PN[0], PN[1], null, hN), C.node(PA[0], PA[1], hA, null)], closed: false }, linePts = C.segPts(line, 0, .3);
+    // new bodice: keep the long way round and close it with the raglan line
+    var K = keep.map(function (nd) { return cpNode(nd); }); var kA = keep[0] === A; // keep runs A ... N or N ... A
+    K[0].h1 = null; K[K.length - 1].h2 = null; K[0].smooth = K[K.length - 1].smooth = false;
+    if (kA) { K[K.length - 1].h2 = hN; K[0].h1 = hA; } else { K[K.length - 1].h2 = hA; K[0].h1 = hN; }
+    // the cut part as points: shoulder tip -> along the shoulder to the neck point -> raglan line to the armhole point
+    var tmpCut = { nodes: cutNA.map(function (nd) { return cpNode(nd); }), closed: false }; tmpCut.nodes[0].h1 = null; tmpCut.nodes[tmpCut.nodes.length - 1].h2 = null;
+    var iS = cutNA.indexOf(S), toNeck = []; for (var i = iS; i > 0; i--) toNeck = toNeck.concat(C.segPts(tmpCut, i - 1, .3).reverse().slice(i === iS ? 0 : 1));
+    var partPts = toNeck.concat(linePts.slice(1)); // S ... N ... A
+    // the sleeve: split along the line through the cap top (grainline direction, or straight down), keep the half with the matching point
+    var flat = C.flat(sleeve, .25).pts, T = C.pointAt(sleeve, top.seg, top.t), M2 = C.pointAt(sleeve, mt.seg, mt.t), gd = sleeve.grain ? nrm(sub(sleeve.grain.b, sleeve.grain.a)) : [0, 1]; if (gd[1] < 0) gd = [-gd[0], -gd[1]];
+    var sideOf = function (p) { return (p[0] - T[0]) * gd[1] - (p[1] - T[1]) * gd[0]; }, want = Math.sign(sideOf(M2)) || 1;
+    var near = function (p) { var b = 0, bd = 1e18; flat.forEach(function (q, i2) { var d = dist(p, q); if (d < bd) { bd = d; b = i2; } }); return b; }, n = flat.length, iT = near(T), iM = near(M2);
+    // walk from the matching point away from the cap top until the outline crosses the centre line
+    var walkFrom = function (iM, start) { var fw = (iT - iM + n) % n, bw = (iM - iT + n) % n, step = fw < bw ? -1 : 1, half = [start], j = iM, X = null;
+    for (var c2 = 0; c2 < n; c2++) { var j2 = (j + step + n) % n, p1 = flat[j], p2 = flat[j2], s1 = sideOf(p1) * want, s2 = sideOf(p2) * want; if (c2 > 0 || dist(p1, start) > 1e-6) half.push(p1); if (s1 > 1e-9 && s2 <= 1e-9 && c2 > 2) { var tt = s1 / (s1 - s2); X = [p1[0] + (p2[0] - p1[0]) * tt, p1[1] + (p2[1] - p1[1]) * tt]; break; } j = j2; }
+    return X ? half.concat([X]) : null; };
+    var half = walkFrom(iM, M2); if (!half) return { err: 'The sleeve centre line through the cap top could not be found. Check the sleeve has a grainline down its middle.' }; var X = half[half.length - 1];
+    // turn the cut part so its shoulder tip sits on the cap top and its armhole point lies towards the matching point
+    var PS = [S.x, S.y], th = Math.atan2(M2[1] - T[1], M2[0] - T[0]) - Math.atan2(PA[1] - PS[1], PA[0] - PS[0]), cs = Math.cos(th), sn = Math.sin(th);
+    var tf = function (p) { var dx = p[0] - PS[0], dy = p[1] - PS[1]; return [T[0] + cs * dx - sn * dy, T[1] + sn * dx + cs * dy]; };
+    var moved = partPts.map(tf), ax = sub(M2, T), crs = function (p) { return ax[0] * (p[1] - T[1]) - ax[1] * (p[0] - T[0]); }, cen = function (P) { var x = 0, y = 0; P.forEach(function (q) { x += q[0]; y += q[1]; }); return [x / P.length, y / P.length]; };
+    if (Math.sign(crs(cen(moved))) === Math.sign(crs(cen(half)))) { var al = nrm(ax); moved = moved.map(function (q) { var d = sub(q, T), t2 = d[0] * al[0] + d[1] * al[1], f2 = [T[0] + al[0] * t2, T[1] + al[1] * t2]; return [2 * f2[0] - q[0], 2 * f2[1] - q[1]]; }); } // the shoulder part sits outside the cap, so mirror it when it lands on the sleeve
+    var iE = near(moved[moved.length - 1]), h2 = walkFrom(iE, flat[iE]); if (h2 && Math.sign(sideOf(flat[iE])) === want) { half = h2; X = h2[h2.length - 1]; } // the raglan line meets the cap where the turned armhole ends
+    if (o.debug) o.debug.push({ part: partPts.map(function (q) { return q.map(function (v) { return +v.toFixed(1); }); }), moved: moved.map(function (q) { return q.map(function (v) { return +v.toFixed(1); }); }) });
+    var poly = half.concat(moved); // M2 ... X, then T(=S) ... N ... A (A lands near M2)
+    var clean = []; poly.forEach(function (q) { if (!clean.length || dist(clean[clean.length - 1], q) > .02) clean.push(q); }); if (dist(clean[0], clean[clean.length - 1]) < .02) clean.pop();
+    var sn2 = C.fitNodes(clean, .04, true); for (var dd = sn2.length - 1; dd >= 0 && sn2.length > 3; dd--) { var nx2 = sn2[(dd + 1) % sn2.length]; if (Math.hypot(sn2[dd].x - nx2.x, sn2[dd].y - nx2.y) < .08) { if (sn2[dd].h1) nx2.h1 = sn2[dd].h1; sn2.splice(dd, 1); } } var sp = C.newPiece(sn2, { name: (o.side === 'back' ? 'Back' : 'Front') + ' raglan sleeve', qty: sleeve.qty || 2, pair: true, cat: sleeve.cat || '' });
+    var hemSeg = C.nearestSeg(sp, flat[(iT + Math.floor(n / 2)) % n]); if (sleeve.hems && sleeve.hems.length && hemSeg && hemSeg.d < .5) sp.hems = [hemSeg.seg];
+    var gx = T, gy = [X[0], X[1]], gm = [(gx[0] + gy[0]) / 2, (gx[1] + gy[1]) / 2]; sp.grain = { a: [gm[0] - gd[0] * 8, gm[1] - gd[1] * 8], b: [gm[0] + gd[0] * 8, gm[1] + gd[1] * 8] };
+    var ns = C.nearestSeg(sp, moved[moved.length - 1]); if (ns) sp.notches.push({ id: uid('nt'), seg: ns.seg, mode: 'dist', v: +ns.s.toFixed(3), from: 'start', type: o.side === 'back' ? 'double' : 'single', depth: .6 });
+    sp.notes = 'Raglan from ' + (body.name || 'bodice') + ' and ' + (sleeve.name || 'sleeve') + '. The line from the cap top down the middle is the overarm seam.';
+    var shift = function (p) { return p; };
+    return { body: { nodes: K, map: shift }, sleeve: sp, A: PA, N: PN, S: PS, armhole: len(cutNA.slice(cutNA.indexOf(S))), capPart: dist(T, M2) };
+  };
+
   /* ---------- grading: each piece keeps, per size, how far each point moves from the base size ---------- */
   C.gradeSet = function (proj) { var g = proj.sizes && proj.sizes.groups && proj.sizes.groups[0]; if (!g) { proj.sizes = { groups: [{ id: 'g1', name: 'Size group 1', base: '', list: [] }] }; g = proj.sizes.groups[0]; } g.list = (g.list || []).filter(Boolean); if (g.list.length && g.list.indexOf(g.base) < 0) g.base = g.list[Math.floor(g.list.length / 2)]; return g; };
   /* the move of every point for one size; points without a rule follow their neighbours, weighted by distance along the outline */
