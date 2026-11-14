@@ -122,3 +122,4 @@ body.dr-full .dr{position:fixed;inset:0;z-index:3000;height:100vh;max-height:non
 .dr-meas label{line-height:1.25}
 .dr-poseb{margin-top:8px}.dr-btn{border:1px solid var(--fx-line,#d8d1c6);background:var(--fx-card,#fff);color:inherit;border-radius:8px;padding:8px 10px;font:600 12.5px "DM Sans",sans-serif;cursor:pointer}.dr-btn[aria-pressed=true]{background:#214538!important;color:#fff!important;border-color:#214538!important}
 .dr-elr{display:flex;flex-direction:column;gap:4px;font-size:12px;margin:10px 0 4px}.dr-elr output{float:right}
+.dr-custom{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:center;padding:8px 10px;margin:0 0 10px;border:1px solid #e3c9a8;border-radius:7px;background:#fff6ec;font-size:12.5px}.dr-custom[hidden]{display:none}.dr-custom b{color:#a3502a}.dr-custom span{flex:1;min-width:0}.dr-custom small{flex-basis:100%;color:#7a5b33}.dr-custom small:empty{display:none}.dr-custom .dr-btn{font-size:12px}

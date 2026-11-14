@@ -196,7 +196,7 @@
     pc.notches.forEach(function (nt) { if (nt.seg > at) nt.seg += delta; else if (nt.seg === at && delta > 0 && t != null) { /* the notch keeps its distance: if it now falls on the new part, move it */ var Lfirst = C.segLen(pc, at), d = nt.mode === 'pct' ? null : nt.v; if (d != null && nt.from !== 'end' && d > Lfirst) { nt.seg = at + 1; nt.v = d - Lfirst; } } });
     var e = {}, cn = {}; Object.keys(pc.sa.edges).forEach(function (k) { var j = +k; e[j > at ? j + delta : j] = pc.sa.edges[k]; if (j === at && delta > 0) e[j + 1] = pc.sa.edges[k]; }); pc.sa.edges = e;
     Object.keys(pc.sa.corner).forEach(function (k) { var j = +k; cn[j > at ? j + delta : j] = pc.sa.corner[k]; }); pc.sa.corner = cn;
-    if (pc.elastic) { var el = {}; Object.keys(pc.elastic).forEach(function (k) { var j = +k; el[j > at ? j + delta : j] = pc.elastic[k]; if (j === at && delta > 0) el[j + 1] = pc.elastic[k]; }); pc.elastic = el; }
+    ['elastic', 'erole'].forEach(function (f) { if (!pc[f]) return; var el = {}; Object.keys(pc[f]).forEach(function (k) { var j = +k; el[j > at ? j + delta : j] = pc[f][k]; if (j === at && delta > 0) el[j + 1] = pc[f][k]; }); pc[f] = el; });
     pc.hems = pc.hems.reduce(function (o, j) { if (j > at) o.push(j + delta); else { o.push(j); if (j === at && delta > 0) o.push(j + 1); } return o; }, []);
     if (pc.fold > at) pc.fold += delta;
     (pc._sewShift = pc._sewShift || []).push([at, delta]);
@@ -207,7 +207,7 @@
     N.splice(i, 1);
     pc.notches = pc.notches.filter(function (nt) { return nt.seg !== i && nt.seg !== (i - 1 + n) % n; }); pc.notches.forEach(function (nt) { if (nt.seg > i) nt.seg--; });
     var e = {}; Object.keys(pc.sa.edges).forEach(function (k) { var j = +k; if (j === i) return; e[j > i ? j - 1 : j] = pc.sa.edges[k]; }); pc.sa.edges = e;
-    if (pc.elastic) { var el = {}; Object.keys(pc.elastic).forEach(function (k) { var j = +k; if (j === i) return; el[j > i ? j - 1 : j] = pc.elastic[k]; }); pc.elastic = el; }
+    ['elastic', 'erole'].forEach(function (f) { if (!pc[f]) return; var el = {}; Object.keys(pc[f]).forEach(function (k) { var j = +k; if (j === i) return; el[j > i ? j - 1 : j] = pc[f][k]; }); pc[f] = el; });
     pc.hems = pc.hems.filter(function (j) { return j !== i; }).map(function (j) { return j > i ? j - 1 : j; });
     if (pc.fold === i || pc.fold === (i - 1 + n) % n) pc.fold = -1; else if (pc.fold > i) pc.fold--;
     (pc._sewShift = pc._sewShift || []).push([i, -1]);
@@ -251,7 +251,7 @@
     var map = function (i) { return (S - 1 - i + S) % S; }; // segment i (node i -> i+1) becomes segment n-1-i
     pc.notches.forEach(function (nt) { nt.seg = map(nt.seg); if (nt.mode === 'pct') nt.v = 100 - nt.v; else nt.from = nt.from === 'end' ? 'start' : 'end'; });
     var e = {}; Object.keys(pc.sa.edges).forEach(function (k) { e[map(+k)] = pc.sa.edges[k]; }); pc.sa.edges = e;
-    if (pc.elastic) { var el = {}; Object.keys(pc.elastic).forEach(function (k) { el[map(+k)] = pc.elastic[k]; }); pc.elastic = el; }
+    ['elastic', 'erole'].forEach(function (f) { if (!pc[f]) return; var el = {}; Object.keys(pc[f]).forEach(function (k) { el[map(+k)] = pc[f][k]; }); pc[f] = el; });
     pc.hems = pc.hems.map(map); if (pc.fold >= 0) pc.fold = map(pc.fold);
     pc._reversed = !pc._reversed; (pc._sewShift = pc._sewShift || []).push(['rev', S]);
   };
@@ -268,7 +268,7 @@
     if (!dst.link || !dst.link.on || dst.link.to !== src.id) return false;
     var b0 = C.bbox(dst), c = C.clone(src); if (dst.link.mode === 'mirror') { var bs = C.bbox(c); C.transformPiece(c, C.M.mirX((bs[0] + bs[2]) / 2)); }
     var b1 = C.bbox(c); C.transformPiece(c, C.M.tr(b0[0] - b1[0], b0[1] - b1[1]));
-    ['nodes', 'internals', 'darts', 'grain', 'notches', 'sa', 'hems', 'fold', 'elastic'].forEach(function (k) { dst[k] = c[k]; }); dst.nodes.forEach(function (nd) { nd.id = uid('p'); }); return true;
+    ['nodes', 'internals', 'darts', 'grain', 'notches', 'sa', 'hems', 'fold', 'elastic', 'erole'].forEach(function (k) { dst[k] = c[k]; }); dst.nodes.forEach(function (nd) { nd.id = uid('p'); }); return true;
   };
   C.unfold = function (pc, seg) { // a full piece from a half: mirror across the fold edge and join
     var k = C.ctrl(pc, seg), a = k.p0, b = k.p3, d = nrm(sub(b, a)), refl = function (p) { var v = sub(p, a), t = v[0] * d[0] + v[1] * d[1], q = [a[0] + d[0] * t, a[1] + d[1] * t]; return [2 * q[0] - p[0], 2 * q[1] - p[1]]; };
@@ -373,14 +373,14 @@
   C.nearestSeg = function (pc, p) { var best = null; for (var s = 0; s < C.segCount(pc); s++) { var pts = C.segPts(pc, s, .1), acc = 0; for (var j = 1; j < pts.length; j++) { var a = pts[j - 1], b = pts[j], vx = b[0] - a[0], vy = b[1] - a[1], LL = vx * vx + vy * vy, L = Math.sqrt(LL), t = LL ? Math.max(0, Math.min(1, ((p[0] - a[0]) * vx + (p[1] - a[1]) * vy) / LL)) : 0, d = Math.hypot(a[0] + vx * t - p[0], a[1] + vy * t - p[1]); if (!best || d < best.d) best = { seg: s, d: d, s: acc + L * t }; acc += L; } } return best; };
   C.anchors = function (pc) {
     var A = { segs: [], notches: [] };
-    for (var k = 0; k < C.segCount(pc); k++) { var L = C.segLen(pc, k); [.1, .5, .9].forEach(function (f) { A.segs.push({ k: k, s: L * f, mid: C.pointAt(pc, k, C.tAt(pc, k, L * f)), sa: pc.sa.edges[k], el: pc.elastic ? pc.elastic[k] : null, hem: pc.hems.indexOf(k) >= 0, fold: pc.fold === k && f === .5 }); }); }
+    for (var k = 0; k < C.segCount(pc); k++) { var L = C.segLen(pc, k); [.1, .5, .9].forEach(function (f) { A.segs.push({ k: k, s: L * f, mid: C.pointAt(pc, k, C.tAt(pc, k, L * f)), sa: pc.sa.edges[k], el: pc.elastic ? pc.elastic[k] : null, ro: pc.erole ? pc.erole[k] : null, hem: pc.hems.indexOf(k) >= 0, fold: pc.fold === k && f === .5 }); }); }
     pc.notches.forEach(function (nt) { if (nt.seg >= C.segCount(pc)) return; var r = C.notchPos(pc, nt); A.notches.push({ nt: nt, p: r.p, k: nt.seg, s: r.s }); });
     return A;
   };
   C.reattach = function (pc, A, map) {
-    var e = {}, hems = [], fold = -1, el = {};
-    A.segs.forEach(function (a) { var p = map(a.mid, a.k, a.s), ne = C.nearestSeg(pc, p); if (!ne || ne.d > .3) return; if (a.sa != null) e[ne.seg] = a.sa; if (a.el) el[ne.seg] = a.el; if (a.hem && hems.indexOf(ne.seg) < 0) hems.push(ne.seg); if (a.fold) fold = ne.seg; });
-    pc.sa.edges = e; pc.hems = hems; pc.fold = fold; pc.elastic = el;
+    var e = {}, hems = [], fold = -1, el = {}, ro = {};
+    A.segs.forEach(function (a) { var p = map(a.mid, a.k, a.s), ne = C.nearestSeg(pc, p); if (!ne || ne.d > .3) return; if (a.sa != null) e[ne.seg] = a.sa; if (a.el) el[ne.seg] = a.el; if (a.ro && !ro[ne.seg]) ro[ne.seg] = a.ro; if (a.hem && hems.indexOf(ne.seg) < 0) hems.push(ne.seg); if (a.fold) fold = ne.seg; });
+    pc.sa.edges = e; pc.hems = hems; pc.fold = fold; pc.elastic = el; if (pc.erole) pc.erole = ro;
     pc.notches = A.notches.map(function (n) { var p = map(n.p, n.k, n.s), ne = C.nearestSeg(pc, p); if (!ne || ne.d > .3) return null; var nt = JSON.parse(JSON.stringify(n.nt)); nt.seg = ne.seg; nt.mode = 'dist'; nt.from = 'start'; nt.v = +ne.s.toFixed(3); return nt; }).filter(Boolean);
   };
   /* index of a node at (seg, t): an existing node when within 0.5 mm, otherwise a new one made by splitting */
@@ -504,7 +504,7 @@
       if (nodes.length > 1 && dist([nodes[0].x, nodes[0].y], [nodes[nodes.length - 1].x, nodes[nodes.length - 1].y]) < 1e-3) { var end = nodes.pop(); nodes[0].h1 = end.h1; }
       for (i = 0; i < nodes.length; i++) if (edgeOfSeg[i] == null || edgeOfSeg[i] >= p.edges.length) edgeOfSeg[i] = Math.min(p.edges.length - 1, edgeOfSeg[i] || 0);
       var cutN = /Cut (\d+)/i.exec(p.cut || '') || [0, 1], pc = C.newPiece(nodes, { name: p.comp || p.name || p.id, cat: o.cat || '', dept: o.dept || '', size: o.size || '', qty: +cutN[1] || 1, pair: /pair|left and right/i.test(p.cut || ''), sa: o.sa, hemSA: o.hem });
-      pc.auto = false; pc.src = p.id;
+      pc.auto = false; pc.src = p.id; var RL = C.ROLES[p.id]; if (RL) { pc.erole = {}; for (i = 0; i < nodes.length; i++) if (RL[edgeOfSeg[i]]) pc.erole[i] = RL[edgeOfSeg[i]]; }
       for (i = 0; i < nodes.length; i++) { var et = p.edges[edgeOfSeg[i]] && p.edges[edgeOfSeg[i]].t; if (et === 'fold') pc.fold = i; if (et === 'hem') pc.hems.push(i); }
       pc.notes = [p.cut, p.notes].filter(Boolean).join(' · ');
       if (p.grain) pc.grain = { a: p.grain[0].slice(), b: p.grain[1].slice() };
@@ -517,6 +517,66 @@
       });
       out.push(pc);
     });
+    return out;
+  };
+
+  /* ---------- the edited pattern in 3D ---------- */
+  // what each edge of a drafted piece is, in draft edge order (Garment Studio's own blocks)
+  C.ROLES = { front: ['fold', 'hem', 'side', 'arm', 'sh', 'neck'], back: ['fold', 'hem', 'side', 'arm', 'sh', 'neck'], sleeve: ['cap', 'uF', 'hem', 'uB'],
+    'sk-front': ['fold', 'waist', 'side', 'hem'], 'sk-back': ['cb', 'waist', 'side', 'hem'] };
+  // where a piece goes on the avatar
+  C.POS3D = [['auto', 'Automatic'], ['front', 'Front (bodice)'], ['back', 'Back (bodice)'], ['sleeve', 'Sleeve'], ['skirt-front', 'Front (skirt, from the waist)'], ['skirt-back', 'Back (skirt, from the waist)'], ['pants-front', 'Front leg (trousers)'], ['pants-back', 'Back leg (trousers)'], ['other', 'Other (collar, cuff, pocket…)'], ['none', 'Leave out of 3D']];
+  C.pos3d = function (pc) {
+    if (pc.pos3d && pc.pos3d !== 'auto') return pc.pos3d; var n = ((pc.src || '') + ' ' + (pc.name || '')).toLowerCase();
+    if (/sleeve/.test(n)) return 'sleeve'; if (/tr-front|front.*(trouser|pant|leg)|(trouser|pant).*front/.test(n)) return 'pants-front'; if (/tr-back|back.*(trouser|pant|leg)|(trouser|pant).*back/.test(n)) return 'pants-back';
+    if (/sk-front|skirt.*front|front.*skirt|kali|panel|godet/.test(n)) return 'skirt-front'; if (/sk-back|skirt.*back|back.*skirt/.test(n)) return 'skirt-back';
+    if (/collar|cuff|pocket|band|facing|rib|yoke|flap|belt|tie|strap/.test(n)) return 'other'; if (/back/.test(n)) return 'back'; if (/front|bodice|kurta|top|body/.test(n)) return 'front';
+    if (/circle|skirt/.test(n)) return 'skirt-front'; return 'other';
+  };
+  // the pattern as 3D panels: each piece's outline as edges (drafted edges of one kind joined into one run, split where a seam starts or ends),
+  // its place on the avatar, its seams (your own, plus the drafted ones from the edge kinds: side, shoulder, sleeve cap to armholes) and elastic
+  C.to3D = function (p) {
+    var out = { v: 1, name: p.name || 'Edited pattern', pieces: [], seams: [], elastic: [], warn: [] }, idx = {}, keyAt = {}, runs = {};
+    var vis = p.pieces.filter(function (pc) { return !pc.hidden && C.pos3d(pc) !== 'none'; });
+    vis.forEach(function (pc) { if (C.validate(pc, true).some(function (i) { return i.k === 'cross' || i.k === 'few'; })) out.warn.push(pc.name + ' crosses itself and was left out.'); });
+    vis = vis.filter(function (pc) { return !C.validate(pc, true).some(function (i) { return i.k === 'cross' || i.k === 'few'; }); });
+    var userSeg = {}; p.sewing.forEach(function (sw) { [sw.A, sw.B].forEach(function (r) { (userSeg[r.pc] = userSeg[r.pc] || {})[r.seg] = 1; }); });
+    vis.forEach(function (pc) {
+      var n = C.segCount(pc), cuts = {}, s, j; for (s = 0; s < n; s++) cuts[s] = [0, C.segLen(pc, s)];
+      p.sewing.forEach(function (sw) { [sw.A, sw.B].forEach(function (r) { if (r.pc !== pc.id || r.seg >= n) return; var L = C.segLen(pc, r.seg); [r.a == null ? 0 : r.a, r.b == null ? L : r.b].forEach(function (d) { d = Math.max(0, Math.min(L, d)); if (cuts[r.seg].every(function (c) { return Math.abs(c - d) > .3; })) cuts[r.seg].push(d); }); }); });
+      var segs = [], keys = {}, us = userSeg[pc.id] || {}, role = function (k) { return pc.erole && !us[k] && !(pc.elastic && pc.elastic[k]) ? pc.erole[k] : null; };
+      var rr = runs[pc.id] = {};
+      for (s = 0; s < n; s++) {
+        var ro = role(s);
+        if (ro && ro !== 'fold' && ro !== 'hem' && ro !== 'neck' && ro !== 'waist') { // one run for consecutive edges of the same kind
+          var pts = []; var s0 = s; while (s < n && role(s) === ro) { var sp = C.segPts(pc, s, .3); pts = pts.concat(pts.length ? sp.slice(1) : sp); keys[s] = [{ key: 'r' + s0, a: 0, b: C.segLen(pc, s) }]; s++; } s--;
+          pts = pts.map(function (q) { return [+q[0].toFixed(3), +q[1].toFixed(3)]; });
+          if (ro === 'cap') { var top = 0; pts.forEach(function (q, i) { if (q[1] < pts[top][1]) top = i; }); segs.push({ key: 'capB' + s0, pts: pts.slice(0, top + 1) }, { key: 'capF' + s0, pts: pts.slice(top) }); (rr.capB = rr.capB || []).push('capB' + s0); (rr.capF = rr.capF || []).push('capF' + s0); }
+          else { segs.push({ key: 'r' + s0, pts: pts }); (rr[ro] = rr[ro] || []).push('r' + s0); }
+          continue;
+        }
+        var cs = cuts[s].sort(function (a, b) { return a - b; }); keys[s] = [];
+        for (j = 1; j < cs.length; j++) { var k = 'e' + s + '_' + j, q2 = C.rangePts(pc, s, cs[j - 1], cs[j], 0); segs.push({ key: k, pts: q2.map(function (q) { return [+q[0].toFixed(3), +q[1].toFixed(3)]; }) }); keys[s].push({ key: k, a: cs[j - 1], b: cs[j] }); }
+      }
+      var pos = C.pos3d(pc), foldKey = pc.fold >= 0 && keys[pc.fold] && keys[pc.fold].length === 1 ? keys[pc.fold][0].key : null;
+      idx[pc.id] = out.pieces.length; keyAt[pc.id] = keys;
+      out.pieces.push({ id: pc.id, name: pc.name, pos: pos, fold: foldKey, pair: !foldKey && (pc.pair || (pc.qty || 1) >= 2) && pos !== 'other', draft: !!pc.src, segs: segs });
+      if (pc.elastic) Object.keys(pc.elastic).forEach(function (k) { var r = C.elasticOf(pc, +k); if (r && keys[+k]) out.elastic.push({ p: idx[pc.id], keys: keys[+k].map(function (q) { return q.key; }), r: r / 100 }); });
+      (pc.darts || []).forEach(function (d) { var di = C.dartInfo(pc, d); if (di && keys[di.i1] && keys[di.ia]) out.seams.push({ a: [idx[pc.id], keys[di.i1][0].key], b: [idx[pc.id], keys[di.ia][keys[di.ia].length - 1].key] }); });
+    });
+    // drafted seams from the edge kinds
+    var first = function (pos) { return vis.filter(function (pc) { return C.pos3d(pc) === pos && runs[pc.id]; })[0]; };
+    var join = function (A, ra, B, rb, extra) { if (!A || !B) return; var ka = (runs[A.id] || {})[ra] || [], kb = (runs[B.id] || {})[rb] || []; for (var i = 0; i < Math.min(ka.length, kb.length); i++) out.seams.push(Object.assign({ a: [idx[A.id], ka[i]], b: [idx[B.id], kb[i]] }, extra || {})); };
+    var F = first('front'), B = first('back'), SL = first('sleeve'), SF = first('skirt-front'), SB = first('skirt-back');
+    join(F, 'side', B, 'side'); join(F, 'sh', B, 'sh'); join(F, 'arm', SL, 'capF'); join(B, 'arm', SL, 'capB'); join(SL, 'uF', SL, 'uB'); join(SF, 'side', SB, 'side'); join(SB, 'cb', SB, 'cb', { cross: true });
+    // your own seams
+    p.sewing.forEach(function (sw) {
+      if (idx[sw.A.pc] == null || idx[sw.B.pc] == null) return;
+      var pick = function (r) { var ks = (keyAt[r.pc] || {})[r.seg]; if (!ks) return null; var L = C.segLen(byId(p, r.pc), r.seg), a = Math.min(r.a == null ? 0 : r.a, r.b == null ? L : r.b), b = Math.max(r.a == null ? 0 : r.a, r.b == null ? L : r.b), best = null, bl = -1; ks.forEach(function (q) { var ov = Math.min(b, q.b) - Math.max(a, q.a); if (ov > bl) { bl = ov; best = q.key; } }); return best; };
+      var ka = pick(sw.A), kb = pick(sw.B); if (!ka || !kb) return;
+      out.seams.push({ a: [idx[sw.A.pc], ka], b: [idx[sw.B.pc], kb], cross: !!sw.cross });
+    });
+    if (!out.pieces.length) out.warn.push('No pieces to show in 3D.'); else if (!out.seams.length) out.warn.push('No seams yet: sew the pieces with the Segment sewing tool so they join in 3D.');
     return out;
   };
 

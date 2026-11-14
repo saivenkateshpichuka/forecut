@@ -2,14 +2,14 @@
    in the garment, style, size and measurements chosen in Draft. Needs pm_edit.js (window.PM3DQuery). */
 (function () {
   'use strict';
-  var wrap = null, frame = null, msg = null, lastSrc = '', on = false;
+  var wrap = null, frame = null, msg = null, lastSrc = '', lastSpec = '', on = false;
   function $(s, r) { return (r || document).querySelector(s); }
   function desk() { return !window.matchMedia || matchMedia('(min-width: 1024px) and (pointer: fine)').matches; }
   function toast(t) { var u = window.PMUI; if (u && u.toast) u.toast(t); }
   function place() { if (!wrap) return; var m = $('.ps-modes'), r = m ? m.getBoundingClientRect() : null; wrap.style.top = Math.max(0, r && r.bottom > 0 ? r.bottom + 6 : 96) + 'px'; }
   function make() {
     wrap = document.createElement('section'); wrap.id = 'pm-3d'; wrap.hidden = true; wrap.setAttribute('aria-label', '3D fitting');
-    wrap.innerHTML = '<div class="p3-bar"><b>3D fitting</b><span class="p3-what"></span><button type="button" class="p3-b" data-p3="sync" title="Dress the avatar in the garment as it is now in Draft">Update from the pattern</button><button type="button" class="p3-b" data-p3="back">Back to the pattern</button></div>'
+    wrap.innerHTML = '<div class="p3-bar"><b>3D fitting</b><span class="p3-what"></span><button type="button" class="p3-b" data-p3="sync" title="Dress the avatar in the garment as it is now in Draft or Edit pieces">Update from the pattern</button><button type="button" class="p3-b" data-p3="back">Back to the pattern</button></div>'
       + '<p class="p3-msg" hidden></p><iframe title="3D fitting: the garment on the avatar" allow="fullscreen" loading="eager"></iframe>';
     document.body.appendChild(wrap); frame = $('iframe', wrap); msg = $('.p3-msg', wrap);
     wrap.addEventListener('click', function (e) { var b = e.target.closest('[data-p3]'); if (!b) return; if (b.dataset.p3 === 'back') close(); else load(true); });
@@ -20,8 +20,23 @@
     $('.p3-what', wrap).textContent = G ? G.n + (S.size ? ' · ' + (S.size === 'custom' ? 'your measurements' : 'size ' + S.size) : '') : '';
     var edited = false; try { edited = localStorage.getItem('pm-mode') === 'edit'; } catch (e) {}
     if (r.err) { msg.hidden = false; msg.textContent = r.err; frame.hidden = true; return; }
-    msg.hidden = !edited; msg.textContent = edited ? 'The 3D view dresses the avatar in the drafted garment. Changes made in Edit pieces (moved points, darts, raglan, elastic) are not in 3D yet.' : '';
-    frame.hidden = false; var src = '3d-drape-studio.html?embed=1&' + r.q;
+    var spec = null, E = window.PMEdit, C = window.FCCad;
+    if (edited && E && E.P && C && C.to3D) { try { var P = E.P(); if (P && P.pieces && P.pieces.length) spec = C.to3D(P); } catch (e) { spec = null; } }
+    var src;
+    if (spec && spec.pieces.length) {
+      try { localStorage.setItem('fc-3d-custom', JSON.stringify(spec)); } catch (e) { spec = null; }
+    }
+    if (spec && spec.pieces.length) {
+      $('.p3-what', wrap).textContent = (spec.name || 'Edited pieces') + ' · your edited pieces';
+      msg.hidden = !spec.warn.length; msg.textContent = spec.warn.join(' · ');
+      src = '3d-drape-studio.html?embed=1&custom=1&' + r.q + '&t=' + Date.now();
+      if (!force && lastSrc.replace(/&t=\d+$/, '') === src.replace(/&t=\d+$/, '') && lastSpec === JSON.stringify(spec)) src = lastSrc;
+      lastSpec = JSON.stringify(spec);
+    } else {
+      msg.hidden = true; msg.textContent = '';
+      src = '3d-drape-studio.html?embed=1&' + r.q;
+    }
+    frame.hidden = false;
     if (force || src !== lastSrc) { lastSrc = src; frame.src = src; }
   }
   function open() {
