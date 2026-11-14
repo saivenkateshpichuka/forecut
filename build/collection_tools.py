@@ -17,8 +17,36 @@ def build():
  S=json.loads((ROOT/'build/seasons.json').read_text())
  locked=json.loads((ROOT/'build/site.json').read_text()).get('locked',[])
  palettes=[{'season':k,'title':S['meta'][k]['title'],'colours':[{'hex':h,'name':n} for h,n in S['meta'][k]['palette']]} for k in S['seasons'] if k not in locked]
+ # India seasons (published ones only); names from the research palette, or the nearest colour name
+ try:
+  import india_data as ID, india_seasons as IS
+  IS.apply(ID)
+  research=json.loads((ROOT/'build/india_research.json').read_text()).get('seasons',{})
+  names=_colour_names()
+  for code,info in ID.SEASON_INFO.items():
+   if code in locked: continue
+   pal=research.get(code,{}).get('palette') or [[h,_nearest(h,names)] for h in info.get('colours',[])]
+   if pal: palettes.append({'season':'in-'+code.lower().replace(' ','-'),'title':'India · '+code.replace(' 2',' 202').replace('Festive 26','Festive 2026') ,'colours':[{'hex':h.lower(),'name':n} for h,n in pal]})
+ except Exception as e: print('india palettes skipped:',e)
  (ROOT/'tools/palettes.js').write_text('window.ForecutPalettes = '+json.dumps(palettes,ensure_ascii=False)+';\n')
 
+
+def _colour_names():
+ import re
+ raw=(ROOT/'tools/colour-names.js').read_text(); out={}
+ for line in raw.splitlines():
+  m=re.match(r'window\.(Forecut\w+Names)=(.*);$',line)
+  if m: out[m.group(1)]=[(p[:6],p[6:]) for p in json.loads(m.group(2)).split('|')]
+ return out
+def _lab(h):
+ h=h.lstrip('#');rgb=[int(h[i:i+2],16)/255 for i in (0,2,4)];rgb=[((c+.055)/1.055)**2.4 if c>.04045 else c/12.92 for c in rgb]
+ x=(rgb[0]*.4124+rgb[1]*.3576+rgb[2]*.1805)/.95047;y=rgb[0]*.2126+rgb[1]*.7152+rgb[2]*.0722;z=(rgb[0]*.0193+rgb[1]*.1192+rgb[2]*.9505)/1.08883
+ f=lambda t:t**(1/3) if t>.008856 else 7.787*t+16/116
+ return 116*f(y)-16,500*(f(x)-f(y)),200*(f(y)-f(z))
+def _nearest(h,names):
+ a=_lab(h);d=lambda p:sum((u-v)**2 for u,v in zip(a,_lab(p[0])))
+ f=min(names['ForecutFashionNames'],key=d)
+ return f[1] if d(f)<12**2 else min(names['ForecutColourNames'],key=d)[1]
 
 def hub_cards():
     cards = ''.join(f'<a href="{key}.html"><span class="b"><img src="tools/icons/{key}.svg" alt="" width="56" height="56" style="width:56px;height:56px;aspect-ratio:1;object-fit:contain"><small>Free · {html.escape(label)}</small><b>{name}</b><span>{html.escape(desc)}</span><em>Open the tool →</em></span></a>' for key,name,label,desc in TOOLS)
