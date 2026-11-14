@@ -433,9 +433,9 @@ COUTURE['capitals'] = [
  ('East & South-East Asia', 'Designers from China, Japan, Singapore and Vietnam bring sculptural eveningwear, technical innovation and their own craft heritage to couture, often as guests in Paris.'),
 ]
 COUTURE['calendar'] = [
- ('January', 'Paris Haute Couture Week', 'Spring/Summer couture collections.'),
+ ('January', 'Paris Haute Couture Week', 'Spring/Summer couture collections. Next: 25–28 January 2027.'),
  ('April', 'Bridal fashion weeks', 'Major Western bridal weeks such as Barcelona and New York typically show in spring (New York also in autumn).'),
- ('July', 'Paris Haute Couture Week', 'Autumn/Winter couture collections. In 2026: 6–9 July.'),
+ ('July', 'Paris Haute Couture Week', 'Autumn/Winter couture collections. In 2026: 6–9 July; in 2027: 5–8 July.'),
  ('July–August', 'India Couture Week', 'India\'s main couture showcase, organised by FDCI. In 2026: 23–29 July, with the opening in Hyderabad.'),
  ('Oct–Feb', 'Indian wedding season', 'Peak demand for bridal and occasion couture across India and the diaspora.'),
 ]
@@ -457,6 +457,11 @@ COUTURE['techniques'] += [
  ('Bespoke tailoring', 'Hand-drafted patterns, canvassed fronts and hand-padded lapels shaped to one client over several fittings.', []),
 ]
 COUTURE['news'] = [
+ ('November 2026', 'Balenciaga changes hands again', 'Balenciaga announced the departure of Pierpaolo Piccioli on 5 November 2026, after his first couture collection for the house in July. Kering named Martine Rose creative director on 6 November; she starts on 16 November. Her first couture collection, if the house keeps showing couture, would fall in the January or July 2027 week.', [('Kering', 'https://www.kering.com/en/news/martine-rose-appointed-creative-director-of-balenciaga/'), ('The Fashion DB', 'https://thefashiondb.com/creative-director-appointments')]),
+ ('November 2026', 'Next couture weeks confirmed', 'The Fédération de la Haute Couture et de la Mode lists Haute Couture Week Spring/Summer 2027 for 25–28 January 2027 and Autumn/Winter 2027-28 for 5–8 July 2027.', [('FHCM', 'https://www.fhcm.paris/en/next-dates')]),
+ ('November 2026', 'Couture in the museum this winter', 'Autumn 2026 exhibitions with a couture angle include "Azzedine Alaïa: Sculpting Fashion" at San Francisco\'s Legion of Honor (21 November 2026 to 11 April 2027), "Look! 40 Years of Fashion at the Museum" at the Musée des Arts Décoratifs in Paris (to 4 April 2027), which also shows patterns, embroidery samples and conservation records, and "A Wardrobe of One\'s Own" at the Palais Galliera (to 14 February 2027).', [('Couture Notebook', 'https://www.couturenotebook.com/best-haute-couture-blog/10-fashion-exhibitions-fall-2026')]),
+ ('October 2026', 'Wedding season: couture reaches the bride', 'As the Indian wedding season opened, Gaurav Gupta released the seventh season of "The Bride Side" around his Light Song\'26 collection, with a sculpted tulle saree-gown on a corseted base, a crystal-embroidered gown and a copper lehenga lined with Banarasi brocade (details from the brand\'s press release). It shows the July couture ideas (corsetry, sculpted drapes, crystal work) moving into bridal stores.', [('ThePrint (ANI press release)', 'https://theprint.in/ani-press-releases/gaurav-gupta-and-sara-ali-khan-unveil-a-new-chapter-of-contemporary-couture-with-the-seventh-season-of-the-bride-side/3073629/')]),
+ ('September 2026', 'A new creative director at Giorgio Armani', 'Dario Vitale was welcomed as creative director of Giorgio Armani on 16 September 2026, the first change of creative leadership at the house, which also shows Armani Privé on the Paris couture calendar.', [('The Fashion DB', 'https://thefashiondb.com/creative-director-appointments')]),
  ('July 2026', 'Indian couture makes its mark in Paris', 'Manish Malhotra made his official Paris Haute Couture Week debut with "Maa", a tribute to his mother using chikankari, zardozi, resham and gota work. Rahul Mishra presented "Devi: The Eternal Muse", inspired by the Ajanta caves and temple carvings, in zardozi and dabka.', [('Aza Fashions', 'https://www.azafashions.com/blog/paris-haute-couture-week-2026/'), ('FashionNetwork', 'https://ww.fashionnetwork.com/news/Paris-haute-couture-week-a-july-line-up-of-stalwarts-and-international-daring,1836920.html')]),
  ('July 2026', 'A season of couture debuts in Paris', 'The 6–9 July week saw Pierpaolo Piccioli\'s first couture collection for Balenciaga and Duran Lantink\'s first for Jean Paul Gaultier. Jonathan Anderson (Dior) and Matthieu Blazy (Chanel) showed their second couture collections, and Fendi presented couture in Rome.', [('Wallpaper*', 'https://www.wallpaper.com/fashion-beauty/fashion-beauty-events/haute-couture-week-aw-2026-what-to-expect-schedule'), ('Aza Fashions', 'https://www.azafashions.com/blog/paris-haute-couture-week-2026/')]),
  ('July 2026', 'Technology meets hand work', 'Iris van Herpen\'s "Sonic Starquakes" used more than 30,000 hand-blown glass bubbles on tulle, while Dior explored hand-pleated chiffon and sculptural bows: proof that innovation and craft now work together on the couture runway.', [('Aza Fashions', 'https://www.azafashions.com/blog/paris-haute-couture-week-2026/')]),
@@ -566,7 +571,27 @@ COUTURE['articles'] += [
    ('p', '<small>Sources: <a href="https://www.etvbharat.com/en/lifestyle/india-couture-week-2026-roundup-trends-pictures-enn26073102348">ETV Bharat</a>, <a href="https://t2online.in/goodlife/fashion-beauty/weekend-highlights-from-hyundai-india-couture-week-2026--an-fdci-initiative/2006772">t2 Online</a>, <a href="https://weddingaffair.co.in/trends-spotted-at-fdci-india-couture-week-2026/">Wedding Affair</a>.</small>'),
   ]},
 ]
-COUTURE['articles'] = COUTURE['articles'][-2:] + COUTURE['articles'][:-2]  # news first
+COUTURE['articles'] += [
+ {'slug': 'couture-update-november-2026', 'tag': 'Couture news', 'read': 5, 'img': ['hub-couture-paris', 'cape-lehengas'],
+  'title': 'Couture update, November 2026: what has changed since July',
+  'desc': 'New creative directors at Balenciaga and Armani, the January 2027 couture week dates, couture in the museum and how the July runways are reaching brides this wedding season.',
+  'body': [
+   ('p', 'Four months after the July couture weeks in Paris and India, the couture world has new leaders, confirmed dates for 2027 and a wedding season that is already wearing the July ideas. Here is Forecut\'s summary, written from published reports.'),
+   ('h2', 'New hands at the top'),
+   ('ul', ['<b>Balenciaga:</b> Pierpaolo Piccioli left the house on 5 November 2026, four months after his first couture collection there. Kering named Martine Rose creative director the next day, starting 16 November.', '<b>Giorgio Armani:</b> Dario Vitale was welcomed as creative director on 16 September 2026, the first change of creative leadership at the house that shows Armani Privé couture in Paris.']),
+   ('p', 'Leadership changes matter to couture because the couture collection is where a new designer shows a house\'s craft language. Watch the January and July 2027 weeks for the first signals.'),
+   ('h2', 'Dates for your 2027 calendar'),
+   ('ul', ['<b>Paris Haute Couture Week, Spring/Summer 2027:</b> 25–28 January 2027.', '<b>Paris Haute Couture Week, Autumn/Winter 2027-28:</b> 5–8 July 2027.', '<b>India Couture Week:</b> usually late July to early August; 2027 dates had not been announced when this was written.']),
+   ('h2', 'Couture on show'),
+   ('p', 'Museum shows this winter are a free way to study couture construction up close. "Azzedine Alaïa: Sculpting Fashion" at the Legion of Honor in San Francisco (from 21 November 2026) focuses on his cutting and fitting. "Look! 40 Years of Fashion at the Museum" at the Musée des Arts Décoratifs in Paris shows patterns, embroidery samples and conservation records next to the garments, and the Palais Galliera\'s "A Wardrobe of One\'s Own" looks at nineteenth-century women who wore men\'s dress.'),
+   ('h2', 'From runway to bride'),
+   ('p', 'India\'s wedding season runs from October to February, and the July couture ideas are now in stores. Gaurav Gupta\'s seventh "The Bride Side" season, released in October, is a clear example: a sculpted tulle saree-gown on a corseted base, crystal embroidery and a copper lehenga lined with Banarasi brocade, according to the brand\'s release. Corsetry, sculpted drapes and crystal work were all strong at India Couture Week in July.'),
+   ('h2', 'What it means for designers and brands'),
+   ('ul', ['<b>Plan around the calendar:</b> January couture sets the mood for spring and summer occasion wear; July couture feeds the Indian wedding season that follows.', '<b>Structure sells:</b> corseted bases and sculpted drapes are moving from runway to bridal stores; build them into your fit blocks (Forecut\'s <a href="pattern-maker.html">Pattern Maker</a> has fitted bodice and princess-line blocks to start from).', '<b>Tell the craft story:</b> museums and couture houses both show the patterns, samples and hours behind a garment. Process content explains price.']),
+   ('p', '<small>Sources: <a href="https://www.kering.com/en/news/martine-rose-appointed-creative-director-of-balenciaga/">Kering</a>, <a href="https://thefashiondb.com/creative-director-appointments">The Fashion DB</a>, <a href="https://www.fhcm.paris/en/next-dates">FHCM</a>, <a href="https://www.couturenotebook.com/best-haute-couture-blog/10-fashion-exhibitions-fall-2026">Couture Notebook</a>, <a href="https://theprint.in/ani-press-releases/gaurav-gupta-and-sara-ali-khan-unveil-a-new-chapter-of-contemporary-couture-with-the-seventh-season-of-the-bride-side/3073629/">ThePrint (ANI press release)</a>.</small>'),
+  ]},
+]
+COUTURE['articles'] = COUTURE['articles'][-1:] + COUTURE['articles'][-3:-1] + COUTURE['articles'][:-3]  # news first, newest first
 
 # ================================================================ EXPANSION: FABRICS
 FABRICS['seo'] = ('Fabric Library, Fabric News & Innovations, Prints, Embroidery & Hand Work | Forecut', 'Fabric news and innovations, upcoming fabrics, a fabric library, weaves, knits, prints, embroidery fabrics, Indian handlooms and hand work, with guides for designers.')
@@ -740,7 +765,7 @@ _CT = {'Zardozi': 'zardozi', 'Aari': 'aari', 'Chikankari': 'chikankari', 'Gota p
        'Hand pleating': 'hand-pleating-smocking', 'Bespoke tailoring': 'bespoke-tailoring'}
 COUTURE['techniques'] = [(a, b, ([f'couture-{v}-2026' for k, v in _CT.items() if a.startswith(k)][:1] + c)) for a, b, c in COUTURE['techniques']]
 for _a, _v in zip(COUTURE['ateliers'], ['womenswear', 'menswear', 'kidswear']): _a['img'] = [f'couture-{_v}-2026'] + _a['img']
-_CA = {'couture-news-paris-july-2026': 'featherwork', 'couture-india-couture-week-2026': 'cape-lehengas', 'couture-what-is-haute-couture': 'draping-plisse',
+_CA = {'couture-update-november-2026': 'beading-crystal', 'couture-news-paris-july-2026': 'featherwork', 'couture-india-couture-week-2026': 'cape-lehengas', 'couture-what-is-haute-couture': 'draping-plisse',
        'couture-brand-theory': 'velvet-bandhgalas', 'couture-storytelling': 'womenswear', 'couture-menswear-guide': 'menswear',
        'couture-kids-occasion': 'kidswear', 'couture-innovations': 'organza-dupattas', 'couture-history': 'lace', 'couture-capitals': 'beading-crystal',
        'couture-gown-anatomy': 'corsetry', 'couture-bespoke-menswear': 'bespoke-tailoring', 'couture-bridal-east-west': 'ombre-lehengas'}
