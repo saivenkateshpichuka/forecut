@@ -116,3 +116,7 @@ body.dr-full .dr{position:fixed;inset:0;z-index:3000;height:100vh;max-height:non
 .dr-ti .dr-link{text-align:left}.dr button[aria-pressed=true]:not(.dr-seg button):not(.dr-ic){background:#f3e3c4;border-color:#d9a441}
 .dr-edge{fill:none;stroke:#d9a441;stroke-opacity:.0001;stroke-width:4;cursor:pointer;pointer-events:stroke}.dr-edge:hover{stroke-opacity:.85}
 #drPieces svg:has(.dr-edge){outline:2px dashed #d9a441;outline-offset:4px;border-radius:6px}
+.dr-meas h4{margin:8px 0 4px;font:600 10.5px/1.2 "DM Sans",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--fx-muted)}
+.dr-meas h4:first-child{margin-top:0}
+.dr-meas label span input[type=number]{width:76px!important;flex:none}
+.dr-meas label{line-height:1.25}

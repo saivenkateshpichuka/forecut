@@ -12,12 +12,52 @@
   // level about its own centre. Collision uses a signed distance field built from the fitted mesh.
   D.loadAvatars = function (buf, meta) {
     var L = meta.layout;
+    var loc = meta.local || {};
     return { meta: meta, tri: new Uint16Array(buf, L.tri[0], L.tri[1] / 2), part: new Uint8Array(buf, L.part[0], L.part[1]),
-      shape: function (key) { var sh = meta.shapes[key]; return sh ? new Int16Array(buf, L.shape0 + sh.i * L.shapeBytes, meta.n * 3) : null; } };
+      skin: L.skin ? { b: new Uint8Array(buf, L.skin[0], meta.n * 4), w: new Uint8Array(buf, L.skin[0] + meta.n * 4, meta.n * 4) } : null,
+      shape: function (key) { var sh = meta.shapes[key]; return sh ? new Int16Array(buf, L.shape0 + sh.i * L.shapeBytes, meta.n * 3) : null; },
+      local: function (key) { var t = loc[key]; if (!t) return null; var o = L.local0 + t.o, pad = t.c % 2 ? 2 : 0; return { idx: new Uint16Array(buf, o, t.c), d: new Int16Array(buf, o + t.c * 2 + pad, t.c * 3) }; } };
   };
+  /* ---------------- poses: the game-engine skeleton (MakeHuman, CC0) drives the fitted body by linear blend skinning ---------------- */
+  // rotations in degrees about the world axes, applied from the fitted A-pose (arms 46 degrees from the body)
+  D.POSES = {
+    a: { n: 'A-pose', r: {} },
+    t: { n: 'T-pose', r: { upperarm_l: [['z', 44]], upperarm_r: [['z', -44]] } },
+    relaxed: { n: 'Arms relaxed', r: { upperarm_l: [['z', -24]], upperarm_r: [['z', 24]], lowerarm_l: [['x', -12]], lowerarm_r: [['x', -12]] } },
+    walk: { n: 'Walking', r: { thigh_l: [['x', -26]], calf_l: [['x', 10]], foot_l: [['x', 10]], thigh_r: [['x', 9]], calf_r: [['x', 20]], foot_r: [['x', -14]],
+      upperarm_l: [['z', -22], ['x', 16]], upperarm_r: [['z', 22], ['x', -18]], lowerarm_r: [['x', -14]], lowerarm_l: [['x', -6]], spine_02: [['y', 4]] } },
+    hip: { n: 'Weight on one hip', r: { pelvis: [['z', 4]], spine_01: [['z', -3]], spine_03: [['z', -2]], thigh_l: [['z', -6]], thigh_r: [['z', 1]], calf_l: [['x', 10]], upperarm_l: [['z', -18]], upperarm_r: [['z', 14]] } }
+  };
+  function rotM(ax, deg) { var a = deg * PI / 180, c = Math.cos(a), s = Math.sin(a); return ax === 'x' ? [1, 0, 0, 0, c, -s, 0, s, c] : ax === 'y' ? [c, 0, s, 0, 1, 0, -s, 0, c] : [c, -s, 0, s, c, 0, 0, 0, 1]; }
+  function mul3(A, B) { var R = new Array(9); for (var i = 0; i < 3; i++) for (var j = 0; j < 3; j++) R[3 * i + j] = A[3 * i] * B[j] + A[3 * i + 1] * B[3 + j] + A[3 * i + 2] * B[6 + j]; return R; }
+  D.poseBody = function (b, AV, key) {
+    var meta = AV.meta, pz = D.POSES[key]; if (!pz || !AV.skin || !meta.bones || !meta.stencils) return null;
+    var P = b.rest || b.pos, n = P.length / 3, ST = meta.stencils;
+    var at = function (j) { var s0 = ST[j]; if (!s0) return null; var o = [0, 0, 0]; for (var k = 0; k < s0.v.length; k++) { var q = 3 * s0.v[k]; o[0] += P[q] * s0.w[k]; o[1] += P[q + 1] * s0.w[k]; o[2] += P[q + 2] * s0.w[k]; } return o; };
+    var B = meta.bones, idx = {}; B.forEach(function (bn, i) { idx[bn.n] = i; });
+    var M = new Array(B.length), done = new Array(B.length);
+    function world(i) { // rotation R and translation t: x' = R x + t
+      if (done[i]) return M[i]; var bn = B[i], par = bn.p && idx[bn.p] !== undefined ? world(idx[bn.p]) : { R: [1, 0, 0, 0, 1, 0, 0, 0, 1], t: [0, 0, 0] };
+      var rs = pz.r[bn.n], R = [1, 0, 0, 0, 1, 0, 0, 0, 1]; (rs || []).forEach(function (q) { R = mul3(rotM(q[0], q[1]), R); });
+      var h = at(bn.h) || [0, 0, 0], loc = { R: R, t: [h[0] - (R[0] * h[0] + R[1] * h[1] + R[2] * h[2]), h[1] - (R[3] * h[0] + R[4] * h[1] + R[5] * h[2]), h[2] - (R[6] * h[0] + R[7] * h[1] + R[8] * h[2])] };
+      var pr = par.R, Rw = mul3(pr, loc.R), tw = [pr[0] * loc.t[0] + pr[1] * loc.t[1] + pr[2] * loc.t[2] + par.t[0], pr[3] * loc.t[0] + pr[4] * loc.t[1] + pr[5] * loc.t[2] + par.t[1], pr[6] * loc.t[0] + pr[7] * loc.t[1] + pr[8] * loc.t[2] + par.t[2]];
+      done[i] = 1; return (M[i] = { R: Rw, t: tw });
+    }
+    for (var i = 0; i < B.length; i++) world(i);
+    var out = new Float32Array(P.length), sb = AV.skin.b, sw = AV.skin.w;
+    for (var v = 0; v < n; v++) { var x = P[3 * v], y = P[3 * v + 1], z = P[3 * v + 2], ox = 0, oy = 0, oz = 0, ws = 0;
+      for (var k = 0; k < 4; k++) { var w = sw[4 * v + k] / 255; if (!w) continue; var T = M[sb[4 * v + k]], R = T.R; ox += w * (R[0] * x + R[1] * y + R[2] * z + T.t[0]); oy += w * (R[3] * x + R[4] * y + R[5] * z + T.t[1]); oz += w * (R[6] * x + R[7] * y + R[8] * z + T.t[2]); ws += w; }
+      if (ws > 0) { out[3 * v] = ox / ws; out[3 * v + 1] = oy / ws; out[3 * v + 2] = oz / ws; } else { out[3 * v] = x; out[3 * v + 1] = y; out[3 * v + 2] = z; } }
+    var lo = 1e9; for (v = 0; v < n; v++) lo = Math.min(lo, out[3 * v + 1]); var dy = (P.length ? (function () { var l0 = 1e9; for (var q = 0; q < n; q++) l0 = Math.min(l0, P[3 * q + 1]); return l0; })() : 0) - lo; // keep the feet on the floor
+    for (v = 0; v < n; v++) out[3 * v + 1] += dy;
+    return out;
+  };
+  D.stencilAt = function (AV, P, j) { var s0 = AV.meta.stencils && AV.meta.stencils[j]; if (!s0) return null; var o = [0, 0, 0]; for (var k = 0; k < s0.v.length; k++) { var q = 3 * s0.v[k]; o[0] += P[q] * s0.w[k]; o[1] += P[q + 1] * s0.w[k]; o[2] += P[q + 2] * s0.w[k]; } return o; };
+  D.setBodyPos = function (b, pos) { if (!b.rest) b.rest = new Float32Array(b.pos); b.pos.set(pos); buildSDF(b); };
   var LEN = ['outseam', 'nape', 'wh', 'rise', 'knee_l', 'sleeve', 'inseam', 'bust_depth'];
   D.body = function (m0, g, AV, size, targetH, pose) {
     var b = fitBody(m0, g, AV, size, pose);
+    if (!(targetH > 0) && pose && +pose.stature && Math.abs(pose.stature - 1) > .005) targetH = b.height * pose.stature; // petite or tall: every length scales, girths stay
     if (targetH > 60 && targetH < 230 && Math.abs(targetH - b.height) > .5) { // a taller or shorter body: scale every length, keep the girths
       var m = {}, k; for (k in m0) m[k] = m0[k]; var f = targetH / b.height; LEN.forEach(function (q) { if (m[q]) m[q] = Math.round(m[q] * f * 10) / 10; });
       b = fitBody(m, g, AV, size, pose);
@@ -27,8 +67,9 @@
   };
   function fitBody(m, g, AV, size, pose) {
     pose = pose || {}; var kid = /kids|boy|girl/.test(g), gk = g === 'unisex' ? 'men' : g, meta = AV.meta, key = gk + '|' + size;
+    if (pose.type && meta.shapes[gk + '~' + pose.type + '|' + size]) key = gk + '~' + pose.type + '|' + size;
     if (!meta.shapes[key]) { // custom size: the stored shape nearest in bust and hip
-      var best = null, bd = 1e9; Object.keys(meta.shapes).forEach(function (k2) { if (k2.indexOf(gk + '|') !== 0) return; best = best || k2; }); key = best;
+      var pre = gk + (pose.type ? '~' + pose.type : '') + '|', best = null; Object.keys(meta.shapes).forEach(function (k2) { if (k2.indexOf(pre) === 0) best = best || k2; }); if (!best) Object.keys(meta.shapes).forEach(function (k2) { if (k2.indexOf(gk + '|') === 0) best = best || k2; }); key = best;
     }
     var n = meta.n, raw = AV.shape(key), tri = AV.tri, part = AV.part, P = new Float32Array(n * 3), i, j;
     for (i = 0; i < n * 3; i++) P[i] = raw[i] * meta.scale;
@@ -37,6 +78,40 @@
     for (i = 0; i < n; i++) { tw[i] = part[4 * i] / 255; aw[i] = part[4 * i + 1] / 255; lw[i] = part[4 * i + 2] / 255; hw[i] = part[4 * i + 3] / 255; }
     // torso-only triangles for girth slices
     var TT = []; for (i = 0; i < tri.length; i += 3) { var a = tri[i], b2 = tri[i + 1], c = tri[i + 2]; if (tw[a] + hw[a] > .5 && tw[b2] + hw[b2] > .5 && tw[c] + hw[c] > .5) TT.push(a, b2, c); }
+    // 0. measurement targets: arm, wrist, neck, shoulder and chest widths solved on the rest shape; the joints follow the skin
+    var ST = meta.stencils || {}, st0 = {};
+    function stencil(j) { var s0 = ST[j], o = [0, 0, 0]; if (!s0) return null; for (var k = 0; k < s0.v.length; k++) { var b = 3 * s0.v[k]; o[0] += P[b] * s0.w[k]; o[1] += P[b + 1] * s0.w[k]; o[2] += P[b + 2] * s0.w[k]; } return o; }
+    Object.keys(J).forEach(function (j) { st0[j] = stencil(j); });
+    function follow() { Object.keys(J).forEach(function (j) { var a = st0[j], b = stencil(j); if (!a || !b) return; J[j][0] += b[0] - a[0]; J[j][1] += b[1] - a[1]; J[j][2] += b[2] - a[2]; st0[j] = b; }); }
+    function applyT(name, w) { var t = AV.local && AV.local(name); if (!t || !w) return; var I = t.idx, d = t.d, k2 = w * .01; for (var k = 0; k < I.length; k++) { var b = 3 * I[k]; P[b] += d[3 * k] * k2; P[b + 1] += d[3 * k + 1] * k2; P[b + 2] += d[3 * k + 2] * k2; } }
+    function solve(key, fn, target) {
+      if (!(target > 0)) return;
+      for (var pass = 0; pass < 2; pass++) {
+        var f0 = fn(); if (!(f0 > 0)) return; if (Math.abs(f0 - target) < .15) return;
+        var sgn = target > f0 ? 'incr' : 'decr'; applyT(key + ':' + sgn, 1); var f1 = fn(); applyT(key + ':' + sgn, -1);
+        if (!(Math.abs(f1 - f0) > 1e-3) || (f1 - f0) * (target - f0) <= 0) { sgn = sgn === 'incr' ? 'decr' : 'incr'; applyT(key + ':' + sgn, 1); f1 = fn(); applyT(key + ':' + sgn, -1); if (!(Math.abs(f1 - f0) > 1e-3) || (f1 - f0) * (target - f0) <= 0) return; }
+        var wr = (target - f0) / (f1 - f0), wq = Math.max(0, Math.min(1.2, wr)); if (D.debug) D.debug.push(key + ' ' + sgn + ' ' + wq.toFixed(2) + ' f0 ' + f0.toFixed(1) + ' f1 ' + f1.toFixed(1) + ' t ' + target); applyT(key + ':' + sgn, wq); if (wr > 1.2) return; // the target cannot reach it: stop rather than distort the body
+      }
+    }
+    var TA = { l: [], r: [] }, TL = { l: [], r: [] };
+    for (i = 0; i < tri.length; i += 3) { var t0 = tri[i], t1 = tri[i + 1], t2 = tri[i + 2], sd0 = raw[3 * t0] >= 0 ? 'l' : 'r';
+      if (aw[t0] > .5 && aw[t1] > .5 && aw[t2] > .5) TA[sd0].push(t0, t1, t2); else if (lw[t0] > .5 && lw[t1] > .5 && lw[t2] > .5) TL[sd0].push(t0, t1, t2); }
+    function cutLen(T3, c, nv, maxR) { // tape round a limb: where the plane through c with normal nv cuts the triangles, measured round their convex outline
+      var u = Math.abs(nv[1]) < .9 ? [0, 1, 0] : [1, 0, 0], e1 = [nv[1] * u[2] - nv[2] * u[1], nv[2] * u[0] - nv[0] * u[2], nv[0] * u[1] - nv[1] * u[0]], l1 = Math.hypot(e1[0], e1[1], e1[2]); e1 = [e1[0] / l1, e1[1] / l1, e1[2] / l1];
+      var e2 = [nv[1] * e1[2] - nv[2] * e1[1], nv[2] * e1[0] - nv[0] * e1[2], nv[0] * e1[1] - nv[1] * e1[0]], pts = [];
+      for (var k = 0; k < T3.length; k += 3) for (var e = 0; e < 3; e++) { var A = 3 * T3[k + e], B = 3 * T3[k + (e + 1) % 3], da = (P[A] - c[0]) * nv[0] + (P[A + 1] - c[1]) * nv[1] + (P[A + 2] - c[2]) * nv[2], db = (P[B] - c[0]) * nv[0] + (P[B + 1] - c[1]) * nv[1] + (P[B + 2] - c[2]) * nv[2];
+        if (da * db >= 0) continue; var f = da / (da - db), x = P[A] + (P[B] - P[A]) * f - c[0], y = P[A + 1] + (P[B + 1] - P[A + 1]) * f - c[1], z = P[A + 2] + (P[B + 2] - P[A + 2]) * f - c[2];
+        if (x * x + y * y + z * z > maxR * maxR) continue; pts.push([x * e1[0] + y * e1[1] + z * e1[2], x * e2[0] + y * e2[1] + z * e2[2]]); }
+      return pts.length > 5 ? hullLen(pts) : 0;
+    }
+    function limb(T3, a, b, t0, t1, mode) { // largest (or smallest) girth between fractions t0 and t1 of the bone a-b
+      var d = [b[0] - a[0], b[1] - a[1], b[2] - a[2]], L2 = Math.hypot(d[0], d[1], d[2]) || 1, nv = [d[0] / L2, d[1] / L2, d[2] / L2], best = mode === 'min' ? 1e9 : 0;
+      for (var k = 0; k <= 6; k++) { var t = t0 + (t1 - t0) * k / 6, c = [a[0] + d[0] * t, a[1] + d[1] * t, a[2] + d[2] * t], g2 = cutLen(T3, c, nv, L2 * .6); if (!g2) continue; best = mode === 'min' ? Math.min(best, g2) : Math.max(best, g2); }
+      return best > 0 && best < 1e9 ? best : 0;
+    }
+    function neckG() { var y = J.neck[1] + 1.2, pts = []; for (var k = 0; k < tri.length; k += 3) for (var e = 0; e < 3; e++) { var A = 3 * tri[k + e], B = 3 * tri[k + (e + 1) % 3]; if (aw[A / 3] > .3 || aw[B / 3] > .3) continue; var ya = P[A + 1], yb = P[B + 1]; if ((ya - y) * (yb - y) >= 0) continue; var f = (y - ya) / (yb - ya), x = P[A] + (P[B] - P[A]) * f, z = P[A + 2] + (P[B + 2] - P[A + 2]) * f; if (Math.abs(x) < 10) pts.push([x, z]); } return pts.length > 5 ? hullLen(pts) : 0; }
+    function shoulderW() { var y0 = J['l-shoulder'][1], lo = 1e9, hi = -1e9; for (var k = 0; k < n; k++) { if (tw[k] < .5) continue; var y = P[3 * k + 1]; if (y < y0 - 1 || y > y0 + 5) continue; lo = Math.min(lo, P[3 * k]); hi = Math.max(hi, P[3 * k]); } return hi > lo ? hi - lo : 0; }
+    function armLen() { var S0 = J['l-shoulder'], E = J['l-elbow'], H = J['l-hand']; return Math.hypot(E[0] - S0[0], E[1] - S0[1], E[2] - S0[2]) + Math.hypot(H[0] - E[0], H[1] - E[1], H[2] - E[2]) + 3; }
     function girth(y) { // tape measure: perimeter of the convex outline of the torso cut at height y
       var pts = [];
       for (var t = 0; t < TT.length; t += 3) {
@@ -91,7 +166,7 @@
     });
     // 2. girths: bust, waist and hip, scaling each torso level about its own centre (twice, to settle the blend)
     var zc = {}; function zCentre(y) { var k2 = Math.round(y); if (zc[k2] !== undefined) return zc[k2]; var lo = 1e9, hi = -1e9; for (var t = 0; t < n; t++) if (tw[t] > .8 && Math.abs(P[3 * t + 1] - y) < 1) { lo = Math.min(lo, P[3 * t + 2]); hi = Math.max(hi, P[3 * t + 2]); } return (zc[k2] = lo < hi ? (lo + hi) / 2 : 0); }
-    for (var it = 0; it < 3; it++) {
+    function girthFit(nIt) { for (var it = 0; it < nIt; it++) {
       zc = {};
       var fb = m.bust / girth(Y.bust), fw = m.waist / girth(Y.waist), fh = m.hip / girth(Y.hip);
       var K = [[Y.crotch - 8, 1 + (fh - 1) * .6], [Y.crotch, 1 + (fh - 1) * .85], [Y.hip, fh], [Y.waist, fw], [Y.bust, fb], [Y.shoulder, 1 + (fb - 1) * .5], [Y.hps, 1]];
@@ -107,6 +182,24 @@
         P[3 * i] = X; P[3 * i + 2] = Z;
       }
       ['l', 'r'].forEach(function (sd) { ['-shoulder', '-elbow', '-hand'].forEach(function (jn) { J[sd + jn][0] += (sd === 'l' ? 1 : -1) * dArm; }); });
+    } }
+    girthFit(3);
+    if (!pose.raw) { // shoulder, neck and arm measurements on the fitted body; the joints follow the skin
+      Object.keys(J).forEach(function (j) { st0[j] = stencil(j); });
+      solve('shoulder', shoulderW, m.shoulder ? m.shoulder + 2 : 0); follow();
+      solve('neck', neckG, m.neck); follow();
+      solve('upperarm_circ', function () { return limb(TA.l, J['l-shoulder'], J['l-elbow'], .3, .6, 'max'); }, m.bicep);
+      solve('wrist', function () { return limb(TA.l, J['l-elbow'], J['l-hand'], .86, .97, 'min'); }, m.wrist);
+      if (m.sleeve > 0) { var al = armLen(), f2 = (m.sleeve - al) / 2; solve('upperarm_len', function () { follow(); return armLen(); }, al + f2); solve('lowerarm_len', function () { follow(); return armLen(); }, m.sleeve); }
+      follow(); girthFit(2); // the shoulder target widens the chest a little: bring bust, waist and hip back, then settle the shoulder again
+      Object.keys(J).forEach(function (j) { st0[j] = stencil(j); }); solve('shoulder', shoulderW, m.shoulder ? m.shoulder + 2 : 0); follow(); girthFit(2);
+    }
+    if (!pose.raw && !(+pose.legs)) { // legs: thigh, knee, calf and ankle girths on the fitted body
+      var LH = J['l-upper-leg'], LK = J['l-knee'], LA = J['l-ankle'];
+      solve('thigh', function () { return limb(TL.l, LH, LK, .12, .3, 'max'); }, m.thigh);
+      solve('knee', function () { return limb(TL.l, LH, LK, .94, 1, 'min') || limb(TL.l, LK, LA, 0, .06, 'min'); }, m.knee);
+      solve('calf', function () { return limb(TL.l, LK, LA, .2, .5, 'max'); }, m.calf);
+      solve('ankle', function () { return limb(TL.l, LK, LA, .86, .95, 'min'); }, m.ankle);
     }
     var top = 0; for (i = 0; i < n; i++) top = Math.max(top, P[3 * i + 1]);
     // sleeves hang from the shoulder joint along the upper arm
@@ -123,7 +216,9 @@
     function maxA(ya, yb) { var r = 0; for (var t = 0; t < n; t++) { if (aw[t] > .3 || hw[t] > .5) continue; var y = P[3 * t + 1]; if (y < ya || y > yb) continue; r = Math.max(r, Math.hypot(P[3 * t], P[3 * t + 2])); } return r; }
     var neckTop = Y.hps + (top - Y.hps) * .35;
     var legs = [['l', 1], ['r', -1]].map(function (sd) { return { s: sd[1], H: J[sd[0] + '-upper-leg'], K: J[sd[0] + '-knee'], A: J[sd[0] + '-ankle'] }; });
-    return { m: m, g: g, key: key, pos: P, tri: tri, mask: mask, under: under, joints: joints, legs: legs, J: J, maxA: maxA, girth: girth, height: top,
+    var fitm = pose.raw ? {} : { shoulder: shoulderW() - 2, neck: neckG(), bicep: limb(TA.l, J['l-shoulder'], J['l-elbow'], .3, .6, 'max'), wrist: limb(TA.l, J['l-elbow'], J['l-hand'], .86, .97, 'min'), sleeve: armLen(),
+      thigh: limb(TL.l, J['l-upper-leg'], J['l-knee'], .12, .3, 'max'), calf: limb(TL.l, J['l-knee'], J['l-ankle'], .2, .5, 'max'), ankle: limb(TL.l, J['l-knee'], J['l-ankle'], .86, .95, 'min'), bust: girth(Y.bust), waist: girth(Y.waist), hip: girth(Y.hip) };
+    return { fit: fitm, m: m, g: g, key: key, pos: P, tri: tri, mask: mask, under: under, joints: joints, legs: legs, J: J, maxA: maxA, girth: girth, height: top,
       head: { c: [0, (neckTop + top) / 2, 0], r: [9, (top - neckTop) / 2, 10] },
       y: { waist: Y.waist, hps: Y.hps, hip: Y.hip, crotch: Y.crotch, bust: Y.bust, arm: Y.shoulder - 6, shoulder: Y.shoulder, neckTop: neckTop } };
   }
@@ -1044,6 +1139,6 @@
   Sim.prototype.clearElastic = function () { this.rings = this.rings.filter(function (r) { return !r.user; }); this.wake(); };
   Sim.prototype.pucker = function (a) { var E = this.E, E0 = this.E0, sm = this.onSeam; for (var j = 0; j < E.length; j += 3) E[j + 2] = sm[E[j]] && sm[E[j + 1]] ? E0[j + 2] * (1 - a) : E0[j + 2]; this.wake(); };
   D.Sim = Sim;
-  D.plen = plen;
+  D.plen = plen; D._sdf = buildSDF;
   if (typeof module !== 'undefined' && module.exports) module.exports = D; else root.FCDrape = D;
 })(typeof window !== 'undefined' ? window : this);

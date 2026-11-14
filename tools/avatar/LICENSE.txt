@@ -1,3 +1,5 @@
-The avatar meshes in this folder are built from the MakeHuman base mesh, macro targets and skin weights
-(https://github.com/makehumancommunity/makehuman), released under CC0 1.0 Universal.
-Built by build/avatar_build.py; fitted to measurements in the browser by tools/drape-sim.js.
+The avatar meshes in this folder are built from the MakeHuman base mesh, body targets (macro and measurement targets)
+and the game-engine skeleton with its skin weights (https://github.com/makehumancommunity/makehuman and MPFB 2),
+all released under CC0 1.0 Universal. The MPFB 2 copies used are the ones shipped inside Anny (github.com/naver/anny,
+Apache 2.0); no SMPL or other non-commercial data is used.
+Built by build/avatar_build.py; fitted to measurements and posed in the browser by tools/drape-sim.js.
