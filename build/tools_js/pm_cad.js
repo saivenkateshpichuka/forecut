@@ -298,7 +298,7 @@
     for (k = 2; k < nb2; k++) out.push(C.clone(b.nodes[(j + k) % nb2])); // B[j+2] ... B[j-1]
     out[0].h1 = B0.h1 ? B0.h1.slice() : null; out[0].smooth = false;
     out.forEach(function (nd) { nd.id = uid('p'); });
-    var m = C.newPiece(out, { name: a.name, cat: a.cat, dept: a.dept, size: a.size, qty: a.qty, pair: a.pair, fabric: a.fabric });
+    var m = C.newPiece(out, { name: a.name, cat: a.cat, dept: a.dept, size: a.size, qty: a.qty, pair: a.pair, fabric: a.fabric, sa: a.sa.def, hemSA: a.sa.hem });
     m.sa.def = a.sa.def; m.sa.hem = a.sa.hem; m.grain = a.grain; m.notes = a.notes; m.internals = a.internals.concat(b.internals); m.darts = a.darts.concat(b.darts);
     a.notches.forEach(function (nt) { if (nt.seg === i) return; var s2 = (nt.seg - (i + 1) + na) % na; m.notches.push(Object.assign({}, nt, { seg: s2 })); });
     a.hems.forEach(function (h) { if (h !== i) m.hems.push((h - (i + 1) + na) % na); });
@@ -310,7 +310,7 @@
     var line = []; segs.forEach(function (s, k) { var p = C.segPts(pc, s, .2); line = line.concat(k ? p.slice(1) : p); });
     var sg = areaOf(C.flat(pc, .5).pts) > 0 ? -1 : 1, inner = line.map(function (q, k) { var a = line[Math.max(0, k - 1)], b = line[Math.min(line.length - 1, k + 1)], t = nrm(sub(b, a)); return [q[0] + t[1] * sg * w, q[1] - t[0] * sg * w]; });
     // keep the inner line inside the piece: points that leave it are pulled back by the same distance along the bisector (simple, adequate for necklines and hems)
-    var poly = line.concat(inner.reverse()), nodes = C.fitNodes(poly, .04, true), f = C.newPiece(nodes, { name: (pc.name || 'Piece') + ' facing', cat: 'facing', size: pc.size, qty: pc.qty, pair: pc.pair, fabric: pc.fabric });
+    var poly = line.concat(inner.reverse()), nodes = C.fitNodes(poly, .04, true), f = C.newPiece(nodes, { name: (pc.name || 'Piece') + ' facing', cat: 'facing', size: pc.size, qty: pc.qty, pair: pc.pair, fabric: pc.fabric, sa: pc.sa.def, hemSA: pc.sa.hem });
     f.sa.def = pc.sa.def; f.x = pc.x; f.y = pc.y; if (pc.grain) f.grain = C.clone(pc.grain); return f;
   };
   C.fromInternal = function (pc, it) {
@@ -661,7 +661,7 @@
     if (o.debug) o.debug.push({ part: partPts.map(function (q) { return q.map(function (v) { return +v.toFixed(1); }); }), moved: moved.map(function (q) { return q.map(function (v) { return +v.toFixed(1); }); }) });
     var poly = half.concat(moved); // M2 ... X, then T(=S) ... N ... A (A lands near M2)
     var clean = []; poly.forEach(function (q) { if (!clean.length || dist(clean[clean.length - 1], q) > .02) clean.push(q); }); if (dist(clean[0], clean[clean.length - 1]) < .02) clean.pop();
-    var sn2 = C.fitNodes(clean, .04, true); for (var dd = sn2.length - 1; dd >= 0 && sn2.length > 3; dd--) { var nx2 = sn2[(dd + 1) % sn2.length]; if (Math.hypot(sn2[dd].x - nx2.x, sn2[dd].y - nx2.y) < .08) { if (sn2[dd].h1) nx2.h1 = sn2[dd].h1; sn2.splice(dd, 1); } } var sp = C.newPiece(sn2, { name: (o.side === 'back' ? 'Back' : 'Front') + ' raglan sleeve', qty: sleeve.qty || 2, pair: true, cat: sleeve.cat || '' });
+    var sn2 = C.fitNodes(clean, .04, true); for (var dd = sn2.length - 1; dd >= 0 && sn2.length > 3; dd--) { var nx2 = sn2[(dd + 1) % sn2.length]; if (Math.hypot(sn2[dd].x - nx2.x, sn2[dd].y - nx2.y) < .08) { if (sn2[dd].h1) nx2.h1 = sn2[dd].h1; sn2.splice(dd, 1); } } var sp = C.newPiece(sn2, { name: (o.side === 'back' ? 'Back' : 'Front') + ' raglan sleeve', qty: sleeve.qty || 2, pair: true, cat: sleeve.cat || '', sa: sleeve.sa.def, hemSA: sleeve.sa.hem });
     var hemSeg = C.nearestSeg(sp, flat[(iT + Math.floor(n / 2)) % n]); if (sleeve.hems && sleeve.hems.length && hemSeg && hemSeg.d < .5) sp.hems = [hemSeg.seg];
     var gx = T, gy = [X[0], X[1]], gm = [(gx[0] + gy[0]) / 2, (gx[1] + gy[1]) / 2]; sp.grain = { a: [gm[0] - gd[0] * 8, gm[1] - gd[1] * 8], b: [gm[0] + gd[0] * 8, gm[1] + gd[1] * 8] };
     var ns = C.nearestSeg(sp, moved[moved.length - 1]); if (ns) sp.notches.push({ id: uid('nt'), seg: ns.seg, mode: 'dist', v: +ns.s.toFixed(3), from: 'start', type: o.side === 'back' ? 'double' : 'single', depth: .6 });
@@ -712,6 +712,20 @@
     tol = tol || 1; var map = pc.nodes.map(function (nd) { var best = -1, bd = tol * tol; basePc.nodes.forEach(function (bn, i) { var d = (bn.x - nd.x) * (bn.x - nd.x) + (bn.y - nd.y) * (bn.y - nd.y); if (d < bd) { bd = d; best = i; } }); return best; });
     var hit = map.filter(function (i) { return i >= 0; }).length; if (!hit) return 0;
     pc.grade = {}; Object.keys(sizes).forEach(function (sz) { var sp = sizes[sz]; if (!sp || sp.nodes.length !== basePc.nodes.length) return; var G = pc.grade[sz] = {}; pc.nodes.forEach(function (nd, i) { var j = map[i]; if (j < 0) return; G[nd.id] = [+(sp.nodes[j].x - basePc.nodes[j].x).toFixed(4), +(sp.nodes[j].y - basePc.nodes[j].y).toFixed(4)]; }); });
+    return hit;
+  };
+
+  /* grade from the draft by edge: every point keeps its place along the same draft edge (as a fraction of the edge length) in each size.
+     Works when the sizes have different numbers of points. base and sizes are raw draft pieces ({edges: [{p: [[x, y]...]}]}). */
+  C.autoGradeDraft = function (pc, base, sizes, tol) {
+    tol = tol || 1;
+    function prep(dp) { return dp.edges.map(function (e) { var cum = [0]; for (var i = 1; i < e.p.length; i++) cum.push(cum[i - 1] + dist(e.p[i - 1], e.p[i])); return { p: e.p, cum: cum, L: cum[cum.length - 1] || 0 }; }); }
+    function at(E, f) { var s0 = f * E.L, i = 1; while (i < E.cum.length - 1 && E.cum[i] < s0) i++; var a = E.p[i - 1], b = E.p[i], seg = (E.cum[i] - E.cum[i - 1]) || 1, t = Math.max(0, Math.min(1, (s0 - E.cum[i - 1]) / seg)); return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]; }
+    var B = prep(base), map = pc.nodes.map(function (nd) { var best = null; B.forEach(function (E, ei) { for (var i = 1; i < E.p.length; i++) { var a = E.p[i - 1], b = E.p[i], vx = b[0] - a[0], vy = b[1] - a[1], LL = vx * vx + vy * vy, t = LL ? Math.max(0, Math.min(1, ((nd.x - a[0]) * vx + (nd.y - a[1]) * vy) / LL)) : 0, q = [a[0] + vx * t, a[1] + vy * t], d = dist(q, [nd.x, nd.y]); if (!best || d < best.d) best = { d: d, ei: ei, f: E.L ? (E.cum[i - 1] + Math.sqrt(LL) * t) / E.L : 0, q: q }; } }); return best && best.d <= tol ? best : null; });
+    var hit = map.filter(Boolean).length; if (!hit) return 0;
+    pc.grade = {};
+    Object.keys(sizes).forEach(function (sz) { var sp = sizes[sz]; if (!sp || !sp.edges || sp.edges.length !== base.edges.length) return; var S2 = prep(sp), G = pc.grade[sz] = {};
+      pc.nodes.forEach(function (nd, i) { var m = map[i]; if (!m) return; var q = at(S2[m.ei], m.f), q0 = at(B[m.ei], m.f); G[nd.id] = [+(q[0] - q0[0]).toFixed(4), +(q[1] - q0[1]).toFixed(4)]; }); });
     return hit;
   };
 

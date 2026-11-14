@@ -451,6 +451,6 @@ def _pm_icons():
     return out
 PMICONS = json.dumps(_pm_icons(), separators=(',', ':'))
 page('pattern-maker.html', 'Garment Studio · Pattern Making, Grading and 3D Fitting · Forecut', pm,
-     'window.PM_DETAILS=' + json.dumps(PMD) + ';window.FC_FABLIB=' + FABLIB + ';window.FC_PMICONS=' + PMICONS + ';' + JS('pm_engine.js') + JS('pm_export.js') + JS('pm_views.js') + JS('pm_cost.js') + JS('pm_ui.js') + JS('pm_edit.js') + JS('pm_cad.js') + JS('pm_studio.js') + JS('pm_more.js') + JS('pm_3d.js'), auth=True)
+     'window.PM_DETAILS=' + json.dumps(PMD) + ';window.FC_FABLIB=' + FABLIB + ';window.FC_PMICONS=' + PMICONS + ';' + JS('pm_engine.js') + JS('pm_export.js') + JS('pm_views.js') + JS('pm_cost.js') + JS('pm_ui.js') + JS('pm_edit.js') + JS('pm_cad.js') + JS('pm_studio.js') + JS('pm_dxf.js') + JS('pm_more.js') + JS('pm_3d.js'), auth=True)
 
 print('tools preview ok', 3)

@@ -20,7 +20,6 @@
     { g: 'Draw', id: 'poly', k: 'p', n: 'Polygon', tip: 'Click to place points. Drag while placing a point to make a curve. Click the first point, double-click or press Enter to close. Backspace removes the last point, Esc cancels.', ic: 'M12 3.5l8.5 6.2-3.2 9.8H6.7L3.5 9.7zM10.6 2.1h2.8v2.8h-2.8z' },
     { g: 'Draw', id: 'rect', k: 'r', n: 'Rectangle', tip: 'Drag to draw, or type the exact width and height in the bar above the canvas and press Create.', ic: 'M4 6.5h16v11H4z' },
     { g: 'Draw', id: 'ellipse', k: 'e', n: 'Ellipse', tip: 'Drag to draw, or type the exact width and height above the canvas. Hold Shift for a circle.', ic: 'M3.5 12a8.5 6 0 1 0 17 0a8.5 6 0 1 0-17 0' },
-    { g: 'Draw', id: 'spiral', n: 'Spiral', tip: 'A spiral strip for flounces and cascades. Set the inner radius, turns, spacing and strip width above the canvas, then click where its centre goes.', ic: 'M12 12.5a1 1 0 0 1 1-1 2 2 0 0 1 2 2 3 3 0 0 1-3 3 4 4 0 0 1-4-4 5 5 0 0 1 5-5 6 6 0 0 1 6 6 7 7 0 0 1-7 7' },
     { g: 'Edit', id: 'addpt', k: '+', n: 'Add point / split edge', tip: 'Click an edge to add a point there without changing the shape. In Properties you can also split an edge into equal parts or at an exact distance.', ic: 'M3 16h7M14 16h7M10.5 14.5h3v3h-3zM12 3.5v7M8.5 7h7' },
     { g: 'Edit', id: 'curv', k: 'c', n: 'Edit curvature', tip: 'Drag an edge sideways to bend it; the end points stay where they are. A straight edge becomes a curve.', ic: 'M4 18.5C7 8.5 17 8.5 20 18.5M12 12.5V4M9.5 6.5L12 4l2.5 2.5M2.5 17h3v3h-3zM18.5 17h3v3h-3z' },
     { g: 'Edit', id: 'smooth', n: 'Smooth curve', tip: 'Select points or edges with Edit pattern, then click Smooth in Properties, or click an edge here to smooth its two joins. Sharp corners stay sharp. The length change is reported.', ic: 'M3 15l4-7 4 6M13 14c2.5-7 5.5-7 8-2M11 14h2' },
@@ -64,15 +63,26 @@
 
   /* ---------- build: the editor lives inside Pattern Maker (tools in the left panel, canvas in the middle, pieces and properties on the right) ---------- */
   var VIEWS = [['grid', 'Grid'], ['snap', 'Snap to points, edges and grid (Alt switches off)'], ['rulers', 'Rulers'], ['sa', 'Seam allowance (cutting line)'], ['seam', 'Seamline'], ['notches', 'Notches'], ['grain', 'Grainlines'], ['internals', 'Internal lines and shapes'], ['labels', 'Piece names'], ['points', 'Points on all pieces'], ['sewing', 'Sewing lines'], ['trims', 'Trims'], ['graphics', 'Graphics'], ['fill', 'Fabric colours on pieces'], ['pages', 'Print pages (paper size as in Export)'], ['nest', 'Graded nest (all sizes)']];
+  var DISP = [
+    ['sewing', 'Sewing display', 'M4 20L20 4M14 4h6v6M6 14l4 4', [['sewing', 'Sewing lines', 1], ['tstitch', 'Topstitches', 1], ['pucker', 'Puckering', 1], ['trims', 'Zips, piping, binding, tape and buttons', 1]]],
+    ['garment', 'Pattern display', 'M8 3l-5 4 3 3v11h12V10l3-3-5-4c-1 2-2.5 3-4 3s-3-1-4-3z', [['seam', 'Seamline', 1], ['sa', 'Seam allowance (cutting line)', 1], ['nest', 'Grading (all sizes)', 0], ['internals', 'Internal lines and shapes', 1], ['notches', 'Notches', 1], ['links', 'Linked and mirrored copy marks', 1], ['points', 'Points on all pieces', 0], ['pages', 'Print pages', 0]]],
+    ['info', 'Information display', 'M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18M12 11v6M12 7.5v.5', [['labels', 'Piece names', 1], ['lens', 'Edge lengths', 0], ['angles', 'Corner angles', 0], ['grain', 'Grainlines', 1], ['meas', 'Kept measurements', 1], ['rulers', 'Rulers', 1], ['grid', 'Grid', 1], ['snap', 'Snap to points, edges and grid', 1]]],
+    ['render', 'Fill style', 'M4 4h16v16H4zM4 14l5-5 4 4 7-7', [['r:fabric', 'Fabric colour and texture'], ['r:mono', 'Plain grey'], ['r:translucent', 'See-through'], ['r:outline', 'Outline only'], ['r:random', 'A colour per piece']]]
+  ];
+  function dispPop(k) {
+    var d = DISP.filter(function (x) { return x[0] === k; })[0], pop = q('#ps-dpop'), v = V(); if (!d) { pop.hidden = true; return; }
+    pop.innerHTML = '<b>' + d[1] + '</b>' + d[3].map(function (o) { if (o[0].indexOf('r:') === 0) { var on = (v.render || 'fabric') === o[0].slice(2); return '<button type="button" class="ps-dopt" data-dset="' + o[0] + '" aria-pressed="' + on + '"><i>' + (on ? '✓' : '') + '</i>' + o[1] + '</button>'; } var on2 = o[2] ? v[o[0]] !== false : !!v[o[0]]; return '<button type="button" class="ps-dopt" data-dset="' + o[0] + '" data-def="' + o[2] + '" aria-pressed="' + on2 + '"><i>' + (on2 ? '✓' : '') + '</i>' + o[1] + '</button>'; }).join('');
+    pop.dataset.k = k; pop.hidden = false; var b = q('[data-disp=' + k + ']'); pop.style.top = (b.offsetTop) + 'px';
+  }
   var MENUS = [
-    ['file', 'File', [['new', 'New blank project', 'Ctrl N'], ['open', 'Open saved project…', 'Ctrl O'], ['openfile', 'Open project file…'], '-', ['save', 'Save', 'Ctrl S'], ['saveas', 'Save as…'], ['savefile', 'Download project file'], '-', ['fromdraft', 'Bring in the current draft'], ['importdxf', 'Import DXF…'], '-', ['xsvg', 'Export SVG (true scale)'], ['xdxf', 'Export DXF'], ['xpdft', 'Export PDF, tiles on your paper size'], ['xpdf', 'Export PDF, full size'], ['xpng', 'Export PNG'], ['bomcsv', 'Export BOM (CSV)']]],
+    ['file', 'File', [['new', 'New blank project', 'Ctrl N'], ['open', 'Open saved project…', 'Ctrl O'], ['openfile', 'Open project file…'], '-', ['save', 'Save', 'Ctrl S'], ['saveas', 'Save as…'], ['savefile', 'Download project file'], '-', ['fromdraft', 'Bring in the current draft'], ['importdxf', 'Import DXF…'], '-', ['xsvg', 'Export SVG (true scale)'], ['dxfdlg', 'Export DXF (CAD, ASTM / AAMA)…'], ['xpdft', 'Export PDF, tiles on your paper size'], ['xpdf', 'Export PDF, full size'], ['xpng', 'Export PNG'], ['bomcsv', 'Export BOM (CSV)']]],
     ['edit', 'Edit', [['undo', 'Undo', 'Ctrl Z'], ['redo', 'Redo', 'Ctrl Shift Z'], '-', ['dup', 'Duplicate', 'Ctrl D'], ['linked', 'Linked copy'], ['mirrorcopy', 'Mirrored copy'], ['del', 'Delete', 'Del'], '-', ['selall', 'Select all pieces', 'Ctrl A'], ['selnone', 'Deselect', 'Esc'], '-', ['history', 'Undo history…', 'Ctrl H']]],
-    ['pattern', 'Pattern', ['tool:select', 'tool:edit', 'tool:pan', '-', 'tool:poly', 'tool:rect', 'tool:ellipse', 'tool:spiral', '-', 'tool:addpt', 'tool:curv', 'tool:smooth', 'tool:cut', 'tool:merge', 'tool:trace', '-', 'tool:iline', 'tool:irect', 'tool:iell', 'tool:notch', 'tool:grain', 'tool:sa', '-', 'tool:dart', 'tool:dartmv', 'tool:pleat', 'tool:slash', 'tool:spread', '-', 'tool:raglan', 'tool:circle', '-', 'tool:measure']],
+    ['pattern', 'Pattern', ['tool:select', 'tool:edit', 'tool:pan', '-', 'tool:poly', 'tool:rect', 'tool:ellipse', '-', 'tool:addpt', 'tool:curv', 'tool:smooth', 'tool:cut', 'tool:merge', 'tool:trace', '-', 'tool:iline', 'tool:irect', 'tool:iell', 'tool:notch', 'tool:grain', 'tool:sa', ['saall', 'Add seam allowance to all pieces'], '-', 'tool:dart', 'tool:dartmv', 'tool:pleat', 'tool:slash', 'tool:spread', '-', 'tool:raglan', 'tool:circle', '-', 'tool:measure']],
     ['sewing', 'Sewing', ['tool:sew', 'tool:fsew', 'tool:walk', '-', ['tab:sewing', 'Sewing list and length check'], ['sewcheck', 'Check all seams'], ['sewclear', 'Delete all sewing']]],
     ['materials', 'Materials', [['tab:fabric', 'Fabric library'], ['fabnew', 'New fabric'], ['fabassign', 'Give the selected pieces a fabric'], '-', 'tool:graphic', ['tab:trims', 'Graphics and trims list']]],
     ['trims', 'Trims', ['tool:button', 'tool:hole', 'tool:zip', 'tool:piping', 'tool:binding', 'tool:tstitch', 'tool:pucker', 'tool:tape', '-', ['tab:trims', 'All trims'], ['presets', 'Topstitch presets']]],
     ['view3d', '3D', [['see3d', 'See the edited pieces in 3D', ''], '-', ['tab:sewing', 'Seams (sewing list)']]],
-    ['grading', 'Grading', [['tab:grade', 'Sizes and grade rules'], ['autograde', 'Auto-grade from the draft'], '-', ['gradecsv', 'Graded measurements (CSV)'], ['sizechart', 'Size chart (CSV)'], ['xgradesvg', 'Export graded nest (SVG)'], ['xgradedxf', 'Export graded nest (DXF)'], ['xgradepdf', 'Export every size, tiled PDF']]],
+    ['grading', 'Grading', [['tab:grade', 'Sizes and grade rules'], ['autograde', 'Auto-grade from the draft'], '-', ['gradecsv', 'Graded measurements (CSV)'], ['sizechart', 'Size chart (CSV)'], ['xgradesvg', 'Export graded nest (SVG)'], ['dxfgrade', 'Export graded DXF (ASTM / AAMA + rule table)…'], ['xgradepdf', 'Export every size, tiled PDF']]],
     ['production', 'Production', [['tab:cw', 'Colourways'], ['tab:bom', 'Bill of materials (BOM)'], ['bomcsv', 'Export BOM (CSV)']]],
     ['view', 'View', VIEWS.map(function (v) { return 'v:' + v[0]; }).concat(['-', ['zin', 'Zoom in', '+'], ['zout', 'Zoom out', '−'], ['fit', 'Fit all pieces', '0'], ['z100', 'Actual size (100%)', '1']])],
     ['settings', 'Settings', [['settings', 'Project settings…']]]
@@ -104,12 +114,12 @@
       + '');
     ctl.insertBefore(barEl, modesEl.nextSibling);
     centerEl = mk('div', 'ps-center', '<div class="ps-banner" id="ps-banner" hidden></div><div class="ps-opts" id="ps-opts"></div><div class="ps-stage"><div class="ps-corner" id="ps-ucorner"></div><canvas class="ps-rx" id="ps-rx" aria-hidden="true"></canvas><canvas class="ps-ry" id="ps-ry" aria-hidden="true"></canvas>'
-      + '<svg id="ps-svg" xmlns="' + NS + '" tabindex="0" aria-label="Pattern editing canvas"><g id="ps-grid"></g><g id="ps-world"></g><g id="ps-over"></g><g id="ps-pts"></g></svg><p class="ps-toast" id="ps-toast" role="status" hidden></p></div><div class="ps-foot"><input class="ps-name" id="ps-name" aria-label="Project name" maxlength="80" title="Project name"><span class="ps-saved" id="ps-saved"></span><div class="ps-status" id="ps-status"></div></div>');
+      + '<div class="ps-disp" id="ps-disp" role="toolbar" aria-label="Show and hide">' + DISP.map(function (d) { return '<button type="button" class="ps-dbtn" data-disp="' + d[0] + '" title="' + d[1] + '" aria-label="' + d[1] + '" aria-haspopup="true">' + I(d[2]) + '</button>'; }).join('') + '<div class="ps-dpop" id="ps-dpop" hidden></div></div><svg id="ps-svg" xmlns="' + NS + '" tabindex="0" aria-label="Pattern editing canvas"><g id="ps-grid"></g><g id="ps-world"></g><g id="ps-over"></g><g id="ps-pts"></g></svg><p class="ps-toast" id="ps-toast" role="status" hidden></p><form class="ps-mvbox" id="ps-mvbox" hidden autocomplete="off"><b>Moved</b><label><span class="ps-u"><input type="number" step="any" data-mv="d" aria-label="Distance moved"><i class="ps-mvu"></i></span></label><label>at <span class="ps-u"><input type="number" step="any" data-mv="a" aria-label="Direction"><i>°</i></span></label><button type="submit" class="ps-b pri">OK</button><button type="button" class="ps-b" data-mvx aria-label="Close">×</button><small>Type an exact distance and press Enter</small></form></div><div class="ps-foot"><input class="ps-name" id="ps-name" aria-label="Project name" maxlength="80" title="Project name"><span class="ps-saved" id="ps-saved"></span><div class="ps-status" id="ps-status"></div></div>');
     pcol.insertBefore(centerEl, ctl.nextSibling);
     sideEl = mk('div', 'ps-side', '<div class="ps-tabs" role="tablist" aria-label="Object browser">' + TABS.map(function (t) { return '<button type="button" role="tab" data-tab="' + t[0] + '" title="' + t[2] + '">' + t[1] + '</button>'; }).join('') + '</div><div class="ps-pane" id="ps-objs"></div>'
       + '<details class="ps-sec" open><summary>Properties</summary><div id="ps-props"></div></details>');
     pr.insertBefore(sideEl, pr.firstChild);
-    modalEl = mk('div', 'ps-host', '<div class="ps-modal" id="ps-modal" hidden></div><div class="ps-tip" id="ps-tip" hidden></div><input type="file" id="ps-file" accept=".json,.fcpattern,application/json" hidden><input type="file" id="ps-dxf" accept=".dxf" hidden><input type="file" id="ps-gfx" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden>');
+    modalEl = mk('div', 'ps-host', '<div class="ps-modal" id="ps-modal" hidden></div><div class="ps-tip" id="ps-tip" hidden></div><input type="file" id="ps-file" accept=".json,.fcpattern,application/json" hidden><input type="file" id="ps-dxf" accept=".dxf" hidden><input type="file" id="ps-gfx" accept="image/png,image/jpeg,image/svg+xml,image/webp" hidden><input type="file" id="ps-texf" accept="image/png,image/jpeg,image/webp" hidden>');
     document.body.appendChild(modalEl);
     parts = [toolsEl, modesEl, barEl, centerEl, sideEl, modalEl];
     svg = q('#ps-svg'); world = q('#ps-world'); ptsG = q('#ps-pts'); rx = q('#ps-rx'); ry = q('#ps-ry'); statusEl = q('#ps-status'); propsEl = q('#ps-props'); objsEl = q('#ps-objs'); optsEl = q('#ps-opts'); toastEl = q('#ps-toast'); tipEl = q('#ps-tip');
@@ -196,11 +206,16 @@
     var fc = v.fill !== false ? fabColour(pc.fabric) : '';
     if (cl) h += '<path class="ps-cut" d="' + polyD(cl.pts) + '"/>';
     else h += '<path class="ps-cut ps-paper" d="' + pathD(pc) + '"/>';
-    if (fc) h += '<path class="ps-fab" d="' + (cl ? polyD(cl.pts) : pathD(pc)) + '" style="fill:' + fc + '"/>';
+    var fobj = fabOf(pc.fabric), rs = v.render || 'fabric';
+    if (rs === 'random') { var hh = 0; for (var ci = 0; ci < pc.id.length; ci++) hh = (hh * 31 + pc.id.charCodeAt(ci)) % 360; fc = 'hsl(' + hh + ',55%,72%)'; } else if (rs === 'mono' || rs === 'outline') fc = rs === 'mono' ? '#d9d4cc' : '';
+    if (fc) h += '<path class="ps-fab" d="' + (cl ? polyD(cl.pts) : pathD(pc)) + '" style="fill:' + fc + (rs === 'translucent' ? ';opacity:.35' : fobj && fobj.opacity != null && fobj.opacity < 1 ? ';opacity:' + fobj.opacity : '') + '"/>';
+    if (fobj && fobj.tex && rs === 'fabric' && v.fill !== false) h += '<path class="ps-fab" d="' + pathD(pc) + '" style="fill:url(#tx-' + esc(fobj.id) + ')' + (fobj.opacity != null && fobj.opacity < 1 ? ';opacity:' + fobj.opacity : '') + '"/>';
     h += '<path class="ps-seam' + (v.seam ? '' : ' nos') + (cl ? '' : ' solo') + '" d="' + pathD(pc) + '"/>';
     if (pc.fold >= 0 && pc.fold < C.segCount(pc)) h += '<path class="ps-fold" d="' + segD(pc, pc.fold) + '"/>';
     if (pc.elastic) Object.keys(pc.elastic).forEach(function (k) { var i = +k; if (i < C.segCount(pc) && C.elasticOf(pc, i)) h += '<path class="ps-elastic" d="' + segD(pc, i) + '"><title>Elastic ' + pc.elastic[k] + '%</title></path>'; });
-    if (v.internals) pc.internals.forEach(function (it) { if (it.visible === false) return; var cls = 'ps-int ' + (it.style === 'dashed' ? 'dash ' : '') + (it.purpose || '') + (ST.it === it.id ? ' on' : ''); if (it.kind === 'point') h += '<circle class="' + cls + '" cx="' + f3(it.pts[0][0]) + '" cy="' + f3(it.pts[0][1]) + '" r=".25"/>'; else if (it.kind === 'ellipse') h += '<ellipse class="' + cls + '" cx="' + f3(it.c[0]) + '" cy="' + f3(it.c[1]) + '" rx="' + f3(it.r[0]) + '" ry="' + f3(it.r[1]) + '"/>'; else h += '<path class="' + cls + '" d="M' + it.pts.map(function (q2) { return f3(q2[0]) + ' ' + f3(q2[1]); }).join('L') + (it.kind === 'rect' || it.kind === 'dart' ? 'Z' : '') + '"/>'; });
+    if (v.internals) pc.internals.forEach(function (it) { if (it.visible === false) return; var cls = 'ps-int ' + (it.style === 'dashed' ? 'dash ' : '') + (it.purpose || '') + (ST.it === it.id ? ' on' : ''), da = ' data-it="' + it.id + '" data-ipc="' + pc.id + '"', geoH;
+      if (it.kind === 'point') geoH = 'circle cx="' + f3(it.pts[0][0]) + '" cy="' + f3(it.pts[0][1]) + '" r=".25"'; else if (it.kind === 'ellipse') geoH = 'ellipse cx="' + f3(it.c[0]) + '" cy="' + f3(it.c[1]) + '" rx="' + f3(it.r[0]) + '" ry="' + f3(it.r[1]) + '"'; else geoH = 'path d="M' + it.pts.map(function (q2) { return f3(q2[0]) + ' ' + f3(q2[1]); }).join('L') + (it.kind === 'rect' || it.kind === 'dart' ? 'Z' : '') + '"';
+      h += '<' + geoH + ' class="' + cls + '"/><' + geoH + ' class="ps-ihit"' + da + '/>'; });
     pc.darts.forEach(function (d) { if (d.kind !== 'outline') return; var I = C.dartInfo(pc, d); if (!I) return; var on = ST.dart && ST.dart.id === d.id, u = [I.mid[0] - I.apex[0], I.mid[1] - I.apex[1]], ul = Math.hypot(u[0], u[1]) || 1, dh = [I.apex[0] + u[0] / ul, I.apex[1] + u[1] / ul];
       h += '<path class="ps-dart' + (on ? ' on' : '') + '" data-dart="' + pc.id + '|' + d.id + '" d="M' + I.mid.map(f3).join(' ') + 'L' + I.apex.map(f3).join(' ') + '"/>' + (d.drill !== false ? '<circle class="ps-drill" cx="' + f3(dh[0]) + '" cy="' + f3(dh[1]) + '" r=".2"/>' : '');
       if (on && ST.dfold) { var fd = C.dartFold(pc, d); if (fd) h += '<path class="ps-dfold" d="M' + fd.map(function (q2) { return q2.map(f3).join(' '); }).join('L') + '"/>'; } });
@@ -210,8 +225,11 @@
     if (v.grain && pc.grain) { var a = pc.grain.a, b = pc.grain.b, gd = C.dist(a, b) || 1, u = [(b[0] - a[0]) / gd, (b[1] - a[1]) / gd], nn = [-u[1], u[0]], ar = function (p, s) { return 'M' + f3(p[0] - u[0] * s * .8 + nn[0] * .4) + ' ' + f3(p[1] - u[1] * s * .8 + nn[1] * .4) + 'L' + p.map(f3).join(' ') + 'L' + f3(p[0] - u[0] * s * .8 - nn[0] * .4) + ' ' + f3(p[1] - u[1] * s * .8 - nn[1] * .4); };
       h += '<path class="ps-grain" d="M' + a.map(f3).join(' ') + 'L' + b.map(f3).join(' ') + ar(b, 1) + (pc.grainDir === 'one' ? '' : ar(a, -1)) + '"/>'; }
     h += trimsHTML(pc, G);
+    if (v.lens || v.angles) { var nS = C.segCount(pc), lf = Math.max(.45, Math.min(1, 9 / ST.z)), sg2 = G.sign || 1;
+      for (var li = 0; li < nS; li++) { if (v.lens) { var ps = G.segs[li] || []; if (ps.length > 1) { var mq = ps[Math.floor(ps.length / 2)], mq0 = ps[Math.max(0, Math.floor(ps.length / 2) - 1)], mq1 = ps[Math.min(ps.length - 1, Math.floor(ps.length / 2) + 1)], tx0 = mq1[0] - mq0[0], ty0 = mq1[1] - mq0[1], tl0 = Math.hypot(tx0, ty0) || 1, ox = ty0 / tl0 * lf * 1.2 * sg2, oy = -tx0 / tl0 * lf * 1.2 * sg2; h += '<text class="ps-len" x="' + f3(mq[0] + ox) + '" y="' + f3(mq[1] + oy) + '" font-size="' + f3(lf) + '">' + esc(F(C.segLen(pc, li))) + '</text>'; } }
+        if (v.angles && li < pc.nodes.length) { var nd0 = pc.nodes[li]; h += '<text class="ps-ang" x="' + f3(nd0.x + lf * .4) + '" y="' + f3(nd0.y - lf * .4) + '" font-size="' + f3(lf * .85) + '">' + C.angleAtNode(pc, li).toFixed(0) + '°</text>'; } } }
     if (v.labels) { var bb = C.bbox(pc), fs = Math.max(.8, Math.min(2.2, (bb[2] - bb[0]) / 10)); h += '<text class="ps-lab" x="' + f3((bb[0] + bb[2]) / 2) + '" y="' + f3((bb[1] + bb[3]) / 2) + '" font-size="' + f3(fs) + '">' + esc(pc.name || 'Piece') + '</text><text class="ps-lab2" x="' + f3((bb[0] + bb[2]) / 2) + '" y="' + f3((bb[1] + bb[3]) / 2 + fs * 1.15) + '" font-size="' + f3(fs * .6) + '">' + esc((pc.size ? pc.size + ' · ' : '') + 'Cut ' + pc.qty + (pc.pair ? ' pair' : '') + (pc.fold >= 0 ? ' on fold' : '')) + '</text>';
-      if (pc.link && pc.link.on) h += '<text class="ps-link" x="' + f3(bb[0]) + '" y="' + f3(bb[1] - .5) + '" font-size=".9">' + (pc.link.mode === 'mirror' ? '⇋ mirrored link' : '⇄ linked') + '</text>'; }
+      if (pc.link && pc.link.on && v.links !== false) h += '<text class="ps-link" x="' + f3(bb[0]) + '" y="' + f3(bb[1] - .5) + '" font-size=".9">' + (pc.link.mode === 'mirror' ? '⇋ mirrored link' : '⇄ linked') + '</text>'; }
     if (PICK.indexOf(ST.tool) >= 0) for (var s = 0; s < C.segCount(pc); s++) { var on = ST.seg && ST.seg.pc === pc.id && ST.seg.i === s, wk = ST.walk.some(function (w) { return w.pc === pc.id && w.seg === s; }) || ST.pick.some(function (w) { return w.pc === pc.id && w.seg === s; }); h += '<path class="ps-eh" data-pc="' + pc.id + '" data-s="' + s + '" d="' + segD(pc, s) + '"/>'; if (on || wk) h += '<path class="ps-eon" d="' + segD(pc, s) + '"/>'; }
     return h + '</g>';
   }
@@ -239,8 +257,8 @@
       T.tape.filter(mine).filter(okSeg).forEach(function (r) { h += '<path class="ps-band ps-tape"' + tag('tape', r) + ' style="stroke:' + trimColour('tape', r, '#d9c27a') + ';stroke-width:' + f3(r.w || 1) + '" d="' + plD(rangeFast(pc, r.seg, r.a, r.b, (r.w || 1) / 2)) + '"/>'; });
       T.binding.filter(mine).filter(okSeg).forEach(function (r) { h += '<path class="ps-band ps-bind"' + tag('binding', r) + ' style="stroke:' + trimColour('binding', r, '#3a5a8c') + ';stroke-width:' + f3(r.w || 1) + '" d="' + plD(rangeFast(pc, r.seg, r.a, r.b, 0)) + '"/>'; });
       T.piping.filter(mine).filter(okSeg).forEach(function (r) { var w = (r.w || .4) + .2; h += '<path class="ps-band ps-pip"' + tag('piping', r) + ' style="stroke:' + trimColour('piping', r, '#7a2f2f') + ';stroke-width:' + f3(w) + '" d="' + plD(rangeFast(pc, r.seg, r.a, r.b, -w / 2)) + '"/>'; });
-      T.pucker.filter(mine).filter(okSeg).forEach(function (r) { var pts = rangeFast(pc, r.seg, r.a, r.b, .5), out = [], amp = .12 + (+r.str || .5) * .3; for (var k = 1; k < pts.length; k++) { var a = pts[k - 1], b = pts[k], L = C.dist(a, b), m = Math.max(1, Math.round(L / .5)); for (var j = 0; j < m; j++) { var f = j / m, x = a[0] + (b[0] - a[0]) * f, y = a[1] + (b[1] - a[1]) * f, nx = -(b[1] - a[1]) / (L || 1), ny = (b[0] - a[0]) / (L || 1), sgn = (out.length % 2 ? 1 : -1) * amp; out.push([x + nx * sgn, y + ny * sgn]); } } h += '<path class="ps-puk"' + tag('pucker', r) + ' d="' + plD(out) + '"/>'; });
-      T.tstitch.filter(mine).filter(okSeg).forEach(function (r) { var len = 2.54 / (+r.spi || 12), dw = Math.max(.05, C.threadDia(+r.tex || 30) / 10 * 1.4); for (var k = 0; k < (+r.rows || 1); k++) h += '<path class="ps-ts"' + tag('tstitch', r) + ' style="stroke:' + trimColour('tstitch', r, '#2b2b2b') + ';stroke-width:' + f3(dw) + ';stroke-dasharray:' + f3(len * .72) + ' ' + f3(len * .28) + '" d="' + plD(rangeFast(pc, r.seg, r.a, r.b, (+r.off || .15) + k * (+r.gap || .64))) + '"/>'; });
+      if (v.pucker !== false) T.pucker.filter(mine).filter(okSeg).forEach(function (r) { var pts = rangeFast(pc, r.seg, r.a, r.b, .5), out = [], amp = .12 + (+r.str || .5) * .3; for (var k = 1; k < pts.length; k++) { var a = pts[k - 1], b = pts[k], L = C.dist(a, b), m = Math.max(1, Math.round(L / .5)); for (var j = 0; j < m; j++) { var f = j / m, x = a[0] + (b[0] - a[0]) * f, y = a[1] + (b[1] - a[1]) * f, nx = -(b[1] - a[1]) / (L || 1), ny = (b[0] - a[0]) / (L || 1), sgn = (out.length % 2 ? 1 : -1) * amp; out.push([x + nx * sgn, y + ny * sgn]); } } h += '<path class="ps-puk"' + tag('pucker', r) + ' d="' + plD(out) + '"/>'; });
+      if (v.tstitch !== false) T.tstitch.filter(mine).filter(okSeg).forEach(function (r) { var len = 2.54 / (+r.spi || 12), dw = Math.max(.05, C.threadDia(+r.tex || 30) / 10 * 1.4); for (var k = 0; k < (+r.rows || 1); k++) h += '<path class="ps-ts"' + tag('tstitch', r) + ' style="stroke:' + trimColour('tstitch', r, '#2b2b2b') + ';stroke-width:' + f3(dw) + ';stroke-dasharray:' + f3(len * .72) + ' ' + f3(len * .28) + '" d="' + plD(rangeFast(pc, r.seg, r.a, r.b, (+r.off || .15) + k * (+r.gap || .64))) + '"/>'; });
       T.zip.filter(mine).filter(okSeg).forEach(function (r) { var pts = rangeFast(pc, r.seg, r.a, r.b, .5), w = { 3: .45, 5: .6, 8: .8, 10: .95 }[r.gauge || 5] || .6; h += '<path class="ps-zipt"' + tag('zip', r) + ' style="stroke:' + trimColour('zip', r, '#2b2b2b') + ';stroke-width:1.6" d="' + plD(rangeFast(pc, r.seg, r.a, r.b, .8)) + '"/><path class="ps-zip"' + tag('zip', r) + ' style="stroke-width:' + f3(w) + ';stroke-dasharray:' + f3(w * .35) + ' ' + f3(w * .35) + '" d="' + plD(pts) + '"/>'; if (pts.length) h += '<rect class="ps-zpull" x="' + f3(pts[0][0] - .5) + '" y="' + f3(pts[0][1] - .5) + '" width="1" height="1.6" rx=".2"' + tag('zip', r) + '/>'; });
       T.hole.filter(mine).forEach(function (r) { var L = +r.len || 1.8, a = (+r.ang || 0) * Math.PI / 180, c = r.at, dx = Math.cos(a) * L / 2, dy = Math.sin(a) * L / 2; h += '<g' + tag('hole', r) + ' class="ps-hole"><path d="M' + f3(c[0] - dx) + ' ' + f3(c[1] - dy) + 'L' + f3(c[0] + dx) + ' ' + f3(c[1] + dy) + '" style="stroke-width:.3;stroke:' + trimColour('hole', r, '#5b4a3a') + '"/><path d="M' + f3(c[0] - dx) + ' ' + f3(c[1] - dy) + 'L' + f3(c[0] + dx) + ' ' + f3(c[1] + dy) + '" style="stroke-width:.06;stroke:#fbfaf7"/></g>'; });
       T.button.filter(mine).forEach(function (r) { var d = +r.size || 1.5, c = r.at, col = trimColour('button', r, '#e9e2d3'), hh = '<circle cx="' + f3(c[0]) + '" cy="' + f3(c[1]) + '" r="' + f3(d / 2) + '" style="fill:' + col + '"/>'; var nh = +r.holes || 4, o = d * .14; if (nh === 2) hh += '<circle class="ps-bh" cx="' + f3(c[0] - o) + '" cy="' + f3(c[1]) + '" r="' + f3(d * .06) + '"/><circle class="ps-bh" cx="' + f3(c[0] + o) + '" cy="' + f3(c[1]) + '" r="' + f3(d * .06) + '"/>'; else if (nh === 4) [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(function (q) { hh += '<circle class="ps-bh" cx="' + f3(c[0] + q[0] * o) + '" cy="' + f3(c[1] + q[1] * o) + '" r="' + f3(d * .055) + '"/>'; }); h += '<g class="ps-btn"' + tag('button', r) + '>' + hh + '</g>'; });
@@ -301,10 +319,21 @@
       'The line between the two points is cut and the side away from the first piece of outline moves. Parallel adds width (or length); pivot adds flare at one end only.');
   }
   function pleatDialog(pc, a, b) {
-    askNums('Pleat', [{ k: 'type', l: 'Type', v: 'knife', opts: [['knife', 'Knife pleat'], ['box', 'Box pleat'], ['inverted', 'Inverted box pleat']] }, { k: 'depth', l: 'Depth (finished fold)', v: 3 }, { k: 'dir', l: 'Knife pleats fold', v: 'a', opts: [['a', 'Towards the first side'], ['b', 'Towards the other side']] }],
-      function (v) { if (!(v.depth > 0)) return toast('Enter a depth above zero.', 1); var res = C.pleat(pc, a, b, { type: v.type, depth: v.depth, flip: v.dir === 'b' }); if (res.err) return toast(res.err, 1);
-        reshape(pc, res, 'Add pleat', function () { res.lines.forEach(function (l) { pc.internals.push(l); }); });
-        toast((v.type === 'knife' ? 'Knife' : v.type === 'box' ? 'Box' : 'Inverted') + ' pleat added: the pattern opened by ' + F(res.intake) + ' (' + (v.type === 'knife' ? '2' : '4') + ' × depth). Fold and placement lines are marked.'); },
+    askNums('Pleat', [{ k: 'type', l: 'Type', v: ST.plType || 'knife', opts: [['knife', 'Knife pleat'], ['box', 'Box pleat'], ['inverted', 'Inverted box pleat']] }, { k: 'depth', l: 'Depth (finished fold)', v: ST.plDepth || 3 }, { k: 'n', l: 'Number of pleats', v: ST.plN || 1, u: 'raw' }, { k: 'gap', l: 'Space between pleats (finished)', v: ST.plGap || 4 }, { k: 'dir', l: 'Knife pleats fold', v: 'a', opts: [['a', 'Towards the first side'], ['b', 'Towards the other side']] }],
+      function (v) { if (!(v.depth > 0)) return toast('Enter a depth above zero.', 1); var n = Math.max(1, Math.min(30, Math.round(v.n || 1))); ST.plType = v.type; ST.plDepth = v.depth; ST.plN = n; ST.plGap = v.gap;
+        var A = a, B = b, made = 0, tot = 0, err = '';
+        for (var k = 0; k < n; k++) {
+          var res = C.pleat(pc, A, B, { type: v.type, depth: v.depth, flip: v.dir === 'b' }); if (res.err) { err = res.err; break; }
+          reshape(pc, res, n > 1 ? 'Add pleat ' + (k + 1) + ' of ' + n : 'Add pleat', function () { res.lines.forEach(function (l) { pc.internals.push(l); }); }); made++; tot += res.intake;
+          if (k === n - 1) break;
+          // the next pleat: parallel to this one, past its placement line by the spacing
+          var off = res.intake + Math.max(0, v.gap), q1 = [res.P1[0] + res.nor[0] * off, res.P1[1] + res.nor[1] * off], q2 = [res.P2[0] + res.nor[0] * off, res.P2[1] + res.nor[1] * off], ends = extendToOutline(pc, [q1, q2]);
+          if (!ends) { err = 'There is no room for more pleats on this piece.'; break; }
+          var e1 = nearestEdge(L2W(pc, ends[0]), pc, null, 2), e2 = nearestEdge(L2W(pc, ends[ends.length - 1]), pc, null, 2); if (!e1 || !e2) { err = 'There is no room for more pleats on this piece.'; break; }
+          A = { pc: pc.id, seg: e1.seg, t: e1.t, p: e1.p }; B = { pc: pc.id, seg: e2.seg, t: e2.t, p: e2.p };
+        }
+        if (!made) return toast(err, 1);
+        toast(made + ' ' + (v.type === 'knife' ? 'knife' : v.type === 'box' ? 'box' : 'inverted box') + ' pleat' + (made > 1 ? 's' : '') + ' added: the pattern opened by ' + F(tot) + ' in all (' + (v.type === 'knife' ? '2' : '4') + ' × depth each). Fold and placement lines are marked.' + (err && made < n ? ' ' + err : ''), !!(err && made < n)); },
       'Knife pleats take twice their depth in fabric; box and inverted pleats take four times. The line between your two clicks is where the pleat goes.');
   }
   function dartOf(t) { var pc = t && pcById(t.pc); if (!pc) return null; var d = pc.darts.filter(function (x) { return x.id === t.id; })[0]; return d ? { pc: pc, d: d } : null; }
@@ -315,7 +344,8 @@
       + row('Show it folded (for truing the seamline)', '<input type="checkbox" data-k="dk_fold"' + (ST.dfold ? ' checked' : '') + '>', 'chk') + row('Drill hole 1 cm from the apex', '<input type="checkbox" data-k="dk_drill"' + (o.d.drill !== false ? ' checked' : '') + '>', 'chk')
       + '<div class="ps-bs">' + btn('dartlegs', 'Make the legs equal') + btn('dartmove', 'Move this dart') + '</div><div class="ps-bs">' + btn('dartfill', 'Fill in (remove) the dart', 'bad') + '</div>';
   }
-  function draw() { if (!ON) return; world.innerHTML = pagesHTML() + P.pieces.filter(function (pc) { return !pc.hidden; }).map(function (pc) { return pieceHTML(pc); }).join('') + nestHTML(); drawView(); status(); }
+  function texDefs() { var h = ''; P.fabrics.forEach(function (f) { if (!f.tex) return; var r = Math.max(.5, +f.texScale || 10); h += '<pattern id="tx-' + esc(f.id) + '" patternUnits="userSpaceOnUse" width="' + r + '" height="' + r + '"><image href="' + esc(f.tex) + '" width="' + r + '" height="' + r + '" preserveAspectRatio="xMidYMid slice"/></pattern>'; }); return h ? '<defs>' + h + '</defs>' : ''; }
+  function draw() { if (!ON) return; world.innerHTML = texDefs() + pagesHTML() + P.pieces.filter(function (pc) { return !pc.hidden; }).map(function (pc) { return pieceHTML(pc); }).join('') + nestHTML(); drawView(); status(); }
   function drawPiece(pc, fast) { var old = world.querySelector('g[data-pc="' + pc.id + '"]'), h = pc.hidden ? '' : pieceHTML(pc, fast); if (old) { if (h) old.insertAdjacentHTML('afterend', h); old.remove(); } else if (h) world.insertAdjacentHTML('beforeend', h); }
   function placeG(pc) { var g = world.querySelector('g[data-pc="' + pc.id + '"]'); if (g) g.setAttribute('transform', 'translate(' + f3(pc.x || 0) + ' ' + f3(pc.y || 0) + ')'); }
   function drawView() {
@@ -333,6 +363,7 @@
         if (ST.tool === 'edit' && !faint && (isSel || segTouches(pc, i))) ['h1', 'h2'].forEach(function (k) { if (!nd[k]) return; var e = W2S(L2W(pc, [nd.x + nd[k][0], nd.y + nd[k][1]])); h += '<path class="ps-hl" d="M' + f1(s[0]) + ' ' + f1(s[1]) + 'L' + f1(e[0]) + ' ' + f1(e[1]) + '"/><circle class="ps-hd" data-pc="' + pc.id + '" data-n="' + i + '" data-h="' + k + '" cx="' + f1(e[0]) + '" cy="' + f1(e[1]) + '" r="4.5"/>'; });
         h += nd.smooth ? '<circle class="ps-pt' + (isSel ? ' on' : '') + (faint ? ' fa' : '') + '" data-pc="' + pc.id + '" data-n="' + i + '" cx="' + f1(s[0]) + '" cy="' + f1(s[1]) + '" r="' + (faint ? 3 : 4.5) + '"/>' : '<rect class="ps-pt' + (isSel ? ' on' : '') + (faint ? ' fa' : '') + '" data-pc="' + pc.id + '" data-n="' + i + '" x="' + f1(s[0] - (faint ? 3 : 4.5)) + '" y="' + f1(s[1] - (faint ? 3 : 4.5)) + '" width="' + (faint ? 6 : 9) + '" height="' + (faint ? 6 : 9) + '"/>'; });
     });
+    var io = ST.it && itOf(ST.it); if (io && !io.pc.hidden && io.it.kind !== 'ellipse' && (ST.tool === 'edit' || ST.tool === 'select')) io.it.pts.forEach(function (q2, k) { var s3 = W2S(L2W(io.pc, q2)); h += '<rect class="ps-pt ps-itp on" data-itp="' + k + '" x="' + f1(s3[0] - 4) + '" y="' + f1(s3[1] - 4) + '" width="8" height="8"/>'; });
     h += hoverHTML() + xfHTML();
     if (ST.hover) { var s2 = W2S(ST.hover.p); h += '<circle class="ps-snap" cx="' + f1(s2[0]) + '" cy="' + f1(s2[1]) + '" r="6"/>' + (ST.hover.k ? '<text class="ps-sk" x="' + f1(s2[0] + 9) + '" y="' + f1(s2[1] - 8) + '">' + esc(ST.hover.k) + '</text>' : ''); }
     if (ST.live) { var L = ST.live, x = L.at[0] + 16, y = L.at[1] + 22, w = Math.max(60, L.t.length * 6.6 + 12); h += '<g class="ps-live"><rect x="' + f1(x) + '" y="' + f1(y - 14) + '" width="' + f1(w) + '" height="20" rx="4"/><text x="' + f1(x + 6) + '" y="' + f1(y) + '">' + esc(L.t) + '</text></g>'; }
@@ -368,8 +399,8 @@
     if (d && d.box) { var b = d.box; if (d.kind === 'ellipse' || d.kind === 'iell') h += '<ellipse class="ps-dr" cx="' + f3((b[0] + b[2]) / 2) + '" cy="' + f3((b[1] + b[3]) / 2) + '" rx="' + f3(Math.abs(b[2] - b[0]) / 2) + '" ry="' + f3(Math.abs(b[3] - b[1]) / 2) + '"/>'; else h += '<path class="ps-dr" d="M' + f3(b[0]) + ' ' + f3(b[1]) + 'H' + f3(b[2]) + 'V' + f3(b[3]) + 'H' + f3(b[0]) + 'Z"/>'; }
     if (d && d.line) h += '<path class="ps-dr" d="M' + d.line[0].map(f3).join(' ') + 'L' + d.line[1].map(f3).join(' ') + '"/>';
     if (ST.marq) { var m = ST.marq; h += '<path class="ps-marq" d="M' + f3(m[0]) + ' ' + f3(m[1]) + 'H' + f3(m[2]) + 'V' + f3(m[3]) + 'H' + f3(m[0]) + 'Z"/>'; }
-    if (ST.meas.length) { var M = ST.meas.concat(ST.mcur ? [ST.mcur] : []); h += '<path class="ps-ms" d="M' + M.map(function (p) { return p.map(f3).join(' '); }).join('L') + '"/>'; M.forEach(function (p, i) { h += '<circle class="ps-msp" cx="' + f3(p[0]) + '" cy="' + f3(p[1]) + '" r="' + f3(3 * px) + '"/>'; if (i) { var a = M[i - 1]; h += '<text class="ps-mt" x="' + f3((a[0] + p[0]) / 2) + '" y="' + f3((a[1] + p[1]) / 2 - 6 * px) + '" font-size="' + f3(12 * px) + '">' + esc(F(C.dist(a, p))) + '</text>'; } }); }
-    if (ST.dpick && ST.cursor) { var dpc0 = pcById(ST.dpick.pc), dp = L2W(dpc0, ST.dpick.p); h += '<path class="ps-dr" d="M' + dp.map(f3).join(' ') + 'L' + ST.cursor.map(f3).join(' ') + '"/><circle class="ps-msp" cx="' + f3(dp[0]) + '" cy="' + f3(dp[1]) + '" r="' + f3(5 * px) + '"/>'; }
+    if (ST.meas.length && V().meas !== false) { var M = ST.meas.concat(ST.mcur ? [ST.mcur] : []); h += '<path class="ps-ms" d="M' + M.map(function (p) { return p.map(f3).join(' '); }).join('L') + '"/>'; M.forEach(function (p, i) { h += '<circle class="ps-msp" cx="' + f3(p[0]) + '" cy="' + f3(p[1]) + '" r="' + f3(3 * px) + '"/>'; if (i) { var a = M[i - 1]; h += '<text class="ps-mt" x="' + f3((a[0] + p[0]) / 2) + '" y="' + f3((a[1] + p[1]) / 2 - 6 * px) + '" font-size="' + f3(12 * px) + '">' + esc(F(C.dist(a, p))) + '</text>'; } }); }
+    if (ST.dpick && ST.cursor) { var dpc0 = pcById(ST.dpick.pc), dp = L2W(dpc0, ST.dpick.p), dw = (ST.o && ST.o.dw) || 2.5, tq = C.tangentAt ? C.tangentAt(dpc0, ST.dpick.seg, C.tAt(dpc0, ST.dpick.seg, ST.dpick.s)) : [1, 0], tl = Math.hypot(tq[0], tq[1]) || 1, ux = tq[0] / tl * dw / 2, uy = tq[1] / tl * dw / 2, inP = inside(C.flat(dpc0, .3).pts, W2L(dpc0, ST.cursor)); h += '<path class="ps-dtri' + (inP ? '' : ' bad') + '" d="M' + f3(dp[0] - ux) + ' ' + f3(dp[1] - uy) + 'L' + ST.cursor.map(f3).join(' ') + 'L' + f3(dp[0] + ux) + ' ' + f3(dp[1] + uy) + 'Z"/><path class="ps-dr" d="M' + dp.map(f3).join(' ') + 'L' + ST.cursor.map(f3).join(' ') + '"/><circle class="ps-msp" cx="' + f3(dp[0]) + '" cy="' + f3(dp[1]) + '" r="' + f3(5 * px) + '"/>'; }
     if (ST.cut.length === 1 && ST.cursor && (ST.tool === 'pleat' || ST.tool === 'slash' || ST.tool === 'cut')) { var cp0 = L2W(pcById(ST.cut[0].pc), ST.cut[0].p); h += '<path class="ps-dr" d="M' + cp0.map(f3).join(' ') + 'L' + ST.cursor.map(f3).join(' ') + '"/>'; }
     if (ST.cut.length) ST.cut.forEach(function (c) { var pc = pcById(c.pc), w = L2W(pc, c.p); h += '<circle class="ps-msp" cx="' + f3(w[0]) + '" cy="' + f3(w[1]) + '" r="' + f3(5 * px) + '"/>'; });
     o.innerHTML = h;
@@ -414,7 +445,7 @@
   function autosave() { ls(AUTO, { t: Date.now(), p: P, file: ST.fileName }); savedLabel(); }
   function savedLabel() { var el = q('#ps-saved'); if (!el) return; el.textContent = ST.dirty ? (ST.savedAt ? 'Autosaved · changes not saved to a project' : 'Autosaved') : (ST.savedAt ? 'Saved' : ''); }
   function act(label, fn) { var ok = H.exec(label, fn); if (ok !== false) refresh(); return ok; }
-  function refresh() { C.normalize(P); C.defaults = { sa: P.settings.sa, hem: P.settings.hem }; draw(); objects(); props(); q('#ps-name').value = P.name; qa('[data-v]').forEach(function (c) { c.checked = V()[c.dataset.v] !== false; }); q('[data-a=undo]').disabled = !H.u.length; q('[data-a=redo]').disabled = !H.r.length; savedLabel(); }
+  function refresh() { C.normalize(P); C.defaults = P.settings.autoSA ? { sa: P.settings.sa, hem: P.settings.hem } : { sa: 0, hem: 0 }; draw(); objects(); props(); q('#ps-name').value = P.name; qa('[data-v]').forEach(function (c) { c.checked = V()[c.dataset.v] !== false; }); q('[data-a=undo]').disabled = !H.u.length; q('[data-a=redo]').disabled = !H.r.length; savedLabel(); }
   function selected() { return ST.sel.map(pcById).filter(Boolean); }
 
   /* ---------- objects panel ---------- */
@@ -521,10 +552,15 @@
     if (t.k === 'graphic') h += '<div class="ps-bs">' + btn('gfxrep', 'Replace image') + btn('gfxratio', 'Original proportions') + '</div>';
     return h + '<div class="ps-bs">' + btn('trdel', 'Delete', 'bad') + '</div>';
   }
+  var FI = [['itemNo', 'Item number', 'text'], ['supplier', 'Supplier', 'text'], ['construction', 'Construction', 'sel', [['', '—'], ['Plain weave', 'Plain weave'], ['Twill', 'Twill'], ['Satin', 'Satin'], ['Dobby', 'Dobby'], ['Jacquard', 'Jacquard'], ['Single jersey', 'Single jersey'], ['Rib', 'Rib'], ['Interlock', 'Interlock'], ['Fleece', 'Fleece'], ['Pique', 'Pique'], ['Lace', 'Lace'], ['Non-woven', 'Non-woven'], ['Other', 'Other']]], ['finish', 'Finish', 'text'], ['price', 'Price per metre', 'num'], ['code', 'Colour code (Pantone, lab dip)', 'text']];
+  var FA = [['opacity', 'Opacity', 'range'], ['sheen', 'Surface', 'sel', [['matte', 'Matte'], ['soft', 'Soft sheen'], ['satin', 'Satin'], ['shiny', 'Shiny']]], ['texScale', 'Texture repeat (cm)', 'num'], ['backSame', 'Back the same as the front', 'chk'], ['backColour', 'Back colour', 'color']];
   var FF = [['name', 'Name', 'text'], ['type', 'Type', 'sel', [['Woven', 'Woven'], ['Knit', 'Knit'], ['Non-woven', 'Non-woven'], ['Leather', 'Leather'], ['Lace or net', 'Lace or net']]], ['comp', 'Composition', 'text'], ['gsm', 'Weight (gsm)', 'num'], ['width', 'Width (cm)', 'num'], ['thick', 'Thickness (mm)', 'num'], ['colour', 'Colour', 'color'], ['shrinkL', 'Shrinkage, length', 'pct'], ['shrinkW', 'Shrinkage, width', 'pct']];
   var FP = [['sw', 'Stretch, weft', 'num'], ['sl', 'Stretch, warp', 'num'], ['sb', 'Stretch, bias', 'num'], ['stiff', 'Bending stiffness (0–100)', 'num'], ['fric', 'Friction', 'num']];
   function fabricPanel(f) {
     var h = '<h5>Fabric</h5>'; FF.forEach(function (x) { h += field('fb_', x, f[x[0]]); });
+    h += '<h5>Information</h5>'; FI.forEach(function (x) { h += field('fb_', x, f[x[0]]); });
+    h += '<h5>Appearance</h5>' + row('Texture image', (f.tex ? '<img class="ps-tex" src="' + esc(f.tex) + '" alt="">' : '') + btn('fabtex', f.tex ? 'Replace' : 'Add an image') + (f.tex ? btn('fabtexx', 'Remove') : ''), 'wide');
+    FA.forEach(function (x) { if (x[0] === 'backColour' && f.backSame !== false) return; h += field('fb_', x, x[0] === 'backSame' ? f.backSame !== false : x[0] === 'opacity' ? (f.opacity == null ? 1 : f.opacity) : f[x[0]]); });
     h += '<h5>Physical properties (for 3D)</h5>'; FP.forEach(function (x) { h += field('fb_', x, f[x[0]]); });
     h += row('Source of these values', '<input data-k="fb_src" value="' + esc(f.src || '') + '">', 'wide') + '<p class="ps-n">Stretch is an index used by the Forecut 3D simulation (0 means it does not stretch). Replace the values with your own fabric test results when you have them, and note the source.</p>';
     return h + '<div class="ps-bs">' + btn('fabassign', 'Give to selected pieces') + btn('fabdup', 'Duplicate') + btn('fabdel', 'Delete', 'bad') + '</div>';
@@ -546,20 +582,32 @@
     else if (pcs.length > 1) h += multiPanel(pcs);
     else h += '<h5>Project</h5>' + row('Name', '<input data-k="pname" value="' + esc(P.name) + '">') + '<p class="ps-n">Select a piece to see its information, seam allowance and transforms. Select a point or edge with Edit pattern to type exact values.</p>'
       + '<h5>Shortcuts</h5><dl class="ps-kb"><dt>V A H</dt><dd>Select, Edit pattern, Pan</dd><dt>P R E</dt><dd>Polygon, Rectangle, Ellipse</dd><dt>N G M W S</dt><dd>Notch, Grainline, Measure, Seam walk, Seam allowance</dd><dt>Ctrl Z / Ctrl Shift Z</dt><dd>Undo, redo</dd><dt>Ctrl D</dt><dd>Duplicate</dd><dt>Delete</dt><dd>Delete the selection</dd><dt>Arrows</dt><dd>Nudge 1 grid step (Shift: 10)</dd><dt>0 / 1</dt><dd>Fit all, actual size</dd></dl>';
-    propsEl.innerHTML = h;
+    propsEl.innerHTML = sections(h);
+  }
+  function sections(h) {
+    var parts2 = h.split(/(?=<h5>)/), out = parts2.shift() || '', first = true;
+    parts2.forEach(function (p2) {
+      var m = /^<h5>([\s\S]*?)<\/h5>([\s\S]*)$/.exec(p2); if (!m) { out += p2; return; }
+      if (first && !out.replace(/<[^>]+>/g, '').trim()) { out += '<h4 class="ps-ptitle">' + m[1] + '</h4>' + m[2]; first = false; return; } first = false;
+      var key = m[1].replace(/<[^>]+>/g, '').replace(/ · .*$/, '').replace(/[0-9]+/g, '#').slice(0, 40), shut = (ST.shut || {})[key];
+      out += '<details class="ps-ps"' + (shut ? '' : ' open') + ' data-sec="' + esc(key) + '"><summary>' + m[1] + '</summary><div class="ps-psb">' + m[2] + '</div></details>';
+    });
+    return out;
   }
   function issuesHtml(pc) { var is = C.validate(pc), cl = C.cutLine(pc); var all = is.map(function (i) { return i.msg; }).concat(cl.warn); return all.length ? '<div class="ps-warn">' + all.map(function (m) { return '<p>' + esc(m) + '</p>'; }).join('') + '</div>' : ''; }
   function piecePanel(pc) {
     var bb = C.bbox(pc), cl = C.cutLine(pc).pts, cb = [Math.min.apply(0, cl.map(function (q2) { return q2[0]; })), Math.min.apply(0, cl.map(function (q2) { return q2[1]; })), Math.max.apply(0, cl.map(function (q2) { return q2[0]; })), Math.max.apply(0, cl.map(function (q2) { return q2[1]; }))];
     var segs = []; for (var i = 0; i < C.segCount(pc); i++) segs.push([i, 'Edge ' + (i + 1) + ' (' + F(C.segLen(pc, i)) + ')']);
-    return '<h5>Piece</h5>' + issuesHtml(pc)
+    return '<h5>Piece</h5>' + issuesHtml(pc) + '<h5>Information</h5>'
       + row('Name', '<input data-k="name" value="' + esc(pc.name) + '">') + row('Category', selOpt('cat', pc.cat, [['', '—'], ['body', 'Body'], ['sleeve', 'Sleeve'], ['collar', 'Collar'], ['cuff', 'Cuff'], ['facing', 'Facing'], ['pocket', 'Pocket'], ['waistband', 'Waistband'], ['yoke', 'Yoke'], ['lining', 'Lining'], ['interlining', 'Interfacing'], ['trim', 'Trim'], ['other', 'Other']]))
       + row('Size', '<input data-k="size" value="' + esc(pc.size) + '">') + row('Cut quantity', plain('qty', pc.qty, 1, 'pcs', ' min="1"')) + row('Cut as a mirrored pair', '<input type="checkbox" data-k="pair"' + (pc.pair ? ' checked' : '') + '>', 'chk')
       + row('Fabric', selOpt('fabric', fabOf(pc.fabric) ? pc.fabric : '', [['', P.fabrics.length ? 'None' : 'Add a fabric in the Fabric tab']].concat(P.fabrics.map(function (x) { return [x.id, x.name]; })))) + row('Cut on the fold', selOpt('fold', pc.fold, [[-1, 'Not on fold']].concat(segs)))
       + row('In 3D', selOpt('pos3d', pc.pos3d || 'auto', C.POS3D.map(function (o) { return o[0] === 'auto' ? ['auto', 'Automatic (' + (C.POS3D.filter(function (x) { return x[0] === C.pos3d(Object.assign({}, pc, { pos3d: 'auto' })); })[0] || ['', '?'])[1] + ')'] : o; })))
       + row('Notes', '<textarea data-k="notes" rows="2">' + esc(pc.notes) + '</textarea>', 'wide')
+      + '<h5>Fabric and grain</h5>' + row('Grain direction', plain('grainang', pc.grain ? +(Math.atan2(-(pc.grain.b[1] - pc.grain.a[1]), pc.grain.b[0] - pc.grain.a[0]) * 180 / Math.PI).toFixed(1) : 90, 'any', '°')) + row('Grainline arrows', selOpt('graindir', pc.grainDir === 'one' ? 'one' : 'two', [['two', 'Both ends'], ['one', 'One way (nap, pile, print)']]))
+      + row('Shrinkage, length', plain('shrinkL', pc.shrinkL || 0, 'any', '%')) + row('Shrinkage, width', plain('shrinkW', pc.shrinkW || 0, 'any', '%')) + '<p class="ps-n">Shrinkage enlarges the piece on export (DXF, SVG, PDF) so it comes back to size after washing. Leave 0 if the fabric is pre-shrunk.</p>'
       + '<h5>Measurements</h5><dl class="ps-kv"><dt>Seamline width × height</dt><dd>' + F(bb[2] - bb[0]) + ' × ' + F(bb[3] - bb[1]) + '</dd><dt>Cutting size</dt><dd>' + F(cb[2] - cb[0]) + ' × ' + F(cb[3] - cb[1]) + '</dd><dt>Seamline length</dt><dd>' + F(C.perimeter(pc)) + '</dd><dt>Area, net</dt><dd>' + (P.unit === 'in' ? (C.area(pc) / 6.4516).toFixed(1) + ' sq in' : (C.area(pc)).toFixed(1) + ' cm²') + '</dd><dt>Points · edges</dt><dd>' + pc.nodes.length + ' · ' + C.segCount(pc) + '</dd></dl>'
-      + '<h5>Seam allowance</h5>' + row('Seams', num('sadef', U(pc.sa.def), C.UNITS[P.unit].step, ' min="0"')) + row('Hems', num('sahem', U(pc.sa.hem), C.UNITS[P.unit].step, ' min="0"'))
+      + '<h5>Seam allowance</h5><div class="ps-bs">' + (pc.sa.def > 0 || pc.sa.hem > 0 ? btn('sanone', 'Remove seam allowance') : btn('saadd', 'Add seam allowance', 'pri')) + '</div>' + row('Seams', num('sadef', U(pc.sa.def), C.UNITS[P.unit].step, ' min="0"')) + row('Hems', num('sahem', U(pc.sa.hem), C.UNITS[P.unit].step, ' min="0"'))
       + row('Hem edges', '<span class="ps-chips">' + segs.map(function (s) { return '<label><input type="checkbox" data-hem="' + s[0] + '"' + (pc.hems.indexOf(s[0]) >= 0 ? ' checked' : '') + '>' + (s[0] + 1) + '</label>'; }).join('') + '</span>', 'wide')
       + row('Show seamline', '<input type="checkbox" data-k="showSeam"' + (V().seam ? ' checked' : '') + '>', 'chk') + row('Show cutting line', '<input type="checkbox" data-k="showCut"' + (V().sa ? ' checked' : '') + '>', 'chk')
       + '<p class="ps-n">Click an edge with the Seam allowance tool to give it its own width or corner. Fold edges always have none.</p>'
@@ -656,7 +704,7 @@
         var v2 = conv(TF[ST.trim.k], f2, val); if (ST.trim.k === 'graphic' && (f2 === 'w' || f2 === 'h') && r.ratio && v2 > 0) { if (f2 === 'w') r.h = v2 * r.ratio; else r.w = v2 / r.ratio; }
         r[f2] = v2; if (ST.trim.k === 'tstitch' && ['spi', 'tex', 'rows', 'gap', 'off', 'colour'].indexOf(f2) >= 0) r.preset = '';
         if (ST.trim.k === 'button') ST.lastBtn = { size: r.size, holes: r.holes, mat: r.mat, colour: r.colour, name: r.name }; if (ST.trim.k === 'hole') ST.lastHole = { len: r.len, ang: r.ang, type: r.type, colour: r.colour }; }); }
-    if (/^fb_/.test(k)) { var fb = fabOf(ST.fab); if (!fb) return; var f3k = k.slice(3); return act('Edit fabric', function () { fb[f3k] = conv(FF.concat(FP), f3k, val); }); }
+    if (/^fb_/.test(k)) { var fb = fabOf(ST.fab); if (!fb) return; var f3k = k.slice(3); return act('Edit fabric', function () { fb[f3k] = conv(FF.concat(FP, FI, FA), f3k, val); }); }
     if (/^ps_/.test(k)) { var pz = P.presets.tstitch.filter(function (x) { return x.id === ST.psel; })[0]; if (!pz) return; var f4 = k.slice(3); return act('Edit preset', function () { pz[f4] = conv(TF.tstitch.concat([['name', 'Name', 'text']]), f4, val); }); }
     if (k === 'pname') return act('Rename project', function () { P.name = val || 'Untitled pattern'; });
     if (['rot', 'scx', 'scy', 'gap', 'pvx', 'pvy', 'ease', 'ndx', 'ndy', 'sbend', 'sdist', 'sparts', 'sfrom', 'efw', 'nrotv', 'nscv'].indexOf(k) >= 0) { if (k === 'rot') ST.rotV = +val; if (k === 'scx') ST.scx = +val; if (k === 'scy') ST.scy = +val; if (k === 'gap') ST.gap = CM(val); if (k === 'pvx' || k === 'pvy') { ST.pv = ST.pv || [0, 0]; ST.pv[k === 'pvx' ? 0 : 1] = CM(val); } if (k === 'ease') { ST.ease = CM(val); props(); } return; }
@@ -683,6 +731,9 @@
       if (k === 'pos3d') { p.pos3d = val; } else if (k === 'name') { p.name = val; p.auto = false; } else if (k === 'qty') p.qty = Math.max(1, Math.round(+val || 1)); else if (k === 'fold') { p.fold = +val; if (p.fold >= 0) delete p.sa.edges[p.fold]; }
       else if (k === 'sadef') p.sa.def = Math.max(0, CM(val)); else if (k === 'sahem') p.sa.hem = Math.max(0, CM(val));
       else if (k === 'px' || k === 'py') { var bb = C.bbox(p); if (k === 'px') p.x = CM(val) - bb[0]; else p.y = CM(val) - bb[1]; }
+      else if (k === 'shrinkL' || k === 'shrinkW') p[k] = Math.max(-20, Math.min(30, +val || 0));
+      else if (k === 'graindir') p.grainDir = val === 'one' ? 'one' : '';
+      else if (k === 'grainang') { var bb2 = C.bbox(p), g = p.grain || { a: [(bb2[0] + bb2[2]) / 2, bb2[3] - (bb2[3] - bb2[1]) * .2], b: [(bb2[0] + bb2[2]) / 2, bb2[1] + (bb2[3] - bb2[1]) * .2] }, mid = [(g.a[0] + g.b[0]) / 2, (g.a[1] + g.b[1]) / 2], L = C.dist(g.a, g.b) / 2 || 5, an = (+val || 0) * Math.PI / 180; p.grain = { a: [mid[0] - Math.cos(an) * L, mid[1] + Math.sin(an) * L], b: [mid[0] + Math.cos(an) * L, mid[1] - Math.sin(an) * L] }; }
       else if (['cat', 'size', 'fabric', 'notes', 'pair'].indexOf(k) >= 0) p[k] = val; });
   }
   function pivotOf(pcs) { var b = [1e9, 1e9, -1e9, -1e9]; pcs.forEach(function (pc) { var bb = C.bbox(pc); b[0] = Math.min(b[0], bb[0] + pc.x); b[1] = Math.min(b[1], bb[1] + pc.y); b[2] = Math.max(b[2], bb[2] + pc.x); b[3] = Math.max(b[3], bb[3] + pc.y); }); var p = ST.pivot || 'c'; return p === 'xy' && ST.pv ? ST.pv : p === 'tl' ? [b[0], b[1]] : p === 'tr' ? [b[2], b[1]] : p === 'bl' ? [b[0], b[3]] : p === 'br' ? [b[2], b[3]] : [(b[0] + b[2]) / 2, (b[1] + b[3]) / 2]; }
@@ -696,6 +747,12 @@
     if (a.indexOf('tab:') === 0) { ST.tab = a.slice(4); var hr0 = document.getElementById('pm-hider'); if (pb.classList.contains('nor') && hr0) hr0.click(); var sec = sideEl.querySelector('.ps-pane'); objects(); if (sec) sec.scrollTop = 0; return; }
     var swc = P.sewing.filter(function (x) { return x.id === ST.seam; })[0], trc = trimOf(ST.trim), fbc = fabOf(ST.fab);
     switch (a) {
+      case 'dxfdlg': if (window.FCDXF) FCDXF.dialog('edit'); return;
+      case 'dxfgrade': if (window.FCDXF) FCDXF.dialog('edit', 'graded'); return;
+      case 'gaddsz': { var inp = q('#ps-gadd'), nz = inp && inp.value.trim(); if (!nz) return toast('Type the new size first.', 1); var gg = gsets(); if (gg.list.indexOf(nz) >= 0) return toast('That size is already in the list.', 1); return act('Add size', function () { var L = gg.g.list; L.push(nz); if (!gg.g.base) gg.g.base = nz; }); }
+      case 'saadd': case 'sanone': case 'saall': { var tg = a === 'saall' ? P.pieces.filter(function (p) { return !p.hidden && !p.locked; }) : pcs.filter(function (p) { return !p.locked; }); if (!tg.length) return toast(a === 'saall' ? 'There are no unlocked pieces.' : 'Select a piece first.', 1); var sv = P.settings.sa != null ? P.settings.sa : 1, hv = P.settings.hem != null ? P.settings.hem : 2.5;
+        act(a === 'sanone' ? 'Remove seam allowance' : 'Add seam allowance', function () { tg.forEach(function (p) { if (a === 'sanone') { p.sa.def = 0; p.sa.hem = 0; p.sa.edges = {}; } else { p.sa.def = sv; p.sa.hem = hv; } }); V().sa = true; });
+        return toast(a === 'sanone' ? 'Seam allowance removed.' : 'Seam allowance added: ' + F(sv) + ' on seams, ' + F(hv) + ' on hems. Change the widths under Seam allowance, or per edge with the Seam allowance tool.'); }
       case 'selall': ST.sel = P.pieces.filter(function (p) { return !p.hidden; }).map(function (p) { return p.id; }); return refresh();
       case 'selnone': ST.sel = []; ST.node = ST.seg = ST.notch = ST.it = ST.seam = ST.trim = ST.fab = ST.psel = null; return refresh();
       case 'sewcheck': { ST.tab = 'sewing'; var bad = P.sewing.filter(function (x) { return !C.seamLens(P, x).ok; }); refresh(); return toast(P.sewing.length ? (bad.length ? bad.length + ' of ' + P.sewing.length + ' seams differ from their planned ease. They are marked in the Sewing tab.' : 'All ' + P.sewing.length + ' seams match their planned ease.') : 'Nothing is sewn yet.', bad.length > 0); }
@@ -712,6 +769,8 @@
       case 'gfxrep': ST.gfxAt = { replace: trc.id }; return q('#ps-gfx').click();
       case 'gfxratio': if (!trc.ratio) return; return act('Graphic proportions', function () { trc.h = trc.w * trc.ratio; });
       case 'fabnew': return act('New fabric', function () { var f = { id: C.uid('fb'), name: 'Fabric ' + (P.fabrics.length + 1), type: 'Woven', comp: '', gsm: 150, width: 145, thick: .3, colour: '#d8d2c4', shrinkL: 0, shrinkW: 0, sw: 0, sl: 0, sb: 1.5, stiff: 50, fric: .5, src: 'Entered by you' }; P.fabrics.push(f); ST.fab = f.id; ST.tab = 'fabric'; ST.seam = ST.trim = ST.psel = null; });
+      case 'fabtex': if (!fbc) return; q('#ps-texf').click(); return;
+      case 'fabtexx': if (!fbc) return; return act('Remove texture', function () { delete fbc.tex; });
       case 'fabassign': { var fid = ST.fab || (P.fabrics[0] && P.fabrics[0].id); if (!fid) { ST.tab = 'fabric'; refresh(); return toast('Add a fabric first: choose one from the library or make a new one.', 1); } if (!pcs.length) return toast('Select pieces first (Shift-click for more), then give them the fabric.', 1); return act('Give fabric', function () { pcs.forEach(function (p) { p.fabric = fid; }); toast(fabOf(fid).name + ' given to ' + pcs.length + ' piece' + (pcs.length > 1 ? 's' : '') + '.'); }); }
       case 'fabdup': return act('Duplicate fabric', function () { var f = C.clone(fbc); f.id = C.uid('fb'); f.name += ' copy'; P.fabrics.push(f); ST.fab = f.id; });
       case 'fabdel': return act('Delete fabric', function () { P.fabrics = P.fabrics.filter(function (x) { return x !== fbc; }); P.pieces.forEach(function (p) { if (p.fabric === fbc.id) p.fabric = ''; }); ST.fab = null; });
@@ -875,7 +934,7 @@
     ST.node = { pc: pc.id, idx: [i] }; ST.seg = null; ST.sel = [pc.id]; refresh();
     ctxMenu(e.clientX, e.clientY, 'Point ' + (i + 1) + ' · ' + pc.name, [
       ['Move to (exact position)…', function () { askNums('Move point to', [{ k: 'x', l: 'X', v: nd.x + pc.x }, { k: 'y', l: 'Y', v: nd.y + pc.y }], function (v) { act('Move point', function () { nd.x = v.x - pc.x; nd.y = v.y - pc.y; }); }); }],
-      ['Move by…', function () { askNums('Move point by', [{ k: 'dx', l: 'Across (X)', v: 0 }, { k: 'dy', l: 'Down (Y)', v: 0 }, { k: 'd', l: 'or a distance', v: 0 }, { k: 'a', l: 'at an angle', v: 0, u: 'deg' }], function (v) { var dx = v.dx, dy = v.dy; if (v.d) { dx = Math.cos(v.a * Math.PI / 180) * v.d; dy = -Math.sin(v.a * Math.PI / 180) * v.d; } act('Move point', function () { C.moveNodes(pc, [i], dx, dy); }); }, 'Angle 0° is to the right, 90° is up. A distance overrides X and Y.'); }],
+      ['Move by a distance…', function () { askNums('Move point', [{ k: 'd', l: 'Distance', v: 0 }, { k: 'a', l: 'Direction (0° right, 90° up)', v: 0, u: 'deg' }, { k: 'dx', l: 'or across (X)', v: 0 }, { k: 'dy', l: 'and down (Y)', v: 0 }], function (v) { var dx = v.dx, dy = v.dy; if (v.d) { dx = Math.cos(v.a * Math.PI / 180) * v.d; dy = -Math.sin(v.a * Math.PI / 180) * v.d; } act('Move point', function () { C.moveNodes(pc, [i], dx, dy); }); }, 'Angle 0° is to the right, 90° is up. A distance overrides X and Y.'); }],
       '-',
       [nd.smooth ? 'Make a corner point' : 'Make a smooth (curve) point', function () { act('Point type', function () { nd.smooth = !nd.smooth; if (nd.smooth) C.smooth(pc, [(i - 1 + n) % n, i], 1, 180); else { nd.h1 = nd.h2 = null; } }); }],
       ['Straighten both edges', function () { act('Straighten', function () { C.toLine(pc, (i - 1 + n) % n); C.toLine(pc, i); }); }],
@@ -933,14 +992,43 @@
       '-', ['Select all', function () { doAct('selall'); }, 'Ctrl A'], ['Fit all pieces', fit, '0'], [(V().grid ? 'Hide' : 'Show') + ' grid', function () { act('View', function () { V().grid = !V().grid; }); }], ['Snap ' + (V().snap ? 'off' : 'on'), function () { act('View', function () { V().snap = !V().snap; }); }]
     ]);
   }
+  function itMenu(e, o) {
+    var it = o.it, pc = o.pc, line = it.kind === 'line', two = line && it.pts.length === 2, setP = function (pu, st) { return function () { act('Internal line', function () { it.purpose = pu; it.style = st; }); }; };
+    var segPts = function (pts) { var out = [], L = 0; for (var k = 1; k < pts.length; k++) L += C.dist(pts[k - 1], pts[k]); return L; };
+    ctxMenu(e.clientX, e.clientY, 'Internal ' + it.kind + (line ? ' · ' + F(segPts(it.pts)) : ''), [
+      line ? ['Edit points (drag the squares)', function () { setTool('edit'); ST.it = it.id; refresh(); }] : null,
+      two ? ['Set the length…', function () { askNums('Line length', [{ k: 'L', l: 'Length', v: C.dist(it.pts[0], it.pts[1]) }, { k: 'from', l: 'Keep fixed', v: 'start', opts: [['start', 'The start point'], ['end', 'The end point'], ['mid', 'The middle']] }], function (v) { if (!(v.L > 0)) return toast('Enter a length above zero.', 1); act('Line length', function () { var a = it.pts[0], b = it.pts[1], L0 = C.dist(a, b) || 1, u = [(b[0] - a[0]) / L0, (b[1] - a[1]) / L0]; if (v.from === 'start') it.pts[1] = [a[0] + u[0] * v.L, a[1] + u[1] * v.L]; else if (v.from === 'end') it.pts[0] = [b[0] - u[0] * v.L, b[1] - u[1] * v.L]; else { var m = [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2]; it.pts = [[m[0] - u[0] * v.L / 2, m[1] - u[1] * v.L / 2], [m[0] + u[0] * v.L / 2, m[1] + u[1] * v.L / 2]]; } }); }); }] : null,
+      line ? ['Offset copy…', function () { askNums('Offset copy', [{ k: 'd', l: 'Distance', v: 1 }, { k: 'n', l: 'How many copies', v: 1, u: 'raw' }], function (v) { var n = Math.max(1, Math.min(20, Math.round(v.n || 1))), pts = it.pts, a = pts[0], b = pts[pts.length - 1], L0 = C.dist(a, b) || 1, nv = [-(b[1] - a[1]) / L0, (b[0] - a[0]) / L0]; act('Offset copy', function () { for (var k = 1; k <= n; k++) { var c2 = C.clone(it); c2.id = C.uid('in'); c2.pts = pts.map(function (q2) { return [q2[0] + nv[0] * v.d * k, q2[1] + nv[1] * v.d * k]; }); pc.internals.push(c2); } }); }, 'A positive distance goes to the left of the line direction; use a negative distance for the other side.'); }] : null,
+      ['Duplicate', function () { act('Duplicate internal', function () { var c2 = C.clone(it); c2.id = C.uid('in'); c2.pts = it.pts.map(function (q2) { return [q2[0] + 1, q2[1] + 1]; }); if (c2.c) c2.c = [c2.c[0] + 1, c2.c[1] + 1]; pc.internals.push(c2); ST.it = c2.id; }); }],
+      line ? ['Reverse direction', function () { act('Reverse line', function () { it.pts.reverse(); }); }] : null,
+      line ? ['Extend to the outline', function () { var r = extendToOutline(pc, it.pts); if (!r) return toast('The line does not reach the outline when extended.', 1); act('Extend line', function () { it.pts = r; }); }] : null,
+      two ? ['Cut the piece along this line', function () { cutAlong(pc, it); }] : null,
+      it.kind !== 'line' && it.kind !== 'point' ? ['Trace to a new piece', function () { traceIt(pc, it); }] : null,
+      '-', ['Make it a fold line', setP('fold', 'dashed')], ['Make it a stitch line', setP('stitch', 'dashed')], ['Make it a guide line', setP('guide', 'solid')], ['Make it a placement mark', setP('placement', 'solid')], [it.style === 'dashed' ? 'Solid line' : 'Dashed line', function () { act('Line style', function () { it.style = it.style === 'dashed' ? 'solid' : 'dashed'; }); }],
+      '-', ['Delete', function () { act('Delete internal', function () { pc.internals = pc.internals.filter(function (x) { return x !== it; }); ST.it = null; }); }, 'Del']
+    ].filter(Boolean));
+  }
+  function segHit(a, b, c, d) { var r = [b[0] - a[0], b[1] - a[1]], s2 = [d[0] - c[0], d[1] - c[1]], den = r[0] * s2[1] - r[1] * s2[0]; if (Math.abs(den) < 1e-9) return null; var t = ((c[0] - a[0]) * s2[1] - (c[1] - a[1]) * s2[0]) / den, u = ((c[0] - a[0]) * r[1] - (c[1] - a[1]) * r[0]) / den; return u >= 0 && u <= 1 ? { t: t, p: [a[0] + r[0] * t, a[1] + r[1] * t] } : null; }
+  function extendToOutline(pc, pts) {
+    var a = pts[0], b = pts[pts.length - 1], poly = C.flat(pc, .1).pts, best0 = null, best1 = null;
+    for (var k = 0; k < poly.length; k++) { var h0 = segHit(a, b, poly[k], poly[(k + 1) % poly.length]); if (!h0) continue; if (h0.t <= 0 && (!best0 || h0.t > best0.t)) best0 = h0; if (h0.t >= 1 && (!best1 || h0.t < best1.t)) best1 = h0; }
+    if (!best0 && !best1) return null; var out = pts.slice(); if (best0) out[0] = best0.p; if (best1) out[out.length - 1] = best1.p; return out;
+  }
+  function cutAlong(pc, it) {
+    var ends = extendToOutline(pc, it.pts); if (!ends) return toast('Extend the line so it crosses the outline first.', 1);
+    var p0 = ends[0], p1 = ends[ends.length - 1], ne0 = nearestEdge(L2W(pc, p0), pc, null, 3), ne1 = nearestEdge(L2W(pc, p1), pc, null, 3); if (!ne0 || !ne1) return toast('The line has to reach the outline at both ends.', 1);
+    ST.cut = [{ pc: pc.id, seg: ne0.seg, t: ne0.t, p: ne0.p }, { pc: pc.id, seg: ne1.seg, t: ne1.t, p: ne1.p }]; doCut();
+  }
   function onCtx(e) {
     e.preventDefault(); if (!ON) return; var w = S2W(e), t = e.target, ds = t.dataset || {};
-    if (drag && (drag.k === 'nodes' || drag.k === 'move')) { var d = drag; drag = null; ST.live = null; var hh = H.mark(); H.swap(JSON.parse(d.mark)); refresh(); void hh;
-      return askNums(d.k === 'move' ? 'Move pieces by' : 'Move by', [{ k: 'dx', l: 'Across (X)', v: 0 }, { k: 'dy', l: 'Down (Y)', v: 0 }], function (v) { if (d.k === 'move') act('Move', function () { d.pcs.forEach(function (o) { var pc = pcById(o[0].id); pc.x += v.dx; pc.y += v.dy; }); }); else { var pc = pcById(d.pc.id), idx = d.idx || ST.node.idx; act('Move point', function () { C.moveNodes(pc, idx, v.dx, v.dy); }); } }); }
+    if (drag && (drag.k === 'nodes' || drag.k === 'move')) { var d = drag, mv0 = moveVec(d); drag = null; ST.live = null; H.swap(JSON.parse(d.mark)); refresh();
+      var L0 = mv0 ? Math.hypot(mv0.v[0], mv0.v[1]) : 0, A0 = mv0 && L0 > 1e-4 ? +(Math.atan2(-mv0.v[1], mv0.v[0]) * 180 / Math.PI).toFixed(1) : 0;
+      return askNums('Moving distance', [{ k: 'd', l: 'Distance moved', v: L0 }, { k: 'a', l: 'Direction (0° right, 90° up)', v: A0, u: 'deg' }], function (v) { var a = v.a * Math.PI / 180, dx = Math.cos(a) * v.d, dy = -Math.sin(a) * v.d; if (d.k === 'move') act('Move', function () { d.pcs.forEach(function (o) { var pc = pcById(o[0].id); pc.x += dx; pc.y += dy; }); }); else { var pc = pcById(d.pc.id), idx = mv0 ? mv0.idx : (d.idx || ST.node.idx); act('Move point', function () { C.moveNodes(pc, idx, dx, dy); }); } }, 'The move keeps the direction you dragged in. Change the direction to send it elsewhere.'); }
     if (ST.draft && ST.tool === 'poly' && ST.draft.pts.length) return polyNext();
     if (t.closest && t.closest('[data-tr]')) { var tp = t.closest('[data-tr]').getAttribute('data-tr').split('|'); ST.trim = { k: tp[0], id: tp[1] }; ST.tab = 'trims'; refresh(); return ctxMenu(e.clientX, e.clientY, trimLabel(tp[0], trimOf(ST.trim)), [['Delete', function () { doAct('trdel'); }, 'Del']]); }
     if (ds.sw) { ST.seam = ds.sw; ST.tab = 'sewing'; refresh(); return ctxMenu(e.clientX, e.clientY, 'Seam', [['Flip (untwist)', function () { doAct('swflip'); }], ['Delete seam', function () { doAct('swdel'); }]]); }
     if (ds.n != null && ds.pc) return pointMenu(e, pcById(ds.pc), +ds.n);
+    if (ds.it || ds.itp != null) { if (ds.it) { ST.it = ds.it; ST.sel = [ds.ipc]; ST.node = ST.seg = ST.notch = null; refresh(); } var oi = itOf(ST.it); if (oi) return itMenu(e, oi); }
     var ne = nearestEdge(w); if (ne) return segMenu(e, ne.pc, ne.seg, ne);
     var pc = pieceAt(w); if (pc) return pieceMenu(e, pc, w);
     canvasMenu(e, w);
@@ -993,6 +1081,24 @@
      the full checks (crossing outlines, overlapping allowances) run when the mouse is released. */
   var drag = null, space = false, pend = null, praf = 0;
   function startDrag(o) { drag = o; ST.live = null; }
+  /* exact move distance: after a drag (or right-click while dragging) type the distance and direction */
+  var MV = null;
+  function moveVec(d) {
+    if (d.k === 'move' && d.pcs.length) { var o = d.pcs[0]; return { kind: 'move', ids: d.pcs.map(function (x) { return x[0].id; }), v: [o[0].x - o[1], o[0].y - o[2]] }; }
+    if (d.k === 'nodes') { var pc = d.pc, idx = (d.idx || (ST.node && ST.node.idx) || [d.lead]).slice(); return { kind: 'nodes', pc: pc.id, idx: idx, v: [pc.nodes[d.lead].x - d.start[d.lead][0], pc.nodes[d.lead].y - d.start[d.lead][1]] }; }
+    return null;
+  }
+  function mvShow(m, at) {
+    var box = q('#ps-mvbox'); if (!m || Math.hypot(m.v[0], m.v[1]) < 1e-4) { box.hidden = true; MV = null; return; }
+    MV = m; box.querySelector('[data-mv=d]').value = U(Math.hypot(m.v[0], m.v[1])); box.querySelector('[data-mv=a]').value = +(Math.atan2(-m.v[1], m.v[0]) * 180 / Math.PI).toFixed(1); box.querySelector('.ps-mvu').textContent = P.unit;
+    var r = svg.getBoundingClientRect(), x = at ? at[0] : r.width / 2, y = at ? at[1] : r.height / 2; box.hidden = false; box.style.left = Math.max(8, Math.min(r.width - box.offsetWidth - 8, x + 16)) + 'px'; box.style.top = Math.max(8, Math.min(r.height - box.offsetHeight - 8, y + 16)) + 'px';
+  }
+  function mvApply(dist, ang) {
+    var m = MV; if (!m) return; var a = ang * Math.PI / 180, want = [Math.cos(a) * dist, -Math.sin(a) * dist], dx = want[0] - m.v[0], dy = want[1] - m.v[1];
+    if (m.kind === 'move') act('Move', function () { m.ids.forEach(function (id) { var pc = pcById(id); if (pc) { pc.x += dx; pc.y += dy; } }); });
+    else { var pc = pcById(m.pc); if (!pc) return; act('Move point', function () { C.moveNodes(pc, m.idx, dx, dy); }); }
+    m.v = want; q('#ps-mvbox').hidden = true; MV = null; toast('Moved exactly ' + F(Math.abs(dist)) + ' at ' + (+ang).toFixed(1) + '°.');
+  }
   function down(e) {
     if (e.button === 1 || space || ST.tool === 'pan') { drag = { k: 'pan', x: e.clientX, y: e.clientY, tx: ST.tx, ty: ST.ty }; svg.setPointerCapture(e.pointerId); e.preventDefault(); return; }
     if (e.button !== 0) return;
@@ -1001,6 +1107,8 @@
     if (ds.xf && ST.tool === 'select') { if (e.detail === 2 && ds.xf === 'pv') { ST.pvW = null; drawPts(); return; } if (xfStart(e, ds.xf, w)) return; }
     switch (ST.tool) {
       case 'select': {
+        if (ds.itp != null && ST.it) { var io0 = itOf(ST.it); if (io0 && !io0.pc.locked) { startDrag({ k: 'itp', o: io0, n: +ds.itp, mark: H.mark() }); } return; }
+        if (ds.it) { ST.it = ds.it; ST.sel = [ds.ipc]; ST.node = ST.seg = ST.notch = ST.seam = ST.trim = ST.fab = ST.psel = ST.dart = null; var io1 = itOf(ds.it); if (io1 && !io1.pc.locked) startDrag({ k: 'itmove', o: io1, a: w, start: C.clone(io1.it), mark: H.mark() }); refresh(); return; }
         if (ds.nt) { ST.notch = ds.nt; ST.node = ST.seg = ST.it = null; refresh(); return; }
         var trEl = t.closest && t.closest('[data-tr]'); if (trEl) { var tp2 = trEl.getAttribute('data-tr').split('|'); ST.trim = { k: tp2[0], id: tp2[1] }; ST.seam = ST.node = ST.seg = ST.notch = ST.it = null; var tro = trimOf(ST.trim); if (tro && (tp2[0] === 'button' || tp2[0] === 'hole' || tp2[0] === 'graphic') && !pcById(tro.pc).locked) { startDrag({ k: 'trim', r: tro, pc: pcById(tro.pc), a: w, at0: tro.at.slice(), mark: H.mark() }); } ST.tab = 'trims'; refresh(); return; }
         var dtEl = t.closest && t.closest('[data-dart]'); if (dtEl) { var dq = dtEl.getAttribute('data-dart').split('|'); ST.dart = { pc: dq[0], id: dq[1] }; ST.sel = [dq[0]]; ST.seam = ST.trim = ST.fab = ST.psel = ST.node = ST.seg = ST.notch = ST.it = null; refresh(); return; }
@@ -1013,6 +1121,8 @@
         startDrag({ k: 'move', a: w, mark: H.mark(), corner: [b0[0], b0[1]], pcs: mv.map(function (p) { return [p, p.x, p.y]; }) }); refresh(); return;
       }
       case 'edit': { ST.seam = ST.trim = ST.fab = ST.psel = null;
+        if (ds.itp != null && ST.it) { var io2 = itOf(ST.it); if (io2 && !io2.pc.locked) startDrag({ k: 'itp', o: io2, n: +ds.itp, mark: H.mark() }); return; }
+        if (ds.it) { ST.it = ds.it; ST.sel = [ds.ipc]; ST.node = ST.seg = ST.notch = null; var io3 = itOf(ds.it); if (io3 && !io3.pc.locked) startDrag({ k: 'itmove', o: io3, a: w, start: C.clone(io3.it), mark: H.mark() }); refresh(); return; }
         if (ds.h && pc) { if (pc.locked) return toast('Unlock the piece first.', 1); startDrag({ k: 'handle', pc: pc, n: +ds.n, h: ds.h, mark: H.mark() }); return; }
         if (ds.n != null && pc) { var n = +ds.n; if (e.shiftKey && ST.node && ST.node.pc === pc.id) { var j = ST.node.idx.indexOf(n); if (j >= 0) ST.node.idx.splice(j, 1); else ST.node.idx.push(n); } else if (!ST.node || ST.node.pc !== pc.id || ST.node.idx.indexOf(n) < 0) ST.node = { pc: pc.id, idx: [n] };
           ST.seg = null; ST.sel = [pc.id]; if (pc.locked) { refresh(); return; } var lead = pc.nodes[n]; startDrag({ k: 'nodes', pc: pc, a: w, lead: n, off: [w[0] - (lead.x + pc.x), w[1] - (lead.y + pc.y)], mark: H.mark(), start: pc.nodes.map(function (nd) { return [nd.x, nd.y]; }) }); refresh(); return; }
@@ -1037,7 +1147,7 @@
       case 'dart': {
         if ((ST.o && ST.o.dtype) === 'fisheye') { var fp = pieceAt(w); if (!fp) return toast('Click inside a piece where the dart centre goes.', 1); var c0 = W2L(fp, sn.p); return askNums('Fisheye dart', [{ k: 'w', l: 'Width at the widest', v: 2.5 }, { k: 'u', l: 'Length above the centre', v: 12 }, { k: 'd', l: 'Length below the centre', v: 14 }], function (v) { if (!(v.w > 0 && v.u > 0 && v.d > 0)) return toast('Enter sizes above zero.', 1); act('Add fisheye dart', function () { var it = { id: C.uid('in'), kind: 'dart', pts: [[c0[0], c0[1] - v.u], [c0[0] + v.w / 2, c0[1]], [c0[0], c0[1] + v.d], [c0[0] - v.w / 2, c0[1]]], purpose: 'dart', style: 'solid', label: 'Fisheye dart ' + F(v.w), visible: true }; fp.internals.push(it); ST.it = it.id; ST.sel = [fp.id]; }); }, 'A double-pointed dart inside the piece, as on a dress or jacket waist. It is sewn, not cut.'); }
         if (!ST.dpick) { var de = nearestEdge(w); if (!de) return toast('Click on the edge where the dart opens.', 1); if (de.pc.locked) return toast('Unlock the piece first.', 1); ST.dpick = { pc: de.pc.id, seg: de.seg, s: de.s, p: de.p }; opts(); drawOver(); status('Now click the dart point (apex) inside the piece.'); return; }
-        var dk = ST.dpick, dpc = pcById(dk.pc); ST.dpick = null; opts(); var apex = W2L(dpc, sn.p);
+        var dk = ST.dpick, dpc = pcById(dk.pc), apex = W2L(dpc, sn.p); if (!inside(C.flat(dpc, .3).pts, apex)) return toast('The dart point has to be inside the piece. Click inside it, or press Esc to start again.', 1); if (C.dist(dk.p, apex) < .5) return toast('Click further inside the piece for the dart point.', 1); ST.dpick = null; opts();
         return askNums('Dart', [{ k: 'w', l: 'Width at the edge (intake)', v: (ST.o && ST.o.dw) || 2.5 }], function (v) { ST.o.dw = v.w; var res = C.addDart(dpc, dk.seg, dk.s, apex, v.w); if (res.err) return toast(res.err, 1); reshape(dpc, res, 'Add dart', function () { dpc.darts.push(res.dart); ST.dart = { pc: dpc.id, id: res.dart.id }; ST.sel = [dpc.id]; }); var I = C.dartInfo(dpc, res.dart); if (I) toast('Dart added: ' + F(I.width) + ' wide, ' + F(I.length) + ' long, legs ' + F(I.leg1) + ' and ' + F(I.leg2) + '.'); }, 'Length ' + F(C.dist(dk.p, apex)) + ' from the edge to the apex.');
       }
       case 'dartmv': {
@@ -1078,7 +1188,6 @@
         d.pts.push({ p: sn.p, h: null }); startDrag({ k: 'polyh', e: d.pts[d.pts.length - 1] }); opts(); drawOver(); status(); return;
       }
       case 'rect': case 'ellipse': startDrag({ k: 'box', a: sn.p, kind: ST.tool }); ST.draft = { kind: ST.tool, box: [sn.p[0], sn.p[1], sn.p[0], sn.p[1]] }; return;
-      case 'spiral': create('mkspiral', sn.p); return;
       case 'iline': case 'irect': case 'iell': {
         var host = ST.draft && ST.draft.host ? pcById(ST.draft.host) : pieceAt(w); if (!host) return toast('Start inside a piece.', 1);
         if (ST.tool === 'iline') { var dd = ST.draft || (ST.draft = { kind: 'iline', host: host.id, pts: [] }); dd.pts.push({ p: sn.p }); drawOver(); return; }
@@ -1093,11 +1202,12 @@
   function move(e) {
     var w = S2W(e), sx = W2S(w); ST.cursor = w;
     if (!drag) {
-      var wants = ['poly', 'rect', 'ellipse', 'measure', 'iline', 'irect', 'iell', 'grain', 'spiral', 'cut', 'notch', 'addpt'].indexOf(ST.tool) >= 0, hov = wants ? snap(w, null, e) : null;
+      var wants = ['poly', 'rect', 'ellipse', 'measure', 'iline', 'irect', 'iell', 'grain', 'spiral', 'cut', 'notch', 'addpt', 'dart'].indexOf(ST.tool) >= 0, hov = wants ? snap(w, null, e) : null;
       if (hov && (ST.tool === 'cut' || ST.tool === 'notch' || ST.tool === 'addpt')) { var ne = nearestEdge(w); hov = ne ? { p: L2W(ne.pc, ne.p), k: F(ne.s) + ' of ' + F(ne.L) } : null; }
       ST.hover = hov && hov.k ? hov : null;
       if (ST.draft && ST.draft.pts) ST.draft.cur = e.shiftKey && ST.draft.pts.length ? constrain(ST.draft.pts[ST.draft.pts.length - 1].p, hov ? hov.p : w) : hov ? hov.p : w;
       if (ST.tool === 'measure' && ST.meas.length) { ST.mcur = e.shiftKey ? constrain(ST.meas[ST.meas.length - 1], hov ? hov.p : w) : hov ? hov.p : w; var lm = ST.meas[ST.meas.length - 1]; ST.live = { at: sx, t: F(C.dist(lm, ST.mcur)) + ' · ' + (Math.atan2(-(ST.mcur[1] - lm[1]), ST.mcur[0] - lm[0]) * 180 / Math.PI).toFixed(1) + '°' }; }
+      else if (ST.tool === 'dart' && ST.dpick) { var dpc1 = pcById(ST.dpick.pc), dw1 = L2W(dpc1, ST.dpick.p), cur1 = hov ? hov.p : w; ST.live = { at: sx, t: 'Dart length ' + F(C.dist(dw1, cur1)) + ' · width ' + F((ST.o && ST.o.dw) || 2.5) }; }
       else if (ST.tool === 'poly' && ST.draft && ST.draft.pts.length) { var lp = ST.draft.pts[ST.draft.pts.length - 1].p, c = ST.draft.cur; ST.live = { at: sx, t: F(C.dist(lp, c)) + ' · ' + (Math.atan2(-(c[1] - lp[1]), c[0] - lp[0]) * 180 / Math.PI).toFixed(1) + '°' }; }
       else ST.live = null;
       ST.hovE = (ST.tool === 'edit' || PICK.indexOf(ST.tool) >= 0) && !(ST.draft) ? nearestEdge(w) : null; if (ST.hovE) ST.hovE.at = sx;
@@ -1111,6 +1221,8 @@
       if (e.shiftKey) { if (Math.abs(dx) > Math.abs(dy)) dy = 0; else dx = 0; }
       d.pcs.forEach(function (o) { o[0].x = o[1] + dx; o[0].y = o[2] + dy; placeG(o[0]); }); d.moved = true; ST.live = { at: sx, t: 'Δ ' + F(dx) + ', ' + F(dy) }; drawPts(); status(); return; }
     if (d.k === 'xf') { xfMove(e, w, sx); return; }
+    if (d.k === 'itp') { var snI = snap(w, null, e), lq2 = W2L(d.o.pc, snI.p); if (e.shiftKey && d.o.it.pts.length > 1) { var nb = d.o.it.pts[d.n === 0 ? 1 : d.n - 1]; lq2 = W2L(d.o.pc, constrain(L2W(d.o.pc, nb), snI.p)); } d.o.it.pts[d.n] = lq2; d.moved = true; ST.hover = snI.k ? snI : null; ST.live = { at: sx, t: d.o.it.kind === 'line' ? 'Line ' + F(C.measure.poly(d.o.it.pts)) : 'X ' + F(lq2[0]) + '  Y ' + F(lq2[1]) }; drawPiece(d.o.pc, true); drawPts(); return; }
+    if (d.k === 'itmove') { var ddx2 = w[0] - d.a[0], ddy2 = w[1] - d.a[1]; if (e.shiftKey) { if (Math.abs(ddx2) > Math.abs(ddy2)) ddy2 = 0; else ddx2 = 0; } d.o.it.pts = d.start.pts.map(function (q2) { return [q2[0] + ddx2, q2[1] + ddy2]; }); if (d.start.c) d.o.it.c = [d.start.c[0] + ddx2, d.start.c[1] + ddy2]; d.moved = Math.hypot(ddx2, ddy2) * ST.z > 2; ST.live = { at: sx, t: 'Δ ' + F(ddx2) + ', ' + F(ddy2) }; drawPiece(d.o.pc, true); drawPts(); return; }
     if (d.k === 'trim') { var sn4 = snap(w, null, e), lq = W2L(d.pc, sn4.p), dd0 = [lq[0] - (d.a[0] - d.pc.x), lq[1] - (d.a[1] - d.pc.y)]; d.r.at = [d.at0[0] + dd0[0], d.at0[1] + dd0[1]]; d.moved = true; ST.live = { at: sx, t: 'X ' + F(d.r.at[0]) + '  Y ' + F(d.r.at[1]) }; drawPiece(d.pc, true); drawPts(); return; }
     if (d.k === 'nodes') { var pc = d.pc, idx = d.idx || ST.node.idx, want = [w[0] - d.off[0], w[1] - d.off[1]], sn = snap(want, { pc: pc, idx: idx }, e), tgt = sn.p, st0 = d.start[d.lead];
       if (e.shiftKey) tgt = constrain(L2W(pc, st0), tgt);
@@ -1138,11 +1250,13 @@
       refresh(); return; }
     if (d.k === 'xf') { if (d.moved) H.commit(d.h === 'rot' ? 'Rotate ' + (d.ang || 0).toFixed(1) + '°' : d.h === 'pv' ? 'Pivot' : 'Scale', d.mark); refresh(); return; }
     if (d.k === 'trim') { if (d.moved) H.commit('Move ' + ST.trim.k, d.mark); refresh(); return; }
+    if (d.k === 'itp' || d.k === 'itmove') { if (d.moved) H.commit(d.k === 'itp' ? 'Move internal point' : 'Move internal line', d.mark); else { H.swap(JSON.parse(d.mark)); } ST.hover = null; refresh(); return; }
+    if ((d.k === 'move' || d.k === 'nodes') && d.moved) { var r0 = svg.getBoundingClientRect(); mvShow(moveVec(d), [e.clientX - r0.left, e.clientY - r0.top]); }
     if ((d.k === 'move' || d.k === 'nodes' || d.k === 'handle' || d.k === 'curv') && d.moved) { var label = { move: 'Move', nodes: 'Move point', handle: 'Reshape curve', curv: 'Edit curvature' }[d.k]; H.commit(label, d.mark); ST.hover = null; if (d.pc) { var iss = geo(d.pc).issues; if (iss.some(function (x) { return x.k === 'cross'; })) toast(iss.filter(function (x) { return x.k === 'cross'; })[0].msg + ' Undo with Ctrl Z.', 1); } refresh(); return; }
     if (d.k === 'move' || d.k === 'nodes' || d.k === 'handle' || d.k === 'curv') { drawPts(); return; }
     if (d.k === 'box') { var b = ST.draft.box, w = Math.abs(b[2] - b[0]), h = Math.abs(b[3] - b[1]), x0 = Math.min(b[0], b[2]), y0 = Math.min(b[1], b[3]); ST.draft = null; ST.hover = null; if (w * ST.z < 4 || h * ST.z < 4) { drawOver(); drawPts(); if (d.kind === 'rect' || d.kind === 'ellipse') sizeAt(d.kind, b.slice(0, 2)); return; }
       if (d.kind === 'rect') act('Draw rectangle', function () { var r = C.rect(x0, y0, w, h, { name: 'Piece ' + (P.pieces.length + 1) }); P.pieces.push(r); ST.sel = [r.id]; });
-      else if (d.kind === 'ellipse') act('Draw ellipse', function () { var r = C.ellipse(x0 + w / 2, y0 + h / 2, w / 2, h / 2, 0, { name: 'Piece ' + (P.pieces.length + 1) }); r.sa.def = Math.min(1, Math.min(w, h) / 6); P.pieces.push(r); ST.sel = [r.id]; });
+      else if (d.kind === 'ellipse') act('Draw ellipse', function () { var r = C.ellipse(x0 + w / 2, y0 + h / 2, w / 2, h / 2, 0, { name: 'Piece ' + (P.pieces.length + 1) }); r.sa.def = Math.min(r.sa.def, Math.min(w, h) / 6); P.pieces.push(r); ST.sel = [r.id]; });
       else { var host = pcById(d.host), a = W2L(host, [x0, y0]); act('Add internal shape', function () { var it = d.kind === 'irect' ? { id: C.uid('in'), kind: 'rect', pts: [a, [a[0] + w, a[1]], [a[0] + w, a[1] + h], [a[0], a[1] + h]], purpose: 'placement', style: 'solid', label: '', visible: true } : { id: C.uid('in'), kind: 'ellipse', c: [a[0] + w / 2, a[1] + h / 2], r: [w / 2, h / 2], pts: [[a[0] + w / 2, a[1] + h / 2]], purpose: 'placement', style: 'solid', label: '', visible: true }; host.internals.push(it); ST.it = it.id; ST.sel = [host.id]; }); }
       return; }
     if (d.k === 'grain') { var ln = ST.draft.line; ST.draft = null; if (C.dist(ln[0], ln[1]) * ST.z < 6) { drawOver(); drawPts(); return; } act('Set grainline', function () { d.pc.grain = { a: W2L(d.pc, ln[0]), b: W2L(d.pc, ln[1]) }; ST.sel = [d.pc.id]; }); return; }
@@ -1172,7 +1286,7 @@
       var N = pc.nodes, i1 = N.indexOf(n1), i2 = N.indexOf(n2), A = [], B = [], i;
       for (i = i1; ; i = (i + 1) % N.length) { A.push(C.clone(N[i])); if (i === i2) break; } for (i = i2; ; i = (i + 1) % N.length) { B.push(C.clone(N[i])); if (i === i1) break; }
       A[A.length - 1].h2 = null; A[0].h1 = null; B[B.length - 1].h2 = null; B[0].h1 = null;
-      var pa = C.newPiece(A, { name: pc.name + ' A', qty: pc.qty, size: pc.size, fabric: pc.fabric }), pb = C.newPiece(B, { name: pc.name + ' B', qty: pc.qty, size: pc.size, fabric: pc.fabric });
+      var pa = C.newPiece(A, { name: pc.name + ' A', qty: pc.qty, size: pc.size, fabric: pc.fabric, sa: pc.sa.def, hemSA: pc.sa.hem }), pb = C.newPiece(B, { name: pc.name + ' B', qty: pc.qty, size: pc.size, fabric: pc.fabric, sa: pc.sa.def, hemSA: pc.sa.hem });
       [pa, pb].forEach(function (p) { p.x = pc.x; p.y = pc.y; p.sa.def = pc.sa.def; p.sa.hem = pc.sa.hem; p.grain = C.clone(pc.grain); });
       pb.x += 2; var at = P.pieces.indexOf(pc); P.pieces.splice(at, 1, pa, pb); ST.sel = [pa.id, pb.id];
     });
@@ -1193,6 +1307,7 @@
     if (!ON) return; var tg = e.target, typing = /INPUT|TEXTAREA|SELECT/.test(tg.tagName) || tg.isContentEditable; var mod = e.ctrlKey || e.metaKey;
     if (q('#ps-modal').hidden === false && e.key !== 'Escape') return;
     if (!typing || mod) e.stopPropagation();
+    if (!typing && e.key === 'Enter' && !q('#ps-mvbox').hidden) { e.preventDefault(); var mi = q('#ps-mvbox [data-mv=d]'); mi.focus(); mi.select(); return; }
     if (mod && e.key.toLowerCase() === 'h') { e.preventDefault(); historyModal(); return; }
     if (mod && e.key.toLowerCase() === 'z') { e.preventDefault(); doAct(e.shiftKey ? 'redo' : 'undo'); return; }
     if (mod && e.key.toLowerCase() === 'y') { e.preventDefault(); doAct('redo'); return; }
@@ -1209,6 +1324,7 @@
     if (e.key === 'Enter') { if (ST.tool === 'poly' && ST.draft) finishPoly(); else if (ST.tool === 'iline' && ST.draft) finishILine(); return; }
     if (e.key === 'Backspace' && ST.draft && ST.draft.pts) { ST.draft.pts.pop(); if (!ST.draft.pts.length) ST.draft = null; drawOver(); status(); e.preventDefault(); return; }
     if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); if (ST.node) doAct('ndel'); else if (ST.notch) doAct('ntdel'); else if (ST.it) doAct('itdel'); else if (ST.sel.length) doAct('del'); return; }
+    if (/^Arrow/.test(e.key) && ST.tab === 'grade' && ST.gsz && ST.node) { e.preventDefault(); var gst = (ST.garrow || (P.unit === 'in' ? 2.54 / 8 : .5)) * (e.shiftKey ? 4 : 1); if (gradeNudge(e.key === 'ArrowLeft' ? -gst : e.key === 'ArrowRight' ? gst : 0, e.key === 'ArrowUp' ? -gst : e.key === 'ArrowDown' ? gst : 0)) return; }
     if (/^Arrow/.test(e.key)) { e.preventDefault(); var st = nudgeStep(e.shiftKey), dx = e.key === 'ArrowLeft' ? -st : e.key === 'ArrowRight' ? st : 0, dy = e.key === 'ArrowUp' ? -st : e.key === 'ArrowDown' ? st : 0; if (ST.node) act('Nudge points', function () { C.moveNodes(pcById(ST.node.pc), ST.node.idx, dx, dy); }); else if (ST.sel.length) act('Nudge', function () { selected().forEach(function (p) { if (!p.locked) { p.x += dx; p.y += dy; } }); }); return; }
     if (e.key === '0') return fit(); if (e.key === '1') return doAct('z100'); if (e.key === '=') return zoomAt(ST.z * 1.25); if (e.key === '-') return zoomAt(ST.z / 1.25);
     var t = TOOLS.filter(function (x) { return x.k === e.key.toLowerCase(); })[0]; if (t) setTool(t.id);
@@ -1237,10 +1353,10 @@
 
   function settingsModal() {
     var st = P.settings;
-    modal('<h4>Project settings</h4>' + '<label class="ps-r"><span>Default seam allowance</span>' + num('set_sa', U(P.settings.sa != null ? P.settings.sa : 1)) + '</label><label class="ps-r"><span>Default hem allowance</span>' + num('set_hem', U(P.settings.hem != null ? P.settings.hem : 2.5)) + '</label><label class="ps-r"><span>Notch depth</span>' + num('set_nd', U(st.notchDepth || .6)) + '</label>'
+    modal('<h4>Project settings</h4>' + '<label class="ps-r"><span>Default seam allowance</span>' + num('set_sa', U(P.settings.sa != null ? P.settings.sa : 1)) + '</label><label class="ps-r"><span>Default hem allowance</span>' + num('set_hem', U(P.settings.hem != null ? P.settings.hem : 2.5)) + '</label><label class="ps-r chk"><span>Add seam allowance to new pieces automatically</span><input type="checkbox" data-k="set_auto"' + (st.autoSA ? ' checked' : '') + '></label><label class="ps-r"><span>Notch depth</span>' + num('set_nd', U(st.notchDepth || .6)) + '</label>'
       + '<label class="ps-r"><span>Marker efficiency for the BOM</span>' + plain('set_eff', st.efficiency, 1, '%') + '</label><label class="ps-r"><span>Extra on piping, binding and tape</span>' + plain('set_waste', st.waste, 1, '%') + '</label><label class="ps-r"><span>Thread per cm of topstitch</span>' + plain('set_thr', st.threadRatio, .1, '× seam') + '</label>'
-      + '<p class="ps-n">Units follow the cm / mm / in switch at the top of Garment Studio. The default allowances apply to new pieces.</p><div class="ps-bs"><button type="button" class="ps-b pri" id="ps-setok">Save</button><button type="button" class="ps-b" data-a="mclose">Cancel</button></div>', function () {
-        q('#ps-setok').onclick = function () { var g = function (k) { return q('#ps-modal [data-k=' + k + ']').value; }; act('Settings', function () { st.sa = CM(g('set_sa')); st.hem = CM(g('set_hem')); st.notchDepth = CM(g('set_nd')); st.efficiency = Math.max(30, Math.min(100, +g('set_eff') || 80)); st.waste = Math.max(0, +g('set_waste') || 0); st.threadRatio = Math.max(1, +g('set_thr') || 2.6); }); closeModal(); };
+      + '<p class="ps-n">Units follow the cm / mm / in switch at the top of Garment Studio. The default allowances are used by “Add seam allowance”, and on new pieces only when the box above is ticked.</p><div class="ps-bs"><button type="button" class="ps-b pri" id="ps-setok">Save</button><button type="button" class="ps-b" data-a="mclose">Cancel</button></div>', function () {
+        q('#ps-setok').onclick = function () { var g = function (k) { return q('#ps-modal [data-k=' + k + ']').value; }; var auto = q('#ps-modal [data-k=set_auto]').checked; act('Settings', function () { st.autoSA = auto; st.sa = CM(g('set_sa')); st.hem = CM(g('set_hem')); st.notchDepth = CM(g('set_nd')); st.efficiency = Math.max(30, Math.min(100, +g('set_eff') || 80)); st.waste = Math.max(0, +g('set_waste') || 0); st.threadRatio = Math.max(1, +g('set_thr') || 2.6); }); closeModal(); };
       });
   }
   function loadGraphic(file) {
@@ -1335,7 +1451,7 @@
   function nestHTML() {
     if (!V().nest) return ''; var G = gsets(); if (G.list.length < 2) return ''; var h = '';
     gradedPieces().forEach(function (pc) { h += '<g class="ps-nest" transform="translate(' + f3(pc.x || 0) + ' ' + f3(pc.y || 0) + ')">';
-      G.list.forEach(function (sz, i) { if (sz === G.base || (ST.gshow && ST.gshow !== sz)) return; var gp = C.gradedPiece(pc, sz, G.base); h += '<path d="' + polyD(C.flat(gp, .3).pts) + '" style="stroke:' + SZC[i % SZC.length] + '"/>'; });
+      G.list.forEach(function (sz, i) { if (sz === G.base || (ST.gshow && ST.gshow !== sz) || (ST.ghide && ST.ghide[sz])) return; var gp = C.gradedPiece(pc, sz, G.base); h += '<path d="' + polyD(C.flat(gp, .3).pts) + '" style="stroke:' + SZC[i % SZC.length] + '"/>'; });
       h += '</g>'; });
     return h;
   }
@@ -1349,12 +1465,16 @@
     h += '<div class="ps-grp">Sizes</div>' + row('Sizes, smallest first', '<input type="text" data-gr="list" value="' + esc(G.list.join(', ')) + '" placeholder="XS, S, M, L, XL">')
       + row('Base size (the pieces you edit)', '<select data-gr="base">' + G.list.map(function (sz) { return '<option' + (sz === G.base ? ' selected' : '') + '>' + esc(sz) + '</option>'; }).join('') + '</select>');
     if (UI && UI.sizes) h += '<div class="ps-objb">' + btn('gradechart', 'Use the size chart sizes') + btn('autograde', 'Auto-grade from the draft', 'pri', 'Drafts the garment in every size and sets each point\'s move from it') + '</div>';
-    if (G.list.length > 1) h += '<div class="ps-gleg">' + G.list.map(function (sz, i) { return '<button type="button" data-gs="' + esc(sz) + '" class="' + (sz === G.base ? 'b' : '') + (ST.gshow === sz ? ' on' : '') + '" title="' + (sz === G.base ? 'Base size' : 'Show only this size in the nest') + '"><i style="background:' + (sz === G.base ? '#1c1f22' : SZC[i % SZC.length]) + '"></i>' + esc(sz) + '</button>'; }).join('') + '</div>'
+    if (G.list.length) h += '<div class="ps-szl" role="table" aria-label="Sizes"><div class="ps-szh" role="row"><span></span><span>Size</span><span title="Show this size in the nest">Show</span><span>Base</span><span></span></div>' + G.list.map(function (sz, i) { var base = sz === G.base; return '<div class="ps-szr' + (base ? ' b' : '') + '" role="row"><i style="background:' + (base ? '#e8e6e1' : SZC[i % SZC.length]) + '"></i><span>' + esc(sz) + '</span><label><input type="checkbox" data-gvis="' + esc(sz) + '"' + (base ? ' checked disabled' : ST.ghide && ST.ghide[sz] ? '' : ' checked') + ' aria-label="Show ' + esc(sz) + '"></label><label><input type="radio" name="ps-gbase" data-gbase="' + esc(sz) + '"' + (base ? ' checked' : '') + ' aria-label="Base size ' + esc(sz) + '"></label><button type="button" class="ps-szx" data-gdel="' + esc(sz) + '" title="Remove size ' + esc(sz) + '" aria-label="Remove size ' + esc(sz) + '"' + (base ? ' disabled' : '') + '>×</button></div>'; }).join('') + '</div><div class="ps-tr"><input type="text" id="ps-gadd" placeholder="New size, e.g. 3XL" maxlength="12" aria-label="New size">' + btn('gaddsz', '+ Add size') + '</div>'
       + row('Show the graded nest', '<input type="checkbox" data-gr="nest"' + (V().nest ? ' checked' : '') + '>', 'chk');
     h += '<div class="ps-grp">Grade rule</div>';
     if (G.list.length < 2) h += '<p class="ps-n">Enter at least two sizes to grade.</p>';
-    else if (nd && ST.node.idx.length) { var id0 = nd.nodes[ST.node.idx[0]].id, r = C.ruleOf(nd, id0, G.list, G.base);
-      h += '<p class="ps-n">' + ST.node.idx.length + ' point' + (ST.node.idx.length > 1 ? 's' : '') + ' on ' + esc(nd.name) + '. Each size step moves ' + (ST.node.idx.length > 1 ? 'them' : 'it') + ' by:</p><div class="ps-tr">' + plain('gr_dx', U(r[0]), 'any', P.unit + ' across') + plain('gr_dy', U(r[1]), 'any', P.unit + ' down') + '</div><div class="ps-objb">' + btn('gradeapply', 'Apply rule') + btn('gradeclear', 'Clear rule') + '</div><p class="ps-n">Positive across is to the right, positive down is towards the hem. Points without a rule follow their neighbours.</p>'; }
+    else if (nd && ST.node.idx.length) { var i0 = ST.node.idx[0], id0 = nd.nodes[i0].id, r = C.ruleOf(nd, id0, G.list, G.base), dl = {}; G.list.forEach(function (sz) { dl[sz] = C.gradeDeltas(nd, sz)[i0] || [0, 0]; }); var own = function (sz) { return !!(nd.grade && nd.grade[sz] && nd.grade[sz][id0]); };
+      h += '<p class="ps-n"><b>' + ST.node.idx.length + ' point' + (ST.node.idx.length > 1 ? 's' : '') + ' on ' + esc(nd.name) + '.</b> Distance from the base size, per size' + (ST.node.idx.length > 1 ? ' (all selected points move alike)' : '') + ':</p>'
+        + '<div class="ps-gtab ps-gpt"><table><tr><th>Size</th><th>Across (X)</th><th>Down (Y)</th></tr>' + G.list.map(function (sz, i) { var base = sz === G.base; return '<tr class="' + (base ? 'b' : '') + (ST.gsz === sz ? ' on' : '') + '" data-gsel="' + esc(sz) + '"><td><i style="background:' + (base ? '#e8e6e1' : SZC[i % SZC.length]) + '"></i>' + esc(sz) + (base ? ' (base)' : own(sz) ? '' : ' <small>follows</small>') + '</td><td><input type="number" step="any" data-gx="' + esc(sz) + '" value="' + U(dl[sz][0]) + '"' + (base ? ' disabled' : '') + ' aria-label="' + esc(sz) + ' across"></td><td><input type="number" step="any" data-gy="' + esc(sz) + '" value="' + U(dl[sz][1]) + '"' + (base ? ' disabled' : '') + ' aria-label="' + esc(sz) + ' down"></td></tr>'; }).join('') + '</table></div>'
+        + '<p class="ps-n">Steps between sizes:</p><div class="ps-gtab ps-gpt"><table><tr><th>Step</th><th>Across (X)</th><th>Down (Y)</th></tr><tr class="' + (ST.gsz === '*' ? 'on' : '') + '" data-gsel="*"><td><b>Every step</b></td><td><input type="number" step="any" data-gall="x" value="' + U(r[0]) + '" aria-label="Every step across"></td><td><input type="number" step="any" data-gall="y" value="' + U(r[1]) + '" aria-label="Every step down"></td></tr>'
+        + G.list.slice(1).map(function (sz, k) { var a2 = dl[G.list[k]], b2 = dl[sz]; return '<tr><td>' + esc(G.list[k]) + ' → ' + esc(sz) + '</td><td><input type="number" step="any" data-gox="' + (k + 1) + '" value="' + U(b2[0] - a2[0]) + '" aria-label="Step ' + esc(G.list[k]) + ' to ' + esc(sz) + ' across"></td><td><input type="number" step="any" data-goy="' + (k + 1) + '" value="' + U(b2[1] - a2[1]) + '" aria-label="Step ' + esc(G.list[k]) + ' to ' + esc(sz) + ' down"></td></tr>'; }).join('') + '</table></div>'
+        + row('Arrow key step', num('gstep', U(ST.garrow || (P.unit === 'in' ? 2.54 / 8 : .5)), C.UNITS[P.unit].step, ' min="0"')) + '<p class="ps-n">Click a row above, then use the arrow keys to move that size (or every step) by this amount. Positive across is to the right, positive down is towards the hem. Points you do not grade follow their neighbours.</p><div class="ps-objb">' + btn('gradeclear', 'Clear grading on these points') + '</div>'; }
     else h += '<p class="ps-n">Select points with Edit points (A), then set how far they move per size. Or use Auto-grade for pieces brought in from the draft.</p>';
     var pc = sel || gradedPieces()[0];
     if (pc && G.list.length > 1) { var n = C.segCount(pc);
@@ -1363,8 +1483,27 @@
       if (!C.isGraded(pc)) h += '<p class="ps-n">This piece has no grade yet, so every size is the same.</p>'; }
     if (P.sewing.length && G.list.length > 1) { var bad = []; G.list.forEach(function (sz) { var tmp = { pieces: P.pieces.map(function (p) { return C.gradedPiece(p, sz, G.base); }), sewing: P.sewing }; P.sewing.forEach(function (sw) { try { if (!C.seamLens(tmp, sw).ok) bad.push(sz); } catch (e) {} }); });
       var ub = bad.filter(function (x, i) { return bad.indexOf(x) === i; }); h += '<p class="ps-check ' + (ub.length ? 'no' : 'ok') + '">' + (ub.length ? 'Seams that do not match in size' + (ub.length > 1 ? 's ' : ' ') + esc(ub.join(', ')) + '. Grade both sides of those seams alike.' : 'Every sewn seam matches in every size.') + '</p>'; }
-    h += '<div class="ps-objb">' + btn('gradecsv', 'Measurements (CSV)') + btn('sizechart', 'Size chart (CSV)') + '</div><div class="ps-objb">' + btn('xgradesvg', 'Nest SVG') + btn('xgradedxf', 'Nest DXF') + btn('xgradepdf', 'Every size, PDF') + '</div>';
+    h += '<div class="ps-objb">' + btn('gradecsv', 'Measurements (CSV)') + btn('sizechart', 'Size chart (CSV)') + '</div><div class="ps-objb">' + btn('xgradesvg', 'Nest SVG') + btn('dxfgrade', 'Graded DXF (ASTM)') + btn('xgradepdf', 'Every size, PDF') + '</div>';
     return h;
+  }
+  function gradeSel() { var pc = ST.node && pcById(ST.node.pc); if (!pc) return null; return { pc: pc, ids: ST.node.idx.map(function (i) { return pc.nodes[i].id; }), i0: ST.node.idx[0] }; }
+  function gradeSet(o, sz, dx, dy) { o.pc.grade = o.pc.grade || {}; var G = o.pc.grade[sz] = o.pc.grade[sz] || {}; o.ids.forEach(function (id) { G[id] = [+dx.toFixed(4), +dy.toFixed(4)]; }); }
+  function gradeEdit(t) {
+    var G = gsets(), o = gradeSel();
+    if (t.dataset.gvis != null) { ST.ghide = ST.ghide || {}; ST.ghide[t.dataset.gvis] = !t.checked; V().nest = true; draw(); return; }
+    if (t.dataset.gbase != null) return gradeInput({ dataset: { gr: 'base' }, value: t.dataset.gbase });
+    if (t.dataset.k === 'gstep') { ST.garrow = Math.max(0, CM(t.value)); return; }
+    if (!o) return;
+    var cur = {}; G.list.forEach(function (sz) { cur[sz] = C.gradeDeltas(o.pc, sz)[o.i0] || [0, 0]; });
+    if (t.dataset.gx != null || t.dataset.gy != null) { var sz = t.dataset.gx != null ? t.dataset.gx : t.dataset.gy, v = CM(t.value || 0); return act('Grade ' + sz, function () { var c2 = cur[sz]; gradeSet(o, sz, t.dataset.gx != null ? v : c2[0], t.dataset.gy != null ? v : c2[1]); V().nest = true; }); }
+    if (t.dataset.gall != null) { var r = C.ruleOf(o.pc, o.ids[0], G.list, G.base), v2 = CM(t.value || 0); return act('Grade rule', function () { C.setRule(o.pc, o.ids, t.dataset.gall === 'x' ? v2 : r[0], t.dataset.gall === 'y' ? v2 : r[1], G.list, G.base); V().nest = true; }); }
+    if (t.dataset.gox != null || t.dataset.goy != null) { var k = +(t.dataset.gox != null ? t.dataset.gox : t.dataset.goy), ax = t.dataset.gox != null ? 0 : 1, bi = G.list.indexOf(G.base), old = cur[G.list[k]][ax] - cur[G.list[k - 1]][ax], ch = CM(t.value || 0) - old;
+      return act('Grade step', function () { G.list.forEach(function (sz2, j) { var shift = k > bi ? (j >= k ? ch : 0) : (j <= k - 1 ? -ch : 0); if (!shift || sz2 === G.base) return; var c3 = cur[sz2].slice(); c3[ax] += shift; gradeSet(o, sz2, c3[0], c3[1]); }); V().nest = true; }); }
+  }
+  function gradeNudge(dx, dy) {
+    var G = gsets(), o = gradeSel(); if (!o || !ST.gsz || G.list.length < 2) return false;
+    if (ST.gsz === '*') { var r = C.ruleOf(o.pc, o.ids[0], G.list, G.base); act('Grade rule', function () { C.setRule(o.pc, o.ids, r[0] + dx, r[1] + dy, G.list, G.base); V().nest = true; }); return true; }
+    if (ST.gsz === G.base) return false; var c = C.gradeDeltas(o.pc, ST.gsz)[o.i0] || [0, 0]; act('Grade ' + ST.gsz, function () { gradeSet(o, ST.gsz, c[0] + dx, c[1] + dy); V().nest = true; }); return true;
   }
   function gradeInput(t) {
     var k = t.dataset.gr, G = gsets();
@@ -1385,10 +1524,10 @@
     if (!P.pieces.some(function (pc) { return pc.src; })) return toast('Auto-grade works on pieces brought in from the draft. Use File › Bring in the current draft, or set rules by hand.', 1);
     if (P.draft && P.draft.sig && P.draft.sig !== draftSig()) return toast('The draft has changed since these pieces were brought in. Set the Draft back to ' + (P.draft.name || 'that garment') + ', or grade by hand.', 1);
     var szs = UI.sizes(), base = UI.baseSize(), drafts = {}, basePcs;
-    try { basePcs = C.fromDraft(UI.draftAt(base), {}); szs.forEach(function (sz) { try { drafts[sz] = C.fromDraft(UI.draftAt(sz), {}); } catch (e) {} }); } catch (e) { return toast('The draft could not be built in every size.', 1); }
+    try { basePcs = UI.draftAt(base).pieces; szs.forEach(function (sz) { try { drafts[sz] = UI.draftAt(sz).pieces; } catch (e) {} }); } catch (e) { return toast('The draft could not be built in every size.', 1); }
     var done = 0, skip = 0;
     act('Auto-grade', function () { var g = C.gradeSet(P); g.list = szs.filter(function (sz) { return drafts[sz]; }); g.base = base;
-      P.pieces.forEach(function (pc) { if (!pc.src) return; var bp = basePcs.filter(function (x) { return x.src === pc.src; })[0]; if (!bp) return; var per = {}; g.list.forEach(function (sz) { var sp = drafts[sz].filter(function (x) { return x.src === pc.src; })[0]; if (sp) per[sz] = sp; }); if (C.autoGrade(pc, bp, per, 1)) { done++; pc.size = base; } else skip++; });
+      P.pieces.forEach(function (pc) { if (!pc.src) return; var bp = basePcs.filter(function (x) { return x.id === pc.src; })[0]; if (!bp) return; var per = {}; g.list.forEach(function (sz) { var sp = drafts[sz].filter(function (x) { return x.id === pc.src; })[0]; if (sp) per[sz] = sp; }); if (C.autoGradeDraft(pc, bp, per, 1.5)) { done++; pc.size = base; } else skip++; });
       V().nest = true; });
     toast(done ? 'Graded ' + done + ' piece' + (done > 1 ? 's' : '') + ' in ' + C.gradeSet(P).list.length + ' sizes from the draft' + (skip ? '. ' + skip + ' moved or mirrored piece' + (skip > 1 ? 's' : '') + ' need rules by hand.' : '.') : 'No piece matched the draft any more. Set grade rules by hand.', !done);
     ST.tab = 'grade'; objects();
@@ -1432,7 +1571,13 @@
     var lb = q('#ps-lvl'); if (lb) { lb.textContent = beg ? 'Beginner' : 'Pro'; lb.setAttribute('aria-pressed', !beg); lb.title = beg ? 'Beginner: everyday tools only. Click for Pro (all tools, trims, grading and production).' : 'Pro: every tool. Click for Beginner (everyday tools only).'; }
     if (BASIC.indexOf(ST.tool) < 0 && beg) setTool('select'); }
 
-  function exportAs(a) {
+  function withShrink(fn) {
+    if (!P.pieces.some(function (p) { return +p.shrinkL || +p.shrinkW; })) return fn();
+    var keep = P.pieces; P.pieces = keep.map(function (p) { if (!(+p.shrinkL || +p.shrinkW)) return p; var c2 = C.clone(p), b = C.bbox(c2); C.transformPiece(c2, C.M.scale(1 + (+p.shrinkW || 0) / 100, 1 + (+p.shrinkL || 0) / 100, b[0], b[1])); return c2; });
+    try { return fn(); } finally { P.pieces = keep; }
+  }
+  function exportAs(a) { return withShrink(function () { exportAs0(a); }); }
+  function exportAs0(a) {
     var s = scene(); if (!s) return toast('There are no visible pieces to export.', 1); if (!X) return toast('Export is not available on this page.', 1);
     var bad = P.pieces.filter(function (p) { return !p.hidden && C.validate(p).length; }); if (bad.length) toast(bad.length + ' piece' + (bad.length > 1 ? 's have' : ' has') + ' problems (marked !). Exported anyway: check before cutting.', 1);
     if (a === 'xsvg') { dl(fname('svg'), X.svg(s.sc, s.W, s.H, P.unit, { title: P.name }), 'image/svg+xml'); toast('SVG downloaded at true scale.'); }
@@ -1450,6 +1595,9 @@
     var tb = e.target.closest('.ps-tb'); if (tb) return setTool(tb.dataset.t);
     var a = e.target.closest('[data-a]'); if (a) { qa('.ps-dd').forEach(function (x) { x.hidden = true; }); if (a.dataset.a === 'mclose') return closeModal(); if (a.dataset.a === 'mclear') { ST.meas = []; ST.mcur = null; opts(); return drawOver(); } return doAct(a.dataset.a, a); }
     var tb2 = e.target.closest('[data-tab]'); if (tb2) { ST.tab = tb2.dataset.tab; return objects(); }
+    var gsl = e.target.closest('[data-gsel]'); if (gsl && !e.target.matches('input')) { ST.gsz = ST.gsz === gsl.dataset.gsel ? null : gsl.dataset.gsel; objects(); svg.focus({ preventScroll: true }); return; }
+    if (gsl && e.target.matches('input')) ST.gsz = gsl.dataset.gsel;
+    var gdl = e.target.closest('[data-gdel]'); if (gdl) { var dz = gdl.dataset.gdel; return act('Remove size', function () { var g = gsets().g; g.list = g.list.filter(function (x) { return x !== dz; }); P.pieces.forEach(function (pc) { if (pc.grade) delete pc.grade[dz]; }); }); }
     var gs = e.target.closest('[data-gs]'); if (gs) { var gz = gs.dataset.gs; ST.gshow = ST.gshow === gz || gz === gsets().base ? null : gz; V().nest = true; draw(); return objects(); }
     var sl = e.target.closest('[data-swl]'); if (sl) { ST.seam = sl.dataset.swl; ST.trim = ST.fab = ST.psel = ST.node = ST.seg = ST.notch = ST.it = null; return refresh(); }
     var fl = e.target.closest('[data-fab]'); if (fl) { ST.fab = fl.dataset.fab; ST.seam = ST.trim = ST.psel = ST.node = ST.seg = ST.notch = ST.it = null; return refresh(); }
@@ -1475,17 +1623,29 @@
     parts.forEach(function (p) { p.addEventListener('pointerover', function (e) { var b = e.target.closest('[data-tip]'); if (!b) { tipEl.hidden = true; return; } var r = b.getBoundingClientRect(); tipEl.textContent = b.dataset.tip; tipEl.hidden = false; var x = r.right + 8; if (x + 270 > innerWidth) x = Math.max(8, r.left - 278); tipEl.style.left = x + 'px'; tipEl.style.top = Math.min(innerHeight - 90, Math.max(4, r.top)) + 'px'; }); p.addEventListener('pointerout', function (e) { if (e.target.closest('[data-tip]')) tipEl.hidden = true; }); });
     q('#ps-file').addEventListener('change', function () { var f = this.files[0]; this.value = ''; if (!f) return; f.text().then(function (t) { try { var p = C.parse(t); confirmDiscard(function () { load(p); P.lib = null; ST.fileName = f.name; toast('Opened ' + f.name + '. Save it to keep it in this browser.'); }); } catch (err) { toast(err.message || 'Could not read that file.', 1); } }); });
     q('#ps-gfx').addEventListener('change', function () { var f = this.files[0]; this.value = ''; loadGraphic(f); });
+    q('#ps-texf').addEventListener('change', function () { var f = this.files[0], fb = fabOf(ST.fab); this.value = ''; if (!f || !fb) return; var rd = new FileReader(); rd.onload = function () { var im = new Image(); im.onload = function () { var k = Math.min(1, 512 / Math.max(im.width, im.height)), cv = document.createElement('canvas'); cv.width = Math.round(im.width * k); cv.height = Math.round(im.height * k); cv.getContext('2d').drawImage(im, 0, 0, cv.width, cv.height); var url = cv.toDataURL('image/jpeg', .85); act('Fabric texture', function () { fb.tex = url; if (!fb.texScale) fb.texScale = 10; }); toast('Texture added. It shows on every piece in this fabric; set its repeat under Appearance.'); }; im.src = rd.result; }; rd.readAsDataURL(f); });
+    propsEl.addEventListener('toggle', function (e) { var d = e.target; if (!d.dataset || !d.dataset.sec) return; ST.shut = ST.shut || {}; ST.shut[d.dataset.sec] = !d.open; }, true);
     objsEl.addEventListener('change', function (e) { var t = e.target;
       if (t.id === 'ps-libsel') { var f = t.value ? libFabric(t.value) : null; t.value = ''; if (f) act('Add fabric', function () { P.fabrics.push(f); ST.fab = f.id; ST.seam = ST.trim = ST.psel = null; if (selected().length) { selected().forEach(function (p) { if (!fabOf(p.fabric)) p.fabric = f.id; }); } }); return; }
       if (t.dataset.cwc) { var pr = t.dataset.cwc.split('|'); act('Colour', function () { var c = P.colourways.filter(function (x) { return x.id === pr[0]; })[0]; if (c) c.c[pr.slice(1).join('|')] = t.value; }); return; }
       if (t.dataset.cwn) { act('Rename colourway', function () { var c = P.colourways.filter(function (x) { return x.id === t.dataset.cwn; })[0]; if (c) c.name = t.value || c.name; }); return; }
       if (t.dataset.cwsel) { act('Show colourway', function () { P.cw = t.dataset.cwsel; }); return; }
-      if (t.dataset.gr) return gradeInput(t); });
+      if (t.dataset.gr) return gradeInput(t);
+      if (t.dataset.gvis != null || t.dataset.gbase != null || t.dataset.gx != null || t.dataset.gy != null || t.dataset.gall != null || t.dataset.gox != null || t.dataset.goy != null || t.dataset.k === 'gstep') return gradeEdit(t); });
+    objsEl.addEventListener('keydown', function (e) { if (e.key === 'Enter' && e.target.matches('#ps-gadd')) { e.preventDefault(); doAct('gaddsz'); } });
     q('#ps-dxf').addEventListener('change', function () { var f = this.files[0]; this.value = ''; if (!f) return; f.text().then(function (t) { importDXF(t, f.name); }); });
     window.addEventListener('beforeunload', function () { if (ST.dirty) autosave(); });
+    q('#ps-mvbox').addEventListener('submit', function (e) { e.preventDefault(); var b = this; mvApply(CM(b.querySelector('[data-mv=d]').value), +b.querySelector('[data-mv=a]').value || 0); svg.focus({ preventScroll: true }); });
+    q('#ps-mvbox').addEventListener('click', function (e) { if (e.target.closest('[data-mvx]')) { this.hidden = true; MV = null; svg.focus({ preventScroll: true }); } });
+    q('#ps-mvbox').addEventListener('keydown', function (e) { if (e.key === 'Escape') { e.stopPropagation(); this.hidden = true; MV = null; svg.focus({ preventScroll: true }); } e.stopPropagation(); });
+    svg.addEventListener('pointerdown', function () { var b = q('#ps-mvbox'); if (!b.hidden) { b.hidden = true; MV = null; } }, true);
+    q('#ps-disp').addEventListener('click', function (e) { var b = e.target.closest('[data-disp]'), o = e.target.closest('[data-dset]'), pop = q('#ps-dpop');
+      if (b) { if (!pop.hidden && pop.dataset.k === b.dataset.disp) { pop.hidden = true; return; } return dispPop(b.dataset.disp); }
+      if (o) { var k = o.dataset.dset; act('View', function () { var v = V(); if (k.indexOf('r:') === 0) v.render = k.slice(2); else { var on = o.dataset.def === '1' ? v[k] !== false : !!v[k]; v[k] = !on; } }); dispPop(pop.dataset.k); } });
+    document.addEventListener('pointerdown', function (e) { var pop = q('#ps-dpop'); if (pop && !pop.hidden && !e.target.closest('#ps-disp')) pop.hidden = true; }, true);
     // in Edit pieces, Pattern Maker's Export menu exports the edited pieces
-    var XMAP = { 'pm-dl-svg': 'xsvg', 'pm-dl-dxf': 'xdxf', 'pm-dl-pdf': 'xpdft', 'pm-dl-pdf2': 'xpdf', 'pm-dl-png': 'xpng' };
-    document.addEventListener('click', function (e) { if (!ON) return; var b = e.target.closest('[id^=pm-dl-]'); if (!b) return; e.preventDefault(); e.stopImmediatePropagation(); var m = document.getElementById('pm-menu'); if (m) m.hidden = true; var eb = document.getElementById('pm-exp'); if (eb) eb.setAttribute('aria-expanded', 'false'); if (XMAP[b.id]) exportAs(XMAP[b.id]); else toast('This export is made from the draft. Switch to Draft to download it; the edited pieces export as SVG, DXF, PDF and PNG.', 1); }, true);
+    var XMAP = { 'pm-dl-svg': 'xsvg', 'pm-dl-dxf': 'dxfdlg', 'pm-dl-aama': 'dxfdlg', 'pm-dl-gdxf': 'dxfdlg', 'pm-dl-gpdf': 'xgradepdf', 'pm-dl-pdf': 'xpdft', 'pm-dl-pdf2': 'xpdf', 'pm-dl-png': 'xpng' };
+    document.addEventListener('click', function (e) { if (!ON) return; var b = e.target.closest('[id^=pm-dl-]'); if (!b) return; e.preventDefault(); e.stopImmediatePropagation(); var m = document.getElementById('pm-menu'); if (m) m.hidden = true; var eb = document.getElementById('pm-exp'); if (eb) eb.setAttribute('aria-expanded', 'false'); var xm = XMAP[b.id]; if (xm === 'dxfdlg') { if (window.FCDXF) FCDXF.dialog('edit', b.id === 'pm-dl-gdxf' ? 'graded' : null); } else if (xm === 'xgradepdf') gradedExport(xm); else if (xm) exportAs(xm); else toast('The tech pack, cost sheet and marker come from the draft: switch to Draft to download them. Your edited pieces export as SVG, DXF (CAD and ASTM/AAMA), PDF and PNG.', 1); }, true);
     // the units switch of Pattern Maker drives the editor too
     document.addEventListener('click', function (e) { if (e.target.closest('#pm-units [data-u]')) setTimeout(function () { P.unit = unitNow(); if (ON) { opts(); refresh(); } }, 0); });
     // collapsing the left panel in edit mode keeps the tools as an icon rail
@@ -1629,9 +1789,20 @@
     '.ps-gleg{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}.ps-gleg button{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--ln);background:none;color:var(--tx);border-radius:12px;padding:2px 9px 2px 6px;font:12px "DM Sans",sans-serif;cursor:pointer}.ps-gleg button.on{border-color:#e08a5e;background:rgba(224,138,94,.12)}.ps-gleg button.b{font-weight:700}.ps-gleg i{width:9px;height:9px;border-radius:50%;display:inline-block}',
     '.ps-gtab{overflow-x:auto;margin:4px 0}.ps-gtab table{border-collapse:collapse;width:100%;font:12px ui-monospace,Menlo,monospace}.ps-gtab th{font:600 11px "DM Sans",sans-serif;color:var(--mu);text-align:right;padding:3px 5px;border-bottom:1px solid var(--ln)}.ps-gtab td{text-align:right;padding:3px 5px;border-bottom:1px solid rgba(255,255,255,.05)}.ps-gtab th:first-child,.ps-gtab td:first-child{text-align:left}.ps-gtab tr.b td{font-weight:700;color:#e08a5e}.ps-gdet summary{cursor:pointer;font-size:12px;color:var(--mu);margin:4px 0}',
     '.ps-hist{list-style:none;margin:8px 0;padding:0;max-height:52vh;overflow:auto;counter-reset:h}.ps-hist li button{display:block;width:100%;text-align:left;background:none;border:0;border-left:2px solid var(--ln);color:var(--tx);padding:5px 10px;font:13px "DM Sans",sans-serif;cursor:pointer}.ps-hist li button:hover{background:rgba(255,255,255,.05)}.ps-hist li button.on{border-left-color:#e08a5e;font-weight:600}.ps-hist li.rd button{color:var(--dim);font-style:italic}',
-    '.ps-lvl{min-width:64px;font:600 11.5px "DM Sans",sans-serif!important}.ps-lvl[aria-pressed=false]{color:#7fc4a0!important}'
+    '.ps-lvl{min-width:64px;font:600 11.5px "DM Sans",sans-serif!important}.ps-lvl[aria-pressed=false]{color:#7fc4a0!important}',
+    '.ps-ihit{fill:none;stroke:transparent;stroke-width:12;pointer-events:stroke;cursor:pointer}.ps-ihit:hover{stroke:rgba(47,102,144,.25)}.ps-itp{cursor:move}',
+    '.ps-len{fill:#2f6690;font:600 1px "DM Sans",sans-serif;text-anchor:middle;dominant-baseline:middle;paint-order:stroke;stroke:#fff;stroke-width:3px;pointer-events:none}.ps-ang{fill:#a9481f;font:600 1px "DM Sans",sans-serif;paint-order:stroke;stroke:#fff;stroke-width:3px;pointer-events:none}',
+    '.ps-stage{position:relative}.ps-disp{position:absolute;left:30px;top:30px;z-index:6;display:flex;flex-direction:column;gap:3px;background:rgba(31,34,38,.92);border:1px solid #3a3f46;border-radius:7px;padding:3px}.ps-dbtn{width:30px;height:30px;display:grid;place-items:center;border:0;border-radius:5px;background:none;color:#c9ccd0;cursor:pointer}.ps-dbtn:hover{background:#3a3f46;color:#fff}.ps-dbtn svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}',
+    '.ps-dpop{position:absolute;left:40px;min-width:250px;background:#24282c;border:1px solid #3a3f46;border-radius:8px;padding:6px;box-shadow:0 10px 26px rgba(0,0,0,.35);display:grid;gap:1px}.ps-dpop[hidden]{display:none}.ps-dpop b{font:600 12px "DM Sans",sans-serif;color:#e8e6e1;padding:4px 8px 6px;border-bottom:1px solid #3a3f46;margin-bottom:3px}.ps-dopt{display:flex;align-items:center;gap:8px;text-align:left;border:0;background:none;color:#d6d8db;font:12.5px "DM Sans",sans-serif;padding:6px 8px;border-radius:5px;cursor:pointer}.ps-dopt:hover{background:#3a3f46}.ps-dopt i{width:14px;color:#e08a5e;font-style:normal;font-weight:700}.ps-dopt[aria-pressed=false]{color:#9da3aa}',
+    '.ps-mvbox{position:absolute;z-index:7;display:flex;flex-wrap:wrap;align-items:center;gap:6px;background:#24282c;border:1px solid #e08a5e;border-radius:8px;padding:7px 9px;box-shadow:0 10px 26px rgba(0,0,0,.35);font:12.5px "DM Sans",sans-serif;color:#e8e6e1;max-width:360px}.ps-mvbox[hidden]{display:none}.ps-mvbox input{width:74px}.ps-mvbox label{display:flex;align-items:center;gap:4px}.ps-mvbox small{flex-basis:100%;color:#9da3aa;font-size:11px}',
+    '.ps-ptitle{margin:4px 0 8px;font:700 13px "DM Sans",sans-serif;color:var(--tx)}details.ps-ps{border-top:1px solid var(--ln);padding:2px 0}details.ps-ps>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:6px;padding:7px 2px;font:700 10.5px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#e08a5e}details.ps-ps>summary::-webkit-details-marker{display:none}details.ps-ps>summary::before{content:"▸";font-size:10px;color:var(--mu);transition:transform .15s}details.ps-ps[open]>summary::before{transform:rotate(90deg)}.ps-psb{padding:0 0 8px}',
+    '.ps-dtri{fill:rgba(224,138,94,.25);stroke:#e08a5e;stroke-width:1.2;stroke-dasharray:4 3}.ps-dtri.bad{fill:rgba(214,69,47,.2);stroke:#d6452f}',
+    '.ps-szl{display:grid;gap:2px;margin:6px 0 8px}.ps-szh,.ps-szr{display:grid;grid-template-columns:14px 1fr 44px 40px 26px;align-items:center;gap:6px;padding:3px 6px;border-radius:5px}.ps-szh{font-size:10.5px;color:var(--mu)}.ps-szr{background:rgba(255,255,255,.03)}.ps-szr.b{background:rgba(224,138,94,.14)}.ps-szr i,.ps-gpt i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px}.ps-szr label{text-align:center}.ps-szx{border:0;background:none;color:var(--mu);font-size:15px;cursor:pointer}.ps-szx:disabled{opacity:.3}',
+    '.ps-gpt input{width:100%;min-width:0;padding:3px 5px}.ps-gpt tr[data-gsel]{cursor:pointer}.ps-gpt tr.on td{background:rgba(224,138,94,.18)}.ps-gpt small{color:var(--mu);font-size:10px}',
+    '.ps-tex{width:44px;height:44px;object-fit:cover;border-radius:4px;border:1px solid var(--ln);margin-right:6px;vertical-align:middle}',
   ].join('\n');
   document.head.appendChild(css);
 
-  window.PMEdit = window.FCStudio = { open: function () { setEdit(true); }, close: function () { setEdit(false); }, setEdit: setEdit, geo: geo, snap: snap, nearestEdge: nearestEdge, P: function () { return P; }, H: H, act: act, setTool: setTool, ST: ST, fit: fit, importDXF: importDXF, parseDXF: parseDXF, scene: scene, fromDraft: fromDraft };
+  function gradeFromDraft() { setEdit(true); setTimeout(function () { if (!P.pieces.some(function (pc) { return pc.src; })) bringDraft(P.pieces.length ? 'add' : 'replace', true); setTimeout(function () { autoGrade(); ST.tab = 'grade'; V().nest = true; refresh(); var hr0 = document.getElementById('pm-hider'); if (pb.classList.contains('nor') && hr0) hr0.click(); }, 120); }, 80); }
+  window.PMEdit = window.FCStudio = { gradeFromDraft: gradeFromDraft, open: function () { setEdit(true); }, close: function () { setEdit(false); }, setEdit: setEdit, geo: geo, snap: snap, nearestEdge: nearestEdge, P: function () { return P; }, H: H, act: act, setTool: setTool, ST: ST, fit: fit, importDXF: importDXF, parseDXF: parseDXF, scene: scene, fromDraft: fromDraft, toast: toast, modal: modal, closeModal: closeModal, selected: selected, withShrink: withShrink, on: function () { return ON; }, dl: dl, fname: fname };
 })();

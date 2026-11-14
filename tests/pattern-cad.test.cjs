@@ -131,3 +131,16 @@ test('raglan: the shoulder moves from the bodice onto the sleeve cap', () => {
   const b = JSON.parse(JSON.stringify(F)); C.applyReshape(b, res.body); assert.equal(C.validate(b).length, 0); assert.equal(C.validate(res.sleeve).length, 0);
   assert.ok(C.area(b) < C.area(F)); assert.ok(C.area(res.sleeve) > C.area(S) / 2); assert.ok(C.bbox(res.sleeve)[1] < C.bbox(S)[1] - 5); // the neck part rises above the cap
 });
+test('auto-grade from the draft grades every size, even when sizes have different point counts', () => {
+  const g = 'kurta', G = PM.GARMENTS[g], o = Object.assign({}, G.d), sizes = Object.keys(PM.CHARTS.women);
+  const draftAt = sz => PM.build(g, 'women', Object.assign({}, PM.CHARTS.women[sz]), o);
+  const base = draftAt('M'), pcs = C.fromDraft(base, {});
+  pcs.forEach(pc => { const bp = base.pieces.find(p => p.id === pc.src), per = {}; sizes.forEach(sz => { per[sz] = draftAt(sz).pieces.find(p => p.id === pc.src); });
+    assert.ok(C.autoGradeDraft(pc, bp, per, 1.5) > 0, pc.name);
+    sizes.forEach(sz => assert.equal(Object.keys(pc.grade[sz] || {}).length, pc.nodes.length, pc.name + ' ' + sz)); });
+  const front = pcs[0], L = C.gradedPiece(front, 'XL', 'M'), S2 = C.gradedPiece(front, 'XS', 'M');
+  assert.ok(C.area(L) > C.area(front) && C.area(S2) < C.area(front), 'bigger sizes are bigger');
+});
+test('new pieces get no seam allowance unless asked', () => {
+  const keep = C.defaults; C.defaults = { sa: 0, hem: 0 }; const r = C.rect(0, 0, 10, 10); assert.equal(r.sa.def, 0); assert.equal(r.sa.hem, 0); C.defaults = keep;
+});
