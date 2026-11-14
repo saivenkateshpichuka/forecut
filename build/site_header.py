@@ -29,7 +29,7 @@ MENU = [
     ], None),
     ('Tools', 'tools', [
         ('Most used', [('pattern-maker.html', 'Pattern Maker', 'Western and Indian patterns, editable, every size'),
-                       ('3d-drape-studio.html', '3D Drape Studio', 'Coming soon'),
+                       ('3d-drape-studio.html', '3D Drape Studio', 'Sew and drape your pattern in 3D'),
                        ('textile-processing-studio.html', 'Textile Processing Studio', 'Dye recipes, blends and process costing'),
                        ('tech-pack-builder.html', 'Tech Pack Builder', 'Factory-ready tech packs'),
                        ('trend-to-style.html', 'Trend to Style Brief', 'Mood, collection and accessory boards')]),
