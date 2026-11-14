@@ -128,3 +128,10 @@ body.fx-locked [data-fx-gate],body.fx-locked .fx-actions,body.fx-locked .fx-jump
 .fx-head,.fx-frame{max-width:none}
 .fx-head{padding-left:clamp(16px,2.2vw,40px);padding-right:clamp(16px,2.2vw,40px)}
 .fx-frame{padding-left:clamp(16px,2.2vw,40px);padding-right:clamp(16px,2.2vw,40px)}
+
+/* tool tabs: a clear segmented switch so the active section always stands out */
+body.fx .bd-modes,body.fx .pal-tabs{display:inline-flex;flex-wrap:wrap;gap:4px;padding:5px;margin:4px 0 18px;background:#ece5d8;border:1px solid var(--fx-line2);border-radius:12px;border-bottom:1px solid var(--fx-line2)}
+body.fx .bd-modes button,body.fx .pal-tabs button{border:0!important;border-radius:9px!important;padding:10px 20px!important;min-height:42px;font:600 14.5px 'DM Sans',sans-serif!important;color:#4a4038!important;background:transparent!important;box-shadow:none;cursor:pointer;transition:background .15s,color .15s}
+body.fx .bd-modes button:hover,body.fx .pal-tabs button:hover{background:#fffdf8!important;color:var(--fx-ink)!important}
+body.fx .bd-modes button[aria-selected=true],body.fx .pal-tabs button[aria-selected=true]{background:var(--fx-green)!important;color:#fff!important;box-shadow:0 2px 6px rgba(33,69,56,.28)}
+body.fx .bd-modes button:focus-visible,body.fx .pal-tabs button:focus-visible{outline:3px solid var(--fx-clay);outline-offset:2px}
