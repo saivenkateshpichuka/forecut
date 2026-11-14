@@ -1,4 +1,4 @@
-/* Colour reference helpers. Forecut ships no Pantone shade data: users can import a reference file from their own licensed source; it stays in their browser. */
+/* Colour reference helpers. This module bundles no shade data; Colour Palette Builder loads the TCX screen-approximation set (tools/tcx-ref.js) and any shade card the user imports, which stays in their browser. */
 (function(root){'use strict';
 const systems=['TCX','TN','TSX'];
 const bundled=[];

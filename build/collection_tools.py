@@ -28,6 +28,10 @@ def build():
    pal=research.get(code,{}).get('palette') or [[h,_nearest(h,names)] for h in info.get('colours',[])]
    if pal: palettes.append({'season':'in-'+code.lower().replace(' ','-'),'title':'India · '+code.replace(' 2',' 202').replace('Festive 26','Festive 2026') ,'colours':[{'hex':h.lower(),'name':n} for h,n in pal]})
  except Exception as e: print('india palettes skipped:',e)
+ # Pantone TCX screen approximations (public dataset, the same set the forecast pages use for nearest codes)
+ tcx=json.loads((ROOT/'build/pantone_fhi.json').read_text())
+ rows=[f"{code}|{name.replace('-',' ').title()}|{hx.lower()}" for code,(name,hx) in sorted(tcx.items())]
+ (ROOT/'tools/tcx-ref.js').write_text('/* Pantone Fashion, Home + Interiors TCX references: '+str(len(rows))+' codes with screen-approximation HEX values from a public dataset (github.com/Margaret2/pantone-colors).\n   Screen colours are previews only; confirm every shade against a physical Pantone book. Loaded only by Colour Palette Builder. */\nwindow.ForecutTCX='+json.dumps(';'.join(rows))+';\n')
  (ROOT/'tools/palettes.js').write_text('window.ForecutPalettes = '+json.dumps(palettes,ensure_ascii=False)+';\n')
 
 

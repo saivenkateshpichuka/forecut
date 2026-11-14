@@ -66,7 +66,7 @@ def html(active=''):
 
 
 CSS = r'''<style id="fs-css">
-:root{--fs-max:1440px;--fs-gut:clamp(16px,3.2vw,48px)}
+:root{--fs-max:none;--fs-gut:clamp(16px,3.2vw,48px)}
 html{overflow-x:clip}body{margin-top:0!important;padding-top:0!important}.fs-strip,.fs-head{margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
 .fs-strip{background:#1c1714;color:#f2ebe2;font:500 12.5px/1.3 'DM Sans',system-ui,sans-serif;letter-spacing:.02em}
 .fs-strip .fs-in{display:flex;justify-content:center;gap:14px;padding-top:8px;padding-bottom:8px;flex-wrap:wrap;text-align:center}

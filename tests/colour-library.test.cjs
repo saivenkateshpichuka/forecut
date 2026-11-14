@@ -9,7 +9,7 @@ test('library names are data and cannot supply markup through colour values',()=
 
 test('material suffix must match the selected system',()=>{assert.throws(()=>L.codeValue('18-0000 TPG','TCX'));assert.throws(()=>L.codeValue('123 C','PMS U'));});
 
-test('ships no Pantone shade data; users import their own licensed references',()=>{
+test('the colour-library module itself bundles no shade data (the TCX screen set loads separately in tools/tcx-ref.js)',()=>{
  assert.deepEqual(L.systems,['TCX','TN','TSX']);
  assert.equal(L.bundled.length,0);
 });
