@@ -123,3 +123,8 @@ body.fx-locked [data-fx-gate],body.fx-locked .fx-actions,body.fx-locked .fx-jump
 .fx-app-menu .fx-ws-pop button small{display:block;font-weight:400;color:#6a6157;font-size:12px}
 
 .fx-gate-cover{display:block;width:calc(100% + 64px);max-width:none;height:auto;margin:-32px -32px 22px;border-radius:12px 12px 0 0;aspect-ratio:16/9;object-fit:cover}@media(max-width:600px){.fx-gate{padding:22px}.fx-gate-cover{width:calc(100% + 44px);margin:-22px -22px 18px}}
+
+/* full width: every tool uses the whole screen (no empty side margins on wide monitors) */
+.fx-head,.fx-frame{max-width:none}
+.fx-head{padding-left:clamp(16px,2.2vw,40px);padding-right:clamp(16px,2.2vw,40px)}
+.fx-frame{padding-left:clamp(16px,2.2vw,40px);padding-right:clamp(16px,2.2vw,40px)}

@@ -2,7 +2,7 @@
 /* Forecut 3D Drape Studio: runs the sewing and draping off the page's main thread. */
 /* global importScripts, PM, FCDrape, Delaunator */
 self.window = self;
-importScripts('pm-engine.js?v=fx-20261114a', 'drape-sim.js?v=fx-20261114a', 'vendor/delaunator.min.js');
+importScripts('pm-engine.js?v=fx-20261114b', 'drape-sim.js?v=fx-20261114b', 'vendor/delaunator.min.js');
 var sim = null, M = null, body = null, running = false, gen = 0, frames = 0, morph = null, poseMap = {}, wantMap = null, pending = false;
 function presetMap(k) { var r = (FCDrape.POSES[k] || FCDrape.POSES.a).r, o = {}; Object.keys(r).forEach(function (b) { o[b] = r[b]; }); return o; }
 
@@ -10,7 +10,7 @@ var AV = null, AVP = null, bodyKey = '';
 function avatars(fresh) {
   if (!AVP) {
     var opt = fresh ? { cache: 'reload' } : {}, get = function (u, k) { return fetch(u + (fresh ? '&r=' + Date.now() : ''), opt).then(function (r) { if (!r.ok) throw new Error('The avatar file could not be downloaded (' + r.status + ').'); return r[k](); }); };
-    AVP = Promise.all([get('avatar/avatars.bin?v=fx-20261114a', 'arrayBuffer'), get('avatar/avatars.json?v=fx-20261114a', 'json')])
+    AVP = Promise.all([get('avatar/avatars.bin?v=fx-20261114b', 'arrayBuffer'), get('avatar/avatars.json?v=fx-20261114b', 'json')])
       .then(function (x) { var L = x[1].layout || {}, need = (L.local0 || L.shape0 || 0); if (x[0].byteLength < need) throw new Error('The avatar files do not match.'); AV = FCDrape.loadAvatars(x[0], x[1]); return AV; })
       .catch(function (err) { AVP = null; if (!fresh) return avatars(true); throw err; }); // a stale or broken copy: fetch both files again from the server once
   }
