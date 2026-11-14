@@ -328,7 +328,7 @@
       { id: 'ts3', name: 'Denim, heavy thread, 8 SPI', spi: 8, tex: 80, rows: 2, gap: .64, off: .2, colour: '#c8892a' },
       { id: 'ts4', name: 'Edge stitch, 14 SPI', spi: 14, tex: 30, rows: 1, gap: 0, off: .1, colour: '#2b2b2b' }];
     p.settings = p.settings || { notchDepth: .6, waste: 5, efficiency: 80, threadRatio: 2.6 };
-    p.view = p.view || {}; ['sewing', 'trims', 'graphics'].forEach(function (k) { if (p.view[k] == null) p.view[k] = true; });
+    p.view = p.view || {}; ['sewing', 'trims', 'graphics'].forEach(function (k) { if (p.view[k] == null) p.view[k] = true; }); ['pages', 'nest'].forEach(function (k) { if (p.view[k] == null) p.view[k] = false; });
     p.app = C.APP; return p;
   };
   /* a part of an edge from distance a to b (cm along the edge, either order), offset inside the piece by 'off' (cm, negative = outside) */
@@ -512,6 +512,51 @@
       out.push(pc);
     });
     return out;
+  };
+
+  /* ---------- grading: each piece keeps, per size, how far each point moves from the base size ---------- */
+  C.gradeSet = function (proj) { var g = proj.sizes && proj.sizes.groups && proj.sizes.groups[0]; if (!g) { proj.sizes = { groups: [{ id: 'g1', name: 'Size group 1', base: '', list: [] }] }; g = proj.sizes.groups[0]; } g.list = (g.list || []).filter(Boolean); if (g.list.length && g.list.indexOf(g.base) < 0) g.base = g.list[Math.floor(g.list.length / 2)]; return g; };
+  /* the move of every point for one size; points without a rule follow their neighbours, weighted by distance along the outline */
+  C.gradeDeltas = function (pc, size) {
+    var n = pc.nodes.length, G = (pc.grade || {})[size] || {}, out = [], known = [], i;
+    for (i = 0; i < n; i++) { var d = G[pc.nodes[i].id]; out.push(d ? d.slice() : null); if (d) known.push(i); }
+    if (!known.length) return out.map(function () { return [0, 0]; });
+    if (known.length === n) return out;
+    var cum = [0], sc = C.segCount(pc); for (i = 0; i < n; i++) cum.push(cum[i] + (i < sc ? C.segLen(pc, i) : 0));
+    var per = cum[n] || 1;
+    for (i = 0; i < n; i++) { if (out[i]) continue; var a = null, b = null, k;
+      for (k = 1; k <= n; k++) { var j = (i - k + n) % n; if (known.indexOf(j) >= 0) { a = j; break; } }
+      for (k = 1; k <= n; k++) { var j2 = (i + k) % n; if (known.indexOf(j2) >= 0) { b = j2; break; } }
+      var da = ((cum[i] - cum[a]) % per + per) % per, db = ((cum[b] - cum[i]) % per + per) % per, t = da + db > 0 ? da / (da + db) : .5, A = G[pc.nodes[a].id], B = G[pc.nodes[b].id];
+      out[i] = [A[0] + (B[0] - A[0]) * t, A[1] + (B[1] - A[1]) * t]; }
+    return out;
+  };
+  C.isGraded = function (pc) { return !!pc.grade && Object.keys(pc.grade).some(function (s) { return Object.keys(pc.grade[s] || {}).length; }); };
+  /* a copy of the piece in another size: points move by their grade, internal marks and the grainline follow the nearest points */
+  C.gradedPiece = function (pc, size, base) {
+    var g = C.clone(pc); g.size = size; if (size === base || !pc.grade) return g;
+    var D = C.gradeDeltas(pc, size); g.nodes.forEach(function (nd, i) { nd.x += D[i][0]; nd.y += D[i][1]; });
+    var near = function (q) { var best = 0, bd = 1e18; pc.nodes.forEach(function (nd, i) { var d = (nd.x - q[0]) * (nd.x - q[0]) + (nd.y - q[1]) * (nd.y - q[1]); if (d < bd) { bd = d; best = i; } }); return D[best]; };
+    var mv = function (q) { var d = near(q); return [q[0] + d[0], q[1] + d[1]]; };
+    var avg = D.reduce(function (a, d) { return [a[0] + d[0] / D.length, a[1] + d[1] / D.length]; }, [0, 0]);
+    g.internals.forEach(function (it) { it.pts = it.pts.map(mv); });
+    g.darts.forEach(function (d) { ['l1', 'apex', 'l2'].forEach(function (k) { if (d[k]) d[k] = mv(d[k]); }); if (d.pts) d.pts = d.pts.map(mv); });
+    if (g.grain) { g.grain.a = [g.grain.a[0] + avg[0], g.grain.a[1] + avg[1]]; g.grain.b = [g.grain.b[0] + avg[0], g.grain.b[1] + avg[1]]; }
+    delete g.grade; return g;
+  };
+  /* a linear rule: the points move by (dx, dy) for every size step away from the base */
+  C.setRule = function (pc, ids, dx, dy, list, base) {
+    var bi = list.indexOf(base); if (bi < 0) return; pc.grade = pc.grade || {};
+    list.forEach(function (sz, k) { var st = k - bi; pc.grade[sz] = pc.grade[sz] || {}; ids.forEach(function (id) { if (st === 0) delete pc.grade[sz][id]; else pc.grade[sz][id] = [+(dx * st).toFixed(4), +(dy * st).toFixed(4)]; }); });
+  };
+  C.ruleOf = function (pc, id, list, base) { var bi = list.indexOf(base), nx = list[bi + 1], pv = list[bi - 1], G = pc.grade || {}; if (nx && G[nx] && G[nx][id]) return G[nx][id].slice(); if (pv && G[pv] && G[pv][id]) return [-G[pv][id][0], -G[pv][id][1]]; return [0, 0]; };
+  C.clearGrade = function (pc, ids) { if (!pc.grade) return; Object.keys(pc.grade).forEach(function (s) { if (!ids) delete pc.grade[s]; else ids.forEach(function (id) { delete pc.grade[s][id]; }); }); if (!ids) delete pc.grade; };
+  /* grade a piece from drafts of the same garment in each size: base = the draft piece in the base size, sizes = {size: draft piece}; points of the edited piece take the move of the nearest draft point */
+  C.autoGrade = function (pc, basePc, sizes, tol) {
+    tol = tol || 1; var map = pc.nodes.map(function (nd) { var best = -1, bd = tol * tol; basePc.nodes.forEach(function (bn, i) { var d = (bn.x - nd.x) * (bn.x - nd.x) + (bn.y - nd.y) * (bn.y - nd.y); if (d < bd) { bd = d; best = i; } }); return best; });
+    var hit = map.filter(function (i) { return i >= 0; }).length; if (!hit) return 0;
+    pc.grade = {}; Object.keys(sizes).forEach(function (sz) { var sp = sizes[sz]; if (!sp || sp.nodes.length !== basePc.nodes.length) return; var G = pc.grade[sz] = {}; pc.nodes.forEach(function (nd, i) { var j = map[i]; if (j < 0) return; G[nd.id] = [+(sp.nodes[j].x - basePc.nodes[j].x).toFixed(4), +(sp.nodes[j].y - basePc.nodes[j].y).toFixed(4)]; }); });
+    return hit;
   };
 
   /* ---------- project and history ---------- */

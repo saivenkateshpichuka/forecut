@@ -1,7 +1,7 @@
 /* Forecut pattern maker: interface, state, scene building and downloads. Needs pm_engine.js and pm_export.js. */
 (function () {
   var $ = FC.$, $$ = FC.$$, PM = window.PM, X = window.PMX, V = window.PMV, DET = window.PM_DETAILS || [];
-  var GC = { anarkali: 'ANK', angrakha: 'ANG', sherwani: 'SHW', bandhgala: 'BDG', salwar: 'SAL', patiala: 'PAT', churidar: 'CHU', gharara: 'GHR', bodice: 'BOD', kurta: 'KUR', shirt: 'SHT', tshirt: 'TEE', hoodie: 'HOD', blouse: 'BLS', top: 'TOP', dress: 'DRS', jacket: 'JKT', skirt: 'SKT', lehenga: 'LEH', trousers: 'TRS', blazer: 'BLZ', coat: 'COT', bomber: 'BMB', jeans: 'JNS', jumpsuit: 'JMP', shirtdress: 'SHD', polo: 'POL', tank: 'TNK' }, VER = '1.3';
+  var GC = { anarkali: 'ANK', angrakha: 'ANG', sherwani: 'SHW', bandhgala: 'BDG', salwar: 'SAL', patiala: 'PAT', churidar: 'CHU', gharara: 'GHR', bodice: 'BOD', kurta: 'KUR', shirt: 'SHT', tshirt: 'TEE', hoodie: 'HOD', blouse: 'BLS', top: 'TOP', dress: 'DRS', jacket: 'JKT', skirt: 'SKT', lehenga: 'LEH', trousers: 'TRS', blazer: 'BLZ', coat: 'COT', bomber: 'BMB', jeans: 'JNS', jumpsuit: 'JMP', shirtdress: 'SHD', polo: 'POL', tank: 'TNK', katori: 'KTB', crosscut: 'CCB', petticoat: 'PTC', nighty: 'NTY' }, VER = '1.3';
   function code() { return 'FC-' + { women: 'W', men: 'M', kids: 'K', unisex: 'U' }[S.gender] + '-' + GC[S.gid] + '-' + (S.size === 'custom' ? 'CUS' : S.size); }
   var UF = { cm: 1, mm: 10, in: 1 / 2.54 };
   var OPT = {
@@ -274,7 +274,7 @@
     if (MARK && cres) { var mv = PMC.markerSvg(cres, 'Marker · ' + s.r.label + ' · ' + (S.size === 'custom' ? 'custom' : S.size) + ' · ' + cres.perMarker + ' garment' + (cres.perMarker > 1 ? 's' : '') + ' · width ' + cres.marker.width + ' cm · length ' + (cres.marker.length / 100).toFixed(2) + ' m · efficiency ' + Math.round(cres.marker.eff * 100) + '%' + shrLab()); svg = mv.svg; last = { W: mv.W, H: mv.H, sc: s.sc }; }
     $('#pm-svg').innerHTML = svg;
     applyZoom();
-    var T = tl ? tl.T : X.tiles(s.sc, s.W, s.H); $('#pm-tilecount').textContent = T.pages + ' A4 pages (' + T.rows + ' rows × ' + T.cols + ' columns, blanks skipped). Print at 100%.';
+    var T = tl ? tl.T : X.tiles(s.sc, s.W, s.H); $('#pm-tilecount').textContent = T.pages + ' ' + X.paper().n + (X.paper().land ? ' landscape' : '') + ' pages (' + T.rows + ' rows × ' + T.cols + ' columns, blanks skipped). Print at 100%.';
     var info = s.r.info, num = function (v) { return typeof v === 'number' ? U(v) + ' ' + S.unit : v; };
     $('#pm-info').innerHTML = Object.keys(info).map(function (k) { return '<div><span>' + k + '</span><b>' + num(info[k]) + '</b></div>'; }).join('') + '<div><span>Sheet</span><b>' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + '</b></div>';
     var ck = V.checks(s.r0, S, U, S.gid), ok = ck.filter(function (c) { return c.ok; }).length;
@@ -284,7 +284,7 @@
     var on = s.r.pieces.filter(function (p) { return (S.pc[p.id] || {}).on !== false; }).length;
     $('#pm-spec').innerHTML = [['Style code', code()], ['Garment', PM.GENDER[S.gender] + ' · ' + PM.GARMENTS[S.gid].n], ['Size', S.size === 'custom' ? 'Custom measurements' : S.size + ' (Forecut base chart)'], ['Pieces', on + ' of ' + s.r.pieces.length], ['Allowances', 'seam ' + U(S.sa) + ', hem ' + U(S.hemA) + ' ' + S.unit + (S.sa ? '' : ' (net pattern)')], ['Checks', ok + ' of ' + ck.length + ' passed'], ['Engine', 'Forecut pattern engine ' + VER]].map(function (r) { return '<dt>' + r[0] + '</dt><dd>' + r[1] + '</dd>'; }).join('');
     var tt = TOILE[S.gid + '-' + S.gender]; $('#pm-toile').innerHTML = tt ? '<b>Toile-tested</b> ' + tt : 'This pattern has not yet been sewn and fit-tested by Forecut. Sew a toile in calico before you cut good fabric; when Forecut has tested a style, the date and fit model will show here.';
-    $('#pm-status').innerHTML = '<span><b>' + on + '</b> pieces</span><span>Sheet <b>' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + '</b></span><span><b>' + T.pages + '</b> A4 pages</span><span>SA <b>' + U(S.sa) + '</b> · Hem <b>' + U(S.hemA) + '</b></span><span class="xy" id="pm-xy"></span>';
+    $('#pm-status').innerHTML = '<span><b>' + on + '</b> pieces</span><span>Sheet <b>' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + '</b></span><span><b>' + T.pages + '</b> ' + X.paper().n + ' pages</span><span>SA <b>' + U(S.sa) + '</b> · Hem <b>' + U(S.hemA) + '</b></span><span class="xy" id="pm-xy"></span>';
     crumb();
     if (!keepTable) pieceTable();
     requestAnimationFrame(rulers);
@@ -486,7 +486,7 @@
       + '<p><small>Estimated with the Forecut pattern maker (forecut.in). The marker is laid automatically; a CAD marker is usually a few per cent shorter. Rates are as entered. Confirm the current GST rate.</small></p><button onclick="print()">Print or save as PDF</button></body></html>');
     w.document.close(); toast('Cost sheet opened in a new tab.'); });
   $('#pm-dl-png').onclick = dl(function () { var s = scene(true); X.png(X.svg(s.sc, s.W, s.H, S.unit, { title: s.title }), s.W, s.H, function (b) { FC.download(fname('png'), b); }); toast('PNG downloaded.'); });
-  $('#pm-dl-pdf').onclick = dl(function () { var s = scene(true), r = X.pdf(s.sc, s.W, s.H, 'tiles', { title: s.title }); FC.download(fname('pdf'), r.blob); toast('PDF ready: ' + r.pages + ' A4 pages. Print at 100% / actual size.'); });
+  $('#pm-dl-pdf').onclick = dl(function () { var s = scene(true), r = X.pdf(s.sc, s.W, s.H, 'tiles', { title: s.title }); FC.download(fname('pdf'), r.blob); toast('PDF ready: ' + r.pages + ' ' + X.paper().n + (X.paper().land ? ' landscape' : '') + ' pages. Print at 100% / actual size.'); });
   $('#pm-dl-pdf2').onclick = dl(function () { var s = scene(true), r = X.pdf(s.sc, s.W, s.H, 'sheet', { title: s.title }); FC.download(fname('sheet.pdf'), r.blob); toast('Full-size PDF ready (' + U(s.W) + ' × ' + U(s.H) + ' ' + S.unit + ') for a plotter or copy shop.'); });
   window.PM_UI = { scene: scene, state: function () { return S; }, applyDetail: applyDetail };
   /* deep link from a Forecut detail: pattern-maker.html?detail=<name> */
@@ -520,7 +520,7 @@
   var TOILE = {}; // filled only from real sewn samples: 'kurta-women': 'size M, 12 Jan 2027, fit model …'
   var qs = new URLSearchParams(location.search), qd = qs.get('detail');
   if (qd) { var d = DET.filter(function (x) { return x[0].toLowerCase() === qd.toLowerCase(); })[0]; if (d) { S.gender = d[2]; S.gid = d[3]; resetMeas(); resetOpts(); Object.keys(d[4]).forEach(function (k) { S.o[k] = d[4][k]; }); S.detail = d[0]; S.pc = {}; } }
-  window.PMUI = { S: function () { return S; }, draw: function () { draw(); }, last: function () { return last; }, U: U, cm: cm, key: editKey, toast: function (t) { try { toast(t); } catch (e) {} }, unit: function () { return S.unit; } };
+  window.PMUI = { S: function () { return S; }, sizes: function () { return Object.keys(chart()); }, baseSize: function () { return baseSize(); }, chart: function () { return chart(); }, draftAt: function (sz) { return shrink(PM.build(S.gid, S.gender, sz === baseSize() && S.size === 'custom' ? S.m : gradeM(sz), OO())); }, ui: function (f) { ui(f); }, keys: function () { return measSet(); }, clients: clients, refreshClients: function () { clientForm(); }, draw: function () { draw(); }, last: function () { return last; }, U: U, cm: cm, key: editKey, toast: function (t) { try { toast(t); } catch (e) {} }, unit: function () { return S.unit; } };
   ui(true); lang();
   try { if (/[?&]pack=1/.test(location.search) && S.detail) { var bn = document.createElement('div'); bn.className = 'spk'; bn.innerHTML = '<b>Style pack for ' + S.detail + '</b><span>Pattern, costing and tech pack are ready.</span><button type="button" class="xbtn pri" id="pm-spk">Open tech pack</button><button type="button" class="xbtn" id="pm-spkx">Close</button>'; $('.pbar').after(bn); $('#pm-spk').onclick = function () { $('#pm-dl-tech').click(); }; $('#pm-spkx').onclick = function () { bn.remove(); }; } } catch (e) { }
 })();

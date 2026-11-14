@@ -53,6 +53,30 @@
   PM.plen = plen;
   function E(t, p) { return { t: t, p: p }; }
   function piece(id, comp, edges, o) { o = o || {}; return { id: id, comp: comp, edges: edges, marks: o.marks || [], grain: o.grain, cut: o.cut || 'Cut 1', defHem: o.hem, notes: o.notes || '', fold: edges.some(function (e) { return e.t === 'fold'; }) }; }
+  function outline(p) { var o = []; p.edges.forEach(function (e) { e.p.forEach(function (q, i) { if (i === 0 && o.length && Math.hypot(o[o.length - 1][0] - q[0], o[o.length - 1][1] - q[1]) < 1e-6) return; o.push(q); }); }); return o; }
+  function bbox(P) { var b = [1e9, 1e9, -1e9, -1e9]; P.forEach(function (q) { b[0] = Math.min(b[0], q[0]); b[1] = Math.min(b[1], q[1]); b[2] = Math.max(b[2], q[0]); b[3] = Math.max(b[3], q[1]); }); return b; }
+  /* split a piece along the straight line through A and B (which must cross the outline twice); edge types are kept and the cut becomes a seam */
+  function splitPiece(p, A, B2) {
+    var seq = []; p.edges.forEach(function (e, ei) { for (var i = 0; i < e.p.length - 1; i++) seq.push({ a: e.p[i], b: e.p[i + 1], t: e.t, ei: ei }); });
+    var side = function (q) { return (B2[0] - A[0]) * (q[1] - A[1]) - (B2[1] - A[1]) * (q[0] - A[0]); }, X = [];
+    seq.forEach(function (s, i) { var sa = side(s.a), sb = side(s.b); if ((sa < 0) !== (sb < 0) && sa !== sb) { var t = sa / (sa - sb); X.push({ i: i, t: t, q: [s.a[0] + (s.b[0] - s.a[0]) * t, s.a[1] + (s.b[1] - s.a[1]) * t] }); } });
+    if (X.length !== 2) return null;
+    function chain(from, to) { var out = [{ q: from.q, t: seq[from.i].t, ei: seq[from.i].ei }], i = (from.i + 1) % seq.length; while (i !== (to.i + 1) % seq.length) { out.push({ q: seq[i].a, t: seq[i].t, ei: seq[i].ei }); i = (i + 1) % seq.length; } out.push({ q: to.q, t: 'seam', ei: -1 }); return out; }
+    function toEdges(ch) { var E2 = [], cur = null; for (var k = 0; k < ch.length; k++) { var nx = ch[(k + 1) % ch.length], t = k === ch.length - 1 ? 'seam' : ch[k].t, ei = k === ch.length - 1 ? -1 : ch[k].ei; if (!cur || cur.ei !== ei) { cur = { t: t, ei: ei, p: [ch[k].q] }; E2.push(cur); } cur.p.push(nx.q); } return E2.map(function (e) { return { t: e.t, p: e.p }; }); }
+    var c1 = chain(X[0], X[1]), c2 = chain(X[1], X[0]), mid = function (ch) { var x = 0, y = 0; ch.forEach(function (c) { x += c.q[0]; y += c.q[1]; }); return side([x / ch.length, y / ch.length]); }, s1 = mid(c1);
+    var marksOn = function (sg) { return p.marks.filter(function (mk) { var c = mk.c || (mk.p && mk.p[Math.floor(mk.p.length / 2)]); return c && (side(c) < 0) === (sg < 0); }); };
+    var mk2 = function (ch, sg) { var pc = piece(p.id, p.comp, toEdges(ch), { cut: p.cut, marks: marksOn(sg), notes: p.notes }), b = bbox(outline(pc)); pc.grain = [[(b[0] + b[2]) / 2, b[1] + (b[3] - b[1]) * .2], [(b[0] + b[2]) / 2, b[1] + (b[3] - b[1]) * .8]]; return pc; };
+    var pa = mk2(c1, s1), pb = mk2(c2, -s1);
+    return bbox(outline(pa))[1] <= bbox(outline(pb))[1] ? [pa, pb] : [pb, pa];
+  }
+  PM.splitPiece = splitPiece;
+  /* armhole from the bodice draft for these measurements: round (front + back) and straight depth from shoulder tip to underarm */
+  PM.armhole = function (gender, m) {
+    var r = PM.build('bodice', 'women', m, Object.assign({}, GAR.bodice.d, { sleeve: 'none' })), fr = r.pieces.filter(function (p) { return p.id === 'front'; })[0], round = r.info['Armhole (front + back)'] || 0, best = null;
+    if (fr) fr.edges.forEach(function (e) { if (e.t !== 'seam' || e.p.length < 6) return; var Lh = 0; for (var i = 1; i < e.p.length; i++) Lh += Math.hypot(e.p[i][0] - e.p[i - 1][0], e.p[i][1] - e.p[i - 1][1]); var d = Math.abs(Lh - round / 2); if (!best || d < best.d) best = { d: d, e: e }; });
+    var depth = best ? Math.abs(best.e.p[0][1] - best.e.p[best.e.p.length - 1][1]) : 0;
+    return { round: Math.round(round * 10) / 10, depth: Math.round(depth * 10) / 10, rule: Math.round((m.bust / 8 + 6.5) * 10) / 10 };
+  };
   function rect(id, comp, w, h, o) { o = o || {}; var fold = o.fold; return piece(id, comp, [E(fold === 'left' ? 'fold' : 'seam', L([0, h], [0, 0])), E('seam', L([0, 0], [w, 0])), E(o.hemRight ? 'hem' : 'seam', L([w, 0], [w, h])), E(fold === 'bottom' ? 'fold' : 'seam', L([w, h], [0, h]))],
     { cut: o.cut, grain: o.grainV ? [[w / 2, h * .15], [w / 2, h * .85]] : [[w * .15, h / 2], [w * .85, h / 2]], marks: o.marks, notes: o.notes }); }
 
@@ -310,9 +334,13 @@
     jumpsuit: { n: 'Jumpsuit', w: 1, g: ['women', 'kids'], o: ['ease', 'neck', 'sleeve', 'slen', 'leg', 'tlen'], d: { ease: 8, neck: 'round', sleeve: 'plain', slen: 'short', leg: 'straight', tlen: 0 } },
     shirtdress: { n: 'Shirt dress', w: 1, g: ['women', 'kids'], o: ['ease', 'len', 'collar', 'sleeve', 'slen', 'pockets', 'hem'], d: { ease: 12, len: 100, shape: 'straight', collar: 'shirt', sleeve: 'shirt', slen: 'full', pockets: 1, hem: 'curved', yoke: 1, drop: 0 } },
     polo: { n: 'Polo shirt', w: 1, g: ['unisex', 'men', 'women', 'kids'], o: ['ease', 'len', 'slen'], d: { ease: 10, len: 72, neck: 'crew', sleeve: 'tee', slen: 'short', drop: 0 } },
+    katori: { n: 'Katori blouse', g: ['women'], o: ['ease', 'len', 'neck', 'back', 'cup', 'sleeve', 'slen', 'opening'], d: { ease: 4, len: 0, neck: 'deep', back: 'deepU', cup: 'B', dartpos: 'side', princess: 0, sleeve: 'plain', slen: 'short', opening: 1, fit: 'fitted' } },
+    crosscut: { n: 'Cross-cut blouse', g: ['women'], o: ['ease', 'len', 'neck', 'back', 'cup', 'sleeve', 'slen', 'opening'], d: { ease: 4, len: 0, neck: 'deep', back: 'deepU', cup: 'B', dartpos: 'side', princess: 0, sleeve: 'plain', slen: 'short', opening: 1, fit: 'fitted' } },
+    petticoat: { n: 'Petticoat (fish-cut inskirt)', g: ['women'], o: ['slen2', 'panels', 'hemc'], d: { slen2: 100, panels: 6, hemc: 300 } },
+    nighty: { n: 'Nighty / nightgown', g: ['women', 'kids'], o: ['ease', 'len', 'neck', 'slen'], d: { ease: 20, len: 135, neck: 'round', slen: 'short', sleeve: 'plain', shape: 'straight', flare: 10, slit: 0, collar: 'none' } },
     tank: { n: 'Tank top / camisole', w: 1, g: ['women', 'men', 'unisex', 'kids'], o: ['ease', 'len', 'neck'], d: { ease: 6, len: 62, neck: 'ushape', shape: 'shaped', collar: 'none', sleeve: 'none' } }
   };
-  ['kurta', 'blouse', 'anarkali', 'angrakha', 'sherwani', 'bandhgala', 'salwar', 'patiala', 'churidar', 'gharara', 'lehenga', 'jacket'].forEach(function (k) { GAR[k].ind = 1; });
+  ['kurta', 'blouse', 'anarkali', 'angrakha', 'sherwani', 'bandhgala', 'salwar', 'patiala', 'churidar', 'gharara', 'lehenga', 'jacket', 'katori', 'crosscut', 'petticoat', 'nighty'].forEach(function (k) { GAR[k].ind = 1; });
   ['shirt', 'tshirt', 'hoodie', 'top', 'dress', 'skirt', 'trousers', 'bodice'].forEach(function (k) { GAR[k].w = 1; });
   /* ---------- western styles built from the blocks above ---------- */
   PM.western = function (gid, gender, m, o) {
@@ -330,6 +358,37 @@
       r2.pieces.push(rect('knitcollar', 'Knit collar', nl * 2 - 2, kid ? 6.5 : 8.5, { cut: 'Cut 1 flat-knit collar (or rib)', notes: 'join to the neckline between the placket centres' }));
       r2.pieces.push(rect('placket', 'Front placket', kid ? 3 : 4, kid ? 12 : 16, { cut: 'Cut 2 + interfacing', marks: [{ t: 'button', c: [kid ? 1.5 : 2, 4] }, { t: 'button', c: [kid ? 1.5 : 2, kid ? 9 : 11] }], notes: 'cut the front open ' + (kid ? 12 : 16) + ' cm at centre front' }));
       return relabel(r2, 'polo shirt');
+    }
+    if (gid === 'katori' || gid === 'crosscut') {
+      var rb = PM.build('blouse', gender, m, Object.assign({}, GAR.blouse.d, o, { princess: 0, dartpos: 'side' })), fr = rb.pieces.filter(function (p) { return p.id === 'front'; })[0];
+      if (fr) { var pts = outline(fr), bb = bbox(pts), ap = null; fr.marks.forEach(function (mk) { if (mk.t === 'dart' && mk.p && mk.p.length === 3 && (!ap || mk.p[1][1] > ap[1])) ap = mk.p[1]; });
+        if (!ap) ap = [(bb[0] + bb[2]) / 2, bb[1] + (m.bust_depth || 25)];
+        var A2, B2, nm;
+        if (gid === 'katori') { var y = ap[1] + ({ A: 6, B: 7, C: 8, D: 9 }[o.cup] || 7); A2 = [bb[0] - 5, y]; B2 = [bb[2] + 5, y]; nm = ['Katori (upper front)', 'Lower front band (patti)']; }
+        else { var top = pts.reduce(function (b, q) { return q[1] < b[1] ? q : b; }); A2 = [top[0], top[1] + 3]; B2 = [bb[0] + (top[0] < (bb[0] + bb[2]) / 2 ? bb[2] - bb[0] : 0), bb[3] - 2]; nm = ['Cross panel, upper', 'Cross panel, lower']; }
+        var sp = splitPiece(fr, A2, B2);
+        if (sp) { sp[0].id = 'front-a'; sp[0].comp = nm[0]; sp[1].id = 'front-b'; sp[1].comp = nm[1]; sp.forEach(function (q) { q.cut = 'Cut 2 (left and right)'; });
+          sp[0].notes = gid === 'katori' ? 'Shape the bust fullness with the darts or small pleats into the katori seam; sew the katori to the band with the darts pressed down.' : 'Cross-cut: the upper panel overlaps the lower along the diagonal seam; add 1.5 cm overlap if you lap it instead of seaming.';
+          var at = rb.pieces.indexOf(fr); rb.pieces.splice(at, 1, sp[0], sp[1]); }
+        rb.info['Style seam'] = gid === 'katori' ? 'horizontal katori seam ' + (A2[1] - bb[1]).toFixed(1) + ' cm below the top of the front' : 'diagonal cross seam from the shoulder to the lower side';
+      }
+      rb.info['Starter pattern'] = 'Made from the saree blouse block; fit a toile before cutting silk.';
+      return relabel(rb, gid === 'katori' ? 'katori blouse' : 'cross-cut blouse');
+    }
+    if (gid === 'nighty') {
+      var rn = PM.build('kurta', gender, m, Object.assign({}, GAR.kurta.d, { ease: +o.ease || 20, len: +o.len || (kid ? 80 : 135), neck: o.neck || 'round', collar: 'none', sleeve: 'plain', slen: o.slen || 'short', shape: 'straight', flare: kid ? 6 : 10, slit: 0, pockets: 0 }));
+      rn.pieces.push(rect('placket', 'Front opening facing', 6, kid ? 18 : 28, { cut: 'Cut 2 + interfacing', notes: 'opening at centre front for buttons or a zip' }));
+      rn.info['Ease'] = (+o.ease || 20) + ' cm at bust (nightwear)'; return relabel(rn, 'nighty');
+    }
+    if (gid === 'petticoat') {
+      var n = Math.max(4, Math.round(+o.panels || 6)), Lp = +o.slen2 || 100, hipY = Math.min(Lp * .3, m.wh || 20), kneeY = Math.min(Lp - 15, (m.knee_l || 58) - 3), top = (m.hip + 10) / n, hipW = (m.hip + 6) / n, kneeW = (m.hip - 2) / n, hemW = Math.max(kneeW, (+o.hemc || 300) / n), pnl = [];
+      var lx = function (w) { return (hemW - w) / 2; }, rise = Math.min(3, (hemW - kneeW) * .12);
+      var edges = [E('seam', L([lx(top), 0], [lx(top) + top, 0], 2)), E('seam', [[lx(top) + top, 0], [lx(hipW) + hipW, hipY], [lx(kneeW) + kneeW, kneeY]].concat(B([lx(kneeW) + kneeW, kneeY], [lx(kneeW) + kneeW + (hemW - kneeW) * .1, kneeY + (Lp - kneeY) * .4], [hemW - (hemW - kneeW) * .05, Lp - rise - 6], [hemW, Lp - rise], 16).slice(1))),
+        E('hem', B([hemW, Lp - rise], [hemW * .7, Lp + rise * .3], [hemW * .3, Lp + rise * .3], [0, Lp - rise], 16)), E('seam', [[0, Lp - rise]].concat(B([0, Lp - rise], [(hemW - kneeW) * .05, Lp - rise - 6], [lx(kneeW) - (hemW - kneeW) * .1, kneeY + (Lp - kneeY) * .4], [lx(kneeW), kneeY], 16).slice(1), [[lx(hipW), hipY], [lx(top), 0]]))];
+      pnl.push(piece('kali', 'Kali (panel)', edges, { cut: 'Cut ' + n, grain: [[hemW / 2, 6], [hemW / 2, Lp - 10]], marks: [{ t: 'notch', c: [lx(hipW), hipY], n: 1 }, { t: 'notch', c: [lx(hipW) + hipW, hipY], n: 1 }, { t: 'notch', c: [lx(kneeW), kneeY], n: 2 }, { t: 'notch', c: [lx(kneeW) + kneeW, kneeY], n: 2 }], notes: 'fitted to the knee, flaring below (fish cut)' }));
+      pnl.push(rect('casing', 'Waist casing', m.hip + 12, 8, { cut: 'Cut 1', marks: [{ t: 'line', p: L([0, 4], [m.hip + 12, 4]), lab: 'fold', dash: 1 }], notes: 'leave a 2 cm gap at the front for the drawstring' }));
+      pnl.push(rect('nada', 'Drawstring (nada)', Math.min(150, m.waist * 1.7), 4, { cut: 'Cut 1 (or use ready cord)' }));
+      return relabel({ pieces: pnl, info: { 'Panels': n, 'Hem circumference': Math.round(hemW * n), 'Hip (finished)': Math.round(hipW * n), 'Knee (finished)': Math.round(kneeW * n), 'Flare starts': Math.round(kneeY) + ' cm below the waist', 'Length': Lp } }, 'petticoat (fish-cut inskirt)');
     }
     if (gid === 'tank') {
       var r3 = PM.build('top', gender, m, Object.assign({}, GAR.top.d, o, { sleeve: 'none', collar: 'none', peplum: 0 })), nl3 = nlOf(r3), ah = r3.info['Armhole (front + back)'] || 44;

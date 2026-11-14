@@ -96,3 +96,17 @@ test('darts: added into the edge, legs equal, transfer keeps the closed shape', 
   const f = C.fillDart(q, mv.dart); const z = JSON.parse(JSON.stringify(q)); C.applyReshape(z, f); assert.equal(z.nodes.length, q.nodes.length - 1);
   assert.equal(C.dartFold(p, res.dart).length, 3);
 });
+test('grading: linear rules, neighbours follow, base change keeps every size', () => {
+  const r = C.rect(0, 0, 20, 30), list = ['S', 'M', 'L'], right = r.nodes.filter(n => Math.abs(n.x - 20) < 1e-9).map(n => n.id), left = r.nodes.filter(n => Math.abs(n.x) < 1e-9).map(n => n.id);
+  assert.equal(right.length, 2); C.setRule(r, right, 1, 0, list, 'M'); C.setRule(r, left, 0, 0, list, 'M'); // right side grows 1 cm per size
+  const L = C.gradedPiece(r, 'L', 'M'), S = C.gradedPiece(r, 'S', 'M'), b = C.bbox(L);
+  near(b[2] - b[0], 21); near(C.bbox(S)[2] - C.bbox(S)[0], 19); assert.ok(C.isGraded(r));
+  const ru = C.ruleOf(r, right[0], list, 'M'); near(ru[0], 1);
+  C.clearGrade(r, [right[0]]); assert.ok(!r.grade.L[right[0]]); const D = C.gradeDeltas(r, 'L'), k = r.nodes.findIndex(n => n.id === right[0]); assert.ok(D[k][0] > 0 && D[k][0] < 1); // an unruled point follows its neighbours
+});
+test('grading: auto-grade from drafts of the same garment in each size', () => {
+  const g = id => C.fromDraft(PM.build('bodice', 'women', Object.assign({}, PM.CHARTS.women[id]), Object.assign({}, PM.GARMENTS.bodice.d)), {});
+  const base = g('M'), sizes = { S: g('S'), M: g('M'), L: g('L') }, pc = JSON.parse(JSON.stringify(base[0]));
+  const hit = C.autoGrade(pc, base[0], { S: sizes.S[0], M: sizes.M[0], L: sizes.L[0] }, 1); assert.equal(hit, pc.nodes.length);
+  const gl = C.gradedPiece(pc, 'L', 'M'); pc.nodes.forEach((n, i) => { near(gl.nodes[i].x, sizes.L[0].nodes[i].x, 1e-3); near(gl.nodes[i].y, sizes.L[0].nodes[i].y, 1e-3); });
+});
