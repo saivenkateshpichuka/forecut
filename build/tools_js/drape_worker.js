@@ -6,14 +6,18 @@ var sim = null, M = null, body = null, running = false, gen = 0, frames = 0, mor
 function presetMap(k) { var r = (FCDrape.POSES[k] || FCDrape.POSES.a).r, o = {}; Object.keys(r).forEach(function (b) { o[b] = r[b]; }); return o; }
 
 var AV = null, AVP = null, bodyKey = '';
-function avatars() {
-  if (!AVP) AVP = Promise.all([fetch('avatar/avatars.bin?v=__V__').then(function (r) { return r.arrayBuffer(); }), fetch('avatar/avatars.json?v=__V__').then(function (r) { return r.json(); })])
-    .then(function (x) { AV = FCDrape.loadAvatars(x[0], x[1]); return AV; });
+function avatars(fresh) {
+  if (!AVP) {
+    var opt = fresh ? { cache: 'reload' } : {}, get = function (u, k) { return fetch(u + (fresh ? '&r=' + Date.now() : ''), opt).then(function (r) { if (!r.ok) throw new Error('The avatar file could not be downloaded (' + r.status + ').'); return r[k](); }); };
+    AVP = Promise.all([get('avatar/avatars.bin?v=__V__', 'arrayBuffer'), get('avatar/avatars.json?v=__V__', 'json')])
+      .then(function (x) { var L = x[1].layout || {}, need = (L.local0 || L.shape0 || 0); if (x[0].byteLength < need) throw new Error('The avatar files do not match.'); AV = FCDrape.loadAvatars(x[0], x[1]); return AV; })
+      .catch(function (err) { AVP = null; if (!fresh) return avatars(true); throw err; }); // a stale or broken copy: fetch both files again from the server once
+  }
   return AVP;
 }
 function build(q) {
   gen = q.gen; running = false;
-  avatars().then(function () { if (q.gen !== gen) return; try { build2(q); } catch (err) { postMessage({ type: 'error', gen: q.gen, message: String(err && err.message || err) }); } });
+  avatars().then(function () { if (q.gen !== gen) return; try { build2(q); } catch (err) { postMessage({ type: 'error', gen: q.gen, message: String(err && err.message || err) }); } }, function (err) { postMessage({ type: 'error', gen: q.gen, message: (err && err.message || 'The avatar could not load.') + ' Check your connection and press Sew and drape again.' }); });
 }
 function build2(q) {
   var key = JSON.stringify([q.m, q.body || q.gender, q.size, q.height, q.pose]);

@@ -942,6 +942,7 @@ function rebuild() {
   gen++; built = false; paused = false; $('#drPause').textContent = 'Pause';
   const m = baseMeas(), opts = Object.assign(baseOpts(), S.opts);
   status(lastBody ? 'Cutting and sewing the pieces…' : 'Loading the avatar…', 'run');
+  const g0 = gen; clearTimeout(rebuild.wd); rebuild.wd = setTimeout(() => { if (gen === g0 && !lastBody && /Loading the avatar/.test($('#drStatus').textContent)) status('The avatar is taking long to load. Check your connection, then press Sew and drape again (or reload the page).', 'err'); }, 30000);
   worker.postMessage({ cmd: 'build', gen, style: S.style, gender: S.gender, body: S.body, pose: Object.assign({}, S.pose || {}, { type: (S.body === 'women' || S.body === 'men') ? S.btype || '' : '', stature: { petite: .94, tall: 1.05 }[S.stature] || 1 }), size: S.size, height: +(S.meas || {}).height || 0, m, opts, fabric: S.fabric, fab: D.phys(fab()), sim: simMsg(), meshType: simset().mesh, h: simset().h, preset: S.preset || 'a', poseMap: S.poseMap || null });
 }
 function onMsg(e) {

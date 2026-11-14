@@ -1,5 +1,5 @@
 // Forecut service worker: app shell offline, fresh pages when online.
-const V = 'forecut-v3';
+const V = 'forecut-v4';
 const CORE = ['/', '/india.html', '/aw26.html', '/reports.html', '/journal.html', '/offline.html', '/fonts/dm-sans.woff', '/fonts/source-serif-4.woff', '/favicon-192.png'];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(V).then((c) => c.addAll(CORE)).then(() => self.skipWaiting())); });
 self.addEventListener('activate', (e) => { e.waitUntil(caches.keys().then((ks) => Promise.all(ks.filter((k) => k !== V).map((k) => caches.delete(k)))).then(() => self.clients.claim())); });
