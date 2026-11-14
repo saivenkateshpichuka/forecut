@@ -1,8 +1,8 @@
 {
  "id": "/forecut-pattern-maker",
- "name": "Forecut Pattern Maker",
- "short_name": "Pattern Maker",
- "description": "Draft and grade garment patterns",
+ "name": "Forecut Garment Studio",
+ "short_name": "Garment Studio",
+ "description": "Pattern making, grading and 3D fitting",
  "start_url": "/pattern-maker.html?source=app",
  "scope": "/",
  "display": "standalone",

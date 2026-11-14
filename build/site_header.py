@@ -28,13 +28,12 @@ MENU = [
                          ('colour.html', 'Colour', 'Colour stories and theory')]),
     ], None),
     ('Tools', 'tools', [
-        ('Most used', [('pattern-maker.html', 'Pattern Maker', 'Western and Indian patterns, editable, every size'),
-                       ('3d-drape-studio.html', '3D Drape Studio', 'Sew and drape your pattern in 3D'),
+        ('Most used', [('pattern-maker.html', 'Garment Studio', 'Patterns, grading and 3D fitting in one place'),
                        ('textile-processing-studio.html', 'Textile Processing Studio', 'Dye recipes, blends and process costing'),
                        ('tech-pack-builder.html', 'Tech Pack Builder', 'Factory-ready tech packs'),
                        ('trend-to-style.html', 'Trend to Style Brief', 'Mood, collection and accessory boards')]),
         ('Plan and cost', [('rangeboard.html', 'Collection Planner', ''), ('pricefold.html', 'Price & Margin Calculator', ''),
-                           ('textile-calculator.html', 'Textile Calculator', ''), ('tools.html', 'All 16 tools →', 'In garment-process order')]),
+                           ('textile-calculator.html', 'Textile Calculator', ''), ('tools.html', 'All 15 tools →', 'In garment-process order')]),
     ], ('tools.html', 'Forecut Studio', 'Every tool in one app, from collection plan to export.', None)),
     ('About', 'about', [
         ('Forecut', [('about.html', 'About Forecut', ''), ('method.html', 'How we forecast', ''), ('index.html#pricing', 'Pricing & access', ''),

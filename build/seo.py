@@ -17,10 +17,10 @@ for fn, t, d in [('about.html', 'About Forecut · Global Fashion Trend Forecasti
                  ('privacy.html', 'Privacy Policy · Forecut', 'How Forecut collects, uses and protects information, in line with Indian data protection law.')]:
     pages[fn] = (t, d, fn)
 for fn, t, d in [('textile-processing-studio.html', 'Textile Processing Studio · Dye Recipes, Processing Costs & Colour Blends · Forecut', 'Search dyes by class and colour, build a dye recipe and batch cost, preview fibre colour blends such as cotton-polyester mélange, and price dyeing, printing, washing and finishing per kg and per metre. For Forecut members.'),
-                 ('tools.html', 'Fashion Design & Production Tools · 16 Tools in Garment-Process Order · Forecut', 'Sixteen tools for designers and apparel brands, in the order a garment is made: plan the collection, colour and fabric, pattern and fit, sampling and tech pack, costing and production, labels, listing and export. Free for Forecut members.'),
+                 ('tools.html', 'Fashion Design & Production Tools · 15 Tools in Garment-Process Order · Forecut', 'Fifteen tools for designers and apparel brands, in the order a garment is made: plan the collection, colour and fabric, pattern and fit, sampling and tech pack, costing and production, labels, listing and export. Free for Forecut members.'),
                  ('textile-calculator.html', 'Textile Calculator · Yarn Count, GSM, Warp & Weft, Knitting, Garment Costing · Forecut', 'Textile calculator for Forecut members: 27 calculators for yarn count (Ne, Nm, tex, denier and 11 more), GSM, warp and weft, reed, knitting, fabric consumption, marker, thread, SMV, costing to MRP, dyeing and units.'),
                  ('3d-drape-studio.html', '3D Drape Studio · Sew & Drape Garment Patterns in 3D, Fit Map, Fabric Simulation · Forecut', 'Free 3D garment simulation: sew tops, kurtas, skirts, lehengas and trousers onto realistic avatars, from toddlers to adults, athletic, mature or maternity, fitted to 17 measurements and posed. Drape in real fabrics, check ease with a fit map. Desktop browser, no install.'),
-                 ('pattern-maker.html', 'Pattern Maker · Editable Western & Indian Patterns: Blazer, Jeans, Shirt, Dress, Kurta, Blouse · Forecut', 'Draft and edit patterns for Western and Indian garments in womenswear, menswear, kidswear and unisex from your measurements or a Forecut detail, move points and walk seams on screen, with automatic fit checks and true-scale PDF, DXF, SVG and PNG downloads. For Forecut members.')]:
+                 ('pattern-maker.html', 'Garment Studio · Pattern Making, Grading & 3D Fitting for Western and Indian Garments · Forecut', 'Forecut Garment Studio: draft and edit patterns for Western and Indian garments, grade sizes, add darts, pleats, raglan sleeves and elastic, then sew and drape them in 3D on avatars in your size and pose. Free for members.')]:
     if os.path.exists(os.path.join(R, fn)): pages[fn] = (t, d, fn)  # tools are published only once their pages exist in the site root
 import journal_data as JD
 pages['journal.html'] = ('Forecut Journal · Indian Fashion Trend Analysis & Guides', 'Analysis and practical guides on Indian and global fashion trends: festive and wedding wear, handloom, footwear, Gen Z fusion and colour, with rupee price bands.', 'journal.html')
@@ -125,7 +125,7 @@ def clip(t, n=158):
     return cut[:dot + 1] if dot > 90 else cut[:cut.rfind(' ')].rstrip(',;:–- ') + '…'
 
 
-NOINDEX = {'account.html', 'india-reference-library.html', 'search.html', '404.html', 'offline.html', 'terms.html', 'privacy.html'}  # legal pages stay reachable but out of Google results and sitelinks
+NOINDEX = {'3d-drape-studio.html', 'account.html', 'india-reference-library.html', 'search.html', '404.html', 'offline.html', 'terms.html', 'privacy.html'}  # legal pages stay reachable but out of Google results and sitelinks
 NOADS = NOINDEX | {'contact.html', 'terms.html', 'privacy.html'}
 ADS_OK = {}
 
@@ -292,7 +292,7 @@ if not os.environ.get('ONLY') or os.environ.get('SITEMAP'):
           'Content is written by Forecut Editorial and summarises public sources with links. Please cite forecut.in and link the page you use. Contact: hello@forecut.in.', '',
           'Social: ' + ', '.join(SO.SAME_AS), '']
     for g, fs in _grp:
-        _l += [f'## {g}', ''] + [_ln(f) for f in fs if f in pages and os.path.exists(os.path.join(R, f))] + ['']
+        _l += [f'## {g}', ''] + [_ln(f) for f in fs if f in pages and f not in NOINDEX and os.path.exists(os.path.join(R, f))] + ['']
     open(os.path.join(R, 'llms.txt'), 'w').write('\n'.join(_l))
     open(os.path.join(R, 'favicon.svg'), 'w').write('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/><path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="#a9481f" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>')
     print('seo ok', len(pages))

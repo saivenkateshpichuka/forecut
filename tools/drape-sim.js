@@ -31,29 +31,65 @@
   };
   function rotM(ax, deg) { var a = deg * PI / 180, c = Math.cos(a), s = Math.sin(a); return ax === 'x' ? [1, 0, 0, 0, c, -s, 0, s, c] : ax === 'y' ? [c, 0, s, 0, 1, 0, -s, 0, c] : [c, -s, 0, s, c, 0, 0, 0, 1]; }
   function mul3(A, B) { var R = new Array(9); for (var i = 0; i < 3; i++) for (var j = 0; j < 3; j++) R[3 * i + j] = A[3 * i] * B[j] + A[3 * i + 1] * B[3 + j] + A[3 * i + 2] * B[6 + j]; return R; }
-  D.poseBody = function (b, AV, key) {
-    var meta = AV.meta, pz = D.POSES[key]; if (!pz || !AV.skin || !meta.bones || !meta.stencils) return null;
-    var P = b.rest || b.pos, n = P.length / 3, ST = meta.stencils;
+  // forward kinematics: each bone turns about its rest head; R holds the rotation in rest world axes, applied before the parent's
+  D.poseFK = function (b, AV, rmap) {
+    var meta = AV.meta, P = b.rest || b.pos, ST = meta.stencils;
     var at = function (j) { var s0 = ST[j]; if (!s0) return null; var o = [0, 0, 0]; for (var k = 0; k < s0.v.length; k++) { var q = 3 * s0.v[k]; o[0] += P[q] * s0.w[k]; o[1] += P[q + 1] * s0.w[k]; o[2] += P[q + 2] * s0.w[k]; } return o; };
     var B = meta.bones, idx = {}; B.forEach(function (bn, i) { idx[bn.n] = i; });
-    var M = new Array(B.length), done = new Array(B.length);
-    function world(i) { // rotation R and translation t: x' = R x + t
-      if (done[i]) return M[i]; var bn = B[i], par = bn.p && idx[bn.p] !== undefined ? world(idx[bn.p]) : { R: [1, 0, 0, 0, 1, 0, 0, 0, 1], t: [0, 0, 0] };
-      var rs = pz.r[bn.n], R = [1, 0, 0, 0, 1, 0, 0, 0, 1]; (rs || []).forEach(function (q) { R = mul3(rotM(q[0], q[1]), R); });
-      var h = at(bn.h) || [0, 0, 0], loc = { R: R, t: [h[0] - (R[0] * h[0] + R[1] * h[1] + R[2] * h[2]), h[1] - (R[3] * h[0] + R[4] * h[1] + R[5] * h[2]), h[2] - (R[6] * h[0] + R[7] * h[1] + R[8] * h[2])] };
-      var pr = par.R, Rw = mul3(pr, loc.R), tw = [pr[0] * loc.t[0] + pr[1] * loc.t[1] + pr[2] * loc.t[2] + par.t[0], pr[3] * loc.t[0] + pr[4] * loc.t[1] + pr[5] * loc.t[2] + par.t[1], pr[6] * loc.t[0] + pr[7] * loc.t[1] + pr[8] * loc.t[2] + par.t[2]];
-      done[i] = 1; return (M[i] = { R: Rw, t: tw });
+    var M = new Array(B.length), heads = new Array(B.length);
+    function world(i) {
+      if (M[i]) return M[i]; var bn = B[i], par = bn.p && idx[bn.p] !== undefined ? world(idx[bn.p]) : { R: [1, 0, 0, 0, 1, 0, 0, 0, 1], t: [0, 0, 0] };
+      var rs = rmap[bn.n], R = [1, 0, 0, 0, 1, 0, 0, 0, 1]; (rs || []).forEach(function (q) { R = mul3(Array.isArray(q) ? rotM(q[0], q[1]) : q.m, R); });
+      var h = at(bn.h) || (bn.p && heads[idx[bn.p]]) || [0, 0, 0]; heads[i] = h;
+      var lt = [h[0] - (R[0] * h[0] + R[1] * h[1] + R[2] * h[2]), h[1] - (R[3] * h[0] + R[4] * h[1] + R[5] * h[2]), h[2] - (R[6] * h[0] + R[7] * h[1] + R[8] * h[2])];
+      var pr = par.R; return (M[i] = { R: mul3(pr, R), t: [pr[0] * lt[0] + pr[1] * lt[1] + pr[2] * lt[2] + par.t[0], pr[3] * lt[0] + pr[4] * lt[1] + pr[5] * lt[2] + par.t[1], pr[6] * lt[0] + pr[7] * lt[1] + pr[8] * lt[2] + par.t[2]], local: R, parR: pr });
     }
     for (var i = 0; i < B.length; i++) world(i);
+    return { M: M, idx: idx, heads: heads, posedHead: function (i) { var T = M[i], h = heads[i], R = T.R; return [R[0] * h[0] + R[1] * h[1] + R[2] * h[2] + T.t[0], R[3] * h[0] + R[4] * h[1] + R[5] * h[2] + T.t[1], R[6] * h[0] + R[7] * h[1] + R[8] * h[2] + T.t[2]]; } };
+  };
+  D.poseBody = function (b, AV, key) {
+    var meta = AV.meta, pz = typeof key === 'object' ? { r: key } : D.POSES[key]; if (!pz || !AV.skin || !meta.bones || !meta.stencils) return null;
+    var P = b.rest || b.pos, n = P.length / 3, M = D.poseFK(b, AV, pz.r).M;
     var out = new Float32Array(P.length), sb = AV.skin.b, sw = AV.skin.w;
     for (var v = 0; v < n; v++) { var x = P[3 * v], y = P[3 * v + 1], z = P[3 * v + 2], ox = 0, oy = 0, oz = 0, ws = 0;
       for (var k = 0; k < 4; k++) { var w = sw[4 * v + k] / 255; if (!w) continue; var T = M[sb[4 * v + k]], R = T.R; ox += w * (R[0] * x + R[1] * y + R[2] * z + T.t[0]); oy += w * (R[3] * x + R[4] * y + R[5] * z + T.t[1]); oz += w * (R[6] * x + R[7] * y + R[8] * z + T.t[2]); ws += w; }
       if (ws > 0) { out[3 * v] = ox / ws; out[3 * v + 1] = oy / ws; out[3 * v + 2] = oz / ws; } else { out[3 * v] = x; out[3 * v + 1] = y; out[3 * v + 2] = z; } }
-    var lo = 1e9; for (v = 0; v < n; v++) lo = Math.min(lo, out[3 * v + 1]); var dy = (P.length ? (function () { var l0 = 1e9; for (var q = 0; q < n; q++) l0 = Math.min(l0, P[3 * q + 1]); return l0; })() : 0) - lo; // keep the feet on the floor
-    for (v = 0; v < n; v++) out[3 * v + 1] += dy;
+    var l0 = 1e9, lo = 1e9; for (v = 0; v < n; v++) { l0 = Math.min(l0, P[3 * v + 1]); lo = Math.min(lo, out[3 * v + 1]); } // keep the feet on the floor
+    for (v = 0; v < n; v++) out[3 * v + 1] += l0 - lo;
     return out;
   };
+  // the bones a person can turn in pose editing, and how to turn one by a world rotation q (3 x 3) from the current pose
+  D.POSE_JOINTS = ['pelvis', 'spine_02', 'neck_01', 'head', 'clavicle_l', 'clavicle_r', 'upperarm_l', 'upperarm_r', 'lowerarm_l', 'lowerarm_r', 'hand_l', 'hand_r', 'thigh_l', 'thigh_r', 'calf_l', 'calf_r', 'foot_l', 'foot_r'];
+  D.turnBone = function (b, AV, rmap, bone, q) {
+    var F = D.poseFK(b, AV, rmap), i = F.idx[bone]; if (i === undefined) return rmap;
+    var T = F.M[i], pr = T.parR, prT = [pr[0], pr[3], pr[6], pr[1], pr[4], pr[7], pr[2], pr[5], pr[8]], nl = mul3(prT, mul3(q, mul3(pr, T.local)));
+    var out = {}; Object.keys(rmap).forEach(function (k) { out[k] = rmap[k]; }); out[bone] = [{ m: nl }]; return out;
+  };
+  D.jointsPosed = function (b, AV, rmap) { var F = D.poseFK(b, AV, rmap), o = {}; D.POSE_JOINTS.forEach(function (bn) { var i = F.idx[bn]; if (i !== undefined) o[bn] = F.posedHead(i); }); return o; };
   D.stencilAt = function (AV, P, j) { var s0 = AV.meta.stencils && AV.meta.stencils[j]; if (!s0) return null; var o = [0, 0, 0]; for (var k = 0; k < s0.v.length; k++) { var q = 3 * s0.v[k]; o[0] += P[q] * s0.w[k]; o[1] += P[q + 1] * s0.w[k]; o[2] += P[q + 2] * s0.w[k]; } return o; };
+  function axisM(k, deg) { var a = deg * PI / 180, c = Math.cos(a), s2 = Math.sin(a), t = 1 - c, x = k[0], y = k[1], z = k[2]; return [t * x * x + c, t * x * y - s2 * z, t * x * z + s2 * y, t * x * y + s2 * z, t * y * y + c, t * y * z - s2 * x, t * x * z - s2 * y, t * y * z + s2 * x, t * z * z + c]; }
+  function nrm3(v) { var l = Math.hypot(v[0], v[1], v[2]) || 1; return [v[0] / l, v[1] / l, v[2] / l]; }
+  function crs3(a, b) { return [a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0]]; }
+  function dot3(a, b) { return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; }
+  function sub3(a, b) { return [a[0] - b[0], a[1] - b[1], a[2] - b[2]]; }
+  /* relaxed hands: fingers drawn together and gently curled, as on a dress form, instead of MakeHuman's spread fingers */
+  D.handRelax = function (P, AV) {
+    var st = function (j) { return D.stencilAt(AV, P, j); }, r = {};
+    ['l', 'r'].forEach(function (sd) {
+      var W = st(sd + '-hand'), M1 = st(sd + '-finger-3-1'), I1 = st(sd + '-finger-2-1'), P1 = st(sd + '-finger-5-1'), T4 = st(sd + '-finger-1-4'); if (!W || !M1 || !I1 || !P1) return;
+      var f = nrm3(sub3(M1, W)), a = nrm3(sub3(I1, P1)), nv = nrm3(crs3(f, a)); a = crs3(nv, f);
+      var palm = T4 && dot3(sub3(T4, W), nv) < 0 ? -1 : 1; // the thumb sits on the palm side
+      var names = { 2: 'index', 3: 'middle', 4: 'ring', 5: 'pinky' };
+      [2, 3, 4, 5].forEach(function (k) {
+        var B = st(sd + '-finger-' + k + '-1'), T = st(sd + '-finger-' + k + '-4'); if (!B || !T) return; var d = nrm3(sub3(T, B)), ang = Math.atan2(dot3(d, a), dot3(d, f)) * 180 / PI, want = (k - 3) * -3.5;
+        var curl = function (deg) { var R = axisM(a, deg * palm); return { m: R }; };
+        var spread = axisM(nv, -(ang - want) * .85);
+        r[names[k] + '_01_' + sd] = [{ m: spread }, curl(9)]; r[names[k] + '_02_' + sd] = [curl(16)]; r[names[k] + '_03_' + sd] = [curl(10)];
+      });
+      r['thumb_02_' + sd] = [{ m: axisM(a, 6 * palm) }];
+    });
+    return r;
+  };
   D.setBodyPos = function (b, pos) { if (!b.rest) b.rest = new Float32Array(b.pos); b.pos.set(pos); buildSDF(b); };
   var LEN = ['outseam', 'nape', 'wh', 'rise', 'knee_l', 'sleeve', 'inseam', 'bust_depth'];
   D.body = function (m0, g, AV, size, targetH, pose) {
@@ -63,6 +99,7 @@
       var m = {}, k; for (k in m0) m[k] = m0[k]; var f = targetH / b.height; LEN.forEach(function (q) { if (m[q]) m[q] = Math.round(m[q] * f * 10) / 10; });
       b = fitBody(m, g, AV, size, pose);
     }
+    if (!(pose && pose.raw) && AV.skin && AV.meta.stencils) { var hr = D.poseBody(b, AV, D.handRelax(b.pos, AV)); if (hr) b.pos.set(hr); }
     buildSDF(b);
     return b;
   };

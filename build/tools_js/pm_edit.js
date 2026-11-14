@@ -16,19 +16,21 @@
   // desktop: open the current garment in 3D Drape Studio
   var D3 = { tshirt: 'tshirt', top: 'top', tank: 'tank', hoodie: 'sweat', kurta: 'kurta', dress: 'dress', skirt: 'skirt', trousers: 'trousers', jeans: 'jeans', churidar: 'churidar', salwar: 'salwar', patiala: 'patiala', gharara: 'gharara', lehenga: 'lehenga', shirt: 'shirt', shirtdress: 'shirtdress', blouse: 'blouse', polo: 'polo', jacket: 'jacket', bandhgala: 'bandhgala', sherwani: 'sherwani', blazer: 'blazer', coat: 'coat', bomber: 'bomber', bodice: 'bodice', anarkali: 'anarkali', jumpsuit: 'jumpsuit' };
   if (window.matchMedia && matchMedia('(min-width: 1024px) and (pointer: fine)').matches) {
-    var b3 = document.createElement('button'); b3.type = 'button'; b3.className = 'ib'; b3.id = 'pm-3db'; b3.title = 'Open this garment in 3D Drape Studio';
+    var b3 = document.createElement('button'); b3.type = 'button'; b3.className = 'ib'; b3.id = 'pm-3db'; b3.title = 'See this garment in 3D';
     b3.innerHTML = '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg><span>3D</span>';
     btn.after(b3);
-    b3.addEventListener('click', function () {
+    // the garment as 3D studio parameters (used by the 3D mode of Garment Studio)
+    window.PM3DQuery = function () {
       var s = S(), st = D3[s.gid], o = s.o || {};
       if (st === 'skirt') st = { aline: 'aline', straight: 'pencil', circle: 'circle', gathered: 'gathered', panels: 'kalis' }[o.skirt] || '';
       if (st === 'dress' && o.dress === 'frock') st = 'frock'; if (st === 'top' && +o.peplum) st = 'peplum'; if (st === 'sweat' && +o.hood) st = 'hoodie';
-      if (!st) { API.toast('3D view works for tops, T-shirts, sweatshirts, kurtas, shift dresses, shirts, blouses, polos, jackets, bandhgalas, sherwanis, blazers, coats, bombers, skirts, lehengas, trousers, jeans, churidar, salwar, patiala and gharara. Angrakhas are coming next.'); return; }
+      if (!st) { return { err: '3D view works for tops, T-shirts, sweatshirts, kurtas, shift dresses, shirts, blouses, polos, jackets, bandhgalas, sherwanis, blazers, coats, bombers, skirts, lehengas, trousers, jeans, churidar, salwar, patiala and gharara. Angrakhas are coming next.' }; }
       var keep = {}; ['len', 'ease', 'neck', 'sleeve', 'slen', 'flare', 'slit', 'slen2', 'leg', 'pfit', 'tlen', 'mohri', 'fullness', 'ruch', 'gfull', 'panels', 'hemc', 'circle'].forEach(function (k) { if (o[k] !== undefined && o[k] !== '') keep[k] = o[k]; });
       var size = s.size && s.size !== 'custom' ? s.size : '', mm = '';
       if (!size && s.m) { var mk = {}; ['bust', 'waist', 'hip', 'shoulder', 'nape', 'bicep'].forEach(function (k) { if (+s.m[k] > 0) mk[k] = +s.m[k]; }); mm = '&m=' + encodeURIComponent(JSON.stringify(mk)); }
-      window.open('3d-drape-studio.html?style=' + st + '&gender=' + encodeURIComponent(s.gender) + (size ? '&size=' + encodeURIComponent(size) : '') + '&o=' + encodeURIComponent(JSON.stringify(keep)) + mm, '_blank', 'noopener');
-    });
+      return { q: 'style=' + st + '&gender=' + encodeURIComponent(s.gender) + (size ? '&size=' + encodeURIComponent(size) : '') + '&o=' + encodeURIComponent(JSON.stringify(keep)) + mm };
+    };
+    b3.addEventListener('click', function () { if (window.PM3D) window.PM3D.open(); });
   }
   var panel = document.createElement('div'); panel.id = 'pm-edpanel'; panel.hidden = true; panel.setAttribute('role', 'region'); panel.setAttribute('aria-label', 'Pattern editing');
   var view = $('#pm-view'); (view.parentNode || document.body).appendChild(panel);

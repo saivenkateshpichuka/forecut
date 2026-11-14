@@ -49,7 +49,7 @@ ICONS = [{'src': '/apps/studio-192.png', 'sizes': '192x192', 'type': 'image/png'
 
 def manifests():
     (ROOT / 'apps').mkdir(exist_ok=True)
-    order = list(T.NAMES)
+    order = [s for s in T.NAMES if s not in getattr(T, 'HIDDEN', set())]
     studio = {'id': '/forecut-studio', 'name': 'Forecut Studio', 'short_name': 'Forecut Studio',
               'description': 'Every Forecut tool for designers and apparel brands, in garment-process order.',
               'start_url': '/tools.html?source=studio-app', 'scope': '/', 'display': 'standalone',

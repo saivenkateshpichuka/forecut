@@ -40,7 +40,7 @@
   function share() {
     var S = UI().S(), name = (PM.GARMENTS[S.gid] || {}).n || 'Pattern';
     var render = function (withM) { var url = base() + '#p=' + enc(shareState(withM)); return linkBlock(url, 'Forecut pattern: ' + name + (withM ? '' : ' (size ' + S.size + ')')); };
-    modal('Share this pattern', '<p class="pmx-n">The link opens Pattern Maker with this garment, its style options and seam allowances. Nothing is uploaded: everything is in the link itself.</p><label class="pmx-chk"><input type="checkbox" id="pmx-wm"' + (S.size === 'custom' ? ' checked' : '') + '> Include the measurements (only share with people you trust)</label><div id="pmx-lk">' + render(S.size === 'custom') + '</div>'
+    modal('Share this pattern', '<p class="pmx-n">The link opens Forecut Garment Studio with this garment, its style options and seam allowances. Nothing is uploaded: everything is in the link itself.</p><label class="pmx-chk"><input type="checkbox" id="pmx-wm"' + (S.size === 'custom' ? ' checked' : '') + '> Include the measurements (only share with people you trust)</label><div id="pmx-lk">' + render(S.size === 'custom') + '</div>'
       + '<div class="pmx-acts"><button type="button" class="xbtn" id="pmx-json">Download settings (JSON)</button></div>', function (b) {
         var go = function () { $('#pmx-lk', b).innerHTML = render($('#pmx-wm', b).checked); wireCopy(b); }; $('#pmx-wm', b).onchange = go; wireCopy(b);
         $('#pmx-json', b).onclick = function () { var d = JSON.stringify(Object.assign({ forecut: 'pattern-maker-settings' }, shareState($('#pmx-wm', b).checked)), null, 2); if (window.FC && FC.download) FC.download('forecut-' + S.gid + '-settings.json', d, 'application/json'); };
@@ -72,7 +72,7 @@
       + '<div class="pmx-uni">Units: <b>' + (unit === 'in' ? 'inches' : unit) + '</b></div>'
       + keys.map(function (k) { return '<label class="pmx-f"><span>' + esc(PM.LABELS[k]) + '<small>' + esc((V && V.HOW && V.HOW[k]) || '') + '</small></span><input type="number" step="any" min="0" inputmode="decimal" data-k="' + k + '"></label>'; }).join('')
       + '<label class="pmx-f"><span>Notes for your tailor (optional)</span><textarea id="pmx-note" rows="2" maxlength="300"></textarea></label>'
-      + '<button type="button" class="xbtn pri" id="pmx-done">Create my link</button><div id="pmx-out"></div><p class="pmx-n">Made with Forecut Pattern Maker · forecut.in</p></div>';
+      + '<button type="button" class="xbtn pri" id="pmx-done">Create my link</button><div id="pmx-out"></div><p class="pmx-n">Made with Forecut Garment Studio · forecut.in</p></div>';
     document.body.appendChild(wrap); document.documentElement.classList.add('pmx-client-open');
     wrap.querySelectorAll('input[data-k]').forEach(function (el) { el.addEventListener('focus', function () { var f = $('.pmx-cfig', wrap); if (f && V && V.figure) f.innerHTML = V.figure(keys, el.dataset.k, (V.BACK || []).indexOf(el.dataset.k) >= 0 ? 'back' : 'front'); }); });
     $('#pmx-done', wrap).onclick = function () {

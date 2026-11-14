@@ -2,7 +2,8 @@
 /* global importScripts, PM, FCDrape, Delaunator */
 self.window = self;
 importScripts('pm-engine.js?v=__V__', 'drape-sim.js?v=__V__', 'vendor/delaunator.min.js');
-var sim = null, M = null, body = null, running = false, gen = 0, frames = 0, morph = null, wantPose = 'a', posed = 'a';
+var sim = null, M = null, body = null, running = false, gen = 0, frames = 0, morph = null, poseMap = {}, wantMap = null, pending = false;
+function presetMap(k) { var r = (FCDrape.POSES[k] || FCDrape.POSES.a).r, o = {}; Object.keys(r).forEach(function (b) { o[b] = r[b]; }); return o; }
 
 var AV = null, AVP = null, bodyKey = '';
 function avatars() {
@@ -16,7 +17,7 @@ function build(q) {
 }
 function build2(q) {
   var key = JSON.stringify([q.m, q.body || q.gender, q.size, q.height, q.pose]);
-  wantPose = q.preset || 'a'; posed = 'a'; morph = null;
+  poseMap = {}; morph = null; wantMap = q.poseMap || presetMap(q.preset || 'a'); pending = Object.keys(wantMap).length > 0;
   if (key !== bodyKey) {
     body = FCDrape.body(q.m, q.body || q.gender, AV, q.size, q.height, q.pose); bodyKey = key;
     postMessage({ type: 'body', gen: gen, pos: body.pos, tri: body.tri, mask: body.mask, under: body.under, y: body.y, height: body.height, head: body.head, m: body.m, J: body.J, cat: q.body || q.gender });
@@ -33,25 +34,25 @@ function build2(q) {
   tick();
 }
 // poses: the body moves from the A-pose to the chosen pose in small steps and the cloth follows it
-function startMorph(key) {
-  var from = new Float32Array(body.pos), to = key === 'a' ? (body.rest ? new Float32Array(body.rest) : from) : FCDrape.poseBody(body, AV, key);
-  if (!to) { posed = wantPose; return; } morph = { from: from, to: to, k: 0, n: 9, f: frames, key: key };
+function startMorph(map, steps) {
+  pending = false; var from = new Float32Array(body.pos), to = Object.keys(map).length ? FCDrape.poseBody(body, AV, map) : (body.rest ? new Float32Array(body.rest) : from);
+  if (!to) return; morph = { from: from, to: to, k: 0, n: steps || 9, f: frames, map: map };
 }
 function stepMorph() {
   morph.k++; var u = morph.k / morph.n, e = u * u * (3 - 2 * u), P = new Float32Array(morph.from.length); for (var i = 0; i < P.length; i++) P[i] = morph.from[i] + (morph.to[i] - morph.from[i]) * e;
   FCDrape.setBodyPos(body, P); sim.wake(); morph.f = frames;
-  var eyes = {}, R = body.rest; ['l-eye', 'r-eye'].forEach(function (k) { var a = FCDrape.stencilAt(AV, R, k), b = FCDrape.stencilAt(AV, P, k), j = body.J && body.J[k]; if (a && b && j) eyes[k] = [j[0] + b[0] - a[0], j[1] + b[1] - a[1], j[2] + b[2] - a[2]]; });
-  postMessage({ type: 'bodypos', gen: gen, pos: P, eyes: eyes, done: morph.k >= morph.n });
-  if (morph.k >= morph.n) { posed = morph.key; morph = null; }
+  var fin = morph.k >= morph.n, eyes = {}, R = body.rest; ['l-eye', 'r-eye', 'l-hand', 'r-hand', 'l-ankle', 'r-ankle'].forEach(function (k) { var a = FCDrape.stencilAt(AV, R, k), b = FCDrape.stencilAt(AV, P, k), j = body.J && body.J[k]; if (a && b && j) eyes[k] = [j[0] + b[0] - a[0], j[1] + b[1] - a[1], j[2] + b[2] - a[2]]; });
+  if (fin) { poseMap = morph.map; morph = null; }
+  postMessage({ type: 'bodypos', gen: gen, pos: P, eyes: eyes, done: fin, joints: fin ? FCDrape.jointsPosed(body, AV, poseMap) : null, poseMap: fin ? poseMap : null });
 }
 function kick() { if (!running && sim) { running = true; tick(); } }
 function tick() {
   if (!running || !sim) return;
   var t0 = Date.now(), steps = 0;
-  if (!morph && sim.settled && wantPose !== posed) startMorph(wantPose);
+  if (!morph && sim.settled && pending) startMorph(wantMap, 9);
   if (morph && (morph.k === 0 || frames - morph.f >= 14)) stepMorph();
   do { sim.step(1 / 60); steps++; frames++; } while (!sim.settled && Date.now() - t0 < 6 && steps < 2);
-  var done = sim.settled && !morph && wantPose === posed, msg = { type: 'frame', gen: gen, x: sim.x.slice(), t: sim.t, done: done };
+  var done = sim.settled && !morph && !pending, msg = { type: 'frame', gen: gen, x: sim.x.slice(), t: sim.t, done: done };
   if (done || frames % 15 === 0) { msg.gap = sim.gap.slice(); msg.strain = sim.computeStrain().slice(); }
   if (done && M.tacks && M.tacks.length) { var tg = 0, X = sim.x; for (var j = 0; j < M.tacks.length; j += 2) { var a = 3 * M.tacks[j], b = 3 * M.tacks[j + 1]; tg = Math.max(tg, Math.hypot(X[a] - X[b], X[a + 1] - X[b + 1], X[a + 2] - X[b + 2])); } msg.tackGap = tg; }
   postMessage(msg);
@@ -81,9 +82,14 @@ onmessage = function (e) {
       postMessage({ type: 'zipped', gen: gen, id: q.id, pairs: pr }); kick(); }
     else if (q.cmd === 'stiff' && sim) { sim.stiffen(q.panel, q.k); kick(); }
     else if (q.cmd === 'elastic' && sim) { var ids = []; (q.keys || []).forEach(function (k) { (M.segIdx[q.panel + '|' + k] || []).forEach(function (i) { if (ids.indexOf(i) < 0) ids.push(i); }); }); if (ids.length > 2) { sim.elastic(ids, q.ratio); kick(); } }
+    else if (q.cmd === 'elasticAt' && sim) { // the edge of the piece nearest the clicked point gets elastic at the given length
+      var pn = M.panel[q.i], best = null, bd = 1e9, X2 = sim.x; Object.keys(M.segIdx).forEach(function (k) { var parts = k.split('|'); if (+parts[0] !== pn) return; var L = M.segIdx[k]; for (var j = 0; j < L.length; j++) { var d = Math.hypot(X2[3 * L[j]] - X2[3 * q.i], X2[3 * L[j] + 1] - X2[3 * q.i + 1], X2[3 * L[j] + 2] - X2[3 * q.i + 2]); if (d < bd) { bd = d; best = k; } } });
+      if (best && bd < 6) { sim.elastic(M.segIdx[best].slice(), q.ratio); postMessage({ type: 'elasticOn', gen: gen, key: best, ids: M.segIdx[best].slice(), ratio: q.ratio }); kick(); } else postMessage({ type: 'elasticOn', gen: gen, key: null }); }
     else if (q.cmd === 'unelastic' && sim) { sim.clearElastic(); kick(); }
     else if (q.cmd === 'pucker' && sim) { sim.pucker(q.a); kick(); }
-    else if (q.cmd === 'pose' && sim) { wantPose = q.preset || 'a'; if (!morph && wantPose !== posed) startMorph(wantPose); kick(); }
+    else if (q.cmd === 'pose' && sim) { if (!morph) startMorph(q.poseMap || presetMap(q.preset), 9); else { wantMap = q.poseMap || presetMap(q.preset); pending = true; } kick(); }
+    else if (q.cmd === 'turn' && sim && !morph) { startMorph(FCDrape.turnBone(body, AV, poseMap, q.bone, q.m), 4); kick(); }
+    else if (q.cmd === 'joints' && body) postMessage({ type: 'joints', gen: gen, joints: FCDrape.jointsPosed(body, AV, poseMap) });
     else if (q.cmd === 'pause') running = false;
     else if (q.cmd === 'resume' && sim && !sim.settled) { running = true; tick(); }
   } catch (err) { postMessage({ type: 'error', gen: q.gen || gen, message: String(err && err.message || err) }); }

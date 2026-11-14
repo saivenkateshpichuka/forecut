@@ -55,7 +55,7 @@
     }
     var objs = [], o = function (s) { objs.push(s); return objs.length; };
     o('<< /Type /Catalog /Pages 2 0 R >>'); o('PAGES'); o('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>'); o('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>');
-    var infoId = 5; o('<< /Title ' + pdfStr(meta.title) + ' /Author (Forecut) /Creator (Forecut pattern maker - forecut.in) /Subject ' + pdfStr('Pattern generated at forecut.in') + ' >>');
+    var infoId = 5; o('<< /Title ' + pdfStr(meta.title) + ' /Author (Forecut) /Creator (Forecut Garment Studio - forecut.in) /Subject ' + pdfStr('Pattern generated at forecut.in') + ' >>');
     o('<< /Type /ExtGState /ca 1 /CA 1 >>'); o('<< /Type /ExtGState /ca 0.14 /CA 0.14 >>');
     var kids = [];
     pages.forEach(function (pg) { var cid = o('<< /Length ' + pg.c.length + ' >>\nstream\n' + pg.c + 'endstream'); kids.push(o('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + n(pg.w) + ' ' + n(pg.h) + '] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> /ExtGState << /GS0 6 0 R /GS1 7 0 R >> >> /Contents ' + cid + ' 0 R >>')); });

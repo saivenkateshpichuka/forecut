@@ -5,7 +5,7 @@ The tool list itself is rendered by tools/shell.js from one registry.
 """
 from html import escape
 
-VER = 'fx-20261113f'
+VER = 'fx-20261114a'
 
 # slug: (brand name, plain label, stage)
 NAMES = {
@@ -14,7 +14,7 @@ NAMES = {
     'swatchsmith': ('Colour Palette Builder', 'Season palettes and swatch sheets', '02 Colour and fabric'),
     'textile-calculator': ('Textile Calculator', 'Yarn, GSM, weaving, knitting and costing', '02 Colour and fabric'),
     'textile-processing-studio': ('Textile Processing Studio', 'Dyeing, processing and colour blends', '02 Colour and fabric'),
-    'pattern-maker': ('Pattern Maker', 'Draft and grade garment patterns', '03 Pattern and fit'),
+    'pattern-maker': ('Garment Studio', 'Pattern making, grading and 3D fitting', '03 Pattern and fit'),
     '3d-drape-studio': ('3D Drape Studio', 'Sew and drape your pattern in 3D', '03 Pattern and fit'),
     'size-chart-builder': ('Size Chart Builder', 'Grade measurements across sizes', '03 Pattern and fit'),
     'decoration-cost-estimator': ('Embroidery & Print Cost', 'Decoration cost per piece', '04 Sampling and tech pack'),
@@ -26,7 +26,8 @@ NAMES = {
     'product-description-writer': ('Product Description Writer', 'Listing titles, bullets and tags', '06 Labels, listing and export'),
     'export-market-checker': ('Export Market Checker', 'Rules and dates by country', '06 Labels, listing and export'),
 }
-COUNT = len(NAMES)
+HIDDEN = {'3d-drape-studio'}  # runs inside Garment Studio (pattern-maker.html), not a tool of its own any more
+COUNT = len([k for k in NAMES if k not in HIDDEN])
 
 # the result block that stays beside the inputs on wide screens
 RAIL = {

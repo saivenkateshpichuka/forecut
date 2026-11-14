@@ -196,6 +196,7 @@
     pc.notches.forEach(function (nt) { if (nt.seg > at) nt.seg += delta; else if (nt.seg === at && delta > 0 && t != null) { /* the notch keeps its distance: if it now falls on the new part, move it */ var Lfirst = C.segLen(pc, at), d = nt.mode === 'pct' ? null : nt.v; if (d != null && nt.from !== 'end' && d > Lfirst) { nt.seg = at + 1; nt.v = d - Lfirst; } } });
     var e = {}, cn = {}; Object.keys(pc.sa.edges).forEach(function (k) { var j = +k; e[j > at ? j + delta : j] = pc.sa.edges[k]; if (j === at && delta > 0) e[j + 1] = pc.sa.edges[k]; }); pc.sa.edges = e;
     Object.keys(pc.sa.corner).forEach(function (k) { var j = +k; cn[j > at ? j + delta : j] = pc.sa.corner[k]; }); pc.sa.corner = cn;
+    if (pc.elastic) { var el = {}; Object.keys(pc.elastic).forEach(function (k) { var j = +k; el[j > at ? j + delta : j] = pc.elastic[k]; if (j === at && delta > 0) el[j + 1] = pc.elastic[k]; }); pc.elastic = el; }
     pc.hems = pc.hems.reduce(function (o, j) { if (j > at) o.push(j + delta); else { o.push(j); if (j === at && delta > 0) o.push(j + 1); } return o; }, []);
     if (pc.fold > at) pc.fold += delta;
     (pc._sewShift = pc._sewShift || []).push([at, delta]);
@@ -206,6 +207,7 @@
     N.splice(i, 1);
     pc.notches = pc.notches.filter(function (nt) { return nt.seg !== i && nt.seg !== (i - 1 + n) % n; }); pc.notches.forEach(function (nt) { if (nt.seg > i) nt.seg--; });
     var e = {}; Object.keys(pc.sa.edges).forEach(function (k) { var j = +k; if (j === i) return; e[j > i ? j - 1 : j] = pc.sa.edges[k]; }); pc.sa.edges = e;
+    if (pc.elastic) { var el = {}; Object.keys(pc.elastic).forEach(function (k) { var j = +k; if (j === i) return; el[j > i ? j - 1 : j] = pc.elastic[k]; }); pc.elastic = el; }
     pc.hems = pc.hems.filter(function (j) { return j !== i; }).map(function (j) { return j > i ? j - 1 : j; });
     if (pc.fold === i || pc.fold === (i - 1 + n) % n) pc.fold = -1; else if (pc.fold > i) pc.fold--;
     (pc._sewShift = pc._sewShift || []).push([i, -1]);
@@ -249,6 +251,7 @@
     var map = function (i) { return (S - 1 - i + S) % S; }; // segment i (node i -> i+1) becomes segment n-1-i
     pc.notches.forEach(function (nt) { nt.seg = map(nt.seg); if (nt.mode === 'pct') nt.v = 100 - nt.v; else nt.from = nt.from === 'end' ? 'start' : 'end'; });
     var e = {}; Object.keys(pc.sa.edges).forEach(function (k) { e[map(+k)] = pc.sa.edges[k]; }); pc.sa.edges = e;
+    if (pc.elastic) { var el = {}; Object.keys(pc.elastic).forEach(function (k) { el[map(+k)] = pc.elastic[k]; }); pc.elastic = el; }
     pc.hems = pc.hems.map(map); if (pc.fold >= 0) pc.fold = map(pc.fold);
     pc._reversed = !pc._reversed; (pc._sewShift = pc._sewShift || []).push(['rev', S]);
   };
@@ -265,7 +268,7 @@
     if (!dst.link || !dst.link.on || dst.link.to !== src.id) return false;
     var b0 = C.bbox(dst), c = C.clone(src); if (dst.link.mode === 'mirror') { var bs = C.bbox(c); C.transformPiece(c, C.M.mirX((bs[0] + bs[2]) / 2)); }
     var b1 = C.bbox(c); C.transformPiece(c, C.M.tr(b0[0] - b1[0], b0[1] - b1[1]));
-    ['nodes', 'internals', 'darts', 'grain', 'notches', 'sa', 'hems', 'fold'].forEach(function (k) { dst[k] = c[k]; }); dst.nodes.forEach(function (nd) { nd.id = uid('p'); }); return true;
+    ['nodes', 'internals', 'darts', 'grain', 'notches', 'sa', 'hems', 'fold', 'elastic'].forEach(function (k) { dst[k] = c[k]; }); dst.nodes.forEach(function (nd) { nd.id = uid('p'); }); return true;
   };
   C.unfold = function (pc, seg) { // a full piece from a half: mirror across the fold edge and join
     var k = C.ctrl(pc, seg), a = k.p0, b = k.p3, d = nrm(sub(b, a)), refl = function (p) { var v = sub(p, a), t = v[0] * d[0] + v[1] * d[1], q = [a[0] + d[0] * t, a[1] + d[1] * t]; return [2 * q[0] - p[0], 2 * q[1] - p[1]]; };
@@ -358,6 +361,8 @@
     T.zip.forEach(function (z) { var pc = byId(p, z.pc), L = pc ? C.rangeLen(pc, z) : 0, inch = Math.ceil(L / 2.54); rows.push({ kind: 'Zipper', item: (z.type || 'Coil') + ' zipper #' + (z.gauge || 5), desc: 'Closed length ' + inch + '" (' + L.toFixed(1) + ' cm) on ' + (pc ? pc.name : '?') + (z.sep ? ' · open-end' : ''), qty: pc ? pc.qty || 1 : 1, unit: 'pcs', colour: cw.c['zip:' + z.id] || z.colour || '' }); });
     [['piping', 'Piping'], ['binding', 'Binding'], ['tape', 'Seam tape']].forEach(function (kk) { var list = T[kk[0]]; if (!list.length) return; var g = grp(list, function (r) { return (r.w || 1) + '|' + (r.type || '') + '|' + (r.fab || ''); }); Object.keys(g).forEach(function (k) { var r = g[k][0], L = len(g[k]) * waste; rows.push({ kind: kk[1], item: kk[1] + ' ' + Math.round((r.w || 1) * 10) + ' mm' + (r.type ? ' · ' + r.type : ''), desc: g[k].length + ' runs, ' + (+st.waste || 0) + '% added for joins', qty: +(L / 100).toFixed(2), unit: 'm', colour: cw.c[kk[0] + ':' + r.id] || r.colour || '' }); }); });
     if (T.tstitch.length) { var g2 = grp(T.tstitch, function (r) { return (r.tex || 30) + '|' + (r.colour || ''); }); Object.keys(g2).forEach(function (k) { var r = g2[k][0], L = g2[k].reduce(function (s, x) { var pc = byId(p, x.pc); return s + (pc ? C.rangeLen(pc, x) * (pc.qty || 1) * (x.rows || 1) : 0); }, 0) * (+st.threadRatio || 2.6); rows.push({ kind: 'Thread', item: 'Topstitch thread Tex ' + (r.tex || 30), desc: 'Topstitching only, at ' + (+st.threadRatio || 2.6) + ' × seam length (lockstitch, needle and bobbin)', qty: +(L / 100).toFixed(1), unit: 'm', colour: cw.c['tstitch:' + r.id] || r.colour || '' }); }); }
+    var elL = 0, elN = 0; p.pieces.forEach(function (pc) { if (!pc.elastic || pc.hidden) return; Object.keys(pc.elastic).forEach(function (k) { var r = C.elasticOf(pc, +k); if (r && +k < C.segCount(pc)) { elL += C.segLen(pc, +k) * r / 100 * (pc.qty || 1); elN += pc.qty || 1; } }); });
+    if (elN) rows.push({ kind: 'Elastic', item: 'Elastic', desc: elN + ' runs, cut to the stretched-in length plus ' + (+st.waste || 0) + '%', qty: +(elL * (1 + (+st.waste || 0) / 100) / 100).toFixed(2), unit: 'm', colour: '' });
     var gx = p.trims.graphic || []; gx.forEach(function (g) { var pc = byId(p, g.pc); rows.push({ kind: 'Artwork', item: g.name || 'Graphic', desc: (g.method || 'Print') + ' · ' + (+g.w || 0).toFixed(1) + ' × ' + (+g.h || 0).toFixed(1) + ' cm on ' + (pc ? pc.name : '?'), qty: pc ? pc.qty || 1 : 1, unit: 'pcs', colour: '' }); });
     return rows;
   };
@@ -368,14 +373,14 @@
   C.nearestSeg = function (pc, p) { var best = null; for (var s = 0; s < C.segCount(pc); s++) { var pts = C.segPts(pc, s, .1), acc = 0; for (var j = 1; j < pts.length; j++) { var a = pts[j - 1], b = pts[j], vx = b[0] - a[0], vy = b[1] - a[1], LL = vx * vx + vy * vy, L = Math.sqrt(LL), t = LL ? Math.max(0, Math.min(1, ((p[0] - a[0]) * vx + (p[1] - a[1]) * vy) / LL)) : 0, d = Math.hypot(a[0] + vx * t - p[0], a[1] + vy * t - p[1]); if (!best || d < best.d) best = { seg: s, d: d, s: acc + L * t }; acc += L; } } return best; };
   C.anchors = function (pc) {
     var A = { segs: [], notches: [] };
-    for (var k = 0; k < C.segCount(pc); k++) { var L = C.segLen(pc, k); [.1, .5, .9].forEach(function (f) { A.segs.push({ k: k, s: L * f, mid: C.pointAt(pc, k, C.tAt(pc, k, L * f)), sa: pc.sa.edges[k], hem: pc.hems.indexOf(k) >= 0, fold: pc.fold === k && f === .5 }); }); }
+    for (var k = 0; k < C.segCount(pc); k++) { var L = C.segLen(pc, k); [.1, .5, .9].forEach(function (f) { A.segs.push({ k: k, s: L * f, mid: C.pointAt(pc, k, C.tAt(pc, k, L * f)), sa: pc.sa.edges[k], el: pc.elastic ? pc.elastic[k] : null, hem: pc.hems.indexOf(k) >= 0, fold: pc.fold === k && f === .5 }); }); }
     pc.notches.forEach(function (nt) { if (nt.seg >= C.segCount(pc)) return; var r = C.notchPos(pc, nt); A.notches.push({ nt: nt, p: r.p, k: nt.seg, s: r.s }); });
     return A;
   };
   C.reattach = function (pc, A, map) {
-    var e = {}, hems = [], fold = -1;
-    A.segs.forEach(function (a) { var p = map(a.mid, a.k, a.s), ne = C.nearestSeg(pc, p); if (!ne || ne.d > .3) return; if (a.sa != null) e[ne.seg] = a.sa; if (a.hem && hems.indexOf(ne.seg) < 0) hems.push(ne.seg); if (a.fold) fold = ne.seg; });
-    pc.sa.edges = e; pc.hems = hems; pc.fold = fold;
+    var e = {}, hems = [], fold = -1, el = {};
+    A.segs.forEach(function (a) { var p = map(a.mid, a.k, a.s), ne = C.nearestSeg(pc, p); if (!ne || ne.d > .3) return; if (a.sa != null) e[ne.seg] = a.sa; if (a.el) el[ne.seg] = a.el; if (a.hem && hems.indexOf(ne.seg) < 0) hems.push(ne.seg); if (a.fold) fold = ne.seg; });
+    pc.sa.edges = e; pc.hems = hems; pc.fold = fold; pc.elastic = el;
     pc.notches = A.notches.map(function (n) { var p = map(n.p, n.k, n.s), ne = C.nearestSeg(pc, p); if (!ne || ne.d > .3) return null; var nt = JSON.parse(JSON.stringify(n.nt)); nt.seg = ne.seg; nt.mode = 'dist'; nt.from = 'start'; nt.v = +ne.s.toFixed(3); return nt; }).filter(Boolean);
   };
   /* index of a node at (seg, t): an existing node when within 0.5 mm, otherwise a new one made by splitting */
@@ -454,6 +459,7 @@
 
 
   /* ---------- seam allowance: the cutting line from the seamline ---------- */
+  C.elasticOf = function (pc, i) { var v = pc.elastic && pc.elastic[i]; return v > 0 && v < 100 ? +v : 0; }; // stretched-in elastic: the elastic is cut at this % of the edge
   C.saOf = function (pc, i) { if (i === pc.fold) return 0; if (pc.sa.edges[i] != null) return +pc.sa.edges[i]; return pc.hems.indexOf(i) >= 0 ? +pc.sa.hem : +pc.sa.def; };
   function lineX(p, d, q, e) { var den = d[0] * e[1] - d[1] * e[0]; if (Math.abs(den) < 1e-9) return null; var t = ((q[0] - p[0]) * e[1] - (q[1] - p[1]) * e[0]) / den; return [p[0] + d[0] * t, p[1] + d[1] * t]; }
   C.cutLine = function (pc, fast) {
@@ -679,7 +685,7 @@
       if (o.internals !== false) pc.internals.forEach(function (it) { if (it.visible === false) return; s += '<polyline points="' + it.pts.map(function (q) { return f(placed(pc, q)); }).join(' ') + '" stroke="#333" stroke-width=".03"' + (it.style === 'dashed' ? ' stroke-dasharray=".4 .25"' : '') + '/>'; });
       if (o.labels !== false) { var bb = C.bbox(pc), c = placed(pc, [(bb[0] + bb[2]) / 2, (bb[1] + bb[3]) / 2]); s += '<text x="' + (c[0] + ox).toFixed(2) + '" y="' + (c[1] + oy).toFixed(2) + '" font-size="1" fill="#111" stroke="none" text-anchor="middle" font-family="Arial">' + esc(pc.name || 'Piece') + '</text><text x="' + (c[0] + ox).toFixed(2) + '" y="' + (c[1] + oy + 1.3).toFixed(2) + '" font-size=".6" fill="#555" stroke="none" text-anchor="middle" font-family="Arial">' + esc((pc.size ? 'Size ' + pc.size + ' · ' : '') + 'Cut ' + pc.qty + (pc.pair ? ' (pair)' : '') + (pc.fold >= 0 ? ' · on fold' : '')) + '</text>'; }
     });
-    if (o.brand !== false) s += '<text x="' + (W - .6).toFixed(2) + '" y="' + (H - .6).toFixed(2) + '" font-size=".5" fill="#a9481f" stroke="none" text-anchor="end" font-family="Arial">Forecut Pattern Maker</text>';
+    if (o.brand !== false) s += '<text x="' + (W - .6).toFixed(2) + '" y="' + (H - .6).toFixed(2) + '" font-size=".5" fill="#a9481f" stroke="none" text-anchor="end" font-family="Arial">Forecut Garment Studio</text>';
     if (o.square !== false) s += '<rect x=".6" y="' + (H - 5.6).toFixed(2) + '" width="5" height="5" stroke="#111" stroke-width=".03"/><text x="3.1" y="' + (H - 2.9).toFixed(2) + '" font-size=".45" text-anchor="middle" stroke="none" fill="#111" font-family="Arial">5 cm</text>';
     return s + '</g></svg>';
   };

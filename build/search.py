@@ -41,7 +41,7 @@ for x in I.D:
     page = ICODES[first] + '.html' if os.path.exists(f'../{ICODES[first]}.html') else 'india.html'
     idx.append({'t': 'i', 'n': x[2], 'c': f'India · {x[1]}', 'a': x[3], 'x': x[4], 'l': x[5], 'u': page, 'i': photo(x[2])})
 # pages: titles and descriptions straight from the built pages
-SKIP = {'404.html', 'offline.html', 'search.html', 'account.html', 'terms.html', 'privacy.html'}
+SKIP = {'404.html', 'offline.html', 'search.html', 'account.html', 'terms.html', 'privacy.html', '3d-drape-studio.html'}
 for f in sorted(glob.glob('../*.html')):
     fn = os.path.basename(f)
     if fn in SKIP or fn.startswith('forecut-'):
