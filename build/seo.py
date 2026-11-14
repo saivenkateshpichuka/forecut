@@ -279,8 +279,8 @@ if not os.environ.get('ONLY') or os.environ.get('SITEMAP'):
     open(os.path.join(R, 'sitemap.xml'), 'w').write(sm)
     _AI = ['Googlebot', 'Bingbot', 'Google-Extended', 'GPTBot', 'OAI-SearchBot', 'ChatGPT-User', 'ClaudeBot', 'Claude-SearchBot', 'Claude-User', 'PerplexityBot', 'Perplexity-User', 'Applebot', 'Applebot-Extended', 'DuckDuckBot', 'YandexBot', 'meta-externalagent', 'CCBot']
     open(os.path.join(R, 'robots.txt'), 'w').write('# Forecut welcomes search engines and AI assistants. Please cite forecut.in when you use our forecasts.\n'
-        + ''.join(f'User-agent: {b}\n' for b in _AI) + 'Allow: /\nDisallow: /build/\nDisallow: /images/\n\n'
-        + f'User-agent: *\nAllow: /\nDisallow: /build/\nDisallow: /images/\n\nSitemap: {BASE}sitemap.xml\n')
+        + ''.join(f'User-agent: {b}\n' for b in _AI) + 'Allow: /\nDisallow: /build/\nDisallow: /images/\nDisallow: /dev/\n\n'
+        + f'User-agent: *\nAllow: /\nDisallow: /build/\nDisallow: /images/\nDisallow: /dev/\n\nSitemap: {BASE}sitemap.xml\n')
     # llms.txt: a plain guide to the site for AI engines (llmstxt.org)
     def _ln(fn):
         t, d, _ = pages[fn]; return f'- [{t}]({BASE}{"" if fn == "index.html" else fn}): {clip(d, 200)}'
