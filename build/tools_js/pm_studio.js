@@ -9,6 +9,8 @@
   function esc(t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function dl(name, data, type) { if (window.FC && FC.download) return FC.download(name, data, type); var b = data instanceof Blob ? data : new Blob([data], { type: type || 'application/octet-stream' }), a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = name; document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 500); }
   function I(d) { return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="' + d + '"/></svg>'; }
+  /* tool icons: the Forecut editor set (24 x 24, 1.65 strokes), falling back to the built-in path */
+  function TI(t) { var ic = (window.FC_PMICONS || {})[t.id]; return ic ? '<svg viewBox="0 0 24 24" aria-hidden="true" class="pmi">' + ic + '</svg>' : I(t.ic); }
 
   /* ---------- tools ---------- */
   var TOOLS = [
@@ -77,7 +79,7 @@
   function menuHTML(m) {
     return '<div class="ps-menu"><button type="button" class="ib ps-mb" data-m="' + m[0] + '" aria-haspopup="menu">' + m[1] + '</button><div class="ps-dd" data-mm="' + m[0] + '" role="menu" hidden>' + m[2].map(function (it) {
       if (it === '-') return '<hr>';
-      if (typeof it === 'string' && it.indexOf('tool:') === 0) { var t = TOOL[it.slice(5)]; return '<button type="button" role="menuitem" data-a="' + it + '">' + I(t.ic) + '<span>' + esc(t.n) + '</span>' + (t.k ? '<kbd>' + t.k.toUpperCase() + '</kbd>' : '') + '</button>'; }
+      if (typeof it === 'string' && it.indexOf('tool:') === 0) { var t = TOOL[it.slice(5)]; return '<button type="button" role="menuitem" data-a="' + it + '">' + TI(t) + '<span>' + esc(t.n) + '</span>' + (t.k ? '<kbd>' + t.k.toUpperCase() + '</kbd>' : '') + '</button>'; }
       if (typeof it === 'string' && it.indexOf('v:') === 0) { var v = VIEWS.filter(function (x) { return x[0] === it.slice(2); })[0]; return '<label><input type="checkbox" data-v="' + v[0] + '"> ' + v[1] + '</label>'; }
       return '<button type="button" role="menuitem" data-a="' + it[0] + '"><i></i><span>' + esc(it[1]) + '</span>' + (it[2] ? '<kbd>' + it[2] + '</kbd>' : '') + '</button>';
     }).join('') + '</div></div>';
@@ -90,7 +92,7 @@
     var pl = pb.querySelector('.pl'), pcol = pb.querySelector('.pc'), pr = pb.querySelector('.pr'), ctl = pcol.querySelector('.ctl'), hidel = document.getElementById('pm-hidel');
     var groups = []; TOOLS.forEach(function (t) { if (groups.indexOf(t.g) < 0) groups.push(t.g); });
     toolsEl = mk('nav', 'ps-tools', '<input type="search" id="ps-tsearch" placeholder="Find a tool" aria-label="Find a tool">'
-      + groups.map(function (g) { return '<div class="ps-tg"><small>' + g + '</small>' + TOOLS.filter(function (t) { return t.g === g; }).map(function (t) { return '<button type="button" class="ps-tb" data-t="' + t.id + '" aria-label="' + esc(t.n) + '" data-tip="' + esc(t.n + (t.k ? ' (' + t.k.toUpperCase() + ')' : '') + '. ' + t.tip) + '">' + I(t.ic) + '<span>' + esc(t.n) + '</span>' + (t.k ? '<kbd>' + t.k.toUpperCase() + '</kbd>' : '') + '</button>'; }).join('') + '</div>'; }).join(''));
+      + groups.map(function (g) { return '<div class="ps-tg"><small>' + g + '</small>' + TOOLS.filter(function (t) { return t.g === g; }).map(function (t) { return '<button type="button" class="ps-tb" data-t="' + t.id + '" aria-label="' + esc(t.n) + '" data-tip="' + esc(t.n + (t.k ? ' (' + t.k.toUpperCase() + ')' : '') + '. ' + t.tip) + '">' + TI(t) + '<span>' + esc(t.n) + '</span>' + (t.k ? '<kbd>' + t.k.toUpperCase() + '</kbd>' : '') + '</button>'; }).join('') + '</div>'; }).join(''));
     toolsEl.setAttribute('aria-label', 'Editing tools'); pl.insertBefore(toolsEl, pl.firstChild);
     modesEl = mk('div', 'ps-modes', '<button type="button" data-pmode="draft" title="Draft: choose the garment, style, size and measurements">Draft</button><button type="button" data-pmode="edit" title="Edit pieces: move points, reshape curves, add notches, seam allowances and more">Edit pieces</button>');
     modesEl.setAttribute('role', 'group'); modesEl.setAttribute('aria-label', 'Mode'); ctl.insertBefore(modesEl, hidel ? hidel.nextSibling : ctl.firstChild);

@@ -442,7 +442,15 @@ pm = (PMCSS + '<link rel="manifest" href="apps/pattern-maker.webmanifest"><link 
 open(OUT + 'pm-link.js', 'w').write('window.FC_PM_LINKS=' + json.dumps({d[0]: PM_NAMES[d[3]] for d in PMD}) + ';' + JS('pm_link.js'))
 import subprocess
 FABLIB = subprocess.run(['node', '-e', "const D=require(process.argv[1]);process.stdout.write(JSON.stringify(Object.keys(D.FABRICS).map(k=>Object.assign({key:k},D.FABRICS[k]))))", os.path.join(os.path.dirname(os.path.abspath(__file__)), 'tools_js', 'drape_sim.js')], capture_output=True, text=True, check=True).stdout
+import glob as _glob, re as _re
+def _pm_icons():
+    out = {}
+    for f in sorted(_glob.glob(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'pm_icons', '*.svg'))):
+        m = _re.search(r'<svg[^>]*>(.*)</svg>', open(f, encoding='utf-8').read(), _re.S)
+        if m: out[os.path.basename(f)[:-4]] = _re.sub(r'\s+', ' ', m.group(1)).strip()
+    return out
+PMICONS = json.dumps(_pm_icons(), separators=(',', ':'))
 page('pattern-maker.html', 'Pattern Maker · Draft Kurta, Shirt, Blouse, Dress, Trousers & More · Forecut', pm,
-     'window.PM_DETAILS=' + json.dumps(PMD) + ';window.FC_FABLIB=' + FABLIB + ';' + JS('pm_engine.js') + JS('pm_export.js') + JS('pm_views.js') + JS('pm_cost.js') + JS('pm_ui.js') + JS('pm_edit.js') + JS('pm_cad.js') + JS('pm_studio.js') + JS('pm_more.js'), auth=True)
+     'window.PM_DETAILS=' + json.dumps(PMD) + ';window.FC_FABLIB=' + FABLIB + ';window.FC_PMICONS=' + PMICONS + ';' + JS('pm_engine.js') + JS('pm_export.js') + JS('pm_views.js') + JS('pm_cost.js') + JS('pm_ui.js') + JS('pm_edit.js') + JS('pm_cad.js') + JS('pm_studio.js') + JS('pm_more.js'), auth=True)
 
 print('tools preview ok', 3)
