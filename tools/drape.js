@@ -40,6 +40,8 @@ const HAIR = [['auto', 'Auto'], ['none', 'None'], ['short', 'Short'], ['bun', 'B
 const SEAMC = ['#c4572f', '#2f6f8f', '#7a5c99', '#3d8a5a', '#b08a1e', '#a23b72', '#4a7d84', '#8c6d3f', '#5b6bbf', '#9c4f2f', '#3f7f3f', '#7f3f6f', '#2f8f7f', '#8f2f3f', '#6f6f2f', '#2f4f8f', '#b2672b', '#6a8f2f'];
 
 let S = load();
+let CUSTOM = null, useCustom = false;
+try { if (/[?&]custom=1/.test(location.search)) { CUSTOM = JSON.parse(localStorage.getItem('fc-3d-custom') || 'null'); useCustom = !!(CUSTOM && CUSTOM.pieces && CUSTOM.pieces.length); } } catch (e) { }
 try { const q = new URLSearchParams(location.search); if (D.STYLES[q.get('style')]) { S.style = q.get('style'); S.opts = {}; S.meas = {}; } if (GENDER[q.get('gender')]) { S.gender = q.get('gender'); S.body = S.gender === 'kids' ? 'girl' : S.gender === 'unisex' ? 'men' : S.gender; } if (q.get('size')) S.size = q.get('size'); if (q.get('o')) { const o = JSON.parse(q.get('o')); S.opts = {}; ['len', 'ease', 'neck', 'sleeve', 'slen', 'flare', 'slit', 'slen2', 'leg', 'pfit', 'tlen', 'mohri', 'fullness', 'ruch', 'gfull', 'panels', 'hemc', 'circle'].forEach(k => { const v = o[k]; if (v === undefined) return; if (/^[\d.]+$/.test(String(v))) S.opts[k] = Math.min(700, +v); else if ((k === 'neck' && NECK.some(n => n[0] === v)) || (k === 'sleeve' && SLEEVE[v]) || (k === 'slen' && SLEN.some(n => n[0] === v)) || (k === 'leg' && LEG.some(n => n[0] === v)) || (k === 'pfit' && PFIT.some(n => n[0] === v)) || (k === 'fullness' && FULL.some(n => n[0] === v))) S.opts[k] = v; }); } if (q.get('m')) { const mm = JSON.parse(q.get('m')); S.meas = {}; MEAS.forEach(k => { if (+mm[k[0]] > 0) S.meas[k[0]] = +mm[k[0]]; }); } if (q.get('style')) history.replaceState(null, '', location.pathname); } catch (e) { }
 function defaults() { return { style: 'tshirt', gender: 'women', size: 'M', fabric: 'jersey', colour: '#7c8ea3', opts: {}, meas: {}, fit: 'off', bodyOn: true, seamsOn: true, quality: 'std', tone: 'form', tool: 'pull', unit: 'cm', body: 'women', pose: { arm: 46, elbow: 0, legs: 0 }, lines: { shoulder: 1, cf: 1, cb: 1, bust: 1, waist: 1, hip: 1, side: 1, neck: 1, knee: 0, armhole: 0 }, showLines: false, showPts: false, showJoints: false, tab: 'garment', fabOv: {}, myFabrics: {}, cws: null, cw: 0, hideL: false, hideR: false, trims: { btn: 'horn', zip: 'metal', top: true, thread: 'tone' } }; }
 function load() { try { const v = JSON.parse(localStorage.getItem(KEY) || 'null'); if (v && D.STYLES[v.style]) { const o = Object.assign(defaults(), v); if (!o.body) o.body = o.gender === 'kids' ? 'boy' : o.gender === 'unisex' ? 'men' : o.gender; if (!D.FABRICS[o.fabric] && !(o.myFabrics || {})[o.fabric]) o.fabric = 'jersey'; return o; } } catch (e) { } return defaults(); }
@@ -53,6 +55,7 @@ app.innerHTML = `<div class="dr" id="drRoot">
       <button type="button" role="tab" data-tab="garment">Garment</button><button type="button" role="tab" data-tab="avatar">Avatar</button><button type="button" role="tab" data-tab="fabric">Fabric</button><button type="button" role="tab" data-tab="colour">Colour</button><button type="button" role="tab" data-tab="graphic">Graphics</button><button type="button" role="tab" data-tab="trim">Trims</button>
     </div>
     <div class="dr-pane" data-pane="garment">
+      <div id="drCustom" class="dr-custom" hidden><b>From Garment Studio</b><span id="drCustomName"></span><small id="drCustomNote"></small><button type="button" id="drCustomOff" class="dr-btn">Use a ready style instead</button><button type="button" id="drCustomOn" class="dr-btn" hidden>Back to my edited pieces</button></div>
       <label>Style<select id="drStyle"></select></label><div id="drOpts" class="dr-opts"></div>
       <label class="dr-elr" title="Used by the Elastic tool above the 3D view">Elastic length (Elastic tool) <output id="drElrO">85%</output><input type="range" id="drElr" min="60" max="99" step="1" value="85"></label>
       <div class="dr-acts"><button type="button" class="dr-p" id="drSew">Sew and drape again</button><button type="button" id="drPause">Pause</button>
@@ -290,6 +293,11 @@ let tmr = 0;
 function later(fn, ms) { clearTimeout(tmr); tmr = setTimeout(fn, ms || 350); }
 function refab() { save(); applyMaterial(); if (worker && built) { worker.postMessage({ cmd: 'fabric', fab: D.phys(fab()), sim: simMsg(), gen }); status('Draping in ' + fabName().toLowerCase() + '…', 'run'); } }
 $('.dr-tabs').addEventListener('click', e => { const t = e.target.dataset.tab; if (!t) return; S.tab = t; save(); renderControls(); });
+function customNote(w) { const n = $('#drCustomNote'); if (n) n.textContent = (w || []).join(' · '); }
+function showCustom() { const c = $('#drCustom'); if (!c) return; c.hidden = !CUSTOM; if (!CUSTOM) return; $('#drCustomName').textContent = (CUSTOM.name || 'Edited pieces') + ' · ' + CUSTOM.pieces.length + ' pieces'; $('#drCustomOff').hidden = !useCustom; $('#drCustomOn').hidden = useCustom; const st = $('#drStyle'); if (st) { st.disabled = useCustom; st.parentNode.style.opacity = useCustom ? .5 : 1; } const op = $('#drOpts'); if (op) op.style.display = useCustom ? 'none' : ''; }
+$('#drCustomOff').addEventListener('click', () => { useCustom = false; customNote([]); showCustom(); rebuild(); });
+$('#drCustomOn').addEventListener('click', () => { useCustom = true; showCustom(); rebuild(); });
+showCustom();
 $('#drStyle').addEventListener('change', e => { S.style = e.target.value; S.opts = {}; save(); renderControls(); rebuild(); });
 $('#drGender').addEventListener('change', e => { S.body = e.target.value; syncG(); S.meas = {}; S.opts = {}; save(); renderControls(); rebuild(); });
 $('#drSize').addEventListener('change', e => { S.size = e.target.value; S.meas = {}; save(); renderControls(); rebuild(); });
@@ -393,7 +401,7 @@ bodyMat.onBeforeCompile = sh => { // underwear drawn per pixel from heights, so 
       float pants = step(.5, vEl) * step(vW.y, pt) * step(cut, vW.y);
       float bra = step(.5, vEl) * step(bl, vW.y) * step(vW.y, bh) * step(.01, bh - bl);
       float u = max(pants, bra); diffuseColor.rgb = mix(skin, cloth, u);
-      if (vW.z > 1.0) { vec2 lu = vec2(.5 - vW.x / logoW, (logoC - vW.y) / (logoW * .25) + .5); if (lu.x > 0. && lu.x < 1. && lu.y > 0. && lu.y < 1.) diffuseColor.rgb = mix(diffuseColor.rgb, logoCol, texture2D(logoMap, lu).a * .9); }`);
+      if (vW.z > 1.0) { vec2 lu = vec2(.5 + vW.x / logoW, (logoC - vW.y) / (logoW * .25) + .5); if (lu.x > 0. && lu.x < 1. && lu.y > 0. && lu.y < 1.) diffuseColor.rgb = mix(diffuseColor.rgb, logoCol, texture2D(logoMap, lu).a * .9); }`);
 };
 /* Loop subdivision for the display skin: one level turns the 26 000 triangle body into a smooth 105 000 triangle surface */
 function loopSub(P, T, A, X) {
@@ -946,7 +954,7 @@ function rebuild() {
   const m = baseMeas(), opts = Object.assign(baseOpts(), S.opts);
   status(lastBody ? 'Cutting and sewing the pieces…' : 'Loading the avatar…', 'run');
   const g0 = gen; clearTimeout(rebuild.wd); rebuild.wd = setTimeout(() => { if (gen === g0 && !lastBody && /Loading the avatar/.test($('#drStatus').textContent)) status('The avatar is taking long to load. Check your connection, then press Sew and drape again (or reload the page).', 'err'); }, 30000);
-  worker.postMessage({ cmd: 'build', gen, style: S.style, gender: S.gender, body: S.body, pose: Object.assign({}, S.pose || {}, { type: (S.body === 'women' || S.body === 'men') ? S.btype || '' : '', stature: { petite: .94, tall: 1.05 }[S.stature] || 1 }), size: S.size, height: +(S.meas || {}).height || 0, m, opts, fabric: S.fabric, fab: D.phys(fab()), sim: simMsg(), meshType: simset().mesh, h: simset().h, preset: S.preset || 'a', poseMap: S.poseMap || null });
+  worker.postMessage({ cmd: 'build', gen, style: S.style, gender: S.gender, body: S.body, pose: Object.assign({}, S.pose || {}, { type: (S.body === 'women' || S.body === 'men') ? S.btype || '' : '', stature: { petite: .94, tall: 1.05 }[S.stature] || 1 }), size: S.size, height: +(S.meas || {}).height || 0, m, opts, fabric: S.fabric, fab: D.phys(fab()), sim: simMsg(), meshType: simset().mesh, h: simset().h, preset: S.preset || 'a', poseMap: S.poseMap || null, custom: useCustom ? CUSTOM : null });
 }
 function onMsg(e) {
   const d = e.data; if (d.gen !== gen) return;
@@ -958,6 +966,7 @@ function onMsg(e) {
     status('Cutting and sewing the pieces…', 'run'); return;
   }
   if (d.type === 'joints') { drawPoseJoints(d.joints); return; }
+  if (d.type === 'custom') { (d.elastic || []).forEach(e => elastics.push(e.ids)); if (d.elastic && d.elastic.length) drawElastics(); const w = (d.warn || []).concat((d.left || []).length ? ['Not in 3D (no seams and no "In 3D" place): ' + d.left.join(', ')] : []); customNote(w); return; }
   if (d.type === 'elasticOn') { if (!d.key) { status('Click closer to an edge (waist, cuff, hem or neckline) for elastic', 'err'); return; } elastics.push(d.ids); drawElastics(); status('Elastic sewn in at ' + Math.round(d.ratio * 100) + '% · Clear marks removes it', 'ok'); return; }
   if (d.type === 'bodypos') { if (!lastBody) return; curBody = Object.assign({}, lastBody, { pos: d.pos, J: Object.assign({}, lastBody.J, d.eyes || {}) }); buildBody(curBody); dirty = true; if (d.done && d.joints) { drawPoseJoints(d.joints); if (d.poseMap && poseTurned) { S.poseMap = d.poseMap; save(); poseTurned = false; const ps = $('#drPreset'); if (ps && ps.value) { ps.insertAdjacentHTML('beforeend', '<option value="">Custom pose</option>'); ps.value = ''; } } } if (d.done) status('Posed: ' + ((D.POSES[S.preset] || {}).n || 'A-pose') + '. Settling the cloth…', 'run'); return; }
   if (d.type === 'mesh') { elastics = []; elG.clear();

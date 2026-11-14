@@ -840,6 +840,76 @@
   };
 
   /* ---------------- meshing ---------------- */
+  /* ---------------- a pattern from Garment Studio's Edit pieces: any pieces, placed by their 3D position, sewn by their seams ---------------- */
+  D.assembleCustom = function (spec, body, m) {
+    var panels = [], seams = [], rings = [], elastic = [], by = body.y, inst = [], yAxis = function (p) { return [0, p[1], 0]; };
+    var reflect = function (q, A, B) { var dx = B[0] - A[0], dy = B[1] - A[1], L = dx * dx + dy * dy || 1, t = ((q[0] - A[0]) * dx + (q[1] - A[1]) * dy) / L, f = [A[0] + dx * t, A[1] + dy * t]; return [2 * f[0] - q[0], 2 * f[1] - q[1]]; };
+    var mirrorSegs = function (segs, fn, suf) { return segs.slice().reverse().map(function (sg) { return { key: sg.key + suf, pts: sg.pts.map(fn).reverse() }; }); };
+    var bbox = function (segs) { var b = [1e9, 1e9, -1e9, -1e9]; segs.forEach(function (sg) { sg.pts.forEach(function (q) { b[0] = Math.min(b[0], q[0]); b[1] = Math.min(b[1], q[1]); b[2] = Math.max(b[2], q[0]); b[3] = Math.max(b[3], q[1]); }); }); return b; };
+    var torsoR = function (top, len, mu) { return Math.max(body.maxA(Math.max(0, top - len - 4), top) + 3.2, mu / 1.42); };
+    var nOther = 0, sewn = {}, left = []; spec.seams.forEach(function (sm) { sewn[sm.a[0]] = sewn[sm.b[0]] = 1; });
+    spec.pieces.forEach(function (P, pi) {
+      if (P.pos === 'other' && !sewn[pi]) { left.push(P.name); inst[pi] = []; return; } // an unsewn collar or pocket would only fall to the floor
+      var segs = P.segs.map(function (sg) { return { key: sg.key, pts: sg.pts.map(function (q) { return q.slice(); }) }; }), list = [];
+      if (P.fold) { // unfold: the fold edge goes, the other half is the mirror across it
+        var fi = segs.findIndex(function (sg) { return sg.key === P.fold; });
+        if (fi >= 0) { var fs = segs[fi], A = fs.pts[0], B = fs.pts[fs.pts.length - 1], right = segs.slice(fi + 1).concat(segs.slice(0, fi)).map(function (sg) { return { key: sg.key + '.R', pts: sg.pts }; });
+          var all = right.concat(mirrorSegs(right.map(function (sg) { return { key: sg.key.replace(/\.R$/, ''), pts: sg.pts }; }), function (q) { return reflect(q, A, B); }, '.L'));
+          var xf = (A[0] + B[0]) / 2; list.push({ side: 'C', both: true, segs: all, ux: function (q) { return q[0] - xf; } }); }
+      }
+      if (!list.length) {
+        var bb0 = bbox(segs), cx = P.draft ? 0 : (bb0[0] + bb0[2]) / 2;
+        if (P.pair) { list.push({ side: 'R', segs: segs.map(function (sg) { return { key: sg.key + '.R', pts: sg.pts }; }), ux: function (q) { return q[0] - cx; } });
+          list.push({ side: 'L', segs: mirrorSegs(segs, function (q) { return [2 * cx - q[0], q[1]]; }, '.L'), ux: function (q) { return q[0] - cx; } }); }
+        else list.push({ side: 'C', segs: segs.map(function (sg) { return { key: sg.key + '.C', pts: sg.pts }; }), ux: function (q) { return q[0] - cx; } });
+      }
+      list.forEach(function (I, k) {
+        var bb = bbox(I.segs), top3, place, axis = yAxis, pos = P.pos, mu = 0; I.segs.forEach(function (sg) { sg.pts.forEach(function (q) { mu = Math.max(mu, Math.abs(I.ux(q))); }); });
+        var vOf = function (y) { return P.draft && (pos === 'front' || pos === 'back' || /^skirt|^pants/.test(pos)) ? y : y - bb[1]; }, len = bb[3] - (P.draft ? 0 : bb[1]);
+        if (pos === 'front' || pos === 'back') {
+          var zs = pos === 'front' ? 1 : -1; top3 = by.hps + 1.5; var R = torsoR(top3, len, mu);
+          place = function (u, v) { var th = u / R; return [R * Math.sin(th), top3 - v, zs * R * Math.cos(th) - (zs < 0 ? .5 : 0)]; };
+        } else if (pos === 'skirt-front' || pos === 'skirt-back') {
+          var zs2 = pos === 'skirt-front' ? 1 : -1; top3 = by.waist + 2.5; var R2 = Math.max(body.maxA(by.crotch - 10, by.waist + 2) + 3, mu / 1.5);
+          place = function (u, v) { var th = u / R2; return [R2 * Math.sin(th), top3 - v, zs2 * R2 * Math.cos(th) - (zs2 < 0 ? 1 : 0)]; };
+        } else if (pos === 'pants-front' || pos === 'pants-back') {
+          var L = body.legs.filter(function (q) { return q.s === (I.side === 'L' ? -1 : 1); })[0] || body.legs[0], zs3 = pos === 'pants-front' ? 1 : -1, rL = Math.max((m.thigh || 55) / TAU + 3, mu / 2.6), top4 = by.waist + 2.5, uc = (bb[0] + bb[2]) / 2;
+          var legX = function (y) { var t = Math.max(0, Math.min(1, (L.H[1] - y) / ((L.H[1] - L.A[1]) || 1))); return [L.H[0] + (L.A[0] - L.H[0]) * t, L.H[2] + (L.A[2] - L.H[2]) * t]; };
+          var y0 = P.draft ? 0 : bb[1]; place = function (u, v) { var y = top4 - (v - y0), c = legX(Math.min(y, L.H[1])), th = (u - uc) / rL * (I.side === 'L' ? -1 : 1); return [c[0] + rL * Math.sin(th), y, c[1] + zs3 * rL * Math.cos(th)]; }; I.raw = true;
+          axis = function (p) { var c = legX(Math.min(p[1], L.H[1])); return [c[0], p[1], c[1]]; };
+        } else if (pos === 'sleeve') {
+          var J = body.joints.filter(function (q) { return q.s === (I.side === 'L' ? -1 : 1); })[0] || body.joints[0], tp = I.segs[0].pts[0]; I.segs.forEach(function (sg) { sg.pts.forEach(function (q) { if (q[1] < tp[1]) tp = q; }); });
+          var capF = I.segs.filter(function (sg) { return /^capF/.test(sg.key); })[0], fl = 1; if (capF) { var cu = 0; capF.pts.forEach(function (q) { cu += q[0] - tp[0]; }); if (cu < 0) fl = -1; }
+          var capEnd = I.segs.filter(function (sg) { return /^cap/.test(sg.key); }).reduce(function (a, sg) { return Math.max(a, sg.pts[0][1], sg.pts[sg.pts.length - 1][1]); }, tp[1] + 10), CH = capEnd - tp[1], rS = J.rb + 2.8;
+          var hwT = []; I.segs.forEach(function (sg) { sg.pts.forEach(function (q) { var vi = Math.max(0, Math.round(q[1] - tp[1])); hwT[vi] = Math.max(hwT[vi] || 0, Math.abs(q[0] - tp[0])); }); });
+          for (var hi = 1; hi < hwT.length; hi++) if (!hwT[hi]) hwT[hi] = hwT[hi - 1] || 0; for (hi = hwT.length - 2; hi >= 0; hi--) if (!hwT[hi]) hwT[hi] = hwT[hi + 1];
+          var hwAt = function (vv) { var i2 = Math.max(0, Math.min(hwT.length - 1, Math.round(vv))); return Math.max(2, hwT[Math.max(i2, Math.min(hwT.length - 1, Math.round(CH)))] || 2); }; // below the cap the sleeve's half width; on the cap, the width at its base
+          place = function (u, v) { var uu = (u - tp[0]) * fl, vv = v - tp[1], hw2 = hwAt(vv), rr = Math.max(rS + .8 - Math.max(0, vv - CH) * .03, 2 * hw2 / TAU * 1.5), ph = uu / hw2 * PI / 1.22, s2 = vv - CH * .25 + 2.5, c = Math.cos(ph) * rr, sn = Math.sin(ph) * rr; return [J.J[0] + J.d[0] * s2 + J.up[0] * c, J.J[1] + J.d[1] * s2 + J.up[1] * c, J.J[2] + J.d[2] * s2 + J.up[2] * c + sn + .5]; };
+          axis = function (p) { var px = p[0] - J.J[0], py = p[1] - J.J[1], pz = p[2] - J.J[2], t = px * J.d[0] + py * J.d[1] + pz * J.d[2]; return [J.J[0] + J.d[0] * t, J.J[1] + J.d[1] * t, J.J[2] + J.d[2] * t]; };
+          var place0 = place; place = function (u, v) { return place0(u, v); }; I.raw = true;
+        } else { // collars, cuffs, pockets: laid flat in front of the chest, then pulled in by their seams
+          var Rf = body.maxA(by.bust - 5, by.bust + 5) + 8 + 2.5 * nOther++, yTop = by.hps - 2;
+          place = function (u, v) { return [u, yTop - v, Rf]; }; axis = function (p) { return [p[0], p[1], p[2] - 10]; };
+        }
+        var pl = place, ux = I.ux, isRaw = I.raw; I.panel = panels.length;
+        panels.push({ name: (P.name || 'Piece') + (I.side !== 'C' ? ' ' + I.side : ''), segs: I.segs, axis: axis, place: function (u, v) { return isRaw ? pl(u, v) : pl(ux([u, v]), vOf(v)); }, bottom: /^skirt|^pants/.test(pos) ? 1 : 0 });
+      });
+      inst[pi] = list;
+    });
+    // the waist: the top edges of skirt and trouser pieces cannot get longer than they were cut
+    var ring = []; spec.pieces.forEach(function (P, pi) { if (!/^skirt|^pants/.test(P.pos)) return; inst[pi].forEach(function (I) { var bb = bbox(I.segs); I.segs.forEach(function (sg) { var a = sg.pts[0], b = sg.pts[sg.pts.length - 1]; if (sg.pts.length > 1 && sg.pts.every(function (q) { return q[1] < bb[1] + 3; }) && Math.abs(b[0] - a[0]) > Math.abs(b[1] - a[1])) ring.push([I.panel, sg.key]); }); }); });
+    rings = ring.length ? [{ keys: ring, len: (m.waist || 70) + 3 }] : []; // held at the waist, as darts, a waistband or elastic would hold it
+    var variants = function (pi, key) { var o = {}; (inst[pi] || []).forEach(function (I) { if (I.both) { o.R = [I.panel, key + '.R']; o.L = [I.panel, key + '.L']; } else if (I.side === 'C') o.C = [I.panel, key + '.C']; else o[I.side] = [I.panel, key + '.' + I.side]; }); return o; };
+    var has = function (pi, k) { var P = spec.pieces[pi]; return P && P.segs.some(function (sg) { return sg.key === k; }); };
+    spec.seams.forEach(function (sm) {
+      if (!has(sm.a[0], sm.a[1]) || !has(sm.b[0], sm.b[1])) return; var A = variants(sm.a[0], sm.a[1]), B = variants(sm.b[0], sm.b[1]);
+      if (sm.cross) { if (A.R && A.L) seams.push([A.R, A.L, 'auto']); return; }
+      if (A.R && A.L && B.R && B.L) { seams.push([A.R, B.R, 'auto'], [A.L, B.L, 'auto']); return; }
+      var a1 = A.C || A.R, b1 = B.C || B.R; if (A.C && B.R && B.L && !B.C) b1 = B.R; if (a1 && b1) seams.push([a1, b1, 'auto']);
+    });
+    (spec.elastic || []).forEach(function (e) { e.keys.forEach(function (k) { var V = variants(e.p, k); ['R', 'L', 'C'].forEach(function (sd) { if (V[sd]) elastic.push([V[sd][0], V[sd][1], e.r]); }); }); });
+    return { panels: panels, seams: seams, rings: rings, info: {}, label: spec.name || 'Edited pattern', opts: {}, tacks: [], buttons: [], zip: null, tops: [], joins: [], elastic: elastic, custom: true, left: left };
+  };
   D.mesh = function (G, h, Delaunator) {
     var segCount = {}, keyOf = function (pi, key) { return pi + '|' + key; };
     G.panels.forEach(function (P, pi) { P.segs.forEach(function (s) { segCount[keyOf(pi, s.key)] = Math.max(1, Math.round(plen(s.pts) / h)); }); });

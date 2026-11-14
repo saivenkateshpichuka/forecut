@@ -71,6 +71,7 @@
     ['sewing', 'Sewing', ['tool:sew', 'tool:fsew', 'tool:walk', '-', ['tab:sewing', 'Sewing list and length check'], ['sewcheck', 'Check all seams'], ['sewclear', 'Delete all sewing']]],
     ['materials', 'Materials', [['tab:fabric', 'Fabric library'], ['fabnew', 'New fabric'], ['fabassign', 'Give the selected pieces a fabric'], '-', 'tool:graphic', ['tab:trims', 'Graphics and trims list']]],
     ['trims', 'Trims', ['tool:button', 'tool:hole', 'tool:zip', 'tool:piping', 'tool:binding', 'tool:tstitch', 'tool:pucker', 'tool:tape', '-', ['tab:trims', 'All trims'], ['presets', 'Topstitch presets']]],
+    ['view3d', '3D', [['see3d', 'See the edited pieces in 3D', ''], '-', ['tab:sewing', 'Seams (sewing list)']]],
     ['grading', 'Grading', [['tab:grade', 'Sizes and grade rules'], ['autograde', 'Auto-grade from the draft'], '-', ['gradecsv', 'Graded measurements (CSV)'], ['sizechart', 'Size chart (CSV)'], ['xgradesvg', 'Export graded nest (SVG)'], ['xgradedxf', 'Export graded nest (DXF)'], ['xgradepdf', 'Export every size, tiled PDF']]],
     ['production', 'Production', [['tab:cw', 'Colourways'], ['tab:bom', 'Bill of materials (BOM)'], ['bomcsv', 'Export BOM (CSV)']]],
     ['view', 'View', VIEWS.map(function (v) { return 'v:' + v[0]; }).concat(['-', ['zin', 'Zoom in', '+'], ['zout', 'Zoom out', '−'], ['fit', 'Fit all pieces', '0'], ['z100', 'Actual size (100%)', '1']])],
@@ -555,6 +556,7 @@
       + row('Name', '<input data-k="name" value="' + esc(pc.name) + '">') + row('Category', selOpt('cat', pc.cat, [['', '—'], ['body', 'Body'], ['sleeve', 'Sleeve'], ['collar', 'Collar'], ['cuff', 'Cuff'], ['facing', 'Facing'], ['pocket', 'Pocket'], ['waistband', 'Waistband'], ['yoke', 'Yoke'], ['lining', 'Lining'], ['interlining', 'Interfacing'], ['trim', 'Trim'], ['other', 'Other']]))
       + row('Size', '<input data-k="size" value="' + esc(pc.size) + '">') + row('Cut quantity', plain('qty', pc.qty, 1, 'pcs', ' min="1"')) + row('Cut as a mirrored pair', '<input type="checkbox" data-k="pair"' + (pc.pair ? ' checked' : '') + '>', 'chk')
       + row('Fabric', selOpt('fabric', fabOf(pc.fabric) ? pc.fabric : '', [['', P.fabrics.length ? 'None' : 'Add a fabric in the Fabric tab']].concat(P.fabrics.map(function (x) { return [x.id, x.name]; })))) + row('Cut on the fold', selOpt('fold', pc.fold, [[-1, 'Not on fold']].concat(segs)))
+      + row('In 3D', selOpt('pos3d', pc.pos3d || 'auto', C.POS3D.map(function (o) { return o[0] === 'auto' ? ['auto', 'Automatic (' + (C.POS3D.filter(function (x) { return x[0] === C.pos3d(Object.assign({}, pc, { pos3d: 'auto' })); })[0] || ['', '?'])[1] + ')'] : o; })))
       + row('Notes', '<textarea data-k="notes" rows="2">' + esc(pc.notes) + '</textarea>', 'wide')
       + '<h5>Measurements</h5><dl class="ps-kv"><dt>Seamline width × height</dt><dd>' + F(bb[2] - bb[0]) + ' × ' + F(bb[3] - bb[1]) + '</dd><dt>Cutting size</dt><dd>' + F(cb[2] - cb[0]) + ' × ' + F(cb[3] - cb[1]) + '</dd><dt>Seamline length</dt><dd>' + F(C.perimeter(pc)) + '</dd><dt>Area, net</dt><dd>' + (P.unit === 'in' ? (C.area(pc) / 6.4516).toFixed(1) + ' sq in' : (C.area(pc)).toFixed(1) + ' cm²') + '</dd><dt>Points · edges</dt><dd>' + pc.nodes.length + ' · ' + C.segCount(pc) + '</dd></dl>'
       + '<h5>Seam allowance</h5>' + row('Seams', num('sadef', U(pc.sa.def), C.UNITS[P.unit].step, ' min="0"')) + row('Hems', num('sahem', U(pc.sa.hem), C.UNITS[P.unit].step, ' min="0"'))
@@ -678,7 +680,7 @@
       return act('Edit internal', function () { var it = io.it; if (k === 'itlabel') it.label = val; if (k === 'itpurpose') { it.purpose = val; if (val === 'fold' || val === 'stitch') it.style = 'dashed'; } if (k === 'itstyle') it.style = val; if (k === 'itvis') it.visible = val; if (k === 'itrx') it.r[0] = Math.max(.1, CM(val) / 2); if (k === 'itry') it.r[1] = Math.max(.1, CM(val) / 2); }); }
     if (!pc) return;
     return act('Edit piece', function () { var p = selected()[0];
-      if (k === 'name') { p.name = val; p.auto = false; } else if (k === 'qty') p.qty = Math.max(1, Math.round(+val || 1)); else if (k === 'fold') { p.fold = +val; if (p.fold >= 0) delete p.sa.edges[p.fold]; }
+      if (k === 'pos3d') { p.pos3d = val; } else if (k === 'name') { p.name = val; p.auto = false; } else if (k === 'qty') p.qty = Math.max(1, Math.round(+val || 1)); else if (k === 'fold') { p.fold = +val; if (p.fold >= 0) delete p.sa.edges[p.fold]; }
       else if (k === 'sadef') p.sa.def = Math.max(0, CM(val)); else if (k === 'sahem') p.sa.hem = Math.max(0, CM(val));
       else if (k === 'px' || k === 'py') { var bb = C.bbox(p); if (k === 'px') p.x = CM(val) - bb[0]; else p.y = CM(val) - bb[1]; }
       else if (['cat', 'size', 'fabric', 'notes', 'pair'].indexOf(k) >= 0) p[k] = val; });
@@ -717,6 +719,7 @@
       case 'cwdel': return act('Delete colourway', function () { P.colourways = P.colourways.filter(function (c) { return c.id !== P.cw; }); P.cw = P.colourways[0].id; });
       case 'bomcsv': { var B = C.bom(P), csv = [['Type', 'Item', 'Description', 'Quantity', 'Unit', 'Colour', 'Colourway']].concat(B.map(function (r) { return [r.kind, r.item, r.desc, r.qty, r.unit, r.colour, cwNow().name]; })).map(function (r) { return r.map(function (v) { v = String(v == null ? '' : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(','); }).join('\n'); dl(fname('bom.csv'), csv, 'text/csv'); return toast('BOM downloaded (' + B.length + ' lines).'); }
       case 'settings': return settingsModal();
+      case 'see3d': if (window.PM3D) window.PM3D.open(); return;
       case 'level': return setLevel(LEVEL === 'pro' ? 'beginner' : 'pro');
       case 'history': return historyModal();
       case 'autograde': return autoGrade();

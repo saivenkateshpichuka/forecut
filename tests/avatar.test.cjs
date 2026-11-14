@@ -30,3 +30,15 @@ test('poses move the limbs and keep the feet on the floor', () => {
   const T = D.poseBody(b, AV, 't'), W = D.poseBody(b, AV, 'walk'); let hi = 0, hiT = 0, lo = 1e9; for (let i = 0; i < R.length / 3; i++) { if (R[3 * i] > 30) hi = Math.max(hi, R[3 * i + 1]); if (T[3 * i] > 30) hiT = Math.max(hiT, T[3 * i + 1]); lo = Math.min(lo, W[3 * i + 1]); }
   assert.ok(hiT > hi + 10, 'T-pose raises the arms'); near(lo, 0, .5, 'floor');
 });
+test('edited pieces from Garment Studio sew and drape on the avatar', () => {
+  const C = require('../build/tools_js/pm_cad.js'), Dl = require('../tools/vendor/delaunator.min.js');
+  for (const g of ['tshirt', 'skirt']) {
+    const m = Object.assign({}, PM.CHARTS.women.M), b = D.body(Object.assign({}, m), 'women', AV, 'M', 0, {});
+    const r = PM.build(g, 'women', m, Object.assign({}, PM.GARMENTS[g].d)), P = { pieces: C.fromDraft(r, {}), sewing: [] }; C.normalize(P);
+    P.pieces.forEach(pc => { if (/front|back/i.test(pc.name)) { const mx = Math.max(...pc.nodes.map(n => n.y)); pc.nodes.forEach(n => { if (n.y > mx - .5) n.y += 5; }); } });
+    const spec = C.to3D(JSON.parse(JSON.stringify(P))); assert.ok(spec.seams.length >= 2, g + ' seams');
+    const G = D.assembleCustom(spec, b, b.m), M = D.mesh(G, 2.6, Dl), sim = new D.Sim(M, b, D.FABRICS.poplin); let k = 0; while (!sim.settled && k < 900) { sim.step(1 / 60); k++; }
+    let gap = 0, hi = -1e9; const X = sim.x; for (let i = 0; i < M.seams.length; i += 2) { const a = 3 * M.seams[i], c = 3 * M.seams[i + 1]; gap = Math.max(gap, Math.hypot(X[a] - X[c], X[a + 1] - X[c + 1], X[a + 2] - X[c + 2])); } for (let i = 1; i < X.length; i += 3) hi = Math.max(hi, X[i]);
+    assert.ok(gap < 1.5, g + ' seam gap ' + gap.toFixed(2)); assert.ok(hi > (g === 'skirt' ? b.y.waist : b.y.hps) - 8, g + ' stays up on the body ' + hi.toFixed(0));
+  }
+});

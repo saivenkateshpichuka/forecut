@@ -28,13 +28,18 @@ function build2(q) {
     postMessage({ type: 'body', gen: gen, pos: body.pos, tri: body.tri, mask: body.mask, under: body.under, y: body.y, height: body.height, head: body.head, m: body.m, J: body.J, cat: q.body || q.gender });
   } else { if (body.rest) FCDrape.setBodyPos(body, body.rest); postMessage({ type: 'body', gen: gen, same: true }); }
   var m = body.m;
-  var G = FCDrape.assemble(PM, q.style, q.gender, m, q.opts, body);
+  var G = q.custom ? FCDrape.assembleCustom(q.custom, body, m) : FCDrape.assemble(PM, q.style, q.gender, m, q.opts, body);
+  if (q.custom && !G.panels.length) { postMessage({ type: 'error', gen: q.gen, message: 'None of the pieces could be placed on the avatar. Set "In 3D" on each piece (front, back, sleeve, skirt) and add seams in Edit pieces.' }); return; }
   G.meshType = q.meshType; M = FCDrape.mesh(G, q.h || 2.3, Delaunator); M.sim = q.sim || {};
   sim = new FCDrape.Sim(M, body, q.fab || FCDrape.FABRICS[q.fabric] || FCDrape.FABRICS.poplin);
+  var elDone = [];
+  (G.elastic || []).forEach(function (e) { var ids = M.segIdx[e[0] + '|' + e[1]]; if (ids && ids.length > 2) { sim.elastic(ids.slice(), e[2]); elDone.push({ key: e[0] + '|' + e[1], ids: ids.slice(), ratio: e[2] }); } });
+  var cmsg = q.custom ? { type: 'custom', gen: gen, left: G.left || [], warn: q.custom.warn || [], elastic: elDone, pieces: G.panels.length } : null;
   var panels = G.panels.map(function (P) { return { name: P.name, segs: P.segs.map(function (s) { return { key: s.key, pts: s.pts }; }) }; });
   var seamLines = [];
   G.seams.forEach(function (sm) { [sm[0], sm[1]].forEach(function (e) { seamLines.push(M.segIdx[e[0] + '|' + e[1]]); }); });
   postMessage({ type: 'mesh', gen: gen, x: M.x.slice(), uv: M.uv, tri: M.tri, panels: panels, seams: G.seams, seamLines: seamLines, info: G.info, label: G.label, opts: G.opts, verts: sim.n, panel: M.panel, buttons: G.buttons, zip: G.zip, tops: G.tops });
+  if (cmsg) postMessage(cmsg);
   running = true; frames = 0;
   tick();
 }
