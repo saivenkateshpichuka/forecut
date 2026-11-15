@@ -124,5 +124,14 @@ if not h.lstrip().lower().startswith('<!doctype'):
     h = ('<!doctype html>\n<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
          + h.replace('<title>Forecut</title>', '<title>Forecut · Global fashion trend forecasting</title></head><body>', 1) + '\n</body></html>')
 i_ = h.rfind('</body>'); h = (h[:i_] + _LD.JS + h[i_:]) if i_ > -1 else h + _LD.JS
+# report links use the same live detail count as the season cards and season pages
+import re as _re
+def _rcount(m):
+    code = m.group(1).lower()
+    if code in SEAS:
+        i = SEAS.index(code); n = sum(1 for _its in M.values() for _it in _its if _it['life'][i] in 'erpf')
+        return f'Open the full {m.group(1)} report <span>{n} details'
+    return m.group(0)
+h = _re.sub(r'Open the full (\w+) report <span>(\d+) details', _rcount, h)
 open('../index.html', 'w').write(h)
 print('home ok')
