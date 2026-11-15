@@ -79,7 +79,7 @@
     ['file', 'File', [['new', 'New blank project', 'Ctrl N'], ['open', 'Open saved project…', 'Ctrl O'], ['openfile', 'Open project file…'], '-', ['save', 'Save', 'Ctrl S'], ['saveas', 'Save as…'], ['savefile', 'Download project file'], '-', ['fromdraft', 'Bring in the current draft'], ['importdxf', 'Import DXF…'], '-', ['xsvg', 'Export SVG (true scale)'], ['dxfdlg', 'Export DXF (CAD, ASTM / AAMA)…'], ['xpdft', 'Export PDF, tiles on your paper size'], ['xpdf', 'Export PDF, full size'], ['xpng', 'Export PNG'], ['bomcsv', 'Export BOM (CSV)']]],
     ['edit', 'Edit', [['undo', 'Undo', 'Ctrl Z'], ['redo', 'Redo', 'Ctrl Shift Z'], '-', ['dup', 'Duplicate', 'Ctrl D'], ['linked', 'Linked copy'], ['mirrorcopy', 'Mirrored copy'], ['del', 'Delete', 'Del'], '-', ['selall', 'Select all pieces', 'Ctrl A'], ['selnone', 'Deselect', 'Esc'], '-', ['history', 'Undo history…', 'Ctrl H']]],
     ['pattern', 'Pattern', ['tool:select', 'tool:edit', 'tool:pan', '-', 'tool:poly', 'tool:rect', 'tool:ellipse', '-', 'tool:addpt', 'tool:curv', 'tool:smooth', 'tool:cut', 'tool:merge', 'tool:trace', '-', 'tool:iline', 'tool:irect', 'tool:iell', 'tool:notch', 'tool:grain', 'tool:sa', ['saall', 'Add seam allowance to all pieces'], '-', 'tool:dart', 'tool:dartmv', 'tool:pleat', 'tool:slash', 'tool:spread', '-', 'tool:raglan', 'tool:circle', '-', 'tool:measure']],
-    ['sewing', 'Sewing', ['tool:sew', 'tool:fsew', 'tool:walk', '-', ['tab:sewing', 'Sewing list and length check'], ['sewcheck', 'Check all seams'], ['sewclear', 'Delete all sewing']]],
+    ['sewing', 'Sewing', ['tool:sew', 'tool:fsew', 'tool:walk', '-', ['tab:sewing', 'Sewing list and length check'], ['sewcheck', 'Check all seams'], ['x4:report', 'Pattern check, every size'], ['sewclear', 'Delete all sewing']]],
     ['materials', 'Materials', [['tab:fabric', 'Fabric library'], ['fabnew', 'New fabric'], ['fabassign', 'Give the selected pieces a fabric'], '-', 'tool:graphic', ['tab:trims', 'Graphics and trims list']]],
     ['trims', 'Trims', ['tool:button', 'tool:hole', 'tool:zip', 'tool:piping', 'tool:binding', 'tool:tstitch', 'tool:pucker', 'tool:tape', '-', ['tab:trims', 'All trims'], ['presets', 'Topstitch presets']]],
     ['view3d', '3D', [['see3d', 'See the edited pieces in 3D', ''], '-', ['tab:sewing', 'Seams (sewing list)']]],
@@ -96,7 +96,7 @@
       return '<button type="button" role="menuitem" data-a="' + it[0] + '"><i></i><span>' + esc(it[1]) + '</span>' + (it[2] ? '<kbd>' + it[2] + '</kbd>' : '') + '</button>';
     }).join('') + '</div></div>';
   }
-  var TABS = [['pieces', 'Pieces', 'Pattern pieces'], ['sewing', 'Sewing', 'Seams and length checks'], ['fabric', 'Fabric', 'Fabrics and physical properties'], ['trims', 'Trims', 'Buttons, zippers, piping, binding, topstitch, puckering, seam tape, graphics'], ['cw', 'Colours', 'Colourway matrix'], ['bom', 'BOM', 'Bill of materials'], ['grade', 'Grading', 'Sizes, grade rules and graded measurements']];
+  var TABS = [['pieces', 'Pieces', 'Pattern pieces'], ['sewing', 'Sewing', 'Seams and length checks'], ['fabric', 'Fabric', 'Fabrics and physical properties'], ['trims', 'Trims', 'Buttons, zippers, piping, binding, topstitch, puckering, seam tape, graphics'], ['cw', 'Colours', 'Colourway matrix'], ['bom', 'BOM', 'Bill of materials'], ['grade', 'Grading', 'Sizes, grade rules and graded measurements'], ['marker', 'Marker', 'Marker, yield and consumption']];
   function mk(tag, cls, html) { var e = document.createElement(tag); if (cls) e.className = cls; if (html) e.innerHTML = html; return e; }
   function build() {
     if (toolsEl) return true;
@@ -497,6 +497,7 @@
       h += '<p class="ps-n">Colourway: ' + esc(cw.name) + '. Fabric is an estimate from piece areas at ' + P.settings.efficiency + '% marker efficiency; confirm it with a marker.</p><div class="ps-objb">' + btn('bomcsv', 'Export BOM (CSV)') + btn('settings', 'Settings') + '</div>';
     }
     else if (ST.tab === 'grade') h = gradePane();
+    else if (ST.tab === 'marker') h = window.FCMarker ? FCMarker.pane() : '<p class="ps-empty">Marker making is not available.</p>';
     objsEl.innerHTML = h;
   }
   function libGroups() { var L = window.FC_FABLIB || [], g = {}; L.forEach(function (f) { (g[f.g] = g[f.g] || []).push(f); }); return Object.keys(g).map(function (k) { return '<optgroup label="' + esc(k) + '">' + g[k].map(function (f) { return '<option value="' + f.key + '">' + esc(f.n) + ' · ' + f.gsm + ' gsm</option>'; }).join('') + '</optgroup>'; }).join(''); }
@@ -754,6 +755,8 @@
   function doAct(a, el) {
     var pcs = selected(), pc = pcs[0];
     if (a.indexOf('tool:') === 0) return setTool(a.slice(5));
+    if (a.indexOf('x4:') === 0) return window.FCCheck && FCCheck.act(a.slice(3), el);
+    if (a.indexOf('mk:') === 0) return window.FCMarker && FCMarker.act(a.slice(3), el);
     if (a.indexOf('tab:') === 0) { ST.tab = a.slice(4); var hr0 = document.getElementById('pm-hider'); if (pb.classList.contains('nor') && hr0) hr0.click(); var sec = sideEl.querySelector('.ps-pane'); objects(); if (sec) sec.scrollTop = 0; return; }
     var swc = P.sewing.filter(function (x) { return x.id === ST.seam; })[0], trc = trimOf(ST.trim), fbc = fabOf(ST.fab);
     switch (a) {
@@ -1521,7 +1524,7 @@
       if (!C.isGraded(pc)) h += '<p class="ps-n">This piece has no grade yet, so every size is the same.</p>'; }
     if (P.sewing.length && G.list.length > 1) { var bad = []; G.list.forEach(function (sz) { var tmp = { pieces: P.pieces.map(function (p) { return C.gradedPiece(p, sz, G.base); }), sewing: P.sewing }; P.sewing.forEach(function (sw) { try { if (!C.seamLens(tmp, sw).ok) bad.push(sz); } catch (e) {} }); });
       var ub = bad.filter(function (x, i) { return bad.indexOf(x) === i; }); h += '<p class="ps-check ' + (ub.length ? 'no' : 'ok') + '">' + (ub.length ? 'Seams that do not match in size' + (ub.length > 1 ? 's ' : ' ') + esc(ub.join(', ')) + '. Grade both sides of those seams alike.' : 'Every sewn seam matches in every size.') + '</p>'; }
-    h += '<div class="ps-objb">' + btn('gradecsv', 'Measurements (CSV)') + btn('sizechart', 'Size chart (CSV)') + '</div><div class="ps-objb">' + btn('xgradesvg', 'Nest SVG') + btn('dxfgrade', 'Graded DXF (ASTM)') + btn('xgradepdf', 'Every size, PDF') + '</div>';
+    h += '<div class="ps-objb">' + btn('x4:report', 'Pattern check, every size', 'pri', 'Pieces, grading, seams, notches, sleeve ease and export scale, with a printable report') + '</div><div class="ps-objb">' + btn('x4:rulecsv', 'Grade rules (CSV)') + btn('x4:ruleimp', 'Import grade rules') + '</div><div class="ps-objb">' + btn('gradecsv', 'Measurements (CSV)') + btn('sizechart', 'Size chart (CSV)') + '</div><div class="ps-objb">' + btn('xgradesvg', 'Nest SVG') + btn('dxfgrade', 'Graded DXF (ASTM)') + btn('xgradepdf', 'Every size, PDF') + '</div>';
     return h + '</div></details>';
   }
   /* grade whole pieces from how much each size grows: width and length change per size, held at a fixed line */
