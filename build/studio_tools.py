@@ -12,8 +12,8 @@ TOOLS=[
  ('product-description-writer','Product Description Writer','Turn verified product facts into editable English or Hindi product copy.','plan','Product Description Writer'),
  ('decoration-cost-estimator','Embroidery & Print Cost Estimator','Estimate decoration cost, setup allocation and embroidery batch time.','cost','Embroidery & Print Cost'),
  ('care-label-generator','Care Label Generator','Create a text care label from approved composition and care instructions.','production','Care Label Generator')]
-EXTRA={'size-chart-builder':'<script defer src="tools/sheet-import.js?v=VER"></script><script defer src="tools/size-templates.js?v=VER"></script>',
- 'tech-pack-builder':'<script defer src="tools/sheet-import.js?v=VER"></script><script defer src="tools/size-templates.js?v=VER"></script>',
+EXTRA={'size-chart-builder':'<script defer src="tools/sheet-import.js?v=VER"></script><script defer src="tools/size-templates.js?v=VER"></script><script defer src="tools/pom-diagram.js?v=VER"></script>',
+ 'tech-pack-builder':'<script defer src="tools/sheet-import.js?v=VER"></script><script defer src="tools/size-templates.js?v=VER"></script><script defer src="tools/pom-diagram.js?v=VER"></script>',
  'care-label-generator':'<script defer src="tools/fabric-preview.js?v=VER"></script>',
  'decoration-cost-estimator':'',
  'product-description-writer':''}

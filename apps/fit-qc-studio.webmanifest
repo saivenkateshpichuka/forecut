@@ -1,0 +1,29 @@
+{
+ "id": "/forecut-fit-qc-studio",
+ "name": "Forecut Fit & QC Studio",
+ "short_name": "Fit & QC Studio",
+ "description": "Fit sessions, measurements, issues and AQL",
+ "start_url": "/fit-qc-studio.html?source=app",
+ "scope": "/",
+ "display": "standalone",
+ "theme_color": "#214538",
+ "background_color": "#f7f4ee",
+ "icons": [
+  {
+   "src": "/apps/studio-192.png",
+   "sizes": "192x192",
+   "type": "image/png"
+  },
+  {
+   "src": "/apps/studio-512.png",
+   "sizes": "512x512",
+   "type": "image/png"
+  },
+  {
+   "src": "/apps/studio-maskable-512.png",
+   "sizes": "512x512",
+   "type": "image/png",
+   "purpose": "maskable"
+  }
+ ]
+}

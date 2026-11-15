@@ -12,7 +12,7 @@
   function dataUrlBlob(d) { var m = /^data:([^;]+);base64,(.*)$/.exec(d || ''); if (!m) return null; var b = atob(m[2]), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return new Blob([a], { type: m[1] }); }
   function csv(rows) { return '﻿' + rows.map(function (r) { return r.map(function (v) { var t = String(v == null ? '' : v); if (/^[=+@\-]/.test(t)) t = "'" + t; return '"' + t.replace(/"/g, '""') + '"'; }).join(','); }).join('\r\n'); }
   var TOOLS = { rangeboard: 'Collection Planner', 'trend-to-style': 'Trend to Style Brief', swatchsmith: 'Colour Palette Builder', 'textile-calculator': 'Textile Calculator', 'textile-processing-studio': 'Textile Processing Studio', 'pattern-maker': 'Garment Studio', 'size-chart-builder': 'Size Chart Builder', 'decoration-cost-estimator': 'Embroidery & Print Cost', 'tech-pack-builder': 'Tech Pack Builder', pricefold: 'Price & Margin Calculator', evenpoint: 'Break-even Calculator', cutclock: 'Production Calendar', 'care-label-generator': 'Care Label Generator', 'product-description-writer': 'Product Description Writer', 'export-market-checker': 'Export Market Checker' };
-  var KEYS = ['fc-collection-workspace-v1', 'fc-production-studio-v1', 'fc-tool-processing', 'fc-tool-boards', 'fc-tool-drape', 'fc-size-library', 'fc-pm-sizechart', 'fc-pm-snap', 'fc-ps-lib', 'fc-ps-auto', 'fc-brand-kit', 'fc-saved', 'fc-recent-tools', 'fc-report-brand', 'pm-clients', 'fc-styles'];
+  var KEYS = ['fc-collection-workspace-v1', 'fc-production-studio-v1', 'fc-tool-processing', 'fc-tool-boards', 'fc-tool-drape', 'fc-size-library', 'fc-pm-sizechart', 'fc-pm-snap', 'fc-ps-lib', 'fc-ps-auto', 'fc-brand-kit', 'fc-saved', 'fc-recent-tools', 'fc-report-brand', 'pm-clients', 'fc-styles', 'fc-materials', 'fc-fitqc', 'fc-tool-pm2', 'fc-pm-cost', 'fc-price-history', 'fc-tool-tc-scen', 'fc-alerts', 'fc-alert-base'];
   function allKeys() { var out = KEYS.slice(); try { for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (/^fc-style-(data|rev)-/.test(k)) out.push(k); } } catch (e) { } return out; }
   function data() {
     return { col: J('fc-collection-workspace-v1', {}), st: J('fc-production-studio-v1', {}), proc: J('fc-tool-processing', {}), boards: J('fc-tool-boards', {}), lib: J('fc-size-library', []), pm: J('fc-pm-sizechart', null), snap: J('fc-pm-snap', null), recent: J('fc-recent-tools', []), saved: J('fc-saved', []), kit: kit() };
@@ -26,7 +26,7 @@
     var D = data(), n = { styles: (window.ForecutStyle ? ForecutStyle.list().length : 0), projects: projects(D).length, files: files(D).length, saved: D.saved.length };
     $('dnav').innerHTML = PANES.map(function (p) { return '<button type="button" data-p="' + p[0] + '" aria-current="' + (p[0] === cur) + '">' + p[1] + (n[p[0]] ? '<small>' + n[p[0]] + '</small>' : '') + '</button>'; }).join('');
   }
-  function show(p) { cur = p; history.replaceState(null, '', '#' + p); nav(); var D = data(); $('pane').innerHTML = '<div class="pane">' + ({ overview: overview, styles: stylesPane, projects: projectsPane, files: filesPane, brand: brandPane, saved: savedPane, account: accountPane }[p])(D) + '</div>'; if (p === 'brand') brandWire(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  function show(p) { cur = p; history.replaceState(null, '', '#' + p); nav(); var D = data(); $('pane').innerHTML = '<div class="pane">' + ({ overview: overview, styles: stylesPane, projects: projectsPane, files: filesPane, brand: brandPane, saved: savedPane, account: accountPane }[p])(D) + '</div>'; if (p === 'brand') brandWire(); if (p === 'saved') runAlerts(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
   // ---------- projects ----------
   function projects(D) {
     var out = [], c = D.col, s = D.st;
@@ -136,9 +136,30 @@
       + '<p class="f">Evidence grades: C = analyst assessment of a season already shown; P = projection for a season not yet shown. Rules: forecut.in/method.html#evidence. Stages describe design direction, not measured sales.</p><script>setTimeout(function(){print()},600)<\/script>');
     w.document.close();
   }
+
+  /* trend alerts (Stage 6): opt in, then every visit compares each saved detail's stages with the latest published index */
+  var TIX = null, NM5 = { e: 'Emerging', r: 'Rising', p: 'Peaking', f: 'Fading', '-': 'not tracked', L: 'locked' };
+  function alertsOn() { try { return localStorage.getItem('fc-alerts') === '1'; } catch (e) { return false; } }
+  function alertsBox() { return '<div class="card" id="alertsBox" style="margin:0 0 14px;padding:14px 16px">' + (alertsOn() ? '<p class="sub" style="margin:0">Checking your saved details against the latest forecast…</p>' : '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><div style="flex:1;min-width:220px"><b>Trend alerts</b><br><span class="sub">Get told here when a saved detail changes stage in any season. Checked each time you open Forecut on this device.</span></div><button class="dbtn pri" type="button" data-act="alertsOn">Turn on alerts</button></div>') + '</div>'; }
+  function changesOf(L, T) {
+    var out = [], base = J('fc-alert-base', {});
+    L.forEach(function (x) { var now = T.d[x.name]; if (!now) return; var was = base[x.name] || x.life || null;
+      if (was) { T.codes.forEach(function (c, i) { var a = was.charAt(i), b = now.charAt(i); if (a && a !== 'L' && b !== a) out.push({ name: x.name, page: x.page, season: c, from: NM5[a] || a, to: NM5[b] || b, proj: T.basis[i] === 'projection' }); }); }
+      else { var i2 = T.codes.indexOf(String(x.season || '').toUpperCase()), b2 = now.charAt(i2); if (i2 > -1 && x.st && b2 !== x.st) out.push({ name: x.name, page: x.page, season: T.codes[i2], from: NM5[x.st], to: NM5[b2] || b2, proj: T.basis[i2] === 'projection' }); } });
+    return out;
+  }
+  function runAlerts() {
+    var box = document.getElementById('alertsBox'); if (!box || !alertsOn()) return;
+    var go = function (T) { var L = J('fc-saved', []), ch = changesOf(L, T), esc5 = esc;
+      box.innerHTML = '<div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:6px"><b style="flex:1">Trend alerts' + (ch.length ? ' · ' + ch.length + ' change' + (ch.length > 1 ? 's' : '') : '') + '</b><small class="sub">Forecast updated ' + esc5(T.updated) + '</small>' + (ch.length ? '<button class="dbtn sm" type="button" data-act="alertsSeen">Mark as seen</button>' : '') + '<button class="dbtn sm" type="button" data-act="alertsOff">Turn off</button></div>'
+        + (ch.length ? '<ul style="margin:0;padding-left:18px">' + ch.map(function (c) { return '<li><a href="' + esc5(c.page) + '">' + esc5(c.name) + '</a>: ' + c.season + ' ' + esc5(c.from) + ' → <b>' + esc5(c.to) + '</b>' + (c.proj ? ' <small class="sub">(projection)</small>' : '') + '</li>'; }).join('') + '</ul>' : '<p class="sub" style="margin:0">No changes to your ' + L.length + ' saved details since you last looked.</p>');
+      if (ch.length && window.Notification && Notification.permission === 'granted' && sessionStorage.getItem('fc-alert-note') !== String(ch.length)) { try { new Notification('Forecut trend alerts', { body: ch.length + ' saved detail stage' + (ch.length > 1 ? 's' : '') + ' changed.', icon: 'apps/studio-192.png' }); sessionStorage.setItem('fc-alert-note', String(ch.length)); } catch (e) { } } };
+    if (TIX) return go(TIX); fetch('trend-index.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (T) { TIX = T; go(T); }).catch(function () { box.innerHTML = '<p class="sub" style="margin:0">Could not load the latest forecast. Check your connection.</p>'; });
+  }
+  function alertsBaseline() { return fetch('trend-index.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (T) { TIX = T; var b = {}; J('fc-saved', []).forEach(function (x) { if (T.d[x.name]) b[x.name] = T.d[x.name]; }); put('fc-alert-base', b); }); }
   function savedPane(D) {
     var NM = { e: 'Emerging', r: 'Rising', p: 'Peaking', f: 'Fading' };
-    return '<section class="card"><h2>Saved details</h2><p class="sub">Tap ♡ Save on any forecast detail to keep it here. Saved on this device.</p>' + (D.saved.length ? '<p><button class="dbtn pri" type="button" data-act="boardPdf">Export trend board (PDF)</button> <small style="color:var(--muted)">Every detail with its season, stage, evidence grade, image note and source page.</small></p>' : '') + (D.saved.length ? '<div class="pj">' + D.saved.map(function (x, i) { return '<article class="pc"><div class="th">' + (x.img ? '<img alt="" src="/' + esc(String(x.img).replace(/^\//, '')) + '" style="object-fit:cover">' : '<em>Detail</em>') + '</div><div class="bd"><small class="k">' + esc([x.season, NM[x.st]].filter(Boolean).join(' · ')) + '</small><b>' + esc(x.name) + '</b><span>' + esc(x.cat || '') + '</span></div><div class="ft"><a class="dbtn sm pri" href="' + esc(x.page) + '">Open</a><button class="dbtn sm" type="button" data-unsave="' + i + '">Remove</button></div></article>'; }).join('') + '</div>' : '<div class="empty">Nothing saved yet. Open any detail and tap ♡ Save to keep it here.</div>') + '</section>';
+    return '<section class="card"><h2>Saved details</h2><p class="sub">Tap ♡ Save on any forecast detail to keep it here. Saved on this device.</p>' + (D.saved.length ? alertsBox() : '') + (D.saved.length ? '<p><button class="dbtn pri" type="button" data-act="boardPdf">Export trend board (PDF)</button> <small style="color:var(--muted)">Every detail with its season, stage, evidence grade, image note and source page.</small></p>' : '') + (D.saved.length ? '<div class="pj">' + D.saved.map(function (x, i) { return '<article class="pc"><div class="th">' + (x.img ? '<img alt="" src="/' + esc(String(x.img).replace(/^\//, '')) + '" style="object-fit:cover">' : '<em>Detail</em>') + '</div><div class="bd"><small class="k">' + esc([x.season, NM[x.st]].filter(Boolean).join(' · ')) + '</small><b>' + esc(x.name) + '</b><span>' + esc(x.cat || '') + '</span></div><div class="ft"><a class="dbtn sm pri" href="' + esc(x.page) + '">Open</a><button class="dbtn sm" type="button" data-unsave="' + i + '">Remove</button></div></article>'; }).join('') + '</div>' : '<div class="empty">Nothing saved yet. Open any detail and tap ♡ Save to keep it here.</div>') + '</section>';
   }
   function accountPane() {
     var u = user || {};
@@ -155,6 +176,9 @@
     if (t.dataset.open) { e.preventDefault(); var F = window.ForecutStyle, href = t.getAttribute('href'); if (F.active() && F.active().id === t.dataset.open) { location.href = href; return; } var r0 = JSON.parse(localStorage.getItem('fc-styles') || '{}'); F.setActive(t.dataset.open, { reload: false }); location.href = href; return; }
     if (t.dataset.edit) { var st = window.ForecutStyle.list().filter(function (x) { return x.id === t.dataset.edit; })[0]; if (st) window.ForecutStyle.dialog(st); return; }
     if (t.dataset.act === 'boardPdf') return boardPdf();
+    if (t.dataset.act === 'alertsOn') { try { localStorage.setItem('fc-alerts', '1'); } catch (x) { } var fin = function () { show('saved'); }; alertsBaseline().then(fin, fin); if (window.Notification && Notification.permission === 'default') try { Notification.requestPermission(); } catch (x) { } return; }
+    if (t.dataset.act === 'alertsOff') { try { localStorage.removeItem('fc-alerts'); } catch (x) { } return show('saved'); }
+    if (t.dataset.act === 'alertsSeen') { alertsBaseline().then(function () { show('saved'); }); return; }
     if (t.dataset.act === 'styleNew') { window.ForecutStyle.dialog(null); return; }
     if (t.dataset.p) return show(t.dataset.p);
     if (t.dataset.go) { e.preventDefault(); return show(t.dataset.go); }

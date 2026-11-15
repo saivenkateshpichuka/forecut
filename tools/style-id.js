@@ -7,7 +7,7 @@
   'use strict';
   var REG = 'fc-styles', DATA = 'fc-style-data-';
   // the saved work that belongs to one style (collection-wide data such as the collection plan and palette stays shared)
-  var STYLE_KEYS = ['fc-production-studio-v1', 'fc-tool-processing', 'fc-tool-boards', 'fc-ps-auto', 'fc-pm-sizechart', 'fc-pm-snap', 'fc-tool-drape', 'fc-3d-custom', 'fc-tool-pm2', 'fc-pm-cost'];
+  var STYLE_KEYS = ['fc-production-studio-v1', 'fc-tool-processing', 'fc-tool-boards', 'fc-ps-auto', 'fc-pm-sizechart', 'fc-pm-snap', 'fc-tool-drape', 'fc-3d-custom', 'fc-tool-pm2', 'fc-pm-cost', 'fc-fitqc'];
   var SEASONS = [['AW26', 'AW26', 'Autumn/Winter 2026'], ['RS27', 'Resort 27', 'Resort 2027'], ['SS27', 'SS27', 'Spring/Summer 2027'], ['PF27', 'Pre-Fall 27', 'Pre-Fall 2027'], ['AW27', 'AW27', 'Autumn/Winter 2027'], ['SS28', 'SS28', 'Spring/Summer 2028'], ['AW28', 'AW28', 'Autumn/Winter 2028'], ['IF26', 'India Festive 26', 'India Festive 2026'], ['IS27', 'India Summer 27', 'India Summer 2027'], ['IF27', 'India Festive 27', 'India Festive 2027'], ['IS28', 'India Summer 28', 'India Summer 2028'], ['IF28', 'India Festive 28', 'India Festive 2028'], ['CORE', 'Core', 'Core / continuity']];
   var CATS = ['Womenswear', 'Menswear', 'Unisex', 'Kidswear', 'Infant / baby', 'Accessories', 'Home textiles'];
   var GARMENTS = ['Shirt', 'T-shirt', 'Polo shirt', 'Blouse', 'Top', 'Kurta', 'Kurti / tunic', 'Dress', 'Skirt', 'Trousers', 'Jeans', 'Shorts', 'Leggings', 'Joggers', 'Hoodie / sweatshirt', 'Sweater', 'Jacket / blazer', 'Coat', 'Waistcoat / Nehru jacket', 'Saree blouse', 'Salwar / churidar', 'Lehenga', 'Jumpsuit', 'Nightwear', 'Other'];

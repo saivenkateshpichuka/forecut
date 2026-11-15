@@ -93,7 +93,7 @@ BODY = f'''<div class="acc" id="acc">
   <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="dbtn pri" type="button" onclick="window.FCFeedback&amp;&amp;FCFeedback.open()">Give feedback · get 1 year free</button><button class="dbtn" type="button" id="dlall">Download all my work</button><button class="dbtn" type="button" id="rsall">Restore</button><input type="file" id="rsfile" accept=".json" hidden><button class="dbtn" type="button" id="out">Sign out</button></div></header>
  <div class="dg"><nav class="dnav" id="dnav" aria-label="Account sections"></nav><div id="pane"></div></div>
 </div>
-<script src="tools/style-id.js?v=fx-20261115i" defer></script><script src="tools/revisions.js?v=fx-20261115i" defer></script><script>window.FC_SEASON_BASIS={BASIS};</script><script src="account-dash.js?v=4" defer></script>
+<script src="tools/style-id.js?v=fx-20261115j" defer></script><script src="tools/revisions.js?v=fx-20261115j" defer></script><script>window.FC_SEASON_BASIS={BASIS};</script><script src="account-dash.js?v=5" defer></script>
 <script type="module">
 function ready(f) {{ window.FCAuth ? f() : document.addEventListener('fcauth-ready', f, {{ once: true }}); }}
 ready(function () {{

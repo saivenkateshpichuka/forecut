@@ -31,6 +31,16 @@ def _gitdate(*fs):
         d = _sp.run(['git', 'log', '-1', '--format=%cs', '--', *fs], capture_output=True, text=True).stdout.strip()
         return _dtm.date.fromisoformat(d).strftime('%-d %b %Y') if d else None
     except Exception: return None
+def _regions(code):
+    import regions_data as RD
+    y = {'aw26': 2026, 'ss27': 2027, 'aw27': 2027, 'ss28': 2028, 'aw28': 2028}
+    north = dict((c, w) for c, _, _, w in RD.SEASONS).get(code, '')
+    def win(r):
+        if r['hemi'] == 'north': return north
+        s2 = (f'Sep {y[code]} – Feb {y[code] + 1} (local spring/summer)' if code.startswith('ss') else f'Mar – Aug {y[code] + 1} (local autumn/winter)')
+        return s2 if r['hemi'] == 'south' else f'North & West Africa: {north} · South Africa: {s2}'
+    return [{'name': r['name'], 'slug': r['slug'], 'hemi': r['hemi'], 'heat': bool(r['heat']), 'boost': r['boost'], 'win': win(r)} for r in RD.REGIONS]
+
 RESEARCHED = _gitdate('details.json', 'regions_data.py', 'india_data.py', 'reports_data.py') or _dtm.date.today().strftime('%-d %b %Y')
 EVREV = _gitdate('details.json') or RESEARCHED
 REFRESHED = _dtm.date.today().strftime('%-d %b %Y')
@@ -128,7 +138,7 @@ for si, s in enumerate(SEASONS):
         '%%DESC%%': json.dumps(descs, ensure_ascii=False).replace('</', '<\\/'), '%%SITE%%': json.dumps(SITE, ensure_ascii=False),
         '%%CODES%%': json.dumps(codes), '%%PALJSON%%': json.dumps([h for h, n in m['palette']]), '%%BASISCLS%%': basis[0], '%%BASISTEXT%%': basis[1],
         '%%STAGE%%': E(m['stage']), '%%WINDOW%%': E(m['window']), '%%TITLE%%': E(m['title']), '%%INTRO%%': E(m['intro']),
-        '%%SOURCES%%': E(m['sources']), '%%EVIDENCE%%': json.dumps({'reviewed': EVREV, 'reviewedIso': __import__('datetime').datetime.strptime(EVREV, '%d %b %Y').strftime('%Y-%m-%d') if EVREV[:1].isdigit() else '', 'seasons': {META[x]['code']: {'basis': META[x]['basis'], 'sources': META[x]['sources'], 'window': META[x]['window']} for x in SEASONS}, 'details': json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'evidence.json')))['details']}, ensure_ascii=False).replace('</', '<\\/'), '%%SOCIAL%%': __import__('social').icons(), '%%CODE%%': m['code'],
+        '%%SOURCES%%': E(m['sources']), '%%EVIDENCE%%': json.dumps({'reviewed': EVREV, 'reviewedIso': __import__('datetime').datetime.strptime(EVREV, '%d %b %Y').strftime('%Y-%m-%d') if EVREV[:1].isdigit() else '', 'seasons': {META[x]['code']: {'basis': META[x]['basis'], 'sources': META[x]['sources'], 'window': META[x]['window']} for x in SEASONS}, 'details': json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'evidence.json')))['details'], 'regions': _regions(s), 'hot': __import__('regions_data').HOT, 'aw': s.startswith('aw')}, ensure_ascii=False).replace('</', '<\\/'), '%%SOCIAL%%': __import__('social').icons(), '%%CODE%%': m['code'],
         '%%STORY%%': story_html(s, E(m['stage']) + ' · ' + E(m['window']), E(m['title']), E(m['intro']), [th[0] for th in m['themes']]),
     }
     out = tpl
@@ -150,3 +160,5 @@ for si, s in enumerate(SEASONS):
     import panels; out = panels.add(out)
     open(os.path.join(STATIC, f'{s}.html') if STATIC else f'forecut-{s}.html', 'w').write(out)
     print(s, total, counts)
+if STATIC:  # stage index for saved-detail alerts on the dashboard
+    json.dump({'updated': EVREV, 'codes': [META[x]['code'] for x in SEASONS], 'basis': [META[x]['basis'] for x in SEASONS], 'd': {it['name']: it['life'] for v in M['model'].values() for it in v}}, open(os.path.join(STATIC, 'trend-index.json'), 'w'), ensure_ascii=False, separators=(',', ':'))
