@@ -97,6 +97,38 @@ footer a{color:var(--muted)} footer .fl{display:flex;gap:16px;flex-wrap:wrap}
 .plan{border:1px solid var(--grid);border-radius:12px;padding:14px;background:var(--paper)}.plan .tg{display:inline-block;font:700 11px "DM Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;background:linear-gradient(135deg,#00a85a,#1fd17f);color:#fff;padding:4px 9px;border-radius:99px;margin-bottom:6px}
 .plan p{margin:4px 0 0;font-size:14.5px!important}
 .qk{display:flex;flex-wrap:wrap;gap:8px}.qk a{font:600 13.5px "DM Sans",sans-serif;text-decoration:none;color:var(--ink);border:1px solid var(--grid);border-radius:99px;padding:7px 12px;background:var(--paper)}
+
+.wrap:has(#dash:not([hidden])){max-width:1320px!important}
+.dash{max-width:1280px;margin:26px auto 40px;padding:0 4px}
+.dh{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:22px 24px;border:1px solid var(--grid);border-radius:18px;background:var(--paper-2)}
+.dh .av{width:64px;height:64px;border-radius:50%;overflow:hidden;background:var(--mat);color:var(--mat-ink);display:grid;place-items:center;font:700 26px "DM Sans",sans-serif;flex:none}.dh .av img{width:100%;height:100%;object-fit:cover}
+.dh .who{flex:1;min-width:200px}.dh .who b{display:block;font:700 22px "DM Sans",sans-serif}.dh .who small{color:var(--muted);font:500 14px "DM Sans",sans-serif}
+.chip{display:inline-block;font:700 11px "DM Sans",sans-serif;letter-spacing:.06em;text-transform:uppercase;background:linear-gradient(135deg,#00a85a,#1fd17f);color:#fff;padding:4px 10px;border-radius:99px;margin-top:6px}
+.dbtn{all:unset;box-sizing:border-box;cursor:pointer;font:600 14px "DM Sans",sans-serif;padding:10px 16px;border-radius:10px;border:1px solid var(--grid);background:var(--paper);color:var(--ink);display:inline-flex;align-items:center;gap:8px;text-decoration:none}.dbtn:hover{border-color:var(--ink)}.dbtn.pri{background:var(--mat);color:var(--mat-ink);border-color:var(--mat)}.dbtn.sm{padding:7px 12px;font-size:13px}.dbtn.bad{color:#c0392b}
+.dg{display:grid;grid-template-columns:230px minmax(0,1fr);gap:22px;margin-top:22px;align-items:start}
+.dnav{position:sticky;top:16px;display:grid;gap:4px;padding:10px;border:1px solid var(--grid);border-radius:16px;background:var(--paper-2)}
+.dnav button{all:unset;cursor:pointer;display:flex;justify-content:space-between;align-items:center;padding:11px 14px;border-radius:10px;font:600 15px "DM Sans",sans-serif;color:var(--muted)}.dnav button:hover{color:var(--ink);background:var(--paper)}
+.dnav button[aria-current=true]{background:var(--mat);color:var(--mat-ink)}.dnav small{font:700 11px "DM Sans",sans-serif;opacity:.75}
+.pane{display:grid;gap:18px}.card{border:1px solid var(--grid);border-radius:16px;background:var(--paper-2);padding:20px 22px}.card h2{font:700 19px "DM Sans",sans-serif!important;margin:0 0 4px!important}.card .sub{color:var(--muted);font:14px/1.5 "DM Sans",sans-serif;margin:0 0 14px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}.kpi{border:1px solid var(--grid);border-radius:14px;padding:14px 16px;background:var(--paper);text-decoration:none;color:var(--ink)}.kpi span{display:block;color:var(--muted);font:600 12.5px "DM Sans",sans-serif}.kpi b{display:block;font:700 28px "DM Sans",sans-serif;margin-top:4px}.kpi small{color:var(--muted);font:12.5px "DM Sans",sans-serif}
+.rec{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}.rc{display:flex;gap:12px;align-items:center;border:1px solid var(--grid);border-radius:14px;padding:12px;background:var(--paper);text-decoration:none;color:var(--ink)}.rc:hover{border-color:var(--ink)}.rc i{width:42px;height:42px;border-radius:10px;background:var(--mat);color:var(--mat-ink);display:grid;place-items:center;font:700 15px "DM Sans",sans-serif;font-style:normal;flex:none}.rc b{display:block;font:700 15px "DM Sans",sans-serif}.rc small{color:var(--muted);font:12.5px "DM Sans",sans-serif}
+.pj{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}.pc{border:1px solid var(--grid);border-radius:14px;background:var(--paper);overflow:hidden;display:flex;flex-direction:column}.pc .th{height:130px;background:var(--grid);display:flex;overflow:hidden;align-items:center;justify-content:center}.pc .th img{width:100%;height:100%;object-fit:contain;background:#fff}.pc .th span{flex:1;height:100%}.pc .th em{font:700 13px "DM Sans",sans-serif;color:var(--muted);font-style:normal}
+.pc .bd{padding:12px 14px;display:grid;gap:4px;flex:1}.pc .bd small.k{font:700 10.5px "DM Sans",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--chalk)}.pc .bd b{font:700 16px "DM Sans",sans-serif}.pc .bd span{color:var(--muted);font:13.5px "DM Sans",sans-serif}.pc .ft{display:flex;gap:8px;padding:0 14px 14px;flex-wrap:wrap}
+.ft2{width:100%;border-collapse:collapse;font:14px "DM Sans",sans-serif}.ft2 th{text-align:left;color:var(--muted);font-weight:600;font-size:12.5px;padding:8px;border-bottom:1px solid var(--grid)}.ft2 td{padding:9px 8px;border-bottom:1px solid var(--grid);vertical-align:middle}.ft2 td:last-child{text-align:right}
+.meter{height:10px;border-radius:99px;background:var(--grid);overflow:hidden;margin:8px 0}.meter i{display:block;height:100%;background:linear-gradient(90deg,#00a85a,#e08a5e)}
+.bk{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,440px);gap:18px;align-items:start}.bkf{display:grid;grid-template-columns:1fr 1fr;gap:12px 14px}.bkf .full{grid-column:1/-1}
+.bkf label,.bkc label{display:grid;gap:5px;font:600 13px "DM Sans",sans-serif;color:var(--muted)}.bkf input,.bkf select,.bkf textarea{box-sizing:border-box;width:100%;font:15px "DM Sans",sans-serif;padding:10px 12px;border-radius:10px;border:1px solid var(--grid);background:var(--paper);color:var(--ink)}
+.bkh{grid-column:1/-1;font:700 12px "DM Sans",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--chalk);margin:10px 0 0}
+.bkc{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}.bkc div{display:grid;gap:6px}.bkc input[type=color]{width:100%;height:54px;border:1px solid var(--grid);border-radius:10px;padding:3px;background:var(--paper);cursor:pointer}.bkc input[type=text]{box-sizing:border-box;width:100%;font:13px ui-monospace,Menlo,monospace;padding:6px 8px;border-radius:8px;border:1px solid var(--grid);background:var(--paper);color:var(--ink);text-transform:uppercase}
+.logo-in{display:flex;align-items:center;gap:14px}.logo-in .lb{width:84px;height:84px;border:1px dashed var(--grid);border-radius:12px;display:grid;place-items:center;background:#fff;overflow:hidden}.logo-in .lb img{max-width:100%;max-height:100%;object-fit:contain}
+.prev{position:sticky;top:16px;display:grid;gap:14px}.pv-r{background:#fff;color:#1b1d20;border-radius:12px;padding:18px;box-shadow:0 8px 24px rgba(0,0,0,.18)}.pv-r .hd{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid var(--bp);padding-bottom:10px}.pv-r .lg{display:flex;align-items:center;gap:10px}.pv-r .lg img{height:34px;max-width:90px;object-fit:contain}.pv-r .bn{font-size:17px;font-weight:700;color:var(--bp)}.pv-r h3{margin:4px 0 0;font-size:22px}.pv-r small{font-size:11px;color:#777}
+.pv-r .sec{margin-top:12px;padding:6px 10px;background:color-mix(in srgb,var(--bp) 10%,white);border-left:3px solid var(--bp);font-weight:700;font-size:13px;color:var(--bp)}.pv-r table{width:100%;border-collapse:collapse;font-size:11.5px;margin-top:8px}.pv-r th{background:var(--bp);color:#fff;text-align:left;padding:5px 7px}.pv-r td{padding:5px 7px;border-bottom:1px solid #eee}
+.pv-t{display:flex;gap:14px;align-items:stretch}.tag{width:150px;min-height:230px;border-radius:10px;padding:26px 14px 14px;position:relative;box-shadow:0 8px 24px rgba(0,0,0,.18);display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px}.tag::before{content:"";position:absolute;top:10px;left:50%;width:10px;height:10px;margin-left:-5px;border-radius:50%;background:var(--paper-2)}.tag img{max-width:80px;max-height:50px;object-fit:contain}.tag b{font-size:20px;line-height:1.1}.tag em{font-style:normal;font-size:11px;opacity:.85}.tag small{margin-top:auto;font-size:10px;opacity:.8}
+.pv-s{flex:1;display:grid;gap:6px}.pv-s div{display:flex;align-items:center;gap:8px;font:12px ui-monospace,Menlo,monospace}.pv-s i{width:36px;height:36px;border-radius:8px;border:1px solid rgba(0,0,0,.12);flex:none}.pv-s span{font-family:"DM Sans",sans-serif;font-weight:600;color:var(--muted);font-size:12px}
+.bkf label.dbtn,.logo-in label.dbtn{display:inline-flex;width:auto;justify-self:start;color:var(--ink);font:600 13px "DM Sans",sans-serif}
+.empty{padding:20px;border:1px dashed var(--grid);border-radius:14px;color:var(--muted);font:14px "DM Sans",sans-serif;text-align:center}
+.saved-ok{color:#00894a;font:600 13px "DM Sans",sans-serif;min-height:18px}
+@media (max-width:900px){.dg{grid-template-columns:1fr}.dnav{position:static;display:flex;overflow:auto}.dnav button{white-space:nowrap}.bk{grid-template-columns:1fr}.prev{position:static}.bkc{grid-template-columns:repeat(3,1fr)}.bkf{grid-template-columns:1fr}}
 </style><style id="fs-css">
 :root{--fs-max:none;--fs-gut:clamp(16px,3.2vw,48px)}
 html{overflow-x:clip}body{margin-top:0!important;padding-top:0!important}.fs-strip,.fs-head{margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw)}
@@ -154,7 +186,6 @@ var bg=h.querySelector('.fs-burger');bg.addEventListener('click',function(){var 
 addEventListener('scroll',function(){h.classList.toggle('fs-sc',scrollY>4)},{passive:true});})();</script><!--/sitehead--><div class="wrap">
 
 <div class="acc" id="acc">
- <section id="saved" class="svd"><h2>Saved details</h2><p class="sub" id="svsub">Tap the ♡ Save button on any detail to keep it here. Saved on this device.</p><div class="svl" id="svl"></div></section>
  <div id="authv">
   <h1 id="ttl">Welcome back</h1><p class="sub" id="sub">Sign in to your Forecut account.</p>
   <div class="tabs" role="tablist"><button type="button" role="tab" id="t-in" aria-selected="true">Sign in</button><button type="button" role="tab" id="t-up" aria-selected="false">Sign up</button></div>
@@ -170,25 +201,13 @@ addEventListener('scroll',function(){h.classList.toggle('fs-sc',scrollY>4)},{pas
   <p class="msg" id="msg" role="status"></p>
   <p class="fine">By continuing you agree to the <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy Policy</a>. Forecut is free during early access.</p>
  </div>
- <div id="mev" class="me" hidden>
-  <div class="row"><div class="av" id="av"></div><div><b id="mn"></b><small id="mm"></small></div></div>
-  <div class="plan"><span class="tg">Early access</span><b style="font:700 16px DM Sans,sans-serif;display:block">Full access, complimentary</b><p>Every season is unlocked for you until plans open on 1 January 2027, including AW27, SS28, AW28 and India Summer 27 to Festive 28, plus reports and PDF downloads. Plans start at ₹999 a year for students and ₹2,999 a year for full access. <a href="index.html#pricing">See pricing</a>.</p></div>
-  <p class="msg" id="vmsg"></p>
-  <div class="qk"><a href="regions.html">Regions</a><a href="india.html">India</a><a href="aw26.html">AW26</a><a href="reports.html">Reports</a><a href="tools.html">Tools</a><a href="journal.html">Journal</a></div>
-  <button class="go" type="button" id="out" style="background:transparent;color:var(--ink);border:1px solid var(--grid)">Sign out</button>
- </div>
 </div>
-<script>
-  (function sv() { let L = []; try { L = JSON.parse(localStorage.getItem('fc-saved') || '[]'); } catch (e) {}
-    const box = document.getElementById('svl'), NM = {e: 'Emerging', r: 'Rising', p: 'Peaking', f: 'Fading'};
-    box.innerHTML = '';
-    if (!L.length) { document.getElementById('svsub').textContent = 'Nothing saved yet. Open any detail and tap ♡ Save to keep it here.'; }
-    L.forEach((x, i) => { const a = document.createElement('a'); a.className = 'svi'; a.href = x.page;
-      a.innerHTML = '<span class="ph">' + (x.img ? '<img alt="" src="/' + x.img.replace(/^\//, '') + '">' : '') + '</span><span><b></b><small></small></span><button type="button" aria-label="Remove">✕</button>';
-      a.querySelector('b').textContent = x.name; a.querySelector('small').textContent = (x.season || '') + ' · ' + (NM[x.st] || '') + ' · ' + (x.cat || '');
-      a.querySelector('button').onclick = (e) => { e.preventDefault(); L.splice(i, 1); try { localStorage.setItem('fc-saved', JSON.stringify(L)); } catch (er) {} sv(); };
-      box.appendChild(a); }); })();
-</script>
+<div class="dash" id="dash" hidden>
+ <header class="dh"><div class="av" id="av"></div><div class="who"><b id="mn"></b><small id="mm"></small><br><span class="chip">Early access · all seasons unlocked</span><p class="msg" id="vmsg" style="margin:6px 0 0"></p></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="dbtn" type="button" id="dlall">Download all my work</button><button class="dbtn" type="button" id="rsall">Restore</button><input type="file" id="rsfile" accept=".json" hidden><button class="dbtn" type="button" id="out">Sign out</button></div></header>
+ <div class="dg"><nav class="dnav" id="dnav" aria-label="Account sections"></nav><div id="pane"></div></div>
+</div>
+<script src="account-dash.js?v=1" defer></script>
 <script type="module">
 function ready(f) { window.FCAuth ? f() : document.addEventListener('fcauth-ready', f, { once: true }); }
 ready(function () {
@@ -219,10 +238,10 @@ ready(function () {
     try { await A.reset(em); say('Password reset email sent to ' + em + '.', true); } catch (e) { say(A.msg(e)); } };
   $('out').onclick = () => A.signOut();
   A.onChange((u) => {
-    $('authv').hidden = !!u; $('mev').hidden = !u; if (!u) return;
+    $('acc').hidden = !!u; $('dash').hidden = !u; if (!u) return; window.__fcUser = u; window.FCDash && window.FCDash.user(u);
     const name = u.displayName || (u.email || '').split('@')[0];
     $('mn').textContent = name; $('mm').textContent = u.email || '';
-    $('av').innerHTML = u.photoURL ? '<img alt="" referrerpolicy="no-referrer" src="' + u.photoURL + '">' : name.charAt(0).toUpperCase();
+    $('av').innerHTML = u.photoURL ? '<img alt="" referrerpolicy="no-referrer" src="' + u.photoURL + '">' : name.charAt(0).toUpperCase(); document.title = 'My account · Forecut';
     $('vmsg').textContent = u.emailVerified || !u.email ? '' : 'Check your inbox to verify your email address.';
     $('vmsg').className = 'msg ok';
   });

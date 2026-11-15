@@ -38,6 +38,7 @@
 
   function init() {
     var cur = here(), nav = document.getElementById('fxNav');
+    try { var R = JSON.parse(localStorage.getItem('fc-recent-tools') || '[]').filter(function (r) { return r.slug !== cur; }); R.unshift({ slug: cur, at: Date.now() }); localStorage.setItem('fc-recent-tools', JSON.stringify(R.slice(0, 15))); } catch (e) { }
     if (nav) nav.innerHTML = navHTML(cur);
     var tog = document.querySelector('.fx-side-toggle'), side = document.querySelector('.fx-side');
     if (tog && side) tog.addEventListener('click', function () { var open = side.classList.toggle('open'); tog.setAttribute('aria-expanded', open); });

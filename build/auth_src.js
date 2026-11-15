@@ -88,7 +88,7 @@ onAuthStateChanged(auth, (u) => {
   const name = u.displayName || (u.email || '').split('@')[0];
   const ini = (name || '?').trim().charAt(0).toUpperCase();
   w.innerHTML = `<button class="fcav" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Account menu">${w.id === 'fc-account-slot' ? `<span class="fc-avatar">${u.photoURL ? `<img src="${u.photoURL}" alt="" referrerpolicy="no-referrer">` : ini}</span><span class="fc-account-label">My account</span>` : (u.photoURL ? `<img src="${u.photoURL}" alt="" referrerpolicy="no-referrer">` : ini)}</button>
-  <div class="fcm" role="menu" hidden><b></b><small></small><span class="tg">Member · all seasons unlocked</span><a href="/account.html" role="menuitem">My account</a><button type="button" role="menuitem" class="fcout">Sign out</button></div>`;
+  <div class="fcm" role="menu" hidden><b></b><small></small><span class="tg">Member · all seasons unlocked</span><a href="/account.html#overview" role="menuitem">Dashboard</a><a href="/account.html#projects" role="menuitem">Projects &amp; files</a><a href="/account.html#brand" role="menuitem">Brand kit</a><a href="/account.html#account" role="menuitem">Account settings</a><button type="button" role="menuitem" class="fcout">Sign out</button></div>`;
   w.querySelector('.fcm b').textContent = name; w.querySelector('.fcm small').textContent = u.email || '';
   const b = w.querySelector('.fcav'), m = w.querySelector('.fcm');
   b.onclick = (e) => { e.stopPropagation(); m.hidden = !m.hidden; b.setAttribute('aria-expanded', String(!m.hidden)); };
