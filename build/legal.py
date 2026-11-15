@@ -101,7 +101,7 @@ P['method.html'] = ('How Forecut Forecasts · Methodology', '''
 <li><b>C · Analyst assessment:</b> the season has been shown and Forecut set the stage from its reading of the season's published runway, retail and trade coverage, but no source is linked to this detail yet.</li>
 <li><b>P · Projection:</b> the season has not been shown yet, so nothing can be observed. The stage is projected from earlier seasons and is marked as a projection in the lifecycle.</li></ul>
 <p>The checks shown with each grade are: several sources, different kinds of source, more than one region, seen directly rather than inferred, recent, and reviewed by a person. A grade only goes up when a dated source is added to the detail's record; sources are never estimated. Most details are currently graded C or P while detail-level sources are being linked, and we would rather show that honestly than show a confident number.</p>
-<p>The lifecycle in each detail separates <b>assessed</b> seasons (already shown) from <b>projected</b> ones. Images are labelled as Forecut illustrations, not runway photographs.</p>
+<p>The lifecycle in each detail separates <b>assessed</b> seasons (already shown) from <b>projected</b> ones. Images are labelled as Forecut illustrations, not runway photographs. How past projections compare with later assessments is published on the <a href="track-record.html">forecast track record</a>.</p>
 <h2>Images</h2>
 <p>Most images on Forecut are AI-generated illustrations made for Forecut to show a detail clearly. They are not runway, campaign or brand photographs. Real photographs are used only when they are free-licensed (for example from Unsplash, Pexels, Wikimedia Commons or The Met Open Access) and are credited where required.</p>
 <h2>Dates</h2>
@@ -188,6 +188,8 @@ P['privacy.html'] = ('Privacy Policy · Forecut', f'''
 <p>We may update this Privacy Policy from time to time. The updated version will be posted here with a new effective date.</p>
 <h2>9. Contact</h2>
 <p>For privacy questions or requests, including grievances: <a href="mailto:hello@forecut.in">hello@forecut.in</a></p>''')
+import track_record
+P['track-record.html'] = ('Forecast Track Record · Forecut', track_record.body())
 for fn, (title, body) in P.items():
     open('../' + fn, 'w').write(HEAD.format(title=html.escape(title)) + body + FOOT)
 print('legal pages', len(P))

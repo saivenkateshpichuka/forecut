@@ -24,6 +24,7 @@
   var S;
   try { S = JSON.parse(localStorage.getItem(KEY) || 'null'); } catch (e) { S = null; }
   if (!S || S.v !== 1) S = defaults();
+  if (!Array.isArray(S.labdips)) S.labdips = [];
   function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); var st = $('#status'); if (st) st.textContent = 'Saved in this browser'; } catch (e) {} }
 
   /* ---------- colour maths: blending in linear light approximates how separate coloured fibres mix to the eye ---------- */
@@ -233,13 +234,40 @@
   /* ---------- shared rendering ---------- */
   function inp(k, l, v, t, ph) { return '<label>' + esc(l) + '<input data-k="' + k + '" type="' + (t || 'text') + '"' + (t === 'number' ? ' step="any" min="0"' : '') + ' value="' + esc(v) + '"' + (ph ? ' placeholder="' + esc(ph) + '"' : '') + '></label>'; }
   function sel(k, l, v, opts) { return '<label>' + esc(l) + '<select data-k="' + k + '">' + opts.map(function (o) { return '<option' + (o === v ? ' selected' : '') + '>' + esc(o) + '</option>'; }).join('') + '</select></label>'; }
-  var TABS = [['recipe', 'Dye recipe and batch cost'], ['blend', 'Colour blend'], ['route', 'Processing route and cost']];
+  var TABS = [['recipe', 'Dye recipe and batch cost'], ['blend', 'Colour blend'], ['route', 'Processing route and cost'], ['labdip', 'Lab dips']];
+  /* ---------- lab dips (Stage 7): submissions per colour, result, measured dE and an indicative screen dE2000 ---------- */
+  function hexLab(h) { h = String(h || '#000').replace('#', ''); var R = toLin(parseInt(h.substr(0, 2), 16)), G = toLin(parseInt(h.substr(2, 2), 16)), B = toLin(parseInt(h.substr(4, 2), 16));
+    var X = (R * .4124 + G * .3576 + B * .1805) / .95047, Y = R * .2126 + G * .7152 + B * .0722, Z = (R * .0193 + G * .1192 + B * .9505) / 1.08883, f = function (t) { return t > .008856 ? Math.cbrt(t) : 7.787 * t + 16 / 116; };
+    return [116 * f(Y) - 16, 500 * (f(X) - f(Y)), 200 * (f(Y) - f(Z))]; }
+  function de00(h1, h2) { var a = hexLab(h1), b = hexLab(h2), rad = Math.PI / 180, L1 = a[0], a1 = a[1], b1 = a[2], L2 = b[0], a2 = b[1], b3 = b[2];
+    var C1 = Math.hypot(a1, b1), C2 = Math.hypot(a2, b3), Cb = (C1 + C2) / 2, G = .5 * (1 - Math.sqrt(Math.pow(Cb, 7) / (Math.pow(Cb, 7) + Math.pow(25, 7)))), ap1 = (1 + G) * a1, ap2 = (1 + G) * a2, Cp1 = Math.hypot(ap1, b1), Cp2 = Math.hypot(ap2, b3);
+    var hp1 = (Math.atan2(b1, ap1) / rad + 360) % 360, hp2 = (Math.atan2(b3, ap2) / rad + 360) % 360, dL = L2 - L1, dC = Cp2 - Cp1, dh = Cp1 * Cp2 === 0 ? 0 : Math.abs(hp2 - hp1) <= 180 ? hp2 - hp1 : hp2 - hp1 > 180 ? hp2 - hp1 - 360 : hp2 - hp1 + 360, dH = 2 * Math.sqrt(Cp1 * Cp2) * Math.sin(dh / 2 * rad);
+    var Lb = (L1 + L2) / 2, Cpb = (Cp1 + Cp2) / 2, hb = Cp1 * Cp2 === 0 ? hp1 + hp2 : Math.abs(hp1 - hp2) <= 180 ? (hp1 + hp2) / 2 : hp1 + hp2 < 360 ? (hp1 + hp2 + 360) / 2 : (hp1 + hp2 - 360) / 2;
+    var T = 1 - .17 * Math.cos((hb - 30) * rad) + .24 * Math.cos(2 * hb * rad) + .32 * Math.cos((3 * hb + 6) * rad) - .2 * Math.cos((4 * hb - 63) * rad), dT = 30 * Math.exp(-Math.pow((hb - 275) / 25, 2)), Rc = 2 * Math.sqrt(Math.pow(Cpb, 7) / (Math.pow(Cpb, 7) + Math.pow(25, 7)));
+    var SL = 1 + .015 * Math.pow(Lb - 50, 2) / Math.sqrt(20 + Math.pow(Lb - 50, 2)), SC = 1 + .045 * Cpb, SH = 1 + .015 * Cpb * T, RT = -Math.sin(2 * dT * rad) * Rc;
+    return Math.sqrt(Math.pow(dL / SL, 2) + Math.pow(dC / SC, 2) + Math.pow(dH / SH, 2) + RT * (dC / SC) * (dH / SH)); }
+  var DIP_RES = ['Waiting', 'Approved', 'Approved with comments', 'Resubmit: too dark', 'Resubmit: too light', 'Resubmit: hue off', 'Resubmit: too dull', 'Resubmit: too bright', 'Rejected'];
+  function labView() {
+    var L = S.labdips, cols = []; L.forEach(function (x) { if (cols.indexOf(x.colour) < 0) cols.push(x.colour); });
+    var head = '<section class="panel"><h2>Lab dips</h2><p class="note">Track every submission for each colour: the target, what the mill or lab sent, the result and comments. Enter the dE your spectrophotometer reports; the screen dE2000 worked out from the colours shown here is only a guide.</p><div class="actions"><button type="button" data-act="adddip">+ New colour</button>' + (L.length ? '<button type="button" data-act="dipcsv">Export lab dips (CSV)</button>' : '') + '</div></section>';
+    if (!L.length) return head + '<section class="panel"><p class="note">No lab dips yet. Add a colour, then record each submission (1, 2, 3…) as it comes back.</p></section>';
+    return head + cols.map(function (c) { var rows = L.map(function (x, i) { return [x, i]; }).filter(function (p) { return p[0].colour === c; }), last = rows[rows.length - 1][0], ok = /^Approved/.test(last.result);
+      return '<section class="panel dip"><div class="dip-h"><h3>' + esc(c) + '</h3><span class="dip-st ' + (ok ? 'ok' : /Reject/.test(last.result) ? 'no' : 'wait') + '">' + esc(ok ? 'Approved on submission ' + last.sub : last.result === 'Waiting' ? 'Waiting for submission ' + last.sub : last.result) + '</span><button type="button" data-act="adddip" data-c="' + esc(c) + '">+ Next submission</button></div>'
+        + rows.map(function (p) { var x = p[0], i = p[1], k = function (f) { return 'labdips.' + i + '.' + f; }, sd = de00(x.target, x.shade);
+          return '<div class="dip-r"><div class="dip-sw"><span style="background:' + esc(x.target) + '"></span><span style="background:' + esc(x.shade) + '"></span><small>target · dip</small></div><div class="dip-f">'
+            + '<label>Colour<input data-k="' + k('colour') + '" value="' + esc(x.colour) + '" maxlength="60"></label><label>TCX / reference<input data-k="' + k('tcx') + '" value="' + esc(x.tcx) + '" maxlength="40" placeholder="19-4052 TCX"></label><label>Target<input type="color" data-k="' + k('target') + '" value="' + esc(x.target) + '"></label><label>Dip as seen<input type="color" data-k="' + k('shade') + '" value="' + esc(x.shade) + '"></label>'
+            + '<label>Submission<input type="number" min="1" step="1" data-k="' + k('sub') + '" value="' + esc(x.sub) + '"></label><label>Lab / mill<input data-k="' + k('lab') + '" value="' + esc(x.lab) + '" maxlength="60"></label><label>Sent<input type="date" data-k="' + k('sent') + '" value="' + esc(x.sent) + '"></label>'
+            + '<label>Result<select data-k="' + k('result') + '">' + DIP_RES.map(function (o) { return '<option' + (o === x.result ? ' selected' : '') + '>' + o + '</option>'; }).join('') + '</select></label><label>Measured dE<input type="number" min="0" step=".01" data-k="' + k('de') + '" value="' + esc(x.de) + '" placeholder="from spectro"></label><label>Light source<select data-k="' + k('light') + '">' + ['D65', 'TL84', 'A (tungsten)', 'CWF', 'D65 + TL84', 'All three'].map(function (o) { return '<option' + (o === x.light ? ' selected' : '') + '>' + o + '</option>'; }).join('') + '</select></label>'
+            + '<label class="dip-c">Comments<input data-k="' + k('comment') + '" value="' + esc(x.comment) + '" maxlength="200" placeholder="e.g. slightly red under TL84"></label></div><div class="dip-de"><b data-de="' + i + '">' + sd.toFixed(2) + '</b><small>screen dE2000</small><button type="button" data-act="rmdip" data-i="' + i + '" aria-label="Remove submission">×</button></div></div>'; }).join('') + '</section>'; }).join('');
+  }
+  function labOut() { S.labdips.forEach(function (x, i) { var e = document.querySelector('[data-de="' + i + '"]'); if (!e) return; e.textContent = de00(x.target, x.shade).toFixed(2); var sw = e.closest('.dip-r').querySelectorAll('.dip-sw span'); sw[0].style.background = x.target; sw[1].style.background = x.shade; }); }
+  window.ForecutDE00 = function (a, b) { return de00(a, b); };
   function render() {
-    var v = S.tab === 'blend' ? blendView() : S.tab === 'route' ? routeView() : recipeView();
+    var v = S.tab === 'labdip' ? labView() : S.tab === 'blend' ? blendView() : S.tab === 'route' ? routeView() : recipeView();
     app.innerHTML = '<div class="pr-tabs" role="tablist">' + TABS.map(function (t) { return '<button type="button" role="tab" aria-selected="' + (S.tab === t[0]) + '" data-tab="' + t[0] + '">' + esc(t[1]) + '</button>'; }).join('') + '</div><div class="pr-grid">' + v + '</div>';
     out();
   }
-  function out() { if (S.tab === 'blend') blendOut(); else if (S.tab === 'route') routeOut(); else recipeOut(); }
+  function out() { if (S.tab === 'labdip') return labOut(); if (S.tab === 'blend') blendOut(); else if (S.tab === 'route') routeOut(); else recipeOut(); }
   function setPath(path, val) { var p = path.split('.'), o = S; for (var i = 0; i < p.length - 1; i++) o = o[p[i]]; o[p[p.length - 1]] = val; }
 
   app.addEventListener('input', function (e) {
@@ -255,7 +283,7 @@
     if (t.dataset.picktcx != null && window.ForecutTCX) { var code = (t.value || '').split(' TCX')[0].trim(); if (code) { var m = window.ForecutTCX.split(';').map(function (r) { return r.split('|'); }).filter(function (a) { return a[0] === code; })[0]; if (m) { S.blend.parts[+t.dataset.picktcx].hex = '#' + m[2].replace('#', ''); save(); render(); } } return; }
     if (t.dataset.pickhex) { if (t.value) { S.blend.parts[+t.dataset.pickhex].hex = t.value; save(); render(); } return; }
     if (t.dataset.k === 'recipe.fibre' || t.dataset.k === 'recipe.cls') { var R = S.recipe, cl = D.FIBRES[R.fibre] || []; if (cl.indexOf(R.cls) < 0) R.cls = cl[0]; R.lr = (D.CLASSES[R.cls] || {}).lr || R.lr; R.auxFor = ''; R.aux = null; save(); return render(); }
-    if (t.dataset.k && (/\.fibre$|\.name$/.test(t.dataset.k))) { save(); render(); }
+    if (t.dataset.k && (/\.fibre$|\.name$|^labdips\.\d+\.(colour|result|sub)$/.test(t.dataset.k))) { save(); render(); }
   });
   app.addEventListener('click', function (e) {
     var b = e.target.closest('button'); if (!b) return;
@@ -267,6 +295,10 @@
     if (a === 'closelib') { var w = $('#prLibWrap'); if (w) w.remove(); }
     if (a === 'pick') { R.dyes.push({ name: b.dataset.n, pct: 1, price: 600 }); save(); var w2 = $('#prLibWrap'); if (w2) w2.remove(); render(); }
     if (a === 'addown') { var n = ($('#prOn').value || '').trim(); if (!n) return; S.custom.push({ name: n, cls: $('#prOc').value, hex: $('#prOh').value }); save(); $('#prOn').value = ''; libResults(); }
+    if (a === 'adddip') { var prev = S.labdips.filter(function (x) { return x.colour === (b.dataset.c || ''); }), base = prev[prev.length - 1]; S.labdips.push(base ? { colour: base.colour, tcx: base.tcx, target: base.target, lab: base.lab, sub: (+base.sub || prev.length) + 1, sent: new Date().toISOString().slice(0, 10), result: 'Waiting', shade: base.shade, de: '', light: base.light, comment: '' } : { colour: 'Colour ' + (S.labdips.length + 1), tcx: '', target: '#2b4c8c', lab: '', sub: 1, sent: new Date().toISOString().slice(0, 10), result: 'Waiting', shade: '#2f4f86', de: '', light: 'D65', comment: '' }); save(); render(); }
+    if (a === 'rmdip') { S.labdips.splice(+b.dataset.i, 1); save(); render(); }
+    if (a === 'dipcsv') { var rows = [['Colour', 'TCX / ref', 'Target hex', 'Submission', 'Lab / mill', 'Sent', 'Result', 'Dip hex', 'Measured dE', 'Screen dE2000', 'Light source', 'Comments']].concat(S.labdips.map(function (x) { return [x.colour, x.tcx, x.target, x.sub, x.lab, x.sent, x.result, x.shade, x.de, de00(x.target, x.shade).toFixed(2), x.light, x.comment]; }));
+      var t = rows.map(function (r) { return r.map(function (v) { v = String(v == null ? '' : v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }).join(','); }).join('\n'), al = document.createElement('a'); al.href = URL.createObjectURL(new Blob(['﻿' + t], { type: 'text/csv' })); al.download = 'lab-dips.csv'; al.click(); }
     if (a === 'addpart') { S.blend.parts.push({ fibre: 'Viscose / rayon', pct: 0, hex: '#888888' }); save(); render(); }
     if (a === 'rmpart') { S.blend.parts.splice(+b.dataset.i, 1); save(); render(); }
   });

@@ -8,13 +8,15 @@
     ['Colour and fabric', [
       ['swatchsmith', 'Colour Palette Builder', 'Season palettes and swatch sheets'],
       ['textile-calculator', 'Textile Calculator', 'Yarn, GSM, weaving, knitting and costing'],
-      ['textile-processing-studio', 'Textile Processing Studio', 'Dyeing, processing and colour blends']]],
+      ['textile-processing-studio', 'Textile Processing Studio', 'Dyeing, processing and colour blends'],
+      ['materials-library', 'Fabric & Trims Library', 'Fabrics and trims with tests, vendors and substitutes']]],
     ['Pattern and fit', [
       ['pattern-maker', 'Garment Studio', 'Patterns, grading and 3D fitting · opens full window'],
       ['size-chart-builder', 'Size Chart Builder', 'Grade measurements across sizes']]],
     ['Sampling and tech pack', [
       ['decoration-cost-estimator', 'Embroidery & Print Cost', 'Decoration cost per piece'],
-      ['tech-pack-builder', 'Tech Pack Builder', 'Supplier-ready tech packs']]],
+      ['tech-pack-builder', 'Tech Pack Builder', 'Supplier-ready tech packs'],
+      ['fit-qc-studio', 'Fit & QC Studio', 'Fit sessions, measurements, issues and AQL']]],
     ['Costing and production', [
       ['pricefold', 'Price & Margin Calculator', 'Real margin after GST, fees and returns'],
       ['evenpoint', 'Break-even Calculator', 'Pieces you must sell to cover costs'],

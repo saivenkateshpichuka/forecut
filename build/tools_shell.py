@@ -5,7 +5,7 @@ The tool list itself is rendered by tools/shell.js from one registry.
 """
 from html import escape
 
-VER = 'fx-20261115i'
+VER = 'fx-20261115j'
 
 # slug: (brand name, plain label, stage)
 NAMES = {
@@ -14,11 +14,13 @@ NAMES = {
     'swatchsmith': ('Colour Palette Builder', 'Season palettes and swatch sheets', '02 Colour and fabric'),
     'textile-calculator': ('Textile Calculator', 'Yarn, GSM, weaving, knitting and costing', '02 Colour and fabric'),
     'textile-processing-studio': ('Textile Processing Studio', 'Dyeing, processing and colour blends', '02 Colour and fabric'),
+    'materials-library': ('Fabric & Trims Library', 'Fabrics and trims with tests, vendors and substitutes', '02 Colour and fabric'),
     'pattern-maker': ('Garment Studio', 'Pattern making, grading and 3D fitting', '03 Pattern and fit'),
     '3d-drape-studio': ('3D Drape Studio', 'Sew and drape your pattern in 3D', '03 Pattern and fit'),
     'size-chart-builder': ('Size Chart Builder', 'Grade measurements across sizes', '03 Pattern and fit'),
     'decoration-cost-estimator': ('Embroidery & Print Cost', 'Decoration cost per piece', '04 Sampling and tech pack'),
     'tech-pack-builder': ('Tech Pack Builder', 'Supplier-ready tech packs', '04 Sampling and tech pack'),
+    'fit-qc-studio': ('Fit & QC Studio', 'Fit sessions, measurements, issues and AQL', '04 Sampling and tech pack'),
     'pricefold': ('Price & Margin Calculator', 'Real margin after GST, fees and returns', '05 Costing and production'),
     'evenpoint': ('Break-even Calculator', 'Pieces you must sell to cover costs', '05 Costing and production'),
     'cutclock': ('Production Calendar', 'Deadlines worked back from launch', '05 Costing and production'),

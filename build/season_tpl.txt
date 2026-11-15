@@ -786,6 +786,19 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
     if (dated.length) return { g: 'C+', n: 'Analyst assessment with a source', t: 'One dated source linked; the stage is Forecut’s reading of it and of the season’s published coverage.' };
     return { g: 'C', n: 'Analyst assessment', t: 'Forecut’s reading of the season’s published runway, retail and trade coverage. No source is linked to this detail yet.' };
   }
+
+  function regionHTML(d) {
+    var R = EVID.regions || [], txt = (d.name + ' ' + d.note).toLowerCase(), esc2 = function (t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+    if (!R.length) return '';
+    var hotHit = (EVID.hot || []).filter(function (w) { return txt.indexOf(w) > -1; });
+    return '<h5>Regional comparison</h5><table class="evt"><tr><th>Region</th><th>Reading</th><th>In stores</th></tr>' + R.map(function (r) {
+      var hits = r.boost.filter(function (w) { return txt.indexOf(w) > -1; }), read;
+      if (r.heat && EVID.aw && hotHit.length) read = '<b>Lighter version or skip</b>: hot climate, and this detail is ' + esc2(hotHit.join(', ')) + '.';
+      else if (hits.length) read = '<b>Strong local fit</b>: matches what this region buys (' + esc2(hits.join(', ')) + ').';
+      else read = 'Global reading applies.';
+      return '<tr><td><a href="region-' + r.slug + '.html">' + esc2(r.name) + '</a></td><td>' + read + '</td><td>' + esc2(r.win) + '</td></tr>';
+    }).join('') + '</table><p class="evn evm">Regional readings follow fixed rules from each region page (local buying focus, climate and hemisphere timing). They are a guide to adaptation, not measured regional sales.</p>';
+  }
   function evidence(d) {
     var el = document.getElementById('vev'), body = document.getElementById('vevb'); if (!el || !body) return;
     var all = (EVID.details[d.name] || []), recs = all.filter(function (r) { return !r.season || r.season === CUR_SEASON; }), G = evGrade(CUR_SEASON, recs), S = EVID.seasons[CUR_SEASON] || {};
@@ -805,7 +818,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
       + '<table class="evt"><tr><th>Check</th><th></th><th>Detail</th></tr>' + fac.map(function (f) { return '<tr><td>' + f[0] + '</td><td class="' + (f[1] ? 'ok' : 'no') + '">' + (f[1] ? '✓' : '–') + '</td><td>' + esc2(f[2]) + '</td></tr>'; }).join('') + '</table>'
       + '<h5>Lifecycle: assessed or projected</h5><table class="evt">' + lifeRows + '</table>'
       + '<h5>Sources</h5>' + (recs.length ? '<ul class="evs">' + recs.map(function (r) { return '<li>' + (r.url ? '<a href="' + esc2(r.url) + '" target="_blank" rel="noopener nofollow">' + esc2(r.title) + '</a>' : esc2(r.title)) + ' <small>' + esc2([r.type, r.region, r.date].filter(Boolean).join(' · ')) + '</small>' + (r.note ? '<br><small>' + esc2(r.note) + '</small>' : '') + '</li>'; }).join('') + '</ul>' : '<p class="evn">No source is linked to this detail yet. Season basis: ' + esc2(S.sources || '') + '</p>')
-      + img + '<p class="evn evm">Region: global (New York, London, Milan and Paris show circuit and international retail). Stages describe design direction, not measured sales. Last reviewed ' + esc2(EVID.reviewed) + '.</p>';
+      + regionHTML(d) + img + '<p class="evn evm">Region: global (New York, London, Milan and Paris show circuit and international retail). Stages describe design direction, not measured sales. Last reviewed ' + esc2(EVID.reviewed) + '.</p>';
   }
 
   function timing(life) { var lk = life.indexOf('L') > -1; var parts = []; SEASON_CODES.forEach(function (code, i) { var ch = life.charAt(i); if (ch !== '-' && ch !== 'L') parts.push(code + ' ' + LBLS[ch]); }); var _r = parts.length ? 'Forecut lifecycle: ' + parts.join(' → ') + '.' : ''; return _r + (lk ? ' Later seasons open at launch.' : ''); }
@@ -881,7 +894,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
       sv.setAttribute('aria-pressed', on ? 'true' : 'false'); sv.querySelector('span').textContent = on ? 'Saved' : 'Save';
       sv.onclick = function () { try { list = JSON.parse(localStorage.getItem(key) || '[]'); } catch (e) { list = []; }
         var i = list.findIndex(function (x) { return x.id === id; });
-        if (i > -1) list.splice(i, 1); else list.unshift({id: id, name: d.name, page: location.pathname, season: CUR_SEASON, cat: d.cat, st: d.st, img: vph || vimg || ''});
+        if (i > -1) list.splice(i, 1); else list.unshift({id: id, name: d.name, page: location.pathname, season: CUR_SEASON, cat: d.cat, st: d.st, life: d.life, at: new Date().toISOString().slice(0, 10), img: vph || vimg || ''});
         try { localStorage.setItem(key, JSON.stringify(list.slice(0, 300))); } catch (e) {}
         var now = i === -1; sv.setAttribute('aria-pressed', now ? 'true' : 'false'); sv.querySelector('span').textContent = now ? 'Saved' : 'Save'; }; })();
     (function () { var pn = document.getElementById('vpin'); if (!pn) return; var base = 'https://forecut.in/';
