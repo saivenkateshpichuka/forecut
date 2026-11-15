@@ -42,7 +42,20 @@ window.FCAuth = {
   },
   reset: (email) => sendPasswordResetEmail(auth, email),
   signOut: () => signOut(auth),
-  onChange: (fn) => onAuthStateChanged(auth, fn)
+  onChange: (fn) => onAuthStateChanged(auth, fn),
+  // feedback goes to the Firestore "feedback" collection; if that is not available, it opens an email instead
+  sendFeedback: async (d) => {
+    const u = auth.currentUser, doc = Object.assign({}, d, { uid: u ? u.uid : '', email: u ? u.email || '' : '', name: u ? u.displayName || '' : '', page: location.pathname, at: new Date().toISOString(), ua: navigator.userAgent.slice(0, 200) });
+    try {
+      const F = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+      await F.addDoc(F.collection(F.getFirestore(app), 'feedback'), doc);
+      return 'saved';
+    } catch (e) {
+      const body = 'Rating: ' + (doc.rating || '-') + '/5\nRole: ' + (doc.role || '-') + '\nUses: ' + (doc.uses || []).join(', ') + '\n\nWhat to improve:\n' + (doc.improve || '') + '\n\nFeature wished for:\n' + (doc.wish || '') + '\n\nAccount: ' + doc.email;
+      location.href = 'mailto:hello@forecut.in?subject=' + encodeURIComponent('Forecut feedback (1 year free access)') + '&body=' + encodeURIComponent(body);
+      return 'mail';
+    }
+  }
 };
 
 // ---- nav widget ----
@@ -147,5 +160,53 @@ onAuthStateChanged(auth, (u) => {
       try { localStorage.setItem(key, String(n + 1)); } catch (x) {}
     }
   }, true);
+})();
+// ---- feedback offer: shown once after sign-in (again 3 days after "Later"); 1 year of full access for feedback ----
+(function () {
+  const css2 = document.createElement('style');
+  css2.textContent = '.fcfb{position:fixed;inset:0;z-index:10001;background:rgba(20,17,15,.6);display:grid;place-items:center;padding:16px;overflow:auto}.fcfb>form{background:#fffdf8;color:#1c1714;max-width:540px;width:100%;border-radius:18px;padding:26px 26px 22px;font:15px/1.5 "DM Sans",system-ui,sans-serif;box-shadow:0 30px 80px rgba(0,0,0,.35);position:relative}'
+   + '.fcfb .bd{display:inline-block;font:700 11px "DM Sans",sans-serif;letter-spacing:.08em;text-transform:uppercase;background:linear-gradient(135deg,#00a85a,#1fd17f);color:#fff;padding:5px 11px;border-radius:99px}.fcfb h3{font:600 27px/1.15 "Source Serif 4",Georgia,serif;margin:10px 0 6px}.fcfb p{margin:0 0 14px;color:#4a3f37}.fcfb label{display:block;font:600 13px "DM Sans",sans-serif;color:#4a3f37;margin:12px 0 6px}'
+   + '.fcfb textarea,.fcfb select{box-sizing:border-box;width:100%;font:15px "DM Sans",sans-serif;padding:10px 12px;border:1px solid #d8d0c3;border-radius:10px;background:#fff;color:#1c1714}.fcfb textarea{min-height:92px;resize:vertical}.fcfb .st{display:flex;gap:4px}.fcfb .st button{all:unset;cursor:pointer;font-size:30px;line-height:1;color:#d8d0c3}.fcfb .st button.on{color:#e0a21b}'
+   + '.fcfb .ch{display:flex;flex-wrap:wrap;gap:6px}.fcfb .ch label{all:unset;cursor:pointer;font:600 13px "DM Sans",sans-serif;border:1px solid #d8d0c3;border-radius:99px;padding:6px 12px}.fcfb .ch input{display:none}.fcfb .ch label:has(input:checked){background:#214538;color:#fff;border-color:#214538}'
+   + '.fcfb .ac{display:flex;gap:10px;align-items:center;margin-top:18px;flex-wrap:wrap}.fcfb .go2{all:unset;cursor:pointer;background:#214538;color:#fff;font-weight:700;padding:12px 20px;border-radius:12px}.fcfb .lt{all:unset;cursor:pointer;color:#6e6259;font-weight:600;padding:12px 8px}.fcfb .x{all:unset;cursor:pointer;position:absolute;top:14px;right:16px;font-size:22px;color:#8a7f76}.fcfb .er{color:#c0392b;font-size:13.5px;min-height:18px;margin:8px 0 0}.fcfb small.f{display:block;color:#8a7f76;font-size:12px;margin-top:12px}';
+  document.head.appendChild(css2);
+  const K = (u) => 'fc-fb-' + u.uid;
+  function state(u) { try { return JSON.parse(localStorage.getItem(K(u)) || 'null'); } catch (e) { return null; } }
+  function setState(u, v) { try { localStorage.setItem(K(u), JSON.stringify(v)); } catch (e) {} }
+  function open(u, force) {
+    if (document.querySelector('.fcfb')) return;
+    const w = document.createElement('div'); w.className = 'fcfb'; w.setAttribute('role', 'dialog'); w.setAttribute('aria-modal', 'true'); w.setAttribute('aria-label', 'Give feedback');
+    w.innerHTML = '<form novalidate><button type="button" class="x" aria-label="Close">×</button><span class="bd">Get 1 year free</span><h3>Help us shape Forecut</h3><p>Tell us what works, what is missing and what we should improve. Send your feedback and get <b>1 year of full Forecut access, free</b>.</p>'
+      + '<label>How useful is Forecut for you so far?</label><div class="st">' + [1, 2, 3, 4, 5].map((n) => '<button type="button" data-r="' + n + '" aria-label="' + n + ' of 5">★</button>').join('') + '</div>'
+      + '<label>What do you use?</label><div class="ch">' + ['Forecasts', 'India seasons', 'Garment Studio', 'Tech pack & size charts', 'Colour & fabric tools', 'Costing tools', 'Reports & PDFs'].map((x) => '<label><input type="checkbox" value="' + x + '">' + x + '</label>').join('') + '</div>'
+      + '<label for="fbr">You are a</label><select id="fbr"><option value="">Choose…</option><option>Fashion designer</option><option>Brand owner / founder</option><option>Merchandiser / buyer</option><option>Pattern maker / technician</option><option>Manufacturer / exporter</option><option>Student / educator</option><option>Other</option></select>'
+      + '<label for="fbi">What should we improve or add? <span style="font-weight:500">(required)</span></label><textarea id="fbi" maxlength="3000" placeholder="Be as specific as you like: a tool, a page, a feature, a problem you hit…"></textarea>'
+      + '<label for="fbw">One feature you would pay for</label><textarea id="fbw" maxlength="1000" style="min-height:60px" placeholder="Optional"></textarea>'
+      + '<p class="er" role="alert"></p><div class="ac"><button type="submit" class="go2">Send feedback</button><button type="button" class="lt">Remind me later</button></div><small class="f">Signed in as ' + (u.email || '').replace(/[<>&]/g, '') + '. Your free year is added to this account after we review your feedback.</small></form>';
+    document.body.appendChild(w);
+    let rating = 0; const f = w.querySelector('form');
+    w.querySelectorAll('[data-r]').forEach((b) => b.onclick = () => { rating = +b.dataset.r; w.querySelectorAll('[data-r]').forEach((x) => x.classList.toggle('on', +x.dataset.r <= rating)); });
+    const later = () => { if (!force) setState(u, { s: 'later', at: Date.now() }); w.remove(); };
+    w.querySelector('.lt').onclick = later; w.querySelector('.x').onclick = later;
+    w.addEventListener('keydown', (e) => { if (e.key === 'Escape') later(); });
+    f.onsubmit = async (e) => {
+      e.preventDefault(); const imp = f.querySelector('#fbi').value.trim();
+      if (imp.length < 15) { f.querySelector('.er').textContent = 'Please write a little more about what we should improve.'; return; }
+      const btn = f.querySelector('.go2'); btn.textContent = 'Sending…'; btn.disabled = true;
+      const r = await window.FCAuth.sendFeedback({ rating, role: f.querySelector('#fbr').value, uses: [...f.querySelectorAll('.ch input:checked')].map((x) => x.value), improve: imp, wish: f.querySelector('#fbw').value.trim(), offer: '1-year-free' });
+      setState(u, { s: 'sent', at: Date.now(), via: r });
+      f.innerHTML = '<span class="bd">Thank you</span><h3>Your feedback is in</h3><p>' + (r === 'mail' ? 'Your email app opened with your feedback: press send to deliver it. ' : '') + 'We read every message. Your 1 year of full Forecut access will be added to <b>' + (u.email || 'your account').replace(/[<>&]/g, '') + '</b>.</p><div class="ac"><button type="button" class="go2">Close</button></div>';
+      f.querySelector('.go2').onclick = () => w.remove();
+    };
+    setTimeout(() => { const s1 = w.querySelector('[data-r]'); if (s1) s1.focus(); }, 50);
+  }
+  window.FCFeedback = { open: () => { const u = auth.currentUser; if (u) open(u, true); else location.href = '/account.html#signin'; } };
+  onAuthStateChanged(auth, (u) => {
+    if (!u || /pattern-maker|3d-drape/.test(location.pathname)) return;
+    const st = state(u);
+    if (st && (st.s === 'sent' || st.s === 'later' && Date.now() - st.at < 3 * 86400000)) return;
+    // on the dashboard the brand set-up comes first; feedback follows when it closes
+    setTimeout(() => { if (document.querySelector('.fcbrand')) document.addEventListener('fcbrand-closed', () => setTimeout(() => open(u), 600), { once: true }); else open(u); }, 2500);
+  });
 })();
 document.dispatchEvent(new Event('fcauth-ready'));
