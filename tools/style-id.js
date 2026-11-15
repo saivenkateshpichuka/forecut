@@ -137,6 +137,8 @@
     var fill = function (sel, v, onlyDefault) { document.querySelectorAll(sel).forEach(function (i) { if (i.value !== v && (!onlyDefault || !i.value || /^(New style|FC-001)$/.test(i.value))) { i.value = v; i.dispatchEvent(new Event('input', { bubbles: true })); i.dispatchEvent(new Event('change', { bubbles: true })); } }); };
     fill('[data-group=brief][data-key=code],[data-group=size][data-key=styleCode],[data-group=copy][data-key=sku]', s.id);
     fill('[data-group=brief][data-key=name],[data-group=size][data-key=styleName]', s.name, true);
+    fill('[data-group=pack][data-key=version]', 'Rev ' + (s.rev || 1));
+    document.querySelectorAll('[data-group=pack][data-key=version]').forEach(function (i) { if (!i.readOnly) { i.readOnly = true; i.title = 'Follows the official revision (Revisions & sign-off)'; i.style.background = '#eef3ef'; } });
     document.querySelectorAll('[data-group=brief][data-key=code],[data-group=size][data-key=styleCode],[data-group=copy][data-key=sku]').forEach(function (i) { if (!i.readOnly) { i.readOnly = true; i.title = 'Set by the style bar at the top of the page'; i.style.background = '#eef3ef'; } });
   }
   function init() {

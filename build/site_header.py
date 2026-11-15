@@ -33,7 +33,7 @@ MENU = [
                        ('tech-pack-builder.html', 'Tech Pack Builder', 'Factory-ready tech packs'),
                        ('trend-to-style.html', 'Trend to Style Brief', 'Mood, collection and accessory boards')]),
         ('Plan and cost', [('rangeboard.html', 'Collection Planner', ''), ('pricefold.html', 'Price & Margin Calculator', ''),
-                           ('textile-calculator.html', 'Textile Calculator', ''), ('tools.html', 'All 17 tools →', 'In garment-process order')]),
+                           ('textile-calculator.html', 'Textile Calculator', ''), ('tools.html', 'All 18 tools →', 'In garment-process order')]),
     ], ('tools.html', 'Forecut Studio', 'Every tool in one app, from collection plan to export.', None)),
     ('About', 'about', [
         ('Forecut', [('about.html', 'About Forecut', ''), ('method.html', 'How we forecast', ''), ('index.html#pricing', 'Pricing & access', ''),
