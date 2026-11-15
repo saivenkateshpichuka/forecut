@@ -140,7 +140,10 @@
     + '#fxReport .rp-foot{margin-top:6mm;border-top:.6pt solid #ccc;padding-top:2mm;font-size:7.5pt;color:#777}';
   function collectionName() { var c = document.getElementById('collectionName'); return c && c.value ? c.value : ''; }
   var TITLES = { rangeboard: 'Collection Plan', 'trend-to-style': 'Style Brief', swatchsmith: 'Colour Palette', 'textile-calculator': 'Textile Calculation', 'textile-processing-studio': 'Textile Processing', 'size-chart-builder': 'Size Chart', 'decoration-cost-estimator': 'Embroidery & Print Cost', 'tech-pack-builder': 'Tech Pack', pricefold: 'Price & Margin', evenpoint: 'Break-even', cutclock: 'Production Calendar', 'care-label-generator': 'Care Label', 'product-description-writer': 'Product Description', 'export-market-checker': 'Export Market Checklist' };
+  function brandKit() { try { var k = JSON.parse(localStorage.getItem('fc-brand-kit') || 'null'); return k && typeof k === 'object' ? k : null; } catch (e) { return null; } }
+  (function loadKitFonts() { var k = brandKit(); if (!k) return; [k.headFont, k.bodyFont].forEach(function (f) { if (!f || /^(DM Sans|Source Serif 4)$/.test(f)) return; var l = document.createElement('link'); l.rel = 'stylesheet'; l.href = 'https://fonts.googleapis.com/css2?family=' + encodeURIComponent(f).replace(/%20/g, '+') + ':wght@400;600;700&display=swap'; (document.head || document.documentElement).appendChild(l); }); })();
   function brandName() {
+    var K = brandKit(); if (K && K.name) return String(K.name).trim();
     try { var b = localStorage.getItem('fc-report-brand'); if (b !== null) return b.trim(); } catch (e) { }
     try { var st = JSON.parse(localStorage.getItem('fc-production-studio-v1') || '{}'); var x = (st.pack && st.pack.brand) || (st.care && st.care.brand) || (st.copy && st.copy.brand) || ''; if (x && !/^your brand$/i.test(x)) return x.trim(); } catch (e) { }
     return '';
@@ -150,7 +153,7 @@
     var l = document.createElement('label'); l.innerHTML = 'Brand name on reports<input id="reportBrand" maxlength="80" placeholder="Your brand">';
     pop.insertBefore(l, pop.children[1] || null);
     var i = l.querySelector('input'); i.value = brandName();
-    i.addEventListener('input', function () { try { localStorage.setItem('fc-report-brand', i.value); } catch (e) { } });
+    i.addEventListener('input', function () { try { localStorage.setItem('fc-report-brand', i.value); var K = brandKit() || {}; K.name = i.value; localStorage.setItem('fc-brand-kit', JSON.stringify(K)); } catch (e) { } });
   }
   if (document.readyState !== 'loading') addBrandField(); else document.addEventListener('DOMContentLoaded', addBrandField);
   var oldTitle = null;
@@ -186,9 +189,12 @@
     meta = meta.concat(extra).filter(function (m) { return m[1]; });
     var body = '';
     try { body = typeof window.FXReportBody === 'function' ? window.FXReportBody(walk) : fullWalk(app); } catch (e) { body = '<p>' + esc(e.message) + '</p>'; }
-    root.innerHTML = '<style>' + CSS.replace('BRANDFOOT', brand.replace(/["\\]/g, '')) + '</style><div class="rp-head"><div>' + (brand ? '<div class="rp-brand">' + esc(brand) + '</div>' : '') + '<h1>' + esc(name) + '</h1></div><table class="rp-meta">' + meta.map(function (m) { return '<tr><td>' + esc(m[0]) + '</td><td><b>' + esc(m[1]) + '</b></td></tr>'; }).join('') + '</table></div>'
+    var K = brandKit() || {}, col = Array.isArray(K.colours) ? K.colours : [], hex = function (h, d) { return /^#[0-9a-f]{6}$/i.test(h || '') ? h : d; }, css = CSS.replace('BRANDFOOT', [brand, K.website].filter(Boolean).join(' · ').replace(/["\\]/g, '')).replace(/#214538/g, hex(col[0], '#214538')).replace(/#a9481f/g, hex(col[1], '#a9481f'));
+    if (K.headFont) css = css.replace(/"Source Serif 4",Georgia/g, '"' + K.headFont.replace(/["<>]/g, '') + '",Georgia');
+    if (K.bodyFont) css = css.replace(/"DM Sans",Arial/g, '"' + K.bodyFont.replace(/["<>]/g, '') + '",Arial');
+    root.innerHTML = '<style>' + css + '</style><div class="rp-head"><div>' + (brand || K.logo ? '<div class="rp-brand">' + (/^data:image\//.test(K.logo || '') ? '<img src="' + K.logo + '" alt="" style="height:12mm;max-width:45mm;object-fit:contain;vertical-align:middle;margin-right:3mm">' : '') + esc(brand) + (K.tagline ? '<small style="display:block;font:500 8pt inherit;color:#777">' + esc(K.tagline) + '</small>' : '') + '</div>' : '') + '<h1>' + esc(name) + '</h1></div><table class="rp-meta">' + meta.map(function (m) { return '<tr><td>' + esc(m[0]) + '</td><td><b>' + esc(m[1]) + '</b></td></tr>'; }).join('') + '</table></div>'
       + body + (window.FXReportSign === false ? '' : '<div class="rp-sign"><div>Prepared by</div><div>Checked by</div><div>Approved by / date</div></div>')
-      + '<div class="rp-foot">Figures are calculated from the values entered above; confirm specifications, rates and requirements with your supplier before production.</div>';
+      + '<div class="rp-foot">' + esc([brand, K.address, K.gstin ? 'GSTIN ' + K.gstin : '', K.email, K.phone].filter(Boolean).join(' · ')) + (brand ? '<br>' : '') + 'Figures are calculated from the values entered above; confirm specifications, rates and requirements with your supplier before production.</div>';
     if (oldTitle === null) oldTitle = document.title; document.title = (brand ? brand + ' · ' : '') + name + ' · ' + d.toISOString().slice(0, 10);
     document.body.classList.add('fx-report-on'); lastBuild = Date.now();
   }
