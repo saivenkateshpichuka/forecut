@@ -233,7 +233,7 @@
       else h += '<label class="ir"><span>' + x.l + '</span><input type="number" id="' + id + '" value="' + x.d + '" step="' + (x.step || 'any') + '" min="0" inputmode="decimal"></label>';
     });
     h += '</div></section><section class="tp" aria-live="polite"><h3>Results<button type="button" id="tc-copy2">' + FCI('copy') + 'Copy</button></h3><div id="cl-out"></div></section></div>'
-      + '<section class="tp fxb"><h3>Formula</h3><div class="fx2">' + c.fx + '</div></section><p class="tnote">Results update as you type. Unit conversions are exact; consumption, thread and packing figures are rules of thumb, so confirm with your marker, mill or lab before ordering bulk.</p>';
+      + '<section class="tp tsc" id="tc-scen"></section><section class="tp fxb"><h3>Formula</h3><div class="fx2">' + c.fx + '</div></section><p class="tnote">Results update as you type. Unit conversions are exact; consumption, thread and packing figures are rules of thumb, so confirm with your marker, mill or lab before ordering bulk.</p>';
     pane.innerHTML = h; mark();
     if (c.id === 'units') {
       var gs = $('#ci-g'), fs = $('#ci-fu');
@@ -251,15 +251,40 @@
         else v[x.k] = n;
       });
       var out; try { out = c.o(v, raw); } catch (err) { out = [['Check the inputs', '–']]; }
-      lastOut = out; var a = split(out[0][1]);
+      lastOut = out; var a = split(out[0][1]); var sbb = $('#tc-sbom'); if (sbb) sbb.hidden = !bomQty(out);
       $('#cl-out').innerHTML = '<div class="ans"><span>' + out[0][0] + '</span><b>' + a.main + '</b>' + (a.alt ? '<em>' + a.alt + '</em>' : '') + '</div><div class="rt2">'
         + out.slice(1).map(function (r) { var p = split(r[1]); return '<div class="rr"><span>' + r[0] + '</span><b' + (/[a-z]{4,}\s+[a-z]{3,}/i.test(p.main) ? ' class="tx"' : '') + '>' + p.main + (p.alt ? ' <i>· ' + p.alt + '</i>' : '') + '</b></div>'; }).join('') + '</div>';
     }
     $$('input,select', pane).forEach(function (e) { e.addEventListener('input', run); e.addEventListener('change', run); var r = e.closest('.ir'); if (r) { e.addEventListener('focus', function () { r.classList.add('on'); }); e.addEventListener('blur', function () { r.classList.remove('on'); }); } });
     $('#tc-reset2').onclick = function () { show(c.id); toast('Example values restored.'); };
     $('#tc-copy2').onclick = copy;
-    run();
+    run(); scen(c);
     try { document.title = c.t + ' · Textile Calculator · Forecut'; } catch (e) { }
+  }
+
+  /* ---------- saved scenarios and sending a result to the Tech Pack BOM (Stage 7) ---------- */
+  function readIns(c) { var o = {}; c.i.forEach(function (x) { var e = $('#ci-' + x.k), u = $('#ci-' + x.k + '-u'); o[x.k] = { v: e.value, u: u ? u.value : null, t: x.o ? e.options[e.selectedIndex].text : e.value + (u ? ' ' + u.options[u.selectedIndex].text : '') }; }); return o; }
+  function scenAll() { var o = FC.load('tc-scen', {}); return o && typeof o === 'object' ? o : {}; }
+  function esc3(t) { return String(t == null ? '' : t).replace(/[&<>"]/g, function (ch) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]; }); }
+  function bomQty(out) { if (!out || !out[0]) return null; var m = String(out[0][1]).match(/([\d][\d,]*\.?\d*)\s*(m|kg|g|yd|cones?|pcs|pieces)\b/i); if (!m) return null; return { q: parseFloat(m[1].replace(/,/g, '')), u: m[2].toLowerCase() }; }
+  function scen(c) {
+    var box = $('#tc-scen'); if (!box) return; var L = scenAll()[c.id] || [], bq = bomQty(lastOut);
+    box.innerHTML = '<h3>Scenarios<span class="tsb"><button type="button" id="tc-ssave">Save scenario</button>' + (bq ? '<button type="button" id="tc-sbom" title="Adds this result as a material line in the Tech Pack for the active style">Send to Tech Pack BOM</button>' : '') + '</span></h3>'
+      + (L.length ? '<div class="tsct"><table><thead><tr><th>Scenario</th>' + c.i.map(function (x) { return '<th>' + x.l + '</th>'; }).join('') + '<th>' + (L[0].out[0] ? L[0].out[0][0] : 'Result') + '</th><th></th></tr></thead><tbody>' + L.map(function (r, i) { return '<tr><td><b>' + esc3(r.name) + '</b><br><small>' + new Date(r.at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }) + '</small></td>' + c.i.map(function (x) { return '<td>' + esc3((r.ins[x.k] || {}).t || '') + '</td>'; }).join('') + '<td><b>' + esc3(r.out[0] ? r.out[0][1] : '') + '</b></td><td style="white-space:nowrap"><button type="button" data-sl="' + i + '">Load</button> <button type="button" data-sd="' + i + '" aria-label="Delete ' + esc3(r.name) + '">×</button></td></tr>'; }).join('') + '</tbody></table></div>'
+        : '<p class="tnote">Save the inputs and result to compare options side by side, such as two fabric widths or two yarn counts. Saved in this browser.</p>');
+    $('#tc-ssave').onclick = function () { var n = prompt('Name this scenario', 'Option ' + String.fromCharCode(65 + L.length)); if (n === null) return; var all = scenAll(); all[c.id] = (all[c.id] || []).concat([{ name: n.slice(0, 40) || 'Scenario', at: Date.now(), ins: readIns(c), out: lastOut }]).slice(-12); FC.save('tc-scen', all); scen(c); toast('Scenario saved.'); };
+    $$('[data-sd]', box).forEach(function (b) { b.onclick = function () { var all = scenAll(); all[c.id].splice(+b.dataset.sd, 1); FC.save('tc-scen', all); scen(c); }; });
+    $$('[data-sl]', box).forEach(function (b) { b.onclick = function () { var r = L[+b.dataset.sl]; c.i.forEach(function (x) { var w = r.ins[x.k]; if (!w) return; var e = $('#ci-' + x.k), u = $('#ci-' + x.k + '-u'); if (u && w.u) u.value = w.u; e.value = w.v; e.dispatchEvent(new Event('change')); }); toast('Loaded ' + r.name + '.'); scen(c); }; });
+    var sb = $('#tc-sbom'); if (sb) sb.onclick = function () {
+      var K = 'fc-production-studio-v1', st; try { st = JSON.parse(localStorage.getItem(K) || 'null'); } catch (e) { st = null; }
+      if (!st || !st.pack || !Array.isArray(st.pack.bom)) { toast('Open the Tech Pack Builder once to start a tech pack, then send this again.'); return; }
+      var q = bomQty(lastOut), item = prompt('Material name for the BOM', c.t.replace(/ calculator$/i, '')); if (item === null || !q) return;
+      var unit = q.u === 'yd' ? 'm' : q.u === 'g' ? 'kg' : /cone/.test(q.u) ? 'cone' : q.u, qty = q.u === 'yd' ? q.q * .9144 : q.u === 'g' ? q.q / 1000 : q.q;
+      if (st.pack.bom.length >= 100) { toast('The BOM is full (100 lines).'); return; }
+      st.pack.bom.push({ item: item.slice(0, 120) || c.t, supplier: '', colour: '', quantity: +qty.toFixed(4), unit: unit, price: 0, src: 'tc:' + c.id, approval: 'Pending', approvalNote: 'From Textile Calculator: ' + c.t });
+      try { localStorage.setItem(K, JSON.stringify(st)); } catch (e) { toast('Could not save: storage is full.'); return; }
+      var F = window.ForecutStyle, a = F && F.active && F.active(); toast('Added ' + (+qty.toFixed(3)) + ' ' + unit + ' to the Tech Pack BOM' + (a ? ' for ' + a.id : '') + '. Add the price there.');
+    };
   }
   function FCI(k) { var P = { reset: '<path d="M4 12a8 8 0 1 0 2.4-5.7M4 4v5h5"/>', copy: '<path d="M8 8h11v12H8zM5 16V4h11"/>' }; return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true" style="width:14px;height:14px">' + P[k] + '</svg>'; }
   function copy() {

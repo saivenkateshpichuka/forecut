@@ -93,6 +93,15 @@ P['method.html'] = ('How Forecut Forecasts · Methodology', '''
 <p>A global trend is not equally relevant everywhere. Each region page reads the international seasons for its own climate, calendar and buyers: southern-hemisphere markets sell a season roughly six months later; hot-climate markets get lighter versions and skip heavy winter pieces; and buying peaks around local moments such as Diwali, Ramadan, Lunar New Year, Black Friday or carnival.</p>
 <h2>Sources</h2>
 <p>Forecut uses public sources only: fashion week calendars and runway reviews, trade press, retailer and brand announcements, company results, and colour authorities. Source links are given on region pages, reports and articles. We do not copy paid forecasting services, and we write every forecast in our own words. Brands and designers are named only where public sources report them.</p>
+<h2 id="evidence">Evidence grades</h2>
+<p>Every detail on a season page has an evidence grade for that season. It is not a percentage or a prediction score: it says how much checkable evidence sits behind the stage, using a fixed rule you can audit. Open any detail and choose <b>Evidence and sources</b> to see the checks behind its grade.</p>
+<ul><li><b>A · Corroborated:</b> at least three dated sources linked to the detail, of at least two kinds (for example runway and retail), from at least two regions, with at least one checked in the last six months.</li>
+<li><b>B · Supported:</b> at least two dated sources of two different kinds linked to the detail.</li>
+<li><b>C+ · Analyst assessment with a source:</b> one dated source linked to the detail, read together with the season's published coverage.</li>
+<li><b>C · Analyst assessment:</b> the season has been shown and Forecut set the stage from its reading of the season's published runway, retail and trade coverage, but no source is linked to this detail yet.</li>
+<li><b>P · Projection:</b> the season has not been shown yet, so nothing can be observed. The stage is projected from earlier seasons and is marked as a projection in the lifecycle.</li></ul>
+<p>The checks shown with each grade are: several sources, different kinds of source, more than one region, seen directly rather than inferred, recent, and reviewed by a person. A grade only goes up when a dated source is added to the detail's record; sources are never estimated. Most details are currently graded C or P while detail-level sources are being linked, and we would rather show that honestly than show a confident number.</p>
+<p>The lifecycle in each detail separates <b>assessed</b> seasons (already shown) from <b>projected</b> ones. Images are labelled as Forecut illustrations, not runway photographs.</p>
 <h2>Images</h2>
 <p>Most images on Forecut are AI-generated illustrations made for Forecut to show a detail clearly. They are not runway, campaign or brand photographs. Real photographs are used only when they are free-licensed (for example from Unsplash, Pexels, Wikimedia Commons or The Met Open Access) and are credited where required.</p>
 <h2>Dates</h2>
