@@ -106,11 +106,11 @@ MARKETS = [
 # Forecut colour direction by region (editorial, linked to local occasions and recent runway news). hex, name, use
 COLOURS = {
  'asia': [('#b8202e', 'Lunar red', 'Lunar New Year, Diwali and wedding edits'), ('#c99a3b', 'Antique gold', 'Festive trims and metallic thread'),
-          ('#3f7f6b', 'Jade', 'Occasion silks and knitwear'), ('#2f6fe0', 'Luminous blue', 'SS27 global colour for daywear'), ('#efe6d4', 'Ivory', 'Modest and Ramadan edits, heat-friendly basics')],
- 'europe': [('#2f6fe0', 'Luminous blue', 'SS27 shirting and sheer layers'), ('#f0d98a', 'Butter yellow', 'Knitwear and soft tailoring'),
+          ('#3f7f6b', 'Jade', 'Occasion silks and knitwear'), ('#2f6fe0', 'Cobalt blue', 'SS27 global colour for daywear'), ('#efe6d4', 'Ivory', 'Modest and Ramadan edits, heat-friendly basics')],
+ 'europe': [('#2f6fe0', 'Cobalt blue', 'SS27 shirting and sheer layers'), ('#f0d98a', 'Butter yellow', 'Knitwear and soft tailoring'),
             ('#a9c4dc', 'Powder blue', 'Organza and appliqué'), ('#4a3326', 'Chocolate', 'Outerwear and leather'), ('#f3f0e8', 'Off-white', 'Broderie and featherlight cotton')],
  'north-america': [('#2f3f6b', 'Deep indigo', 'Y2K and heritage denim'), ('#6e1f2c', 'Burgundy', 'Piped satin and holiday partywear'),
-                   ('#b98a5a', 'Camel', 'Equestrian outerwear'), ('#2f6fe0', 'Luminous blue', 'SS27 colour for spring'), ('#efe6d4', 'Cream', 'Knitwear and tailoring')],
+                   ('#b98a5a', 'Camel', 'Equestrian outerwear'), ('#2f6fe0', 'Cobalt blue', 'SS27 colour for spring'), ('#efe6d4', 'Cream', 'Knitwear and tailoring')],
  'south-america': [('#f07a1d', 'Carnival orange', 'Carnival and festival dressing'), ('#2f8a57', 'Tropical green', 'Prints and resortwear'),
                    ('#f2c230', 'Sun yellow', 'Swim and summer dresses'), ('#ef6fa7', 'Pop pink', 'SS27 accent'), ('#f6f4ee', 'Réveillon white', 'New Year\'s Eve linen and lace')],
  'africa': [('#b3261e', 'Runway red', 'Seen at Lagos Fashion Week 2026'), ('#6b3f24', 'Earth brown', 'Tailoring and Aso-Oke'),

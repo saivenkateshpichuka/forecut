@@ -136,7 +136,7 @@ rep = {
     '%%TITLEUP%%': m['title'].upper(), '%%STAGEUP%%': m['stage'].upper(), '%%WINDOWUP%%': m['window'].upper(),
     '%%CODES%%': json.dumps(codes), '%%PALJSON%%': json.dumps([h for h, n in m['palette']]), '%%BASISCLS%%': 'res', '%%BASISTEXT%%': 'Based on Indian runway, retail and trade coverage',
     '%%STAGE%%': E(m['stage']), '%%WINDOW%%': E(m['window']), '%%TITLE%%': E(m['title']), '%%INTRO%%': E(m['intro']),
-    '%%SOURCES%%': E(m['sources']), '%%SOCIAL%%': __import__('social').icons(), '%%CODE%%': m['code'],
+    '%%SOURCES%%': E(m['sources']), '%%EVIDENCE%%': json.dumps({'reviewed': '7 Nov 2026', 'reviewedIso': '2026-11-07', 'seasons': {c: {'basis': 'research' if i == 0 else 'projection', 'sources': m['sources']} for i, c in enumerate(codes)}, 'details': {}, 'regions': [], 'hot': [], 'aw': False}, ensure_ascii=False).replace('</', '<\\/'), '%%SOCIAL%%': __import__('social').icons(), '%%CODE%%': m['code'],
     '%%STORY%%': story_html('india', E(m['stage']) + ' · ' + E(m['window']), E(m['title']), E(m['intro']), [t['t'] for t in I.THEMES]),
     '%%GLANCEL%%': glance, '%%GLANCER%%': '',
     '%%DESC%%': json.dumps(descs, ensure_ascii=False).replace('</', '<\\/'), '%%SITE%%': json.dumps(SITE, ensure_ascii=False),

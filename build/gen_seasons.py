@@ -144,6 +144,7 @@ for si, s in enumerate(SEASONS):
     out = tpl
     for k, v in rep.items():
         out = out.replace(k, v)
+    out = out.replace('%%EVIDENCE%%', rep['%%EVIDENCE%%'])
     assert '%%' not in out.replace('100%%', ''), [ln for ln in out.split('\n') if '%%' in ln][:3]
     out = out.replace('</style>', '.seasons a.lockt{opacity:.7}.seasons a .lk{width:9px;height:9px;margin-right:4px;vertical-align:-1px;display:inline}' + '</style>', 1)
     if s in LOCKED:

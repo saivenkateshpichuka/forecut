@@ -617,7 +617,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
 
     <div class="panel" role="tabpanel" id="p-aw26" aria-labelledby="t-aw26">
       <div class="panelhead"><h3>Autumn/Winter 2026</h3><p>A rich, tactile season led by statement outerwear, sharp tailoring and considered embellishment.</p></div>
-      <a class="reportlink" href="https://claude.ai/artifact/63DnMLg9Y4sqBMrSed8SrJ" target="_blank" rel="noopener">Open the full AW26 report <span>418 details · themes · colour of the year: Cloud Dancer & Transformative Teal</span><b aria-hidden="true">→</b></a>
+      <a class="reportlink" href="https://claude.ai/artifact/63DnMLg9Y4sqBMrSed8SrJ" target="_blank" rel="noopener">Open the full AW26 report <span>418 details · themes · colour of the year: Cloud Dancer</span><b aria-hidden="true">→</b></a>
       
       <div class="cats">
         <div class="cat"><h4>Silhouettes</h4><ul>
@@ -651,7 +651,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
 
     <div class="panel" role="tabpanel" id="p-ss27" aria-labelledby="t-ss27" hidden>
       <div class="panelhead"><h3>Spring/Summer 2027</h3><p>Defined waists return, refined footwear replaces the everyday sneaker, and handcraft moves into daily shirting.</p></div>
-      <a class="reportlink" href="https://claude.ai/artifact/4kaD9mYgPYUff4KR7LGMPb" target="_blank" rel="noopener">Open the full SS27 report <span>451 details · themes · colour of the year: Luminous Blue</span><b aria-hidden="true">→</b></a>
+      <a class="reportlink" href="https://claude.ai/artifact/4kaD9mYgPYUff4KR7LGMPb" target="_blank" rel="noopener">Open the full SS27 report <span>451 details · themes · key colour: bright cobalt blue</span><b aria-hidden="true">→</b></a>
       <div class="cats">
         <div class="cat"><h4>Silhouettes</h4><ul>
           <li><span>Defined waist: peplums, bubble skirts</span><span class="pill rise">Rising</span></li>
@@ -674,7 +674,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
           <li><span>Elegant flats and loafers</span><span class="pill rise">Rising</span></li>
           <li><span>Everyday sneakers</span><span class="pill fade">Fading</span></li></ul></div>
         <div class="cat"><h4>Colours</h4><div class="chips">
-          <span class="chip"><i style="background:#2f6fe0"></i>Luminous blue</span>
+          <span class="chip"><i style="background:#2f6fe0"></i>Bright cobalt blue</span>
           <span class="chip"><i style="background:#f07a1d"></i>Energy orange</span>
           <span class="chip"><i style="background:#ef6fa7"></i>Pop pink</span>
           <span class="chip"><i style="background:#7fa35a"></i>Meadow green</span>
@@ -684,7 +684,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
 
     <div class="panel" role="tabpanel" id="p-aw27" aria-labelledby="t-aw27" hidden>
       <div class="panelhead"><h3>Autumn/Winter 2027</h3><p>Early outlook projecting where SS27 signals are likely to lead. Updated as runway data becomes available.</p></div>
-      <a class="reportlink" href="https://claude.ai/artifact/AhTcWYMJCc1gNCuDJSAu8z" target="_blank" rel="noopener">Open the full AW27 report <span>486 details · themes · colour of the year: Luminous Blue</span><b aria-hidden="true">→</b></a>
+      <a class="reportlink" href="https://claude.ai/artifact/AhTcWYMJCc1gNCuDJSAu8z" target="_blank" rel="noopener">Open the full AW27 report <span>486 details · themes · key colour: bright cobalt blue</span><b aria-hidden="true">→</b></a>
       <div class="cats">
         <div class="cat"><h4>Silhouettes</h4><ul>
           <li><span>Belted, waisted outerwear</span><span class="pill rise">Rising</span></li>
@@ -717,7 +717,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
 
     <div class="panel" role="tabpanel" id="p-ss28" aria-labelledby="t-ss28" hidden>
       <div class="panelhead"><h3>Spring/Summer 2028</h3><p>Long-range outlook: structured clarity and ease of movement, with fewer, better pieces anchored by a warm earth orange. Projection.</p></div>
-      <a class="reportlink" href="https://claude.ai/artifact/VbZ4af3QScHPqwM8LzyBiM" target="_blank" rel="noopener">Open the full SS28 report <span>460 details · themes · colour of the year: Radiant Earth</span><b aria-hidden="true">→</b></a>
+      <a class="reportlink" href="https://claude.ai/artifact/VbZ4af3QScHPqwM8LzyBiM" target="_blank" rel="noopener">Open the full SS28 report <span>460 details · themes · key colour: warm earth orange</span><b aria-hidden="true">→</b></a>
       <div class="cats">
         <div class="cat"><h4>Silhouettes</h4><ul>
           <li><span>Clean, structured shapes with ease</span><span class="pill emerge">Emerging</span></li>
@@ -740,7 +740,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
           <li><span>Slim-sole loafers</span><span class="pill peak">Peaking</span></li>
           <li><span>Statement socks with heels</span><span class="pill fade">Fading</span></li></ul></div>
         <div class="cat"><h4>Colours</h4><div class="chips">
-          <span class="chip"><i style="background:#c0582b"></i>Radiant earth</span>
+          <span class="chip"><i style="background:#c0582b"></i>Earth orange</span>
           <span class="chip"><i style="background:#d9b892"></i>Sand</span>
           <span class="chip"><i style="background:#a8a49b"></i>Stone</span>
           <span class="chip"><i style="background:#1f5e63"></i>Deep teal</span>
@@ -750,7 +750,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
 
     <div class="panel" role="tabpanel" id="p-aw28" aria-labelledby="t-aw28" hidden>
       <div class="panelhead"><h3>Autumn/Winter 2028</h3><p>Long-range outlook: functional tailoring and quiet structure for winter as SS27 handcraft details recede. Projection.</p></div>
-      <a class="reportlink" href="https://claude.ai/artifact/2CnmAmF88emYUCYLJwEwgx" target="_blank" rel="noopener">Open the full AW28 report <span>400 details · themes · colour of the year: Radiant Earth</span><b aria-hidden="true">→</b></a>
+      <a class="reportlink" href="https://claude.ai/artifact/2CnmAmF88emYUCYLJwEwgx" target="_blank" rel="noopener">Open the full AW28 report <span>400 details · themes · key colour: warm earth orange</span><b aria-hidden="true">→</b></a>
       <div class="cats">
         <div class="cat"><h4>Silhouettes</h4><ul>
           <li><span>Structured long-line coats</span><span class="pill rise">Rising</span></li>

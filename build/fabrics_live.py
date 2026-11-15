@@ -50,7 +50,7 @@ RUNWAY = [
  {'city': 'New York', 'dates': '10 – 15 Sep 2026', 'status': 'SS27', 'img': ['hub-fabrics-runway-newyork', 'sheer-sleeve-dresses-ss27-photo'],
   'head': 'Sheer skirts, silk and light knits',
   'fabrics': ['See-through skirts with covered-up tops (Calvin Klein, Eckhaus Latta, Brandon Maxwell, Thom Browne)', 'Head-to-toe sheer separates (Prabal Gurung, Aknvas, Vettese)',
-              'Silk shirts and light knits tied at the waist (Cult Gaia, Tibi)', 'Long, skinny fringe and silk scarves', 'Luminous Blue and marigold as the leading colours'],
+              'Silk shirts and light knits tied at the waist (Cult Gaia, Tibi)', 'Long, skinny fringe and silk scarves', 'Cobalt blue and marigold as the leading colours'],
   'read': 'Sheer is commercial in New York: expect it as skirts and overlays over opaque layers, the version most Indian retail can sell.',
   'src': [('Fashionista', 'https://fashionista.com/2026/09/new-york-fashion-week-spring-2027-trends')]},
  {'city': 'India', 'dates': 'Lakmē Fashion Week, 13 – 18 Oct 2026', 'status': 'Live', 'img': ['hub-fabrics-runway-india', 'handspun-khadi', 'pastel-handloom-sarees'],
@@ -165,7 +165,7 @@ ARTICLES = [
   'body': [
    ('p', 'The Spring/Summer 2027 shows ran from New York in mid-September to Paris on 6 October 2026. Across all four cities one idea kept returning: fabric that feels lighter than air. Here is what the runways were made of, and what it means for the season ahead.'),
    ('h2', 'New York: sheer goes commercial'),
-   ('p', 'New York showed see-through skirts paired with covered-up tops at Calvin Klein, Eckhaus Latta, Brandon Maxwell and Thom Browne, and head-to-toe sheer at Prabal Gurung and Vettese. Silk shirts and light knits were tied low at the waist. Luminous Blue, the 2027 colour of the year, and marigold led the palette.'),
+   ('p', 'New York showed see-through skirts paired with covered-up tops at Calvin Klein, Eckhaus Latta, Brandon Maxwell and Thom Browne, and head-to-toe sheer at Prabal Gurung and Vettese. Silk shirts and light knits were tied low at the waist. Cobalt blue, and marigold led the palette.'),
    ('h2', 'London: organza as a canvas'),
    ('p', 'London decorated sheer bases. Burberry placed floral appliqué on powder-blue organza, Alexander McQueen printed acid florals on reflective organza, and Vin + Omi built a gown of 3D flowers made from recycled plastic. Frayed, hand-cut layers of silk, cotton and gauze (Dreaming Eli) and torn lace (KNWLS) gave the craft story a raw edge.'),
    ('h2', 'Milan: sheer meets gloss'),

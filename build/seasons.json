@@ -135,33 +135,9 @@
        "Mustard"
       ]
      ]
-    },
-    {
-     "name": "Transformative Teal",
-     "by": "WGSN × Coloro",
-     "year": "2026",
-     "code": "Colour of the Year 2026",
-     "hex": "#2E6B6F",
-     "ink": "#ffffff",
-     "text": "A blue-green between ocean and forest. Strong on outerwear, leather and knitwear, and as an accent on footwear.",
-     "flat": "Clean leather bombers",
-     "pairs": [
-      [
-       "#efe9dc",
-       "Cream"
-      ],
-      [
-       "#c9a227",
-       "Mustard"
-      ],
-      [
-       "#5e1f24",
-       "Oxblood"
-      ]
-     ]
     }
    ],
-   "sources": "Season themes summarise published AW26 runway, retail and trade coverage, including Who What Wear, Harrods and Trendalytics. Colours of the year are Pantone 2026 (Cloud Dancer) and WGSN × Coloro 2026 (Transformative Teal)."
+   "sources": "Season themes summarise published AW26 runway, retail and trade coverage, including Who What Wear, Harrods and Trendalytics. Colour of the year is Pantone 2026 (Cloud Dancer)."
   },
   "ss27": {
    "code": "SS27",
@@ -253,7 +229,7 @@
    "palette": [
     [
      "#3d6fd6",
-     "Luminous blue"
+     "Bright cobalt blue"
     ],
     [
      "#f07a1d",
@@ -280,33 +256,8 @@
      "Panna cotta"
     ]
    ],
-   "coty": [
-    {
-     "name": "Luminous Blue",
-     "by": "WGSN × Coloro",
-     "year": "2027",
-     "code": "Colour of the Year 2027",
-     "hex": "#3D6FD6",
-     "ink": "#ffffff",
-     "text": "A bright, optimistic blue with a glow. Use it head to toe on summer tailoring and shirting, or as a sharp accent against clay and stone.",
-     "flat": "Peplum blouses",
-     "pairs": [
-      [
-       "#b57552",
-       "Clay"
-      ],
-      [
-       "#f2e9d8",
-       "Panna cotta"
-      ],
-      [
-       "#f07a1d",
-       "Energy orange"
-      ]
-     ]
-    }
-   ],
-   "sources": "SS27 themes summarise published runway and trade coverage from the September–October 2026 shows, including FashionUnited and The Zoe Report. Colour of the year is WGSN × Coloro 2027 (Luminous Blue); Pantone announces its 2027 colour in December 2026."
+   "coty": [],
+   "sources": "SS27 themes summarise published runway and trade coverage from the September–October 2026 shows, including FashionUnited and The Zoe Report. Pantone announces its 2027 colour of the year in December 2026."
   },
   "aw27": {
    "code": "AW27",
@@ -357,7 +308,7 @@
     ],
     [
      "Deep blue",
-     "Luminous blue darkens into ink and cobalt for winter.",
+     "Bright cobalt blue darkens into ink and deep cobalt for winter.",
      "waves",
      "#23407a",
      "#b9cdf3",
@@ -412,34 +363,8 @@
      "Cream"
     ]
    ],
-   "coty": [
-    {
-     "name": "Luminous Blue",
-     "by": "WGSN × Coloro",
-     "year": "2027",
-     "code": "Colour of the Year 2027",
-     "hex": "#3D6FD6",
-     "ink": "#ffffff",
-     "deep": "#23407a",
-     "text": "The 2027 colour carries into winter. Expect it in deeper cobalt and ink versions on knitwear, wool coats and leather accessories.",
-     "flat": "Funnel-neck knits",
-     "pairs": [
-      [
-       "#8a4b2a",
-       "Cognac"
-      ],
-      [
-       "#efe6d6",
-       "Cream"
-      ],
-      [
-       "#9c1f2e",
-       "Carmine"
-      ]
-     ]
-    }
-   ],
-   "sources": "AW27 runway shows take place in February–March 2027, so this season is a Forecut projection built from SS27 runway signals and the 2027 colour of the year. It will be updated as runway coverage arrives."
+   "coty": [],
+   "sources": "AW27 runway shows take place in February–March 2027, so this season is a Forecut projection built from SS27 runway signals and the season's colour direction. It will be updated as runway coverage arrives."
   },
   "ss28": {
    "code": "SS28",
@@ -518,7 +443,7 @@
    "palette": [
     [
      "#c0582b",
-     "Radiant earth"
+     "Earth orange"
     ],
     [
      "#d9b892",
@@ -545,33 +470,8 @@
      "Ink navy"
     ]
    ],
-   "coty": [
-    {
-     "name": "Radiant Earth",
-     "by": "WGSN × Coloro",
-     "year": "2028",
-     "code": "Colour of the Year 2028",
-     "hex": "#B5522B",
-     "ink": "#ffffff",
-     "text": "A warm, grounded burnt orange described as a reliable but assertive neutral. Works as a base for tailoring and knitwear or as a strong accent on accessories.",
-     "flat": "Clean column dresses",
-     "pairs": [
-      [
-       "#1f5e63",
-       "Deep teal"
-      ],
-      [
-       "#d9b892",
-       "Sand"
-      ],
-      [
-       "#f3f0e8",
-       "Off-white"
-      ]
-     ]
-    }
-   ],
-   "sources": "SS28 is a long-range Forecut projection. It builds on early SS28 trade coverage (structured clarity and performance design, FashionUnited) and the WGSN × Coloro 2028 colour of the year, Radiant Earth."
+   "coty": [],
+   "sources": "SS28 is a long-range Forecut projection. It builds on early SS28 trade coverage (structured clarity and performance design, FashionUnited) and Forecut's warm earth-orange colour direction."
   },
   "aw28": {
    "code": "AW28",
@@ -609,7 +509,7 @@
     ],
     [
      "Earth deepens",
-     "Radiant earth turns to rust and brick for winter.",
+     "Earth orange turns to rust and brick for winter.",
      "topo",
      "#8e3d1f",
      "#f3d2c2",
@@ -677,34 +577,8 @@
      "Graphite"
     ]
    ],
-   "coty": [
-    {
-     "name": "Radiant Earth",
-     "by": "WGSN × Coloro",
-     "year": "2028",
-     "code": "Colour of the Year 2028",
-     "hex": "#B5522B",
-     "ink": "#ffffff",
-     "deep": "#8e3d1f",
-     "text": "The 2028 colour moves into winter as deeper rust and brick. Strong on wool coats, suede and leather boots.",
-     "flat": "Belted suit jackets",
-     "pairs": [
-      [
-       "#33363a",
-       "Charcoal"
-      ],
-      [
-       "#d8cdb8",
-       "Oatmeal"
-      ],
-      [
-       "#1f4a35",
-       "Bottle green"
-      ]
-     ]
-    }
-   ],
-   "sources": "AW28 is a long-range Forecut projection based on SS28 direction and the WGSN × Coloro 2028 colour of the year, Radiant Earth. It will be refined as SS28 and AW28 coverage arrives."
+   "coty": [],
+   "sources": "AW28 is a long-range Forecut projection based on SS28 direction and Forecut's warm earth-orange colour direction. It will be refined as SS28 and AW28 coverage arrives."
   }
  }
 }
