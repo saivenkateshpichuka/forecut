@@ -1,0 +1,4 @@
+{
+  "about": "Detail-level evidence records. Add a record only for a real, dated source you have checked. Each record: {season, title, url, date (YYYY-MM-DD), type: runway|retail|editorial|trade|street|search|analyst, region, note, checked (YYYY-MM-DD)}. Grades are computed from these records by the rules on method.html; nothing here is estimated.",
+  "details": {}
+}

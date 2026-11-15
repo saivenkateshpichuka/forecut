@@ -32,6 +32,7 @@ def _gitdate(*fs):
         return _dtm.date.fromisoformat(d).strftime('%-d %b %Y') if d else None
     except Exception: return None
 RESEARCHED = _gitdate('details.json', 'regions_data.py', 'india_data.py', 'reports_data.py') or _dtm.date.today().strftime('%-d %b %Y')
+EVREV = _gitdate('details.json') or RESEARCHED
 REFRESHED = _dtm.date.today().strftime('%-d %b %Y')
 short = {'Womenswear': 'Women', 'Menswear': 'Men', 'Footwear': 'Shoes'}
 for si, s in enumerate(SEASONS):
@@ -127,7 +128,7 @@ for si, s in enumerate(SEASONS):
         '%%DESC%%': json.dumps(descs, ensure_ascii=False).replace('</', '<\\/'), '%%SITE%%': json.dumps(SITE, ensure_ascii=False),
         '%%CODES%%': json.dumps(codes), '%%PALJSON%%': json.dumps([h for h, n in m['palette']]), '%%BASISCLS%%': basis[0], '%%BASISTEXT%%': basis[1],
         '%%STAGE%%': E(m['stage']), '%%WINDOW%%': E(m['window']), '%%TITLE%%': E(m['title']), '%%INTRO%%': E(m['intro']),
-        '%%SOURCES%%': E(m['sources']), '%%SOCIAL%%': __import__('social').icons(), '%%CODE%%': m['code'],
+        '%%SOURCES%%': E(m['sources']), '%%EVIDENCE%%': json.dumps({'reviewed': EVREV, 'reviewedIso': __import__('datetime').datetime.strptime(EVREV, '%d %b %Y').strftime('%Y-%m-%d') if EVREV[:1].isdigit() else '', 'seasons': {META[x]['code']: {'basis': META[x]['basis'], 'sources': META[x]['sources'], 'window': META[x]['window']} for x in SEASONS}, 'details': json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'evidence.json')))['details']}, ensure_ascii=False).replace('</', '<\\/'), '%%SOCIAL%%': __import__('social').icons(), '%%CODE%%': m['code'],
         '%%STORY%%': story_html(s, E(m['stage']) + ' · ' + E(m['window']), E(m['title']), E(m['intro']), [th[0] for th in m['themes']]),
     }
     out = tpl

@@ -69,6 +69,8 @@ CSS = '''<style>
 @media (max-width:900px){.dg{grid-template-columns:1fr}.dnav{position:static;display:flex;overflow:auto}.dnav button{white-space:nowrap}.bk{grid-template-columns:1fr}.prev{position:static}.bkc{grid-template-columns:repeat(3,1fr)}.bkf{grid-template-columns:1fr}}
 </style>'''
 G = '<svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>'
+import json as _j
+BASIS = _j.dumps({v['code']: v['basis'] for v in _j.load(open('seasons.json'))['meta'].values()})
 BODY = f'''<div class="acc" id="acc">
  <div id="authv">
   <h1 id="ttl">Welcome back</h1><p class="sub" id="sub">Sign in to your Forecut account.</p>
@@ -91,7 +93,7 @@ BODY = f'''<div class="acc" id="acc">
   <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="dbtn pri" type="button" onclick="window.FCFeedback&amp;&amp;FCFeedback.open()">Give feedback · get 1 year free</button><button class="dbtn" type="button" id="dlall">Download all my work</button><button class="dbtn" type="button" id="rsall">Restore</button><input type="file" id="rsfile" accept=".json" hidden><button class="dbtn" type="button" id="out">Sign out</button></div></header>
  <div class="dg"><nav class="dnav" id="dnav" aria-label="Account sections"></nav><div id="pane"></div></div>
 </div>
-<script src="tools/style-id.js?v=fx-20261115h" defer></script><script src="tools/revisions.js?v=fx-20261115h" defer></script><script src="account-dash.js?v=3" defer></script>
+<script src="tools/style-id.js?v=fx-20261115i" defer></script><script src="tools/revisions.js?v=fx-20261115i" defer></script><script>window.FC_SEASON_BASIS={BASIS};</script><script src="account-dash.js?v=4" defer></script>
 <script type="module">
 function ready(f) {{ window.FCAuth ? f() : document.addEventListener('fcauth-ready', f, {{ once: true }}); }}
 ready(function () {{
