@@ -148,16 +148,30 @@
     for (var i = 0; i < fibres.length; i++) for (var j = i + 1; j < fibres.length; j++) { var k = [fibres[i], fibres[j]].sort().join('|'); if (D.BLENDS[k] && routes.indexOf(D.BLENDS[k]) < 0) routes.push(D.BLENDS[k]); }
     return { tot: tot, mel: mel, routes: routes };
   }
+  function dyePick(p, i) {
+    var ok = D.FIBRES[p.fibre] || [], all = allDyes(), groups = {};
+    all.forEach(function (d) { (groups[d.cls] = groups[d.cls] || []).push(d); });
+    var opt = function (d) { return '<option value="' + d.hex + '"' + (d.hex.toLowerCase() === String(p.hex).toLowerCase() ? ' selected' : '') + '>' + esc(d.name + ' · ' + d.hue) + '</option>'; };
+    var html = '<option value="">Choose a dye (' + all.length + ')…</option>';
+    ok.forEach(function (c) { if (groups[c]) html += '<optgroup label="' + esc(c + ' · suits ' + p.fibre) + '">' + groups[c].map(opt).join('') + '</optgroup>'; });
+    Object.keys(groups).forEach(function (c) { if (ok.indexOf(c) < 0) html += '<optgroup label="' + esc(c + ' · other fibres') + '">' + groups[c].map(opt).join('') + '</optgroup>'; });
+    return '<label>Colour from a dye<select data-pickhex="' + i + '">' + html + '</select></label>' +
+      '<label>Or a Pantone TCX shade<input list="prTcx" data-picktcx="' + i + '" placeholder="Type a code or name, e.g. 19-4052" autocomplete="off"></label>';
+  }
+  function tcxList() {
+    if (!window.ForecutTCX) return '';
+    return '<datalist id="prTcx">' + window.ForecutTCX.split(';').map(function (r) { var a = r.split('|'); return a.length === 3 ? '<option value="' + esc(a[0] + ' TCX · ' + a[1]) + '"></option>' : ''; }).join('') + '</datalist>';
+  }
   function blendView() {
     var P = S.blend.parts;
     return '<section class="panel"><h2>Fibres and their colours</h2><p class="note">Choose each fibre, its share of the blend and the colour it is dyed. The preview shows how the colours mix to the eye when separately dyed fibres are blended into one yarn (a mélange or heather).</p>' +
       P.map(function (p, i) {
         return '<div class="pr-part"><input type="color" aria-label="Colour of part ' + (i + 1) + '" data-k="blend.parts.' + i + '.hex" value="' + esc(p.hex) + '">' +
           sel('blend.parts.' + i + '.fibre', 'Fibre', p.fibre, Object.keys(D.FIBRES)) + inp('blend.parts.' + i + '.pct', 'Share %', p.pct, 'number') +
-          '<label>Colour from a dye<select data-pickhex="' + i + '"><option value="">Choose…</option>' + allDyes().filter(function (d) { return (D.FIBRES[p.fibre] || []).indexOf(d.cls) > -1; }).map(function (d) { return '<option value="' + d.hex + '">' + esc(d.name) + '</option>'; }).join('') + '</select></label>' +
+          dyePick(p, i) +
           (P.length > 2 ? '<button type="button" class="pr-x" data-act="rmpart" data-i="' + i + '" aria-label="Remove fibre">×</button>' : '') + '</div>';
       }).join('') +
-      (P.length < 4 ? '<div class="actions"><button type="button" data-act="addpart">+ Add a fibre</button></div>' : '') + '</section>' +
+      (P.length < 4 ? '<div class="actions"><button type="button" data-act="addpart">+ Add a fibre</button></div>' : '') + tcxList() + '<p class="note">Every dye in the library is listed: the dye classes that suit the chosen fibre come first. Pantone TCX colours are screen approximations; confirm with a physical standard and a lab dip.</p></section>' +
       '<aside class="pr-rail" id="prOut"></aside>';
   }
   function blendOut() {
@@ -238,6 +252,7 @@
     var t = e.target;
     if (t.id === 'prQc') return libResults();
     if (t.dataset.stage) { if (t.checked) S.route.sel[t.dataset.stage] = 1; else delete S.route.sel[t.dataset.stage]; save(); return render(); }
+    if (t.dataset.picktcx != null && window.ForecutTCX) { var code = (t.value || '').split(' TCX')[0].trim(); if (code) { var m = window.ForecutTCX.split(';').map(function (r) { return r.split('|'); }).filter(function (a) { return a[0] === code; })[0]; if (m) { S.blend.parts[+t.dataset.picktcx].hex = '#' + m[2].replace('#', ''); save(); render(); } } return; }
     if (t.dataset.pickhex) { if (t.value) { S.blend.parts[+t.dataset.pickhex].hex = t.value; save(); render(); } return; }
     if (t.dataset.k === 'recipe.fibre' || t.dataset.k === 'recipe.cls') { var R = S.recipe, cl = D.FIBRES[R.fibre] || []; if (cl.indexOf(R.cls) < 0) R.cls = cl[0]; R.lr = (D.CLASSES[R.cls] || {}).lr || R.lr; R.auxFor = ''; R.aux = null; save(); return render(); }
     if (t.dataset.k && (/\.fibre$|\.name$/.test(t.dataset.k))) { save(); render(); }
