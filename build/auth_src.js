@@ -109,6 +109,20 @@ onAuthStateChanged(auth, (u) => {
   w.addEventListener('keydown', (e) => { if (e.key === 'Escape') { m.hidden = true; b.setAttribute('aria-expanded', 'false'); b.focus(); } });
   w.querySelector('.fcout').onclick = () => signOut(auth);
 });
+// ---- feedback button in the header ----
+(function () {
+  const fxNav = document.querySelector('.fx-head nav');
+  if ((!w && !fxNav) || document.querySelector('.fcfbb')) return;
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'fcfbb';
+  b.innerHTML = '<span aria-hidden="true">★</span> Feedback<span class="fcfbx"> · 1 year free</span>';
+  b.title = 'Give feedback and get 1 year of full Forecut access free';
+  b.onclick = () => window.FCFeedback ? window.FCFeedback.open() : (location.href = '/account.html#signin');
+  const slot = document.getElementById('fc-install-slot');
+  if (slot && slot.parentNode) slot.parentNode.insertBefore(b, slot); else if (w) w.parentNode.insertBefore(b, w); else fxNav.insertBefore(b, fxNav.querySelector('.fx-signin'));
+  const st = document.createElement('style');
+  st.textContent = '.fcfbb{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font:700 13px "DM Sans",sans-serif;white-space:nowrap;padding:7px 13px;border-radius:999px;background:linear-gradient(135deg,#00a85a,#1fd17f);color:#fff;margin:0 8px;box-shadow:0 2px 10px rgba(0,168,90,.25)}.fcfbb:hover{filter:brightness(1.05)}.fcfbb:focus-visible{outline:2px solid #1c1714;outline-offset:2px}@media (max-width:820px){.fcfbx{display:none}.fcfbb{padding:6px 10px;margin:0 4px}}';
+  document.head.appendChild(st);
+})();
 // ---- install app button ----
 (function () {
   const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
