@@ -12,20 +12,21 @@
   function dataUrlBlob(d) { var m = /^data:([^;]+);base64,(.*)$/.exec(d || ''); if (!m) return null; var b = atob(m[2]), a = new Uint8Array(b.length); for (var i = 0; i < b.length; i++) a[i] = b.charCodeAt(i); return new Blob([a], { type: m[1] }); }
   function csv(rows) { return '﻿' + rows.map(function (r) { return r.map(function (v) { var t = String(v == null ? '' : v); if (/^[=+@\-]/.test(t)) t = "'" + t; return '"' + t.replace(/"/g, '""') + '"'; }).join(','); }).join('\r\n'); }
   var TOOLS = { rangeboard: 'Collection Planner', 'trend-to-style': 'Trend to Style Brief', swatchsmith: 'Colour Palette Builder', 'textile-calculator': 'Textile Calculator', 'textile-processing-studio': 'Textile Processing Studio', 'pattern-maker': 'Garment Studio', 'size-chart-builder': 'Size Chart Builder', 'decoration-cost-estimator': 'Embroidery & Print Cost', 'tech-pack-builder': 'Tech Pack Builder', pricefold: 'Price & Margin Calculator', evenpoint: 'Break-even Calculator', cutclock: 'Production Calendar', 'care-label-generator': 'Care Label Generator', 'product-description-writer': 'Product Description Writer', 'export-market-checker': 'Export Market Checker' };
-  var KEYS = ['fc-collection-workspace-v1', 'fc-production-studio-v1', 'fc-tool-processing', 'fc-tool-boards', 'fc-tool-drape', 'fc-size-library', 'fc-pm-sizechart', 'fc-pm-snap', 'fc-ps-lib', 'fc-ps-auto', 'fc-brand-kit', 'fc-saved', 'fc-recent-tools', 'fc-report-brand', 'pm-clients'];
+  var KEYS = ['fc-collection-workspace-v1', 'fc-production-studio-v1', 'fc-tool-processing', 'fc-tool-boards', 'fc-tool-drape', 'fc-size-library', 'fc-pm-sizechart', 'fc-pm-snap', 'fc-ps-lib', 'fc-ps-auto', 'fc-brand-kit', 'fc-saved', 'fc-recent-tools', 'fc-report-brand', 'pm-clients', 'fc-styles'];
+  function allKeys() { var out = KEYS.slice(); try { for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (/^fc-style-data-/.test(k)) out.push(k); } } catch (e) { } return out; }
   function data() {
     return { col: J('fc-collection-workspace-v1', {}), st: J('fc-production-studio-v1', {}), proc: J('fc-tool-processing', {}), boards: J('fc-tool-boards', {}), lib: J('fc-size-library', []), pm: J('fc-pm-sizechart', null), snap: J('fc-pm-snap', null), recent: J('fc-recent-tools', []), saved: J('fc-saved', []), kit: kit() };
   }
   function kit() { var k = J('fc-brand-kit', null) || {}; var d = { name: '', tagline: '', logo: '', colours: ['#214538', '#a9481f', '#e08a5e', '#1b1d20', '#f5f1e9'], headFont: 'Source Serif 4', bodyFont: 'DM Sans', website: '', email: '', phone: '', address: '', gstin: '', social: '' }; for (var x in d) if (k[x] === undefined) k[x] = d[x]; if (!k.name) { try { k.name = localStorage.getItem('fc-report-brand') || ''; } catch (e) { } } return k; }
-  var PANES = [['overview', 'Overview'], ['projects', 'Projects'], ['files', 'Files'], ['brand', 'Brand kit'], ['saved', 'Saved details'], ['account', 'Account']];
+  var PANES = [['overview', 'Overview'], ['styles', 'Styles'], ['projects', 'Projects'], ['files', 'Files'], ['brand', 'Brand kit'], ['saved', 'Saved details'], ['account', 'Account']];
   var cur = (location.hash || '').replace('#', '');
   if (!PANES.some(function (p) { return p[0] === cur; })) cur = 'overview';
   var user = null;
   function nav() {
-    var D = data(), n = { projects: projects(D).length, files: files(D).length, saved: D.saved.length };
+    var D = data(), n = { styles: (window.ForecutStyle ? ForecutStyle.list().length : 0), projects: projects(D).length, files: files(D).length, saved: D.saved.length };
     $('dnav').innerHTML = PANES.map(function (p) { return '<button type="button" data-p="' + p[0] + '" aria-current="' + (p[0] === cur) + '">' + p[1] + (n[p[0]] ? '<small>' + n[p[0]] + '</small>' : '') + '</button>'; }).join('');
   }
-  function show(p) { cur = p; history.replaceState(null, '', '#' + p); nav(); var D = data(); $('pane').innerHTML = '<div class="pane">' + ({ overview: overview, projects: projectsPane, files: filesPane, brand: brandPane, saved: savedPane, account: accountPane }[p])(D) + '</div>'; if (p === 'brand') brandWire(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  function show(p) { cur = p; history.replaceState(null, '', '#' + p); nav(); var D = data(); $('pane').innerHTML = '<div class="pane">' + ({ overview: overview, styles: stylesPane, projects: projectsPane, files: filesPane, brand: brandPane, saved: savedPane, account: accountPane }[p])(D) + '</div>'; if (p === 'brand') brandWire(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
   // ---------- projects ----------
   function projects(D) {
     var out = [], c = D.col, s = D.st;
@@ -118,6 +119,12 @@
       if (t.id === 'logoIn' && t.files[0]) shrink(t.files[0], 600).then(function (d) { if (d.length > 400000) return alert('Use a smaller logo (under about 300 KB).'); var k = kit(); k.logo = d; saveKit(k); show('brand'); }).catch(function (er) { alert(er.message); });
       if (t.id === 'kitIn' && t.files[0]) t.files[0].text().then(function (x) { var j = JSON.parse(x); if (!j || !Array.isArray(j.colours)) throw Error(); saveKit(Object.assign(kit(), j)); show('brand'); }).catch(function () { alert('This is not a Forecut brand kit file.'); }); };
   }
+  function stylesPane() {
+    var F = window.ForecutStyle; if (!F) return '<section class="card"><div class="empty">Styles could not load. Reload the page.</div></section>';
+    var L = F.list(), a = F.active(), has = function (id) { try { return !!localStorage.getItem('fc-style-data-' + id) || (a && a.id === id); } catch (e) { return false; } };
+    return '<section class="card"><div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:flex-start"><div><h2>Styles</h2><p class="sub">Every style has one Style ID that follows it through the collection plan, size chart, Garment Studio, tech pack, costing, labels and reports. The work in each tool is saved with its style.</p></div><button class="dbtn pri" type="button" data-act="styleNew">+ New style</button></div>'
+      + (L.length ? '<table class="ft2"><thead><tr><th>Style ID</th><th>Name</th><th>Season</th><th>Category · garment</th><th>Status</th><th>Rev</th><th>Updated</th><th></th></tr></thead><tbody>' + L.map(function (x) { return '<tr' + (a && a.id === x.id ? ' style="background:color-mix(in srgb,var(--mat) 8%,transparent)"' : '') + '><td><b style="font-family:ui-monospace,Menlo,monospace">' + esc(x.id) + '</b>' + (a && a.id === x.id ? '<br><small style="color:#00894a;font-weight:700">Active</small>' : '') + '</td><td>' + esc(x.name) + (x.colId ? '<br><small style="color:var(--muted)">From Collection Planner</small>' : '') + '</td><td>' + esc(F.seasonName(x.season)) + '</td><td>' + esc(x.category + ' · ' + x.garment) + '</td><td>' + esc(x.status) + '</td><td>' + (x.rev || 1) + '</td><td>' + esc(ago(Date.parse(x.updated))) + (has(x.id) ? '' : '<br><small style="color:var(--muted)">no tool work yet</small>') + '</td><td style="white-space:nowrap"><a class="dbtn sm pri" href="tech-pack-builder.html" data-open="' + esc(x.id) + '">Open</a> <button class="dbtn sm" type="button" data-edit="' + esc(x.id) + '">Edit</button></td></tr>'; }).join('') + '</tbody></table>' : '<div class="empty">No styles yet. Create one, or add styles in the <a href="rangeboard.html">Collection Planner</a>: each gets a Style ID automatically.</div>') + '</section>';
+  }
   function savedPane(D) {
     var NM = { e: 'Emerging', r: 'Rising', p: 'Peaking', f: 'Fading' };
     return '<section class="card"><h2>Saved details</h2><p class="sub">Tap ♡ Save on any forecast detail to keep it here. Saved on this device.</p>' + (D.saved.length ? '<div class="pj">' + D.saved.map(function (x, i) { return '<article class="pc"><div class="th">' + (x.img ? '<img alt="" src="/' + esc(String(x.img).replace(/^\//, '')) + '" style="object-fit:cover">' : '<em>Detail</em>') + '</div><div class="bd"><small class="k">' + esc([x.season, NM[x.st]].filter(Boolean).join(' · ')) + '</small><b>' + esc(x.name) + '</b><span>' + esc(x.cat || '') + '</span></div><div class="ft"><a class="dbtn sm pri" href="' + esc(x.page) + '">Open</a><button class="dbtn sm" type="button" data-unsave="' + i + '">Remove</button></div></article>'; }).join('') + '</div>' : '<div class="empty">Nothing saved yet. Open any detail and tap ♡ Save to keep it here.</div>') + '</section>';
@@ -130,10 +137,13 @@
       + '<section class="card"><h2>Sign out</h2><p class="sub">Your work stays in this browser after you sign out.</p><button class="dbtn" type="button" data-act="out">Sign out</button></section>';
   }
   // ---------- backup ----------
-  function dlAll() { var o = { forecut: 'all-work', v: 1, at: new Date().toISOString(), data: {} }; KEYS.forEach(function (k) { var v = localStorage.getItem(k); if (v != null) o.data[k] = v; }); dl('forecut-my-work-' + new Date().toISOString().slice(0, 10) + '.json', JSON.stringify(o)); }
-  function rsAll(file) { file.text().then(function (t) { var o = JSON.parse(t); if (!o || o.forecut !== 'all-work' || !o.data) throw Error('This is not a Forecut “all my work” backup.'); if (!confirm('Restore this backup? It replaces the tool data in this browser.')) return; Object.keys(o.data).forEach(function (k) { if (KEYS.indexOf(k) > -1 && typeof o.data[k] === 'string') localStorage.setItem(k, o.data[k]); }); show(cur); alert('Restored.'); }).catch(function (e) { alert(e.message || 'That file could not be read.'); }); }
+  function dlAll() { var o = { forecut: 'all-work', v: 1, at: new Date().toISOString(), data: {} }; allKeys().forEach(function (k) { var v = localStorage.getItem(k); if (v != null) o.data[k] = v; }); dl('forecut-my-work-' + new Date().toISOString().slice(0, 10) + '.json', JSON.stringify(o)); }
+  function rsAll(file) { file.text().then(function (t) { var o = JSON.parse(t); if (!o || o.forecut !== 'all-work' || !o.data) throw Error('This is not a Forecut “all my work” backup.'); if (!confirm('Restore this backup? It replaces the tool data in this browser.')) return; Object.keys(o.data).forEach(function (k) { if ((KEYS.indexOf(k) > -1 || /^fc-style-data-/.test(k)) && typeof o.data[k] === 'string') localStorage.setItem(k, o.data[k]); }); show(cur); alert('Restored.'); }).catch(function (e) { alert(e.message || 'That file could not be read.'); }); }
   document.addEventListener('click', function (e) {
-    var t = e.target.closest('[data-p],[data-go],[data-act],[data-file],[data-unsave]'); if (!t || !$('dash').contains(t)) return;
+    var t = e.target.closest('[data-p],[data-go],[data-act],[data-file],[data-unsave],[data-open],[data-edit]'); if (!t || !$('dash').contains(t)) return;
+    if (t.dataset.open) { e.preventDefault(); var F = window.ForecutStyle, href = t.getAttribute('href'); if (F.active() && F.active().id === t.dataset.open) { location.href = href; return; } var r0 = JSON.parse(localStorage.getItem('fc-styles') || '{}'); F.setActive(t.dataset.open, { reload: false }); location.href = href; return; }
+    if (t.dataset.edit) { var st = window.ForecutStyle.list().filter(function (x) { return x.id === t.dataset.edit; })[0]; if (st) window.ForecutStyle.dialog(st); return; }
+    if (t.dataset.act === 'styleNew') { window.ForecutStyle.dialog(null); return; }
     if (t.dataset.p) return show(t.dataset.p);
     if (t.dataset.go) { e.preventDefault(); return show(t.dataset.go); }
     if (t.dataset.file != null) { var f = files(data())[+t.dataset.file]; if (f) { var g = f.get(); dl(f.n.replace(/[\\/:*?"<>|]+/g, '-'), g[0], g[1]); } return; }
@@ -143,7 +153,7 @@
     else if (a === 'logoDel') { var k = kit(); k.logo = ''; saveKit(k); show('brand'); }
     else if (a === 'fromPalette') { var p = (J('fc-collection-workspace-v1', {}).palette || []).map(function (x) { return x.hex; }).filter(function (h) { return /^#[0-9a-f]{6}$/i.test(h); }); if (!p.length) return alert('Add colours in the Colour Palette Builder first.'); var k2 = kit(); for (var i = 0; i < 3 && i < p.length; i++) k2.colours[i] = p[i]; saveKit(k2); show('brand'); }
     else if (a === 'kitExport') dl('brand-kit-' + (kit().name || 'forecut').replace(/[^a-z0-9]+/gi, '-').toLowerCase() + '.json', JSON.stringify(kit(), null, 2));
-    else if (a === 'wipe') { if (confirm('Delete all Forecut tool data in this browser? Download a backup first. This cannot be undone.')) { KEYS.forEach(function (k) { localStorage.removeItem(k); }); show('overview'); } }
+    else if (a === 'wipe') { if (confirm('Delete all Forecut tool data in this browser? Download a backup first. This cannot be undone.')) { allKeys().forEach(function (k) { localStorage.removeItem(k); }); show('overview'); } }
     else if (a === 'out') { var o = $('out'); if (o) o.click(); }
   });
   function init() {
