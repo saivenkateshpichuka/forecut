@@ -39,3 +39,4 @@ td.style-ref{vertical-align:top}
 .fab-chip canvas{width:100%;height:auto;border-radius:5px;display:block}.fab-chip.on{border-color:#214538;color:#214538;background:#eef3ef}.fab-chip:hover{border-color:#bdb3a2}
 @media (max-width:900px){.pl-top{grid-template-columns:1fr}}
 .linked-src{margin:-6px 0 14px;padding:9px 14px;background:#eef3ef;border-left:3px solid #214538;border-radius:8px;font-size:14px}
+.sid-tag{display:block;margin-top:4px;font:700 11px ui-monospace,Menlo,monospace;color:#214538}

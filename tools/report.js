@@ -186,6 +186,8 @@
     var d = new Date(), ref = (brand ? brand.replace(/[^A-Za-z0-9]/g, '').slice(0, 3).toUpperCase() || 'REF' : 'REF') + '-' + (tool || 'tool').slice(0, 3).toUpperCase() + '-' + d.toISOString().slice(0, 10).replace(/-/g, '') + '-' + String(d.getHours()).padStart(2, '0') + String(d.getMinutes()).padStart(2, '0');
     var meta = [['Collection', collectionName()], ['Report date', d.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) + ', ' + d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })], ['Reference', ref]];
     var extra = typeof window.FXReportMeta === 'function' ? window.FXReportMeta() || [] : [];
+    var sty = window.ForecutStyle && window.ForecutStyle.active();
+    if (sty) { meta.splice(1, 0, ['Style ID', sty.id], ['Style', sty.name + ' · Rev ' + (sty.rev || 1)], ['Season', window.ForecutStyle.seasonName(sty.season) + ' · ' + sty.status]); ref = sty.id + '-R' + (sty.rev || 1) + '-' + d.toISOString().slice(0, 10).replace(/-/g, ''); meta[meta.length - 1] = ['Reference', ref]; }
     meta = meta.concat(extra).filter(function (m) { return m[1]; });
     var body = '';
     try { body = typeof window.FXReportBody === 'function' ? window.FXReportBody(walk) : fullWalk(app); } catch (e) { body = '<p>' + esc(e.message) + '</p>'; }
@@ -195,7 +197,7 @@
     root.innerHTML = '<style>' + css + '</style><div class="rp-head"><div>' + (brand || K.logo ? '<div class="rp-brand">' + (/^data:image\//.test(K.logo || '') ? '<img src="' + K.logo + '" alt="" style="height:12mm;max-width:45mm;object-fit:contain;vertical-align:middle;margin-right:3mm">' : '') + esc(brand) + (K.tagline ? '<small style="display:block;font:500 8pt inherit;color:#777">' + esc(K.tagline) + '</small>' : '') + '</div>' : '') + '<h1>' + esc(name) + '</h1></div><table class="rp-meta">' + meta.map(function (m) { return '<tr><td>' + esc(m[0]) + '</td><td><b>' + esc(m[1]) + '</b></td></tr>'; }).join('') + '</table></div>'
       + body + (window.FXReportSign === false ? '' : '<div class="rp-sign"><div>Prepared by</div><div>Checked by</div><div>Approved by / date</div></div>')
       + '<div class="rp-foot">' + esc([brand, K.address, K.gstin ? 'GSTIN ' + K.gstin : '', K.email, K.phone].filter(Boolean).join(' · ')) + (brand ? '<br>' : '') + 'Figures are calculated from the values entered above; confirm specifications, rates and requirements with your supplier before production.</div>';
-    if (oldTitle === null) oldTitle = document.title; document.title = (brand ? brand + ' · ' : '') + name + ' · ' + d.toISOString().slice(0, 10);
+    if (oldTitle === null) oldTitle = document.title; document.title = (sty ? sty.id + ' R' + (sty.rev || 1) + ' · ' : '') + (brand ? brand + ' · ' : '') + name + ' · ' + d.toISOString().slice(0, 10);
     document.body.classList.add('fx-report-on'); lastBuild = Date.now();
   }
   function off() { document.body.classList.remove('fx-report-on'); if (oldTitle !== null) { document.title = oldTitle; oldTitle = null; } }

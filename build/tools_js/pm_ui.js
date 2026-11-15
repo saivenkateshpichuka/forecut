@@ -268,7 +268,7 @@
     return { g: g, T: T };
   }
   var pubT = 0;
-  function publishChart() { clearTimeout(pubT); pubT = setTimeout(function () { try { var gr = gradeRows(), G = PM.GARMENTS[S.gid] || {}; try { if (last) { var sv = X.svg(last.sc, last.W, last.H, S.unit, { title: last.title }); if (sv.length < 1500000) localStorage.setItem('fc-pm-snap', JSON.stringify({ at: Date.now(), code: code(), garment: G.n || S.gid, svg: sv })); } } catch (e2) { } localStorage.setItem('fc-pm-sizechart', JSON.stringify({ at: Date.now(), garment: G.n || S.gid, gid: S.gid, gender: S.gender, code: code(), unit: 'cm', base: baseSize(), sizes: gr.sizes, opts: S.o || {}, rows: gr.rows.map(function (r) { return { name: r[0], values: r[1].map(function (v) { return typeof v === 'number' ? +v.toFixed(2) : null; }), tol: tol(r[0]) }; }) })); } catch (e) { } }, 700); }
+  function publishChart() { clearTimeout(pubT); pubT = setTimeout(function () { try { var gr = gradeRows(), G = PM.GARMENTS[S.gid] || {}; try { if (last) { var sv = X.svg(last.sc, last.W, last.H, S.unit, { title: last.title }); if (sv.length < 1500000) localStorage.setItem('fc-pm-snap', JSON.stringify({ at: Date.now(), code: code(), garment: G.n || S.gid, svg: sv })); } } catch (e2) { } localStorage.setItem('fc-pm-sizechart', JSON.stringify({ style: window.ForecutStyle && ForecutStyle.active() ? ForecutStyle.active().id : '', at: Date.now(), garment: G.n || S.gid, gid: S.gid, gender: S.gender, code: code(), unit: 'cm', base: baseSize(), sizes: gr.sizes, opts: S.o || {}, rows: gr.rows.map(function (r) { return { name: r[0], values: r[1].map(function (v) { return typeof v === 'number' ? +v.toFixed(2) : null; }), tol: tol(r[0]) }; }) })); } catch (e) { } }, 700); }
   function draw(keepTable) {
     publishChart();
     var s = scene(false); last = s; var tl = null, svg = X.svg(s.sc, s.W, s.H, S.unit, { screen: 1, grid: $('#pm-grid').checked ? grid(s.W, s.H) : '' });
@@ -331,7 +331,7 @@
   document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !menu.hidden) { menuOpen(false); eb.focus(); } });
   var tt = null;
   function toast(t) { var m = $('#pm-msg'); m.textContent = t; m.hidden = false; clearTimeout(tt); tt = setTimeout(function () { m.hidden = true; }, 4500); }
-  function fname(ext) { return 'forecut-' + (built ? built.label : 'pattern').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + String(S.size).toLowerCase() + '.' + ext; }
+  function fname(ext) { return (window.ForecutStyle ? ForecutStyle.fileTag() : '') + 'forecut-' + (built ? built.label : 'pattern').toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + String(S.size).toLowerCase() + '.' + ext; }
   function dl(f) { return function () { menuOpen(false); f(); }; }
   $('#pm-dl-svg').onclick = dl(function () { var s = scene(true); FC.download(fname('svg'), X.svg(s.sc, s.W, s.H, S.unit, { title: s.title }), 'image/svg+xml'); toast('SVG downloaded at true scale.'); });
   $('#pm-dl-dxf').onclick = dl(function () { var s = scene(true); FC.download(fname('dxf'), X.dxf(s.sc, s.W, s.H, S.unit === 'in' ? 'in' : 'mm'), 'application/dxf'); toast('DXF downloaded (' + (S.unit === 'in' ? 'inches' : 'millimetres') + ').'); });
