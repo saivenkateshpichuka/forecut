@@ -3,7 +3,7 @@
    Fields become label/value tables, tables keep their values, results keep their figures, images stay. */
 (function () {
   'use strict';
-  var SKIP = 'script,style,noscript,button,.no-print,.no-report,[data-report-skip],.fx-actions,.fx-jump,nav,#studioNav,.fx-side,.fx-head,.fx-foot,input[type=file],input[type=hidden],dialog,.toast2,.tcdoc,.tsel,.tbar,.tnav,summary .fx-ws';
+  var SKIP = '.palette-intro img,.pr-stage:not(.on),[role=tablist],.pal-tabs,.pr-tabs,.bd-modes,script,style,noscript,button,.no-print,.no-report,[data-report-skip],.fx-actions,.fx-jump,nav,#studioNav,.fx-side,.fx-head,.fx-foot,input[type=file],input[type=hidden],dialog,.toast2,.tcdoc,.tsel,.tbar,.tnav,summary .fx-ws';
   var BLOCK = /^(DIV|SECTION|ARTICLE|ASIDE|FIELDSET|FORM|MAIN|HEADER|FOOTER|UL|OL|LI|DL|DETAILS|FIGURE)$/;
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function vis(el) { var cs = getComputedStyle(el); if (cs.display === 'none' || cs.visibility === 'hidden') return false; return el.getClientRects().length > 0 || cs.display === 'contents'; }
@@ -102,7 +102,7 @@
         if (parts.length >= 2) { out += '<div class="rp-m"><span>' + esc(parts[0]) + '</span><b>' + esc(parts[1]) + '</b>' + (parts[2] ? '<small>' + esc(parts.slice(2).join(' · ')) + '</small>' : '') + '</div>'; return; }
       }
       var inner2 = walk(n, depth + 1);
-      if (!inner2.trim()) return;
+      if (!inner2.trim() || BLOCK.test(tag) && !inner2.replace(/<h[2-4]>[\s\S]*?<\/h[2-4]>/g, '').replace(/<[^>]+>/g, '').trim() && !/<(img|svg|table|i )/.test(inner2)) return;
       if (BLOCK.test(tag)) {
         var nf = (inner2.match(/class="rp-f"/g) || []).length, nm = (inner2.match(/class="rp-m"/g) || []).length;
         var allF = /^(\s*<div class="rp-f">[\s\S]*?<\/div>\s*)+$/.test(inner2), allM = /^(\s*<div class="rp-m">[\s\S]*?<\/div>\s*)+$/.test(inner2);
@@ -136,6 +136,7 @@
     + '#fxReport .rp-img{max-width:100%;max-height:105mm;object-fit:contain;display:block;margin:2mm 0;border:.5pt solid #ddd;break-inside:avoid}#fxReport .rp-svg{display:block;width:100%;height:auto;max-height:120mm;margin:2mm 0;break-inside:avoid}'
     + '#fxReport p{margin:1.2mm 0}#fxReport .rp-note{color:#666;font-size:8pt}#fxReport .rp-notice{border:.6pt solid #e2c3ad;background:#fbf3ec;padding:2mm 3mm;font-size:8.5pt}#fxReport .rp-url{color:#777;font-size:7.5pt;word-break:break-all}#fxReport .rp-dim{color:#aaa}'
     + '#fxReport .rp-sign{display:grid;grid-template-columns:repeat(3,1fr);gap:8mm;margin-top:10mm;break-inside:avoid}#fxReport .rp-sign div{border-top:.6pt solid #888;padding-top:1.5mm;font-size:8pt;color:#555}'
+    + '#fxReport .rp-part.brk{break-before:page}#fxReport .rp-tabh{font:700 15pt "Source Serif 4",Georgia,serif;color:#1b1d20;margin:2mm 0 1mm;padding-bottom:1.5mm;border-bottom:.8pt solid #214538}'
     + '#fxReport .rp-foot{margin-top:6mm;border-top:.6pt solid #ccc;padding-top:2mm;font-size:7.5pt;color:#777}';
   function collectionName() { var c = document.getElementById('collectionName'); return c && c.value ? c.value : ''; }
   var TITLES = { rangeboard: 'Collection Plan', 'trend-to-style': 'Style Brief', swatchsmith: 'Colour Palette', 'textile-calculator': 'Textile Calculation', 'textile-processing-studio': 'Textile Processing', 'size-chart-builder': 'Size Chart', 'decoration-cost-estimator': 'Embroidery & Print Cost', 'tech-pack-builder': 'Tech Pack', pricefold: 'Price & Margin', evenpoint: 'Break-even', cutclock: 'Production Calendar', 'care-label-generator': 'Care Label', 'product-description-writer': 'Product Description', 'export-market-checker': 'Export Market Checklist' };
@@ -153,6 +154,24 @@
   }
   if (document.readyState !== 'loading') addBrandField(); else document.addEventListener('DOMContentLoaded', addBrandField);
   var oldTitle = null;
+  function walkOne(el) { var host = { childNodes: [el] }; return walk(host, 0); }
+  // tools with tabs: report every tab, not only the one on screen
+  function fullWalk(app) {
+    var q = function () { return [].slice.call(app.querySelectorAll('[role=tab]')).filter(vis); };
+    var tabs = q();
+    if (tabs.length < 2) return walk(app, 0);
+    var seen = {}, cur = tabs.findIndex(function (t) { return t.getAttribute('aria-selected') === 'true' || t.classList.contains('on'); }), out = '', n = tabs.length;
+    for (var i = 0; i < n; i++) {
+      var t = q()[i]; if (!t) break;
+      var label = t.textContent.replace(/\s+/g, ' ').replace(/\(\d+\)$/, '').trim();
+      try { t.click(); } catch (e) { }
+      var part = '';
+      [].slice.call(app.children).forEach(function (ch) { if (ch.matches(SKIP) || !vis(ch)) return; var w = document.createElement('div'); var h = walkOne(ch); var key = h.replace(/\s+/g, ' '); if (!h.trim() || seen[key]) return; seen[key] = 1; part += h; });
+      if (part.trim()) out += '<div class="rp-part' + (out ? ' brk' : '') + '"><div class="rp-tabh">' + esc(label) + '</div>' + part + '</div>';
+    }
+    var back = q()[cur < 0 ? 0 : cur]; if (back) try { back.click(); } catch (e) { }
+    return out;
+  }
   var lastBuild = 0;
   function build() {
     if (Date.now() - lastBuild < 1500 && document.body.classList.contains('fx-report-on')) return;
@@ -166,7 +185,7 @@
     var extra = typeof window.FXReportMeta === 'function' ? window.FXReportMeta() || [] : [];
     meta = meta.concat(extra).filter(function (m) { return m[1]; });
     var body = '';
-    try { body = typeof window.FXReportBody === 'function' ? window.FXReportBody(walk) : walk(app, 0); } catch (e) { body = '<p>' + esc(e.message) + '</p>'; }
+    try { body = typeof window.FXReportBody === 'function' ? window.FXReportBody(walk) : fullWalk(app); } catch (e) { body = '<p>' + esc(e.message) + '</p>'; }
     root.innerHTML = '<style>' + CSS.replace('BRANDFOOT', brand.replace(/["\\]/g, '')) + '</style><div class="rp-head"><div>' + (brand ? '<div class="rp-brand">' + esc(brand) + '</div>' : '') + '<h1>' + esc(name) + '</h1></div><table class="rp-meta">' + meta.map(function (m) { return '<tr><td>' + esc(m[0]) + '</td><td><b>' + esc(m[1]) + '</b></td></tr>'; }).join('') + '</table></div>'
       + body + (window.FXReportSign === false ? '' : '<div class="rp-sign"><div>Prepared by</div><div>Checked by</div><div>Approved by / date</div></div>')
       + '<div class="rp-foot">Figures are calculated from the values entered above; confirm specifications, rates and requirements with your supplier before production.</div>';
