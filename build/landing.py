@@ -157,7 +157,7 @@ def pricing():
     <div class="plans4">
       <div class="pl"><span class="plk">Free</span><h3>Free member</h3><div class="pr">₹0</div><span class="fx" data-inr="0"></span>
         <p class="plsub">Full free trial until {LAUNCH_TXT} when you sign in.</p>
-        <ul><li>Browse every season, region and the Journal</li><li>From launch: a monthly allowance of full detail cards</li><li>Lifecycle tracker and colour pages</li><li>Ads keep it free</li></ul>
+        <ul><li>Browse every season, region and the Journal</li><li>From launch: a monthly allowance of full detail cards</li><li>Lifecycle tracker and colour pages</li><li>All 15 design and production tools, free for signed-in members</li><li>Ads keep it free</li></ul>
         <a class="btn ghost" href="account.html#signup">Sign in free</a></div>
       <div class="pl"><span class="plk">With college ID</span><h3>Student</h3><div class="pr">₹999<small> / year</small></div><span class="fx" data-inr="999"></span>
         <p class="plsub">For students with a valid college ID.</p>
@@ -183,7 +183,8 @@ def pricing():
 FAQ = [
     ('How does the free trial work?', f'Sign in free with Google or email to unlock every season, region, report and download until {LAUNCH_TXT}. Visitors who do not sign in can browse, with a small monthly limit on full detail cards and no downloads.'),
     ('When do paid plans start?', f'On {LAUNCH_TXT}. Nothing is charged before then, and you will be asked before any payment.'),
-    ('What stays free after launch?', 'Browsing seasons, regions, the Journal and the lifecycle tracker, plus a monthly allowance of full detail cards for signed-in members.'),
+    ('What stays free after launch?', 'Browsing seasons, regions, the Journal and the lifecycle tracker, a monthly allowance of full detail cards, and all 15 Forecut tools (Garment Studio, tech pack, size chart, costing and the rest) for signed-in members. Paid plans add full forecast access, reports and downloads.'),
+    ('What is free now, and what is a trial?', 'The 15 tools are free for signed-in members, now and after launch. Full forecast access (every season, region, report and download) is a free trial until 1 January 2027; after that it is part of the paid plans.'),
     ('Can I pay monthly?', 'Yes: ₹499 a month for Individual, or ₹2,999 a year, which saves 50%.'),
     ('Is there a student price?', 'Yes: ₹999 a year with a valid college ID.'),
     ('What does Enterprise include?', 'Everything in Individual for 10 users, one login each, for ₹19,999 a year, with team onboarding and invoice billing.'),
