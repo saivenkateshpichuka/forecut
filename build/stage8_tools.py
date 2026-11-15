@@ -7,6 +7,9 @@ import tools_shell as T
 
 ROOT = Path(__file__).resolve().parent.parent
 PAGES = {
+    'style-tracker': ('Track every style from brief to store: status, owner, revision and sign-off, milestones on the critical path, samples, buyer comments, linked files and a full change history, with what is blocking each style.',
+                      'Tracker data is saved in this browser. Download a backup to keep it or move it to another device.', 'plm.js',
+                      'Forecut · A lightweight tracker for small teams. It keeps dates and decisions; it does not replace contracts or purchase orders.'),
     'materials-library': ('Keep every fabric and trim you use in one library: fibre, construction, GSM, width, shrinkage, stretch, vendor, price, MOQ, lead time, certifications, tests and approved substitutes. Each value shows whether you entered it, the supplier claims it or a lab tested it.',
                           'Your materials are saved in this browser. Download a backup to keep them or move them to another device.', 'materials.js',
                           'Forecut · Supplier claims are not verified by Forecut. Check certificates on the certifier’s database and test fabrics before bulk.'),
