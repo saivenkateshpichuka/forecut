@@ -26,6 +26,7 @@
     { g: 'Edit', id: 'cut', k: 'k', n: 'Cut and split', tip: 'Click two points on the outline of a piece to cut it into two pieces along the line between them.', ic: 'M4.0 6.5a2.5 2.5 0 1 0 5.0 0a2.5 2.5 0 1 0 -5.0 0M4.0 17.5a2.5 2.5 0 1 0 5.0 0a2.5 2.5 0 1 0 -5.0 0M8.7 8L20.5 17.5M8.7 16L20.5 6.5' },
     { g: 'Edit', id: 'merge', n: 'Merge pieces', tip: 'Click an edge of the first piece, then the matching edge of the second. The second piece turns to meet it and the two become one piece. The length difference is reported.', ic: 'M3 5h6v14H3zM15 5h6v14h-6zM10.5 9l2 3-2 3M13.5 9l-2 3 2 3' },
     { g: 'Edit', id: 'trace', k: 't', n: 'Trace', tip: 'Click an edge to trace a facing of the width set above the canvas, or click inside an internal rectangle, ellipse or closed shape to trace it as a new piece (a pocket from its placement, say).', ic: 'M4 4h16v16H4zM4 9h16M7.5 6.5h9' },
+    { g: 'Grading', id: 'grade', k: 'q', n: 'Edit grading', tip: 'Click a point, a curve point or an edge to grade it; Shift-click adds more. Choose a size in the Grading panel or click its coloured dot, then drag the point or edge to move that size, or type exact values.', ic: 'M4 20l5-5M4 20h4M4 20v-4M9 15h3v3H9zM14 4h6v6h-6zM15 9l-4 4M17 7h.01M7 10h.01M10 7h.01' },
     { g: 'Internal', id: 'iline', k: 'l', n: 'Internal line', tip: 'Draw a line inside a piece: a fold line, guide, placement or stitch line. Click points, double-click or press Enter to finish.', ic: 'M3.5 3.5h17v17h-17zM7.5 16.5l9-9M6 15h3v3H6zM15 6h3v3h-3z' },
     { g: 'Internal', id: 'irect', n: 'Internal rectangle', tip: 'Drag inside a piece for a pocket placement, a cut-out or a guide.', ic: 'M3.5 3.5h17v17h-17zM7.5 8.5h9v7h-9z' },
     { g: 'Internal', id: 'iell', n: 'Internal circle or ellipse', tip: 'Drag inside a piece for a cut-out, button or placement marking.', ic: 'M3.5 3.5h17v17h-17zM7.8 12a4.2 4.2 0 1 0 8.4 0a4.2 4.2 0 1 0 -8.4 0' },
@@ -357,19 +358,20 @@
   function drawPts() {
     var h = '', v = V();
     P.pieces.forEach(function (pc) {
-      if (pc.hidden) return; var sel = ST.sel.indexOf(pc.id) >= 0, show = ST.tool === 'edit' && (sel || ST.node && ST.node.pc === pc.id) || v.points || ST.tool === 'cut' || (ST.tool === 'edit' && ST.sel.length === 0);
+      if (pc.hidden) return; var sel = ST.sel.indexOf(pc.id) >= 0, show = (ST.tool === 'edit' || ST.tool === 'grade') && (sel || ST.node && ST.node.pc === pc.id) || v.points || ST.tool === 'cut' || ((ST.tool === 'edit' || ST.tool === 'grade') && ST.sel.length === 0);
       if (!show) return; var faint = ST.tool === 'edit' && !sel && !(ST.node && ST.node.pc === pc.id);
       pc.nodes.forEach(function (nd, i) { var isSel = ST.node && ST.node.pc === pc.id && ST.node.idx.indexOf(i) >= 0, s = W2S(L2W(pc, [nd.x, nd.y]));
         if (ST.tool === 'edit' && !faint && (isSel || segTouches(pc, i))) ['h1', 'h2'].forEach(function (k) { if (!nd[k]) return; var e = W2S(L2W(pc, [nd.x + nd[k][0], nd.y + nd[k][1]])); h += '<path class="ps-hl" d="M' + f1(s[0]) + ' ' + f1(s[1]) + 'L' + f1(e[0]) + ' ' + f1(e[1]) + '"/><circle class="ps-hd" data-pc="' + pc.id + '" data-n="' + i + '" data-h="' + k + '" cx="' + f1(e[0]) + '" cy="' + f1(e[1]) + '" r="4.5"/>'; });
         h += nd.smooth ? '<circle class="ps-pt' + (isSel ? ' on' : '') + (faint ? ' fa' : '') + '" data-pc="' + pc.id + '" data-n="' + i + '" cx="' + f1(s[0]) + '" cy="' + f1(s[1]) + '" r="' + (faint ? 3 : 4.5) + '"/>' : '<rect class="ps-pt' + (isSel ? ' on' : '') + (faint ? ' fa' : '') + '" data-pc="' + pc.id + '" data-n="' + i + '" x="' + f1(s[0] - (faint ? 3 : 4.5)) + '" y="' + f1(s[1] - (faint ? 3 : 4.5)) + '" width="' + (faint ? 6 : 9) + '" height="' + (faint ? 6 : 9) + '"/>'; });
     });
-    if (ON && ST.tab === 'grade') { var GG = gsets(); if (GG.list.length > 1) { var gpcs = selected().length ? selected() : gradedPieces();
+    if (ON && (ST.tab === 'grade' || ST.tool === 'grade')) { var GG = gsets(); if (GG.list.length > 1) { var gpcs = selected().length ? selected() : gradedPieces();
+      if (ST.gseg && pcById(ST.gseg.pc)) { var gsp = pcById(ST.gseg.pc), gq = C.segPts(gsp, ST.gseg.i, .3).map(function (q3) { return W2S(L2W(gsp, q3)); }); h += '<path class="ps-gsegh" d="M' + gq.map(function (q3) { return f1(q3[0]) + ' ' + f1(q3[1]); }).join('L') + '"/>'; }
       gpcs.forEach(function (pc) { if (pc.hidden) return; var Ds = {}; GG.list.forEach(function (sz) { if (sz !== GG.base && !(ST.ghide && ST.ghide[sz])) Ds[sz] = C.gradeDeltas(pc, sz); });
         pc.nodes.forEach(function (nd, i) { var b0 = W2S(L2W(pc, [nd.x, nd.y])), isSel = ST.node && ST.node.pc === pc.id && ST.node.idx.indexOf(i) >= 0, pts2 = [];
           GG.list.forEach(function (sz, k) { if (!Ds[sz]) { if (sz === GG.base) pts2.push([b0, null, sz, k]); return; } var d = Ds[sz][i]; if (!d || (Math.abs(d[0]) < 1e-6 && Math.abs(d[1]) < 1e-6)) return; pts2.push([W2S(L2W(pc, [nd.x + d[0], nd.y + d[1]])), d, sz, k]); });
           if (pts2.length < 2 && !isSel) return; h += '<path class="ps-gvec' + (isSel ? ' on' : '') + '" d="M' + pts2.map(function (q2) { return f1(q2[0][0]) + ' ' + f1(q2[0][1]); }).join('L') + '"/>';
           pts2.slice().sort(function (x, y) { return (x[2] === ST.gsz) - (y[2] === ST.gsz); }).forEach(function (q2) { if (!q2[1]) return; h += '<circle class="ps-gpt' + (isSel ? ' on' : '') + (ST.gsz === q2[2] ? ' cur' : '') + '" cx="' + f1(q2[0][0]) + '" cy="' + f1(q2[0][1]) + '" r="' + (isSel ? 4.5 : 2.4) + '" style="fill:' + SZC[q2[3] % SZC.length] + '"' + (isSel ? ' data-gpt="' + esc(q2[2]) + '"' : '') + '><title>' + esc(q2[2]) + ': ' + F(q2[1][0]) + ', ' + F(q2[1][1]) + '</title></circle>'; });
-          if (!isSel && ST.tool !== 'edit') h += '<circle class="ps-gpick" cx="' + f1(b0[0]) + '" cy="' + f1(b0[1]) + '" r="5" data-gpick="' + pc.id + '|' + i + '"/>'; }); }); } }
+          if (!isSel && ST.tool !== 'edit' && ST.tool !== 'grade') h += '<circle class="ps-gpick" cx="' + f1(b0[0]) + '" cy="' + f1(b0[1]) + '" r="5" data-gpick="' + pc.id + '|' + i + '"/>'; }); }); } }
     var io = ST.it && itOf(ST.it); if (io && !io.pc.hidden && io.it.kind !== 'ellipse' && (ST.tool === 'edit' || ST.tool === 'select')) io.it.pts.forEach(function (q2, k) { var s3 = W2S(L2W(io.pc, q2)); h += '<rect class="ps-pt ps-itp on" data-itp="' + k + '" x="' + f1(s3[0] - 4) + '" y="' + f1(s3[1] - 4) + '" width="8" height="8"/>'; });
     h += hoverHTML() + xfHTML();
     if (ST.hover) { var s2 = W2S(ST.hover.p); h += '<circle class="ps-snap" cx="' + f1(s2[0]) + '" cy="' + f1(s2[1]) + '" r="6"/>' + (ST.hover.k ? '<text class="ps-sk" x="' + f1(s2[0] + 9) + '" y="' + f1(s2[1] - 8) + '">' + esc(ST.hover.k) + '</text>' : ''); }
@@ -1118,7 +1120,7 @@
     svg.focus({ preventScroll: true }); ctxClose(); var w = S2W(e), t = e.target, ds = t.dataset || {}, pc = ds.pc ? pcById(ds.pc) : null, sn = snap(w, null, e);
     svg.setPointerCapture(e.pointerId);
     if (ds.gpick) { var gp = ds.gpick.split('|'), gpc = pcById(gp[0]); if (gpc) { var gi = +gp[1]; if (e.shiftKey && ST.node && ST.node.pc === gpc.id) { if (ST.node.idx.indexOf(gi) < 0) ST.node.idx.push(gi); } else ST.node = { pc: gpc.id, idx: [gi] }; ST.sel = [gpc.id]; ST.seg = null; refresh(); } return; }
-    if (ds.gpt && gradeSel()) { var go = gradeSel(); ST.gsz = ds.gpt; startDrag({ k: 'gpt', o: go, sz: ds.gpt, a: w, d0: (C.gradeDeltas(go.pc, ds.gpt)[go.i0] || [0, 0]).slice(), mark: H.mark() }); objects(); return; }
+    if (ds.gpt && gradeSel()) { ST.gsz = ds.gpt; gradeDrag(w, ds.gpt); objects(); return; }
     if (ds.xf && ST.tool === 'select') { if (e.detail === 2 && ds.xf === 'pv') { ST.pvW = null; drawPts(); return; } if (xfStart(e, ds.xf, w)) return; }
     switch (ST.tool) {
       case 'select': {
@@ -1143,6 +1145,14 @@
           ST.seg = null; ST.sel = [pc.id]; if (pc.locked) { refresh(); return; } var lead = pc.nodes[n]; startDrag({ k: 'nodes', pc: pc, a: w, lead: n, off: [w[0] - (lead.x + pc.x), w[1] - (lead.y + pc.y)], mark: H.mark(), start: pc.nodes.map(function (nd) { return [nd.x, nd.y]; }) }); refresh(); return; }
         if (ds.s != null && pc) { ST.seg = { pc: pc.id, i: +ds.s }; ST.node = null; ST.sel = [pc.id]; if (!pc.locked) startDrag({ k: 'nodes', pc: pc, a: w, lead: +ds.s, off: [w[0] - (pc.nodes[+ds.s].x + pc.x), w[1] - (pc.nodes[+ds.s].y + pc.y)], mark: H.mark(), start: pc.nodes.map(function (nd) { return [nd.x, nd.y]; }), idx: [+ds.s, (+ds.s + 1) % pc.nodes.length], seg: +ds.s }); refresh(); return; }
         var hp = pieceAt(w); ST.node = ST.seg = null; ST.sel = hp ? [hp.id] : []; if (!hp) startDrag({ k: 'marqn', a: w }); refresh(); return;
+      }
+      case 'grade': {
+        var Gl = gsets(); if (Gl.list.length < 2) { ST.tab = 'grade'; refresh(); return toast('Add sizes first: Grading panel › Sizes, or Auto-grade from the draft.', 1); }
+        if (!ST.gsz || ST.gsz === '*' || Gl.list.indexOf(ST.gsz) < 0 || ST.gsz === Gl.base) ST.gsz = Gl.list[Gl.list.length - 1];
+        ST.tab = 'grade'; V().nest = true;
+        if (ds.n != null && pc) { var gn = +ds.n; if (e.shiftKey && ST.node && ST.node.pc === pc.id) { var gj = ST.node.idx.indexOf(gn); if (gj >= 0) ST.node.idx.splice(gj, 1); else ST.node.idx.push(gn); } else if (!ST.node || ST.node.pc !== pc.id || ST.node.idx.indexOf(gn) < 0) ST.node = { pc: pc.id, idx: [gn] }; ST.gseg = null; ST.sel = [pc.id]; if (ST.node.idx.length) gradeDrag(w, ST.gsz); refresh(); return; }
+        var ge = nearestEdge(w); if (ge) { var gnn = ge.pc.nodes.length, ends = [ge.seg, (ge.seg + 1) % gnn]; if (e.shiftKey && ST.node && ST.node.pc === ge.pc.id) ends.forEach(function (x) { if (ST.node.idx.indexOf(x) < 0) ST.node.idx.push(x); }); else ST.node = { pc: ge.pc.id, idx: ends }; ST.gseg = { pc: ge.pc.id, i: ge.seg }; ST.sel = [ge.pc.id]; gradeDrag(w, ST.gsz); refresh(); return; }
+        var ghp = pieceAt(w); ST.node = ST.gseg = null; ST.sel = ghp ? [ghp.id] : []; refresh(); return;
       }
       case 'addpt': { var ne = nearestEdge(w); if (!ne) return; if (ne.pc.locked) return toast('Unlock the piece first.', 1); act('Add point', function () { var nd = C.splitSeg(ne.pc, ne.seg, ne.t); ST.node = { pc: ne.pc.id, idx: [ne.pc.nodes.indexOf(nd)] }; ST.sel = [ne.pc.id]; }); toast('Point added ' + F(ne.s) + ' from the start of the edge.'); return; }
       case 'curv': { var ce = nearestEdge(w); if (!ce || ce.pc.locked) return; var k0 = C.ctrl(ce.pc, ce.seg); startDrag({ k: 'curv', pc: ce.pc, seg: ce.seg, a: w, mark: H.mark(), h2: ce.pc.nodes[ce.seg].h2, h1: ce.pc.nodes[(ce.seg + 1) % ce.pc.nodes.length].h1, chord: [k0.p0, k0.p3], L0: C.segLen(ce.pc, ce.seg) }); ST.seg = { pc: ce.pc.id, i: ce.seg }; ST.sel = [ce.pc.id]; refresh(); return; }
@@ -1199,13 +1209,14 @@
       }
       case 'poly': {
         var d = ST.draft || (ST.draft = { kind: 'poly', pts: [] });
+        var isDb2 = dblDown(e); if (d.pts.length > 2 && isDb2) { finishPoly(); return; }
         if (d.pts.length > 2 && C.dist(sn.p, d.pts[0].p) < 9 / ST.z) { finishPoly(); return; }
         d.pts.push({ p: sn.p, h: null }); startDrag({ k: 'polyh', e: d.pts[d.pts.length - 1] }); opts(); drawOver(); status(); return;
       }
       case 'rect': case 'ellipse': startDrag({ k: 'box', a: sn.p, kind: ST.tool }); ST.draft = { kind: ST.tool, box: [sn.p[0], sn.p[1], sn.p[0], sn.p[1]] }; return;
       case 'iline': case 'irect': case 'iell': {
         var host = ST.draft && ST.draft.host ? pcById(ST.draft.host) : pieceAt(w); if (!host) return toast('Start inside a piece.', 1);
-        if (ST.tool === 'iline') { var dd = ST.draft || (ST.draft = { kind: 'iline', host: host.id, pts: [] }); dd.pts.push({ p: sn.p }); drawOver(); return; }
+        if (ST.tool === 'iline') { var isDb = dblDown(e); if (ST.draft && ST.draft.pts.length > 1 && isDb) { finishILine(); return; } var dd = ST.draft || (ST.draft = { kind: 'iline', host: host.id, pts: [] }); dd.pts.push({ p: sn.p }); drawOver(); status(); return; }
         startDrag({ k: 'box', a: sn.p, kind: ST.tool, host: host.id }); ST.draft = { kind: ST.tool, host: host.id, box: [sn.p[0], sn.p[1], sn.p[0], sn.p[1]] }; return;
       }
       case 'grain': { var gp = pieceAt(w); if (!gp) return toast('Drag across a piece.', 1); startDrag({ k: 'grain', pc: gp, a: sn.p }); ST.draft = { line: [sn.p, sn.p] }; return; }
@@ -1236,7 +1247,8 @@
       if (e.shiftKey) { if (Math.abs(dx) > Math.abs(dy)) dy = 0; else dx = 0; }
       d.pcs.forEach(function (o) { o[0].x = o[1] + dx; o[0].y = o[2] + dy; placeG(o[0]); }); d.moved = true; ST.live = { at: sx, t: 'Δ ' + F(dx) + ', ' + F(dy) }; drawPts(); status(); return; }
     if (d.k === 'xf') { xfMove(e, w, sx); return; }
-    if (d.k === 'gpt') { var gdx = w[0] - d.a[0], gdy = w[1] - d.a[1]; if (e.shiftKey) { if (Math.abs(gdx) > Math.abs(gdy)) gdy = 0; else gdx = 0; } if (!e.altKey) { var gs2 = P.unit === 'in' ? 2.54 / 32 : .05; gdx = Math.round((d.d0[0] + gdx) / gs2) * gs2 - d.d0[0]; gdy = Math.round((d.d0[1] + gdy) / gs2) * gs2 - d.d0[1]; } gradeSet(d.o, d.sz, d.d0[0] + gdx, d.d0[1] + gdy); d.moved = true; ST.live = { at: sx, t: d.sz + ': ' + F(d.d0[0] + gdx) + ' across, ' + F(d.d0[1] + gdy) + ' down' }; draw(); drawPts(); return; }
+    if (d.k === 'gpt') { var gdx = w[0] - d.a[0], gdy = w[1] - d.a[1]; if (!d.moved && Math.hypot(gdx, gdy) * ST.z < 3) return; if (e.shiftKey) { if (Math.abs(gdx) > Math.abs(gdy)) gdy = 0; else gdx = 0; } if (!e.altKey) { var gs2 = P.unit === 'in' ? 2.54 / 32 : .05; gdx = Math.round((d.d0[0] + gdx) / gs2) * gs2 - d.d0[0]; gdy = Math.round((d.d0[1] + gdy) / gs2) * gs2 - d.d0[1]; }
+      d.o.pc.grade = d.o.pc.grade || {}; var GD = d.o.pc.grade[d.sz] = d.o.pc.grade[d.sz] || {}; d.o.ids.forEach(function (id, k) { var b0 = d.d0s[k] || d.d0; GD[id] = [+(b0[0] + gdx).toFixed(4), +(b0[1] + gdy).toFixed(4)]; }); d.moved = true; ST.live = { at: sx, t: d.sz + ': ' + F(d.d0[0] + gdx) + ' across, ' + F(d.d0[1] + gdy) + ' down' }; draw(); drawPts(); return; }
     if (d.k === 'itp') { var snI = snap(w, null, e), lq2 = W2L(d.o.pc, snI.p); if (e.shiftKey && d.o.it.pts.length > 1) { var nb = d.o.it.pts[d.n === 0 ? 1 : d.n - 1]; lq2 = W2L(d.o.pc, constrain(L2W(d.o.pc, nb), snI.p)); } d.o.it.pts[d.n] = lq2; d.moved = true; ST.hover = snI.k ? snI : null; ST.live = { at: sx, t: d.o.it.kind === 'line' ? 'Line ' + F(C.measure.poly(d.o.it.pts)) : 'X ' + F(lq2[0]) + '  Y ' + F(lq2[1]) }; drawPiece(d.o.pc, true); drawPts(); return; }
     if (d.k === 'itmove') { var ddx2 = w[0] - d.a[0], ddy2 = w[1] - d.a[1]; if (e.shiftKey) { if (Math.abs(ddx2) > Math.abs(ddy2)) ddy2 = 0; else ddx2 = 0; } d.o.it.pts = d.start.pts.map(function (q2) { return [q2[0] + ddx2, q2[1] + ddy2]; }); if (d.start.c) d.o.it.c = [d.start.c[0] + ddx2, d.start.c[1] + ddy2]; d.moved = Math.hypot(ddx2, ddy2) * ST.z > 2; ST.live = { at: sx, t: 'Δ ' + F(ddx2) + ', ' + F(ddy2) }; drawPiece(d.o.pc, true); drawPts(); return; }
     if (d.k === 'trim') { var sn4 = snap(w, null, e), lq = W2L(d.pc, sn4.p), dd0 = [lq[0] - (d.a[0] - d.pc.x), lq[1] - (d.a[1] - d.pc.y)]; d.r.at = [d.at0[0] + dd0[0], d.at0[1] + dd0[1]]; d.moved = true; ST.live = { at: sx, t: 'X ' + F(d.r.at[0]) + '  Y ' + F(d.r.at[1]) }; drawPiece(d.pc, true); drawPts(); return; }
@@ -1279,6 +1291,9 @@
     if (d.k === 'grain') { var ln = ST.draft.line; ST.draft = null; if (C.dist(ln[0], ln[1]) * ST.z < 6) { drawOver(); drawPts(); return; } act('Set grainline', function () { d.pc.grain = { a: W2L(d.pc, ln[0]), b: W2L(d.pc, ln[1]) }; ST.sel = [d.pc.id]; }); return; }
     drawPts();
   }
+  /* our own double-click test: the browser's dblclick is unreliable while the drawing redraws under the pointer */
+  var lastDn = null;
+  function dblDown(e) { var now = Date.now(), r = lastDn && now - lastDn.t < 450 && Math.hypot(e.clientX - lastDn.x, e.clientY - lastDn.y) < 7; lastDn = r ? null : { t: now, x: e.clientX, y: e.clientY }; return r; }
   function dbl(e) {
     if (ST.tool === 'poly' && ST.draft) { ST.draft.pts.pop(); finishPoly(); return; }
     if (ST.tool === 'iline' && ST.draft) { finishILine(); return; }
@@ -1488,7 +1503,7 @@
     h += sec('point', 'Grade points' + (nd && ST.node.idx.length ? ' · ' + ST.node.idx.length + ' selected' : ''));
     if (G.list.length < 2) h += '<p class="ps-n">Enter at least two sizes to grade.</p>';
     else if (nd && ST.node.idx.length) { var i0 = ST.node.idx[0], id0 = nd.nodes[i0].id, r = C.ruleOf(nd, id0, G.list, G.base), dl = {}; G.list.forEach(function (sz) { dl[sz] = C.gradeDeltas(nd, sz)[i0] || [0, 0]; }); var own = function (sz) { return !!(nd.grade && nd.grade[sz] && nd.grade[sz][id0]); };
-      h += '<p class="ps-n"><b>' + ST.node.idx.length + ' point' + (ST.node.idx.length > 1 ? 's' : '') + ' on ' + esc(nd.name) + '.</b> Distance from the base size, per size' + (ST.node.idx.length > 1 ? ' (all selected points move alike)' : '') + ':</p>'
+      h += '<p class="ps-n"><b>' + ST.node.idx.length + ' point' + (ST.node.idx.length > 1 ? 's' : '') + ' on ' + esc(nd.name) + '.</b> Distance from the base size, per size' + (ST.node.idx.length > 1 ? ' (typing sets the same value on all of them; dragging on the canvas keeps each point\'s own grade)' : '') + ':</p>'
         + '<div class="ps-gtab ps-gpt"><table><tr><th>Size</th><th>Across (X)</th><th>Down (Y)</th></tr>' + G.list.map(function (sz, i) { var base = sz === G.base; return '<tr class="' + (base ? 'b' : '') + (ST.gsz === sz ? ' on' : '') + '" data-gsel="' + esc(sz) + '"><td><i style="background:' + (base ? '#e8e6e1' : SZC[i % SZC.length]) + '"></i>' + esc(sz) + (base ? ' (base)' : own(sz) ? '' : ' <small>follows</small>') + '</td><td><input type="number" step="any" data-gx="' + esc(sz) + '" value="' + U(dl[sz][0]) + '"' + (base ? ' disabled' : '') + ' aria-label="' + esc(sz) + ' across"></td><td><input type="number" step="any" data-gy="' + esc(sz) + '" value="' + U(dl[sz][1]) + '"' + (base ? ' disabled' : '') + ' aria-label="' + esc(sz) + ' down"></td></tr>'; }).join('') + '</table></div>'
         + '<p class="ps-n">Steps between sizes:</p><div class="ps-gtab ps-gpt"><table><tr><th>Step</th><th>Across (X)</th><th>Down (Y)</th></tr><tr class="' + (ST.gsz === '*' ? 'on' : '') + '" data-gsel="*"><td><b>Every step</b></td><td><input type="number" step="any" data-gall="x" value="' + U(r[0]) + '" aria-label="Every step across"></td><td><input type="number" step="any" data-gall="y" value="' + U(r[1]) + '" aria-label="Every step down"></td></tr>'
         + G.list.slice(1).map(function (sz, k) { var a2 = dl[G.list[k]], b2 = dl[sz]; return '<tr><td>' + esc(G.list[k]) + ' → ' + esc(sz) + '</td><td><input type="number" step="any" data-gox="' + (k + 1) + '" value="' + U(b2[0] - a2[0]) + '" aria-label="Step ' + esc(G.list[k]) + ' to ' + esc(sz) + ' across"></td><td><input type="number" step="any" data-goy="' + (k + 1) + '" value="' + U(b2[1] - a2[1]) + '" aria-label="Step ' + esc(G.list[k]) + ' to ' + esc(sz) + ' down"></td></tr>'; }).join('') + '</table></div>'
@@ -1530,6 +1545,7 @@
       V().nest = true; });
     toast(tg.length + ' piece' + (tg.length > 1 ? 's' : '') + ' graded in ' + G.list.length + ' sizes. Check the nest, then fine-tune points.');
   }
+  function gradeDrag(w, sz) { var go = gradeSel(); if (!go || !sz || sz === '*' || sz === gsets().base || go.pc.locked) return false; var all = C.gradeDeltas(go.pc, sz), idx = ST.node.idx.slice(); startDrag({ k: 'gpt', o: go, sz: sz, a: w, sx0: null, d0: (all[go.i0] || [0, 0]).slice(), d0s: idx.map(function (i) { return (all[i] || [0, 0]).slice(); }), mark: H.mark() }); return true; }
   function gradeSel() { var pc = ST.node && pcById(ST.node.pc); if (!pc) return null; return { pc: pc, ids: ST.node.idx.map(function (i) { return pc.nodes[i].id; }), i0: ST.node.idx[0] }; }
   function gradeSet(o, sz, dx, dy) { o.pc.grade = o.pc.grade || {}; var G = o.pc.grade[sz] = o.pc.grade[sz] || {}; o.ids.forEach(function (id) { G[id] = [+dx.toFixed(4), +dy.toFixed(4)]; }); }
   function gradeEdit(t) {
@@ -1605,7 +1621,7 @@
     });
   }
   /* ---------- Beginner / Pro ---------- */
-  var BASIC = ['select', 'edit', 'pan', 'poly', 'rect', 'addpt', 'curv', 'cut', 'notch', 'grain', 'sa', 'dart', 'pleat', 'slash', 'spread', 'circle', 'measure', 'sew'], LEVEL = 'pro';
+  var BASIC = ['select', 'edit', 'pan', 'poly', 'rect', 'addpt', 'curv', 'grade', 'cut', 'notch', 'grain', 'sa', 'dart', 'pleat', 'slash', 'spread', 'circle', 'measure', 'sew'], LEVEL = 'pro';
   try { LEVEL = localStorage.getItem('pm-level') || 'pro'; } catch (e) {}
   function setLevel(l) { LEVEL = l === 'beginner' ? 'beginner' : 'pro'; try { localStorage.setItem('pm-level', LEVEL); } catch (e) {} var beg = LEVEL === 'beginner';
     qa('.ps-tb[data-t]').forEach(function (b) { b.hidden = beg && BASIC.indexOf(b.dataset.t) < 0; }); qa('.ps-tg').forEach(function (g) { g.hidden = !g.querySelector('.ps-tb:not([hidden])'); });
@@ -1856,6 +1872,8 @@
     '.ps-bar .ps-mb{background:none!important;border:0!important;box-shadow:none!important}',
     '.ps-gvec{fill:none;stroke:rgba(232,230,225,.35);stroke-width:1;pointer-events:none}.ps-gvec.on{stroke:#e8e6e1;stroke-width:1.4;stroke-dasharray:3 2}.ps-gpt{stroke:#1c1f22;stroke-width:1;pointer-events:none}.ps-gpt.on{pointer-events:all;cursor:move;stroke-width:1.5}.ps-gpt.cur{stroke:#fff;stroke-width:2.2}.ps-gpick{fill:transparent;stroke:rgba(224,138,94,.6);stroke-width:1.2;cursor:pointer}.ps-gpick:hover{fill:rgba(224,138,94,.35)}',
     '.ps-side.grading>.ps-sec{display:none}.ps-side.grading #ps-objs,.ps-side.grading .ps-pane{max-height:calc(100vh - 190px)!important}.pbody.cad.psgrading{grid-template-columns:200px minmax(0,1fr) 400px}@media (min-width:981px){.pbody.cad.psgrading.nol{grid-template-columns:48px minmax(0,1fr) 400px}}.ps-gsec>summary{font-size:11px}',
+    '.pbody.cad .ctl{height:auto!important;min-height:36px;flex-wrap:wrap;row-gap:4px;padding-top:3px;padding-bottom:3px}.pbody.cad .ps-bar{flex-wrap:wrap!important;overflow:visible!important;row-gap:4px;flex-basis:320px}.pbody.cad .ps-bar .ib,.pbody.cad .ps-bar .ps-zl{margin:0}',
+    '.ps-gsegh{fill:none;stroke:#e08a5e;stroke-width:4;stroke-linecap:round;opacity:.7;pointer-events:none}',
     '.ps-tex{width:44px;height:44px;object-fit:cover;border-radius:4px;border:1px solid var(--ln);margin-right:6px;vertical-align:middle}',
   ].join('\n');
   document.head.appendChild(css);
