@@ -112,7 +112,7 @@
       + '<div class="ac"><button type="submit" class="p">' + (isNew ? 'Create and open style' : 'Save') + '</button>' + (isNew ? '' : '<button type="button" data-a="rev">Start revision ' + ((s.rev || 1) + 1) + '</button>') + '<button type="button" data-a="x">Cancel</button>' + (isNew ? '' : '<button type="button" class="bad" data-a="del">Delete style</button>') + '</div></form>';
     document.body.appendChild(w);
     var f = w.querySelector('form'), close = function () { w.remove(); };
-    w.addEventListener('click', function (e) { if (e.target === w) close(); var a = e.target.dataset && e.target.dataset.a; if (a === 'x') close(); if (a === 'rev') { if (confirm('Start revision ' + ((s.rev || 1) + 1) + ' of ' + s.id + '? Reports and exports will show the new revision.')) { newRevision(s.id); location.reload(); } } if (a === 'del') { if (confirm('Delete ' + s.id + ' and the tool work saved with it? Download a backup first if you may need it.')) { remove(s.id); location.reload(); } } });
+    w.addEventListener('click', function (e) { if (e.target === w) close(); var a = e.target.dataset && e.target.dataset.a; if (a === 'x') close(); if (a === 'rev' && window.ForecutRev) { close(); ForecutRev.open(); return; } if (a === 'rev') { if (confirm('Start revision ' + ((s.rev || 1) + 1) + ' of ' + s.id + '? Reports and exports will show the new revision.')) { newRevision(s.id); location.reload(); } } if (a === 'del') { if (confirm('Delete ' + s.id + ' and the tool work saved with it? Download a backup first if you may need it.')) { remove(s.id); location.reload(); } } });
     w.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
     f.onsubmit = function (e) { e.preventDefault(); var d = { name: f.elements.name.value.trim() || 'New style', season: f.elements.season.value, category: f.elements.category.value, garment: f.elements.garment.value, status: f.elements.status.value, notes: f.elements.notes.value.trim() }; if (isNew) { if (f.elements.prefix) d.prefix = f.elements.prefix.value; create(d); } else { update(s.id, d); location.reload(); } };
     setTimeout(function () { f.elements.name.focus(); }, 40);
@@ -123,12 +123,12 @@
     var host = document.querySelector('.fx-title');
     var b = document.createElement('div'); b.className = 'fcs-bar no-print'; b.setAttribute('role', 'region'); b.setAttribute('aria-label', 'Active style');
     b.innerHTML = '<span class="lb">Style</span>' + (s ? '<span class="id">' + esc(s.id) + '</span>' : '') + '<select aria-label="Active style">' + options(r) + '</select>'
-      + (s ? '<span class="mt">' + esc([seasonName(s.season), s.category, s.garment].filter(Boolean).join(' · ')) + '</span><span class="st">' + esc(s.status) + ' · Rev ' + (s.rev || 1) + '</span>' : '<span class="mt">Create or choose a style to link your work across every tool.</span>')
-      + '<span class="sp"></span>' + (s ? '<button type="button" data-a="edit">Edit</button>' : '') + '<button type="button" class="p" data-a="new">+ New style</button><a class="b" href="account.html#styles">All styles</a>';
+      + (s ? '<span class="mt">' + esc([seasonName(s.season), s.category, s.garment].filter(Boolean).join(' · ')) + '</span><span class="st">' + esc(s.status) + ' · Rev ' + (s.rev || 1) + (window.ForecutRev ? ' · ' + esc(ForecutRev.statusOf(s)) : '') + '</span>' : '<span class="mt">Create or choose a style to link your work across every tool.</span>')
+      + '<span class="sp"></span>' + (s ? '<button type="button" data-a="revs">Revisions &amp; sign-off</button><button type="button" data-a="edit">Edit</button>' : '') + '<button type="button" class="p" data-a="new">+ New style</button><a class="b" href="account.html#styles">All styles</a>';
     if (host && host.parentNode) host.parentNode.insertBefore(b, host.nextSibling);
     else { var pm = document.getElementById('pm-ttl'); if (!pm) return; b.className = 'fcs-pm'; b.innerHTML = '<select aria-label="Active style">' + options(r) + '</select><button type="button" data-a="new">+ Style</button>'; pm.parentNode.insertBefore(b, pm.nextSibling); }
     b.querySelector('select').onchange = function (e) { var v = e.target.value; if (v === (r.active || '')) return; if (confirm(v ? 'Switch to ' + v + '? Your current work is kept with ' + (r.active || 'standalone work') + ' and the tools load ' + v + '.' : 'Work without a style? Your current work is kept with ' + r.active + '.')) setActive(v); else e.target.value = r.active || ''; };
-    b.addEventListener('click', function (e) { var a = e.target.dataset && e.target.dataset.a; if (a === 'new') dialog(null); if (a === 'edit') dialog(active()); });
+    b.addEventListener('click', function (e) { var a = e.target.dataset && e.target.dataset.a; if (a === 'new') dialog(null); if (a === 'edit') dialog(active()); if (a === 'revs' && window.ForecutRev) ForecutRev.open(); });
   }
   // the Style ID is set by the style bar, so the matching fields in the tools are read-only
   function lockFields() {
@@ -148,6 +148,6 @@
   }
   // runs before the tools read their saved work, so they open on the active style
   var R0 = sync(); if (R0.active) stamp(byId(R0, R0.active));
-  window.ForecutStyle = { sync: sync, list: function () { return reg().list; }, active: active, setActive: setActive, create: create, update: update, newRevision: newRevision, remove: remove, label: label, fileTag: fileTag, seasonName: seasonName, dialog: dialog, SEASONS: SEASONS };
+  window.ForecutStyle = { KEYS: STYLE_KEYS, reg: reg, saveReg: saveReg, stamp: stamp, byId: byId, sync: sync, list: function () { return reg().list; }, active: active, setActive: setActive, create: create, update: update, newRevision: newRevision, remove: remove, label: label, fileTag: fileTag, seasonName: seasonName, dialog: dialog, SEASONS: SEASONS };
   if (document.readyState !== 'loading') init(); else document.addEventListener('DOMContentLoaded', init);
 })();
