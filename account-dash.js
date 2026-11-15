@@ -152,6 +152,24 @@
     window.addEventListener('hashchange', function () { var h = location.hash.slice(1); if (user && PANES.some(function (p) { return p[0] === h; }) && h !== cur) show(h); });
     if (dlb) dlb.onclick = dlAll; if (rs) rs.onclick = function () { rf.click(); }; if (rf) rf.onchange = function () { if (rf.files[0]) rsAll(rf.files[0]); rf.value = ''; };
   }
-  window.FCDash = { user: function (u) { user = u; show(cur); } };
+  function brandOnboard(u) {
+    var flag = 'fc-brand-onb-' + u.uid; try { if (localStorage.getItem(flag) || kit().name) return; } catch (e) { return; }
+    var k = kit(), w = document.createElement('div'); w.className = 'fcbrand'; w.setAttribute('role', 'dialog'); w.setAttribute('aria-modal', 'true'); w.setAttribute('aria-label', 'Set up your brand');
+    w.innerHTML = '<form class="fcb-in"><button type="button" class="x" aria-label="Close">×</button><span class="chip">Welcome' + (u.displayName ? ', ' + esc(u.displayName.split(' ')[0]) : '') + '</span><h3>Make Forecut yours</h3><p>Add your brand once. Every report, PDF, tech pack and label you make will carry your name, logo, colours and fonts.</p>'
+      + '<div class="fcb-g"><label>Brand name<input name="name" maxlength="80" placeholder="e.g. Aarna Studio" required></label><label>Tagline<input name="tagline" maxlength="120" placeholder="e.g. Handcrafted in Jaipur"></label>'
+      + '<div class="fcb-logo"><div class="lb" id="fcbLogo"><small>Logo</small></div><label class="dbtn sm" style="cursor:pointer">Upload logo<input type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" hidden></label></div>'
+      + '<div class="fcb-c"><label>Primary colour<input type="color" name="c0" value="' + esc(k.colours[0]) + '"></label><label>Secondary colour<input type="color" name="c1" value="' + esc(k.colours[1]) + '"></label><label>Heading font<select name="headFont">' + FONTS.map(function (f) { return '<option' + (f === k.headFont ? ' selected' : '') + '>' + f + '</option>'; }).join('') + '</select></label></div>'
+      + '<label>Website<input name="website" maxlength="120" placeholder="yourbrand.in"></label></div><p class="er" role="alert"></p>'
+      + '<div class="ac"><button type="submit" class="dbtn pri">Save my brand</button><button type="button" class="dbtn later">Skip for now</button><span class="hint">You can change everything later in Brand kit.</span></div></form>';
+    document.body.appendChild(w);
+    var logo = '', f = w.querySelector('form');
+    function close(saved) { try { localStorage.setItem(flag, saved ? 'saved' : 'skipped'); } catch (e) { } w.remove(); document.dispatchEvent(new Event('fcbrand-closed')); if (saved) show('brand'); }
+    w.querySelector('.x').onclick = function () { close(false); }; w.querySelector('.later').onclick = function () { close(false); };
+    w.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(false); });
+    w.querySelector('input[type=file]').onchange = function (e) { var file = e.target.files[0]; if (file) shrink(file, 600).then(function (d) { if (d.length > 400000) return alert('Use a smaller logo.'); logo = d; $('fcbLogo').innerHTML = '<img src="' + d + '" alt="">'; }); };
+    f.onsubmit = function (e) { e.preventDefault(); var n = f.elements['name'].value.trim(); if (!n) { f.querySelector('.er').textContent = 'Add your brand name, or skip for now.'; return; } var K = kit(); K.name = n; K.tagline = f.tagline.value.trim(); K.website = f.website.value.trim(); K.colours[0] = f.c0.value; K.colours[1] = f.c1.value; K.headFont = f.headFont.value; if (logo) K.logo = logo; saveKit(K, true); close(true); };
+    setTimeout(function () { f.elements['name'].focus(); }, 60);
+  }
+  window.FCDash = { user: function (u) { user = u; show(cur); brandOnboard(u); } };
   if (document.readyState !== 'loading') init(); else document.addEventListener('DOMContentLoaded', init);
 })();
