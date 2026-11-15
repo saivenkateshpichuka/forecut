@@ -267,7 +267,10 @@
         + '<text x="' + (x + .6) + '" y="' + (y + 1.9) + '" font-size="1.5" font-weight="700" font-family="DM Sans,sans-serif" fill="' + (t.blank ? '#9da3aa' : '#a9481f') + '">' + t.id + '</text>' + (t.blank ? '<text x="' + (x + .6) + '" y="' + (y + 3.1) + '" font-size=".9" font-family="DM Sans,sans-serif" fill="#9da3aa">not printed</text>' : ''); });
     return { g: g, T: T };
   }
+  var pubT = 0;
+  function publishChart() { clearTimeout(pubT); pubT = setTimeout(function () { try { var gr = gradeRows(), G = PM.GARMENTS[S.gid] || {}; try { if (last) { var sv = X.svg(last.sc, last.W, last.H, S.unit, { title: last.title }); if (sv.length < 1500000) localStorage.setItem('fc-pm-snap', JSON.stringify({ at: Date.now(), code: code(), garment: G.n || S.gid, svg: sv })); } } catch (e2) { } localStorage.setItem('fc-pm-sizechart', JSON.stringify({ at: Date.now(), garment: G.n || S.gid, gid: S.gid, gender: S.gender, code: code(), unit: 'cm', base: baseSize(), sizes: gr.sizes, opts: S.o || {}, rows: gr.rows.map(function (r) { return { name: r[0], values: r[1].map(function (v) { return typeof v === 'number' ? +v.toFixed(2) : null; }), tol: tol(r[0]) }; }) })); } catch (e) { } }, 700); }
   function draw(keepTable) {
+    publishChart();
     var s = scene(false); last = s; var tl = null, svg = X.svg(s.sc, s.W, s.H, S.unit, { screen: 1, grid: $('#pm-grid').checked ? grid(s.W, s.H) : '' });
     if (TILES) { tl = tilesSvg(s.sc, s.W, s.H); svg = svg.replace('</svg>', tl.g + '</svg>'); }
     var cres = costing(s);

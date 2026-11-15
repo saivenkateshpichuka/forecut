@@ -11,12 +11,12 @@ def build():
      import tools_shell as T
      n,l,_=T.NAMES[key]
      page=f'''<!doctype html>
-<html lang="en-IN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{T.title(key)} | Forecut</title><meta name="description" content="{html.escape(desc,quote=True)}"><meta name="theme-color" content="#214538"><meta property="og:title" content="{T.title(key)} | Forecut"><meta property="og:description" content="{html.escape(desc,quote=True)}"><meta property="og:url" content="https://forecut.in/{key}.html"><meta property="og:image" content="https://forecut.in/og-image.png"><link rel="canonical" href="https://forecut.in/{key}.html"><link rel="icon" href="favicon.svg"><link rel="stylesheet" href="tools/tools.css?v={T.VER}">{T.head_links(key)}{T.rail_style(key)}<script defer src="tools/core.js?v={T.VER}"></script><script defer src="tools/palettes.js?v={T.VER}"></script><script defer src="tools/colour-library.js?v={T.VER}"></script><script defer src="tools/app.js?v={T.VER}"></script></head>
+<html lang="en-IN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{T.title(key)} | Forecut</title><meta name="description" content="{html.escape(desc,quote=True)}"><meta name="theme-color" content="#214538"><meta property="og:title" content="{T.title(key)} | Forecut"><meta property="og:description" content="{html.escape(desc,quote=True)}"><meta property="og:url" content="https://forecut.in/{key}.html"><meta property="og:image" content="https://forecut.in/og-image.png"><link rel="canonical" href="https://forecut.in/{key}.html"><link rel="icon" href="favicon.svg"><link rel="stylesheet" href="tools/tools.css?v={T.VER}">{T.head_links(key)}{T.rail_style(key)}<script defer src="tools/core.js?v={T.VER}"></script><script defer src="tools/palettes.js?v={T.VER}"></script><script defer src="tools/colour-library.js?v={T.VER}"></script><script defer src="tools/fabric-preview.js?v={T.VER}"></script><script defer src="tools/app.js?v={T.VER}"></script></head>
 {T.body_open(key)}<main id="main" class="fx-main">{T.title_row(key,desc,'Your collection is saved in this browser and shared by Collection Planner, Price & Margin Calculator, Colour Palette Builder, Break-even Calculator and Production Calendar. Download a backup to keep it safe or move it to another device.')}<div id="status" role="status" aria-live="polite"></div><p id="printCollection" class="print-only"></p><div id="app" class="fx-app" data-fx-gate></div><noscript><p>Turn on JavaScript to use this tool. Nothing you enter is sent to a server.</p></noscript>{T.foot('Forecut · Use your own supplier rates and approved specifications. Results are planning estimates.')}</main></div><div id="toast" role="status" aria-live="polite" hidden></div></body></html>'''
      (ROOT/f'{key}.html').write_text(page)
  S=json.loads((ROOT/'build/seasons.json').read_text())
  locked=json.loads((ROOT/'build/site.json').read_text()).get('locked',[])
- palettes=[{'season':k,'title':S['meta'][k]['title'],'colours':[{'hex':h,'name':n} for h,n in S['meta'][k]['palette']]} for k in S['seasons'] if k not in locked]
+ palettes=[{'season':k,'title':S['meta'][k]['title'],'colours':[{'hex':h,'name':n} for h,n in S['meta'][k]['palette']]} for k in S['seasons']]  # every season through 2028 (the tool is for signed-in members)
  # India seasons (published ones only); names from the research palette, or the nearest colour name
  try:
   import india_data as ID, india_seasons as IS
@@ -24,9 +24,8 @@ def build():
   research=json.loads((ROOT/'build/india_research.json').read_text()).get('seasons',{})
   names=_colour_names()
   for code,info in ID.SEASON_INFO.items():
-   if code in locked: continue
    pal=research.get(code,{}).get('palette') or [[h,_nearest(h,names)] for h in info.get('colours',[])]
-   if pal: palettes.append({'season':'in-'+code.lower().replace(' ','-'),'title':'India · '+code.replace(' 2',' 202').replace('Festive 26','Festive 2026') ,'colours':[{'hex':h.lower(),'name':n} for h,n in pal]})
+   if pal: palettes.append({'season':'in-'+code.lower().replace(' ','-'),'title':'India · '+code.replace(' 2',' 202') ,'colours':[{'hex':h.lower(),'name':n} for h,n in pal]})
  except Exception as e: print('india palettes skipped:',e)
  # Pantone TCX screen approximations (public dataset, the same set the forecast pages use for nearest codes)
  tcx=json.loads((ROOT/'build/pantone_fhi.json').read_text())
