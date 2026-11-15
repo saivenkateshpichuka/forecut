@@ -24,7 +24,7 @@ ST = {'e': ('emerge', 'Emerging'), 'r': ('rise', 'Rising'), 'p': ('peak', 'Peaki
 POS = {'e': .16, 'r': .36, 'p': .55, 'f': .80}
 
 # the signature: photo + lifecycle curve with a "now" dot + colour chip with its Pantone TCX code
-HERO = [('Peplum blouses', ['peplum-blouses-photo'], '#2f6fe0', 'Luminous blue'),
+HERO = [('Peplum blouses', ['peplum-blouses-photo'], '#2f6fe0', 'Cobalt blue'),
         ('Asymmetric wrap closures', ['asymmetric-wrap-closures-ss27-photo', 'asymmetric-wrap-closures-photo'], '#ef6fa7', 'Pop pink'),
         ('Barrel-leg cargo jeans', ['barrel-leg-cargo-jeans-ss27-photo', 'barrel-leg-cargo-jeans-photo'], '#b57552', 'Clay')]
 

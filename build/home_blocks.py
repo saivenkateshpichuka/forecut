@@ -95,9 +95,9 @@ def spotlight(M, SEAS, islug):
 
 
 PALETTES = [
-    ('SS27', 'ss27.html', 'Luminous blue leads, with energy orange and pop pink', [('#2f6fe0', 'Luminous blue'), ('#f07a1d', 'Energy orange'), ('#ef6fa7', 'Pop pink'), ('#7fa35a', 'Meadow green'), ('#b57552', 'Clay')]),
+    ('SS27', 'ss27.html', 'Bright cobalt blue leads, with energy orange and pop pink', [('#2f6fe0', 'Bright cobalt blue'), ('#f07a1d', 'Energy orange'), ('#ef6fa7', 'Pop pink'), ('#7fa35a', 'Meadow green'), ('#b57552', 'Clay')]),
     ('AW27', 'aw27.html', 'Warm cognac and carmine against steel grey', [('#8a4b2a', 'Cognac'), ('#9c1f2e', 'Carmine'), ('#6f7880', 'Steel grey'), ('#6b6a4b', 'Khaki'), ('#5a3f7a', 'Deep purple')]),
-    ('SS28', 'ss28.html', 'Radiant earth with sand, stone and deep teal', [('#c0582b', 'Radiant earth'), ('#d9b892', 'Sand'), ('#a8a49b', 'Stone'), ('#1f5e63', 'Deep teal'), ('#f3f0e8', 'Off-white')]),
+    ('SS28', 'ss28.html', 'Earth orange with sand, stone and deep teal', [('#c0582b', 'Earth orange'), ('#d9b892', 'Sand'), ('#a8a49b', 'Stone'), ('#1f5e63', 'Deep teal'), ('#f3f0e8', 'Off-white')]),
 ]
 
 
