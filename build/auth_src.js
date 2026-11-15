@@ -194,7 +194,7 @@ onAuthStateChanged(auth, (u) => {
       + '<label>How useful is Forecut for you so far?</label><div class="st">' + [1, 2, 3, 4, 5].map((n) => '<button type="button" data-r="' + n + '" aria-label="' + n + ' of 5">★</button>').join('') + '</div>'
       + '<label>What do you use?</label><div class="ch">' + ['Forecasts', 'India seasons', 'Garment Studio', 'Tech pack & size charts', 'Colour & fabric tools', 'Costing tools', 'Reports & PDFs'].map((x) => '<label><input type="checkbox" value="' + x + '">' + x + '</label>').join('') + '</div>'
       + '<label for="fbr">You are a</label><select id="fbr"><option value="">Choose…</option><option>Fashion designer</option><option>Brand owner / founder</option><option>Merchandiser / buyer</option><option>Pattern maker / technician</option><option>Manufacturer / exporter</option><option>Student / educator</option><option>Other</option></select>'
-      + '<label for="fbi">What should we improve or add? <span style="font-weight:500">(required)</span></label><textarea id="fbi" maxlength="3000" placeholder="Be as specific as you like: a tool, a page, a feature, a problem you hit…"></textarea>'
+      + '<label for="fbi">What should we improve or add?</label><textarea id="fbi" maxlength="3000" placeholder="Be as specific as you like: a tool, a page, a feature, a problem you hit…"></textarea>'
       + '<label for="fbw">One feature you would pay for</label><textarea id="fbw" maxlength="1000" style="min-height:60px" placeholder="Optional"></textarea>'
       + '<p class="er" role="alert"></p><div class="ac"><button type="submit" class="go2">Send feedback</button><button type="button" class="lt">Remind me later</button></div><small class="f">Signed in as ' + (u.email || '').replace(/[<>&]/g, '') + '. Your free year is added to this account after we review your feedback.</small></form>';
     document.body.appendChild(w);
@@ -204,8 +204,9 @@ onAuthStateChanged(auth, (u) => {
     w.querySelector('.lt').onclick = later; w.querySelector('.x').onclick = later;
     w.addEventListener('keydown', (e) => { if (e.key === 'Escape') later(); });
     f.onsubmit = async (e) => {
-      e.preventDefault(); const imp = f.querySelector('#fbi').value.trim();
-      if (imp.length < 15) { f.querySelector('.er').textContent = 'Please write a little more about what we should improve.'; return; }
+      e.preventDefault(); const imp = f.querySelector('#fbi').value.trim(), wish0 = f.querySelector('#fbw').value.trim();
+      if ((imp + wish0).replace(/\s+/g, '').length < 8) { f.querySelector('.er').textContent = 'Please write a short note in either box so we know what to improve.'; f.querySelector('#fbi').focus(); return; }
+      f.querySelector('.er').textContent = '';
       const btn = f.querySelector('.go2'); btn.textContent = 'Sending…'; btn.disabled = true;
       const r = await window.FCAuth.sendFeedback({ rating, role: f.querySelector('#fbr').value, uses: [...f.querySelectorAll('.ch input:checked')].map((x) => x.value), improve: imp, wish: f.querySelector('#fbw').value.trim(), offer: '1-year-free' });
       setState(u, { s: 'sent', at: Date.now(), via: r });
