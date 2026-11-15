@@ -50,3 +50,5 @@ main,aside,.shell>*,.fields>*{min-width:0}.table-scroll{max-width:100%}@media(ma
 .mk-bar{height:8px;border-radius:99px;background:#ece6da;overflow:hidden;margin-bottom:10px}.mk-bar i{display:block;height:100%;background:#214538}
 .mk-ck{display:flex!important;gap:10px;align-items:flex-start;padding:9px 4px;border-bottom:1px solid #eee7da;font-weight:500!important}.mk-ck input{width:auto;margin:3px 0 0}
 .kd-hit td{background:#fbf3e6}
+.lk-wrap{display:grid;gap:8px;margin:0 0 14px}.lk-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:11px 14px;border:1px solid #b9cfc2;border-left:4px solid #214538;border-radius:10px;background:#f1f7f3;font-size:14px;margin:0 0 14px;color:#1b1d20}.lk-wrap .lk-bar{margin:0}.lk-bar>span:nth-child(2){flex:1;min-width:220px}.lk-i{font-size:16px}.lk-b{display:flex;gap:8px;flex-wrap:wrap}.lk-b button{padding:7px 12px;font-size:13px;margin:0}.lk-tag{display:block;margin-top:3px;font:700 10.5px "DM Sans",sans-serif;color:#214538}.lk-good{color:#1a7a45;font-weight:700}.lk-bad{color:#b03a2e;font-weight:700}
+[data-row=bom][data-key=item]{min-width:230px}
