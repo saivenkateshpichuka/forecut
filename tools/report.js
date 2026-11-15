@@ -114,7 +114,7 @@
     });
     return out;
   }
-  var CSS = '@page{size:A4;margin:14mm 12mm 16mm}@page{@bottom-left{content:"Forecut · forecut.in";font:8pt "DM Sans",Arial,sans-serif;color:#777}@bottom-right{content:"Page " counter(page) " of " counter(pages);font:8pt "DM Sans",Arial,sans-serif;color:#777}}'
+  var CSS = '@page{size:A4;margin:14mm 12mm 16mm}@page{@bottom-left{content:"BRANDFOOT";font:8pt "DM Sans",Arial,sans-serif;color:#777}@bottom-right{content:"Page " counter(page) " of " counter(pages);font:8pt "DM Sans",Arial,sans-serif;color:#777}}'
     + '#fxReport{display:none}'
     + '@media print{html,body{background:#fff!important}body.fx-report-on>*:not(#fxReport){display:none!important}body.fx-report-on #fxReport{display:block!important}}'
     + '#fxReport{font:9.5pt/1.45 "DM Sans",Arial,sans-serif;color:#1b1d20;-webkit-print-color-adjust:exact;print-color-adjust:exact}'
@@ -138,26 +138,42 @@
     + '#fxReport .rp-sign{display:grid;grid-template-columns:repeat(3,1fr);gap:8mm;margin-top:10mm;break-inside:avoid}#fxReport .rp-sign div{border-top:.6pt solid #888;padding-top:1.5mm;font-size:8pt;color:#555}'
     + '#fxReport .rp-foot{margin-top:6mm;border-top:.6pt solid #ccc;padding-top:2mm;font-size:7.5pt;color:#777}';
   function collectionName() { var c = document.getElementById('collectionName'); return c && c.value ? c.value : ''; }
+  var TITLES = { rangeboard: 'Collection Plan', 'trend-to-style': 'Style Brief', swatchsmith: 'Colour Palette', 'textile-calculator': 'Textile Calculation', 'textile-processing-studio': 'Textile Processing', 'size-chart-builder': 'Size Chart', 'decoration-cost-estimator': 'Embroidery & Print Cost', 'tech-pack-builder': 'Tech Pack', pricefold: 'Price & Margin', evenpoint: 'Break-even', cutclock: 'Production Calendar', 'care-label-generator': 'Care Label', 'product-description-writer': 'Product Description', 'export-market-checker': 'Export Market Checklist' };
+  function brandName() {
+    try { var b = localStorage.getItem('fc-report-brand'); if (b !== null) return b.trim(); } catch (e) { }
+    try { var st = JSON.parse(localStorage.getItem('fc-production-studio-v1') || '{}'); var x = (st.pack && st.pack.brand) || (st.care && st.care.brand) || (st.copy && st.copy.brand) || ''; if (x && !/^your brand$/i.test(x)) return x.trim(); } catch (e) { }
+    return '';
+  }
+  function addBrandField() {
+    var pop = document.querySelector('.fx-ws:not(.fx-app-menu) .fx-ws-pop'); if (!pop || document.getElementById('reportBrand')) return;
+    var l = document.createElement('label'); l.innerHTML = 'Brand name on reports<input id="reportBrand" maxlength="80" placeholder="Your brand">';
+    pop.insertBefore(l, pop.children[1] || null);
+    var i = l.querySelector('input'); i.value = brandName();
+    i.addEventListener('input', function () { try { localStorage.setItem('fc-report-brand', i.value); } catch (e) { } });
+  }
+  if (document.readyState !== 'loading') addBrandField(); else document.addEventListener('DOMContentLoaded', addBrandField);
+  var oldTitle = null;
   var lastBuild = 0;
   function build() {
     if (Date.now() - lastBuild < 1500 && document.body.classList.contains('fx-report-on')) return;
     document.body.classList.remove('fx-report-on');
     var root = document.getElementById('fxReport');
     if (!root) { root = document.createElement('div'); root.id = 'fxReport'; root.setAttribute('aria-hidden', 'true'); document.body.appendChild(root); }
-    var name = document.body.getAttribute('data-tool-name') || document.title.split('|')[0].trim();
+    var tool = document.body.getAttribute('data-tool') || '', name = TITLES[tool] || (document.body.getAttribute('data-tool-name') || document.title.split('|')[0].trim()).replace(/\s+(Calculator|Generator|Builder|Writer|Checker|Studio|Planner)$/, ''), brand = brandName();
     var kick = document.querySelector('.fx-kicker'), app = document.querySelector('[data-report-root]') || document.getElementById('app') || document.getElementById('tc-app') || document.querySelector('main');
-    var d = new Date(), ref = 'FC-' + (document.body.getAttribute('data-tool') || 'tool').slice(0, 3).toUpperCase() + '-' + d.toISOString().slice(0, 10).replace(/-/g, '') + '-' + String(d.getHours()).padStart(2, '0') + String(d.getMinutes()).padStart(2, '0');
+    var d = new Date(), ref = (brand ? brand.replace(/[^A-Za-z0-9]/g, '').slice(0, 3).toUpperCase() || 'REF' : 'REF') + '-' + (tool || 'tool').slice(0, 3).toUpperCase() + '-' + d.toISOString().slice(0, 10).replace(/-/g, '') + '-' + String(d.getHours()).padStart(2, '0') + String(d.getMinutes()).padStart(2, '0');
     var meta = [['Collection', collectionName()], ['Report date', d.toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) + ', ' + d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' })], ['Reference', ref]];
     var extra = typeof window.FXReportMeta === 'function' ? window.FXReportMeta() || [] : [];
     meta = meta.concat(extra).filter(function (m) { return m[1]; });
     var body = '';
     try { body = typeof window.FXReportBody === 'function' ? window.FXReportBody(walk) : walk(app, 0); } catch (e) { body = '<p>' + esc(e.message) + '</p>'; }
-    root.innerHTML = '<style>' + CSS + '</style><div class="rp-head"><div><div class="rp-brand">Forecut<i>.</i></div>' + (kick ? '<div class="rp-kick">' + esc(kick.textContent) + '</div>' : '') + '<h1>' + esc(name) + ' report</h1></div><table class="rp-meta">' + meta.map(function (m) { return '<tr><td>' + esc(m[0]) + '</td><td><b>' + esc(m[1]) + '</b></td></tr>'; }).join('') + '</table></div>'
+    root.innerHTML = '<style>' + CSS.replace('BRANDFOOT', brand.replace(/["\\]/g, '')) + '</style><div class="rp-head"><div>' + (brand ? '<div class="rp-brand">' + esc(brand) + '</div>' : '') + '<h1>' + esc(name) + '</h1></div><table class="rp-meta">' + meta.map(function (m) { return '<tr><td>' + esc(m[0]) + '</td><td><b>' + esc(m[1]) + '</b></td></tr>'; }).join('') + '</table></div>'
       + body + (window.FXReportSign === false ? '' : '<div class="rp-sign"><div>Prepared by</div><div>Checked by</div><div>Approved by / date</div></div>')
-      + '<div class="rp-foot">Made with Forecut tools. Figures are calculated from the values entered above; confirm specifications, rates and requirements with your supplier before production.</div>';
+      + '<div class="rp-foot">Figures are calculated from the values entered above; confirm specifications, rates and requirements with your supplier before production.</div>';
+    if (oldTitle === null) oldTitle = document.title; document.title = (brand ? brand + ' · ' : '') + name + ' · ' + d.toISOString().slice(0, 10);
     document.body.classList.add('fx-report-on'); lastBuild = Date.now();
   }
-  function off() { document.body.classList.remove('fx-report-on'); }
+  function off() { document.body.classList.remove('fx-report-on'); if (oldTitle !== null) { document.title = oldTitle; oldTitle = null; } }
   window.FXReport = { build: build, walk: walk, field: field, esc: esc };
   window.addEventListener('beforeprint', function () { if (document.body.getAttribute('data-print-mode')) return; build(); });
   window.addEventListener('afterprint', off);
