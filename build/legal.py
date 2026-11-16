@@ -1,6 +1,7 @@
 """Write ../about.html, ../method.html, ../contact.html, ../terms.html, ../privacy.html (shared Forecut style)."""
 import html
 EFF = '11 October 2026'
+PEFF = '16 November 2026'
 HEAD = '''<!doctype html>
 <html lang="en-IN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{title}</title>
@@ -159,7 +160,7 @@ P['terms.html'] = ('Terms & Conditions · Forecut', f'''
 <p>Questions about these Terms: <a href="mailto:hello@forecut.in">hello@forecut.in</a></p>''')
 P['privacy.html'] = ('Privacy Policy · Forecut', f'''
 <div class="eb">Legal</div><h1>Privacy Policy</h1>
-<p class="meta">Effective {EFF}</p>
+<p class="meta">Effective {PEFF}</p>
 <p>This Privacy Policy explains what information Forecut collects when you use forecut.in, how it is used, and the choices you have. We aim to collect as little personal data as possible and to handle it in line with applicable Indian law, including the Digital Personal Data Protection Act, 2023.</p>
 <h2>1. Information we collect</h2>
 <ul><li><b>Information you send us.</b> When you email us, including through the early-access or feedback form (which opens your own email app), we receive your email address and whatever you choose to include, such as your name, role and feedback.</li>
@@ -169,6 +170,10 @@ P['privacy.html'] = ('Privacy Policy · Forecut', f'''
 <p>Forecut uses Google Analytics to understand how visitors use the site, such as which pages are viewed, the approximate country or city, device type and how visitors arrived. Google Analytics sets cookies and processes this information on our behalf under <a href="https://policies.google.com/privacy">Google's Privacy Policy</a>; we do not receive your name or email from it. You can opt out with the <a href="https://tools.google.com/dlpage/gaoptout">Google Analytics opt-out add-on</a> or by blocking cookies in your browser. </p>
 <h2>Accounts</h2>
 <p>If you create a Forecut account, we store your name, email address and, if you sign in with Google, your Google profile picture, using Google Firebase Authentication. Passwords are handled by Firebase and are never visible to us. We use this information only to provide your account and to contact you about Forecut. You can ask us to delete your account at any time by writing to <a href="mailto:hello@forecut.in">hello@forecut.in</a>.</p>
+<h3>Your work in the tools</h3>
+<p>Work you create in the Forecut tools is saved in your browser. When you are signed in, it is also copied to your account in Google Cloud Firestore so it is available on your other devices; you can turn this off in Dashboard &rarr; Team &amp; sync, and work saved before then stays in your account until you delete it or ask us to. If you join a team, styles you choose to share are visible to the members of that team. Only you and the members of teams you share with can read this work; we do not use it for advertising or sell it.</p>
+<h3>Ask AI</h3>
+<p>Ask AI uses your own key from the AI provider you choose (Anthropic or OpenAI). Your key is kept only in your browser and is never sent to Forecut or saved in your account or backups. When you ask a question, the question and the page and style details shown in the panel are sent directly from your browser to that provider and handled under its own terms and privacy policy.</p>
 <h2>Advertising</h2>
 <p>Forecut may show ads served by Google AdSense. Third-party vendors, including Google, use cookies to serve ads based on your prior visits to this website or other websites. Google's use of advertising cookies enables it and its partners to serve ads to you based on your visits to Forecut and/or other sites on the internet. You may opt out of personalised advertising by visiting <a href="https://www.google.com/settings/ads">Google Ads Settings</a> or <a href="https://www.aboutads.info/choices/">www.aboutads.info</a>. See <a href="https://policies.google.com/technologies/partner-sites">how Google uses information from sites that use its services</a>.</p>
 <h2>3. How we use information</h2>
