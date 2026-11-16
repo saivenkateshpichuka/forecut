@@ -31,7 +31,7 @@ const ERR = {
 const msg = (e) => ERR[e && e.code] || 'Something went wrong. Please try again.';
 
 window.FCAuth = {
-  auth, msg,
+  auth, msg, app,
   google: () => signInWithPopup(auth, google),
   signIn: (email, pw) => signInWithEmailAndPassword(auth, email, pw),
   signUp: async (name, email, pw) => {
@@ -93,6 +93,8 @@ function unlock() {
   document.querySelectorAll('.scard.locked .stag.lock').forEach((t) => { t.className = 'stag now'; t.textContent = 'Member access'; });
   const sn = document.querySelector('#seasons .hint'); if (sn) sn.textContent = 'You have member access to every season. Thanks for joining Forecut early.';
 }
+// cloud sync and teams load only for signed-in people
+onAuthStateChanged(auth, (u) => { if (u) import('/sync.js').then((m) => m.start(app, auth, u)).catch(() => {}); });
 onAuthStateChanged(auth, (u) => {
   if (u) { unlock(); const cta = document.querySelector('header.hero#top .cta a[href*="account"]'); if (cta) { cta.textContent = 'My saved details'; cta.href = '/account#saved'; } } else if (wasMember) { location.reload(); return; }
   wasMember = !!u;

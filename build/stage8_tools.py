@@ -26,7 +26,7 @@ def build():
         page = (f'<!doctype html><html lang="en-IN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{escape(t)} | Forecut</title>'
                 f'<meta name="description" content="{escape(desc)}"><link rel="canonical" href="https://forecut.in/{slug}.html"><meta property="og:title" content="{escape(t)} | Forecut"><meta property="og:description" content="{escape(desc)}">'
                 f'<meta name="theme-color" content="#214538"><link rel="icon" href="favicon.svg"><link rel="stylesheet" href="fonts/fonts.css">{T.head_links(slug)}'
-                f'<link rel="stylesheet" href="tools/tools.css?v={v}"><link rel="stylesheet" href="tools/stage8.css?v={v}"><script defer src="tools/{js}?v={v}"></script></head>'
+                f'<link rel="stylesheet" href="tools/tools.css?v={v}"><link rel="stylesheet" href="tools/stage8.css?v={v}"><script defer src="tools/validate3d.js?v={v}"></script><script defer src="tools/{js}?v={v}"></script></head>'
                 f'{T.body_open(slug)}<main id="main" class="fx-main">{T.title_row(slug, desc, note, extra_buttons="<button id=fxExample type=button>Load example</button>")}'
                 f'<div id="status" role="status" aria-live="polite"></div><div id="app" class="fx-app s8" data-fx-gate></div>'
                 f'<noscript>Turn on JavaScript to use this tool. Nothing you enter is sent to a server.</noscript>{T.foot(foot)}</main></div></body></html>')

@@ -26,3 +26,12 @@ test('POM diagram draws common points for tops and bottoms', () => {
   const bot = window.ForecutPOM.svg('Trousers', [{ name: 'Waist' }, { name: 'Inseam' }, { name: 'Front rise' }, { name: 'Leg opening' }]);
   assert.equal(bot.kind, 'bottom'); assert.equal(bot.drawn.length, 4); assert.match(bot.svg, /<svg/);
 });
+test('3D fabric from lab tests: rigidity and stiffness scale match the library presets', () => {
+  require('../tools/validate3d.js'); const T = window.Forecut3D;
+  assert.equal(T.rigidity(150, 2), 120); // (150/10) × 2³
+  const chiffon = T.fromTests({ gsm: 70, bendWarp: 1.2 }).stiff, poplin = T.fromTests({ gsm: 115, bendWarp: 2.5 }).stiff, denim = T.fromTests({ gsm: 270, bendWarp: 3.5 }).stiff;
+  assert.ok(chiffon >= 5 && chiffon <= 20, 'chiffon ' + chiffon); assert.ok(poplin >= 50 && poplin <= 65, 'poplin ' + poplin); assert.ok(denim >= 78 && denim <= 92, 'denim ' + denim);
+  assert.equal(T.fromTests({ gsm: 150, bendWarp: 2, bendWeft: 2, angle: 45 }).fric, 1);
+  const r = { pts: T.POINTS.map((p, i) => ({ name: p[0], unit: p[1], tol: p[2], sim: 10, real: i < 9 ? 10.5 : 13 })) };
+  const e = T.evalRec(r); assert.equal(e.n, 10); assert.equal(e.ok, 9); assert.equal(e.verdict, 'Close: calibrate'); // one point 3 out on a tolerance of 1
+});
