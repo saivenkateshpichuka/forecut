@@ -66,13 +66,14 @@ code{background:#f0ebe2;padding:1px 5px;border-radius:4px}
         <span id="bMsg"></span></div>
     </div>
     <div class="card" id="mail" hidden>
-      <h2 style="font:600 19px/1.2 'Source Serif 4',serif;margin:0 0 4px">Email members from hello@forecut.in</h2>
+      <h2 style="font:600 19px/1.2 'Source Serif 4',serif;margin:0 0 4px">Email members from hello@forecut.in (Zoho Mail)</h2>
       <p class="sub" style="margin:0 0 10px" id="mailTo"></p>
-      <div class="bar"><label>Start from <select id="tpl"></select></label></div>
+      <div class="bar"><label>Message for <select id="tpl"></select></label></div>
       <input type="text" id="mSub" placeholder="Subject" style="width:100%;margin:0 0 8px">
       <textarea id="mBody" rows="10" style="width:100%;border:1px solid var(--line);border-radius:7px;padding:8px;font:14px/1.5 'DM Sans',sans-serif"></textarea>
       <div class="bar" style="margin:8px 0 4px" id="mailGo"></div>
-      <p class="sub" style="font-size:12.5px;margin:6px 0 0">Everyone goes in <b>Bcc</b>, so members never see each other's addresses. In Gmail, check the <b>From</b> line says hello@forecut.in before you press Send. Large lists open in batches of 50.</p>
+      <p class="sub" style="font-size:12.5px;margin:6px 0 0">Everyone goes in <b>Bcc</b>, so members never see each other's addresses. Lists over 50 open in batches of 50.<br>
+      <b>One-time setup so this opens Zoho:</b> sign in at mail.zoho.in → Settings → System → <b>Mail To Handlers</b> → <b>Enable Mail To Handler</b> → Allow. If the message does not fill in, use the Copy buttons and paste into a new Zoho email.</p>
     </div>
     <div class="card" id="imp" hidden>
       <h2 style="font:600 19px/1.2 'Source Serif 4',serif;margin:0 0 6px">Bring in everyone who has signed up</h2>
@@ -185,8 +186,7 @@ $('bApply').addEventListener('click', async () => {
 });
 function openMail(plan) {
   $('mail').hidden = false; $('mailBtn').setAttribute('aria-expanded', true);
-  const want = plan === 'student' ? 'Student access granted' : plan === 'alumni' ? 'Alumni access granted' : plan ? 'Access granted' : '';
-  const i = TPL.findIndex((t) => t[0] === want); if (i > 0) { $('tpl').value = i; $('tpl').dispatchEvent(new Event('change')); }
+  if (plan) pickTpl(plan, $('bUntil').value); else autoTpl();
   mailInfo(); $('mail').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 $('bMsg').addEventListener('click', (e) => { if (e.target.id === 'bTell') openMail(lastPlan); });
@@ -302,37 +302,55 @@ $('impGo').addEventListener('click', async () => {
   } catch (x) { $('impMsg').textContent = 'Not added: ' + x.message + '. Publish the latest Firestore rules, then try again.'; }
   $('impGo').disabled = false;
 });
-// ---- email from hello@forecut.in (Gmail or the mail app; members go in Bcc)
+// ---- email from hello@forecut.in through Zoho Mail (mailto, with Zoho set as the browser's mail handler); members go in Bcc
 const SIGN = '\n\nWarm regards,\nTeam Forecut\nhello@forecut.in · forecut.in\n\nYou are receiving this because you have a Forecut account. Reply "stop" and we won\'t email you again.';
 const TPL = [
-  ['Blank', '', ''],
-  ['Welcome', 'Welcome to Forecut', 'Hi there,\n\nThank you for joining Forecut. Here is where to start:\n\n• Seasons and India reports: forecut.in\n• Free tools for pattern making, colour, fabric and costing: forecut.in/tools\n• Your account and saved work: forecut.in/account\n\nIf anything is unclear or you would like a feature, just reply to this email.'],
-  ['Please sign in again', 'One quick step to switch on your Forecut access', 'Hi there,\n\nThank you for signing up to Forecut. Please open forecut.in once more and sign in with the same account. That is all we need to switch on your access.'],
-  ['Student access granted', 'Your Forecut student access is on', 'Hi there,\n\nYour Forecut student access is now active. Sign in at forecut.in/account to see it on your dashboard.\n\nUse the trend reports, the India season guides and every studio tool for your projects and portfolio. We would love to see what you make.'],
-  ['Alumni access granted', 'Your Forecut alumni access is on', 'Hi there,\n\nAs an alumnus, you now have free Forecut access. Sign in at forecut.in/account to see it on your dashboard.\n\nDo try the Textile Processing Studio, built for handloom and textile people like us. Your feedback would mean a lot.'],
-  ['Access granted', 'Your Forecut access is on', 'Hi there,\n\nYour Forecut access is now active. Sign in at forecut.in/account to see it, and the date it runs until, on your dashboard.\n\nEvery report and studio tool is open to you. If you need anything, just reply to this email.'],
-  ['Ask for feedback', 'Two minutes to help shape Forecut?', 'Hi there,\n\nForecut is built for designers, students and makers, and your view shapes what comes next. What do you use most, and what is missing?\n\nJust reply to this email. Every reply is read.'],
-  ['What is new', 'New on Forecut this month', 'Hi there,\n\nHere is what is new on Forecut this month:\n\n• \n• \n\nSee it all at forecut.in.']
+  ['', 'Blank', '', ''],
+  ['free', 'Welcome (free member)', 'Welcome to Forecut', 'Hi there,\n\nThank you for joining Forecut. Here is where to start:\n\n• Season and India trend reports: forecut.in\n• Studio tools for pattern making, colour, fabric and costing: forecut.in/tools\n• Your account and saved work: forecut.in/account\n\nIf anything is unclear or you would like a feature, just reply to this email.'],
+  ['student', 'Student access', 'Your Forecut student access is on', 'Hi there,\n\nYour Forecut student access is now active and runs until {until}. Sign in at forecut.in/account to see it on your dashboard.\n\nUse the trend reports, the India season guides and every studio tool for your projects and portfolio. We would love to see what you make.'],
+  ['alumni', 'Alumni access', 'Your Forecut alumni access is on', 'Hi there,\n\nAs an alumnus, you now have free Forecut access until {until}. Sign in at forecut.in/account to see it on your dashboard.\n\nDo try the Textile Processing Studio, built for handloom and textile people like us. Your feedback would mean a lot.'],
+  ['partner', 'Partner access', 'Your Forecut partner access is on', 'Hi there,\n\nThank you for partnering with Forecut. Your partner access is now active and runs until {until}. Sign in at forecut.in/account to see it on your dashboard.\n\nIf you would like to plan a session, a workshop or a shared project, just reply to this email.'],
+  ['individual', 'Individual plan', 'Your Forecut Individual plan is active', 'Hi there,\n\nThank you for choosing Forecut. Your Individual plan is now active and runs until {until}. Sign in at forecut.in/account to see it on your dashboard.\n\nEvery report and studio tool is open to you. If you need anything, just reply to this email.'],
+  ['team', 'Team plan', 'Your Forecut Team plan is active', 'Hi there,\n\nThank you for choosing Forecut for your team. Your Team plan is now active and runs until {until}.\n\nSign in at forecut.in/account and open Team to invite your colleagues and share styles. If you need help setting up, just reply to this email.'],
+  ['enterprise', 'Enterprise plan', 'Your Forecut Enterprise access is active', 'Hi there,\n\nThank you for working with Forecut. Your Enterprise access is now active and runs until {until}.\n\nSign in at forecut.in/account to get started. We are happy to set up a walkthrough for your team; just reply with a time that suits you.'],
+  ['signin', 'Please sign in again', 'One quick step to switch on your Forecut access', 'Hi there,\n\nThank you for signing up to Forecut. Please open forecut.in once more and sign in with the same account. That is all we need to switch on your access.'],
+  ['ending', 'Access ending soon', 'Your Forecut access ends soon', 'Hi there,\n\nA quick note that your Forecut access ends soon. To keep using every report and studio tool, just reply to this email and we will sort it out.\n\nThank you for being part of Forecut.'],
+  ['ended', 'Access ended', 'Your Forecut access has ended', 'Hi there,\n\nYour Forecut access has now ended. Your saved work stays in your account. To switch access back on, just reply to this email.\n\nThank you for being part of Forecut.'],
+  ['feedback', 'Ask for feedback', 'Two minutes to help shape Forecut?', 'Hi there,\n\nForecut is built for designers, students and makers, and your view shapes what comes next. What do you use most, and what is missing?\n\nJust reply to this email. Every reply is read.'],
+  ['news', 'What is new', 'New on Forecut this month', 'Hi there,\n\nHere is what is new on Forecut this month:\n\n• \n• \n\nSee it all at forecut.in.']
 ];
-$('tpl').innerHTML = TPL.map((t, i) => '<option value="' + i + '">' + esc(t[0]) + '</option>').join('');
-$('tpl').addEventListener('change', () => { const t = TPL[+$('tpl').value]; $('mSub').value = t[1]; $('mBody').value = t[2] ? t[2] + SIGN : ''; });
+const longDate = (d) => d ? new Date(d + 'T12:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+let mailUntil = '';
+$('tpl').innerHTML = TPL.map((t, i) => '<option value="' + i + '">' + esc(t[1]) + '</option>').join('');
+function fillTpl() {
+  const t = TPL[+$('tpl').value], u = longDate(mailUntil || untilFor(t[0]));
+  $('mSub').value = t[2];
+  $('mBody').value = t[3] ? (u ? t[3].replace(/\{until\}/g, u) : t[3].replace(/ (and )?runs until \{until\}| until \{until\}/g, '')) + SIGN : '';
+}
+$('tpl').addEventListener('change', () => { mailUntil = ''; fillTpl(); });
+function pickTpl(key, until) { const i = TPL.findIndex((t) => t[0] === key); if (i < 0) return; mailUntil = until || ''; $('tpl').value = i; fillTpl(); }
 function recipients() { const L = picked.size ? members.filter((m) => picked.has(m.uid)) : list(); return [...new Set(L.map((m) => (m.email || '').trim()).filter((e) => e.includes('@')))]; }
 function mailInfo() {
   if ($('mail').hidden) return;
   const R = recipients(), n = R.length, B = Math.ceil(n / 50);
-  $('mailTo').textContent = n ? 'To ' + n + (picked.size ? ' selected members' : ' members shown in the list below') + (picked.size ? '' : ' (tick boxes to choose people, or use search and the filter)') + '.' : 'Nobody to email. Tick some members or change the filter.';
+  $('mailTo').textContent = n ? 'To ' + n + (picked.size ? ' selected members.' : ' members shown in the list below (tick boxes to choose people, or use search and the filter).') : 'Nobody to email. Tick some members or change the filter.';
   let h = '';
-  for (let i = 0; i < B; i++) { const lab = B > 1 ? ' · batch ' + (i + 1) + ' of ' + B : ''; h += '<button class="btn" type="button" data-g="' + i + '">Open in Gmail' + lab + '</button><button class="btn o" type="button" data-a="' + i + '">Mail app' + lab + '</button>'; }
+  for (let i = 0; i < B; i++) { const lab = B > 1 ? ' · batch ' + (i + 1) + ' of ' + B : ''; h += '<button class="btn" type="button" data-z="' + i + '">Open in Zoho Mail' + lab + '</button><button class="btn o" type="button" data-cb="' + i + '">Copy Bcc list' + lab + '</button>'; }
+  if (n) h += '<button class="btn o" type="button" data-cs>Copy subject</button><button class="btn o" type="button" data-cm>Copy message</button><a class="btn o" href="https://mail.zoho.in/" target="_blank" rel="noopener">Open Zoho Mail</a><span id="mailOk"></span>';
   $('mailGo').innerHTML = h;
 }
 function batch(i) { return recipients().slice(i * 50, i * 50 + 50).join(','); }
+async function copy(t, what) { try { await navigator.clipboard.writeText(t); $('mailOk').textContent = what + ' copied.'; } catch (e) { prompt('Copy this:', t); } }
 $('mailGo').addEventListener('click', (e) => {
-  const g = e.target.closest('[data-g]'), a = e.target.closest('[data-a]'); if (!g && !a) return;
-  const bcc = batch(+(g || a).dataset[g ? 'g' : 'a']), su = $('mSub').value, body = $('mBody').value;
-  if (g) window.open('https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent('hello@forecut.in') + '&bcc=' + encodeURIComponent(bcc) + '&su=' + encodeURIComponent(su) + '&body=' + encodeURIComponent(body), '_blank', 'noopener');
-  else location.href = 'mailto:hello@forecut.in?bcc=' + encodeURIComponent(bcc) + '&subject=' + encodeURIComponent(su) + '&body=' + encodeURIComponent(body);
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.dataset.z != null) location.href = 'mailto:hello@forecut.in?bcc=' + encodeURIComponent(batch(+t.dataset.z)) + '&subject=' + encodeURIComponent($('mSub').value) + '&body=' + encodeURIComponent($('mBody').value);
+  else if (t.dataset.cb != null) copy(batch(+t.dataset.cb), 'Bcc list');
+  else if (t.hasAttribute('data-cs')) copy($('mSub').value, 'Subject');
+  else if (t.hasAttribute('data-cm')) copy($('mBody').value, 'Message');
 });
-$('mailBtn').addEventListener('click', () => { const o = $('mail').hidden; $('mail').hidden = !o; $('mailBtn').setAttribute('aria-expanded', o); mailInfo(); if (o) $('mail').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
+function autoTpl() { const f = $('flt').value; if (f.startsWith('p:')) pickTpl(f.slice(2)); else if (f === 'soon') pickTpl('ending'); else if (f === 'expired') pickTpl('ended'); }
+$('mailBtn').addEventListener('click', () => { const o = $('mail').hidden; $('mail').hidden = !o; $('mailBtn').setAttribute('aria-expanded', o); if (o) autoTpl(); mailInfo(); if (o) $('mail').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
+$('flt').addEventListener('change', () => { if (!$('mail').hidden) autoTpl(); });
 $('rows').addEventListener('change', (e) => { const c = e.target.closest('[data-pick]'); if (!c) return; c.checked ? picked.add(c.dataset.pick) : picked.delete(c.dataset.pick); bulkInfo(); mailInfo(); });
 $('all').addEventListener('change', (e) => { list().forEach((m) => e.target.checked ? picked.add(m.uid) : picked.delete(m.uid)); render(); bulkInfo(); });
 document.querySelector('.tabs').addEventListener('click', (e) => {
