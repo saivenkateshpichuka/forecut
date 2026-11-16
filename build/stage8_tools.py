@@ -29,7 +29,7 @@ def build():
                 f'<link rel="stylesheet" href="tools/tools.css?v={v}"><link rel="stylesheet" href="tools/stage8.css?v={v}"><script defer src="tools/validate3d.js?v={v}"></script><script defer src="tools/{js}?v={v}"></script></head>'
                 f'{T.body_open(slug)}<main id="main" class="fx-main">{T.title_row(slug, desc, note, extra_buttons="<button id=fxExample type=button>Load example</button>")}'
                 f'<div id="status" role="status" aria-live="polite"></div><div id="app" class="fx-app s8" data-fx-gate></div>'
-                f'<noscript>Turn on JavaScript to use this tool. Nothing you enter is sent to a server.</noscript>{T.foot(foot)}</main></div></body></html>')
+                f'<noscript>Turn on JavaScript to use this tool. Your work is saved in this browser and, when you are signed in, synced to your account.</noscript>{T.foot(foot)}</main></div></body></html>')
         (ROOT / f'{slug}.html').write_text(page)
 
 
