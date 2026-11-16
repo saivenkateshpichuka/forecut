@@ -29,6 +29,7 @@ python3 hubs.py
 python3 regions.py
 python3 image_requests.py
 python3 account.py
+python3 admin_page.py
 cp auth_src.js ../auth.js
 python3 reports.py
 python3 seo.py

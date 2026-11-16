@@ -1,0 +1,156 @@
+"""Write ../admin.html: the owner's private page for members, access and feedback.
+Not linked anywhere, noindex, left out of search and the sitemap. Data access is enforced by Firestore rules
+(admins/{uid} must exist), so the page shows nothing to anyone else."""
+import os
+R = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
+
+HTML = r'''<!doctype html>
+<html lang="en-IN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Forecut admin</title><meta name="robots" content="noindex,nofollow"><link rel="icon" href="/favicon.svg">
+<link rel="stylesheet" href="/fonts/fonts.css">
+<style>
+:root{--paper:#f5f0e8;--card:#fffcf7;--ink:#1c1714;--muted:#6e6259;--line:#e2dacd;--green:#1f3d33;--gsoft:#e8eee8;--clay:#a9481f}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14.5px/1.5 "DM Sans",system-ui,sans-serif}
+header{background:var(--green);color:#fff;padding:14px max(16px,env(safe-area-inset-left))}
+header .in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px;justify-content:space-between;flex-wrap:wrap}
+header b{font:800 15px/1 "DM Sans";letter-spacing:.16em}header a{color:#cfd9d2}
+main{max-width:1280px;margin:0 auto;padding:22px max(16px,env(safe-area-inset-left)) 60px}
+h1{font:600 28px/1.15 "Source Serif 4",Georgia,serif;margin:0 0 4px}.sub{color:var(--muted);margin:0 0 18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:0 0 16px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 16px}
+.stats div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}.stats b{display:block;font:600 26px/1.1 "Source Serif 4",serif;color:var(--green)}.stats span{color:var(--muted);font-size:12.5px}
+.tabs{display:flex;gap:6px;margin:0 0 12px}.tabs button{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:7px 14px;font:600 13px "DM Sans";cursor:pointer}.tabs button[aria-pressed=true]{background:var(--green);color:#fff;border-color:var(--green)}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 12px}
+input,select,button{font:inherit}input[type=search],select,input[type=date],input[type=text]{border:1px solid var(--line);border-radius:7px;padding:7px 9px;background:#fff;color:var(--ink)}
+input[type=search]{min-width:220px;flex:1}
+.btn{border:1px solid var(--green);background:var(--green);color:#fff;border-radius:7px;padding:7px 12px;font-weight:600;cursor:pointer}.btn.o{background:#fff;color:var(--green)}.btn.s{padding:5px 10px;font-size:12.5px}
+.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:980px;font-size:13.5px}th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:700 11px/1.2 "DM Sans";letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--paper);position:sticky;top:0}
+td small{color:var(--muted)}a{color:var(--green)}
+.tag{display:inline-block;font:700 11px "DM Sans";padding:3px 8px;border-radius:99px;background:var(--gsoft);color:var(--green)}.tag.new{background:#fde6db;color:#8a2f17}
+.acc{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.acc select{padding:5px}.acc input[type=date]{padding:4px}.acc input[type=text]{width:130px;padding:4px 6px}
+.msg{padding:12px 14px;border-radius:8px;background:var(--gsoft);margin:0 0 14px}.msg.err{background:#fbebeb}
+code{background:#f0ebe2;padding:1px 5px;border-radius:4px}
+:focus-visible{outline:2px solid var(--clay);outline-offset:2px}
+.fca,.fcfbb,.fcinst,.fcip,.fcfb{display:none!important}
+</style>
+<script type="module" src="/auth.js"></script>
+</head><body>
+<header><div class="in"><b>FORECUT · ADMIN</b><span id="who"></span></div></header>
+<main>
+<h1>Members</h1><p class="sub">Everyone who has signed in, the access you've given them, and their feedback.</p>
+<div id="state" class="msg">Loading…</div>
+<div id="app" hidden>
+  <div class="stats" id="stats"></div>
+  <div class="tabs" role="group" aria-label="View"><button type="button" data-tab="m" aria-pressed="true">Members</button><button type="button" data-tab="f" aria-pressed="false">Feedback</button></div>
+  <section id="tm">
+    <div class="bar">
+      <input type="search" id="q" placeholder="Search name or email">
+      <select id="flt"><option value="all">All members</option><option value="new">Signed up in the last 7 days</option><option value="active">Visited in the last 7 days</option><option value="acc">Has access granted</option><option value="noacc">No access granted</option></select>
+      <button class="btn o" type="button" id="copy">Copy emails</button>
+      <button class="btn o" type="button" id="csv">Download CSV</button>
+      <button class="btn o" type="button" id="reload">Refresh</button>
+    </div>
+    <p class="sub" id="note" style="margin:-4px 0 10px;font-size:12.5px"></p>
+    <div class="wrap"><table><thead><tr><th>Member</th><th>Signed up</th><th>Last visit</th><th>Sign-in</th><th>Access</th></tr></thead><tbody id="rows"></tbody></table></div>
+    <p class="sub" style="margin-top:10px;font-size:12.5px">Members appear here after their first visit since the admin page went live. For anyone missing, check Firebase console → Authentication → Users.</p>
+  </section>
+  <section id="tf" hidden><div class="wrap"><table><thead><tr><th>Date</th><th>From</th><th>Rating</th><th>Role</th><th>Uses</th><th>What to improve</th><th>Wished-for feature</th></tr></thead><tbody id="fb"></tbody></table></div></section>
+</div>
+</main>
+<script type="module">
+const FS = "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+const PLANS = [['free','Free member'],['student','Student'],['alumni','Alumni'],['partner','Partner'],['individual','Individual'],['team','Team'],['enterprise','Enterprise']];
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const fmt = (iso) => iso ? new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+const ago = (iso) => iso ? (Date.now() - new Date(iso).getTime()) / 864e5 : 1e9;
+let F, db, me, members = [], access = {}, feedback = [];
+function state(t, err) { const s = $('state'); s.hidden = !t; s.className = 'msg' + (err ? ' err' : ''); s.innerHTML = t || ''; }
+function wait() { return new Promise((r) => { const t = setInterval(() => { if (window.FCAuth) { clearInterval(t); r(); } }, 50); }); }
+await wait();
+window.FCAuth.onChange(async (u) => {
+  me = u;
+  if (!u) { $('who').textContent = ''; $('app').hidden = true; state('Sign in with your owner account to see members. <a href="/account?next=/admin">Sign in</a>'); return; }
+  $('who').textContent = u.email || '';
+  F = await import(FS); db = F.getFirestore(window.FCAuth.app);
+  let ok = false; try { ok = (await F.getDoc(F.doc(db, 'admins', u.uid))).exists(); } catch (e) { ok = false; }
+  if (!ok) {
+    $('app').hidden = true;
+    state('<b>This account is not set up as an admin yet.</b><br>Your user ID is <code>' + esc(u.uid) + '</code>.<br>In Firebase console → Firestore Database → Data, start a collection called <code>admins</code>, give the new document this user ID as its Document ID, add any field (for example <code>role</code> = <code>owner</code>), then save and refresh this page.<br>Also publish the latest Firestore rules first.', true);
+    return;
+  }
+  state(''); $('app').hidden = false; load();
+});
+async function load() {
+  state('Loading members…');
+  try {
+    const [p, a] = await Promise.all([F.getDocs(F.collection(db, 'profiles')), F.getDocs(F.collection(db, 'access'))]);
+    members = p.docs.map((d) => d.data()).sort((x, y) => (y.created || '').localeCompare(x.created || ''));
+    access = {}; a.docs.forEach((d) => { access[d.id] = d.data(); });
+    try { const f = await F.getDocs(F.collection(db, 'feedback')); feedback = f.docs.map((d) => d.data()).sort((x, y) => (y.at || '').localeCompare(x.at || '')); } catch (e) { feedback = []; }
+    state(''); stats(); render(); renderFb();
+  } catch (e) { state('Could not load members: ' + esc(e.message) + '. Check that the latest Firestore rules are published.', true); }
+}
+function hasAcc(m) { const a = access[m.uid]; return !!(a && a.plan && a.plan !== 'free' && (!a.until || a.until >= new Date().toISOString().slice(0, 10))); }
+function stats() {
+  const n = members.length;
+  const c = [[n, 'Members'], [members.filter((m) => ago(m.created) <= 1).length, 'New today'], [members.filter((m) => ago(m.created) <= 7).length, 'New in 7 days'],
+    [members.filter((m) => ago(m.lastSeen) <= 7).length, 'Visited in 7 days'], [members.filter(hasAcc).length, 'With access granted'], [feedback.length, 'Feedback received']];
+  $('stats').innerHTML = c.map(([v, l]) => '<div><b>' + v + '</b><span>' + l + '</span></div>').join('');
+}
+function list() {
+  const q = $('q').value.trim().toLowerCase(), f = $('flt').value;
+  return members.filter((m) => (!q || (m.name || '').toLowerCase().includes(q) || (m.email || '').includes(q))
+    && (f === 'all' || (f === 'new' && ago(m.created) <= 7) || (f === 'active' && ago(m.lastSeen) <= 7) || (f === 'acc' && hasAcc(m)) || (f === 'noacc' && !hasAcc(m))));
+}
+function render() {
+  const L = list();
+  $('note').textContent = L.length + ' shown';
+  $('rows').innerHTML = L.map((m) => {
+    const a = access[m.uid] || {}, plan = a.plan || 'free';
+    const prov = m.provider === 'google.com' ? 'Google' : 'Email';
+    return '<tr><td><b>' + esc(m.name || '—') + '</b>' + (ago(m.created) <= 7 ? ' <span class="tag new">New</span>' : '') + '<br><a href="mailto:' + esc(m.email) + '">' + esc(m.email) + '</a>' + (m.provider !== 'google.com' && !m.verified ? ' <small>(email not verified)</small>' : '') + '</td>'
+      + '<td>' + fmt(m.created) + '</td><td>' + fmt(m.lastSeen) + '<br><small>' + esc(m.lastPage || '') + '</small></td><td>' + prov + '</td>'
+      + '<td><div class="acc" data-uid="' + esc(m.uid) + '"><select aria-label="Access for ' + esc(m.email) + '">' + PLANS.map(([v, l]) => '<option value="' + v + '"' + (v === plan ? ' selected' : '') + '>' + l + '</option>').join('') + '</select>'
+      + '<input type="date" value="' + esc(a.until || '') + '" aria-label="Until"><input type="text" placeholder="Note" value="' + esc(a.note || '') + '" aria-label="Note">'
+      + '<button class="btn s" type="button" data-save>Save</button><small data-ok></small></div>'
+      + (a.by ? '<small>Set ' + fmt(a.at) + '</small>' : '') + '</td></tr>';
+  }).join('') || '<tr><td colspan="5">No members match.</td></tr>';
+}
+function renderFb() {
+  $('fb').innerHTML = feedback.map((f) => '<tr><td>' + fmt(f.at) + '</td><td>' + esc(f.name || '') + '<br><a href="mailto:' + esc(f.email) + '">' + esc(f.email || '') + '</a></td><td>' + esc(f.rating || '') + '</td><td>' + esc(f.role || '') + '</td><td>' + esc((f.uses || []).join(', ')) + '</td><td>' + esc(f.improve || '') + '</td><td>' + esc(f.wish || '') + '</td></tr>').join('') || '<tr><td colspan="7">No feedback yet.</td></tr>';
+}
+$('rows').addEventListener('click', async (e) => {
+  const b = e.target.closest('[data-save]'); if (!b) return;
+  const box = b.closest('.acc'), uid = box.dataset.uid, [sel, date, note] = box.querySelectorAll('select,input'), ok = box.querySelector('[data-ok]');
+  const d = { plan: sel.value, until: date.value || '', note: note.value.trim(), by: me.uid, at: new Date().toISOString() };
+  b.disabled = true; ok.textContent = 'Saving…';
+  try {
+    if (d.plan === 'free') { await F.deleteDoc(F.doc(db, 'access', uid)); delete access[uid]; }
+    else { await F.setDoc(F.doc(db, 'access', uid), d); access[uid] = d; }
+    ok.textContent = 'Saved'; stats();
+  } catch (x) { ok.textContent = 'Not saved: ' + x.message; }
+  b.disabled = false;
+});
+$('q').addEventListener('input', render); $('flt').addEventListener('change', render); $('reload').addEventListener('click', load);
+$('copy').addEventListener('click', async () => {
+  const em = list().map((m) => m.email).filter(Boolean).join(', ');
+  try { await navigator.clipboard.writeText(em); $('note').textContent = 'Copied ' + list().length + ' emails. Paste them into BCC.'; } catch (e) { prompt('Copy these emails:', em); }
+});
+$('csv').addEventListener('click', () => {
+  const rows = [['Name', 'Email', 'Signed up', 'Last visit', 'Sign-in', 'Access', 'Access until', 'Note']].concat(list().map((m) => { const a = access[m.uid] || {}; return [m.name || '', m.email || '', (m.created || '').slice(0, 10), (m.lastSeen || '').slice(0, 10), m.provider === 'google.com' ? 'Google' : 'Email', a.plan || 'free', a.until || '', a.note || '']; }));
+  const csv = rows.map((r) => r.map((c) => '"' + String(c).replace(/"/g, '""') + '"').join(',')).join('\n');
+  const u = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' })); const l = document.createElement('a'); l.href = u; l.download = 'forecut-members-' + new Date().toISOString().slice(0, 10) + '.csv'; l.click(); setTimeout(() => URL.revokeObjectURL(u), 2000);
+});
+document.querySelector('.tabs').addEventListener('click', (e) => {
+  const b = e.target.closest('[data-tab]'); if (!b) return;
+  document.querySelectorAll('.tabs button').forEach((x) => x.setAttribute('aria-pressed', x === b));
+  $('tm').hidden = b.dataset.tab !== 'm'; $('tf').hidden = b.dataset.tab !== 'f';
+});
+</script>
+</body></html>
+'''
+open(os.path.join(R, 'admin.html'), 'w').write(HTML)
+print('admin.html')

@@ -20,11 +20,13 @@ Allow: /
 Disallow: /build/
 Disallow: /images/
 Disallow: /dev/
+Disallow: /admin
 
 User-agent: *
 Allow: /
 Disallow: /build/
 Disallow: /images/
 Disallow: /dev/
+Disallow: /admin
 
 Sitemap: https://forecut.in/sitemap.xml
