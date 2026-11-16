@@ -60,7 +60,7 @@ def _season_block(s):
             if len(out) >= n: break
         return '<div class="tgrid">' + ''.join(f'<div class="tcd">{_ph(r[0], s)}<div class="in"><b>{E(r[0])}</b><small>{E(r[1])} · {E(r[2])}</small></div></div>' for r in out) + '</div>'
     fl = ', '.join(sorted({r[0] for r in fading})[:14])
-    return (f'<section class="wsec"><h2>{E(m["code"])} · {E(m.get("title", ""))}</h2><p class="sub">{len(rising)} details moving into Rising, {len(emerging)} Emerging and {len(fading)} Fading across womenswear, menswear and footwear.</p>'
+    return (f'<section class="wsec"><h2>{E(m["code"])} · {E(m.get("title", ""))}</h2><p class="sub">The details moving into Rising, the ones Emerging and the ones Fading, across womenswear, menswear and footwear.</p>'
             f'<h3 style="font:700 17px DM Sans,sans-serif;margin:14px 0 8px">Newly rising: invest</h3>{cards(rising, 8)}'
             f'<h3 style="font:700 17px DM Sans,sans-serif;margin:18px 0 8px">Emerging: test small</h3>{cards(emerging, 4)}'
             f'<div class="wcard" style="margin-top:14px"><div class="meta">Fading: reduce</div><p>{E(fl)}{"…" if len(fading) > 14 else ""}</p></div>'
@@ -68,8 +68,8 @@ def _season_block(s):
 
 
 tot = sum(len(v) for v in _M.values())
-body = (cover('Global Trend Report · 2026–2028', 'Global Trend Report: what the world will wear next', f'Forecut\'s worldwide outlook for {len(_S["seasons"])} seasons, from AW26 to AW28: the details rising, emerging and fading across womenswear, menswear and footwear, from {tot} tracked details.', 'hero-ss27')
-        + '<div class="kpis">' + ''.join(f'<div class="kpi"><b>{a}</b><span>{b}</span></div>' for a, b in [(str(tot), 'details tracked worldwide'), (str(len(_S['seasons'])), 'seasons forecast, AW26–AW28'), (str(len(_M)), 'categories across 3 departments'), ('4', 'lifecycle stages per detail')]) + '</div>'
+body = (cover('Global Trend Report · 2026–2028', 'Global Trend Report: what the world will wear next', f'Forecut\'s worldwide outlook for {len(_S["seasons"])} seasons, from AW26 to AW28: the details rising, emerging and fading across womenswear, menswear and footwear.', 'hero-ss27')
+        + '<div class="kpis">' + ''.join(f'<div class="kpi"><b>{a}</b><span>{b}</span></div>' for a, b in [(str(len(_S['seasons'])), 'seasons forecast, AW26–AW28'), (str(len(_M)), 'categories across 3 departments'), ('4', 'lifecycle stages per detail')]) + '</div>'
         + ''.join(_season_block(s) for s in ['ss27', 'aw27', 'ss28'])
         + '<section class="wsec howto"><h2>How to use this report</h2><ul><li><b>Rising:</b> commit to development and broader ranges.</li><li><b>Emerging:</b> test in small capsules.</li><li><b>Peaking:</b> keep in core, avoid over-buying.</li><li><b>Fading:</b> clear stock and move on.</li></ul></section>'
         '<p class="note">Statuses are Forecut\'s forecast, built from public runway, retail and trade signals and refined monthly. AW27, SS28 and AW28 are long-range outlooks.</p>')

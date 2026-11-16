@@ -172,7 +172,7 @@ onAuthStateChanged(auth, (u) => {
     const d = e.target.closest && e.target.closest('.d, .lbk, .mv');
     if (d && !e.target.closest('.scrim')) {
       let n = 0; try { n = +localStorage.getItem(key) || 0; } catch (x) {}
-      if (n >= LIMIT) { e.preventDefault(); e.stopImmediatePropagation(); gate('You have explored ' + LIMIT + ' details this month.'); return; }
+      if (n >= LIMIT) { e.preventDefault(); e.stopImmediatePropagation(); gate('You have reached this month\'s free detail views.'); return; }
       try { localStorage.setItem(key, String(n + 1)); } catch (x) {}
     }
   }, true);

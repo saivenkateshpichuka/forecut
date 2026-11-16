@@ -532,7 +532,6 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
       <p class="intro">%%INTRO%%</p>
       <p class="basis %%BASISCLS%%">%%BASISTEXT%%</p>
       <div class="stats">
-        <div><b>%%TOTAL%%</b><span>Details</span></div>
         <div><b>%%CATS%%</b><span>Categories</span></div>
         <div><b style="color:var(--chalk)">%%EMERGE%%</b><span>Emerging</span></div>
         <div><b style="color:var(--rise)">%%RISE%%</b><span>Rising</span></div>
@@ -657,7 +656,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
         });
         c.querySelectorAll('.sub').forEach(function (sb) { sb.hidden = !sb.querySelector('.d:not([hidden])'); });
         c.hidden = n === 0;
-        c.querySelector('.vis').textContent = n;
+        var vis = c.querySelector('.vis'); if (vis) vis.textContent = n;
         deptShown += n;
       });
       dp.hidden = deptShown === 0;
@@ -1108,18 +1107,18 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
     });
     var mixEl = document.getElementById('tvmix'); mixEl.innerHTML = '';
     var keyEl = el('div', 'mixkey');
-    ['e', 'r', 'p', 'f'].forEach(function (k) { if (!mix[k]) return; var seg = el('i'); seg.style.background = COL[k]; seg.style.width = (mix[k] / cards.length * 100) + '%'; seg.title = LBL[k] + ': ' + mix[k]; mixEl.appendChild(seg);
-      var s = el('span'); var dot = el('i'); dot.style.background = COL[k]; s.appendChild(dot); s.appendChild(document.createTextNode(LBL[k] + ' ' + mix[k])); keyEl.appendChild(s); });
+    ['e', 'r', 'p', 'f'].forEach(function (k) { if (!mix[k]) return; var seg = el('i'); seg.style.background = COL[k]; seg.style.width = (mix[k] / cards.length * 100) + '%'; seg.title = LBL[k] + ': ' + Math.round(mix[k] / cards.length * 100) + '%'; mixEl.appendChild(seg);
+      var s = el('span'); var dot = el('i'); dot.style.background = COL[k]; s.appendChild(dot); s.appendChild(document.createTextNode(LBL[k] + ' ' + Math.round(mix[k] / cards.length * 100) + '%')); keyEl.appendChild(s); });
     var bars = document.getElementById('tvcats'); bars.innerHTML = ''; bars.appendChild(keyEl);
     var rows = Object.keys(groups).sort(function (a, b) { return groups[b] - groups[a]; }), mx = rows.length ? groups[rows[0]] : 1;
     if (!rows.length) bars.appendChild(el('p', 'src', 'No matching details on this page yet.'));
-    rows.forEach(function (k) { var r = el('div', 'tbar'); r.appendChild(el('span', null, k)); var tr = el('span', 'track'); var f = el('i'); f.style.width = (groups[k] / mx * 100) + '%'; tr.appendChild(f); r.appendChild(tr); r.appendChild(el('b', null, String(groups[k]))); bars.appendChild(r); });
+    rows.forEach(function (k) { var r = el('div', 'tbar'); r.appendChild(el('span', null, k)); var tr = el('span', 'track'); var f = el('i'); f.style.width = (groups[k] / mx * 100) + '%'; tr.appendChild(f); r.appendChild(tr); bars.appendChild(r); });
     var pt = document.getElementById('tvprice'); pt.innerHTML = '';
     d.prices.forEach(function (p) { var tr = el('tr'); var th = el('th', null, p[0]); th.scope = 'row'; tr.appendChild(th); [1, 2, 3].forEach(function (j) { tr.appendChild(el('td', null, p[j])); }); pt.appendChild(tr); });
     document.getElementById('tvcostlvl').textContent = d.cost[0];
     document.getElementById('tvcost').textContent = d.cost[1];
     var ac = document.getElementById('tvact'); ac.innerHTML = ''; d.actions.forEach(function (a) { ac.appendChild(el('li', null, a)); });
-    document.getElementById('tvdeth').textContent = 'Related details (' + cards.length + ')';
+    document.getElementById('tvdeth').textContent = 'Related details';
     var det = document.getElementById('tvdet'); det.innerHTML = '';
     cards.forEach(function (c) {
       var b = el('button'); b.type = 'button'; var st = c.getAttribute('data-st');
@@ -1148,5 +1147,5 @@ function collapse(){if(!mq.matches)return;var q=(document.getElementById('q')||{
 document.querySelectorAll('.cat').forEach(function(c){var vis=[].filter.call(c.querySelectorAll('.d'),function(d){return !d.hidden;});
 vis.forEach(function(d,i){d.classList.toggle('xtra',!anyF&&i>=6);});[].forEach.call(c.querySelectorAll('.d[hidden]'),function(d){d.classList.remove('xtra');});
 var b=c.querySelector('.morebtn');if(!b){b=document.createElement('button');b.type='button';b.className='morebtn';b.onclick=function(){c.classList.add('open');};c.appendChild(b);}
-var n=vis.length;b.textContent='Show all '+n+' details';b.hidden=anyF||n<=6;});}
+var n=vis.length;b.textContent='Show all details';b.hidden=anyF||n<=6;});}
 collapse();document.addEventListener('click',function(e){if(e.target.closest('.tools'))setTimeout(collapse,0);});var qi=document.getElementById('q');if(qi)qi.addEventListener('input',function(){setTimeout(collapse,0);});})();</script>

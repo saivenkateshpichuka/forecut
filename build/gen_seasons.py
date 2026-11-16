@@ -76,8 +76,8 @@ for si, s in enumerate(SEASONS):
             c, l = SL[st]
             q = E((it['name'] + ' ' + it['area'] + ' ' + it['note'] + ' ' + cat).lower())
             cards.append(f'<article class="d" tabindex="0" role="button" aria-haspopup="dialog" data-st="{st}" data-life="{it["life"]}"{(' data-img="img/' + islug(it['name']) + '-' + s + '.webp"') if (islug(it['name']) + '-' + s) in IMGS else ((' data-img="img/' + islug(it['name']) + '.webp"') if (islug(it['name']) in IMGS and si == next(i for i, ch in enumerate(it['life']) if ch != '-')) else '')}{(' data-flatimg="img/flat-' + islug(it['name']) + '-' + s + '.webp"') if ('flat-' + islug(it['name']) + '-' + s) in IMGS else ((' data-flatimg="img/flat-' + islug(it['name']) + '.webp"') if ('flat-' + islug(it['name'])) in IMGS else '')} data-q="{q} {E(sname.lower())}"><div class="thumb" aria-hidden="true"></div><div class="dtop"><span class="area">{E(it["area"])}</span><span class="pill {c}">{l}</span></div><h4>{E(it["name"])}</h4><p>{E(it["note"])}</p><span class="open">View detail →</span></article>')
-          subhtml.append(f'<div class="sub" data-sub="{E(sname)}"><h5>{E(sname)} <span>{len(groups[sname])}</span></h5><div class="grid">{"".join(cards)}</div></div>')
-        secs.append(f'<section class="cat" id="{cid}" data-dept="{slug(dept)}"><div class="cathead"><h3>{E(cat)}</h3><span class="cnt"><span class="vis">{len(items)}</span> details</span></div>{"".join(subhtml)}</section>')
+          subhtml.append(f'<div class="sub" data-sub="{E(sname)}"><h5>{E(sname)}</h5><div class="grid">{"".join(cards)}</div></div>')
+        secs.append(f'<section class="cat" id="{cid}" data-dept="{slug(dept)}"><div class="cathead"><h3>{E(cat)}</h3></div>{"".join(subhtml)}</section>')
     secs.append('</div>')
     # season at a glance
     movers = []
@@ -92,7 +92,7 @@ for si, s in enumerate(SEASONS):
         movers += pick
     mv = ''.join(f'<button class="mv" type="button" data-name="{E(it["name"])}"><span class="gt" aria-hidden="true"></span><span><b>{E(it["name"])}</b><small class="{it["life"][si]}">{SL[it["life"][si]][1]} · {E(cat)}</small></span></button>' for it, cat in movers)
     tot = max(total, 1)
-    mixbar = ''.join(f'<i style="width:{counts[k] / tot * 100:.1f}%;background:var(--{v})" title="{SL[k][1]} {counts[k]}"></i>' for k, v in [('e', 'chalk'), ('r', 'rise'), ('p', 'peak'), ('f', 'fade')])
+    mixbar = ''.join(f'<i style="width:{counts[k] / tot * 100:.1f}%;background:var(--{v})" title="{SL[k][1]} {round(counts[k] / tot * 100)}%"></i>' for k, v in [('e', 'chalk'), ('r', 'rise'), ('p', 'peak'), ('f', 'fade')])
     mixkey = ''.join(f'<span style="--k:var(--{v})">{SL[k][1]} {round(counts[k] / tot * 100)}%</span>' for k, v in [('e', 'chalk'), ('r', 'rise'), ('p', 'peak'), ('f', 'fade')])
     pstrip = ''.join(f'<i style="background:{h}" title="{E(n)}"></i>' for h, n in m['palette'])
     qj = ''.join(f'<a href="#{slug(d)}-{slug(c)}">{short[d]} · {E(c)}</a>' for d, c in M['order'])
@@ -132,7 +132,7 @@ for si, s in enumerate(SEASONS):
         '%%ENGINE%%': engine, '%%SECS%%': ''.join(secs), '%%NAV%%': ''.join(nav), '%%SEASONNAV%%': snav,
         '%%THEMES%%': themes, '%%THEMEDATA%%': json.dumps(tdj, ensure_ascii=False).replace('</', '<\\/'), '%%PALETTE%%': pal, '%%COTY%%': coty, '%%HOME%%': HOME,
         '%%TOTAL%%': str(total), '%%CATS%%': str(len(M['order'])),
-        '%%RISE%%': str(counts['r']), '%%EMERGE%%': str(counts['e']), '%%PEAK%%': str(counts['p']), '%%FADE%%': str(counts['f']),
+        '%%RISE%%': str(round(counts['r'] * 100 / max(total, 1))) + '%', '%%EMERGE%%': str(round(counts['e'] * 100 / max(total, 1))) + '%', '%%PEAK%%': str(round(counts['p'] * 100 / max(total, 1))) + '%', '%%FADE%%': str(round(counts['f'] * 100 / max(total, 1))) + '%',
         '%%TITLEUP%%': m['title'].upper(), '%%STAGEUP%%': m['stage'].upper(), '%%WINDOWUP%%': m['window'].upper(),
         '%%GLANCEL%%': glance, '%%GLANCER%%': '' if len(m['coty']) > 1 else ('<div class="glance pcard"><div><h3>' + m['code'] + ' key colours</h3><div class="pgrid">' + ''.join(f'<div><i style="background:{h}"></i><span>{E(n)}</span></div>' for h, n in m['palette']) + '</div></div></div>'),
         '%%DESC%%': json.dumps(descs, ensure_ascii=False).replace('</', '<\\/'), '%%SITE%%': json.dumps(SITE, ensure_ascii=False),

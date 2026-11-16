@@ -68,7 +68,7 @@ class Report:
   self.picture(ROOT/'img/india-season-art'/(slug(self.code)+'.webp'),CW,325)
   self.text('AI-generated original forecast concept. Not a documented runway photograph.',7.5,'FCItalic',MUTED,after=15)
   self.text(r['focus'],12,after=12);self.text(r['basis'],9,'FCBold',after=10)
-  self.text(f'{len(items)} active details | {len(I.CATS)} categories | Full research, palette and development guidance',10,'FCBold',after=8)
+  self.text(f'{len(I.CATS)} categories | Full research, palette and development guidance',10,'FCBold',after=8)
   self.text('Prepared for Indian fashion brands, design teams and collection planners.',9,'FC',MUTED)
  def palette(self,r):
   self.new('Season at a glance','overview');self.heading(r['title']);self.text(r['focus'],12);self.text(r['basis'],9,'FCBold',after=15)
@@ -130,7 +130,7 @@ def main():
  for code in I.CODES:
   r=S.RESEARCH['seasons'].get(code) or festive26();items=[x for x in I.D if x[5][I.CODES.index(code)]!='-'];report=Report(code);report.cover(r,items);report.palette(r)
   report.new('Report contents','contents');report.heading('Inside this season')
-  for title,desc in [('Season strategy','Forecast focus, original palette and development priorities'),('Theme directions','Product opportunities, construction guidance and commercial actions'),('Category opportunities & calendar','Assortment guidance and sampling milestones'),('Complete detail library',str(len(items))+' illustrated detail pages, grouped by category'),('Research & methodology','Linked sources, evidence limits and review checkpoints')]:report.sub(title);report.text(desc,11,after=17)
+  for title,desc in [('Season strategy','Forecast focus, original palette and development priorities'),('Theme directions','Product opportunities, construction guidance and commercial actions'),('Category opportunities & calendar','Assortment guidance and sampling milestones'),('Complete detail library','Illustrated detail pages, grouped by category'),('Research & methodology','Linked sources, evidence limits and review checkpoints')]:report.sub(title);report.text(desc,11,after=17)
   report.text('PDF bookmarks navigate the principal sections. Every active detail from this season is included; inactive entries are not silently presented as current recommendations.',9,'FCItalic',MUTED)
   for i,t in enumerate(r['themes'],1):report.theme(t,i)
   report.new('Category opportunities','categories');report.heading('Build the assortment')
@@ -144,8 +144,10 @@ def main():
   report.sub('What would change this forecast?')
   for t in r['watch']:report.bullet(t,10)
   for dept,cat,*_ in I.CATS:
-   group=[x for x in items if x[0]==cat];report.new('Detail library / '+cat,'cat-'+slug(cat));report.heading(cat);report.text(str(len(group))+' active details | '+code,12,'FCBold');report.text('Illustrated design references, full development notes, material guidance and lifecycle for every active detail in this category.',11)
-   for x in group:report.bullet(x[2]+' - '+STATUS[x[5][report.si]],10)
+   group=[x for x in items if x[0]==cat];report.new('Detail library / '+cat,'cat-'+slug(cat));report.heading(cat);report.text('Active details | '+code,12,'FCBold');report.text('Illustrated design references, full development notes, material guidance and lifecycle for every active detail in this category.',11)
+   for x in group:
+    if report.y<80:report.new('Detail library / '+cat+' (continued)')
+    report.bullet(x[2]+' - '+STATUS[x[5][report.si]],10)
    for x in group:report.detail(x)
   report.new('Research & methodology','sources');report.heading('Evidence, with context');report.text(S.RESEARCH['method'],10.5,after=20)
   if not report.si:report.sub('Published Festive 26 source basis');report.text(I.META['sources'],10)

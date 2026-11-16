@@ -7,7 +7,7 @@ CODES=['Festive 26','Summer 27','Festive 27','Summer 28','Festive 28']
 def add(out):
  manifest=json.loads((ROOT/'build/india_pdf_manifest.json').read_text())
  def button(code,i):
-  m=manifest[code];return '<button type="button" class="season-pdf" data-pdf-si="'+str(i)+'" aria-label="Download complete '+E(code)+' report PDF">Download full report PDF ↓<small>'+str(m['pages'])+' pages · '+str(m['details'])+' details · '+str(round(m['bytes']/1048576,1))+' MB</small></button>'
+  m=manifest[code];return '<button type="button" class="season-pdf" data-pdf-si="'+str(i)+'" aria-label="Download complete '+E(code)+' report PDF">Download full report PDF ↓<small>'+str(m['pages'])+' pages · '+str(round(m['bytes']/1048576,1))+' MB</small></button>'
  # Keep this integrated with the generated season guide, not hand-edited HTML.
  n=0
  def card(match):
@@ -18,7 +18,7 @@ def add(out):
  for i,code in enumerate(CODES[1:],1):
   marker='<div class="ir-themes">'
   report=out.index('data-report-si="'+str(i)+'"');at=out.index(marker,report);m=manifest[code]
-  figure='<div class="ir-download">'+button(code,i)+'<p>Complete season report with images, all '+str(m['details'])+' active details, palette, design guidance, calendar and sources.</p></div><figure class="ir-season-art"><img src="'+m['hero']+'" alt="'+E(code)+' conceptual collection direction" width="1536" height="1024" loading="lazy"><figcaption>Original AI-generated Forecut concept art. Not a documented runway image.</figcaption></figure>'
+  figure='<div class="ir-download">'+button(code,i)+'<p>Complete season report with images, all active details, palette, design guidance, calendar and sources.</p></div><figure class="ir-season-art"><img src="'+m['hero']+'" alt="'+E(code)+' conceptual collection direction" width="1536" height="1024" loading="lazy"><figcaption>Original AI-generated Forecut concept art. Not a documented runway image.</figcaption></figure>'
   out=out[:at]+figure+out[at:]
  css='''.season-cover{margin:0 0 6px}.season-cover img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;display:block;border-radius:8px}.season-cover figcaption{font:500 9px var(--body);color:var(--muted);margin-top:5px}.season-pdf{cursor:pointer;background:var(--chalk);color:white;border:0;border-radius:8px;padding:11px 12px;font:700 13px var(--body);text-align:center;line-height:1.35}.season-pdf small{display:block;font:500 10.5px var(--body);opacity:.9;margin-top:4px}.season-pdf:hover{filter:brightness(.92)}.season-pdf:focus-visible{outline:3px solid var(--mat);outline-offset:3px}.ir-download{display:flex;gap:20px;align-items:center;border-block:1px solid var(--grid);padding:20px 0;margin:20px 0 28px}.ir-download p{font-size:14px;line-height:1.6;max-width:55ch}.ir-download .season-pdf{flex:none;min-width:240px}.ir-season-art{margin:0 0 30px}.ir-season-art img{display:block;width:100%;height:auto;border-radius:12px}.ir-season-art figcaption{font:500 12px var(--body);color:var(--muted);margin-top:8px}@media(max-width:700px){.ir-download{align-items:stretch;flex-direction:column;gap:5px}.ir-download .season-pdf{min-width:0}.season-cover figcaption{font-size:10px}}'''
  out=out.replace('</style>',css+'</style>',1)
