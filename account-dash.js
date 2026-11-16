@@ -26,7 +26,7 @@
     var D = data(), n = { styles: (window.ForecutStyle ? ForecutStyle.list().length : 0), projects: projects(D).length, files: files(D).length, saved: D.saved.length };
     $('dnav').innerHTML = PANES.map(function (p) { return '<button type="button" data-p="' + p[0] + '" aria-current="' + (p[0] === cur) + '">' + p[1] + (n[p[0]] ? '<small>' + n[p[0]] + '</small>' : '') + '</button>'; }).join('');
   }
-  function show(p) { cur = p; history.replaceState(null, '', '#' + p); nav(); var D = data(); $('pane').innerHTML = '<div class="pane">' + ({ overview: overview, styles: stylesPane, projects: projectsPane, files: filesPane, brand: brandPane, saved: savedPane, team: teamPane, account: accountPane }[p])(D) + '</div>'; if (p === 'brand') brandWire(); if (p === 'saved') runAlerts(); if (p === 'team') teamLoad(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  function show(p) { cur = p; history.replaceState(null, '', '#' + p); nav(); var D = data(); $('pane').innerHTML = '<div class="pane">' + ({ overview: overview, styles: stylesPane, projects: projectsPane, files: filesPane, brand: brandPane, saved: savedPane, team: teamPane, account: accountPane }[p])(D) + '</div>'; if (p === 'brand') brandWire(); if (p === 'saved') runAlerts(); if (p === 'team') teamLoad(); if (p === 'account') accessLoad(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
   // ---------- projects ----------
   function projects(D) {
     var out = [], c = D.col, s = D.st;
@@ -215,9 +215,18 @@
   function accountPane() {
     var u = user || {};
     return '<section class="card"><h2>Profile</h2><table class="ft2"><tr><td>Name</td><td style="text-align:left"><b>' + esc(u.displayName || '—') + '</b></td></tr><tr><td>Email</td><td style="text-align:left"><b>' + esc(u.email || '—') + '</b>' + (u.email && !u.emailVerified ? ' <small style="color:#c0392b">not verified</small>' : '') + '</td></tr><tr><td>Sign-in method</td><td style="text-align:left">' + esc(((u.providerData || [])[0] || {}).providerId === 'google.com' ? 'Google' : 'Email and password') + '</td></tr><tr><td>Member since</td><td style="text-align:left">' + esc(u.metadata && u.metadata.creationTime ? new Date(u.metadata.creationTime).toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '—') + '</td></tr></table></section>'
-      + '<section class="card"><h2>Plan</h2><div class="plan"><span class="tg">Early access</span><b style="font:700 16px DM Sans,sans-serif;display:block">Full access, complimentary</b><p>Every season is unlocked for you until plans open on 1 January 2027, including AW27, SS28, AW28 and India Summer 27 to Festive 28, plus reports and PDF downloads. Plans start at ₹999 a year for students and ₹2,999 a year for full access. <a href="/#pricing">See pricing</a>.</p></div></section>'
-      + '<section class="card"><h2>Data on this device</h2><p class="sub">Your tool work is stored in this browser, not on Forecut’s servers. Download a backup before clearing your browser or changing device.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="dbtn pri" type="button" data-act="dlall">Download all my work</button><button class="dbtn" type="button" data-act="rsall">Restore from a backup</button><button class="dbtn bad" type="button" data-act="wipe">Clear all tool data on this device</button></div></section>'
+      + '<section class="card"><h2>Plan</h2><div id="myAccess"></div><div class="plan"><span class="tg">Early access</span><b style="font:700 16px DM Sans,sans-serif;display:block">Full access, complimentary</b><p>Every season is unlocked for you until plans open on 1 January 2027, including AW27, SS28, AW28 and India Summer 27 to Festive 28, plus reports and PDF downloads. Plans start at ₹999 a year for students and ₹2,999 a year for full access. <a href="/#pricing">See pricing</a>.</p></div></section>'
+      + '<section class="card"><h2>Data on this device</h2><p class="sub">Your tool work is stored in this browser and, while sync is on, in your account. Download a backup to keep your own copy.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="dbtn pri" type="button" data-act="dlall">Download all my work</button><button class="dbtn" type="button" data-act="rsall">Restore from a backup</button><button class="dbtn bad" type="button" data-act="wipe">Clear all tool data on this device</button></div></section>'
       + '<section class="card"><h2>Sign out</h2><p class="sub">Your work stays in this browser after you sign out, and in your account if sync is on.</p><button class="dbtn" type="button" data-act="out">Sign out</button></section>';
+  }
+  function accessLoad() {
+    var box = $('myAccess'); if (!box || !window.FCAuth || !window.FCAuth.myAccess) return;
+    var NAMES = { student: 'Student access', alumni: 'Alumni access', partner: 'Partner access', individual: 'Individual plan', enterprise: 'Enterprise plan', team: 'Team access' };
+    window.FCAuth.myAccess().then(function (a) {
+      if (!a || !a.plan || a.plan === 'free') return;
+      var until = a.until ? new Date(a.until + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+      box.innerHTML = '<div class="plan" style="margin-bottom:10px"><span class="tg ok">Granted by Forecut</span><b style="font:700 16px DM Sans,sans-serif;display:block">' + esc(NAMES[a.plan] || a.plan) + '</b><p>' + (until ? 'Full access until ' + esc(until) + '.' : 'Full access.') + '</p></div>';
+    });
   }
   // ---------- backup ----------
   function dlAll() { try { localStorage.setItem('fc-last-backup', new Date().toISOString()); } catch (e) { } var o = { forecut: 'all-work', v: 1, at: new Date().toISOString(), data: {} }; allKeys().forEach(function (k) { var v = localStorage.getItem(k); if (v != null) o.data[k] = v; }); dl('forecut-my-work-' + new Date().toISOString().slice(0, 10) + '.json', JSON.stringify(o)); }

@@ -7,10 +7,33 @@ service cloud.firestore {
     function signedIn() { return request.auth != null; }
     function myEmail() { return request.auth.token.email.lower(); }
     function teamData(t) { return get(/databases/$(database)/documents/teams/$(t)).data; }
+    // the owner is listed in admins/{uid} (created by hand in the Firebase console; nobody can write it from the site)
+    function isAdmin() { return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
 
-    // feedback form: anyone signed in can send their own feedback; nobody can read it from the site
+    match /admins/{uid} {
+      allow read: if signedIn() && request.auth.uid == uid;
+    }
+
+    // member profile: each person writes only their own; the owner reads all on the admin page
+    match /profiles/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.uid == uid
+        && request.resource.data.keys().hasOnly(['uid', 'email', 'name', 'provider', 'verified', 'created', 'lastSeen', 'lastPage'])
+        && (request.auth.token.email == null || request.resource.data.email == request.auth.token.email.lower());
+      allow delete: if isAdmin();
+    }
+
+    // access granted by the owner (student, alumni, partner...): members read their own, only the owner writes
+    match /access/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow write: if isAdmin();
+    }
+
+    // feedback form: anyone signed in can send their own feedback; only the owner can read it
     match /feedback/{id} {
       allow create: if signedIn() && request.resource.data.uid == request.auth.uid;
+      allow read, delete: if isAdmin();
     }
 
     // personal sync: each person can only read and write their own copy

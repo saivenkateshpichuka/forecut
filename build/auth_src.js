@@ -43,6 +43,15 @@ window.FCAuth = {
   reset: (email) => sendPasswordResetEmail(auth, email),
   signOut: () => signOut(auth),
   onChange: (fn) => onAuthStateChanged(auth, fn),
+  // access granted by Forecut (student, alumni, partner…): { plan, until, note } or null
+  myAccess: async () => {
+    const u = auth.currentUser; if (!u) return null;
+    try {
+      const F = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
+      const d = await F.getDoc(F.doc(F.getFirestore(app), 'access', u.uid));
+      return d.exists() ? d.data() : null;
+    } catch (e) { return null; }
+  },
   // feedback goes to the Firestore "feedback" collection; if that is not available, it opens an email instead
   sendFeedback: async (d) => {
     const u = auth.currentUser, doc = Object.assign({}, d, { uid: u ? u.uid : '', email: u ? u.email || '' : '', name: u ? u.displayName || '' : '', page: location.pathname, at: new Date().toISOString(), ua: navigator.userAgent.slice(0, 200) });
@@ -95,6 +104,23 @@ function unlock() {
 }
 // cloud sync and teams load only for signed-in people
 onAuthStateChanged(auth, (u) => { if (u) import('/sync.js').then((m) => m.start(app, auth, u)).catch(() => {}); });
+// ---- member profile for the admin page: name, email, sign-up date and last visit (written at most once a day) ----
+const FS = "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+onAuthStateChanged(auth, async (u) => {
+  if (!u) return;
+  const day = new Date().toISOString().slice(0, 10), k = 'fcp-seen-' + u.uid;
+  try { if (localStorage.getItem(k) === day) return; } catch (e) {}
+  try {
+    const F = await import(FS);
+    await F.setDoc(F.doc(F.getFirestore(app), 'profiles', u.uid), {
+      uid: u.uid, email: (u.email || '').toLowerCase(), name: u.displayName || '',
+      provider: ((u.providerData || [])[0] || {}).providerId || 'password', verified: !!u.emailVerified,
+      created: u.metadata && u.metadata.creationTime ? new Date(u.metadata.creationTime).toISOString() : '',
+      lastSeen: new Date().toISOString(), lastPage: location.pathname
+    }, { merge: true });
+    try { localStorage.setItem(k, day); } catch (e) {}
+  } catch (e) {}
+});
 onAuthStateChanged(auth, (u) => {
   if (u) { unlock(); const cta = document.querySelector('header.hero#top .cta a[href*="account"]'); if (cta) { cta.textContent = 'My saved details'; cta.href = '/account.html#saved'; } } else if (wasMember) { location.reload(); return; }
   wasMember = !!u;
