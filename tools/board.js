@@ -285,7 +285,7 @@
     if (a === 'png') exportPNG();
     if (a === 'json') exportJSON();
     if (a === 'load') $('#bdFile').click();
-    if (a === 'tobrief') { var t = find(sel[0]); S.mode = 'brief'; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} location.href = 'trend-to-style.html?detail=' + encodeURIComponent((t.text || '').split('\n')[0].slice(0, 120)); }
+    if (a === 'tobrief') { var t = find(sel[0]); S.mode = 'brief'; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} location.href = 'trend-to-style?detail=' + encodeURIComponent((t.text || '').split('\n')[0].slice(0, 120)); }
   }
   function pickTemplate() {
     var d = document.createElement('div'); d.className = 'bd-pick'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-label', 'Choose a board');
@@ -380,7 +380,7 @@
   /* ---------- import from Collection Planner ---------- */
   function importPlanner() {
     var C = null; try { C = JSON.parse(localStorage.getItem('fc-collection-workspace-v1') || 'null'); } catch (e) { C = null; }
-    if (!C || ((!C.styles || !C.styles.length) && (!C.palette || !C.palette.length))) { status('Nothing to import yet: add styles in Collection Planner first.'); if (confirm('Your Collection Planner has no styles yet. Open Collection Planner now?')) location.href = 'rangeboard.html'; return; }
+    if (!C || ((!C.styles || !C.styles.length) && (!C.palette || !C.palette.length))) { status('Nothing to import yet: add styles in Collection Planner first.'); if (confirm('Your Collection Planner has no styles yet. Open Collection Planner now?')) location.href = 'rangeboard'; return; }
     var items = B().items.filter(function (i) { return i.type !== 'arrow'; }), x0 = items.length ? Math.max.apply(null, items.map(function (i) { return i.x + i.w; })) + 160 : 0, y0 = items.length ? Math.min.apply(null, items.map(function (i) { return i.y; })) : 0;
     var st = C.styles || [], pal = C.palette || [], cols = Math.min(5, Math.max(1, st.length)), cw = 250, chH = 420, rows = Math.ceil(st.length / cols), W = Math.max(cols * cw + 60, 900), out = [];
     snapshot();

@@ -34,9 +34,9 @@
   function navHTML(cur) {
     return STAGES.map(function (st, i) {
       return '<div class="fx-group"><span class="fx-group-name"><b>0' + (i + 1) + '</b> ' + esc(st[0]) + '</span>' + st[1].map(function (t) {
-        return '<a href="' + t[0] + '.html"' + (t[0] === 'pattern-maker' ? ' target="_blank" rel="noopener"' : '') + (t[0] === cur ? ' aria-current="page"' : '') + '><span>' + esc(t[1]) + '</span><small>' + esc(t[2]) + '</small></a>';
+        return '<a href="' + t[0] + '"' + (t[0] === 'pattern-maker' ? ' target="_blank" rel="noopener"' : '') + (t[0] === cur ? ' aria-current="page"' : '') + '><span>' + esc(t[1]) + '</span><small>' + esc(t[2]) + '</small></a>';
       }).join('') + '</div>';
-    }).join('') + '<a class="fx-all" href="tools.html">All tools overview →</a>';
+    }).join('') + '<a class="fx-all" href="tools/">All tools overview →</a>';
   }
 
   /* ---------- Stage 10: breadcrumb and save state, command palette, simple view, friendly errors ---------- */
@@ -49,15 +49,15 @@
       var col = (document.getElementById('collectionName') || {}).value || (J2('fc-collection-workspace-v1', {}) || {}).name || 'My collection';
       var F = window.ForecutStyle, s = F && F.active && F.active(), R = window.ForecutRev, c = R && R.current && R.current();
       var last = J2('fc-last-backup', null), days = last ? Math.floor((Date.now() - Date.parse(last)) / 864e5) : null;
-      var bk = days == null ? '<a href="account.html#files" class="fx-bk warn">No backup yet</a>' : days > 14 ? '<a href="account.html#files" class="fx-bk warn">Last backup ' + days + ' days ago</a>' : '<a href="account.html#files" class="fx-bk">Backed up ' + (days ? days + ' day' + (days > 1 ? 's' : '') + ' ago' : 'today') + '</a>';
-      el.innerHTML = '<ol><li><a href="rangeboard.html">' + esc(col) + '</a></li>' + (s ? '<li><a href="style-tracker.html">' + esc(s.id) + ' · ' + esc(s.name) + '</a></li><li>Rev ' + (s.rev || 1) + (c ? ' · ' + esc(c.status) : '') + '</li>' : '<li><span class="fx-dim">No style selected</span></li>') + '<li aria-current="page">' + esc(toolName(here()) || document.title.split('|')[0].trim()) + '</li></ol><span class="fx-save"><span aria-hidden="true">●</span> Saved in this browser · ' + bk + '<button type="button" class="fx-k" data-fxk title="Search tools and actions">Ctrl K</button></span>';
+      var bk = days == null ? '<a href="account#files" class="fx-bk warn">No backup yet</a>' : days > 14 ? '<a href="account#files" class="fx-bk warn">Last backup ' + days + ' days ago</a>' : '<a href="account#files" class="fx-bk">Backed up ' + (days ? days + ' day' + (days > 1 ? 's' : '') + ' ago' : 'today') + '</a>';
+      el.innerHTML = '<ol><li><a href="rangeboard">' + esc(col) + '</a></li>' + (s ? '<li><a href="style-tracker">' + esc(s.id) + ' · ' + esc(s.name) + '</a></li><li>Rev ' + (s.rev || 1) + (c ? ' · ' + esc(c.status) : '') + '</li>' : '<li><span class="fx-dim">No style selected</span></li>') + '<li aria-current="page">' + esc(toolName(here()) || document.title.split('|')[0].trim()) + '</li></ol><span class="fx-save"><span aria-hidden="true">●</span> Saved in this browser · ' + bk + '<button type="button" class="fx-k" data-fxk title="Search tools and actions">Ctrl K</button></span>';
     }
     setTimeout(paint, 900);
   }
-  var ACTIONS = [['New style', function () { var F = window.ForecutStyle; if (F && F.dialog) F.dialog(null); else location.href = 'account.html#styles'; }], ['Revisions and sign-off', function () { if (window.ForecutRev) ForecutRev.open(); else alert('Choose a style first.'); }], ['Print or save this tool as PDF', function () { var p = document.getElementById('print'); if (p) p.click(); else window.print(); }], ['Back up all my work', function () { location.href = 'account.html#files'; }], ['My styles', function () { location.href = 'account.html#styles'; }], ['Style tracker', function () { location.href = 'style-tracker.html'; }], ['Toggle simple view', function () { setSimple(!document.body.classList.contains('fx-simple')); }], ['Keyboard shortcuts', function () { alert('Ctrl/⌘ K: search tools and actions\n/ in the Textile Calculator: search calculators\nEsc: close dialogs and menus\nGarment Studio: hover a tool for its shortcut'); }]];
+  var ACTIONS = [['New style', function () { var F = window.ForecutStyle; if (F && F.dialog) F.dialog(null); else location.href = 'account#styles'; }], ['Revisions and sign-off', function () { if (window.ForecutRev) ForecutRev.open(); else alert('Choose a style first.'); }], ['Print or save this tool as PDF', function () { var p = document.getElementById('print'); if (p) p.click(); else window.print(); }], ['Back up all my work', function () { location.href = 'account#files'; }], ['My styles', function () { location.href = 'account#styles'; }], ['Style tracker', function () { location.href = 'style-tracker'; }], ['Toggle simple view', function () { setSimple(!document.body.classList.contains('fx-simple')); }], ['Keyboard shortcuts', function () { alert('Ctrl/⌘ K: search tools and actions\n/ in the Textile Calculator: search calculators\nEsc: close dialogs and menus\nGarment Studio: hover a tool for its shortcut'); }]];
   function palette() {
     var old = document.querySelector('.fx-pal'); if (old) { old.remove(); return; }
-    var items = [], F = window.ForecutStyle; STAGES.forEach(function (st) { st[1].forEach(function (t) { items.push({ t: t[1], s: st[0] + ' · ' + t[2], go: t[0] + '.html' }); }); });
+    var items = [], F = window.ForecutStyle; STAGES.forEach(function (st) { st[1].forEach(function (t) { items.push({ t: t[1], s: st[0] + ' · ' + t[2], go: t[0] }); }); });
     ACTIONS.forEach(function (a) { items.push({ t: a[0], s: 'Action', fn: a[1] }); });
     if (F && F.list) F.list().slice(0, 40).forEach(function (s) { items.push({ t: s.id + ' · ' + s.name, s: 'Switch to this style', fn: function () { F.setActive(s.id); } }); });
     var w = document.createElement('div'); w.className = 'fx-pal'; w.setAttribute('role', 'dialog'); w.setAttribute('aria-modal', 'true'); w.setAttribute('aria-label', 'Search tools and actions');

@@ -121,7 +121,7 @@ app.innerHTML = `<div class="dr" id="drRoot">
   <aside class="dr-2d" aria-label="Pattern pieces and measurements">
     <section><h2>Pattern pieces</h2><p class="dr-note">Matching colours are sewn together.</p><div id="drPieces"></div></section>
     <section><h2>Garment and body</h2><table class="dr-tab" id="drTab"></table></section>
-    <section class="dr-pm"><a href="pattern-maker.html" target="_blank" rel="noopener" id="drPM">Open this pattern in Garment Studio ↗</a>
+    <section class="dr-pm"><a href="pattern-maker" target="_blank" rel="noopener" id="drPM">Open this pattern in Garment Studio ↗</a>
       <p class="dr-note">The 3D view shows proportion, balance and where the garment touches the body. It is a preview, not a fit sample: always sew a toile before production.</p></section>
   </aside>
 </div>`;
@@ -971,7 +971,7 @@ function onMsg(e) {
   if (d.type === 'bodypos') { if (!lastBody) return; curBody = Object.assign({}, lastBody, { pos: d.pos, J: Object.assign({}, lastBody.J, d.eyes || {}) }); buildBody(curBody); dirty = true; if (d.done && d.joints) { drawPoseJoints(d.joints); if (d.poseMap && poseTurned) { S.poseMap = d.poseMap; save(); poseTurned = false; const ps = $('#drPreset'); if (ps && ps.value) { ps.insertAdjacentHTML('beforeend', '<option value="">Custom pose</option>'); ps.value = ''; } } } if (d.done) status('Posed: ' + ((D.POSES[S.preset] || {}).n || 'A-pose') + '. Settling the cloth…', 'run'); return; }
   if (d.type === 'mesh') { elastics = []; elG.clear();
     built = true; panelOf = d.panel; lastMesh = d; selPanel = -1; PS = {}; pins = []; tackA = null; tackLines = []; setTimeout(() => { const U = tUser(); U.zips.forEach((z, i) => { z.pairs = null; if (z.closed && d.panels[z.a[0]] && d.panels[z.a[0]].name === z.an) worker.postMessage({ cmd: 'zip', a: z.a, b: z.b, id: i, gen }); }); U.btns.forEach(bt => { bt.pair = null; if (bt.hole != null && U.holes[bt.hole]) { const h = U.holes[bt.hole], bi = nearestVert(bt.pi, bt.u, bt.v), hi = nearestVert(h.pi, h.u, h.v); if (bi >= 0 && hi >= 0) { bt.pair = [bi, hi]; worker.postMessage({ cmd: 'tack', a: bi, b: hi, gen }); } } }); }, 0); if (+S.pucker) worker.postMessage({ cmd: 'pucker', a: S.pucker / 100, gen }); tc.detach(); $('#drGz').hidden = true; buildGarment(d); drawPieces(d); drawTable(d, baseMeas()); fitTarget(curBody, d); setView(view, false);
-    $('#drPM').href = 'pattern-maker.html'; return;
+    $('#drPM').href = 'pattern-maker'; return;
   }
   if (d.type === 'frame') {
     posAttr.array.set(d.x); posAttr.needsUpdate = true; garMesh.geometry.computeVertexNormals(); garMesh.geometry.computeBoundingSphere(); updateTrims(); dirty = true; if (elastics.length && (d.done || d.gap)) drawElastics();
