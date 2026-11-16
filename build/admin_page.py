@@ -33,6 +33,7 @@ td small{color:var(--muted)}a{color:var(--green)}
 .msg{padding:12px 14px;border-radius:8px;background:var(--gsoft);margin:0 0 14px}.msg.err{background:#fbebeb}
 code{background:#f0ebe2;padding:1px 5px;border-radius:4px}
 :focus-visible{outline:2px solid var(--clay);outline-offset:2px}
+#bulk{position:sticky;top:0;z-index:5;box-shadow:0 6px 18px rgba(28,23,20,.12);border-color:var(--green)}#bulk .bar{margin:0}.tag.exp{background:#fbebeb;color:#8a1f1f}.dur{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px 18px}.dur label{display:flex;gap:8px;align-items:center;justify-content:space-between}
 .fca,.fcfbb,.fcinst,.fcip,.fcfb{display:none!important}
 </style>
 <script type="module" src="/auth.js"></script>
@@ -47,12 +48,28 @@ code{background:#f0ebe2;padding:1px 5px;border-radius:4px}
   <section id="tm">
     <div class="bar">
       <input type="search" id="q" placeholder="Search name or email">
-      <select id="flt"><option value="all">All members</option><option value="new">Signed up in the last 7 days</option><option value="active">Visited in the last 7 days</option><option value="acc">Has access granted</option><option value="noacc">No access granted</option></select>
+      <select id="flt"><option value="all">All members</option><option value="new">Signed up in the last 7 days</option><option value="active">Visited in the last 7 days</option><option value="acc">Has access granted</option><option value="noacc">No access granted</option><option value="soon">Access ends in 30 days</option><option value="expired">Access ended</option><option value="p:student">Students</option><option value="p:alumni">Alumni</option><option value="p:partner">Partners</option><option value="p:individual">Individual</option><option value="p:team">Team</option><option value="p:enterprise">Enterprise</option></select>
       <button class="btn o" type="button" id="copy">Copy emails</button>
       <button class="btn o" type="button" id="csv">Download CSV</button>
       <button class="btn o" type="button" id="reload">Refresh</button>
       <button class="btn" type="button" id="impBtn" aria-expanded="false">Import from Firebase</button>
       <button class="btn" type="button" id="mailBtn" aria-expanded="false">Send email</button>
+      <button class="btn o" type="button" id="durBtn" aria-expanded="false">Plan durations</button>
+    </div>
+    <div class="card" id="dur" hidden>
+      <h2 style="font:600 19px/1.2 'Source Serif 4',serif;margin:0 0 4px">How long each plan lasts</h2>
+      <p class="sub" style="margin:0 0 10px">When you choose a plan for someone, the end date fills in from here. You can still change any single date by hand.</p>
+      <div class="dur" id="durList"></div>
+    </div>
+    <div class="card" id="bulk" hidden>
+      <div class="bar"><b id="bulkN"></b>
+        <label>Give <select id="bPlan"></select></label>
+        <label>until <input type="date" id="bUntil"></label>
+        <input type="text" id="bNote" placeholder="Note (optional)">
+        <button class="btn" type="button" id="bApply">Apply to selected</button>
+        <button class="btn o" type="button" id="bMail">Email selected</button>
+        <button class="btn o" type="button" id="bClear">Clear selection</button>
+        <span id="bMsg"></span></div>
     </div>
     <div class="card" id="mail" hidden>
       <h2 style="font:600 19px/1.2 'Source Serif 4',serif;margin:0 0 4px">Email members from hello@forecut.in</h2>
@@ -118,6 +135,69 @@ async function load() {
   } catch (e) { state('Could not load members: ' + esc(e.message) + '. Check that the latest Firestore rules are published.', true); }
 }
 function hasAcc(m) { const a = access[m.uid]; return !!(a && a.plan && a.plan !== 'free' && (!a.until || a.until >= new Date().toISOString().slice(0, 10))); }
+function today() { return new Date().toISOString().slice(0, 10); }
+function addDays(n) { const d = new Date(); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); }
+function isExpired(m) { const a = access[m.uid]; return !!(a && a.plan && a.plan !== 'free' && a.until && a.until < today()); }
+// plan durations: '1m' '3m' '6m' '1y' '2y', a fixed date, or 'none'; kept in this browser
+const DUR0 = { student: '1y', alumni: '2027-06-30', partner: '6m', individual: '1m', team: '1m', enterprise: '1y' };
+let DUR = Object.assign({}, DUR0); try { Object.assign(DUR, JSON.parse(localStorage.getItem('fc-admin-dur') || '{}')); } catch (e) {}
+function untilFor(plan) {
+  const v = DUR[plan]; if (!v || plan === 'free' || v === 'none') return '';
+  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
+  const d = new Date(), n = parseInt(v, 10);
+  if (v.endsWith('y')) d.setFullYear(d.getFullYear() + n); else d.setMonth(d.getMonth() + n);
+  d.setDate(d.getDate() - 1); return d.toISOString().slice(0, 10);
+}
+const DOPT = [['1m', '1 month'], ['3m', '3 months'], ['6m', '6 months'], ['1y', '1 year'], ['2y', '2 years'], ['date', 'Until a fixed date'], ['none', 'No end date']];
+function renderDur() {
+  $('durList').innerHTML = PLANS.filter(([v]) => v !== 'free').map(([v, l]) => { const cur = DUR[v] || 'none', fixed = /^\d{4}/.test(cur);
+    return '<label data-p="' + v + '"><b>' + l + '</b><span><select>' + DOPT.map(([k, t]) => '<option value="' + k + '"' + ((fixed ? 'date' : cur) === k ? ' selected' : '') + '>' + t + '</option>').join('') + '</select> <input type="date" value="' + (fixed ? cur : '') + '"' + (fixed ? '' : ' hidden') + '></span></label>'; }).join('');
+}
+$('durList').addEventListener('change', (e) => {
+  const l = e.target.closest('[data-p]'), sel = l.querySelector('select'), dt = l.querySelector('input');
+  dt.hidden = sel.value !== 'date'; if (sel.value === 'date' && !dt.value) dt.value = '2027-06-30';
+  DUR[l.dataset.p] = sel.value === 'date' ? dt.value : sel.value;
+  try { localStorage.setItem('fc-admin-dur', JSON.stringify(DUR)); } catch (x) {}
+  $('bUntil').value = untilFor($('bPlan').value);
+});
+$('durBtn').addEventListener('click', () => { const o = $('dur').hidden; $('dur').hidden = !o; $('durBtn').setAttribute('aria-expanded', o); renderDur(); });
+async function saveAccess(uid, d) {
+  if (d.plan === 'free') { await F.deleteDoc(F.doc(db, 'access', uid)); delete access[uid]; }
+  else { await F.setDoc(F.doc(db, 'access', uid), d); access[uid] = d; }
+}
+function bulkInfo() {
+  $('bulk').hidden = !picked.size; $('bulkN').textContent = picked.size + ' selected';
+  $('note').textContent = list().length + ' shown' + (picked.size ? ' · ' + picked.size + ' selected' : '');
+}
+$('bPlan').innerHTML = PLANS.map(([v, l]) => '<option value="' + v + '"' + (v === 'student' ? ' selected' : '') + '>' + (v === 'free' ? 'Free member (remove access)' : l) + '</option>').join('');
+$('bUntil').value = untilFor('student');
+$('bPlan').addEventListener('change', () => { $('bUntil').value = untilFor($('bPlan').value); });
+let lastPlan = '';
+$('bApply').addEventListener('click', async () => {
+  const plan = $('bPlan').value, ids = [...picked]; if (!ids.length) return;
+  const d = { plan, until: plan === 'free' ? '' : $('bUntil').value, note: $('bNote').value.trim(), by: me.uid, at: new Date().toISOString() };
+  $('bApply').disabled = true; $('bMsg').textContent = 'Saving…';
+  try {
+    for (let i = 0; i < ids.length; i += 400) {
+      const b = F.writeBatch(db);
+      ids.slice(i, i + 400).forEach((u) => { const r = F.doc(db, 'access', u); plan === 'free' ? b.delete(r) : b.set(r, d); });
+      await b.commit();
+    }
+    ids.forEach((u) => { if (plan === 'free') delete access[u]; else access[u] = Object.assign({}, d); });
+    lastPlan = plan; stats(); render(); bulkInfo();
+    $('bMsg').innerHTML = 'Done for ' + ids.length + '. ' + (plan === 'free' ? '' : '<button class="btn s" type="button" id="bTell">Email them now</button>');
+  } catch (x) { $('bMsg').textContent = 'Not saved: ' + x.message; }
+  $('bApply').disabled = false;
+});
+function openMail(plan) {
+  $('mail').hidden = false; $('mailBtn').setAttribute('aria-expanded', true);
+  const want = plan === 'student' ? 'Student access granted' : plan === 'alumni' ? 'Alumni access granted' : plan ? 'Access granted' : '';
+  const i = TPL.findIndex((t) => t[0] === want); if (i > 0) { $('tpl').value = i; $('tpl').dispatchEvent(new Event('change')); }
+  mailInfo(); $('mail').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+$('bMsg').addEventListener('click', (e) => { if (e.target.id === 'bTell') openMail(lastPlan); });
+$('bMail').addEventListener('click', () => openMail(''));
+$('bClear').addEventListener('click', () => { picked.clear(); $('all').checked = false; render(); bulkInfo(); });
 function stats() {
   const n = members.length;
   const c = [[n, 'Members'], [members.filter((m) => ago(m.created) <= 1).length, 'New today'], [members.filter((m) => ago(m.created) <= 7).length, 'New in 7 days'],
@@ -127,7 +207,9 @@ function stats() {
 function list() {
   const q = $('q').value.trim().toLowerCase(), f = $('flt').value;
   return members.filter((m) => (!q || (m.name || '').toLowerCase().includes(q) || (m.email || '').includes(q))
-    && (f === 'all' || (f === 'new' && ago(m.created) <= 7) || (f === 'active' && ago(m.lastSeen) <= 7) || (f === 'acc' && hasAcc(m)) || (f === 'noacc' && !hasAcc(m))));
+    && (f === 'all' || (f === 'new' && ago(m.created) <= 7) || (f === 'active' && ago(m.lastSeen) <= 7) || (f === 'acc' && hasAcc(m)) || (f === 'noacc' && !hasAcc(m))
+    || (f === 'soon' && hasAcc(m) && (access[m.uid].until || '9') <= addDays(30)) || (f === 'expired' && isExpired(m))
+    || (f.startsWith('p:') && (access[m.uid] || {}).plan === f.slice(2) && !isExpired(m))));
 }
 function render() {
   const L = list();
@@ -141,23 +223,23 @@ function render() {
       + '<td><div class="acc" data-uid="' + esc(m.uid) + '"><select aria-label="Access for ' + esc(m.email) + '">' + PLANS.map(([v, l]) => '<option value="' + v + '"' + (v === plan ? ' selected' : '') + '>' + l + '</option>').join('') + '</select>'
       + '<input type="date" value="' + esc(a.until || '') + '" aria-label="Until"><input type="text" placeholder="Note" value="' + esc(a.note || '') + '" aria-label="Note">'
       + '<button class="btn s" type="button" data-save>Save</button><small data-ok></small></div>'
-      + (a.by ? '<small>Set ' + fmt(a.at) + '</small>' : '') + '</td></tr>';
+      + (isExpired(m) ? '<span class="tag exp">Ended ' + fmt(a.until) + '</span>' : a.by ? '<small>Set ' + fmt(a.at) + '</small>' : '') + '</td></tr>';
   }).join('') || '<tr><td colspan="6">No members match.</td></tr>';
 }
 function renderFb() {
   $('fb').innerHTML = feedback.map((f) => '<tr><td>' + fmt(f.at) + '</td><td>' + esc(f.name || '') + '<br><a href="mailto:' + esc(f.email) + '">' + esc(f.email || '') + '</a></td><td>' + esc(f.rating || '') + '</td><td>' + esc(f.role || '') + '</td><td>' + esc((f.uses || []).join(', ')) + '</td><td>' + esc(f.improve || '') + '</td><td>' + esc(f.wish || '') + '</td></tr>').join('') || '<tr><td colspan="7">No feedback yet.</td></tr>';
 }
-$('rows').addEventListener('click', async (e) => {
-  const b = e.target.closest('[data-save]'); if (!b) return;
-  const box = b.closest('.acc'), uid = box.dataset.uid, [sel, date, note] = box.querySelectorAll('select,input'), ok = box.querySelector('[data-ok]');
-  const d = { plan: sel.value, until: date.value || '', note: note.value.trim(), by: me.uid, at: new Date().toISOString() };
+async function saveRow(box) {
+  const uid = box.dataset.uid, [sel, date, note] = box.querySelectorAll('select,input'), ok = box.querySelector('[data-ok]'), b = box.querySelector('[data-save]');
+  const d = { plan: sel.value, until: sel.value === 'free' ? '' : (date.value || ''), note: note.value.trim(), by: me.uid, at: new Date().toISOString() };
   b.disabled = true; ok.textContent = 'Saving…';
-  try {
-    if (d.plan === 'free') { await F.deleteDoc(F.doc(db, 'access', uid)); delete access[uid]; }
-    else { await F.setDoc(F.doc(db, 'access', uid), d); access[uid] = d; }
-    ok.textContent = 'Saved'; stats();
-  } catch (x) { ok.textContent = 'Not saved: ' + x.message; }
+  try { await saveAccess(uid, d); ok.textContent = 'Saved'; stats(); } catch (x) { ok.textContent = 'Not saved: ' + x.message; }
   b.disabled = false;
+}
+$('rows').addEventListener('click', (e) => { const b = e.target.closest('[data-save]'); if (b) saveRow(b.closest('.acc')); });
+$('rows').addEventListener('change', (e) => {
+  const sel = e.target.closest('.acc select'); if (!sel) return;
+  const box = sel.closest('.acc'); box.querySelector('input[type=date]').value = untilFor(sel.value); saveRow(box);
 });
 $('q').addEventListener('input', render); $('flt').addEventListener('change', render); $('reload').addEventListener('click', load);
 $('copy').addEventListener('click', async () => {
@@ -234,6 +316,7 @@ const TPL = [
   ['Please sign in again', 'One quick step to switch on your Forecut access', 'Hi there,\n\nThank you for signing up to Forecut. Please open forecut.in once more and sign in with the same account. That is all we need to switch on your access.'],
   ['Student access granted', 'Your Forecut student access is on', 'Hi there,\n\nYour Forecut student access is now active. Sign in at forecut.in/account to see it on your dashboard.\n\nUse the trend reports, the India season guides and every studio tool for your projects and portfolio. We would love to see what you make.'],
   ['Alumni access granted', 'Your Forecut alumni access is on', 'Hi there,\n\nAs an alumnus, you now have free Forecut access. Sign in at forecut.in/account to see it on your dashboard.\n\nDo try the Textile Processing Studio, built for handloom and textile people like us. Your feedback would mean a lot.'],
+  ['Access granted', 'Your Forecut access is on', 'Hi there,\n\nYour Forecut access is now active. Sign in at forecut.in/account to see it, and the date it runs until, on your dashboard.\n\nEvery report and studio tool is open to you. If you need anything, just reply to this email.'],
   ['Ask for feedback', 'Two minutes to help shape Forecut?', 'Hi there,\n\nForecut is built for designers, students and makers, and your view shapes what comes next. What do you use most, and what is missing?\n\nJust reply to this email. Every reply is read.'],
   ['What is new', 'New on Forecut this month', 'Hi there,\n\nHere is what is new on Forecut this month:\n\n• \n• \n\nSee it all at forecut.in.']
 ];
@@ -256,8 +339,8 @@ $('mailGo').addEventListener('click', (e) => {
   else location.href = 'mailto:hello@forecut.in?bcc=' + encodeURIComponent(bcc) + '&subject=' + encodeURIComponent(su) + '&body=' + encodeURIComponent(body);
 });
 $('mailBtn').addEventListener('click', () => { const o = $('mail').hidden; $('mail').hidden = !o; $('mailBtn').setAttribute('aria-expanded', o); mailInfo(); if (o) $('mail').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
-$('rows').addEventListener('change', (e) => { const c = e.target.closest('[data-pick]'); if (!c) return; c.checked ? picked.add(c.dataset.pick) : picked.delete(c.dataset.pick); $('note').textContent = list().length + ' shown' + (picked.size ? ' · ' + picked.size + ' selected' : ''); mailInfo(); });
-$('all').addEventListener('change', (e) => { list().forEach((m) => e.target.checked ? picked.add(m.uid) : picked.delete(m.uid)); render(); });
+$('rows').addEventListener('change', (e) => { const c = e.target.closest('[data-pick]'); if (!c) return; c.checked ? picked.add(c.dataset.pick) : picked.delete(c.dataset.pick); bulkInfo(); mailInfo(); });
+$('all').addEventListener('change', (e) => { list().forEach((m) => e.target.checked ? picked.add(m.uid) : picked.delete(m.uid)); render(); bulkInfo(); });
 document.querySelector('.tabs').addEventListener('click', (e) => {
   const b = e.target.closest('[data-tab]'); if (!b) return;
   document.querySelectorAll('.tabs button').forEach((x) => x.setAttribute('aria-pressed', x === b));
