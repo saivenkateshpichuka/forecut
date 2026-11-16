@@ -77,12 +77,15 @@
       + (rows ? '<div class="table-scroll"><table class="fq-c"><thead><tr><th>Point of measure</th><th>Before (vs spec)</th><th>After (vs spec)</th><th>Change</th></tr></thead><tbody>' + rows + '</tbody></table></div>' : '<p class="note">Record measurements in both sessions to compare them.</p>')
       + '<p class="note">Issues: ' + closed + ' of ' + A.issues.length + ' from before are fixed or closed; ' + opened + ' new issue' + (opened === 1 ? '' : 's') + ' after. In tolerance: before ' + sumMeas(A, SP).ok + '/' + sumMeas(A, SP).n + ', after ' + sumMeas(B, SP).ok + '/' + sumMeas(B, SP).n + '.</p></section>';
   }
+  var fmode = 'fit';
+  function modeTabs() { return window.Forecut3D ? '<div class="pl-tabs" role="tablist"><button type="button" role="tab" data-fmode="fit" aria-selected="' + (fmode === 'fit') + '">Fit sessions &amp; QC</button><button type="button" role="tab" data-fmode="val" aria-selected="' + (fmode === 'val') + '">3D vs real sample</button></div>' : ''; }
   function render() {
+    if (fmode === 'val' && window.Forecut3D) { app.innerHTML = modeTabs() + Forecut3D.html(); return; }
     var SP = spec(), F = window.ForecutStyle, a = F && F.active ? F.active() : null, s = sess(cur);
     var list = '<section class="panel"><div class="panel-head"><h2>Sessions' + (a ? ' · ' + esc(a.id) : '') + '</h2><div class="actions"><select id="fqType" aria-label="Type of the new session">' + TYPES.map(function (t) { return '<option>' + t + '</option>'; }).join('') + '</select><button type="button" class="primary" data-a="newSess">+ New session</button></div></div>'
       + (a ? '' : '<p class="notice">No style is selected. Choose or create a style in the bar above so sessions are saved with it.</p>')
       + (S.sessions.length ? '<div class="fq-list">' + S.sessions.map(function (x) { var m = sumMeas(x, SP), o = x.issues.filter(function (i) { return i.status === 'Open'; }).length; return '<button type="button" data-s="' + x.id + '" class="' + (x.id === cur ? 'on' : '') + '"><b>' + esc(x.type) + '</b><small>' + day(x.date) + ' · size ' + esc(x.size) + '</small><span>' + (m.n ? m.ok + '/' + m.n + ' in tol · ' : '') + o + ' open' + (x.decision ? ' · ' + esc(x.decision) : '') + '</span></button>'; }).join('') + '</div>' : '<p class="empty">No sessions yet. Start with the proto or first fit sample. Open issues carry over to the next session automatically.</p>') + '</section>';
-    app.innerHTML = list + (s ? sessView(s, SP) : '') + compareView(SP) + aqlView();
+    app.innerHTML = modeTabs() + list + (s ? sessView(s, SP) : '') + compareView(SP) + aqlView();
   }
   function upd() { var s = sess(cur); if (!s) return; var SP = spec(); if (!SP) return; SP.rows.forEach(function (r) { var m = measRes(r, s.size, s.meas[r.key]), d = app.querySelector('[data-d="' + CSS.escape(r.key) + '"]'), q = app.querySelector('[data-r="' + CSS.escape(r.key) + '"]'); if (!d) return; d.textContent = m ? (m.d > 0 ? '+' : '') + f2(m.d) : ''; q.textContent = m ? (m.ok ? '✓' : 'Out') : ''; d.parentNode.className = m ? (m.ok ? 'ok' : 'no') : ''; }); }
   app.addEventListener('input', function (e) { var t = e.target, s = sess(cur);
@@ -103,6 +106,7 @@
     if (t.dataset.sf === 'date') render();
   });
   app.addEventListener('click', function (e) { var b = e.target.closest('button'); if (!b) return; var s = sess(cur), a = b.dataset.a;
+    if (b.dataset.fmode) { fmode = b.dataset.fmode; return render(); }
     if (b.dataset.s) { cur = b.dataset.s; return render(); }
     if (a === 'newSess') return newSession($('#fqType').value);
     if (!s) return;
@@ -129,5 +133,6 @@
     s.issues.push({ id: 'I1', area: 'Fit / balance', desc: 'Front neck gapes at centre front', sev: 'Major', action: 'Reduce front neck width by 0.5 cm and re-check', owner: 'Pattern maker', due: '', status: 'Open' }, { id: 'I2', area: 'Seam / stitching', desc: 'Puckering on side seam', sev: 'Minor', action: 'Lower thread tension; check needle size', owner: 'Factory', due: '', status: 'Open' });
     save(); render(); var m = $('#status'); if (m) m.textContent = 'Example session added' + (SP ? ' with measurements from your size chart' : '') + '.'; });
   window.ForecutFitQC = { plan: plan };
+  if (window.Forecut3D) Forecut3D.bind(app, render);
   render();
 })();
