@@ -34,4 +34,5 @@ python3 reports.py
 python3 seo.py
 python3 search.py && ONLY=search.html python3 seo.py
 
+python3 tools_hub.py
 python3 clean_urls.py
