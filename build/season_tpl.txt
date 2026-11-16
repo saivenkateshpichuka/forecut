@@ -796,7 +796,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
       if (r.heat && EVID.aw && hotHit.length) read = '<b>Lighter version or skip</b>: hot climate, and this detail is ' + esc2(hotHit.join(', ')) + '.';
       else if (hits.length) read = '<b>Strong local fit</b>: matches what this region buys (' + esc2(hits.join(', ')) + ').';
       else read = 'Global reading applies.';
-      return '<tr><td><a href="region-' + r.slug + '.html">' + esc2(r.name) + '</a></td><td>' + read + '</td><td>' + esc2(r.win) + '</td></tr>';
+      return '<tr><td><a href="region-' + r.slug + '">' + esc2(r.name) + '</a></td><td>' + read + '</td><td>' + esc2(r.win) + '</td></tr>';
     }).join('') + '</table><p class="evn evm">Regional readings follow fixed rules from each region page (local buying focus, climate and hemisphere timing). They are a guide to adaptation, not measured regional sales.</p>';
   }
   function evidence(d) {

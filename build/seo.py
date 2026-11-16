@@ -112,7 +112,7 @@ MOB = ('<style id="fcmob">'
   '}'
   '@media (hover:none){a,button{-webkit-tap-highlight-color:rgba(169,72,31,.15)}}'
   '</style>'
-  '<script>(function(){function m(){var p=location.pathname.split("/").pop()||"index.html";document.querySelectorAll("nav>.links a").forEach(function(a){var h=(a.getAttribute("href")||"").split("/").pop().split("#")[0]||"index.html";if(h===p){a.setAttribute("aria-current","page");if(a.scrollIntoView&&innerWidth<=760){var l=a.parentNode;l.scrollLeft=a.offsetLeft-l.clientWidth/2+a.offsetWidth/2;}}});}'
+  '<script>(function(){function m(){var p=(location.pathname.split("/").pop()||"index").replace(/\\.html$/,"");document.querySelectorAll("nav>.links a").forEach(function(a){var h=((a.getAttribute("href")||"").split("/").pop().split("#")[0]||"index").replace(/\\.html$/,"");if(h===p){a.setAttribute("aria-current","page");if(a.scrollIntoView&&innerWidth<=760){var l=a.parentNode;l.scrollLeft=a.offsetLeft-l.clientWidth/2+a.offsetWidth/2;}}});}'
   'if(document.readyState!=="loading")m();else document.addEventListener("DOMContentLoaded",m);})();</script>')
 REPORT_FILES = set()
 def tab_for(fn):

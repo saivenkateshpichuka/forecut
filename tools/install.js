@@ -20,7 +20,7 @@
   }
   function go(which) {
     var page = location.pathname.split('/').pop();
-    if (which === 'studio' && page !== 'tools.html') { location.href = 'tools.html#install-studio'; return; }
+    if (which === 'studio' && page !== 'tools/') { location.href = 'tools/#install-studio'; return; }
     if (deferred) { deferred.prompt(); deferred.userChoice.finally(function () { deferred = null; }); return; }
     how(which);
   }
