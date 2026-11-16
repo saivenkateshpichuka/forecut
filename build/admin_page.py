@@ -207,7 +207,7 @@ function check(text) {
   all.forEach((x) => uniq.set(x.uid, x));
   pending = [...uniq.values()].filter((x) => !seen.has(x.uid));
   const found = uniq.size;
-  $('impMsg').textContent = found ? 'Found ' + found + ' accounts: ' + (found - pending.length) + ' already listed, ' + pending.length + ' to add.' : 'No accounts found in that text. Copy the Users list again, including the User UID column.';
+  $('impMsg').textContent = found ? 'Found ' + found + ' accounts: ' + (found - pending.length) + ' already listed, ' + pending.length + ' to add.' : (/…|\.\.\./.test(text) ? 'The emails and user IDs were copied in shortened form (ending in …). Zoom the Firebase page out with Ctrl and minus (Mac: Cmd and minus) until they show in full, then copy again.' : 'No accounts found in that text. Copy the Users list again, including the User UID column.');
   $('impGo').hidden = !pending.length;
 }
 $('impBtn').addEventListener('click', () => { const o = $('imp').hidden; $('imp').hidden = !o; $('impBtn').setAttribute('aria-expanded', o); if (o) $('impTxt').focus(); });
