@@ -71,7 +71,7 @@ def graph(r):
         bars += f'<text x="{x + bw / 2:.0f}" y="{H - 10}" text-anchor="middle">{s.upper()}</text><text x="{x + bw / 2:.0f}" y="{y - 6:.0f}" text-anchor="middle">{mom} rising/emerging</text>'
     key = ''.join(f'<span><i style="background:{COL[k]}"></i>{LBL[k]}</span>' for k in 'erpf')
     lead = max(rows, key=lambda rc: rc[1]['e'] + rc[1]['r'])[0].upper()
-    return (f'<section class="sec" id="graph"><h2>Trend momentum in {E(r["name"])}</h2><p class="sub">The {len(rel)} Forecut details most relevant to this region, by stage, season by season{" (heavy winter pieces left out for hot-climate markets)" if r["heat"] else ""}. Momentum peaks in {lead}.</p>'
+    return (f'<section class="sec" id="graph"><h2>Trend momentum in {E(r["name"])}</h2><p class="sub">The Forecut details most relevant to this region, by stage, season by season{" (heavy winter pieces left out for hot-climate markets)" if r["heat"] else ""}. Momentum peaks in {lead}.</p>'
             f'<div class="rgx"><svg viewBox="0 0 {W} {H}" role="img" aria-label="Stacked bar chart of trend stages by season for {E(r["name"])}">{bars}</svg><div class="rgxk">{key}</div></div></section>')
 
 

@@ -39,9 +39,9 @@ def season_cards(M, SEAS):
                     if c in n:
                         n[c] += 1
             tot = sum(n.values()) or 1
-            bar = ('<div class="sbar" role="img" aria-label="' + ', '.join(f'{n[k]} {ST[k][1].lower()}' for k in 'erpf') + '">'
+            bar = ('<div class="sbar" role="img" aria-label="' + ', '.join(f'{round(n[k] * 100 / tot)}% {ST[k][1].lower()}' for k in 'erpf') + '">'
                    + ''.join(f'<i class="{k}" style="width:{n[k] * 100 / tot:.1f}%"></i>' for k in 'erpf') + '</div>'
-                   + f'<div class="skey"><span>{tot} details</span><span>{n["e"]} emerging</span><span>{n["r"]} rising</span><span>{n["p"]} peaking</span><span>{n["f"]} fading</span></div>')
+                   + f'<div class="skey"><span>{round(n["e"] * 100 / tot)}% emerging</span><span>{round(n["r"] * 100 / tot)}% rising</span><span>{round(n["p"] * 100 / tot)}% peaking</span><span>{round(n["f"] * 100 / tot)}% fading</span></div>')
         else:
             bar = '<div class="skey"><span>Collection report · read for all six regions</span></div>'
         out.append(f'<a class="scard" href="{page}"><span class="ph"><img src="img/{_img(imgs)}.webp" alt="{E(title)} forecast" loading="lazy" width="600" height="800"><span class="lab">{lab}</span></span>'
@@ -191,7 +191,7 @@ def this_week(M, SEAS, islug):
             f'<div class="twcal"><small>Coming up</small><ul>{cal}</ul></div>')
     return (f'''  <section id="thisweek" aria-labelledby="twh">
     <div class="sechead"><div><span class="mono eyebrow">This week at Forecut · updated {today().strftime("%-d %b %Y")}</span><h2 id="twh">What's new.</h2></div><p>The newest details added from runways, fashion weeks and retail, the latest analysis, and what's coming on the global calendar.</p></div>
-    <div class="twgrid"><div class="twmain"><div class="twlab"><b>{len(cards)} new details this month</b><a href="search.html">Search all details →</a></div><div class="nwrow" tabindex="0" aria-label="New details, scroll sideways">{"".join(cards[:10])}</div>{__import__("landing").next_sales(8)}</div>
+    <div class="twgrid"><div class="twmain"><div class="twlab"><b>New this month</b><a href="search.html">Search all details →</a></div><div class="nwrow" tabindex="0" aria-label="New details, scroll sideways">{"".join(cards[:10])}</div>{__import__("landing").next_sales(8)}</div>
     <aside class="twside">{side}</aside></div>
   </section>
 ''')

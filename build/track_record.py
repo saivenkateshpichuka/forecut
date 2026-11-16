@@ -63,14 +63,14 @@ def body():
             prev = S[i - 1]['life']; parts = []
             for c in sorted(s['basis']):
                 k = sum(1 for nm, st in s['life'].items() if nm in prev and prev[nm].get(c, '-') != st.get(c, '-'))
-                if k: parts.append(f'{c} {k}')
+                if k: parts.append(c)
             added = len(set(s['life']) - set(prev))
-            ch = ', '.join(parts) + (f'{"; " if parts else ""}{added} new details' if added else '') or 'no stage changes'
+            ch = (('stage changes in ' + ', '.join(parts)) if parts else '') + (f'{"; " if parts else ""}new details added' if added else '') or 'no stage changes'
         proj = ', '.join(c for c, b in sorted(s['basis'].items()) if b == 'projection')
-        rows += f'<tr><td>{E(s["date"] if s["date"] != "now" else "Latest")}</td><td>{len(s["life"])}</td><td>{E(proj)}</td><td>{E(ch)}</td></tr>'
+        rows += f'<tr><td>{E(s["date"] if s["date"] != "now" else "Latest")}</td><td>{E(proj)}</td><td>{E(ch)}</td></tr>'
     if B:
-        bt = '<table class="tr"><tr><th>Season</th><th>Last projected</th><th>Assessed</th><th>Details compared</th><th>Same stage</th><th>Within one stage</th></tr>' + ''.join(
-            f'<tr><td>{E(b["season"])}</td><td>{E(b["from"])}</td><td>{E(b["to"])}</td><td>{b["n"]}</td><td>{b["exact"]} ({b["exact"] * 100 // max(1, b["n"])}%)</td><td>{b["near"]} ({b["near"] * 100 // max(1, b["n"])}%)</td></tr>' for b in B) + '</table>'
+        bt = '<table class="tr"><tr><th>Season</th><th>Last projected</th><th>Assessed</th><th>Same stage</th><th>Within one stage</th></tr>' + ''.join(
+            f'<tr><td>{E(b["season"])}</td><td>{E(b["from"])}</td><td>{E(b["to"])}</td><td>{b["exact"] * 100 // max(1, b["n"])}%</td><td>{b["near"] * 100 // max(1, b["n"])}%</td></tr>' for b in B) + '</table>'
     else:
         first = S[0]['date'] if S else '—'
         nxt = sorted(c for c, b in (S[-1]['basis'].items() if S else []) if b == 'projection')
@@ -83,8 +83,8 @@ def body():
 <p>For each season that has moved from projection to assessed: the share of details whose assessed stage is the same as the last projected stage, and the share within one stage (for example projected Rising, assessed Peaking).</p>
 {bt}
 <h2>Forecast snapshots</h2>
-<p>Each row is a published version of the forecast. "Changes" counts details whose stage moved in that season compared with the previous version.</p>
-<table class="tr"><tr><th>Date</th><th>Details</th><th>Projected seasons</th><th>Changes since the previous version</th></tr>{rows}</table>
+<p>Each row is a published version of the forecast. "Changes" names the seasons in which any detail's stage moved compared with the previous version.</p>
+<table class="tr"><tr><th>Date</th><th>Projected seasons</th><th>Changes since the previous version</th></tr>{rows}</table>
 <h2>Limits</h2>
 <p>Assessed stages are Forecut's own reading of published coverage, so a back-test measures how stable our projections are against our later assessment, not against sales. Read it alongside the <a href="method.html#evidence">evidence grades</a>.</p>
 <style>.tr{{width:100%;border-collapse:collapse;font:14px "DM Sans",sans-serif;margin:10px 0}}.tr th{{text-align:left;font-size:12px;color:var(--muted);padding:6px 8px;border-bottom:1px solid var(--grid)}}.tr td{{padding:7px 8px;border-bottom:1px solid var(--grid);vertical-align:top}}</style>'''

@@ -130,8 +130,8 @@ def _rcount(m):
     code = m.group(1).lower()
     if code in SEAS:
         i = SEAS.index(code); n = sum(1 for _its in M.values() for _it in _its if _it['life'][i] in 'erpf')
-        return f'Open the full {m.group(1)} report <span>{n} details'
+        return f'Open the full {m.group(1)} report <span>'
     return m.group(0)
-h = _re.sub(r'Open the full (\w+) report <span>(\d+) details', _rcount, h)
+h = _re.sub(r'Open the full (\w+) report <span>(\d+) details · ', _rcount, h)
 open('../index.html', 'w').write(h)
 print('home ok')

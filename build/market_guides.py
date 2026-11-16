@@ -25,7 +25,7 @@ INDIA = CSS + '''<section class="mguide" id="guide" aria-labelledby="ig"><span c
 <h3>How global trends translate</h3>
 <p>Global directions reach India adapted. The SS27 defined waist appears as peplum kurtas and structured blouses; sheer layering becomes organza dupattas and overlays; refined flats become juttis and Kolhapuris in new finishes. Forecut tracks both: the global stage of a detail and its Indian version, with indicative rupee price bands.</p>
 <h3>How to use the India edits</h3>
-<ul><li>Start with the open season (Festive 26) to see the format: 20 curated details, prices, offers and designer stories.</li>
+<ul><li>Start with the open season (Festive 26) to see the format: curated details, prices, offers and designer stories.</li>
 <li>Compare with the global season pages to see which ideas are international and which are local.</li>
 <li>Use the region page for Asia to compare India with China, Japan and Korea, Southeast Asia and the Gulf.</li></ul>
 ''' + _faq([

@@ -86,8 +86,8 @@ for dept, cat, use, fab in I.CATS:
             img = f' data-img="img/{islug(it["name"])}.webp"' if islug(it['name']) in IMGS else ''
             if ('flat-' + islug(it['name'])) in IMGS: img += f' data-flatimg="img/flat-{islug(it["name"])}.webp"'
             cards.append(f'<article class="d"{off} tabindex="0" role="button" aria-haspopup="dialog" data-area="{E(it["area"])}" data-st="{st}" data-life="{it["life"]}"{img} data-q="{q}"><div class="thumb" aria-hidden="true"></div><div class="dtop"><span class="area">{E(sname)}</span><span class="pill {c}">{l}</span></div><h4>{E(it["name"])}</h4><p>{E(it["note"])}</p><span class="open">View detail →</span></article>')
-        subhtml.append(f'<div class="sub" data-sub="{E(sname)}"><h5>{E(sname)} <span>{len(groups[sname])}</span></h5><div class="grid">{"".join(cards)}</div></div>')
-    secs.append(f'<section class="cat" id="{cid}" data-dept="{slug(dept)}"><div class="cathead"><h3>{E(cat)}</h3><span class="cnt"><span class="vis">{len(items)}</span> details</span></div>{"".join(subhtml)}</section>')
+        subhtml.append(f'<div class="sub" data-sub="{E(sname)}"><h5>{E(sname)}</h5><div class="grid">{"".join(cards)}</div></div>')
+    secs.append(f'<section class="cat" id="{cid}" data-dept="{slug(dept)}"><div class="cathead"><h3>{E(cat)}</h3></div>{"".join(subhtml)}</section>')
 secs.append('</div>')
 
 m = I.META
@@ -110,7 +110,7 @@ for dept, cat, *_ in I.CATS:
     if pool and len(movers) < 6 and cat not in ('Western Wear (India)', 'Fabrics & Weaves'): movers.append((pool[0], cat))
 mv = ''.join(f'<button class="mv" type="button" data-name="{E(x[2])}"{(chr(32) + 'data-photo="img/' + islug(x[2]) + '.webp"') if islug(x[2]) in IMGS else ""}><span class="gt" aria-hidden="true"></span><span><b>{E(x[2])}</b><small class="{x[5][0]}">{SL[x[5][0]][1]} · {E(cat)}</small></span></button>' for x, cat in movers[:6])
 tot = max(total, 1)
-mixbar = ''.join(f'<i style="width:{counts[k] / tot * 100:.1f}%;background:var(--{v})" title="{SL[k][1]} {counts[k]}"></i>' for k, v in [('e', 'chalk'), ('r', 'rise'), ('p', 'peak'), ('f', 'fade')])
+mixbar = ''.join(f'<i style="width:{counts[k] / tot * 100:.1f}%;background:var(--{v})" title="{SL[k][1]} {round(counts[k] / tot * 100)}%"></i>' for k, v in [('e', 'chalk'), ('r', 'rise'), ('p', 'peak'), ('f', 'fade')])
 mixkey = ''.join(f'<span style="--k:var(--{v})">{SL[k][1]} {round(counts[k] / tot * 100)}%</span>' for k, v in [('e', 'chalk'), ('r', 'rise'), ('p', 'peak'), ('f', 'fade')])
 cal = ''.join(f'<div class="calw{" cur" if i == 0 else ""}"><b>{E(c)}</b><span>{E(I.WINDOWS[c])}</span></div>' for i, c in enumerate(codes))
 glance = (f'<div class="glance"><div><h3>Status mix · {codes[0]}</h3><div class="mixbar" role="img" aria-label="Status mix">{mixbar}</div><div class="mixkey">{mixkey}</div></div>'
@@ -132,7 +132,7 @@ rep = {
     '%%ENGINE%%': engine, '%%SECS%%': ''.join(secs), '%%NAV%%': ''.join(nav), '%%SEASONNAV%%': snav,
     '%%THEMES%%': themes, '%%THEMEDATA%%': json.dumps(tdj, ensure_ascii=False).replace('</', '<\\/'), '%%PALETTE%%': pal, '%%COTY%%': coty, '%%HOME%%': HOME,
     '%%TOTAL%%': str(total), '%%CATS%%': str(len(I.CATS)),
-    '%%RISE%%': str(counts['r']), '%%EMERGE%%': str(counts['e']), '%%PEAK%%': str(counts['p']), '%%FADE%%': str(counts['f']),
+    '%%RISE%%': str(round(counts['r'] * 100 / max(total, 1))) + '%', '%%EMERGE%%': str(round(counts['e'] * 100 / max(total, 1))) + '%', '%%PEAK%%': str(round(counts['p'] * 100 / max(total, 1))) + '%', '%%FADE%%': str(round(counts['f'] * 100 / max(total, 1))) + '%',
     '%%TITLEUP%%': m['title'].upper(), '%%STAGEUP%%': m['stage'].upper(), '%%WINDOWUP%%': m['window'].upper(),
     '%%CODES%%': json.dumps(codes), '%%PALJSON%%': json.dumps([h for h, n in m['palette']]), '%%BASISCLS%%': 'res', '%%BASISTEXT%%': 'Based on Indian runway, retail and trade coverage',
     '%%STAGE%%': E(m['stage']), '%%WINDOW%%': E(m['window']), '%%TITLE%%': E(m['title']), '%%INTRO%%': E(m['intro']),
@@ -164,7 +164,7 @@ for i, c in enumerate(codes):
     tag = ('<span class="stag now">Now · open</span>' if (c not in SITE.get('locked', [])) else '<span class="stag lock"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="3" y="7" width="10" height="7" rx="1.6" fill="currentColor"/></svg>Opens at launch</span>')
     sc += (f'<article class="scard{" open" if (c not in SITE.get("locked", [])) else " locked"}"><div class="shd">{tag}<b>{E(c)}</b><span>{E(when)}</span></div>'
            f'<p class="socc">{E(occ)}</p><p class="sfoc">{E(si_["focus"])}</p>'
-           f'<div class="ssw">{sw}</div><div class="smix">{bar}</div><p class="sct">{tot} details · {cnt["e"]} emerging · {cnt["r"]} rising · {cnt["p"]} peaking · {cnt["f"]} fading</p>'
+           f'<div class="ssw">{sw}</div><div class="smix">{bar}</div><p class="sct">{round(cnt["e"] * 100 / max(tot, 1))}% emerging · {round(cnt["r"] * 100 / max(tot, 1))}% rising · {round(cnt["p"] * 100 / max(tot, 1))}% peaking · {round(cnt["f"] * 100 / max(tot, 1))}% fading</p>'
            f'<p class="splan"><b>Plan:</b> {E(si_["plan"])}</p><button type="button" class="season-open" data-open-si="{i}">Explore {E(c)} →</button></article>')
 ssec = f"""  <section class="sec" id="seasons" aria-labelledby="sgh"><div class="sechead"><span class="mono eb">India fashion calendar</span><h2 id="sgh">Five seasons, one plan.</h2><p class="hint">Festive 26 is open to everyone. Later seasons are open to signed-in members now, and to everyone at launch.</p></div>
     <div class="sgrid">{sc}</div></section>
