@@ -21,6 +21,9 @@ service cloud.firestore {
         && request.resource.data.uid == uid
         && request.resource.data.keys().hasOnly(['uid', 'email', 'name', 'provider', 'verified', 'created', 'lastSeen', 'lastPage'])
         && (request.auth.token.email == null || request.resource.data.email == request.auth.token.email.lower());
+      // the owner can bring in members who signed up before profiles existed (Import from Firebase on the admin page)
+      allow create: if isAdmin() && request.resource.data.uid == uid
+        && request.resource.data.keys().hasOnly(['uid', 'email', 'name', 'provider', 'verified', 'created', 'lastSeen', 'lastPage']);
       allow delete: if isAdmin();
     }
 
