@@ -285,8 +285,11 @@ onAuthStateChanged(auth, (u) => {
     setTimeout(() => { const s1 = w.querySelector('[data-r]'); if (s1) s1.focus(); }, 50);
   }
   window.FCFeedback = { open: () => { const u = auth.currentUser; if (u) open(u, true); else location.href = '/account.html#signin'; } };
+  // the automatic pop-up is switched off (owner's request, 17 Nov 2026); the header Feedback button still opens the form.
+  // Set AUTO_FEEDBACK = true to show it again once after sign-in.
+  const AUTO_FEEDBACK = false;
   onAuthStateChanged(auth, (u) => {
-    if (!u || /pattern-maker|3d-drape/.test(location.pathname)) return;
+    if (!AUTO_FEEDBACK || !u || /pattern-maker|3d-drape/.test(location.pathname)) return;
     const st = state(u);
     if (st && (st.s === 'sent' || st.s === 'later' && Date.now() - st.at < 3 * 86400000)) return;
     // on the dashboard the brand set-up comes first; feedback follows when it closes
