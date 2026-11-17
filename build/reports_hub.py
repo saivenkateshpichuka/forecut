@@ -1,3 +1,4 @@
+from site_flags import SHOW_PRICING
 # Reports hub (reports.html), exec'd from reports.py: uses PAGES, EXTRA, E and page().
 # Featured report, paths by job, filter chips + search, shelves (swipe rows on mobile), access band.
 HUB_CSS = '''<style>
@@ -126,10 +127,10 @@ for g, n, d, kinds in GROUPS:
 hub += '<p class="nores" id="nores">No reports match. Try another word, or <a href="#all" data-reset>show all reports</a>.</p>'
 
 hub += ('<section class="access" id="access"><div><h2>How access works</h2><p>Every report is a web page with a matching PDF.</p>'
-        '<div class="rcta"><a class="p" href="account.html#signup">Sign in free</a><a class="g" href="index.html#pricing">See pricing</a></div></div>'
+        '<div class="rcta"><a class="p" href="account.html#signup">Sign in free</a>' + ('<a class="g" href="index.html#pricing">See pricing</a>' if SHOW_PRICING else '<a class="g" href="tools.html">Explore the tools</a>') + '</div></div>'
         '<ol><li><b>Read online.</b> Every report opens as a web page you can browse and search.</li>'
         '<li><b>Free trial until launch.</b> Signed-in members get the full trial, including PDF downloads, until 1 January 2027.</li>'
-        '<li><b>From launch.</b> Reports are included in Student, Individual and Enterprise plans, or buy any single report for ₹299.</li></ol></section>')
+        + ('<li><b>From launch.</b> Reports are included in Student, Individual and Enterprise plans, or buy any single report for ₹299.</li>' if SHOW_PRICING else '<li><b>From launch.</b> Reports will be part of Forecut\'s paid plans; details will be announced before launch.</li>') + '</ol></section>')
 
 hub += '''<script>(function(){
 var bs=[].slice.call(document.querySelectorAll('.rbar button')),q=document.getElementById('rq'),cards=[].slice.call(document.querySelectorAll('.rk')),

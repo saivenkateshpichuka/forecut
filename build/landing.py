@@ -136,9 +136,11 @@ def audience():
     tabs = ''.join(f'<button type="button" role="tab" id="au-{k}" aria-controls="ap-{k}" aria-selected="{"true" if i == 0 else "false"}"{"" if i == 0 else " tabindex=\"-1\""}>{E(n)}</button>' for i, (k, n, *_ ) in enumerate(AUD))
     panes = ''
     for i, (k, n, head, sub, gets, plan, c1, c2) in enumerate(AUD):
+        if not SHOW_PRICING and c2[1] == '#pricing':
+            c2 = ('Explore the tools', 'tools.html') if k == 'd2c' else ('See reports', 'reports.html')
         panes += (f'<div class="apane" role="tabpanel" id="ap-{k}" aria-labelledby="au-{k}"{"" if i == 0 else " hidden"}>'
                   f'<div><h3>{E(head)}</h3><p>{E(sub)}</p><div class="acta"><a class="btn" href="{c1[1]}">{E(c1[0])}</a><a class="btn ghost" href="{c2[1]}">{E(c2[0])}</a></div></div>'
-                  f'<div class="aget"><small>What you get</small><ul>{"".join(f"<li>{E(g)}</li>" for g in gets)}</ul><p class="arec">Best plan: <b>{E(plan)}</b></p></div></div>')
+                  f'<div class="aget"><small>What you get</small><ul>{"".join(f"<li>{E(g)}</li>" for g in gets)}</ul>{f'<p class="arec">Best plan: <b>{E(plan)}</b></p>' if SHOW_PRICING else ''}</div></div>')
     return f"""  <section id="foryou" aria-labelledby="fyh">
     <div class="sechead"><div><span class="mono eyebrow">Built for the job you do</span><h2 id="fyh">Choose your path.</h2></div>
       <p>From "I hope this works" to "I know where this is going": pick what you do and see what Forecut gives you.</p></div>
@@ -148,7 +150,12 @@ def audience():
 """
 
 
+from site_flags import SHOW_PRICING  # prices hidden for now; see site_flags.py
+
+
 def pricing():
+    if not SHOW_PRICING:
+        return ''
     return f"""  <section id="pricing" aria-labelledby="ph">
     <div class="sechead"><div><span class="mono eyebrow">Pricing · plans open {LAUNCH_TXT}</span><h2 id="ph">Simple plans for every team.</h2></div>
       <p>Sign in free for the full trial until {LAUNCH_TXT}. Nothing is charged before then.</p></div>
@@ -194,10 +201,14 @@ FAQ = [
 ]
 
 
+PRICE_Q = {'Can I pay monthly?', 'Is there a student price?', 'What does Enterprise include?', 'Can I buy a single report?'}
+
+
 def faq():
+    items = [(q, a if SHOW_PRICING else a.replace(' Prices are set in rupees; write to us for pricing in your currency.', '')) for q, a in FAQ if SHOW_PRICING or q not in PRICE_Q]
     return ('  <section id="faq" aria-labelledby="fqh"><div class="sechead"><div><span class="mono eyebrow">Questions</span><h2 id="fqh">Before you start.</h2></div>'
             '<p>Anything else? <a href="mailto:hello@forecut.in">hello@forecut.in</a>. We reply within 24 hours.</p></div><div class="faq">'
-            + ''.join(f'<details><summary>{E(q)}</summary><p>{a}</p></details>' for q, a in FAQ) + '</div></section>\n')
+            + ''.join(f'<details><summary>{E(q)}</summary><p>{a}</p></details>' for q, a in items) + '</div></section>\n')
 
 
 def founding():

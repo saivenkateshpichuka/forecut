@@ -1,6 +1,8 @@
 """One site-wide header for every Forecut page: a thin announcement strip, a full-width bar with
 mega menus (Forecasts, Insight, Design, Tools, About), search, sign-in and a free-trial button.
 seo.py inserts it after <body> and removes each page's old top nav. Also sets the wider page width."""
+from site_flags import SHOW_PRICING
+
 
 LOGO = ('<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/>'
         '<path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/>'
@@ -36,7 +38,7 @@ MENU = [
                            ('textile-calculator.html', 'Textile Calculator', ''), ('tools.html', 'All 18 tools →', 'In garment-process order')]),
     ], ('tools.html', 'Forecut Studio', 'Every tool in one app, from collection plan to export.', None)),
     ('About', 'about', [
-        ('Forecut', [('about.html', 'About Forecut', ''), ('method.html', 'How we forecast', ''), ('index.html#pricing', 'Pricing & access', ''),
+        ('Forecut', [('about.html', 'About Forecut', ''), ('method.html', 'How we forecast', ''), ] + ([('index.html#pricing', 'Pricing & access', '')] if SHOW_PRICING else []) + [
                      ('contact.html', 'Contact', '')]),
     ], None),
 ]
@@ -59,7 +61,7 @@ def html(active=''):
             f'<a class="fs-logo" href="/" aria-label="Forecut home">{LOGO}<span>FORECUT</span></a>'
             '<nav class="fs-nav" aria-label="Main"><ul>' + ''.join(nav) + '</ul></nav>'
             '<div class="fs-act"><div id="fc-install-slot" hidden></div><a class="fs-search" href="/search.html" aria-label="Search Forecut"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg></a>'
-            '<a class="fs-price" href="/index.html#pricing">Pricing</a><span id="fc-account-slot"><a href="/account.html#signin">Sign in</a></span>'
+            + ('<a class="fs-price" href="/index.html#pricing">Pricing</a>' if SHOW_PRICING else '') + '<span id="fc-account-slot"><a href="/account.html#signin">Sign in</a></span>'
             '<a class="fs-cta" href="/account.html#signup">Start free trial</a>'
             '<button type="button" class="fs-burger" aria-expanded="false" aria-label="Open menu"><i></i><i></i><i></i></button></div>'
             '</div></header>' + JS + '<!--/sitehead-->')

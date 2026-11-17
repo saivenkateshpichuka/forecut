@@ -1,4 +1,5 @@
 """Write ../about.html, ../method.html, ../contact.html, ../terms.html, ../privacy.html (shared Forecut style)."""
+from site_flags import SHOW_PRICING
 import html
 EFF = '11 October 2026'
 PEFF = '17 November 2026'
@@ -196,5 +197,7 @@ P['privacy.html'] = ('Privacy Policy · Forecut', f'''
 import track_record
 P['track-record.html'] = ('Forecast Track Record · Forecut', track_record.body())
 for fn, (title, body) in P.items():
+    if fn == 'terms.html' and not SHOW_PRICING:
+        body = body.replace('<h2>2. Plans and pricing</h2>\n<p>Prices shown on the website are for subscription plans that begin at launch on 1 January 2027.', '<h2>2. Plans and pricing</h2>\n<p>Paid subscription plans may begin at launch on 1 January 2027. Their prices will be published on the website before then.')
     open('../' + fn, 'w').write(HEAD.format(title=html.escape(title)) + body + FOOT)
 print('legal pages', len(P))
