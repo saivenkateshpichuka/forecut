@@ -222,12 +222,38 @@
   function accessLoad() {
     var box = $('myAccess'); if (!box || !window.FCAuth || !window.FCAuth.myAccess) return;
     var NAMES = { student: 'Student access', alumni: 'Alumni access', partner: 'Partner access', individual: 'Individual plan', enterprise: 'Enterprise plan', team: 'Team access' };
-    window.FCAuth.myAccess().then(function (a) {
-      if (!a || !a.plan || a.plan === 'free') return;
-      var until = a.until ? new Date(a.until + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
-      box.innerHTML = '<div class="plan" style="margin-bottom:10px"><span class="tg ok">Granted by Forecut</span><b style="font:700 16px DM Sans,sans-serif;display:block">' + esc(NAMES[a.plan] || a.plan) + '</b><p>' + (until ? 'Full access until ' + esc(until) + '.' : 'Full access.') + '</p></div>';
+    var fld = 'width:100%;padding:9px 10px;border:1px solid #d9cfc2;border-radius:6px;font:inherit;background:#fff;color:#1c1714';
+    var code = ''; try { code = localStorage.getItem('fc-code') || ''; } catch (e) { }
+    Promise.all([window.FCAuth.myAccess(), window.FCAuth.myRequest ? window.FCAuth.myRequest() : null]).then(function (r) {
+      var a = r[0], q = r[1], h = '';
+      if (a && a.plan && a.plan !== 'free') {
+        var until = a.until ? new Date(a.until + 'T00:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+        var over = a.until && a.until < new Date().toISOString().slice(0, 10);
+        h += '<div class="plan" style="margin-bottom:10px"><span class="tg ok">' + (a.code ? 'Code ' + esc(a.code) : 'Granted by Forecut') + '</span><b style="font:700 16px DM Sans,sans-serif;display:block">' + esc(NAMES[a.plan] || a.plan) + '</b><p>' + (over ? 'Ended on ' + esc(until) + '. Reply to any Forecut email or write to hello@forecut.in to renew.' : until ? 'Full access until ' + esc(until) + '.' : 'Full access.') + '</p></div>';
+      }
+      h += '<div class="plan" style="margin-bottom:10px"><b style="font:700 15px DM Sans,sans-serif;display:block">Have an access code?</b><p style="margin:4px 0 8px">Your college, alumni group or a Forecut partner may have given you one.</p>'
+        + '<form id="codeForm" style="display:flex;gap:8px;flex-wrap:wrap"><input id="codeIn" aria-label="Access code" placeholder="For example NIFT2026" autocapitalize="characters" value="' + esc(code) + '" style="' + fld + ';flex:1;min-width:160px;width:auto;text-transform:uppercase"><button class="dbtn pri" type="submit">Apply code</button></form><p id="codeMsg" role="status" style="margin:6px 0 0"></p></div>';
+      if (q && q.status === 'new') h += '<div class="plan" style="margin-bottom:10px"><span class="tg">Request sent</span><p style="margin:4px 0 0">You asked for ' + esc((q.role || 'access').toLowerCase()) + ' access on ' + esc(new Date(q.at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })) + '. We reply by email, usually within two days.</p></div>';
+      else if (!(a && a.plan && a.plan !== 'free' && !(a.until && a.until < new Date().toISOString().slice(0, 10)))) h += '<details class="plan"' + (q && q.status === 'declined' ? '' : '') + '><summary style="cursor:pointer;font:700 15px DM Sans,sans-serif">Student, alumni or faculty? Ask for free access</summary>'
+        + (q && q.status === 'declined' ? '<p style="margin:8px 0 0">Your last request was not approved. You can send a new one with more detail.</p>' : '')
+        + '<form id="reqForm" style="display:grid;gap:10px;margin-top:10px">'
+        + '<label>I am<br><select name="role" style="' + fld + '"><option>Student</option><option>Alumni</option><option>Faculty</option><option>Other</option></select></label>'
+        + '<label>College or institute<br><input name="college" required maxlength="120" style="' + fld + '"></label>'
+        + '<label>Course or department<br><input name="course" maxlength="80" style="' + fld + '"></label>'
+        + '<label>Year (of study or graduation)<br><input name="year" maxlength="20" style="' + fld + '"></label>'
+        + '<label>Anything else? (optional)<br><textarea name="message" rows="3" maxlength="600" style="' + fld + '"></textarea></label>'
+        + '<div><button class="dbtn pri" type="submit">Send request</button> <span id="reqMsg" role="status"></span></div></form></details>';
+      box.innerHTML = h;
+      var cf = $('codeForm'); if (cf) cf.onsubmit = function (e) { e.preventDefault(); var m = $('codeMsg'); m.textContent = 'Checking…';
+        window.FCAuth.redeem($('codeIn').value).then(function (x) { try { localStorage.removeItem('fc-code'); } catch (er) { }
+          var u = x.until ? new Date(x.until + 'T12:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+          if (x.already) { m.textContent = 'You already have access' + (u ? ' until ' + u : '') + ', so nothing changed.'; return; }
+          accessLoad(); }).catch(function (er) { m.textContent = er.message; }); };
+      var rf = $('reqForm'); if (rf) rf.onsubmit = function (e) { e.preventDefault(); var fd = new FormData(rf), d = {}; fd.forEach(function (v, k) { d[k] = v; }); $('reqMsg').textContent = 'Sending…';
+        window.FCAuth.requestAccess(d).then(function () { accessLoad(); }).catch(function (er) { $('reqMsg').textContent = 'Not sent: ' + (er.message || 'please try again.'); }); };
     });
   }
+  window.addEventListener('fc-access-changed', function () { if (cur === 'account') accessLoad(); });
   // ---------- backup ----------
   function dlAll() { try { localStorage.setItem('fc-last-backup', new Date().toISOString()); } catch (e) { } var o = { forecut: 'all-work', v: 1, at: new Date().toISOString(), data: {} }; allKeys().forEach(function (k) { var v = localStorage.getItem(k); if (v != null) o.data[k] = v; }); dl('forecut-my-work-' + new Date().toISOString().slice(0, 10) + '.json', JSON.stringify(o)); }
   function rsAll(file) { file.text().then(function (t) { var o = JSON.parse(t); if (!o || o.forecut !== 'all-work' || !o.data) throw Error('This is not a Forecut “all my work” backup.'); if (!confirm('Restore this backup? It replaces the tool data in this browser.')) return; Object.keys(o.data).forEach(function (k) { if ((KEYS.indexOf(k) > -1 || /^fc-style-(data|rev)-/.test(k)) && typeof o.data[k] === 'string') localStorage.setItem(k, o.data[k]); }); show(cur); alert('Restored.'); }).catch(function (e) { alert(e.message || 'That file could not be read.'); }); }

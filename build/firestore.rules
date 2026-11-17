@@ -8,6 +8,10 @@ service cloud.firestore {
     function myEmail() { return request.auth.token.email.lower(); }
     function teamData(t) { return get(/databases/$(database)/documents/teams/$(t)).data; }
     // the owner is listed in admins/{uid} (created by hand in the Firebase console; nobody can write it from the site)
+    function codeGives(c, d) {
+      let k = get(/databases/$(database)/documents/codes/$(c)).data;
+      return k.active == true && d.plan == k.plan && d.until == k.until && (k.closesMs == 0 || request.time.toMillis() <= k.closesMs);
+    }
     function isAdmin() { return signedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
 
     match /admins/{uid} {
@@ -19,11 +23,11 @@ service cloud.firestore {
       allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
       allow create, update: if signedIn() && request.auth.uid == uid
         && request.resource.data.uid == uid
-        && request.resource.data.keys().hasOnly(['uid', 'email', 'name', 'provider', 'verified', 'created', 'lastSeen', 'lastPage'])
+        && request.resource.data.keys().hasOnly(['uid', 'email', 'name', 'provider', 'verified', 'created', 'lastSeen', 'lastPage', 'source', 'landing'])
         && (request.auth.token.email == null || request.resource.data.email == request.auth.token.email.lower());
       // the owner can bring in members who signed up before profiles existed (Import from Firebase on the admin page)
       allow create: if isAdmin() && request.resource.data.uid == uid
-        && request.resource.data.keys().hasOnly(['uid', 'email', 'name', 'provider', 'verified', 'created', 'lastSeen', 'lastPage']);
+        && request.resource.data.keys().hasOnly(['uid', 'email', 'name', 'provider', 'verified', 'created', 'lastSeen', 'lastPage', 'source', 'landing']);
       allow delete: if isAdmin();
     }
 
@@ -31,12 +35,45 @@ service cloud.firestore {
     match /access/{uid} {
       allow read: if signedIn() && (request.auth.uid == uid || isAdmin());
       allow write: if isAdmin();
+      // a member can switch on their own access with a valid code, only to what the code gives, and never shorten what they have
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['plan', 'until', 'note', 'by', 'at', 'code'])
+        && request.resource.data.by == uid
+        && codeGives(request.resource.data.code, request.resource.data)
+        && (resource == null || (resource.data.until != '' && (request.resource.data.until == '' || resource.data.until < request.resource.data.until)));
+    }
+
+    // access codes: made on the admin page; a signed-in member can look up one code by name, never list them
+    match /codes/{c} {
+      allow get: if signedIn();
+      allow list, write: if isAdmin();
+    }
+
+    // access requests from the account page: one per member, reviewed by the owner
+    match /requests/{uid} {
+      allow get: if signedIn() && (request.auth.uid == uid || isAdmin());
+      allow list: if isAdmin();
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.uid == uid && request.resource.data.status == 'new'
+        && request.resource.data.keys().hasOnly(['uid', 'email', 'name', 'role', 'college', 'course', 'year', 'message', 'at', 'status'])
+        && (resource == null || resource.data.status != 'approved');
+      allow update, delete: if isAdmin();
+    }
+
+    // the owner's tags, notes and history for each member, and the log of emails sent: admin only
+    match /crm/{uid} { allow read, write: if isAdmin(); }
+    match /mails/{id} { allow read, write: if isAdmin(); }
+
+    // site settings such as the announcement banner: everyone can read, only the owner changes them
+    match /config/{d} {
+      allow read: if true;
+      allow write: if isAdmin();
     }
 
     // feedback form: anyone signed in can send their own feedback; only the owner can read it
     match /feedback/{id} {
       allow create: if signedIn() && request.resource.data.uid == request.auth.uid;
-      allow read, delete: if isAdmin();
+      allow read, update, delete: if isAdmin();
     }
 
     // personal sync: each person can only read and write their own copy

@@ -12,6 +12,20 @@ const app = initializeApp({
   appId: "1:795394157690:web:982a632ee315c3d6061fc3"
 });
 const auth = getAuth(app);
+const FS = "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+// ---- where a visitor first came from (kept in this browser; saved to the profile only for new sign-ups) ----
+(function () {
+  try {
+    const q = new URLSearchParams(location.search), code = q.get('code');
+    if (code) localStorage.setItem('fc-code', code.trim().toUpperCase());
+    if (localStorage.getItem('fc-src')) return;
+    let s = (q.get('utm_source') || q.get('source') || q.get('ref') || '').toLowerCase().trim();
+    if (!s && document.referrer) { try { const h = new URL(document.referrer).hostname.replace(/^www\./, ''); if (!/forecut\.in$/.test(h)) s = h; } catch (e) {} }
+    const map = [[/linkedin|lnkd/, 'linkedin'], [/instagram|^ig$/, 'instagram'], [/whatsapp|wa\.me/, 'whatsapp'], [/scribd/, 'scribd'], [/facebook|fb\.|^fb$/, 'facebook'], [/youtube|youtu\.be/, 'youtube'], [/google\./, 'google'], [/bing\./, 'bing'], [/chatgpt|openai/, 'chatgpt'], [/t\.co$|twitter|^x$/, 'x'], [/pinterest/, 'pinterest'], [/^app$/, 'app'], [/mail|zoho|gmail|outlook/, 'email']];
+    if (s) { const m = map.find(([r]) => r.test(s)); s = m ? m[1] : s.slice(0, 40); } else s = 'direct';
+    localStorage.setItem('fc-src', JSON.stringify({ source: s, landing: location.pathname.slice(0, 80) }));
+  } catch (e) {}
+})();
 const google = new GoogleAuthProvider();
 
 const ERR = {
@@ -51,6 +65,32 @@ window.FCAuth = {
       const d = await F.getDoc(F.doc(F.getFirestore(app), 'access', u.uid));
       return d.exists() ? d.data() : null;
     } catch (e) { return null; }
+  },
+  // access code (e.g. NIFT2026): checks codes/{CODE} and, if valid and better than what the member has, writes their access
+  redeem: async (raw) => {
+    const u = auth.currentUser; if (!u) throw Error('Please sign in first.');
+    const code = String(raw || '').trim().toUpperCase().replace(/[^A-Z0-9-]/g, ''); if (!code) throw Error('Please enter a code.');
+    const F = await import(FS), db = F.getFirestore(app);
+    let c; try { c = await F.getDoc(F.doc(db, 'codes', code)); } catch (e) { throw Error('That code could not be checked. Please try again.'); }
+    if (!c.exists() || !c.data().active) throw Error('That code is not valid. Check the spelling, or ask the person who shared it.');
+    const d = c.data(); if (d.closesMs && Date.now() > d.closesMs) throw Error('That code has closed.');
+    const cur = await F.getDoc(F.doc(db, 'access', u.uid)), a = cur.exists() ? cur.data() : null;
+    if (a && a.plan && a.plan !== 'free' && (!a.until || (d.until && a.until >= d.until))) return { plan: a.plan, until: a.until || '', already: true };
+    const rec = { plan: d.plan, until: d.until || '', note: 'Code ' + code, by: u.uid, at: new Date().toISOString(), code };
+    await F.setDoc(F.doc(db, 'access', u.uid), rec);
+    return { plan: rec.plan, until: rec.until };
+  },
+  // access request (student, alumni, faculty…): one per member, reviewed on the admin page
+  requestAccess: async (d) => {
+    const u = auth.currentUser; if (!u) throw Error('Please sign in first.');
+    const F = await import(FS), cut = (v, n) => String(v || '').trim().slice(0, n);
+    const rec = { uid: u.uid, email: (u.email || '').toLowerCase(), name: u.displayName || '', role: cut(d.role, 40), college: cut(d.college, 120), course: cut(d.course, 80), year: cut(d.year, 20), message: cut(d.message, 600), at: new Date().toISOString(), status: 'new' };
+    await F.setDoc(F.doc(F.getFirestore(app), 'requests', u.uid), rec);
+    return rec;
+  },
+  myRequest: async () => {
+    const u = auth.currentUser; if (!u) return null;
+    try { const F = await import(FS); const r = await F.getDoc(F.doc(F.getFirestore(app), 'requests', u.uid)); return r.exists() ? r.data() : null; } catch (e) { return null; }
   },
   // feedback goes to the Firestore "feedback" collection; if that is not available, it opens an email instead
   sendFeedback: async (d) => {
@@ -105,7 +145,6 @@ function unlock() {
 // cloud sync and teams load only for signed-in people
 onAuthStateChanged(auth, (u) => { if (u) import('/sync.js').then((m) => m.start(app, auth, u)).catch(() => {}); });
 // ---- member profile for the admin page: name, email, sign-up date and last visit (written at most once a day) ----
-const FS = "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 onAuthStateChanged(auth, async (u) => {
   if (!u) return;
   const day = new Date().toISOString().slice(0, 10), k = 'fcp-seen-' + u.uid;
@@ -116,7 +155,9 @@ onAuthStateChanged(auth, async (u) => {
       uid: u.uid, email: (u.email || '').toLowerCase(), name: u.displayName || '',
       provider: ((u.providerData || [])[0] || {}).providerId || 'password', verified: !!u.emailVerified,
       created: u.metadata && u.metadata.creationTime ? new Date(u.metadata.creationTime).toISOString() : '',
-      lastSeen: new Date().toISOString(), lastPage: location.pathname
+      lastSeen: new Date().toISOString(), lastPage: location.pathname,
+      ...(() => { try { const c = u.metadata && u.metadata.creationTime ? new Date(u.metadata.creationTime).getTime() : 0, src = JSON.parse(localStorage.getItem('fc-src') || 'null');
+        return src && c && Date.now() - c < 3 * 864e5 ? { source: src.source, landing: src.landing } : {}; } catch (e) { return {}; } })()
     }, { merge: true });
     try { localStorage.setItem(k, day); } catch (e) {}
   } catch (e) {}
@@ -253,3 +294,45 @@ onAuthStateChanged(auth, (u) => {
   });
 })();
 document.dispatchEvent(new Event('fcauth-ready'));
+
+// ---- a code from a shared link (?code=…) switches access on as soon as the person is signed in ----
+onAuthStateChanged(auth, async (u) => {
+  let code = ''; try { code = localStorage.getItem('fc-code') || ''; } catch (e) {}
+  if (!u || !code) return;
+  try { localStorage.removeItem('fc-code'); } catch (e) {}
+  let t;
+  try { const r = await window.FCAuth.redeem(code); const until = r.until ? new Date(r.until + 'T12:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+    t = r.already ? 'You already have Forecut access' + (until ? ' until ' + until : '') + '.' : 'Code ' + code + ' applied. Your ' + r.plan + ' access is on' + (until ? ' until ' + until : '') + '.'; }
+  catch (e) { t = 'Code ' + code + ': ' + e.message; }
+  if (!document.getElementById('fcip-css')) { const st = document.createElement('style'); st.id = 'fcip-css'; st.textContent = '.fcip{position:fixed;left:12px;right:12px;bottom:14px;z-index:9999;background:#1f3d33;color:#f5f0e8;border-radius:14px;padding:14px 16px;font:15px/1.5 "DM Sans",sans-serif;box-shadow:0 12px 30px -10px rgba(0,0,0,.5);max-width:520px;margin:0 auto}.fcip button{all:unset;cursor:pointer;float:right;font-weight:700;margin-left:10px}'; document.head.appendChild(st); }
+  const p = document.createElement('div'); p.className = 'fcip'; p.setAttribute('role', 'status');
+  p.innerHTML = '<button type="button" aria-label="Close">✕</button>'; p.appendChild(document.createTextNode(t)); document.body.appendChild(p);
+  p.querySelector('button').onclick = () => p.remove(); setTimeout(() => p.remove(), 12000);
+  window.dispatchEvent(new Event('fc-access-changed'));
+});
+// ---- site announcement banner, set on the admin page (config/site); read with one small request, cached for 10 minutes ----
+(async function () {
+  if (/^\/admin/.test(location.pathname)) return;
+  let c = null;
+  try { const k = JSON.parse(sessionStorage.getItem('fc-banner') || 'null'); if (k && Date.now() - k.t < 6e5) c = k.c; } catch (e) {}
+  if (!c) {
+    try {
+      const r = await fetch('https://firestore.googleapis.com/v1/projects/forcut-forecast/databases/(default)/documents/config/site?key=AIzaSyCPG9vO5NZobpaZga7JfBa13yCstTU9uRM');
+      const j = r.ok ? await r.json() : {}, f = j.fields || {}, v = (x) => x ? (x.stringValue != null ? x.stringValue : x.booleanValue) : '';
+      c = { on: !!v(f.on), text: v(f.text) || '', link: v(f.link) || '', label: v(f.label) || '', tone: v(f.tone) || 'green', ends: v(f.ends) || '' };
+      try { sessionStorage.setItem('fc-banner', JSON.stringify({ t: Date.now(), c })); } catch (e) {}
+    } catch (e) { return; }
+  }
+  if (!c.on || !c.text || (c.ends && c.ends < new Date().toISOString().slice(0, 10))) return;
+  const key = 'fc-banner-x-' + c.text.length + '-' + c.text.slice(0, 24);
+  try { if (localStorage.getItem(key)) return; } catch (e) {}
+  const safe = /^(https:\/\/|\/)/.test(c.link) ? c.link : '';
+  const b = document.createElement('div'); b.className = 'fcban fcban-' + (c.tone === 'clay' ? 'clay' : 'green'); b.setAttribute('role', 'region'); b.setAttribute('aria-label', 'Announcement');
+  const sp = document.createElement('span'); sp.textContent = c.text; b.appendChild(sp);
+  if (safe) { const a = document.createElement('a'); a.href = safe; a.textContent = c.label || 'Find out more'; b.appendChild(a); }
+  const x = document.createElement('button'); x.type = 'button'; x.setAttribute('aria-label', 'Close announcement'); x.textContent = '✕'; b.appendChild(x);
+  x.onclick = () => { b.remove(); try { localStorage.setItem(key, '1'); } catch (e) {} };
+  const st = document.createElement('style');
+  st.textContent = '.fcban{display:flex;gap:10px 14px;align-items:center;justify-content:center;flex-wrap:wrap;padding:9px 44px 9px 16px;font:600 14px/1.4 "DM Sans",system-ui,sans-serif;text-align:center;position:relative;z-index:50}.fcban-green{background:#1f3d33;color:#f5f0e8}.fcban-clay{background:#a9481f;color:#fff}.fcban a{color:inherit;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}.fcban button{all:unset;cursor:pointer;position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:15px;padding:4px 6px}.fcban button:focus-visible,.fcban a:focus-visible{outline:2px solid currentColor;outline-offset:2px}';
+  document.head.appendChild(st); document.body.prepend(b);
+})();
