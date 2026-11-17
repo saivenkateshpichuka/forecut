@@ -1,109 +1,227 @@
 <!doctype html>
-<html lang="en-IN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en-IN"><head><script>(function(l){var p=l.pathname;if(/\.html$/.test(p)){p=p.replace(/(^|\/)index\.html$/,"$1").replace(/\.html$/,"");if(p==="/tools"){l.replace("/tools/"+l.search+l.hash);return}history.replaceState(null,"",p+l.search+l.hash)}})(location)</script><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Forecut admin</title><meta name="robots" content="noindex,nofollow"><link rel="icon" href="/favicon.svg">
+<link rel="manifest" href="/admin.webmanifest"><meta name="theme-color" content="#1f3d33">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="FC Admin"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="/favicon-192.png">
 <link rel="stylesheet" href="/fonts/fonts.css">
 <style>
-:root{--paper:#f5f0e8;--card:#fffcf7;--ink:#1c1714;--muted:#6e6259;--line:#e2dacd;--green:#1f3d33;--gsoft:#e8eee8;--clay:#a9481f}
-*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font:14.5px/1.5 "DM Sans",system-ui,sans-serif}
-header{background:var(--green);color:#fff;padding:14px max(16px,env(safe-area-inset-left))}
-header .in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px;justify-content:space-between;flex-wrap:wrap}
-header b{font:800 15px/1 "DM Sans";letter-spacing:.16em}header a{color:#cfd9d2}
-main{max-width:1280px;margin:0 auto;padding:22px max(16px,env(safe-area-inset-left)) 60px}
-h1{font:600 28px/1.15 "Source Serif 4",Georgia,serif;margin:0 0 4px}.sub{color:var(--muted);margin:0 0 18px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:0 0 16px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:0 0 16px}
-.stats div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px 14px}.stats b{display:block;font:600 26px/1.1 "Source Serif 4",serif;color:var(--green)}.stats span{color:var(--muted);font-size:12.5px}
-.tabs{display:flex;gap:6px;margin:0 0 12px}.tabs button{border:1px solid var(--line);background:var(--card);border-radius:99px;padding:7px 14px;font:600 13px "DM Sans";cursor:pointer}.tabs button[aria-pressed=true]{background:var(--green);color:#fff;border-color:var(--green)}
-.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 12px}
-input,select,button{font:inherit}input[type=search],select,input[type=date],input[type=text]{border:1px solid var(--line);border-radius:7px;padding:7px 9px;background:#fff;color:var(--ink)}
-input[type=search]{min-width:220px;flex:1}
-.btn{border:1px solid var(--green);background:var(--green);color:#fff;border-radius:7px;padding:7px 12px;font-weight:600;cursor:pointer}.btn.o{background:#fff;color:var(--green)}.btn.s{padding:5px 10px;font-size:12.5px}
-.wrap{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
-table{border-collapse:collapse;width:100%;min-width:1010px;font-size:13.5px}th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-th{font:700 11px/1.2 "DM Sans";letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--paper);position:sticky;top:0}
-td small{color:var(--muted)}a{color:var(--green)}
-.tag{display:inline-block;font:700 11px "DM Sans";padding:3px 8px;border-radius:99px;background:var(--gsoft);color:var(--green)}.tag.new{background:#fde6db;color:#8a2f17}
-.acc{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.acc select{padding:5px}.acc input[type=date]{padding:4px}.acc input[type=text]{width:130px;padding:4px 6px}
-.msg{padding:12px 14px;border-radius:8px;background:var(--gsoft);margin:0 0 14px}.msg.err{background:#fbebeb}
+:root{--paper:#f5f0e8;--card:#fffcf7;--ink:#1c1714;--muted:#6e6259;--line:#e2dacd;--green:#1f3d33;--gsoft:#e8eee8;--clay:#a9481f;--bad:#8a1f1f;--badsoft:#fbebeb;--warnsoft:#fdf1dc}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}body{margin:0;background:var(--paper);color:var(--ink);font:14.5px/1.5 "DM Sans",system-ui,sans-serif}
+header{background:var(--green);color:#fff;padding:calc(12px + env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) 12px max(16px,env(safe-area-inset-left))}
+header .in{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:10px 14px;justify-content:space-between;flex-wrap:wrap}
+header b{font:800 15px/1 "DM Sans";letter-spacing:.16em}header small{color:#cfd9d2;font-size:12.5px;overflow:hidden;text-overflow:ellipsis;max-width:60vw;white-space:nowrap}
+main{max-width:1280px;margin:0 auto;padding:18px max(16px,env(safe-area-inset-right)) 110px max(16px,env(safe-area-inset-left))}
+h1{font:600 26px/1.15 "Source Serif 4",Georgia,serif;margin:0 0 12px}h2{font:600 19px/1.2 "Source Serif 4",Georgia,serif;margin:0 0 6px}h3{font:700 13px/1.3 "DM Sans";letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:16px 0 6px}
+.sub{color:var(--muted);margin:0 0 12px}.small{font-size:12.5px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin:0 0 14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:0 0 14px}
+.stats>div{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}.stats b{display:block;font:600 24px/1.1 "Source Serif 4",serif;color:var(--green)}.stats span{color:var(--muted);font-size:12.5px}
+.stats button{all:unset;cursor:pointer;display:block;width:100%}
+.tabs{display:flex;gap:6px;margin:0 0 14px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:2px;scrollbar-width:none}.tabs::-webkit-scrollbar{display:none}
+.tabs button{flex:none;border:1px solid var(--line);background:var(--card);border-radius:99px;padding:8px 14px;font:600 13.5px "DM Sans";cursor:pointer;color:var(--ink)}.tabs button[aria-pressed=true]{background:var(--green);color:#fff;border-color:var(--green)}
+.tabs i[hidden]{display:none}.tabs i{font-style:normal;display:inline-block;min-width:18px;padding:0 5px;margin-left:5px;border-radius:99px;background:var(--clay);color:#fff;font-size:11.5px;text-align:center}
+.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 10px}
+input,select,button,textarea{font:inherit;color:var(--ink)}
+input[type=search],select,input[type=date],input[type=text],input[type=url],textarea{border:1px solid var(--line);border-radius:7px;padding:8px 9px;background:#fff;max-width:100%}
+input[type=search]{min-width:200px;flex:1}textarea{width:100%}
+.btn{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--green);background:var(--green);color:#fff;border-radius:7px;padding:8px 12px;font-weight:600;cursor:pointer;text-decoration:none;white-space:nowrap}.btn.o{background:#fff;color:var(--green)}.btn.s{padding:5px 10px;font-size:12.5px}.btn.bad{border-color:var(--bad);background:#fff;color:var(--bad)}.btn:disabled{opacity:.55;cursor:default}
+.lnk{all:unset;cursor:pointer;font-weight:700;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}.lnk:hover{text-decoration-color:currentColor}
+.wrap{border:1px solid var(--line);border-radius:10px;background:var(--card);overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px}th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:700 11px/1.2 "DM Sans";letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--paper)}
+td small,.muted{color:var(--muted)}a{color:var(--green)}
+.tag{display:inline-flex;align-items:center;gap:4px;font:700 11px "DM Sans";padding:3px 8px;border-radius:99px;background:var(--gsoft);color:var(--green);margin:2px 3px 0 0}.tag.new{background:#fde6db;color:#8a2f17}.tag.exp{background:var(--badsoft);color:var(--bad)}.tag.warn{background:var(--warnsoft);color:#7a4a00}.tag.grey{background:#eee8de;color:var(--muted)}
+.tag button{all:unset;cursor:pointer;font-size:12px;line-height:1}
+.acc{display:flex;gap:6px;flex-wrap:wrap;align-items:center}.acc select{padding:6px}.acc input[type=date]{padding:5px}.acc input[type=text]{width:130px;padding:5px 7px}
+.msg{padding:12px 14px;border-radius:8px;background:var(--gsoft);margin:0 0 14px}.msg.err{background:var(--badsoft)}.msg.warn{background:var(--warnsoft)}
 code{background:#f0ebe2;padding:1px 5px;border-radius:4px}
 :focus-visible{outline:2px solid var(--clay);outline-offset:2px}
-#bulk{position:sticky;top:0;z-index:5;box-shadow:0 6px 18px rgba(28,23,20,.12);border-color:var(--green)}#bulk .bar{margin:0}.tag.exp{background:#fbebeb;color:#8a1f1f}.dur{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px 18px}.dur label{display:flex;gap:8px;align-items:center;justify-content:space-between}
-.fca,.fcfbb,.fcinst,.fcip,.fcfb{display:none!important}
+#bulk{position:sticky;top:0;z-index:20;background:var(--card);border:1px solid var(--green);border-radius:10px;box-shadow:0 6px 18px rgba(28,23,20,.14);margin:0 0 12px}
+#bulk summary{cursor:pointer;padding:11px 14px;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:10px}#bulk summary::-webkit-details-marker{display:none}#bulk summary::after{content:"Actions ▾";color:var(--green)}#bulk[open] summary::after{content:"Hide ▴"}
+#bulk .in{padding:0 14px 12px;display:grid;gap:8px}#bulk .bar{margin:0}
+.dur{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:8px 18px}.dur label{display:flex;gap:8px;align-items:center;justify-content:space-between}
+.grid2 .wide{grid-column:1/-1}.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px}
+.rq{border:1px solid var(--line);border-radius:10px;background:var(--card);padding:12px 14px;margin:0 0 10px}.rq p{margin:6px 0}
+dialog{border:none;border-radius:14px;padding:0;width:min(760px,96vw);max-height:92vh;background:var(--card);color:var(--ink);box-shadow:0 30px 80px -20px rgba(0,0,0,.45)}
+dialog::backdrop{background:rgba(28,23,20,.45)}
+dialog .hd{position:sticky;top:0;background:var(--card);display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);z-index:2}
+dialog .bd{padding:14px 16px 20px}
+dialog .x{all:unset;cursor:pointer;font-size:18px;padding:4px 8px}
+.kv{display:grid;grid-template-columns:130px 1fr;gap:4px 12px;margin:0}.kv dt{color:var(--muted)}.kv dd{margin:0}
+.chart{display:block;width:100%;height:auto}.chart text{font:12px "DM Sans",sans-serif;fill:var(--muted)}.chart .v{fill:var(--ink);font-weight:600}
+.hb{display:grid;grid-template-columns:minmax(90px,150px) 1fr auto;gap:6px 10px;align-items:center;font-size:13.5px}.hb span.b{display:block;height:14px;background:var(--green);border-radius:0 4px 4px 0;min-width:2px}
+.ban{display:flex;gap:10px 14px;align-items:center;justify-content:center;flex-wrap:wrap;padding:9px 16px;border-radius:8px;font:600 14px/1.4 "DM Sans";text-align:center}.ban.green{background:#1f3d33;color:#f5f0e8}.ban.clay{background:#a9481f;color:#fff}.ban a{color:inherit}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom));background:var(--ink);color:#fff;padding:10px 16px;border-radius:99px;z-index:100;font-weight:600;max-width:92vw}
+.fca,.fcfbb,.fcinst,.fcip,.fcfb,.fcban{display:none!important}
+@media (min-width:761px){table.mt{min-width:1040px}}
+@media (max-width:760px){
+  h1{font-size:22px}.stats{grid-template-columns:repeat(3,1fr);gap:8px}.stats>div{padding:8px 10px}.stats b{font-size:20px}.stats span{font-size:11.5px}
+  .wrap{border:none;background:none;overflow:visible}
+  table.mt,table.mt tbody{display:block}table.mt thead{display:none}
+  table.mt tr{display:grid;grid-template-columns:30px 1fr;gap:2px 8px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:0 0 10px}
+  table.mt td{display:block;border:none;padding:0;grid-column:2}table.mt td.ck{grid-column:1;grid-row:1 / span 6;padding-top:2px}
+  table.mt td[data-l]{font-size:12.5px;color:var(--muted)}table.mt td[data-l]::before{content:attr(data-l) ": ";font-weight:600}
+  table.mt td.ac{margin-top:6px}.acc input[type=text]{flex:1;min-width:120px}
+  #bulk{position:fixed;left:8px;right:8px;top:auto;bottom:calc(8px + env(safe-area-inset-bottom));margin:0;max-height:70vh;overflow:auto}
+  .kv{grid-template-columns:1fr}.kv dt{margin-top:6px}
+  dialog{width:100vw;max-width:100vw;height:100%;max-height:100%;border-radius:0}
+  .tb2 th:nth-child(n+4),.tb2 td:nth-child(n+4){display:none}
+}
 </style>
 <script type="module" src="/auth.js"></script>
 </head><body>
-<header><div class="in"><b>FORECUT · ADMIN</b><span id="who"></span></div></header>
+<header><div class="in"><b>FORECUT · ADMIN</b><small id="who"></small></div></header>
 <main>
-<h1>Members</h1><p class="sub">Everyone who has signed in, the access you've given them, and their feedback.</p>
 <div id="state" class="msg">Loading…</div>
+<div id="warn" class="msg warn" hidden></div>
 <div id="app" hidden>
   <div class="stats" id="stats"></div>
-  <div class="tabs" role="group" aria-label="View"><button type="button" data-tab="m" aria-pressed="true">Members</button><button type="button" data-tab="f" aria-pressed="false">Feedback</button></div>
+  <nav class="tabs" role="group" aria-label="Sections">
+    <button type="button" data-tab="m" aria-pressed="true">Members</button>
+    <button type="button" data-tab="r" aria-pressed="false">Requests<i id="nR" hidden></i></button>
+    <button type="button" data-tab="c" aria-pressed="false">Codes</button>
+    <button type="button" data-tab="e" aria-pressed="false">Emails</button>
+    <button type="button" data-tab="f" aria-pressed="false">Feedback<i id="nF" hidden></i></button>
+    <button type="button" data-tab="i" aria-pressed="false">Insights</button>
+    <button type="button" data-tab="s" aria-pressed="false">Site &amp; app</button>
+  </nav>
+
+  <!-- MEMBERS -->
   <section id="tm">
     <div class="bar">
-      <input type="search" id="q" placeholder="Search name or email">
-      <select id="flt"><option value="all">All members</option><option value="new">Signed up in the last 7 days</option><option value="active">Visited in the last 7 days</option><option value="acc">Has access granted</option><option value="noacc">No access granted</option><option value="soon">Access ends in 30 days</option><option value="expired">Access ended</option><option value="p:student">Students</option><option value="p:alumni">Alumni</option><option value="p:partner">Partners</option><option value="p:individual">Individual</option><option value="p:team">Team</option><option value="p:enterprise">Enterprise</option></select>
+      <input type="search" id="q" placeholder="Search name, email, college or tag" aria-label="Search members">
+      <select id="flt" aria-label="Show"></select>
+    </div>
+    <div class="bar">
+      <button class="btn" type="button" id="mailBtn">Send email</button>
+      <button class="btn o" type="button" id="impBtn" aria-expanded="false">Import from Firebase</button>
+      <button class="btn o" type="button" id="durBtn" aria-expanded="false">Plan durations</button>
       <button class="btn o" type="button" id="copy">Copy emails</button>
       <button class="btn o" type="button" id="csv">Download CSV</button>
       <button class="btn o" type="button" id="reload">Refresh</button>
-      <button class="btn" type="button" id="impBtn" aria-expanded="false">Import from Firebase</button>
-      <button class="btn" type="button" id="mailBtn" aria-expanded="false">Send email</button>
-      <button class="btn o" type="button" id="durBtn" aria-expanded="false">Plan durations</button>
     </div>
     <div class="card" id="dur" hidden>
-      <h2 style="font:600 19px/1.2 'Source Serif 4',serif;margin:0 0 4px">How long each plan lasts</h2>
-      <p class="sub" style="margin:0 0 10px">When you choose a plan for someone, the end date fills in from here. You can still change any single date by hand.</p>
+      <h2>How long each plan lasts</h2>
+      <p class="sub">When you choose a plan, the end date fills in from here. You can still change any date by hand. Saved on this device.</p>
       <div class="dur" id="durList"></div>
     </div>
-    <div class="card" id="bulk" hidden>
-      <div class="bar"><b id="bulkN"></b>
-        <label>Give <select id="bPlan"></select></label>
-        <label>until <input type="date" id="bUntil"></label>
-        <input type="text" id="bNote" placeholder="Note (optional)">
-        <button class="btn" type="button" id="bApply">Apply to selected</button>
-        <button class="btn o" type="button" id="bMail">Email selected</button>
-        <button class="btn o" type="button" id="bClear">Clear selection</button>
-        <span id="bMsg"></span></div>
-    </div>
-    <div class="card" id="mail" hidden>
-      <h2 style="font:600 19px/1.2 'Source Serif 4',serif;margin:0 0 4px">Email members from hello@forecut.in (Zoho Mail)</h2>
-      <p class="sub" style="margin:0 0 10px" id="mailTo"></p>
-      <div class="bar"><label>Message for <select id="tpl"></select></label></div>
-      <input type="text" id="mSub" placeholder="Subject" style="width:100%;margin:0 0 8px">
-      <textarea id="mBody" rows="10" style="width:100%;border:1px solid var(--line);border-radius:7px;padding:8px;font:14px/1.5 'DM Sans',sans-serif"></textarea>
-      <div class="bar" style="margin:8px 0 4px" id="mailGo"></div>
-      <p class="sub" style="font-size:12.5px;margin:6px 0 0">Everyone goes in <b>Bcc</b>, so members never see each other's addresses. Lists over 50 open in batches of 50.<br>
-      <b>One-time setup so this opens Zoho:</b> sign in at mail.zoho.in → Settings → System → <b>Mail To Handlers</b> → <b>Enable Mail To Handler</b> → Allow. If the message does not fill in, use the Copy buttons and paste into a new Zoho email.</p>
-    </div>
     <div class="card" id="imp" hidden>
-      <h2 style="font:600 19px/1.2 'Source Serif 4',serif;margin:0 0 6px">Bring in everyone who has signed up</h2>
+      <h2>Bring in everyone who has signed up</h2>
       <ol style="margin:0 0 10px;padding-left:20px">
-        <li>Open Firebase console → <b>Authentication</b> → <b>Users</b>.</li>
-        <li>At the bottom of the list, set <b>Rows per page</b> to the largest number so everyone is on one page.</li>
-        <li>Click anywhere on the list, press <b>Ctrl + A</b> (Mac: <b>Cmd + A</b>), then <b>Ctrl + C</b> (Mac: <b>Cmd + C</b>).</li>
-        <li>Paste below with <b>Ctrl + V</b> and press <b>Check</b>. Extra text from the page is ignored.</li>
+        <li>Open Firebase console → <b>Authentication</b> → <b>Users</b> (on a computer).</li>
+        <li>At the bottom of the list, set <b>Rows per page</b> to the largest number.</li>
+        <li>Click on the list, press <b>Ctrl + A</b> (Mac: <b>Cmd + A</b>), then <b>Ctrl + C</b> (Mac: <b>Cmd + C</b>).</li>
+        <li>Paste below and press <b>Check</b>. Extra text from the page is ignored.</li>
       </ol>
-      <textarea id="impTxt" rows="6" style="width:100%;border:1px solid var(--line);border-radius:7px;padding:8px;font:13px/1.4 ui-monospace,monospace" placeholder="Paste the Firebase Users list here"></textarea>
+      <textarea id="impTxt" rows="5" style="font:13px/1.4 ui-monospace,monospace" placeholder="Paste the Firebase Users list here" aria-label="Firebase users list"></textarea>
       <div class="bar" style="margin:8px 0 0"><button class="btn o" type="button" id="impChk">Check</button>
         <label class="btn o" style="cursor:pointer">Or choose an export file<input type="file" id="impFile" accept=".json,.csv,.txt" hidden></label>
-        <button class="btn" type="button" id="impGo" hidden>Add to members</button><span id="impMsg"></span></div>
+        <button class="btn" type="button" id="impGo" hidden>Add to members</button><span id="impMsg" role="status"></span></div>
     </div>
-    <p class="sub" id="note" style="margin:-4px 0 10px;font-size:12.5px"></p>
-    <div class="wrap"><table><thead><tr><th><input type="checkbox" id="all" aria-label="Select all shown"></th><th>Member</th><th>Signed up</th><th>Last visit</th><th>Sign-in</th><th>Access</th></tr></thead><tbody id="rows"></tbody></table></div>
-    <p class="sub" style="margin-top:10px;font-size:12.5px">New members appear here on their own when they visit. To bring in anyone missing, use <b>Import from Firebase</b>.</p>
+    <details id="bulk" hidden open>
+      <summary><span id="bulkN"></span></summary>
+      <div class="in">
+        <div class="bar"><label>Give <select id="bPlan"></select></label><label>until <input type="date" id="bUntil"></label><input type="text" id="bNote" placeholder="Note (optional)" aria-label="Note"><button class="btn" type="button" id="bApply">Apply</button></div>
+        <div class="bar"><button class="btn o" type="button" id="bRenew" title="Adds each person's plan length to their current end date">Renew access</button><input type="text" id="bTag" placeholder="Tag, e.g. NIFT 2024" list="tagList" aria-label="Tag"><button class="btn o" type="button" id="bTagAdd">Add tag</button><button class="btn o" type="button" id="bTagDel">Remove tag</button></div>
+        <div class="bar"><button class="btn" type="button" id="bMail">Email selected</button><button class="btn o" type="button" id="bClear">Clear selection</button><span id="bMsg" role="status"></span></div>
+      </div>
+    </details>
+    <datalist id="tagList"></datalist>
+    <p class="sub small" id="note"></p>
+    <div class="wrap"><table class="mt"><thead><tr><th><input type="checkbox" id="all" aria-label="Select all shown"></th><th>Member</th><th>Signed up</th><th>Last visit</th><th>Sign-in</th><th>Access</th></tr></thead><tbody id="rows"></tbody></table></div>
   </section>
-  <section id="tf" hidden><div class="wrap"><table><thead><tr><th>Date</th><th>From</th><th>Rating</th><th>Role</th><th>Uses</th><th>What to improve</th><th>Wished-for feature</th></tr></thead><tbody id="fb"></tbody></table></div></section>
+
+  <!-- REQUESTS -->
+  <section id="tr" hidden>
+    <p class="sub">People who asked for student, alumni or faculty access from their account page. Approve with one tap, then email them.</p>
+    <div class="bar"><select id="rqF" aria-label="Show requests"><option value="new">Waiting</option><option value="approved">Approved</option><option value="declined">Declined</option><option value="all">All</option></select></div>
+    <div id="rqList"></div>
+  </section>
+
+  <!-- CODES -->
+  <section id="tc" hidden>
+    <div class="card">
+      <h2>Make an access code</h2>
+      <p class="sub">Anyone who enters the code on their account page, or opens the code's link, gets this plan straight away. Share it in a post, a WhatsApp group or an email to a college.</p>
+      <form id="cForm" class="bar" style="align-items:flex-end">
+        <label>Code<br><input type="text" id="cCode" required maxlength="24" placeholder="NIFT2026" style="text-transform:uppercase;width:150px"></label>
+        <label>Plan<br><select id="cPlan"></select></label>
+        <label>Access until<br><input type="date" id="cUntil"></label>
+        <label>Code stops working on <small>(optional)</small><br><input type="date" id="cCloses"></label>
+        <label>Label <small>(for you)</small><br><input type="text" id="cLabel" maxlength="80" placeholder="NIFT Hyderabad students"></label>
+        <button class="btn" type="submit">Create code</button><span id="cMsg" role="status"></span>
+      </form>
+    </div>
+    <div class="wrap"><table class="tb2"><thead><tr><th>Code</th><th>Gives</th><th>Used by</th><th>Stops</th><th>Label</th><th>On</th><th></th></tr></thead><tbody id="cRows"></tbody></table></div>
+  </section>
+
+  <!-- EMAILS -->
+  <section id="te" hidden>
+    <p class="sub">Every email you opened in Zoho or copied from this page: who it went to and when. It is recorded when you open it, so if you closed Zoho without sending, it still shows here.</p>
+    <div id="eList"></div>
+  </section>
+
+  <!-- FEEDBACK -->
+  <section id="tf" hidden>
+    <div class="bar"><select id="fbF" aria-label="Show feedback"><option value="open">New and replied</option><option value="new">New</option><option value="replied">Replied</option><option value="done">Done</option><option value="all">All</option></select></div>
+    <div id="fbList"></div>
+  </section>
+
+  <!-- INSIGHTS -->
+  <section id="ti" hidden><div id="ins"></div></section>
+
+  <!-- SITE & APP -->
+  <section id="ts" hidden>
+    <div class="card">
+      <h2>Announcement banner</h2>
+      <p class="sub">A strip at the top of every forecut.in page. Visitors can close it; a new message shows again. Changes appear within about 10 minutes.</p>
+      <form id="sForm" style="display:grid;gap:10px">
+        <label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="sOn"> Show the banner</label>
+        <label>Message<br><input type="text" id="sText" maxlength="160" style="width:100%" placeholder="Student access is open. Use code NIFT2026 on your account page."></label>
+        <div class="bar" style="margin:0"><label>Link <small>(optional)</small><br><input type="text" id="sLink" placeholder="/account" style="width:220px"></label><label>Link text<br><input type="text" id="sLabel" maxlength="40" placeholder="Get access" style="width:160px"></label>
+          <label>Colour<br><select id="sTone"><option value="green">Green</option><option value="clay">Clay</option></select></label><label>Hide after <small>(optional)</small><br><input type="date" id="sEnds"></label></div>
+        <div><b class="small">Preview</b><div id="sPrev" style="margin-top:6px"></div></div>
+        <div><button class="btn" type="submit">Save banner</button> <span id="sMsg" role="status"></span></div>
+      </form>
+    </div>
+    <div class="card">
+      <h2>Admin app on your phone</h2>
+      <p class="sub" id="appTxt"></p>
+      <button class="btn" type="button" id="appBtn" hidden>Install Forecut Admin</button>
+      <ul class="small" style="margin:8px 0 0;padding-left:18px"><li><b>iPhone:</b> open this page in Safari → Share <span aria-hidden="true">⬆︎</span> → <b>Add to Home Screen</b>.</li><li><b>Android:</b> Chrome menu ⋮ → <b>Add to Home screen</b> or <b>Install app</b>.</li></ul>
+    </div>
+  </section>
 </div>
 </main>
+
+<dialog id="mp" aria-labelledby="mpT"><div class="hd"><h2 id="mpT" style="margin:0"></h2><button class="x" type="button" data-close aria-label="Close">✕</button></div><div class="bd" id="mpB"></div></dialog>
+<dialog id="md" aria-labelledby="mdT"><div class="hd"><h2 id="mdT" style="margin:0">Email from hello@forecut.in</h2><button class="x" type="button" data-close aria-label="Close">✕</button></div><div class="bd">
+  <p class="sub" id="mailTo"></p>
+  <label>Message <select id="tpl"></select></label>
+  <input type="text" id="mSub" placeholder="Subject" aria-label="Subject" style="width:100%;margin:10px 0 8px">
+  <textarea id="mBody" rows="11" aria-label="Message" style="font:14px/1.5 'DM Sans',sans-serif"></textarea>
+  <div class="bar" style="margin:8px 0 4px" id="mailGo"></div>
+  <p class="sub small" style="margin:6px 0 0">Everyone goes in <b>Bcc</b>, so members never see each other's addresses. Lists over 50 open in batches of 50.<br>
+  <b>One-time setup so this opens Zoho:</b> sign in at mail.zoho.in → Settings → System → <b>Mail To Handlers</b> → <b>Enable Mail To Handler</b> → Allow. On a phone, it opens the Zoho Mail app if it is your default mail app. If the message does not fill in, use the Copy buttons.</p>
+</div></dialog>
+
 <script type="module">
 const FS = "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 const PLANS = [['free','Free member'],['student','Student'],['alumni','Alumni'],['partner','Partner'],['individual','Individual'],['team','Team'],['enterprise','Enterprise']];
+const PN = Object.fromEntries(PLANS);
 const $ = (id) => document.getElementById(id);
 const esc = (s) => String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-const fmt = (iso) => iso ? new Date(iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+const fmt = (iso) => iso ? new Date(iso.length === 10 ? iso + 'T12:00:00' : iso).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '—';
+const longDate = (d) => d ? new Date(d + 'T12:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
 const ago = (iso) => iso ? (Date.now() - new Date(iso).getTime()) / 864e5 : 1e9;
-let F, db, me, members = [], access = {}, feedback = [], picked = new Set();
+const today = () => new Date().toISOString().slice(0, 10);
+const addDays = (n) => { const d = new Date(); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); };
+const nowIso = () => new Date().toISOString();
+const mobile = () => matchMedia('(max-width:760px)').matches;
+let F, db, me, members = [], access = {}, crm = {}, feedback = [], requests = [], codes = [], mails = [], site = {}, picked = new Set();
 function state(t, err) { const s = $('state'); s.hidden = !t; s.className = 'msg' + (err ? ' err' : ''); s.innerHTML = t || ''; }
+function toast(t) { const d = document.createElement('div'); d.className = 'toast'; d.setAttribute('role', 'status'); d.textContent = t; document.body.appendChild(d); setTimeout(() => d.remove(), 3200); }
 function wait() { return new Promise((r) => { const t = setInterval(() => { if (window.FCAuth) { clearInterval(t); r(); } }, 50); }); }
 await wait();
 window.FCAuth.onChange(async (u) => {
@@ -119,133 +237,227 @@ window.FCAuth.onChange(async (u) => {
   }
   state(''); $('app').hidden = false; load();
 });
+
+// ================= data =================
 async function load() {
-  state('Loading members…');
-  try {
-    const [p, a] = await Promise.all([F.getDocs(F.collection(db, 'profiles')), F.getDocs(F.collection(db, 'access'))]);
-    members = p.docs.map((d) => d.data()).sort((x, y) => (y.created || '').localeCompare(x.created || ''));
-    access = {}; a.docs.forEach((d) => { access[d.id] = d.data(); });
-    try { const f = await F.getDocs(F.collection(db, 'feedback')); feedback = f.docs.map((d) => d.data()).sort((x, y) => (y.at || '').localeCompare(x.at || '')); } catch (e) { feedback = []; }
-    state(''); stats(); render(); renderFb();
-  } catch (e) { state('Could not load members: ' + esc(e.message) + '. Check that the latest Firestore rules are published.', true); }
+  state('Loading…');
+  const col = (n) => F.getDocs(F.collection(db, n));
+  const names = ['profiles', 'access', 'crm', 'feedback', 'requests', 'codes', 'mails'];
+  const res = await Promise.allSettled(names.map(col).concat([F.getDoc(F.doc(db, 'config', 'site'))]));
+  if (res[0].status === 'rejected') { state('Could not load members: ' + esc(res[0].reason && res[0].reason.message) + '. Check that the latest Firestore rules are published.', true); return; }
+  const docs = (i) => res[i].status === 'fulfilled' ? res[i].value.docs : [];
+  members = docs(0).map((d) => d.data()).filter((m) => m && m.uid).sort((x, y) => (y.created || '').localeCompare(x.created || ''));
+  access = {}; docs(1).forEach((d) => { access[d.id] = d.data(); });
+  crm = {}; docs(2).forEach((d) => { crm[d.id] = d.data(); });
+  feedback = docs(3).map((d) => Object.assign({ id: d.id }, d.data())).sort((x, y) => (y.at || '').localeCompare(x.at || ''));
+  requests = docs(4).map((d) => d.data()).sort((x, y) => (y.at || '').localeCompare(x.at || ''));
+  codes = docs(5).map((d) => d.data()).sort((x, y) => (y.at || '').localeCompare(x.at || ''));
+  mails = docs(6).map((d) => Object.assign({ id: d.id }, d.data())).sort((x, y) => (y.at || '').localeCompare(x.at || ''));
+  site = res[7].status === 'fulfilled' && res[7].value.exists() ? res[7].value.data() : {};
+  const off = names.map((n, i) => res[i].status === 'rejected' ? n : '').filter(Boolean).concat(res[7].status === 'rejected' ? ['config'] : []);
+  const NICE = { access: 'access', crm: 'tags and notes', feedback: 'feedback', requests: 'requests', codes: 'codes', mails: 'email history', config: 'site banner' };
+  $('warn').hidden = !off.length; $('warn').innerHTML = off.length ? 'Some parts could not load (' + off.map((n) => NICE[n] || n).join(', ') + '). Publish the latest Firestore rules, then press Refresh.' : '';
+  state(''); renderAll();
 }
-function hasAcc(m) { const a = access[m.uid]; return !!(a && a.plan && a.plan !== 'free' && (!a.until || a.until >= new Date().toISOString().slice(0, 10))); }
-function today() { return new Date().toISOString().slice(0, 10); }
-function addDays(n) { const d = new Date(); d.setDate(d.getDate() + n); return d.toISOString().slice(0, 10); }
+function renderAll() { fillFilter(); stats(); render(); renderReq(); renderCodes(); renderMails(); renderFb(); renderIns(); renderSite(); badges(); }
+const prof = (uid) => members.find((m) => m.uid === uid) || { uid, email: (requests.find((r) => r.uid === uid) || {}).email || '' };
+const tagsOf = (uid) => (crm[uid] && crm[uid].tags) || [];
+const reqOf = (uid) => requests.find((r) => r.uid === uid);
+function hasAcc(m) { const a = access[m.uid]; return !!(a && a.plan && a.plan !== 'free' && (!a.until || a.until >= today())); }
 function isExpired(m) { const a = access[m.uid]; return !!(a && a.plan && a.plan !== 'free' && a.until && a.until < today()); }
-// plan durations: '1m' '3m' '6m' '1y' '2y', a fixed date, or 'none'; kept in this browser
+function allTags() { const s = new Set(); Object.values(crm).forEach((c) => (c.tags || []).forEach((t) => s.add(t))); return [...s].sort(); }
+
+// ================= plan durations =================
 const DUR0 = { student: '1y', alumni: '2027-06-30', partner: '6m', individual: '1m', team: '1m', enterprise: '1y' };
 let DUR = Object.assign({}, DUR0); try { Object.assign(DUR, JSON.parse(localStorage.getItem('fc-admin-dur') || '{}')); } catch (e) {}
-function untilFor(plan) {
-  const v = DUR[plan]; if (!v || plan === 'free' || v === 'none') return '';
-  if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v;
-  const d = new Date(), n = parseInt(v, 10);
-  if (v.endsWith('y')) d.setFullYear(d.getFullYear() + n); else d.setMonth(d.getMonth() + n);
-  d.setDate(d.getDate() - 1); return d.toISOString().slice(0, 10);
+function plus(base, v) { const d = new Date(base + 'T12:00:00'), n = parseInt(v, 10) || 1; if (String(v).endsWith('y')) d.setFullYear(d.getFullYear() + n); else d.setMonth(d.getMonth() + n); d.setDate(d.getDate() - 1); return d.toISOString().slice(0, 10); }
+function untilFor(plan) { const v = DUR[plan]; if (!v || plan === 'free' || v === 'none') return ''; if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return v; return plus(today(), v); }
+function renewUntil(a) {
+  const base = a.until && a.until > today() ? a.until : today(), v = DUR[a.plan] || '1y';
+  if (/^\d{4}-/.test(v)) return v > base ? v : plus(base, '1y');
+  return plus(base, v === 'none' ? '1y' : v);
 }
 const DOPT = [['1m', '1 month'], ['3m', '3 months'], ['6m', '6 months'], ['1y', '1 year'], ['2y', '2 years'], ['date', 'Until a fixed date'], ['none', 'No end date']];
 function renderDur() {
   $('durList').innerHTML = PLANS.filter(([v]) => v !== 'free').map(([v, l]) => { const cur = DUR[v] || 'none', fixed = /^\d{4}/.test(cur);
-    return '<label data-p="' + v + '"><b>' + l + '</b><span><select>' + DOPT.map(([k, t]) => '<option value="' + k + '"' + ((fixed ? 'date' : cur) === k ? ' selected' : '') + '>' + t + '</option>').join('') + '</select> <input type="date" value="' + (fixed ? cur : '') + '"' + (fixed ? '' : ' hidden') + '></span></label>'; }).join('');
+    return '<label data-p="' + v + '"><b>' + l + '</b><span><select aria-label="' + l + ' length">' + DOPT.map(([k, t]) => '<option value="' + k + '"' + ((fixed ? 'date' : cur) === k ? ' selected' : '') + '>' + t + '</option>').join('') + '</select> <input type="date" aria-label="' + l + ' end date" value="' + (fixed ? cur : '') + '"' + (fixed ? '' : ' hidden') + '></span></label>'; }).join('');
 }
 $('durList').addEventListener('change', (e) => {
   const l = e.target.closest('[data-p]'), sel = l.querySelector('select'), dt = l.querySelector('input');
   dt.hidden = sel.value !== 'date'; if (sel.value === 'date' && !dt.value) dt.value = '2027-06-30';
   DUR[l.dataset.p] = sel.value === 'date' ? dt.value : sel.value;
   try { localStorage.setItem('fc-admin-dur', JSON.stringify(DUR)); } catch (x) {}
-  $('bUntil').value = untilFor($('bPlan').value);
+  $('bUntil').value = untilFor($('bPlan').value); $('cUntil').value = untilFor($('cPlan').value);
 });
-$('durBtn').addEventListener('click', () => { const o = $('dur').hidden; $('dur').hidden = !o; $('durBtn').setAttribute('aria-expanded', o); renderDur(); });
-async function saveAccess(uid, d) {
-  if (d.plan === 'free') { await F.deleteDoc(F.doc(db, 'access', uid)); delete access[uid]; }
-  else { await F.setDoc(F.doc(db, 'access', uid), d); access[uid] = d; }
+const toggle = (btn, box, after) => $(btn).addEventListener('click', () => { const o = $(box).hidden; $(box).hidden = !o; $(btn).setAttribute('aria-expanded', o); if (o && after) after(); });
+toggle('durBtn', 'dur', renderDur);
+toggle('impBtn', 'imp', () => $('impTxt').focus());
+
+// ================= writes (access + member history) =================
+function logEntries(uids, text) {
+  const at = nowIso(), b = F.writeBatch(db);
+  uids.forEach((u) => { const c = Object.assign({ tags: [], notes: '', log: [] }, crm[u] || {}); c.log = (c.log || []).concat([{ at, t: text }]).slice(-60); crm[u] = c; b.set(F.doc(db, 'crm', u), c); });
+  return b.commit().catch(() => {});
 }
-function bulkInfo() {
-  $('bulk').hidden = !picked.size; $('bulkN').textContent = picked.size + ' selected';
-  $('note').textContent = list().length + ' shown' + (picked.size ? ' · ' + picked.size + ' selected' : '');
+async function setAccessMany(uids, mk, logText) {
+  for (let i = 0; i < uids.length; i += 400) {
+    const b = F.writeBatch(db);
+    uids.slice(i, i + 400).forEach((u) => { const d = mk(u), r = F.doc(db, 'access', u); if (!d || d.plan === 'free') b.delete(r); else b.set(r, d); });
+    await b.commit();
+  }
+  uids.forEach((u) => { const d = mk(u); if (!d || d.plan === 'free') delete access[u]; else access[u] = d; });
+  await logEntries(uids, typeof logText === 'function' ? '' : logText);
 }
-$('bPlan').innerHTML = PLANS.map(([v, l]) => '<option value="' + v + '"' + (v === 'student' ? ' selected' : '') + '>' + (v === 'free' ? 'Free member (remove access)' : l) + '</option>').join('');
-$('bUntil').value = untilFor('student');
-$('bPlan').addEventListener('change', () => { $('bUntil').value = untilFor($('bPlan').value); });
-let lastPlan = '';
-$('bApply').addEventListener('click', async () => {
-  const plan = $('bPlan').value, ids = [...picked]; if (!ids.length) return;
-  const d = { plan, until: plan === 'free' ? '' : $('bUntil').value, note: $('bNote').value.trim(), by: me.uid, at: new Date().toISOString() };
-  $('bApply').disabled = true; $('bMsg').textContent = 'Saving…';
-  try {
-    for (let i = 0; i < ids.length; i += 400) {
-      const b = F.writeBatch(db);
-      ids.slice(i, i + 400).forEach((u) => { const r = F.doc(db, 'access', u); plan === 'free' ? b.delete(r) : b.set(r, d); });
-      await b.commit();
-    }
-    ids.forEach((u) => { if (plan === 'free') delete access[u]; else access[u] = Object.assign({}, d); });
-    lastPlan = plan; stats(); render(); bulkInfo();
-    $('bMsg').innerHTML = 'Done for ' + ids.length + '. ' + (plan === 'free' ? '' : '<button class="btn s" type="button" id="bTell">Email them now</button>');
-  } catch (x) { $('bMsg').textContent = 'Not saved: ' + x.message; }
-  $('bApply').disabled = false;
-});
-function openMail(plan) {
-  $('mail').hidden = false; $('mailBtn').setAttribute('aria-expanded', true);
-  if (plan) pickTpl(plan, $('bUntil').value); else autoTpl();
-  mailInfo(); $('mail').scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-$('bMsg').addEventListener('click', (e) => { if (e.target.id === 'bTell') openMail(lastPlan); });
-$('bMail').addEventListener('click', () => openMail(''));
-$('bClear').addEventListener('click', () => { picked.clear(); $('all').checked = false; render(); bulkInfo(); });
+const grant = (plan, until, note) => ({ plan, until: plan === 'free' ? '' : (until || ''), note: note || '', by: me.uid, at: nowIso() });
+const accText = (d) => d.plan === 'free' ? 'Access removed' : PN[d.plan] + ' access' + (d.until ? ' until ' + fmt(d.until) : '');
+
+// ================= stats + filters =================
 function stats() {
-  const n = members.length;
-  const c = [[n, 'Members'], [members.filter((m) => ago(m.created) <= 1).length, 'New today'], [members.filter((m) => ago(m.created) <= 7).length, 'New in 7 days'],
-    [members.filter((m) => ago(m.lastSeen) <= 7).length, 'Visited in 7 days'], [members.filter(hasAcc).length, 'With access granted'], [feedback.length, 'Feedback received']];
-  $('stats').innerHTML = c.map(([v, l]) => '<div><b>' + v + '</b><span>' + l + '</span></div>').join('');
+  const waiting = requests.filter((r) => r.status === 'new').length;
+  const c = [[members.length, 'Members', 'all'], [members.filter((m) => ago(m.created) <= 1).length, 'New today', 'new1'], [members.filter((m) => ago(m.created) <= 7).length, 'New in 7 days', 'new'],
+    [members.filter((m) => ago(m.lastSeen) <= 7).length, 'Visited in 7 days', 'active'], [members.filter(hasAcc).length, 'With access', 'acc'], [waiting, 'Requests waiting', '#r']];
+  $('stats').innerHTML = c.map(([v, l, f]) => '<div><button type="button" data-sf="' + f + '"><b>' + v + '</b><span>' + l + '</span></button></div>').join('');
+}
+$('stats').addEventListener('click', (e) => { const b = e.target.closest('[data-sf]'); if (!b) return; if (b.dataset.sf === '#r') return tab('r'); tab('m'); $('flt').value = b.dataset.sf; render(); });
+function badges() { const r = requests.filter((x) => x.status === 'new').length, f = feedback.filter((x) => !x.status || x.status === 'new').length; $('nR').hidden = !r; $('nR').textContent = r; $('nF').hidden = !f; $('nF').textContent = f; }
+function fillFilter() {
+  const v = $('flt').value || 'all', tags = allTags();
+  const o = [['all', 'All members'], ['new1', 'Signed up today'], ['new', 'Signed up in the last 7 days'], ['active', 'Visited in the last 7 days'], ['idle', 'Not visited in 30 days'], ['acc', 'Has access'], ['noacc', 'No access'], ['soon', 'Access ends in 30 days'], ['expired', 'Access ended']]
+    .concat(PLANS.filter(([p]) => p !== 'free').map(([p, l]) => ['p:' + p, l + (p === 'individual' || p === 'team' || p === 'enterprise' ? ' plan' : '')]))
+    .concat(tags.map((t) => ['t:' + t, 'Tag: ' + t]));
+  $('flt').innerHTML = o.map(([k, l]) => '<option value="' + esc(k) + '">' + esc(l) + '</option>').join('');
+  $('flt').value = o.some(([k]) => k === v) ? v : 'all';
+  $('tagList').innerHTML = tags.map((t) => '<option value="' + esc(t) + '">').join('');
 }
 function list() {
   const q = $('q').value.trim().toLowerCase(), f = $('flt').value;
-  return members.filter((m) => (!q || (m.name || '').toLowerCase().includes(q) || (m.email || '').includes(q))
-    && (f === 'all' || (f === 'new' && ago(m.created) <= 7) || (f === 'active' && ago(m.lastSeen) <= 7) || (f === 'acc' && hasAcc(m)) || (f === 'noacc' && !hasAcc(m))
-    || (f === 'soon' && hasAcc(m) && (access[m.uid].until || '9') <= addDays(30)) || (f === 'expired' && isExpired(m))
-    || (f.startsWith('p:') && (access[m.uid] || {}).plan === f.slice(2) && !isExpired(m))));
+  return members.filter((m) => {
+    if (q) { const r = reqOf(m.uid) || {}; const hay = [m.name, m.email, r.college, r.course, ...tagsOf(m.uid), (crm[m.uid] || {}).notes].join(' ').toLowerCase(); if (!hay.includes(q)) return false; }
+    const a = access[m.uid] || {};
+    return f === 'all' || (f === 'new1' && ago(m.created) <= 1) || (f === 'new' && ago(m.created) <= 7) || (f === 'active' && ago(m.lastSeen) <= 7) || (f === 'idle' && ago(m.lastSeen) > 30)
+      || (f === 'acc' && hasAcc(m)) || (f === 'noacc' && !hasAcc(m)) || (f === 'soon' && hasAcc(m) && a.until && a.until <= addDays(30)) || (f === 'expired' && isExpired(m))
+      || (f.startsWith('p:') && a.plan === f.slice(2) && !isExpired(m)) || (f.startsWith('t:') && tagsOf(m.uid).includes(f.slice(2)));
+  });
+}
+
+// ================= member list =================
+const PROV = (p) => p === 'google.com' ? 'Google' : p === 'password' ? 'Email' : '—';
+function accBox(m) {
+  const a = access[m.uid] || {}, plan = a.plan || 'free';
+  return '<div class="acc" data-uid="' + esc(m.uid) + '"><select aria-label="Access for ' + esc(m.email) + '">' + PLANS.map(([v, l]) => '<option value="' + v + '"' + (v === plan ? ' selected' : '') + '>' + l + '</option>').join('') + '</select>'
+    + '<input type="date" value="' + esc(a.until || '') + '" aria-label="Until"><input type="text" placeholder="Note" value="' + esc(a.note || '') + '" aria-label="Note">'
+    + '<button class="btn s" type="button" data-save>Save</button>' + (plan !== 'free' ? '<button class="btn s o" type="button" data-renew title="Add one plan length to the end date">Renew</button>' : '') + '<small data-ok role="status"></small></div>'
+    + (isExpired(m) ? '<span class="tag exp">Ended ' + fmt(a.until) + '</span>' : a.code ? '<small>Code ' + esc(a.code) + ' · ' + fmt(a.at) + '</small>' : a.by ? '<small>Set ' + fmt(a.at) + '</small>' : '');
 }
 function render() {
   const L = list();
   $('note').textContent = L.length + ' shown' + (picked.size ? ' · ' + picked.size + ' selected' : '');
-  setTimeout(mailInfo);
   $('rows').innerHTML = L.map((m) => {
-    const a = access[m.uid] || {}, plan = a.plan || 'free';
-    const prov = m.provider === 'google.com' ? 'Google' : m.provider === 'password' ? 'Email' : '—';
-    return '<tr><td><input type="checkbox" data-pick="' + esc(m.uid) + '"' + (picked.has(m.uid) ? ' checked' : '') + ' aria-label="Select ' + esc(m.email) + '"></td><td><b>' + esc(m.name || '—') + '</b>' + (ago(m.created) <= 7 ? ' <span class="tag new">New</span>' : '') + '<br><a href="mailto:' + esc(m.email) + '">' + esc(m.email) + '</a>' + (m.provider === 'password' && !m.verified ? ' <small>(email not verified)</small>' : '') + '</td>'
-      + '<td>' + fmt(m.created) + '</td><td>' + fmt(m.lastSeen) + '<br><small>' + esc(m.lastPage || (m.lastSeen ? 'last sign-in, from Firebase' : '')) + '</small></td><td>' + prov + '</td>'
-      + '<td><div class="acc" data-uid="' + esc(m.uid) + '"><select aria-label="Access for ' + esc(m.email) + '">' + PLANS.map(([v, l]) => '<option value="' + v + '"' + (v === plan ? ' selected' : '') + '>' + l + '</option>').join('') + '</select>'
-      + '<input type="date" value="' + esc(a.until || '') + '" aria-label="Until"><input type="text" placeholder="Note" value="' + esc(a.note || '') + '" aria-label="Note">'
-      + '<button class="btn s" type="button" data-save>Save</button><small data-ok></small></div>'
-      + (isExpired(m) ? '<span class="tag exp">Ended ' + fmt(a.until) + '</span>' : a.by ? '<small>Set ' + fmt(a.at) + '</small>' : '') + '</td></tr>';
+    const r = reqOf(m.uid), tg = tagsOf(m.uid);
+    return '<tr><td class="ck"><input type="checkbox" data-pick="' + esc(m.uid) + '"' + (picked.has(m.uid) ? ' checked' : '') + ' aria-label="Select ' + esc(m.email) + '"></td>'
+      + '<td><button class="lnk" type="button" data-open="' + esc(m.uid) + '">' + esc(m.name || (m.email || '').split('@')[0] || '—') + '</button>' + (ago(m.created) <= 7 ? ' <span class="tag new">New</span>' : '') + (r && r.status === 'new' ? ' <span class="tag warn">Request</span>' : '')
+      + '<br><a href="mailto:' + esc(m.email) + '">' + esc(m.email) + '</a>' + (m.provider === 'password' && !m.verified ? ' <small>(not verified)</small>' : '')
+      + (r && r.college ? '<br><small>' + esc(r.role || '') + ' · ' + esc(r.college) + '</small>' : '') + (tg.length ? '<br>' + tg.map((t) => '<span class="tag">' + esc(t) + '</span>').join('') : '') + '</td>'
+      + '<td data-l="Joined">' + fmt(m.created) + (m.source ? ' <small>· ' + esc(m.source) + '</small>' : '') + '</td><td data-l="Last visit">' + fmt(m.lastSeen) + '<small> ' + esc(m.lastPage || '') + '</small></td><td data-l="Sign-in">' + PROV(m.provider) + '</td>'
+      + '<td class="ac">' + accBox(m) + '</td></tr>';
   }).join('') || '<tr><td colspan="6">No members match.</td></tr>';
+  $('all').checked = L.length > 0 && L.every((m) => picked.has(m.uid));
 }
-function renderFb() {
-  $('fb').innerHTML = feedback.map((f) => '<tr><td>' + fmt(f.at) + '</td><td>' + esc(f.name || '') + '<br><a href="mailto:' + esc(f.email) + '">' + esc(f.email || '') + '</a></td><td>' + esc(f.rating || '') + '</td><td>' + esc(f.role || '') + '</td><td>' + esc((f.uses || []).join(', ')) + '</td><td>' + esc(f.improve || '') + '</td><td>' + esc(f.wish || '') + '</td></tr>').join('') || '<tr><td colspan="7">No feedback yet.</td></tr>';
+async function saveBox(box, d) {
+  const uid = box.dataset.uid, ok = box.querySelector('[data-ok]'); box.querySelectorAll('button').forEach((b) => b.disabled = true); ok.textContent = 'Saving…';
+  try { await setAccessMany([uid], () => d, accText(d)); ok.textContent = 'Saved'; stats(); if ($('mp').open && $('mp').dataset.uid === uid) openMember(uid); else setTimeout(render, 700); }
+  catch (x) { ok.textContent = 'Not saved: ' + x.message; }
+  box.querySelectorAll('button').forEach((b) => b.disabled = false);
 }
-async function saveRow(box) {
-  const uid = box.dataset.uid, [sel, date, note] = box.querySelectorAll('select,input'), ok = box.querySelector('[data-ok]'), b = box.querySelector('[data-save]');
-  const d = { plan: sel.value, until: sel.value === 'free' ? '' : (date.value || ''), note: note.value.trim(), by: me.uid, at: new Date().toISOString() };
-  b.disabled = true; ok.textContent = 'Saving…';
-  try { await saveAccess(uid, d); ok.textContent = 'Saved'; stats(); } catch (x) { ok.textContent = 'Not saved: ' + x.message; }
-  b.disabled = false;
-}
-$('rows').addEventListener('click', (e) => { const b = e.target.closest('[data-save]'); if (b) saveRow(b.closest('.acc')); });
-$('rows').addEventListener('change', (e) => {
+function boxData(box) { const [sel, date, note] = box.querySelectorAll('select,input'); return grant(sel.value, date.value, note.value.trim()); }
+document.addEventListener('click', (e) => {
+  const s = e.target.closest('.acc [data-save]'); if (s) return saveBox(s.closest('.acc'), boxData(s.closest('.acc')));
+  const rn = e.target.closest('.acc [data-renew]'); if (rn) { const box = rn.closest('.acc'), a = access[box.dataset.uid] || boxData(box); const d = grant(a.plan, renewUntil(a), a.note); box.querySelector('input[type=date]').value = d.until; return saveBox(box, d); }
+  const o = e.target.closest('[data-open]'); if (o) return openMember(o.dataset.open);
+  const c = e.target.closest('[data-close]'); if (c) return c.closest('dialog').close();
+});
+document.addEventListener('change', (e) => {
   const sel = e.target.closest('.acc select'); if (!sel) return;
-  const box = sel.closest('.acc'); box.querySelector('input[type=date]').value = untilFor(sel.value); saveRow(box);
+  const box = sel.closest('.acc'); box.querySelector('input[type=date]').value = untilFor(sel.value); saveBox(box, boxData(box));
 });
+$('rows').addEventListener('change', (e) => { const c = e.target.closest('[data-pick]'); if (!c) return; c.checked ? picked.add(c.dataset.pick) : picked.delete(c.dataset.pick); bulkInfo(); });
+$('all').addEventListener('change', (e) => { list().forEach((m) => e.target.checked ? picked.add(m.uid) : picked.delete(m.uid)); render(); bulkInfo(); });
 $('q').addEventListener('input', render); $('flt').addEventListener('change', render); $('reload').addEventListener('click', load);
-$('copy').addEventListener('click', async () => {
-  const em = list().map((m) => m.email).filter(Boolean).join(', ');
-  try { await navigator.clipboard.writeText(em); $('note').textContent = 'Copied ' + list().length + ' emails. Paste them into BCC.'; } catch (e) { prompt('Copy these emails:', em); }
+
+// ================= group actions =================
+let bulkWasHidden = true;
+function bulkInfo() {
+  const n = picked.size; $('bulk').hidden = !n; $('bulkN').textContent = n + ' selected';
+  if (n && bulkWasHidden) $('bulk').open = !mobile(); bulkWasHidden = !n;
+  $('note').textContent = list().length + ' shown' + (n ? ' · ' + n + ' selected' : '');
+}
+$('bPlan').innerHTML = PLANS.map(([v, l]) => '<option value="' + v + '"' + (v === 'student' ? ' selected' : '') + '>' + (v === 'free' ? 'Free member (remove access)' : l) + '</option>').join('');
+$('bUntil').value = untilFor('student');
+$('bPlan').addEventListener('change', () => { $('bUntil').value = untilFor($('bPlan').value); });
+let lastPlan = '', lastUntil = '';
+async function bulkRun(btn, fn) { const ids = [...picked]; if (!ids.length) return; btn.disabled = true; $('bMsg').textContent = 'Saving…'; try { await fn(ids); } catch (x) { $('bMsg').textContent = 'Not saved: ' + x.message; } btn.disabled = false; }
+$('bApply').addEventListener('click', () => bulkRun($('bApply'), async (ids) => {
+  const d = grant($('bPlan').value, $('bUntil').value, $('bNote').value.trim());
+  await setAccessMany(ids, () => Object.assign({}, d), accText(d));
+  lastPlan = d.plan; lastUntil = d.until; stats(); render(); bulkInfo();
+  $('bMsg').innerHTML = 'Done for ' + ids.length + '. ' + (d.plan === 'free' ? '' : '<button class="btn s" type="button" id="bTell">Email them now</button>');
+}));
+$('bRenew').addEventListener('click', () => bulkRun($('bRenew'), async (ids) => {
+  const have = ids.filter((u) => access[u] && access[u].plan && access[u].plan !== 'free');
+  if (!have.length) { $('bMsg').textContent = 'None of the selected people have a plan to renew. Use Give instead.'; return; }
+  const next = {}; have.forEach((u) => { next[u] = grant(access[u].plan, renewUntil(access[u]), access[u].note); });
+  await setAccessMany(have, (u) => next[u], 'Access renewed');
+  stats(); render(); bulkInfo(); $('bMsg').textContent = 'Renewed ' + have.length + (have.length < ids.length ? ' (' + (ids.length - have.length) + ' had no plan)' : '') + '.';
+}));
+async function tagMany(ids, tag, add) {
+  tag = tag.trim().slice(0, 40); if (!tag) { $('bMsg').textContent = 'Type a tag first.'; return; }
+  const b = F.writeBatch(db);
+  ids.forEach((u) => { const c = Object.assign({ tags: [], notes: '', log: [] }, crm[u] || {}); c.tags = add ? [...new Set((c.tags || []).concat(tag))] : (c.tags || []).filter((t) => t !== tag); crm[u] = c; b.set(F.doc(db, 'crm', u), c); });
+  await b.commit(); fillFilter(); render(); bulkInfo(); $('bMsg').textContent = (add ? 'Tagged ' : 'Removed tag from ') + ids.length + '.';
+}
+$('bTagAdd').addEventListener('click', () => bulkRun($('bTagAdd'), (ids) => tagMany(ids, $('bTag').value, true)));
+$('bTagDel').addEventListener('click', () => bulkRun($('bTagDel'), (ids) => tagMany(ids, $('bTag').value, false)));
+$('bMsg').addEventListener('click', (e) => { if (e.target.id === 'bTell') compose({ uids: [...picked], tpl: lastPlan, until: lastUntil }); });
+$('bMail').addEventListener('click', () => compose({ uids: [...picked] }));
+$('bClear').addEventListener('click', () => { picked.clear(); render(); bulkInfo(); });
+$('mailBtn').addEventListener('click', () => compose({ uids: picked.size ? [...picked] : list().map((m) => m.uid) }));
+
+// ================= member page =================
+function openMember(uid) {
+  const m = prof(uid), a = access[uid] || {}, c = crm[uid] || {}, r = reqOf(uid);
+  const fb = feedback.filter((f) => f.uid === uid), sent = mails.filter((x) => (x.uids || []).includes(uid));
+  $('mp').dataset.uid = uid; $('mpT').textContent = m.name || m.email || 'Member';
+  $('mpB').innerHTML = '<dl class="kv"><dt>Email</dt><dd><a href="mailto:' + esc(m.email) + '">' + esc(m.email || '—') + '</a></dd><dt>Joined</dt><dd>' + fmt(m.created) + (m.source ? ' · came from <b>' + esc(m.source) + '</b>' + (m.landing ? ' (' + esc(m.landing) + ')' : '') : '') + '</dd>'
+    + '<dt>Last visit</dt><dd>' + fmt(m.lastSeen) + ' <small>' + esc(m.lastPage || '') + '</small></dd><dt>Sign-in</dt><dd>' + PROV(m.provider) + (m.provider === 'password' && !m.verified ? ' (email not verified)' : '') + '</dd>'
+    + (r ? '<dt>Request</dt><dd>' + esc(r.role) + ' · ' + esc(r.college) + (r.course ? ' · ' + esc(r.course) : '') + (r.year ? ' · ' + esc(r.year) : '') + ' <span class="tag ' + (r.status === 'new' ? 'warn' : r.status === 'declined' ? 'exp' : '') + '">' + esc(r.status === 'new' ? 'Waiting' : r.status) + '</span>' + (r.message ? '<br><small>“' + esc(r.message) + '”</small>' : '') + '</dd>' : '')
+    + '</dl><h3>Access</h3>' + accBox(m)
+    + '<h3>Tags</h3><div id="mpTags">' + ((c.tags || []).map((t) => '<span class="tag">' + esc(t) + ' <button type="button" data-untag="' + esc(t) + '" aria-label="Remove tag ' + esc(t) + '">✕</button></span>').join('') || '<small class="muted">No tags yet.</small>') + '</div>'
+    + '<div class="bar" style="margin-top:6px"><input type="text" id="mpTag" list="tagList" placeholder="Add a tag" aria-label="Add a tag"><button class="btn s o" type="button" id="mpTagAdd">Add</button></div>'
+    + '<h3>Your notes</h3><textarea id="mpNotes" rows="3" aria-label="Notes">' + esc(c.notes || '') + '</textarea><div class="bar" style="margin-top:6px"><button class="btn s" type="button" id="mpNotesSave">Save notes</button><small id="mpNotesOk" role="status"></small></div>'
+    + '<h3>Email</h3><div class="bar"><button class="btn" type="button" id="mpMail">Write to ' + esc((m.name || '').split(' ')[0] || 'them') + '</button></div>'
+    + (sent.length ? '<ul class="small" style="margin:6px 0 0;padding-left:18px">' + sent.map((x) => '<li>' + fmt(x.at) + ' · ' + esc(x.subject || '(no subject)') + '</li>').join('') + '</ul>' : '<small class="muted">No emails sent from this page yet.</small>')
+    + '<h3>Feedback</h3>' + (fb.length ? fb.map((f) => '<p class="small" style="margin:4px 0">' + fmt(f.at) + ' · ' + esc(f.rating || '-') + '/5 · ' + esc(f.improve || '') + (f.wish ? ' · wishes: ' + esc(f.wish) : '') + '</p>').join('') : '<small class="muted">None.</small>')
+    + '<h3>History</h3>' + ((c.log || []).length ? '<ul class="small" style="margin:0;padding-left:18px">' + (c.log || []).slice().reverse().map((l) => '<li>' + fmt(l.at) + ' · ' + esc(l.t) + '</li>').join('') + '</ul>' : '<small class="muted">Nothing yet.</small>')
+    + '<h3>Delete on request</h3><p class="small muted" style="margin:0 0 6px">If this person asks you to remove their data: this clears their profile, access, request, tags and notes here. Then also delete their account in Firebase console → Authentication → Users, and their saved work in Firestore → users → ' + esc(uid) + '.</p><button class="btn bad s" type="button" id="mpDel">Delete their data</button>';
+  if (!$('mp').open) $('mp').showModal();
+}
+$('mpB').addEventListener('click', async (e) => {
+  const uid = $('mp').dataset.uid, c = () => Object.assign({ tags: [], notes: '', log: [] }, crm[uid] || {});
+  const ut = e.target.closest('[data-untag]');
+  if (ut) { const x = c(); x.tags = x.tags.filter((t) => t !== ut.dataset.untag); crm[uid] = x; await F.setDoc(F.doc(db, 'crm', uid), x); fillFilter(); render(); return openMember(uid); }
+  if (e.target.id === 'mpTagAdd') { const t = $('mpTag').value.trim().slice(0, 40); if (!t) return; const x = c(); x.tags = [...new Set(x.tags.concat(t))]; crm[uid] = x; await F.setDoc(F.doc(db, 'crm', uid), x); fillFilter(); render(); return openMember(uid); }
+  if (e.target.id === 'mpNotesSave') { const x = c(); x.notes = $('mpNotes').value.slice(0, 4000); crm[uid] = x; try { await F.setDoc(F.doc(db, 'crm', uid), x); $('mpNotesOk').textContent = 'Saved'; } catch (er) { $('mpNotesOk').textContent = 'Not saved: ' + er.message; } return; }
+  if (e.target.id === 'mpMail') { const a = access[uid]; return compose({ uids: [uid], tpl: a && a.plan && !isExpired(prof(uid)) ? a.plan : '', until: a && a.until }); }
+  if (e.target.id === 'mpDel') {
+    if (!confirm('Delete this member\'s profile, access, request, tags and notes? This cannot be undone.')) return;
+    try { await Promise.all(['profiles', 'access', 'crm', 'requests'].map((n) => F.deleteDoc(F.doc(db, n, uid)).catch((x) => { if (n === 'profiles') throw x; })));
+      members = members.filter((m) => m.uid !== uid); delete access[uid]; delete crm[uid]; requests = requests.filter((r) => r.uid !== uid); picked.delete(uid);
+      $('mp').close(); renderAll(); toast('Deleted. Now remove their account in Firebase Authentication too.'); } catch (er) { alert('Not deleted: ' + er.message); }
+  }
 });
-$('csv').addEventListener('click', () => {
-  const rows = [['Name', 'Email', 'Signed up', 'Last visit', 'Sign-in', 'Access', 'Access until', 'Note']].concat(list().map((m) => { const a = access[m.uid] || {}; return [m.name || '', m.email || '', (m.created || '').slice(0, 10), (m.lastSeen || '').slice(0, 10), m.provider === 'google.com' ? 'Google' : m.provider === 'password' ? 'Email' : '', a.plan || 'free', a.until || '', a.note || '']; }));
-  const csv = rows.map((r) => r.map((c) => '"' + String(c).replace(/"/g, '""') + '"').join(',')).join('\n');
-  const u = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' })); const l = document.createElement('a'); l.href = u; l.download = 'forecut-members-' + new Date().toISOString().slice(0, 10) + '.csv'; l.click(); setTimeout(() => URL.revokeObjectURL(u), 2000);
-});
-// ---- import from Firebase Authentication (pasted Users list, or a firebase auth:export JSON/CSV file)
+$('mp').addEventListener('close', () => render());
+
+// ================= import from Firebase Authentication =================
 const MON = 'Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec';
 function day(str) { const d = new Date(str); if (isNaN(d)) return ''; d.setHours(12, 0, 0, 0); return d.toISOString(); }
 function fromMs(v) { const n = Number(v); return n > 1e11 ? new Date(n).toISOString() : ''; }
@@ -262,12 +474,11 @@ function parseImport(text) {
     } catch (e) { /* fall through to text */ }
   }
   const lines = text.split(/\r?\n/);
-  if (lines.filter((l) => /^"?[A-Za-z0-9]{28}"?,/.test(l)).length >= Math.max(1, lines.length / 2)) {   // firebase auth:export CSV
+  if (lines.filter((l) => /^"?[A-Za-z0-9]{28}"?,/.test(l)).length >= Math.max(1, lines.length / 2)) {
     lines.forEach((l) => { const c = l.split(','), uid = c[0].replace(/"/g, ''); if (!/^[A-Za-z0-9]{28}$/.test(uid)) return;
       const ms = c.filter((x) => /^\d{12,14}$/.test(x)); out.push({ uid, email: (c[1] || '').toLowerCase(), name: c[5] || '', provider: c[3] ? 'password' : '', verified: c[2] === 'true', created: fromMs(ms[0]), lastSeen: fromMs(ms[1]) }); });
     return out;
   }
-  // pasted from the console: each row reads email … created date … signed-in date … user UID
   const re = new RegExp('([^\\s@,;"<>()]+@[^\\s@,;"<>()]+\\.[A-Za-z]{2,})|((?:' + MON + ')[a-z]* \\d{1,2}, \\d{4}|\\d{1,2} (?:' + MON + ')[a-z]* \\d{4}|\\d{4}-\\d{2}-\\d{2})|(?<![A-Za-z0-9])([A-Za-z0-9]{28})(?![A-Za-z0-9])', 'g');
   let cur = {}, m;
   while ((m = re.exec(text))) {
@@ -279,14 +490,13 @@ function parseImport(text) {
 }
 let pending = [];
 function check(text) {
-  const seen = new Set(members.map((x) => x.uid)), all = parseImport(text), uniq = new Map();
-  all.forEach((x) => uniq.set(x.uid, x));
+  const seen = new Set(members.map((x) => x.uid)), uniq = new Map();
+  parseImport(text).forEach((x) => uniq.set(x.uid, x));
   pending = [...uniq.values()].filter((x) => !seen.has(x.uid));
   const found = uniq.size;
   $('impMsg').textContent = found ? 'Found ' + found + ' accounts: ' + (found - pending.length) + ' already listed, ' + pending.length + ' to add.' : (/…|\.\.\./.test(text) ? 'The emails and user IDs were copied in shortened form (ending in …). Zoom the Firebase page out with Ctrl and minus (Mac: Cmd and minus) until they show in full, then copy again.' : 'No accounts found in that text. Copy the Users list again, including the User UID column.');
   $('impGo').hidden = !pending.length;
 }
-$('impBtn').addEventListener('click', () => { const o = $('imp').hidden; $('imp').hidden = !o; $('impBtn').setAttribute('aria-expanded', o); if (o) $('impTxt').focus(); });
 $('impChk').addEventListener('click', () => check($('impTxt').value));
 $('impFile').addEventListener('change', async (e) => { const f = e.target.files[0]; if (f) check(await f.text()); e.target.value = ''; });
 $('impGo').addEventListener('click', async () => {
@@ -302,7 +512,17 @@ $('impGo').addEventListener('click', async () => {
   } catch (x) { $('impMsg').textContent = 'Not added: ' + x.message + '. Publish the latest Firestore rules, then try again.'; }
   $('impGo').disabled = false;
 });
-// ---- email from hello@forecut.in through Zoho Mail (mailto, with Zoho set as the browser's mail handler); members go in Bcc
+$('copy').addEventListener('click', async () => {
+  const em = list().map((m) => m.email).filter(Boolean).join(', ');
+  try { await navigator.clipboard.writeText(em); toast('Copied ' + list().length + ' emails.'); } catch (e) { prompt('Copy these emails:', em); }
+});
+$('csv').addEventListener('click', () => {
+  const rows = [['Name', 'Email', 'Signed up', 'Came from', 'Last visit', 'Sign-in', 'Access', 'Access until', 'Note', 'Tags', 'College', 'Course']].concat(list().map((m) => { const a = access[m.uid] || {}, r = reqOf(m.uid) || {}; return [m.name || '', m.email || '', (m.created || '').slice(0, 10), m.source || '', (m.lastSeen || '').slice(0, 10), PROV(m.provider), a.plan || 'free', a.until || '', a.note || '', tagsOf(m.uid).join('; '), r.college || '', r.course || '']; }));
+  const csv = rows.map((r) => r.map((c) => '"' + String(c).replace(/"/g, '""') + '"').join(',')).join('\n');
+  const u = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' })); const l = document.createElement('a'); l.href = u; l.download = 'forecut-members-' + today() + '.csv'; l.click(); setTimeout(() => URL.revokeObjectURL(u), 2000);
+});
+
+// ================= email (Zoho via mailto, Bcc) =================
 const SIGN = '\n\nWarm regards,\nTeam Forecut\nhello@forecut.in · forecut.in\n\nYou are receiving this because you have a Forecut account. Reply "stop" and we won\'t email you again.';
 const TPL = [
   ['', 'Blank', '', ''],
@@ -313,50 +533,198 @@ const TPL = [
   ['individual', 'Individual plan', 'Your Forecut Individual plan is active', 'Hi there,\n\nThank you for choosing Forecut. Your Individual plan is now active and runs until {until}. Sign in at forecut.in/account to see it on your dashboard.\n\nEvery report and studio tool is open to you. If you need anything, just reply to this email.'],
   ['team', 'Team plan', 'Your Forecut Team plan is active', 'Hi there,\n\nThank you for choosing Forecut for your team. Your Team plan is now active and runs until {until}.\n\nSign in at forecut.in/account and open Team to invite your colleagues and share styles. If you need help setting up, just reply to this email.'],
   ['enterprise', 'Enterprise plan', 'Your Forecut Enterprise access is active', 'Hi there,\n\nThank you for working with Forecut. Your Enterprise access is now active and runs until {until}.\n\nSign in at forecut.in/account to get started. We are happy to set up a walkthrough for your team; just reply with a time that suits you.'],
+  ['declined', 'Request not approved', 'About your Forecut access request', 'Hi there,\n\nThank you for asking for free Forecut access. We could not approve this request yet, usually because we could not confirm the college or course.\n\nIf you reply with your college ID or a short note from your department, we will look again. You can keep using Forecut as a free member in the meantime.'],
+  ['code', 'Share an access code', 'Free Forecut access for you', 'Hi there,\n\nYou can now use Forecut free until {until}. Open this link and sign up, and your access switches on by itself:\n\n{link}\n\nOr sign in at forecut.in/account and enter the code {code}.'],
   ['signin', 'Please sign in again', 'One quick step to switch on your Forecut access', 'Hi there,\n\nThank you for signing up to Forecut. Please open forecut.in once more and sign in with the same account. That is all we need to switch on your access.'],
   ['ending', 'Access ending soon', 'Your Forecut access ends soon', 'Hi there,\n\nA quick note that your Forecut access ends soon. To keep using every report and studio tool, just reply to this email and we will sort it out.\n\nThank you for being part of Forecut.'],
   ['ended', 'Access ended', 'Your Forecut access has ended', 'Hi there,\n\nYour Forecut access has now ended. Your saved work stays in your account. To switch access back on, just reply to this email.\n\nThank you for being part of Forecut.'],
   ['feedback', 'Ask for feedback', 'Two minutes to help shape Forecut?', 'Hi there,\n\nForecut is built for designers, students and makers, and your view shapes what comes next. What do you use most, and what is missing?\n\nJust reply to this email. Every reply is read.'],
   ['news', 'What is new', 'New on Forecut this month', 'Hi there,\n\nHere is what is new on Forecut this month:\n\n• \n• \n\nSee it all at forecut.in.']
 ];
-const longDate = (d) => d ? new Date(d + 'T12:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
-let mailUntil = '';
 $('tpl').innerHTML = TPL.map((t, i) => '<option value="' + i + '">' + esc(t[1]) + '</option>').join('');
+let mc = { uids: [], until: '', vars: {}, logged: new Set(), to: '' };
 function fillTpl() {
-  const t = TPL[+$('tpl').value], u = longDate(mailUntil || untilFor(t[0]));
-  $('mSub').value = t[2];
-  $('mBody').value = t[3] ? (u ? t[3].replace(/\{until\}/g, u) : t[3].replace(/ (and )?runs until \{until\}| until \{until\}/g, '')) + SIGN : '';
+  const t = TPL[+$('tpl').value], u = longDate(mc.until || untilFor(t[0]));
+  let body = t[3] ? (u ? t[3].replace(/\{until\}/g, u) : t[3].replace(/ (and )?runs until \{until\}| until \{until\}/g, '')) : '';
+  Object.entries(mc.vars || {}).forEach(([k, v]) => { body = body.split('{' + k + '}').join(v); });
+  $('mSub').value = t[2]; $('mBody').value = body ? body + SIGN : '';
 }
-$('tpl').addEventListener('change', () => { mailUntil = ''; fillTpl(); });
-function pickTpl(key, until) { const i = TPL.findIndex((t) => t[0] === key); if (i < 0) return; mailUntil = until || ''; $('tpl').value = i; fillTpl(); }
-function recipients() { const L = picked.size ? members.filter((m) => picked.has(m.uid)) : list(); return [...new Set(L.map((m) => (m.email || '').trim()).filter((e) => e.includes('@')))]; }
+$('tpl').addEventListener('change', () => { mc.until = ''; fillTpl(); });
+function autoKey() { const f = $('flt').value; return f.startsWith('p:') ? f.slice(2) : f === 'soon' ? 'ending' : f === 'expired' ? 'ended' : ''; }
+function compose(o) {
+  mc = { uids: o.uids || [], until: o.until || '', vars: o.vars || {}, logged: new Set(), to: o.to || '' };
+  const key = o.tpl != null && o.tpl !== '' ? o.tpl : autoKey(), i = TPL.findIndex((t) => t[0] === key);
+  $('tpl').value = i > 0 ? i : 0; fillTpl(); mailInfo(); if (!$('md').open) $('md').showModal();
+}
+function recipients() { return mc.to ? [mc.to] : [...new Set(mc.uids.map((u) => (prof(u).email || '').trim()).filter((e) => e.includes('@')))]; }
 function mailInfo() {
-  if ($('mail').hidden) return;
-  const R = recipients(), n = R.length, B = Math.ceil(n / 50);
-  $('mailTo').textContent = n ? 'To ' + n + (picked.size ? ' selected members.' : ' members shown in the list below (tick boxes to choose people, or use search and the filter).') : 'Nobody to email. Tick some members or change the filter.';
+  const R = recipients(), n = R.length, B = Math.ceil(n / 50), one = n === 1;
+  $('mailTo').textContent = n ? (one ? 'To ' + R[0] + '.' : 'To ' + n + ' people, in Bcc.') : 'Nobody to email. Tick some members or change the filter first.';
   let h = '';
-  for (let i = 0; i < B; i++) { const lab = B > 1 ? ' · batch ' + (i + 1) + ' of ' + B : ''; h += '<button class="btn" type="button" data-z="' + i + '">Open in Zoho Mail' + lab + '</button><button class="btn o" type="button" data-cb="' + i + '">Copy Bcc list' + lab + '</button>'; }
-  if (n) h += '<button class="btn o" type="button" data-cs>Copy subject</button><button class="btn o" type="button" data-cm>Copy message</button><a class="btn o" href="https://mail.zoho.in/" target="_blank" rel="noopener">Open Zoho Mail</a><span id="mailOk"></span>';
+  for (let i = 0; i < B; i++) { const lab = B > 1 ? ' · batch ' + (i + 1) + ' of ' + B : ''; h += '<button class="btn" type="button" data-z="' + i + '">Open in Zoho Mail' + lab + '</button>' + (one ? '' : '<button class="btn o" type="button" data-cb="' + i + '">Copy Bcc list' + lab + '</button>'); }
+  if (n) h += '<button class="btn o" type="button" data-cs>Copy subject</button><button class="btn o" type="button" data-cm>Copy message</button><a class="btn o" href="https://mail.zoho.in/" target="_blank" rel="noopener">Open Zoho Mail</a>';
   $('mailGo').innerHTML = h;
 }
-function batch(i) { return recipients().slice(i * 50, i * 50 + 50).join(','); }
-async function copy(t, what) { try { await navigator.clipboard.writeText(t); $('mailOk').textContent = what + ' copied.'; } catch (e) { prompt('Copy this:', t); } }
+const batchOf = (i) => recipients().slice(i * 50, i * 50 + 50);
+async function copyT(t, what) { try { await navigator.clipboard.writeText(t); toast(what + ' copied.'); } catch (e) { prompt('Copy this:', t); } }
+async function logMail(i) {
+  if (mc.logged.has(i)) return; mc.logged.add(i);
+  const em = batchOf(i), uids = mc.to ? [] : mc.uids.filter((u) => em.includes((prof(u).email || '').trim()));
+  const rec = { at: nowIso(), subject: $('mSub').value.slice(0, 200), tpl: TPL[+$('tpl').value][1], count: em.length, uids: uids.slice(0, 500), emails: em.slice(0, 50), by: me.uid };
+  try { const r = await F.addDoc(F.collection(db, 'mails'), rec); mails.unshift(Object.assign({ id: r.id }, rec)); renderMails(); } catch (e) {}
+}
 $('mailGo').addEventListener('click', (e) => {
   const t = e.target.closest('button'); if (!t) return;
-  if (t.dataset.z != null) location.href = 'mailto:hello@forecut.in?bcc=' + encodeURIComponent(batch(+t.dataset.z)) + '&subject=' + encodeURIComponent($('mSub').value) + '&body=' + encodeURIComponent($('mBody').value);
-  else if (t.dataset.cb != null) copy(batch(+t.dataset.cb), 'Bcc list');
-  else if (t.hasAttribute('data-cs')) copy($('mSub').value, 'Subject');
-  else if (t.hasAttribute('data-cm')) copy($('mBody').value, 'Message');
+  if (t.dataset.z != null) { const i = +t.dataset.z, em = batchOf(i); logMail(i);
+    const href = em.length === 1 ? 'mailto:' + encodeURIComponent(em[0]) + '?subject=' : 'mailto:hello@forecut.in?bcc=' + encodeURIComponent(em.join(',')) + '&subject=';
+    location.href = href + encodeURIComponent($('mSub').value) + '&body=' + encodeURIComponent($('mBody').value); }
+  else if (t.dataset.cb != null) { logMail(+t.dataset.cb); copyT(batchOf(+t.dataset.cb).join(','), 'Bcc list'); }
+  else if (t.hasAttribute('data-cs')) copyT($('mSub').value, 'Subject');
+  else if (t.hasAttribute('data-cm')) copyT($('mBody').value, 'Message');
 });
-function autoTpl() { const f = $('flt').value; if (f.startsWith('p:')) pickTpl(f.slice(2)); else if (f === 'soon') pickTpl('ending'); else if (f === 'expired') pickTpl('ended'); }
-$('mailBtn').addEventListener('click', () => { const o = $('mail').hidden; $('mail').hidden = !o; $('mailBtn').setAttribute('aria-expanded', o); if (o) autoTpl(); mailInfo(); if (o) $('mail').scrollIntoView({ behavior: 'smooth', block: 'nearest' }); });
-$('flt').addEventListener('change', () => { if (!$('mail').hidden) autoTpl(); });
-$('rows').addEventListener('change', (e) => { const c = e.target.closest('[data-pick]'); if (!c) return; c.checked ? picked.add(c.dataset.pick) : picked.delete(c.dataset.pick); bulkInfo(); mailInfo(); });
-$('all').addEventListener('change', (e) => { list().forEach((m) => e.target.checked ? picked.add(m.uid) : picked.delete(m.uid)); render(); bulkInfo(); });
-document.querySelector('.tabs').addEventListener('click', (e) => {
-  const b = e.target.closest('[data-tab]'); if (!b) return;
-  document.querySelectorAll('.tabs button').forEach((x) => x.setAttribute('aria-pressed', x === b));
-  $('tm').hidden = b.dataset.tab !== 'm'; $('tf').hidden = b.dataset.tab !== 'f';
+
+// ================= requests =================
+const ROLEPLAN = { Student: 'student', Alumni: 'alumni', Faculty: 'partner' };
+function renderReq() {
+  const f = $('rqF').value, L = requests.filter((r) => f === 'all' || r.status === f);
+  $('rqList').innerHTML = L.map((r) => { const p = ROLEPLAN[r.role] || 'student';
+    return '<div class="rq" data-rq="' + esc(r.uid) + '"><b>' + esc(r.name || r.email) + '</b> <span class="tag ' + (r.status === 'new' ? 'warn' : r.status === 'declined' ? 'exp' : '') + '">' + esc(r.status === 'new' ? 'Waiting' : r.status === 'approved' ? 'Approved' : 'Declined') + '</span><br><a href="mailto:' + esc(r.email) + '">' + esc(r.email) + '</a> · <small>' + fmt(r.at) + '</small>'
+      + '<p><b>' + esc(r.role || '') + '</b> · ' + esc(r.college || '') + (r.course ? ' · ' + esc(r.course) : '') + (r.year ? ' · ' + esc(r.year) : '') + '</p>' + (r.message ? '<p class="small">“' + esc(r.message) + '”</p>' : '')
+      + (r.status === 'new' ? '<div class="bar" style="margin:8px 0 0"><select aria-label="Plan">' + PLANS.filter(([v]) => v !== 'free').map(([v, l]) => '<option value="' + v + '"' + (v === p ? ' selected' : '') + '>' + l + '</option>').join('') + '</select><input type="date" value="' + untilFor(p) + '" aria-label="Until"><button class="btn" type="button" data-ap>Approve</button><button class="btn o" type="button" data-de>Decline</button><button class="btn o" type="button" data-open="' + esc(r.uid) + '">Member page</button></div>'
+        : '<div class="bar" style="margin:8px 0 0"><button class="btn o s" type="button" data-rm>Email them</button><button class="btn o s" type="button" data-open="' + esc(r.uid) + '">Member page</button>' + (r.decidedAt ? '<small>' + (r.status === 'approved' ? 'Approved ' : 'Declined ') + fmt(r.decidedAt) + '</small>' : '') + '</div>') + '</div>'; }).join('')
+    || '<p class="sub">' + (f === 'new' ? 'No requests waiting. People can ask from their account page: forecut.in/account → Account settings.' : 'Nothing here.') + '</p>';
+}
+$('rqF').addEventListener('change', renderReq);
+$('rqList').addEventListener('change', (e) => { if (e.target.matches('select')) e.target.nextElementSibling.value = untilFor(e.target.value); });
+$('rqList').addEventListener('click', async (e) => {
+  const box = e.target.closest('[data-rq]'); if (!box) return; const uid = box.dataset.rq, r = reqOf(uid);
+  if (e.target.matches('[data-rm]')) return compose({ uids: [uid], to: r.email, tpl: r.status === 'approved' ? (r.plan || 'student') : 'declined', until: r.until });
+  const ap = e.target.matches('[data-ap]'), de = e.target.matches('[data-de]'); if (!ap && !de) return;
+  e.target.disabled = true;
+  try {
+    const upd = Object.assign({}, r, { status: ap ? 'approved' : 'declined', decidedAt: nowIso() });
+    if (ap) { const d = grant(box.querySelector('select').value, box.querySelector('input[type=date]').value, 'Request: ' + (r.role || '') + ', ' + (r.college || '')); upd.plan = d.plan; upd.until = d.until; await setAccessMany([uid], () => d, 'Request approved: ' + accText(d)); }
+    else await logEntries([uid], 'Request declined');
+    await F.setDoc(F.doc(db, 'requests', uid), upd); Object.assign(r, upd);
+    renderReq(); badges(); stats(); render();
+    compose({ uids: [uid], to: r.email, tpl: ap ? upd.plan : 'declined', until: upd.until });
+  } catch (x) { alert('Not saved: ' + x.message); e.target.disabled = false; }
 });
+
+// ================= codes =================
+$('cPlan').innerHTML = PLANS.filter(([v]) => v !== 'free').map(([v, l]) => '<option value="' + v + '">' + l + '</option>').join('');
+$('cUntil').value = untilFor('student');
+$('cPlan').addEventListener('change', () => { $('cUntil').value = untilFor($('cPlan').value); });
+const codeLink = (c) => 'https://forecut.in/account?code=' + encodeURIComponent(c);
+const usedBy = (c) => Object.entries(access).filter(([, a]) => a.code === c).map(([u]) => u);
+function renderCodes() {
+  $('cRows').innerHTML = codes.map((c) => { const u = usedBy(c.code), closed = c.closesMs && Date.now() > c.closesMs;
+    return '<tr data-code="' + esc(c.code) + '"><td><b>' + esc(c.code) + '</b></td><td>' + esc(PN[c.plan] || c.plan) + (c.until ? '<br><small>until ' + fmt(c.until) + '</small>' : '') + '</td><td>' + (u.length ? '<button class="lnk" type="button" data-cu>' + u.length + (u.length === 1 ? ' person' : ' people') + '</button>' : '0') + '</td>'
+      + '<td>' + (c.closes ? fmt(c.closes) + (closed ? ' <span class="tag exp">Closed</span>' : '') : '—') + '</td><td>' + esc(c.label || '') + '</td>'
+      + '<td><input type="checkbox" data-con' + (c.active ? ' checked' : '') + ' aria-label="Code ' + esc(c.code) + ' on"></td>'
+      + '<td><div class="bar" style="margin:0"><button class="btn s" type="button" data-cl>Copy link</button><button class="btn s o" type="button" data-cw>Copy WhatsApp message</button><button class="btn s o" type="button" data-ce>Email it</button><button class="btn s bad" type="button" data-cd aria-label="Delete code ' + esc(c.code) + '">Delete</button></div></td></tr>'; }).join('')
+    || '<tr><td colspan="7">No codes yet. Make one above.</td></tr>';
+}
+$('cForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const code = $('cCode').value.trim().toUpperCase().replace(/[^A-Z0-9-]/g, ''); if (code.length < 4) { $('cMsg').textContent = 'Use at least 4 letters or numbers.'; return; }
+  if (codes.some((c) => c.code === code)) { $('cMsg').textContent = 'That code already exists.'; return; }
+  const closes = $('cCloses').value, d = { code, plan: $('cPlan').value, until: $('cUntil').value || '', closes, closesMs: closes ? new Date(closes + 'T23:59:59+05:30').getTime() : 0, label: $('cLabel').value.trim(), active: true, at: nowIso(), by: me.uid };
+  try { await F.setDoc(F.doc(db, 'codes', code), d); codes.unshift(d); renderCodes(); $('cMsg').textContent = 'Code ' + code + ' is live.'; $('cCode').value = ''; $('cLabel').value = ''; } catch (x) { $('cMsg').textContent = 'Not saved: ' + x.message; }
+});
+const waMsg = (c) => 'Free Forecut ' + (PN[c.plan] || '').toLowerCase() + ' access' + (c.until ? ' until ' + longDate(c.until) : '') + ': trend forecasts, India season reports and studio tools for pattern making, colour and costing. Sign up here and it switches on automatically: ' + codeLink(c.code) + '&source=whatsapp  (or enter code ' + c.code + ' on your account page)';
+$('cRows').addEventListener('click', async (e) => {
+  const tr = e.target.closest('[data-code]'); if (!tr) return; const c = codes.find((x) => x.code === tr.dataset.code);
+  if (e.target.matches('[data-cl]')) return copyT(codeLink(c.code), 'Link');
+  if (e.target.matches('[data-cw]')) return copyT(waMsg(c), 'WhatsApp message');
+  if (e.target.matches('[data-ce]')) return compose({ uids: picked.size ? [...picked] : list().map((m) => m.uid), tpl: 'code', until: c.until, vars: { link: codeLink(c.code) + '&source=email', code: c.code } });
+  if (e.target.matches('[data-cu]')) { tab('m'); $('flt').value = 'all'; $('q').value = ''; picked = new Set(usedBy(c.code)); render(); bulkInfo(); return; }
+  if (e.target.matches('[data-cd]')) { if (!confirm('Delete code ' + c.code + '? People who already used it keep their access.')) return; try { await F.deleteDoc(F.doc(db, 'codes', c.code)); codes = codes.filter((x) => x !== c); renderCodes(); } catch (x) { alert('Not deleted: ' + x.message); } }
+});
+$('cRows').addEventListener('change', async (e) => {
+  if (!e.target.matches('[data-con]')) return; const c = codes.find((x) => x.code === e.target.closest('[data-code]').dataset.code);
+  try { await F.setDoc(F.doc(db, 'codes', c.code), Object.assign({}, c, { active: e.target.checked })); c.active = e.target.checked; toast(c.code + (c.active ? ' is on.' : ' is off.')); } catch (x) { e.target.checked = !e.target.checked; alert('Not saved: ' + x.message); }
+});
+
+// ================= email history =================
+function renderMails() {
+  $('eList').innerHTML = mails.map((m) => '<details class="rq"><summary style="cursor:pointer"><b>' + esc(m.subject || '(no subject)') + '</b><br><small>' + fmt(m.at) + ' · ' + esc(m.tpl || '') + ' · ' + m.count + (m.count === 1 ? ' person' : ' people') + '</small></summary><p class="small" style="word-break:break-all">' + esc((m.emails || []).join(', ')) + '</p></details>').join('') || '<p class="sub">No emails yet.</p>';
+}
+
+// ================= feedback =================
+function renderFb() {
+  const f = $('fbF').value, L = feedback.filter((x) => { const s = x.status || 'new'; return f === 'all' || (f === 'open' ? s !== 'done' : s === f); });
+  $('fbList').innerHTML = L.map((x) => '<div class="rq" data-fb="' + esc(x.id) + '"><b>' + esc(x.name || x.email || 'Someone') + '</b> · <small>' + fmt(x.at) + ' · ' + esc(x.rating || '-') + '/5' + (x.role ? ' · ' + esc(x.role) : '') + '</small>'
+    + (x.uses && x.uses.length ? '<p class="small">Uses: ' + esc(x.uses.join(', ')) + '</p>' : '') + (x.improve ? '<p><b>Improve:</b> ' + esc(x.improve) + '</p>' : '') + (x.wish ? '<p><b>Wishes for:</b> ' + esc(x.wish) + '</p>' : '')
+    + '<div class="bar" style="margin:6px 0 0"><select data-fs aria-label="Status"><option value="new"' + ((x.status || 'new') === 'new' ? ' selected' : '') + '>New</option><option value="replied"' + (x.status === 'replied' ? ' selected' : '') + '>Replied</option><option value="done"' + (x.status === 'done' ? ' selected' : '') + '>Done</option></select>'
+    + (x.email ? '<button class="btn s" type="button" data-fr>Reply</button>' : '') + (x.uid ? '<button class="btn s o" type="button" data-open="' + esc(x.uid) + '">Member page</button>' : '') + '</div></div>').join('') || '<p class="sub">Nothing here.</p>';
+}
+$('fbF').addEventListener('change', renderFb);
+async function fbStatus(x, s) { try { await F.setDoc(F.doc(db, 'feedback', x.id), { status: s }, { merge: true }); x.status = s; badges(); } catch (er) { alert('Not saved: ' + er.message); } }
+$('fbList').addEventListener('change', (e) => { if (!e.target.matches('[data-fs]')) return; const x = feedback.find((f) => f.id === e.target.closest('[data-fb]').dataset.fb); fbStatus(x, e.target.value).then(renderFb); });
+$('fbList').addEventListener('click', (e) => {
+  if (!e.target.matches('[data-fr]')) return; const x = feedback.find((f) => f.id === e.target.closest('[data-fb]').dataset.fb);
+  const body = 'Hi ' + ((x.name || '').split(' ')[0] || 'there') + ',\n\nThank you for your feedback on Forecut.\n\n\n\n> ' + [x.improve, x.wish].filter(Boolean).join('\n> ') + SIGN;
+  location.href = 'mailto:' + encodeURIComponent(x.email) + '?subject=' + encodeURIComponent('Re: your Forecut feedback') + '&body=' + encodeURIComponent(body);
+  if ((x.status || 'new') === 'new') fbStatus(x, 'replied').then(renderFb);
+});
+
+// ================= insights =================
+function bars(data, label) {
+  const W = 640, H = 170, pad = 22, bw = (W - 10) / data.length, max = Math.max(1, ...data.map((d) => d[1]));
+  return '<svg class="chart" viewBox="0 0 ' + W + ' ' + (H + pad) + '" role="img" aria-label="' + esc(label) + '">'
+    + '<line x1="0" x2="' + W + '" y1="' + H + '" y2="' + H + '" stroke="#e2dacd"/>'
+    + data.map(([k, v], i) => { const h = v ? Math.max(3, (v / max) * (H - 26)) : 0, x = 5 + i * bw + bw * .18, w = bw * .64;
+      return '<g><title>' + esc(k) + ': ' + v + '</title><rect x="' + x + '" y="' + (H - h) + '" width="' + w + '" height="' + h + '" rx="4" fill="#1f3d33"/>' + (v ? '<text class="v" x="' + (x + w / 2) + '" y="' + (H - h - 6) + '" text-anchor="middle">' + v + '</text>' : '')
+        + (i % Math.ceil(data.length / 8) === 0 ? '<text x="' + (x + w / 2) + '" y="' + (H + 16) + '" text-anchor="middle">' + esc(k) + '</text>' : '') + '<rect x="' + (5 + i * bw) + '" y="0" width="' + bw + '" height="' + H + '" fill="transparent"><title>' + esc(k) + ': ' + v + '</title></rect></g>'; }).join('') + '</svg>';
+}
+function hbars(rows) { const max = Math.max(1, ...rows.map((r) => r[1])); return '<div class="hb">' + rows.map(([k, v]) => '<span>' + esc(k) + '</span><span><span class="b" style="width:' + (v / max * 100) + '%"></span></span><b>' + v + '</b>').join('') + '</div>'; }
+function table(rows, h) { return '<details class="small" style="margin-top:6px"><summary style="cursor:pointer">Show as a table</summary><table><thead><tr><th>' + h[0] + '</th><th>' + h[1] + '</th></tr></thead><tbody>' + rows.map(([k, v]) => '<tr><td>' + esc(k) + '</td><td>' + v + '</td></tr>').join('') + '</tbody></table></details>'; }
+function renderIns() {
+  const wk = []; const mon = (d) => { const x = new Date(d); x.setHours(0, 0, 0, 0); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; };
+  const start = mon(new Date()); for (let i = 11; i >= 0; i--) { const s = new Date(start); s.setDate(s.getDate() - 7 * i); const e = new Date(s); e.setDate(e.getDate() + 7);
+    wk.push([s.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), members.filter((m) => m.created && new Date(m.created) >= s && new Date(m.created) < e).length]); }
+  const dy = []; for (let i = 29; i >= 0; i--) { const k = addDays(-i); dy.push([new Date(k + 'T12:00:00').toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), members.filter((m) => (m.created || '').slice(0, 10) === k).length]); }
+  const cnt = (arr) => Object.entries(arr.reduce((o, k) => (o[k] = (o[k] || 0) + 1, o), {})).sort((a, b) => b[1] - a[1]);
+  const src = cnt(members.filter((m) => m.source).map((m) => m.source)), noSrc = members.filter((m) => !m.source).length;
+  const plans = cnt(members.filter(hasAcc).map((m) => PN[access[m.uid].plan] || access[m.uid].plan)); const free = members.length - members.filter(hasAcc).length;
+  const pages = cnt(members.filter((m) => m.lastPage && !/^\/admin/.test(m.lastPage) && ago(m.lastSeen) <= 30).map((m) => m.lastPage)).slice(0, 8);
+  const back = members.filter((m) => ago(m.lastSeen) <= 7 && ago(m.created) > 7).length;
+  const month = members.filter((m) => (m.created || '').slice(0, 7) === today().slice(0, 7)).length;
+  const codeUse = codes.map((c) => [c.code, usedBy(c.code).length]).filter((r) => r[1]);
+  $('ins').innerHTML = '<div class="stats"><div><b>' + month + '</b><span>Joined this month</span></div><div><b>' + back + '</b><span>Came back this week</span></div><div><b>' + members.filter((m) => ago(m.lastSeen) > 30).length + '</b><span>Not seen in 30 days</span></div><div><b>' + requests.filter((r) => r.status === 'approved').length + '</b><span>Requests approved</span></div></div>'
+    + '<div class="grid2"><div class="card wide"><h2>New members each week</h2><p class="sub small">Last 12 weeks, by the week they signed up.</p>' + bars(wk, 'New members each week') + table(wk, ['Week from', 'New members']) + '</div>'
+    + '<div class="card wide"><h2>New members each day</h2><p class="sub small">Last 30 days.</p>' + bars(dy, 'New members each day') + table(dy, ['Day', 'New members']) + '</div>'
+    + '<div class="card"><h2>Where new members came from</h2><p class="sub small">Recorded for sign-ups from 17 Nov 2026. Add <code>?source=linkedin</code> (or instagram, whatsapp…) to links you share to see each one here.</p>' + (src.length ? hbars(src) : '<p class="sub">No sign-ups recorded yet.</p>') + (noSrc ? '<p class="small muted">' + noSrc + ' joined before this was recorded.</p>' : '') + '</div>'
+    + '<div class="card"><h2>Access</h2>' + hbars(plans.concat([['No plan (free)', free]])) + (codeUse.length ? '<h3>Codes used</h3>' + hbars(codeUse) : '') + '</div>'
+    + '<div class="card"><h2>Pages members were last on</h2><p class="sub small">Members seen in the last 30 days.</p>' + (pages.length ? hbars(pages) : '<p class="sub">Nothing yet.</p>') + '</div></div>';
+}
+
+// ================= site banner + app =================
+function renderSite() {
+  $('sOn').checked = !!site.on; $('sText').value = site.text || ''; $('sLink').value = site.link || ''; $('sLabel').value = site.label || ''; $('sTone').value = site.tone || 'green'; $('sEnds').value = site.ends || ''; prev();
+}
+function prev() { const t = $('sText').value.trim(); $('sPrev').innerHTML = t ? '<div class="ban ' + ($('sTone').value === 'clay' ? 'clay' : 'green') + '"><span>' + esc(t) + '</span>' + ($('sLink').value.trim() ? '<a href="#" onclick="return false">' + esc($('sLabel').value.trim() || 'Find out more') + '</a>' : '') + '<span aria-hidden="true">✕</span></div>' + ($('sOn').checked ? '' : '<p class="small muted">The banner is switched off.</p>') : '<p class="small muted">Type a message to see it here.</p>'; }
+$('sForm').addEventListener('input', prev); $('sForm').addEventListener('change', prev);
+$('sForm').addEventListener('submit', async (e) => {
+  e.preventDefault(); let link = $('sLink').value.trim(); if (link && !/^(https:\/\/|\/)/.test(link)) link = link.startsWith('forecut.in') ? 'https://' + link : '/' + link.replace(/^\/+/, '');
+  const d = { on: $('sOn').checked, text: $('sText').value.trim().slice(0, 160), link, label: $('sLabel').value.trim().slice(0, 40), tone: $('sTone').value, ends: $('sEnds').value || '', at: nowIso(), by: me.uid };
+  try { await F.setDoc(F.doc(db, 'config', 'site'), d); site = d; $('sLink').value = link; $('sMsg').textContent = d.on ? 'Saved. It shows on forecut.in within about 10 minutes.' : 'Saved. The banner is off.'; } catch (x) { $('sMsg').textContent = 'Not saved: ' + x.message; }
+});
+let inst = null; const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+$('appTxt').textContent = standalone ? 'You are using the Forecut Admin app.' : 'Put Forecut Admin on your home screen. It opens straight to this page, like an app, and keeps you signed in.';
+addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); inst = e; $('appBtn').hidden = false; });
+$('appBtn').addEventListener('click', async () => { if (!inst) return; inst.prompt(); await inst.userChoice; inst = null; $('appBtn').hidden = true; });
+
+// ================= tabs =================
+function tab(k) {
+  document.querySelectorAll('.tabs button').forEach((x) => x.setAttribute('aria-pressed', x.dataset.tab === k));
+  ['m', 'r', 'c', 'e', 'f', 'i', 's'].forEach((t) => { $('t' + t).hidden = t !== k; });
+  $('bulk').hidden = k !== 'm' || !picked.size;
+  try { history.replaceState(null, '', '#' + k); } catch (e) {}
+  if (k === 'i') renderIns();
+}
+document.querySelector('.tabs').addEventListener('click', (e) => { const b = e.target.closest('[data-tab]'); if (b) tab(b.dataset.tab); });
+const h0 = location.hash.slice(1); if (/^[mrcefis]$/.test(h0)) tab(h0);
 </script>
 </body></html>

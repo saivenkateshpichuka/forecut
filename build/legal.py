@@ -1,7 +1,7 @@
 """Write ../about.html, ../method.html, ../contact.html, ../terms.html, ../privacy.html (shared Forecut style)."""
 import html
 EFF = '11 October 2026'
-PEFF = '16 November 2026'
+PEFF = '17 November 2026'
 HEAD = '''<!doctype html>
 <html lang="en-IN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{title}</title>
@@ -169,7 +169,7 @@ P['privacy.html'] = ('Privacy Policy · Forecut', f'''
 <h2>2. Cookies, analytics and advertising</h2>
 <p>Forecut uses Google Analytics to understand how visitors use the site, such as which pages are viewed, the approximate country or city, device type and how visitors arrived. Google Analytics sets cookies and processes this information on our behalf under <a href="https://policies.google.com/privacy">Google's Privacy Policy</a>; we do not receive your name or email from it. You can opt out with the <a href="https://tools.google.com/dlpage/gaoptout">Google Analytics opt-out add-on</a> or by blocking cookies in your browser. </p>
 <h2>Accounts</h2>
-<p>If you create a Forecut account, we store your name, email address and, if you sign in with Google, your Google profile picture, using Google Firebase Authentication. We also keep the date you created your account, the date of your last visit and any access we have granted you (for example student access), in Google Cloud Firestore. Passwords are handled by Firebase and are never visible to us. We use this information only to provide your account and to contact you about Forecut. You can ask us to delete your account at any time by writing to <a href="mailto:hello@forecut.in">hello@forecut.in</a>.</p>
+<p>If you create a Forecut account, we store your name, email address and, if you sign in with Google, your Google profile picture, using Google Firebase Authentication. We also keep the date you created your account, the date of your last visit and any access we have granted you (for example student access), in Google Cloud Firestore. For new accounts we also record where you first arrived from (for example a LinkedIn or WhatsApp link) and the first page you opened, so we can see which of our posts help people find Forecut. If you ask for student, alumni or faculty access, we keep the details you give (role, college, course, year and your message) to review the request, and if you use an access code we record which code you used. We may keep short notes and labels about your account (such as the college group you belong to) and a record of the emails we have sent you, so we do not contact you twice. Passwords are handled by Firebase and are never visible to us. We use this information only to provide your account and to contact you about Forecut. You can ask us to delete your account at any time by writing to <a href="mailto:hello@forecut.in">hello@forecut.in</a>.</p>
 <h3>Your work in the tools</h3>
 <p>Work you create in the Forecut tools is saved in your browser. When you are signed in, it is also copied to your account in Google Cloud Firestore so it is available on your other devices; you can turn this off in Dashboard &rarr; Team &amp; sync, and work saved before then stays in your account until you delete it or ask us to. If you join a team, styles you choose to share are visible to the members of that team. Only you and the members of teams you share with can read this work; we do not use it for advertising or sell it.</p>
 <h3>Ask AI</h3>
