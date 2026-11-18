@@ -77,8 +77,8 @@ HUB_CSS = '''<style>
 
 GROUPS = [
     ('global', 'Global & industry', 'Worldwide outlook, market numbers, marketing and the debates shaping fashion.', ['Global Trend Report', 'Market Data', 'Marketing Trends', 'Industry Watch']),
-    ('core', 'Core item updates', 'Item by item: what to invest in, test, maintain and reduce, with each detail\'s status.', ['Core Item Update']),
-    ('caps', 'Design capsules', 'Mood, colour with Pantone TCX codes, key pieces with reference photos, and India price guides.', ['Design Capsule']),
+    ('core', 'India core item updates', 'For the India market, item by item: what to invest in, test, maintain and reduce, with each detail\'s status.', ['Core Item Update']),
+    ('caps', 'India design capsules', 'For the India market: mood, colour with Pantone TCX codes, key pieces with reference photos, and India price guides.', ['Design Capsule']),
     ('india', 'India guides', 'Indian brands, colour and craft sourcing for the India market.', ['Brand Watch', 'Colour Forecast', 'Sourcing Guide']),
 ]
 G_OF = {k: g for g, _, _, ks in GROUPS for k in ks}
@@ -108,16 +108,16 @@ hub += (f'<header class="rh"><div><p class="kicker">Reports · {NT} ready to use
         f'<a class="feat" href="{gtr[0]}"><img src="img/{gtr[4]}.webp" alt="" width="800" height="640"><span class="ft"><small>Featured report</small>'
         f'<strong>{E(gtr[1])}</strong><span>{E(gtr[2])}</span><em>Read the report →</em></span></a></header>')
 
-PATHS = [('Designer', 'Plan a collection', 'Design capsules with mood, colour and key pieces.', '#caps'),
-         ('Brand or buyer', 'Plan a range', 'Core item updates: invest, test, maintain, reduce.', '#core'),
+PATHS = [('Designer', 'Plan a collection', 'Season forecasts with colour, details and lifecycles.', 'ss27.html'),
+         ('Brand or buyer', 'Plan a range', 'The global trend report: what to back next.', 'global-trend-report.html'),
          ('Marketing', 'Plan a campaign', 'The nine marketing trends for 2026.', 'fashion-marketing-trends-2026.html'),
-         ('Sourcing', 'Find the fabric', 'India textile and craft sourcing guide.', 'india-textile-craft-guide.html')]
+         ('Sourcing', 'Find the fabric', 'The live fabric forecast from runways and mills.', 'fabrics.html')]
 hub += '<nav class="paths" aria-label="Start with your job">' + ''.join(f'<a href="{h}"><small>{E(a)}</small><b>{E(b)}</b><span>{E(c)}</span></a>' for a, b, c, h in PATHS) + '</nav>'
 
 hub += ('<div class="rbar" id="all"><div class="chips" role="group" aria-label="Filter reports">'
         f'<button type="button" data-f="all" aria-pressed="true">All<i>{NT}</i></button>'
         + ''.join(f'<button type="button" data-f="{g}" aria-pressed="false">{E(n)}<i>{cnt[g]}</i></button>' for g, n, *_ in GROUPS) +
-        '</div><input type="search" id="rq" placeholder="Search reports, e.g. saree, colour" aria-label="Search reports"></div><p class="rcount" id="rcount" aria-live="polite"></p>')
+        '</div><input type="search" id="rq" placeholder="Search reports, e.g. denim, colour" aria-label="Search reports"></div><p class="rcount" id="rcount" aria-live="polite"></p>')
 
 KEY = '<div class="vkey"><span><i style="background:#047a45"></i>Invest</span><span><i style="background:#c2410c"></i>Test</span><span><i style="background:#d99a00"></i>Maintain</span><span><i style="background:#6d4fc2"></i>Reduce</span><span>· share of each item\'s details, Festive 26</span></div>'
 for g, n, d, kinds in GROUPS:

@@ -29,5 +29,5 @@ def icons(label=False):
 
 def follow(kind='page'):
     t = {'report': ('Get the next report first', 'Follow Forecut for new trend reports, runway fabric watch and India forecasts every week.'),
-         'page': ('Follow Forecut', 'Weekly trend forecasts, runway reports and India market signals on Instagram, LinkedIn and Facebook.')}[kind]
+         'page': ('Follow Forecut', 'Weekly trend forecasts, runway reports and regional market signals on Instagram, LinkedIn and Facebook.')}[kind]
     return f'<!--soc--><div class="follow"><div><b>{t[0]}</b><span>{t[1]}</span></div>{icons(True)}</div><!--/soc-->'

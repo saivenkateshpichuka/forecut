@@ -37,11 +37,17 @@ TIDY = ('<script>(function(l){var p=l.pathname;if(/\\.html$/.test(p)){p=p.replac
         'if(p==="/tools"){l.replace("/tools/"+l.search+l.hash);return}history.replaceState(null,"",p+l.search+l.hash)}})(location)</script>')
 
 
+def glob_lang(s):
+    # Forecut is a global forecast: tag pages as international English, not India-specific (17 Nov 2026)
+    return (s.replace('lang="en-IN"', 'lang="en"').replace('content="en_IN"', 'content="en_GB"')
+             .replace('"inLanguage": "en-IN"', '"inLanguage": "en"').replace('"Forecut India", ', ''))
+
+
 def run():
     n = 0
-    for f in sorted(ROOT.glob('*.html')):
+    for f in sorted(ROOT.glob('*.html')) + sorted((ROOT / 'tools').glob('*.html')):
         s = f.read_text(); o = s
-        s = fix(s)
+        s = glob_lang(fix(s))
         a = s.find('<script>(function(l){var p=l.pathname;')
         if a > -1: s = s[:a] + s[s.find('(location)</script>', a) + len('(location)</script>'):]
         m = re.search(r'<head[^>]*>', s)

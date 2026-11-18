@@ -337,7 +337,7 @@ FABRICS = {
 # ---------------------------------------------------------------- COLOUR
 COLOUR = {
  'file': 'colour.html', 'eb': 'Colour', 'title': 'Colour trends',
- 'seo': ('Colour Trends & Forecasts with Pantone TCX | Forecut', 'Season colour palettes from AW26 to AW28 and India Festive & Summer, each with HEX and nearest Pantone TCX codes, plus colour guides for designers.'),
+ 'seo': ('Colour Trends & Forecasts with Pantone TCX | Forecut', 'Global season colour palettes from AW26 to AW28, plus regional palettes, each with HEX and nearest Pantone TCX codes, plus colour guides for designers.'),
  'lead': 'Colour is often the first thing a customer notices and the first thing that goes wrong in production. Here are Forecut\'s season palettes with HEX and nearest Pantone TCX references, plus practical guides to using colour well.',
  'hero': ['hub-colour', 'theme-ss27-in-motion', 'hero-ss27'],
  'articles': [
@@ -420,7 +420,7 @@ COLOUR = {
 COUTURE.update({
  'hero_pos': '50% 12%',
  'title': 'Couture: the world of made-to-measure',
- 'seo': ('Haute Couture Worldwide: Couture Weeks, Houses, Techniques & Indian Couture | Forecut', 'Explore couture worldwide: Paris haute couture, Indian bridal couture, couture capitals, the couture calendar, gowns, bespoke menswear, kids occasion wear, techniques, news and articles.'),
+ 'seo': ('Haute Couture Worldwide: Couture Weeks, Houses & Techniques | Forecut', 'Explore couture worldwide: Paris haute couture, Indian bridal couture, couture capitals, the couture calendar, gowns, bespoke menswear, kids occasion wear, techniques, news and articles.'),
  'lead': 'Couture is fashion at its most personal: one client, one body, hundreds of hours of hand work. Forecut explores couture worldwide, from the Paris haute couture calendar to Indian bridal ateliers, with the techniques, stories, news and innovations behind it.',
 })
 COUTURE['capitals'] = [
