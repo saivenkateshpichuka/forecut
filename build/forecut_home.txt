@@ -907,7 +907,7 @@ p.intro,.intro,.sechead p,.lead,.d p,.vdesc p,.tbody p,.tsec p,.coty .cinfo p,.m
     <span>© 2026 Forecut</span>
     <span class="flinks"><a href="https://forecut.in/couture.html">Couture</a> · <a href="https://forecut.in/fabrics.html">Fabrics</a> · <a href="https://forecut.in/colour.html">Colour</a> · <a href="https://forecut.in/reports.html">Reports</a> · <a href="https://forecut.in/journal.html">Journal</a> · <a href="https://forecut.in/about.html">About</a> · <a href="method.html">Methodology</a> · <a href="search.html">Search</a> · <a href="https://forecut.in/contact.html">Contact</a> · <a href="https://forecut.in/terms.html">Terms &amp; Conditions</a> · <a href="https://forecut.in/privacy.html">Privacy Policy</a></span>
     <span><a href="mailto:hello@forecut.in">hello@forecut.in</a></span>
-    <span>Global detail-level fashion forecasting · Made in India</span>
+    <span>Global detail-level fashion forecasting</span>
   </footer>
 </div>
 

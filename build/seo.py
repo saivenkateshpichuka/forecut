@@ -53,7 +53,7 @@ OVR = {
  'reports.html': ('Trend Reports | Forecut',
    'Ready-to-use global trend reports: core item updates, design capsules, colour forecasts with Pantone TCX, sourcing guides, brand watch and India market reports, with PDF downloads.'),
  'journal.html': ('Journal | Forecut',
-   'Expert analysis of global fashion trends by region: runway directions, regional markets, fabrics, footwear, colour and India festive wear, with practical next steps for brands.'),
+   'Expert analysis of global fashion trends: runway directions, regional markets, fabrics, footwear and colour, with practical next steps for designers and brands.'),
  'about.html': ('About Us | Forecut',
    'Forecut is an independent global fashion trend forecasting company, combining expert research with AI and data to help brands, designers and manufacturers in every region plan ahead.'),
  'contact.html': ('Contact | Forecut', 'Contact Forecut at hello@forecut.in for questions, partnerships and enterprise enquiries about global fashion trend forecasting.'),
@@ -70,7 +70,7 @@ pages['india-reference-library.html'] = ('India Extended Reference Library | For
 org = {"@context": "https://schema.org", "@graph": [
   {"@type": "Organization", "@id": BASE + "#org", "name": "Forecut", "url": BASE, "logo": BASE + "favicon-192.png", "email": "hello@forecut.in", "sameAs": SO.SAME_AS,
    "description": "Global, detail-level fashion trend forecasting platform for designers, brands and manufacturers, with regional forecasts for Asia, Europe, the Americas, Africa and Oceania.", "slogan": "Know the next detail before it trends.", "foundingDate": "2026", "contactPoint": {"@type": "ContactPoint", "email": "hello@forecut.in", "contactType": "customer support", "areaServed": "Worldwide", "availableLanguage": "en"}, "areaServed": "Worldwide"},
-  {"@type": "WebSite", "@id": BASE + "#site", "name": "Forecut", "alternateName": ["Forecut India", "forecut.in"], "url": BASE, "publisher": {"@id": BASE + "#org"}, "inLanguage": "en-IN"}]}
+  {"@type": "WebSite", "@id": BASE + "#site", "name": "Forecut", "alternateName": ["forecut.in"], "url": BASE, "publisher": {"@id": BASE + "#org"}, "inLanguage": "en"}]}
 for _fn, (_t, _d) in OVR.items():
     if _fn in pages: pages[_fn] = (_t, _d, pages[_fn][2])
 for _k in SEAS:
@@ -146,12 +146,12 @@ def block(fn, title, desc, path):
     b = ['<!--seo-->', f'<meta name="description" content="{E(desc)}">', f'<link rel="canonical" href="{url}">',
          ('<meta name="robots" content="noindex,follow">' if fn in NOINDEX else '<meta name="robots" content="index,follow">'), '<meta name="theme-color" content="#1f3d33">',
          '<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon-96.png" type="image/png" sizes="96x96"><link rel="icon" href="/favicon-192.png" type="image/png" sizes="192x192"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest">',
-         '<meta property="og:type" content="website">', '<meta property="og:site_name" content="Forecut">', '<meta property="og:locale" content="en_IN">',
+         '<meta property="og:type" content="website">', '<meta property="og:site_name" content="Forecut">', '<meta property="og:locale" content="en_GB">',
          f'<meta property="og:title" content="{E(title)}">', f'<meta property="og:description" content="{E(desc)}">', f'<meta property="og:url" content="{url}">',
          f'<meta property="og:image" content="{BASE}{_si}">', f'<meta property="og:image:width" content="{_sw}">', f'<meta property="og:image:height" content="{_sh}">', f'<meta property="og:image:alt" content="{E(title)}">',
          '<meta name="twitter:card" content="summary_large_image">', f'<meta name="twitter:title" content="{E(title)}">', f'<meta name="twitter:description" content="{E(desc)}">', f'<meta name="twitter:image" content="{BASE}{_si}">'] + ([f'<meta name="p:domain_verify" content="{SITE["pinterest"]}">'] if SITE.get('pinterest') else [])
     if fn == 'index.html': b.append('<script type="application/ld+json">' + json.dumps(org, ensure_ascii=False) + '</script>')
-    else: b.append('<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@type": "WebPage", "name": title, "description": desc, "url": url, "isPartOf": {"@id": BASE + "#site"}, "publisher": {"@id": BASE + "#org"}, "inLanguage": "en-IN",
+    else: b.append('<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@type": "WebPage", "name": title, "description": desc, "url": url, "isPartOf": {"@id": BASE + "#site"}, "publisher": {"@id": BASE + "#org"}, "inLanguage": "en",
         "breadcrumb": {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Forecut", "item": BASE}, {"@type": "ListItem", "position": 2, "name": title.split(' · ')[0].split(' (')[0], "item": url}]}}, ensure_ascii=False) + '</script>')
     if SITE.get('adsense'): b.append('<meta name="google-adsense-account" content="' + SITE['adsense'] + '">')
     # ads only on substantial content pages (AdSense "low value content" rule); utility and thin pages carry no ad code
@@ -165,7 +165,7 @@ def block(fn, title, desc, path):
 
     if fn in ARTS:
         a = ARTS[fn]
-        b.append('<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@type": "Article", "headline": a['title'], "description": a['desc'], "image": BASE + 'img/' + a['hero'] + '.webp', "datePublished": a.get("date", JD.DATE), "dateModified": a.get("date", JD.DATE), "author": {"@type": "Organization", "name": "Forecut Editorial", "url": BASE + 'about.html'}, "publisher": {"@id": BASE + "#org"}, "mainEntityOfPage": url, "inLanguage": "en-IN"}, ensure_ascii=False) + '</script>')
+        b.append('<script type="application/ld+json">' + json.dumps({"@context": "https://schema.org", "@type": "Article", "headline": a['title'], "description": a['desc'], "image": BASE + 'img/' + a['hero'] + '.webp', "datePublished": a.get("date", JD.DATE), "dateModified": a.get("date", JD.DATE), "author": {"@type": "Organization", "name": "Forecut Editorial", "url": BASE + 'about.html'}, "publisher": {"@id": BASE + "#org"}, "mainEntityOfPage": url, "inLanguage": "en"}, ensure_ascii=False) + '</script>')
     if fn in ARTS and isinstance(ARTS[fn].get('body'), list):
         _qa = [re.match(r'<b>([^<]*\?)</b>\s*(.*)', x[1], re.S) for x in ARTS[fn]['body'] if x[0] == 'p']
         _qa = [(m.group(1), re.sub(r'<[^>]+>', '', m.group(2))) for m in _qa if m]
@@ -226,7 +226,7 @@ for fn, (title, desc, path) in pages.items():
     h = h.replace('</title>', '</title>\n' + block(fn, title, desc, path), 1)
     _ff = open(os.path.join(R, 'fonts', 'fonts.css')).read().split('*/', 1)[1].strip().replace('url(', 'url(fonts/')
     h = h.replace('<link rel="stylesheet" href="fonts/fonts.css">', '<style>' + _ff + '</style>')
-    if '<html lang="en">' in h: h = h.replace('<html lang="en">', '<html lang="en-IN">', 1)
+    if '<html lang="en">' in h: pass  # pages stay lang="en" (global)
     h = re.sub(r'<nav class="fctab".*?</nav>', '', h, flags=re.S)
     h = re.sub(r'<a href="(?:https://forecut\.in/)?tools\.html">Tools</a>', '', h)
     h = h.replace('<script src="pm-link.js" defer></script>', '')
