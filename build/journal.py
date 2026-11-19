@@ -1,6 +1,7 @@
 """Write ../journal.html and one page per article from journal_data.py, in the shared Forecut page style (from legal.py)."""
 import html, json
 import journal_visuals as JV
+import southeast_asia_visual as SAV
 import journal_data as J
 import credits as CR
 import os
@@ -56,6 +57,7 @@ def block(b):
     if k == 'cta': return f'<div class="cta">{b[1]}</div>'
     raise ValueError(k)
 def card_image(a):
+    if a['slug'] == SAV.SLUG: return SAV.card()
     if a['slug'] == JV.SLUG:
         return "<div class=\"ph\"><img src=\"img/lagos-crafted-studio-editorial-640.webp\" srcset=\"img/lagos-crafted-studio-editorial-640.webp 640w, img/lagos-crafted-studio-editorial-960.webp 960w, img/lagos-crafted-studio-editorial.webp 1536w\" sizes=\"(max-width: 600px) calc(100vw - 32px), (max-width: 892px) 50vw, 280px\" alt=\"AI-generated editorial illustration of indigo tailoring and woven cloth for the Lagos CRAFTED story\" loading=\"lazy\" decoding=\"async\" width=\"1536\" height=\"1024\"></div><small style=\"color:var(--muted);font-weight:500;letter-spacing:0;text-transform:none\">AI-generated editorial illustration</small>"
     return img(a["hero"], a["title"], "ph")
@@ -70,7 +72,7 @@ for a in J.ARTICLES:
             + ''.join(block(b) for b in a['body']) +
             '<p class="byline">Written by the Forecut editorial team. Sources include public coverage of Lakmé Fashion Week x FDCI 2026 (Harper\'s Bazaar India, Free Press Journal), Aza Fashions and Lashkaraa trend guides, Pearl Academy Gen Z reports, Global Indian and Outlook Business. Statuses are Forecut\'s forecast and will be refined as new data arrives.' + (f' Sources for this article: {E(a["sources"])}.' if a.get('sources') else '') + '</p></article>'
             f'<section class="more"><h3>More from the Journal</h3><div class="jgrid">{"".join(card(x) for x in others)}</div></section>')
-    open(f'../{a["slug"]}.html', 'w').write(JV.decorate(a['slug'], head(a['title'] + ' · Forecut Journal') + body + FOOT))
+    open(f'../{a["slug"]}.html', 'w').write(SAV.decorate(a['slug'], JV.decorate(a['slug'], head(a['title'] + ' · Forecut Journal') + body + FOOT)))
 idx = ('<p class="eb">Journal</p><h1>The Forecut Journal</h1><p class="lead">Analysis and practical guides on Indian and global fashion trends: what is emerging, rising, peaking and fading, why it matters, and what to do about it.</p>'
        f'<div class="jgrid">{"".join(card(x) for x in J.ARTICLES)}</div>' + getattr(J, 'INDEX_GUIDE', ''))
 open('../journal.html', 'w').write(head('Forecut Journal · Indian fashion trend analysis and guides') + idx + FOOT)

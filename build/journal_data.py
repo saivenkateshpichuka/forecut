@@ -9,7 +9,7 @@ ARTICLES = [
 {'slug': 'southeast-asia-ss27-jakarta-ramadan-lunar-new-year-guide',
  'title': "Selling SS27 in Southeast Asia: Jakarta's modest wear, Lunar New Year and Ramadan in one week",
  'desc': 'How to plan SS27 for Indonesia, Malaysia, Singapore and the wider region: Jakarta Fashion Week 2027 trends, the February 2027 calendar and e-Conomy SEA data.',
- 'tag': 'Regional market', 'read': 6, 'hero': 'theme-ss27-handcraft',
+ 'tag': 'Regional market', 'read': 6, 'hero': 'art-southeast-asia-ss27-jakarta-ramadan-lunar-new-year-guide',
  'date': '2026-11-19', 'date_txt': '19 November 2026',
  'hero_new': 'art-southeast-asia-ss27-jakarta-ramadan-lunar-new-year-guide',
  'img_kw': 'Jakarta boutique, batik fabric, modest fashion',

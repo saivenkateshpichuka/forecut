@@ -85,6 +85,7 @@ SITE = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), '
 def share_img(fn):
     html_ = open(os.path.join(R, fn)).read() if os.path.exists(os.path.join(R, fn)) else ''
     k = fn[:-5]
+    if k == 'southeast-asia-ss27-jakarta-ramadan-lunar-new-year-guide': return 'img/art-southeast-asia-ss27-jakarta-ramadan-lunar-new-year-guide.webp', 1672, 941
     if k == 'lagos-fashion-week-2026-crafted-west-africa': return 'img/lagos-crafted-studio-editorial.webp', 1536, 1024
     for cand in [f'img/hero-{k}.webp', f'img/hero-{"india" if k == "india" else k}.webp']:
         if os.path.exists(os.path.join(R, cand)): return cand, 1920, 1080
