@@ -230,6 +230,10 @@ D = [
  ("Women's Ethnic", 'Sarees', 'Black velvet sarees', 'Fabric', "Black velvet sarees with embellished borders for winter evening functions, as on Kajol at Manish Malhotra's Diwali party, Mumbai, Nov 2026; velvet suits the cooler North Indian wedding months.", 'rprpf', None),
  ("Women's Ethnic", 'Sarees', 'Metallic grey pre-draped sarees', 'Colour', "Silver-grey georgette pre-draped sarees with mirror and sequin work and a sleeveless sequinned blouse, as on Shilpa Shetty at Ramesh Taurani's Diwali party, Mumbai, 3 Nov 2026: a quieter alternative to gold.", 'errpf', None),
  ("Men's Ethnic", 'Kurtas & sets', 'Burgundy velvet kurtas', 'Fabric', "Dark burgundy velvet kurtas worn with black trousers, as on Vicky Kaushal at Manish Malhotra's Diwali party, Mumbai, Nov 2026, with burgundy velvet co-ords on women the same night.", 'rprpf', None),
+ # Weekly details 2026-11-21 (Sharvari's Yeh Prem Mol Liya promotions, Mumbai, 18-20 Nov; Sara Ali Khan, 18 Nov; wedding-season bridesmaid looks, 18 Nov)
+ ("Women's Ethnic", 'Lehengas', 'Multi-panel colour-block lehengas', 'Colour', "Voluminous lehenga skirts built from broad panels of different colours rather than one ground colour: Sharvari's pink, green, coral and maroon lehenga with mustard-gold panels at the Yeh Prem Mol Liya trailer launch, Mumbai (20 Nov 2026), and Sara Ali Khan's purple, magenta and emerald panelled lehenga (18 Nov 2026).", 'rrppf', None),
+ ("Women's Ethnic", 'Lehengas', 'Mustard lehengas with magenta blouses', 'Colour', "A mustard-orange lehenga with magenta geometric motifs and a gold hem, worn with a short-sleeved square-neck magenta blouse and a sheer mustard dupatta; Baise Gaba on Sharvari for Yeh Prem Mol Liya promotions (18 Nov 2026). A warm, haldi-friendly pairing for day functions.", 'errpf', None),
+ ("Women's Ethnic", 'Lehengas', 'Multicolour mirror-work lehengas', 'Embellishment', "Fitted lehengas worked in mirrors on a multi-coloured ground, styled with a statement maang tikka and ear chains, as on Ananya Panday and Kriti Sanon in a wedding-season bridesmaid round-up (18 Nov 2026); a brighter follow-on to the black mirror-work lehenga.", 'rppff', None),
 
 ]
 

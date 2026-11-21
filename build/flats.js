@@ -1439,6 +1439,21 @@ var Flats = (function () {
     'Convertible backpack puffers': T({ t: 'jacket', len: 210, fl: 8, col: 'funnel', cl: 'zip', hem: 'band', cuff: 'band', x: ['quiltlines', 'belt'], hl: ['body'] }),
     'Sculpted rocker-sole trainers': { g: 'shoe', s: 'sneaker', chunky: true, hl: ['sole'] },
     'Barefoot sole-less sandals': { g: 'shoe', s: 'sandal', heel: 'flat', x: ['anklestrap'], hl: ['strap'] },
+    /* Weekly details 2026-11-21 (Governors Awards, Latin Grammys, London premiere, Cairo IFF, ARIAs, Martin Fierro de Cable, Uniqlo x Bahnsen, sacai, Songzio x Egonlab, Puma x JiyongKim, Birkenstock 1774, holiday edits) */
+    'Corseted tea-length crinoline dresses': { g: 'dress', nk: 'slip', sl: 'none', sk: 'bubble', len: 200, x: ['boning', 'lacetop'], hl: ['body'] },
+    'Lace-up corset-back sequin gowns': { g: 'dress', nk: 'slip', sl: 'none', sk: 'column', x: ['sequin', 'boning'], hl: ['body'] },
+    'Cup-bodice gold column gowns': { g: 'dress', nk: 'square', sl: 'none', sk: 'column', x: ['sequin'], hl: ['body'] },
+    'Starry crystal velvet gowns': { g: 'dress', nk: 'v', sl: 'none', sk: 'column', x: ['velvet', 'beads'], hl: ['body'] },
+    'Low-rise slip skirts with bra tops': { g: 'skirt', s: 'midi', x: ['lacehem'], hl: ['waist'] },
+    'Shirred-waist fleece skirts': { g: 'skirt', s: 'mini', x: ['tiers'], hl: ['waist'] },
+    'Tone-on-tone embroidered tuxedos': T({ t: 'blazer', col: 'peak', cl: 'onebutton', pk: 'welt', x: ['dark', 'embroid'], hl: ['body'] }),
+    'Cropped parkas over evening gowns': T({ t: 'jacket', len: 180, col: 'funnel', cl: 'zip', pk: 'flap', hem: 'band', cuff: 'band', x: ['hood'], hl: ['hem'] }),
+    'Sequin-flecked Fair Isle jumpers': T({ t: 'knit', col: 'crew', x: ['fairisle', 'sequin'], hl: ['yoke'] }),
+    'Velvet cape tops': T({ t: 'shirt', col: 'band', cl: 'placket', x: ['velvet', 'cape'], hl: ['cape'] }),
+    'Braided officer coats': T({ t: 'coat', col: 'band', cl: 'db', x: ['dark', 'epaulette', 'piping'], hl: ['closure'] }),
+    'Contrast-stitch nylon twill blousons': T({ t: 'jacket', col: 'shirt', cl: 'zip', hem: 'rib', cuff: 'rib', pk: 'slant', x: ['topst', 'gloss'], hl: ['body'] }),
+    'Studded and ruffled Mary Jane clogs': { g: 'shoe', s: 'clog', shearling: true, x: ['tassel'], hl: ['upper'] },
+    'Sun-bleached distressed sneakers': { g: 'shoe', s: 'sneaker', chunky: true, x: ['suede', 'patch'], hl: ['upper'] },
   };
   var LABEL = { knees: 'Knees', bodice: 'Bodice', front: 'Wrap front', chain: 'Chain trim', centre: 'Centre front', collar: 'Collar', cuffs: 'Cuffs', hem: 'Hem', shoulders: 'Shoulders', body: 'Whole piece', closure: 'Front closure', pockets: 'Pockets', waist: 'Waist', cape: 'Cape', stormflap: 'Storm flap', chest: 'Chest', yoke: 'Yoke', tie: 'Tie', sleeves: 'Sleeves', skirt: 'Skirt', sides: 'Side seams', neck: 'Neckline', legs: 'Legs', pleats: 'Pleats', fly: 'Fly', seams: 'Outseams', adjusters: 'Side adjusters', loop: 'Hammer loop', slit: 'Slit', strap: 'Strap', toe: 'Toe', heel: 'Heel', vamp: 'Vamp', upper: 'Upper', sole: 'Sole', shaft: 'Shaft', topline: 'Topline', laces: 'Lacing', sock: 'Sock' };
 
