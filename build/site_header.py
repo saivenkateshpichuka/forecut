@@ -10,7 +10,7 @@ LOGO = ('<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28
 
 MENU = [
     ('Forecasts', 'forecasts', [
-        ('Seasons', [('ss27.html', 'SS27', 'Next season forecast'), ('aw26.html', 'AW26', 'In stores now'),
+        ('Seasons', [('forecasts.html', 'All forecast reports', 'By season and topic, with PDFs'), ('ss27.html', 'SS27', 'Next season forecast'), ('aw26.html', 'AW26', 'In stores now'),
                      ('resort-27.html', 'Resort 27', 'Cruise · Nov–Jan'), ('pre-fall-27.html', 'Pre-Fall 27', 'Outlook · May–Jul'),
                      ('aw27.html', 'AW27', 'Early outlook'), ('ss28.html', 'SS28', 'Long-range projection'),
                      ('aw28.html', 'AW28', 'Long-range projection')]),
@@ -19,7 +19,7 @@ MENU = [
                      ('india.html', 'India', 'Festive and summer seasons')]),
     ], ('ss27.html', 'SS27 forecast', 'The waist returns, handcraft goes everyday and a luminous blue leads.', 'img/hero-ss27.webp')),
     ('Insight', 'insight', [
-        ('Read', [('reports.html', 'Reports', 'Ready-to-use trend and market reports'), ('journal.html', 'Journal', 'Analysis and practical guides'),
+        ('Read', [('insights.html', 'Insights', 'Reports, articles and market news'), ('reports.html', 'Reports', 'Ready-to-use trend and market reports'), ('journal.html', 'Journal', 'Analysis and practical guides'),
                   ('celebrity-style.html', 'Celebrity style', 'Weekly red-carpet watch'),
                   ('how-to-choose-a-fashion-trend-forecasting-service.html', 'Choosing a forecasting service', 'Free vs paid, global vs India')]),
         ('More regions', [('region-south-america.html', 'South America', ''), ('region-africa.html', 'Africa', ''),
