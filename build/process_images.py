@@ -19,6 +19,7 @@ hubs_v |= {a['hero_new'] for a in JDX.ARTICLES if a.get('hero_new')}
 import regions_data as _RG
 hubs_v |= set(_RG.IMAGES)
 themes_v |= hubs_v  # hub images: 16:10 like theme tiles
+themes_v |= {f'cover-{s}-{t}' for s in seasons for t in ('themes', 'colour', 'womenswear', 'menswear', 'footwear', 'knitwear', 'fabrics', 'trims')}  # report covers: 16:10
 flats_v = {'flat-' + b for b in base} | {'flat-' + b + '-' + s for b in base for s in seasons}
 valid = base | {b + '-' + s for b in base for s in seasons} | heroes | themes_v | flats_v
 imgs = set(json.load(open('images.json')))
