@@ -757,11 +757,15 @@ GROUPS4 = [('Trend', ['trend-to-style', 'rangeboard', 'swatchsmith']),
 
 def tools():
     T = {t['slug']: t for t in TOOLS}
-    h = head('Tools | Forecut', 'Free Forecut tools from trend to finished product.') + nav_app('Tools') + '<main id="main">'
+    h = head('Fashion Design and Production Tools | Forecut', 'Free fashion tools in the order a garment is made: trend briefs, collection plans, colour palettes, patterns, tech packs, costing, production and export.').replace('href="/site.webmanifest"', 'href="/studio.webmanifest"') + nav_app('Tools') + '<main id="main">'
     h += f'''<section class="sec t"><div class="w split" style="display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap">
 <div><h1 class="dsp" style="font-size:52px">Tools</h1><p class="lead" style="margin-top:10px">From trend to finished product. Free for members.</p></div>
 <label class="srch" style="width:320px;max-width:100%">{SEARCH}<input id="tq" type="search" placeholder="Find a tool" aria-label="Find a tool" style="border:0;outline:0;font:inherit;width:100%;background:transparent"></label></div></section>
 <section class="w" style="padding-bottom:24px" id="recent"></section>
+<section class="w" style="padding-bottom:48px"><h2 class="dsp" style="font-size:28px;margin-bottom:18px">Most used</h2><div class="g g4 feat">''' + ''.join(
+        f'<a class="tool" href="/{sl}.html" data-q="{E((T[sl]["title"] + " " + T[sl]["lead"] + " " + T[sl]["tags"]).lower())}"><span class="tim2"><img src="/tools/covers/{sl}-640.webp" alt="" loading="lazy"></span><span class="tt">{E(T[sl]["title"].replace("&", "and"))}</span><span class="small gr">{E(T[sl]["lead"])}</span></a>'
+        for sl in ['pattern-maker', 'tech-pack-builder', 'trend-to-style', 'textile-processing-studio']) + f'''</div></section>
+<section class="w"><h2 class="dsp" style="font-size:28px;margin-bottom:6px">All tools</h2><p class="gr" style="margin-bottom:18px">In the order a garment is made.</p></section>
 <section class="w g g4 toolcols" style="gap:0;border-top:1px solid var(--ru);padding-bottom:64px">'''
     for i, (g, sl) in enumerate(GROUPS4):
         h += f'<div style="padding:22px 24px 0 0;{"border-left:1px solid var(--ru);padding-left:24px" if i else ""}"><h2 class="dsp" style="font-size:22px;margin-bottom:14px">{g}</h2>'
@@ -834,7 +838,7 @@ def main():
     shutil.copy(os.path.join(B, 'v2', 'archivo.woff2'), os.path.join(ASSET, 'archivo.woff2'))
     open(os.path.join(ASSET, 'forecut.js'), 'w').write(JS + JS2)
     pages = {}
-    for name, fn, si in [('index', landing, f'hero-{NEXT}'), ('home', home, None), ('forecasts', forecasts, None), ('insights', insights, None)]:
+    for name, fn, si in [('index', landing, f'hero-{NEXT}'), ('home', home, None), ('forecasts', forecasts, None), ('insights', insights, None), ('tools', tools, None)]:
         _PATH[:] = ['' if name == 'index' else name + '.html', si]
         pages[name] = fn()
     for s, t in REPORTS:

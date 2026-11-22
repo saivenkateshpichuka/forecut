@@ -277,3 +277,4 @@ button.item:focus-visible{outline:2px solid var(--ac);outline-offset:4px}
 
 html:not(.fc-in) .in-only{display:none!important}html.fc-in .out-only{display:none!important}
 .art.ph{color:#fff!important}.art.ph::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.6),rgba(0,0,0,0) 60%)}.art>span{z-index:1}
+.feat .tool{display:flex;flex-direction:column;gap:4px}.feat .tim2{display:block;aspect-ratio:16/9;background:var(--st);overflow:hidden;margin-bottom:8px}.feat .tim2 img{transition:transform .5s cubic-bezier(.2,.7,.2,1)}.feat .tool:hover img{transform:scale(1.04)}.feat .tt{font-weight:500}
