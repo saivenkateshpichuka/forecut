@@ -50,7 +50,9 @@ h1.d{font-size:40pt}h2.d{font-size:26pt;margin-bottom:6mm}h3{font-weight:500;fon
 .im{background:#efede9;overflow:hidden}.im img{width:100%%;height:100%%;object-fit:cover;display:block}
 .it .im{height:44mm}.it h4{font-weight:500;font-size:10pt;margin-top:2mm}.it p{font-size:8.5pt;color:#5c5c5c;line-height:1.35}
 .st{display:inline-block;font-size:7.5pt;font-weight:600;padding:.4mm 1.8mm;margin-top:1.5mm}
-.s-e{background:#e9c46a}.s-r{background:#3a9a63;color:#fff}.s-p{background:#3559b8;color:#fff}.s-f{background:#cfcbc4}
+.s-e{background:#d0703f;color:#fff}.s-r{background:#2e7d55;color:#fff}.s-p{background:#b07a24;color:#fff}.s-f{background:#8a6f86;color:#fff}
+.mk{display:inline-flex;align-items:center;gap:2.5mm;font-stretch:125%%;letter-spacing:.2em;font-weight:600}.mk svg{width:8mm;height:8mm}.ft .mk{gap:1.5mm;letter-spacing:.15em;color:#1f3d33}.ft .mk svg{width:4mm;height:4mm}
+h2.d{color:#1f3d33}
 table{border-collapse:collapse;width:100%%}th,td{text-align:left;font-weight:400;padding:1.6mm 1.5mm;border-bottom:.3mm solid #e4e2de;font-size:9pt}
 thead th{color:#5c5c5c;font-size:8pt}
 .lc td{padding:1mm .8mm}.lc td span{display:block;padding:.8mm 1.5mm;font-size:7.5pt}.lc td.now{outline:.5mm solid #000;outline-offset:-.5mm}
@@ -70,7 +72,7 @@ class Doc:
 
     def page(self, body, cls='', style=''):
         n = len(self.pages) + 1
-        ft = '' if 'cov' in cls else f'<div class="ft"><span>Forecut, {self.m["code"]} {E(V.TOPIC[self.topic][1])}, {E(self.ptitle)}</span><span>{n}</span></div>'
+        ft = '' if 'cov' in cls else f'<div class="ft"><span><span class="mk">{V.MARK}FORECUT</span>  {self.m["code"]} {E(V.TOPIC[self.topic][1])}, {E(self.ptitle)}</span><span>{n}</span></div>'
         self.pages.append(f'<section class="pg {cls}" style="{style}">{body}{ft}</section>')
 
     def html(self):
@@ -93,7 +95,7 @@ def build(s, topic):
     def cover(d, contents):
         th_k = f'cover-{s}-{topic}'
         bgimg = f'<img src="{pic(th_k, 1600)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">' if th_k in V.IMG else ''
-        d.page(bgimg + f'''<div class="in"><div class="top"><span>{m["code"]}</span><span>FORECUT</span></div>
+        d.page(bgimg + f'''<div class="in"><div class="top"><span>{m["code"]}</span><span class="mk">{V.MARK}FORECUT</span></div>
 <div class="t d">{E(title)}</div><div class="p">{E(d.ptitle)}</div>
 <div class="pal">{''.join(f'<i style="background:{c}"></i>' for c, _ in pal)}</div>
 <div class="meta"><span>{E(m["title"])}, {E(m["stage"].lower())}. In stores {E(m["window"])}.</span><span>{V.TODAY.strftime("%-d %B %Y")}</span></div></div>''', 'cov', f'--bg:{hx};--fg:{fg}')

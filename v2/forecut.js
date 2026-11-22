@@ -9,9 +9,9 @@ var il=document.getElementById('ilist');
 if(il){document.querySelector('[data-f=kind]').addEventListener('click',function(e){var c=e.target.closest('button.ch');if(!c)return;this.querySelectorAll('.ch').forEach(function(x){x.classList.toggle('on',x===c)});var v=c.dataset.v;document.querySelectorAll('[data-kind]').forEach(function(a){a.classList.toggle('hide',v!=='all'&&a.dataset.kind!==v)})});}
 /* tools search + recently used */
 var tq=document.getElementById('tq');
-if(tq){tq.addEventListener('input',function(){var q=tq.value.trim().toLowerCase();document.querySelectorAll('a.tool').forEach(function(a){a.classList.toggle('hide',q&&a.dataset.q.indexOf(q)<0)})});
+if(tq){tq.addEventListener('input',function(){var q=tq.value.trim().toLowerCase(),n=0;document.querySelectorAll('a.tool,a.tcard').forEach(function(a){var ok=!q||a.dataset.q.indexOf(q)>-1;a.classList.toggle('hide',!ok);if(ok)n++});document.querySelectorAll('.tgrp').forEach(function(g){g.classList.toggle('hide',!g.querySelector('a.tcard:not(.hide)'))});var tn=document.getElementById('tnone');if(tn)tn.classList.toggle('hide',n>0)});
  try{var r=JSON.parse(localStorage.getItem('fc-recent-tools')||'[]');if(r.length){var h='<p class="small gr" style="margin-bottom:10px">Recently used</p><div class="flt">';r.slice(0,4).forEach(function(x){h+='<a class="ch" href="'+x.u+'">'+x.t+'</a>'});document.getElementById('recent').innerHTML=h+'</div>'}}catch(e){}
- document.querySelectorAll('a.tool').forEach(function(a){a.addEventListener('click',function(){try{var r=JSON.parse(localStorage.getItem('fc-recent-tools')||'[]').filter(function(x){return x.u!==a.getAttribute('href')});r.unshift({u:a.getAttribute('href'),t:a.querySelector('span').textContent});localStorage.setItem('fc-recent-tools',JSON.stringify(r.slice(0,6)))}catch(e){}})});}
+ document.querySelectorAll('a.tool,a.tcard').forEach(function(a){a.addEventListener('click',function(){try{var r=JSON.parse(localStorage.getItem('fc-recent-tools')||'[]').filter(function(x){return x.u!==a.getAttribute('href')});r.unshift({u:a.getAttribute('href'),t:(a.querySelector('.tt')||a.querySelector('span')).textContent});localStorage.setItem('fc-recent-tools',JSON.stringify(r.slice(0,6)))}catch(e){}})});}
 /* greeting + detail of the day + continue reading */
 var g=document.getElementById('greet');if(g){var hr=new Date().getHours();g.textContent=(hr<12?'Good morning.':hr<17?'Good afternoon.':'Good evening.')}
 var P=window.FC_DOTD;if(P&&P.length){var d=new Date(),i=Math.floor((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()))/864e5)%P.length,x=P[i];
@@ -60,10 +60,33 @@ function setUser(u){var R=document.documentElement;R.classList.toggle('fc-in',!!
 gate(!document.documentElement.classList.contains('fc-in')||location.hash==='#preview');
 (function wait(n){if(window.FCAuth&&FCAuth.onChange){FCAuth.onChange(setUser)}else if(n<80)setTimeout(function(){wait(n+1)},100)})(0);
 document.addEventListener('click',function(e){var a=e.target.closest('[data-pdf]');if(a&&!document.documentElement.classList.contains('fc-in')){e.preventDefault();location.href='/account.html#signup'}});
+/* lifecycle table: fill in when it comes into view */
+var lcs=document.querySelectorAll('.lct,.cdev,.tdev');
+if(lcs.length){if(RM||!('IntersectionObserver' in window)){lcs.forEach(function(t){t.classList.add('vis')})}else{var lio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');lio.unobserve(e.target)}})},{threshold:.2});lcs.forEach(function(t){lio.observe(t)})}}
+/* Home: saved details and tools you used */
+var sv=document.getElementById('saved');
+if(sv){try{var L=JSON.parse(localStorage.getItem('fc-saved')||'[]');if(L.length){sv.innerHTML=L.slice(0,6).map(function(x){var n=document.createElement('i');n.textContent=x.n||x.name||'';return '<a href="'+(x.u||x.page||'/forecasts.html')+'">'+(x.p?'<span class="sim"><img src="/img/'+x.p+'.webp" alt=""></span>':'<span class="sim"></span>')+'<span><b>'+n.innerHTML+'</b><span class="small gr">'+(x.s||x.season||'')+'</span></span></a>'}).join('')+(L.length>6?'<a class="lk" href="/account.html">See all</a>':'')}}catch(e){}}
+var mt=document.getElementById('mytools');
+if(mt){try{var R=JSON.parse(localStorage.getItem('fc-recent-tools')||'[]');if(R.length){mt.innerHTML=R.slice(0,4).map(function(x){var n=document.createElement('i');n.textContent=x.t;return '<a href="'+x.u+'"><b>'+n.innerHTML+'</b><span class="small gr">Used recently</span></a>'}).join('')}}catch(e){}}
+/* forecast finder */
+var ff=document.getElementById('fform');
+if(ff){ff.addEventListener('submit',function(e){e.preventDefault();var m=ff.m.value;if(m){location.href=m}else{location.href='/'+ff.s.value+'-'+ff.t.value+'.html'}})}
 /* detail pop-up */
 var DM=document.getElementById('dm'),FI=window.FC_ITEMS;
 if(DM&&FI){var cards=[].slice.call(document.querySelectorAll('button.item')),cur=-1,last=null,ST={e:'Emerging',r:'Rising',p:'Peaking',f:'Fading'},SC={e:'st-e',r:'st-r',p:'st-p',f:'st-f'};
  function saved(){try{return JSON.parse(localStorage.getItem('fc-saved')||'[]')}catch(e){return[]}}
+ function esc(x){var e=document.createElement('i');e.textContent=x;return e.innerHTML}
+ function curve(life,ci){var X={e:46,r:98,p:160,f:236},NM=ST,COL={e:'#d0703f',r:'#2e7d55',p:'#b07a24',f:'#8a6f86'};
+  function y(x){return 92-74*Math.exp(-Math.pow((x-160)/62,2))}
+  var pts=[];for(var x=8;x<=312;x+=4)pts.push(x+','+y(x).toFixed(1));var ch=life.charAt(ci);if(!X[ch])return '';
+  var cx=X[ch],done=[];for(var x2=8;x2<=cx;x2+=4)done.push(x2+','+y(x2).toFixed(1));
+  var s='<svg viewBox="0 -18 320 146" role="img" aria-label="Trend curve: '+NM[ch]+' in '+FI.seasons[ci]+'"><polyline points="'+pts.join(' ')+'" fill="none" stroke="#e6ded3" stroke-width="5" stroke-linecap="round"/>';
+  s+='<polyline class="tcdone" points="'+done.join(' ')+'" fill="none" stroke="'+COL[ch]+'" stroke-width="5" stroke-linecap="round" pathLength="100"/>';
+  ['e','r','p','f'].forEach(function(k,ix){var on=k===ch;s+='<circle cx="'+X[k]+'" cy="'+y(X[k]).toFixed(1)+'" r="'+(on?8:4.5)+'" fill="'+(on?COL[k]:'#fff')+'" stroke="'+COL[k]+'" stroke-width="2.5"'+(on?' class="tcdot"':'')+' style="--k:'+ix+'"/><text x="'+X[k]+'" y="120" text-anchor="middle" font-size="11.5" font-weight="'+(on?700:500)+'" fill="'+(on?COL[k]:'#8a817a')+'">'+NM[k]+'</text>'});
+  s+='<text x="'+cx+'" y="'+(y(cx)-16).toFixed(1)+'" text-anchor="middle" font-size="12" font-weight="700" fill="#1c1714">'+FI.seasons[ci]+'</text></svg>';
+  var nx=life.charAt(ci+1),msg={e:'Early signals: test in small quantities.',r:'Growth is building: the best time to invest.',p:'At its height: keep in core ranges, avoid over-buying.',f:'Demand is slowing: clear stock and move on.'}[ch];
+  if(FI.seasons[ci+1])msg+=X[nx]?' Next, '+FI.seasons[ci+1]+': '+NM[nx].toLowerCase()+'.':' Leaves the forecast in '+FI.seasons[ci+1]+'.';
+  return s+'<p class="small gr">'+msg+'</p>'}
  function fill(i){var d=FI.items[i],c=cards[i],im=c.querySelector('img'),dimg=document.getElementById('dmimg');
   var di=DM.querySelector('.dmi'),ph=c.querySelector('.ph');di.classList.toggle('none',!im);di.style.cssText=im?'':ph.getAttribute('style');var pe=di.querySelector('em');if(pe)pe.remove();if(im){dimg.src=im.src;dimg.alt=d.n}else{dimg.removeAttribute('src');var e2=document.createElement('em');e2.textContent=d.a;di.appendChild(e2)}
   document.getElementById('dmk').textContent=d.k+', '+d.a.toLowerCase();document.getElementById('dmn').textContent=d.n;document.getElementById('dmnote').textContent=d.note;
@@ -72,6 +95,11 @@ if(DM&&FI){var cards=[].slice.call(document.querySelectorAll('button.item')),cur
   var h='';for(var j=0;j<5;j++){var s=d.l[j];h+='<div class="c-'+(s==='-'?'n':s)+(j===FI.si?' now':'')+'" style="--d:'+(j*90)+'ms"><b>'+FI.seasons[j]+'</b><span>'+(ST[s]||'Not in forecast')+'</span></div>'}
   document.getElementById('dmlc').innerHTML=h;
   document.getElementById('dmth').innerHTML=d.th.length?'<h3>Part of these themes</h3><p class="gr">'+d.th.join(', ')+'</p>':'';
+  document.getElementById('dmcurve').innerHTML=curve(d.l,FI.si);
+  document.getElementById('dmd').innerHTML=(d.d||[]).map(function(x){return '<li>'+esc(x)+'</li>'}).join('');
+  document.getElementById('dmf').textContent=d.f||'';document.getElementById('dmu').textContent=d.u||'';
+  document.getElementById('dmnote').textContent=d.o||d.note;
+  var pin=document.getElementById('dmpin');pin.hidden=!d.p;if(d.p)pin.href='https://www.pinterest.com/pin/create/button/?url='+encodeURIComponent(location.origin+location.pathname)+'&media='+encodeURIComponent(location.origin+'/img/'+d.p+'.webp')+'&description='+encodeURIComponent(d.n+', '+FI.seasons[FI.si]+' forecast by Forecut');
   var sv=document.getElementById('dmsave'),on=saved().some(function(x){return x.n===d.n});sv.textContent=on?'Saved':'Save detail';sv.setAttribute('aria-pressed',on);
   document.getElementById('dmprev').disabled=i===0;document.getElementById('dmnext').disabled=i===cards.length-1;cur=i}
  function open(i){last=cards[i];fill(i);DM.hidden=false;document.body.style.overflow='hidden';DM.classList.remove('in');void DM.offsetWidth;DM.classList.add('in');
@@ -83,6 +111,6 @@ if(DM&&FI){var cards=[].slice.call(document.querySelectorAll('button.item')),cur
  cards.forEach(function(c,i){c.addEventListener('click',function(){open(i)})});
  DM.addEventListener('click',function(e){if(e.target.closest('[data-close]'))close()});
  document.getElementById('dmprev').addEventListener('click',function(){step(-1)});document.getElementById('dmnext').addEventListener('click',function(){step(1)});
- document.getElementById('dmsave').addEventListener('click',function(){var d=FI.items[cur],L=saved(),k=L.findIndex(function(x){return x.n===d.n});if(k<0)L.unshift({n:d.n,s:FI.seasons[FI.si],u:location.pathname});else L.splice(k,1);try{localStorage.setItem('fc-saved',JSON.stringify(L.slice(0,200)))}catch(e){}fill(cur)});
+ document.getElementById('dmsave').addEventListener('click',function(){var d=FI.items[cur],L=saved(),k=L.findIndex(function(x){return x.n===d.n});if(k<0)L.unshift({n:d.n,s:FI.seasons[FI.si],u:location.pathname,p:d.p,k:d.k});else L.splice(k,1);try{localStorage.setItem('fc-saved',JSON.stringify(L.slice(0,200)))}catch(e){}fill(cur)});
  document.addEventListener('keydown',function(e){if(DM.hidden)return;if(e.key==='Escape')close();else if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1);else if(e.key==='Tab'){var f=[].slice.call(DM.querySelectorAll('button:not([disabled]),a[href]'));var a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}}});}
 })();
