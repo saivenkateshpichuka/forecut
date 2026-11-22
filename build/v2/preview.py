@@ -49,9 +49,13 @@ def fix_imgs(h):
     out, pos = [], 0
     for m in re.finditer(r'src="/img/([^"]+)\.webp"', h):
         before = h[max(0, m.start() - 260):m.start()]
-        if '<div class="ph"' in before[-60:] or 'aspect-ratio:1"' in before[-40:] or 'aspect-ratio:4/5"><img' in before[-30:] and 'dimg' not in h[m.start() - 30:m.start()]:
+        if 'class="th"' in before[-30:]:
+            w = 96
+        elif '<figure>' in before[-12:]:
+            w = 520
+        elif 'class="ph"' in before[-60:] or 'aspect-ratio:1"' in before[-40:] or 'aspect-ratio:4/5"><img' in before[-30:] and 'dimg' not in h[m.start() - 30:m.start()]:
             w = 300
-        elif 'class="cov"' in before or 'aspect-ratio:3/4">' in before[-30:] or 'aspect-ratio:16/10' in before[-40:] or 'aspect-ratio:4/3' in before[-40:]:
+        elif 'class="cov"' in before or 'class="ip"' in before[-80:] or 'aspect-ratio:16/10' in before[-40:] or 'aspect-ratio:4/3' in before[-40:]:
             w = 560
         else:
             w = 1000
