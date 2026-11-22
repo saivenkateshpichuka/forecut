@@ -1,6 +1,7 @@
 """Forecut report PDFs (A4 landscape), one set of separate PDFs per season and topic.
 
-python3 v2/pdf_v2.py aw28 trims      -> output/pdf-v2/aw28-trims-{full,inspiration,strategy,pricing,markets}.pdf
+python3 v2/pdf_v2.py aw28 trims   -> output/reports/aw28-trims-{full,inspiration,business}.pdf
+python3 v2/pdf_v2.py all          -> every season and topic
 Writes print HTML to /tmp/fcpdf and prints it with Chromium (v2/pdf_print.cjs).
 """
 import os, sys, json, subprocess, shutil
@@ -11,7 +12,7 @@ from PIL import Image
 
 ROOT = V.ROOT
 TMP = '/tmp/fcpdf'
-OUT = os.path.join(ROOT, 'output', 'pdf-v2')
+OUT = os.path.join(ROOT, 'output', 'reports')
 FONT = os.path.join(ROOT, 'build', 'v2', 'archivo.woff2')
 
 
@@ -23,7 +24,7 @@ def pic(key, w=900):
     if not os.path.exists(f):
         im = Image.open(os.path.join(ROOT, 'img', key + '.webp')).convert('RGB')
         im.thumbnail((w, w * 2))
-        im.save(f, 'JPEG', quality=80)
+        im.save(f, 'JPEG', quality=62, optimize=True, progressive=True)
     return 'file://' + f
 
 
@@ -90,7 +91,9 @@ def build(s, topic):
     pal = m['palette']
 
     def cover(d, contents):
-        d.page(f'''<div class="in"><div class="top"><span>{m["code"]}</span><span>FORECUT</span></div>
+        th_k = f'cover-{s}-{topic}'
+        bgimg = f'<img src="{pic(th_k, 1600)}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">' if th_k in V.IMG else ''
+        d.page(bgimg + f'''<div class="in"><div class="top"><span>{m["code"]}</span><span>FORECUT</span></div>
 <div class="t d">{E(title)}</div><div class="p">{E(d.ptitle)}</div>
 <div class="pal">{''.join(f'<i style="background:{c}"></i>' for c, _ in pal)}</div>
 <div class="meta"><span>{E(m["title"])}, {E(m["stage"].lower())}. In stores {E(m["window"])}.</span><span>{V.TODAY.strftime("%-d %B %Y")}</span></div></div>''', 'cov', f'--bg:{hx};--fg:{fg}')
@@ -112,7 +115,7 @@ def build(s, topic):
         for t, desc, pat, bg, tfg, fl, kw in ths[:4 if full else 3]:
             th = V.THEMES.get(f'{s}|{t}', {})
             tk = f'theme-{s}-{V.islug(t)}'
-            d.page(f'<div class="cols c2" style="gap:10mm;height:100%"><div class="im" style="background:{bg}">' + (f'<img src="{pic(tk, 1200)}">' if tk in V.IMG else '') + '</div><div>'
+            d.page(f'<div class="cols c2" style="gap:10mm;height:100%"><div class="im" style="background:{bg}">' + (f'<img src="{pic(tk, 1000)}">' if tk in V.IMG else '') + '</div><div>'
                    f'<p class="sm gr">Inspiration</p><h2 class="d" style="margin:2mm 0 4mm">{E(t)}</h2><p>{E(th.get("story", desc))}</p>' +
                    (f'<h3 style="margin-top:5mm">Why now</h3><p class="gr">{E(th["why"])}</p>' if th.get('why') else '') +
                    (f'<h3 style="margin-top:5mm">Seen at</h3><p class="gr sm">{E("; ".join(b[0] + ": " + b[1] for b in th["brands"][:4]))}</p>' if th.get('brands') else '') +
@@ -152,7 +155,7 @@ def build(s, topic):
             cells = ''
             for k, it, st, nx in ch:
                 p = V.photo(it['name'], s)
-                im = f'<div class="im"><img src="{pic(p, 500)}"></div>' if p else f'<div class="im ph" style="background:{hx};color:{fg}">{E(it["area"])}</div>'
+                im = f'<div class="im"><img src="{pic(p, 360)}"></div>' if p else f'<div class="im ph" style="background:{hx};color:{fg}">{E(it["area"])}</div>'
                 nl = (f' <span class="sm gr">next: {V.STAGE[nx][0].lower()}</span>' if nx in V.STAGE else '') if with_next else ''
                 cells += f'<div class="it">{im}<h4>{E(it["name"])}</h4><p>{E(k.replace("|", ", "))}, {E(it["area"].lower())}</p><p style="color:#000">{E(it["note"])}</p><span class="st s-{st}">{V.STAGE[st][0]}</span>{nl}</div>'
             d.page(f'<h2 class="d" style="font-size:20pt">{E(heading)}</h2><div class="cols c4" style="gap:5mm 6mm">{cells}</div>')
@@ -225,32 +228,27 @@ def build(s, topic):
             kp = [x for x in R + Em + Pk if V.photo(x[1]['name'], s)]
             if kp:
                 items_pages(d, kp[:16], 'Key pieces', with_next=False)
-        elif pk == 'strategy':
-            cover(d, ['Overview', 'Range strategy', 'How it developed', 'Actions and timing'])
-            overview(d); strategy(d); development(d)
-        elif pk == 'pricing':
-            cover(d, ['Pricing and cost', 'Margin checklist'])
-            pricing(d)
         else:
-            cover(d, ['Markets', 'India'])
-            markets(d)
+            cover(d, ['Overview', 'Range strategy', 'How it developed', 'Actions and timing', 'Pricing and cost', 'Margin checklist', 'Markets', 'India'])
+            overview(d); strategy(d); development(d); pricing(d); markets(d)
         back(d)
         docs[pk] = d
     return docs
 
 
-def main(s, topic):
+def main(pairs):
     os.makedirs(TMP, exist_ok=True); os.makedirs(OUT, exist_ok=True)
     jobs = []
-    for pk, d in build(s, topic).items():
-        hp = os.path.join(TMP, f'{s}-{topic}-{pk}.html')
-        open(hp, 'w').write(d.html())
-        jobs.append([hp, os.path.join(OUT, f'{s}-{topic}-{pk}.pdf')])
+    for s, topic in pairs:
+        for pk, d in build(s, topic).items():
+            hp = os.path.join(TMP, f'{s}-{topic}-{pk}.html')
+            open(hp, 'w').write(d.html())
+            jobs.append([hp, os.path.join(OUT, f'{s}-{topic}-{pk}.pdf')])
     json.dump(jobs, open(os.path.join(TMP, 'jobs.json'), 'w'))
     subprocess.run(['node', os.path.join(V.B, 'v2', 'pdf_print.cjs'), os.path.join(TMP, 'jobs.json')], check=True, cwd='/home/claude/work/design')
-    for _, o in jobs:
-        print(o, round(os.path.getsize(o) / 1e6, 1), 'MB')
+    tot = sum(os.path.getsize(o) for _, o in jobs)
+    print(len(jobs), 'PDFs,', round(tot / 1e6, 1), 'MB')
 
 
 if __name__ == '__main__':
-    main(sys.argv[1], sys.argv[2])
+    main(V.REPORTS if sys.argv[1] == 'all' else [(sys.argv[1], sys.argv[2])])

@@ -1,4 +1,5 @@
-"""Forecut redesign (v2), built from the real site data. Writes ../../v2/*.html.
+"""Forecut redesign (v2), built from the real site data. Writes the new pages to the site root
+(index, home, forecasts, insights and one report page per season and topic); styles and script live in /.
 
 Run from build/:  python3 v2/build_v2.py
 Pages: landing (index), home, forecasts library, one report page per season and topic, insights, tools, account.
@@ -9,7 +10,11 @@ from html import escape as E
 
 B = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))          # build/
 ROOT = os.path.dirname(B)                                                 # repo root
-OUT = os.path.join(ROOT, 'v2')
+OUT = ROOT
+ASSET = os.path.join(ROOT, 'v2')
+BASE = 'https://forecut.in/'
+SITE = json.load(open('site.json'))
+_PATH = ['', None]   # current page path and share image, set before each page is rendered
 sys.path.insert(0, B)
 os.chdir(B)
 import home_blocks as HB
@@ -137,28 +142,40 @@ BURGER = '<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><pa
 
 
 def head(title, desc):
+    path, si = _PATH
+    url = BASE + path
+    shot = BASE + 'img/' + (si or f'hero-{NEXT}') + '.webp'
+    ga = SITE.get('ga')
     return (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-            f'<title>{E(title)}</title><meta name="description" content="{E(desc)}"><meta name="robots" content="noindex">'
-            '<link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="/v2/forecut.css"></head><body>'
-            '<a class="skip" href="#main">Skip to content</a>')
+            f'<title>{E(title)}</title><meta name="description" content="{E(desc)}"><meta name="robots" content="index,follow">'
+            f'<link rel="canonical" href="{url}"><meta name="theme-color" content="#ffffff">'
+            '<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest">'
+            f'<meta property="og:type" content="website"><meta property="og:site_name" content="Forecut"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc)}">'
+            f'<meta property="og:url" content="{url}"><meta property="og:image" content="{shot}"><meta name="twitter:card" content="summary_large_image">'
+            '<link rel="preload" href="/v2/archivo.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="/v2/forecut.css">'
+            "<script>try{if(localStorage.getItem('fc-in')==='1')document.documentElement.classList.add('fc-in')}catch(e){}</script>"
+            '<script type="module" src="/auth.js"></script>' +
+            (f'<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments)}}gtag("js",new Date());gtag("config","{ga}");(function(){{var d=0;function go(){{if(d)return;d=1;var g=document.createElement("script");g.async=1;g.src="https://www.googletagmanager.com/gtag/js?id={ga}";document.head.appendChild(g)}}["scroll","pointerdown","keydown","touchstart"].forEach(function(e){{addEventListener(e,go,{{once:true,passive:true}})}});addEventListener("load",function(){{setTimeout(go,2500)}})}})();</script>' if ga else '') +
+            "<script>if('serviceWorker' in navigator)addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){})});</script>"
+            '</head><body><a class="skip" href="#main">Skip to content</a>')
 
 
 def nav_public(active=''):
-    links = [('What we do', '/v2/#what'), ('Forecasts', '/v2/forecasts.html'), ('Services', '/v2/#services'), ('About', '/about.html'), ('Resources', '/v2/insights.html')]
-    return _nav(links, active, '<a href="/account.html">Log in</a><a class="btn s" href="/account.html?signup=1">Sign up free</a>',
-                [('What we do', '/v2/#what', 'Forecasts, colour, tools'), ('Forecasts', '/v2/forecasts.html', 'Seasons and topics'), ('Services', '/v2/#services', 'For designers, brands, schools'),
-                 ('About', '/about.html', 'Our method'), ('Resources', '/v2/insights.html', 'Reports and articles'), ('Log in', '/account.html', ''), ('Sign up free', '/account.html?signup=1', '')])
+    links = [('What we do', '/#what'), ('Forecasts', '/forecasts.html'), ('Services', '/#services'), ('About', '/about.html'), ('Resources', '/insights.html')]
+    return _nav(links, active, '<a class="out-only" href="/account.html#signin">Log in</a><a class="btn s out-only" href="/account.html#signup">Sign up free</a><a class="btn s in-only" href="/home.html">Your Home</a>',
+                [('What we do', '/#what', 'Forecasts, colour, tools'), ('Forecasts', '/forecasts.html', 'Seasons and topics'), ('Services', '/#services', 'For designers, brands, schools'),
+                 ('About', '/about.html', 'Our method'), ('Resources', '/insights.html', 'Reports and articles'), ('Log in', '/account.html', ''), ('Sign up free', '/account.html#signup', '')])
 
 
 def nav_app(active=''):
-    links = [('Home', '/v2/home.html'), ('Forecasts', '/v2/forecasts.html'), ('Insights', '/v2/insights.html'), ('Tools', '/v2/tools.html')]
-    return _nav(links, active, f'<a class="srch" href="/search.html">{SEARCH} Search forecasts</a><a class="av" href="/v2/account.html" aria-label="Your dashboard">You</a>',
-                [('Home', '/v2/home.html', ''), ('Forecasts', '/v2/forecasts.html', 'Seasons, topics, regions'), ('Insights', '/v2/insights.html', 'Reports and articles'),
-                 ('Tools', '/v2/tools.html', 'Free design tools'), ('Your dashboard', '/v2/account.html', 'Plan, saved work'), ('Search', '/search.html', '')])
+    links = [('Home', '/home.html'), ('Forecasts', '/forecasts.html'), ('Insights', '/insights.html'), ('Tools', '/tools.html')]
+    return _nav(links, active, f'<a class="srch" href="/search.html">{SEARCH} Search forecasts</a><a class="av in-only" href="/account.html" aria-label="Your account" id="fcav">You</a><a class="out-only" href="/account.html#signin">Log in</a><a class="btn s out-only" href="/account.html#signup">Sign up free</a>',
+                [('Home', '/home.html', ''), ('Forecasts', '/forecasts.html', 'Seasons, topics, regions'), ('Insights', '/insights.html', 'Reports and articles'),
+                 ('Tools', '/tools.html', 'Free design tools'), ('Your dashboard', '/account.html', 'Plan, saved work'), ('Search', '/search.html', '')])
 
 
 def _nav(links, active, right, mob):
-    return ('<header class="nav"><div class="w"><a class="logo" href="/v2/">FORECUT</a><nav class="links" aria-label="Main">' +
+    return ('<header class="nav"><div class="w"><a class="logo" href="/">FORECUT</a><nav class="links" aria-label="Main">' +
             ''.join(f'<a{" class=on" if t == active else ""} href="{u}">{t}</a>' for t, u in links) +
             f'</nav><div class="r">{right}<button class="mbtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mmenu">{BURGER}</button></div></div></header>'
             '<div class="mmenu" id="mmenu">' + ''.join(f'<a class="big" href="{u}">{t}<span>{d}</span></a>' for t, u, d in mob) +
@@ -166,10 +183,10 @@ def _nav(links, active, right, mob):
 
 
 def footer():
-    cols = [('Forecasts', [('Seasonal forecasts', '/v2/forecasts.html'), ('Colour', f'/v2/{NEXT}-colour.html'), ('Fabrics', f'/v2/{NEXT}-fabrics.html'), ('Trims and details', f'/v2/{NEXT}-trims.html'), ('Regions', '/regions.html'), ('India', '/india.html')]),
-            ('Services', [('Forecast reports', '/v2/forecasts.html'), ('Design tools', '/v2/tools.html'), ('For fashion schools', '/v2/#services'), ('For brands', '/v2/#services')]),
+    cols = [('Forecasts', [('Seasonal forecasts', '/forecasts.html'), ('Colour', f'/{NEXT}-colour.html'), ('Fabrics', f'/{NEXT}-fabrics.html'), ('Trims and details', f'/{NEXT}-trims.html'), ('Regions', '/regions.html'), ('India', '/india.html')]),
+            ('Services', [('Forecast reports', '/forecasts.html'), ('Design tools', '/tools.html'), ('For fashion schools', '/#services'), ('For brands', '/#services')]),
             ('Company', [('About Forecut', '/about.html'), ('Our method', '/method.html'), ('Track record', '/track-record.html'), ('Contact', '/contact.html')]),
-            ('Resources', [('Insights', '/v2/insights.html'), ('Couture', '/couture.html'), ('Privacy', '/privacy.html'), ('Terms', '/terms.html')])]
+            ('Resources', [('Insights', '/insights.html'), ('Couture', '/couture.html'), ('Privacy', '/privacy.html'), ('Terms', '/terms.html')])]
     return ('<footer class="ft"><div class="w"><div class="g">'
             '<div><div class="logo" style="margin-bottom:14px">FORECUT</div><p class="small" style="color:#bdbdbd;max-width:24em">Seasonal fashion forecasts and design tools for designers, brands and fashion schools.</p>'
             '<p class="small" style="margin-top:18px">hello@forecut.in</p></div>' +
@@ -205,7 +222,7 @@ ARTS = sorted(JD.ARTICLES, key=lambda a: a.get('date', ''), reverse=True)
 # ---------------------------------------------------------------- pages
 def landing():
     hero_item = next(((k, it) for k, L in DET.items() for it in L if it['name'] == 'Colour-block knits'), None)
-    h = head('Forecut: seasonal fashion forecasts', 'Seasonal trend forecasts with colour, fabric and detail direction, for designers, brands and fashion schools.') + nav_public() + '<main id="main">'
+    h = head('Forecut | Seasonal Fashion Trend Forecasts', 'Seasonal fashion trend forecasts with colour, fabric and detail direction for every season, for designers, brands and fashion schools. Global, with India in depth.').replace('<body>', '<body data-page="landing">', 1) + nav_public() + '<main id="main">'
     pal = META['aw27']['palette'] if 'aw27' in META else META[NEXT]['palette']
     sg = next((p for p in pal if 'grey' in p[1].lower()), pal[0])
     h += hero_html() + f'''<section class="sec" id="what"><div class="w">
@@ -216,7 +233,7 @@ def landing():
     <div><div style="aspect-ratio:4/3">{img('theme-aw27-quiet-structure')}</div><h3 class="dsp" style="margin:18px 0 8px">Design to production</h3><p class="gr">Free tools that take a trend to a brief, a pattern, a tech pack and a cost sheet.</p></div>
   </div></div></section>
 <section class="sec st"><div class="w">
-  <div class="hd"><h2 class="dsp">This season’s reports</h2><a class="lk" href="/v2/forecasts.html">All forecasts</a></div>
+  <div class="hd"><h2 class="dsp">This season’s reports</h2><a class="lk" href="/forecasts.html">All forecasts</a></div>
   <div class="g g4">{''.join(cover(NEXT, t, locked=True) for t in ['themes', 'colour', 'womenswear', 'trims'])}</div>
   <p class="small gr" style="margin-top:18px">Every report opens with a free preview. Sign up to read it in full and download the PDF.</p>
 </div></section>
@@ -237,12 +254,12 @@ def landing():
   <div>{''.join(f'<a href="{u}" style="display:grid;grid-template-columns:110px 1fr;padding:14px 0;border-bottom:1px solid var(--ru)"><span class="gr">{d.strftime("%-d %b")}</span><span>{E(t)}</span></a>' for d, t, u in coming())}</div>
 </div></section>
 <section class="sec"><div class="w">
-  <div class="hd"><h2 class="dsp">Resources</h2><a class="lk" href="/v2/insights.html">All insights</a></div>
+  <div class="hd"><h2 class="dsp">Resources</h2><a class="lk" href="/insights.html">All insights</a></div>
   <div class="g g3">{''.join(f'<a href="/{a["slug"]}.html">' + (f'<div style="aspect-ratio:16/10">{img(art_img(a))}</div>' if art_img(a) else '') + f'<p class="small gr" style="margin:14px 0 4px">{art_kind(a)}{(", " + dt.date.fromisoformat(a["date"]).strftime("%-d %b")) if a.get("date") else ""}</p><h3 class="dsp" style="font-size:21px">{E(a["title"])}</h3></a>' for a in ARTS[:3])}</div>
 </div></section>
 <section style="background:{META[NEXT]['palette'][0][0]};color:#fff;padding:64px 0"><div class="w cta2" style="display:flex;justify-content:space-between;align-items:center;gap:24px">
   <h2 class="dsp" style="font-size:40px">Start with {META[NEXT]['code']}. It is free to join.</h2>
-  <a class="btn" style="background:#fff;color:#000;border-color:#fff" href="/account.html?signup=1">Sign up free</a></div></section>
+  <a class="btn" style="background:#fff;color:#000;border-color:#fff" href="/account.html#signup">Sign up free</a></div></section>
 </main>'''
     return h + footer() + end()
 
@@ -276,15 +293,15 @@ def home():
       <p class="gr small" id="dnote">{E(pool[0]['note'])}</p>
       <div style="margin:18px 0;display:grid;gap:8px" class="small"><div><b style="font-weight:500">Category:</b> <span id="dcat">{E(pool[0]['k'])}</span></div>
       <div><b style="font-weight:500">Stage:</b> <span id="dst"></span></div><div><b style="font-weight:500">Detail type:</b> <span id="darea">{E(pool[0]['a'])}</span></div></div>
-      <a class="btn s" id="dlink" href="/v2/{pool[0]['sk']}-womenswear.html">Open the report</a></div></div>
+      <a class="btn s" id="dlink" href="/{pool[0]['sk']}-womenswear.html">Open the report</a></div></div>
   <div style="display:flex;flex-direction:column;gap:24px">
     <div style="border:1px solid var(--ru);padding:22px" id="cont"><h3 style="font-weight:500;margin-bottom:12px">Continue reading</h3>
-      <a href="/v2/{NEXT}-colour.html" id="contlink" style="display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:center"><div class="mini">{cover_art(NEXT, 'colour')}</div><div><div class="small gr" id="contseason">{META[NEXT]['code']}</div><div id="conttitle">Colour forecast</div></div></a></div>
+      <a href="/{NEXT}-colour.html" id="contlink" style="display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:center"><div class="mini">{cover_art(NEXT, 'colour')}</div><div><div class="small gr" id="contseason">{META[NEXT]['code']}</div><div id="conttitle">Colour forecast</div></div></a></div>
     <div style="border:1px solid var(--ru);padding:22px"><h3 style="font-weight:500;margin-bottom:6px">Coming up</h3>{''.join(f'<a href="{u}" style="display:grid;grid-template-columns:62px 1fr;padding:9px 0;border-bottom:1px solid var(--ru);font-size:14px"><span class="gr">{d.strftime("%-d %b")}</span><span>{E(t)}</span></a>' for d, t, u in coming(4))}</div>
   </div></section>
-<section class="sec st"><div class="w"><div class="hd"><h2 class="dsp" style="font-size:34px">{META[NEXT]['code']} reports</h2><a class="lk" href="/v2/forecasts.html">All forecasts</a></div>
+<section class="sec st"><div class="w"><div class="hd"><h2 class="dsp" style="font-size:34px">{META[NEXT]['code']} reports</h2><a class="lk" href="/forecasts.html">All forecasts</a></div>
   <div class="g g4">{''.join(cover(NEXT, t) for t in ['trims', 'womenswear', 'footwear', 'fabrics'])}</div></div></section>
-<section class="sec"><div class="w"><div class="hd"><h2 class="dsp" style="font-size:34px">Latest insights</h2><a class="lk" href="/v2/insights.html">All insights</a></div>
+<section class="sec"><div class="w"><div class="hd"><h2 class="dsp" style="font-size:34px">Latest insights</h2><a class="lk" href="/insights.html">All insights</a></div>
   <div class="g g3">{''.join(f'<a href="/{a["slug"]}.html" style="display:grid;grid-template-columns:110px 1fr;gap:16px">' + (f'<div style="aspect-ratio:1">{img(art_img(a))}</div>' if art_img(a) else '<div></div>') + f'<div><p class="small gr">{art_kind(a)}</p><p style="font-weight:500;margin-top:4px">{E(a["title"])}</p></div></a>' for a in ARTS[:3])}</div></div></section>
 </main>'''
     data = json.dumps(pool, ensure_ascii=False).replace('</', '<\\/')
@@ -313,14 +330,14 @@ def cover_art(s, topic, big=False, part=None):
     t = TOPIC[topic][1]
     title = E(part or t)
     pal = ''.join(f'<i style="background:{c}"></i>' for c, _ in META[s]['palette'])
-    return (f'<div class="art{" big" if big else ""}" style="background:{hx};color:{fg}">' +
+    return (f'<div class="art{" big" if big else ""}{" ph" if thumb in IMG else ""}" style="background:{hx};color:{fg}">' +
             (img(thumb, f'{META[s]["code"]} {t}') if thumb in IMG else '') +
             f'<span class="a1">{META[s]["code"]}</span><span class="a2">Forecut</span>'
             f'<span class="at">{title}</span>' + (f'<span class="as">{E(t)}</span>' if part else '') + f'<span class="pal">{pal}</span></div>')
 
 
 def cover(s, topic, locked=False, small=False):
-    return (f'<a class="cv" href="/v2/{report_slug(s, topic)}.html" data-season="{s}" data-topic="{topic}">' + cover_art(s, topic) +
+    return (f'<a class="cv" href="/{report_slug(s, topic)}.html" data-season="{s}" data-topic="{topic}">' + cover_art(s, topic) +
             f'<div class="meta"><span>{E(season_label(s))}</span>' + (f'<span class="lock">{LOCK} Full report</span>' if locked else '<span>Report and PDFs</span>') + '</div></a>')
 
 
@@ -393,13 +410,9 @@ def regions_for(s, its):
 PARTS = [('full', 'Full forecast report', 'Every section of this report in one document, for reading and presenting.',
           ['Overview and key messages', 'Inspiration and themes', 'How it developed', 'The forecast, item by item', 'Colour, strategy, pricing and markets']),
          ('inspiration', 'Inspiration and design', 'Moodboards, themes and colour, ready to pin up in the studio.',
-          ['Theme stories and why now', 'Moodboard of key pieces', 'Colour palette with TCX and HEX', 'Design notes for each key piece']),
-         ('strategy', 'Range strategy', 'What to build, test, sell through and drop, with season timing.',
-          ['Build, test, sell through, exit', 'Lifecycle of key pieces across seasons', 'Actions for the range', 'Season calendar']),
-         ('pricing', 'Pricing and cost', 'Price bands for key garments and where cost sits.',
-          ['Indicative retail bands: value, mid, premium', 'Cost level and cost-down options', 'Margin checklist']),
-         ('markets', 'Markets and business', 'Where this direction sells and how each region reads it.',
-          ['Regional directions', 'Best-fit pieces by region', 'Climate and key selling moments', 'India in depth'])]
+          ['Theme stories and why now', 'Moodboard of key pieces', 'Colour palette with TCX and HEX', 'Key pieces with design notes']),
+         ('business', 'Strategy, pricing and markets', 'What to build and drop, price bands, cost and how each region reads the season.',
+          ['Build, test, sell through, exit', 'Lifecycle and season timing', 'Indicative price bands and cost', 'Regional directions and India'])]
 
 
 def report(s, topic):
@@ -412,7 +425,7 @@ def report(s, topic):
     nxt = META[SKEYS[si + 1]]['code'] if si + 1 < 5 else None
     prv = META[SKEYS[si - 1]]['code'] if si > 0 else None
     h = head(f'{m["code"]} {title} | Forecut', f'{m["title"]} {title.lower()}: {desc}') + nav_app('Forecasts') + '<main id="main">'
-    h += f'<div class="w crumb"><a href="/v2/forecasts.html">Forecasts</a> / <a href="/v2/forecasts.html#{s}">{m["code"]}</a> / {E(title)}</div>'
+    h += f'<div class="w crumb"><a href="/forecasts.html">Forecasts</a> / <a href="/forecasts.html#{s}">{m["code"]}</a> / {E(title)}</div>'
     # ---------------- header
     lead_line = (f'Build around {names(R_, 3)}.' if R_ else f'Lead with {names(Pk, 3)}.' if Pk else '')
     h += f'''<section class="w rhead"><div>{cover_art(s, topic, big=True)}</div>
@@ -560,9 +573,9 @@ def report(s, topic):
     body += '<section class="rs" id="downloads"><div class="rsh"><h2 class="dsp">Downloads</h2><p class="gr">Each PDF stands on its own, so share only the part a team needs.</p></div><div class="dls">'
     for pk, pt, pd, pc in PARTS:
         body += (f'<div class="dl1"><div class="dth">{cover_art(s, topic, part=pt)}</div><div><h3>{pt}</h3><p class="gr small">{pd}</p><ul>' + ''.join(f'<li>{E(x)}</li>' for x in pc) +
-                 f'</ul><a class="btn s" href="/v2/pdf/{report_slug(s, topic)}-{pk}.pdf" data-pdf>Download PDF</a></div></div>')
+                 f'</ul><a class="btn s" href="/output/reports/{report_slug(s, topic)}-{pk}.pdf" data-pdf>Download PDF</a></div></div>')
     body += '</div></section>'
-    h += f'''<div class="w gate hide" id="gate"><h2 class="dsp" style="font-size:32px">Read the full report free</h2><p class="gr" style="margin:12px 0 22px">Sign up to read every section and download the PDFs. It takes under a minute.</p><a class="btn" href="/account.html?signup=1">Sign up free</a> <a class="btn o" href="/account.html" style="margin-left:8px">Log in</a></div>
+    h += f'''<div class="w gate hide" id="gate"><h2 class="dsp" style="font-size:32px">Read the full report free</h2><p class="gr" style="margin:12px 0 22px">Sign up to read every section and download the PDFs. It takes under a minute.</p><a class="btn" href="/account.html#signup">Sign up free</a> <a class="btn o" href="/account.html#signin" style="margin-left:8px">Log in</a></div>
 <div class="w" id="report">{body}<p class="small gr src">Sources: {E(m.get("sources", ""))}</p></div>
 <section class="sec st"><div class="w"><h2 class="dsp" style="font-size:30px;margin-bottom:22px">More {m["code"]} reports</h2><div class="g g4">{''.join([cover(s, t) for t, *_ in TOPICS if t != topic][:4])}</div></div></section></main>'''
     h += '''<div class="dm" id="dm" role="dialog" aria-modal="true" aria-labelledby="dmn" hidden><div class="dmb" data-close></div><div class="dmc" tabindex="-1">
@@ -630,7 +643,7 @@ def hero_html():
   <div class="hc" style="padding:72px 56px 64px max(40px,calc((100vw - 1280px)/2 + 40px));display:flex;flex-direction:column;justify-content:center">
     <h1 class="dsp">See the next season first.</h1>
     <p class="lead" style="margin:26px 0 34px">Seasonal trend forecasts with colour, fabric and detail direction, for designers, brands and fashion schools.</p>
-    <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="/account.html?signup=1">Sign up free</a><a class="btn o" href="/v2/{NEXT}-trims.html#preview">See a sample report</a></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="/account.html#signup">Sign up free</a><a class="btn o" href="/{NEXT}-trims.html">See a sample report</a></div>
     <p class="small mu" style="margin-top:22px">Free to join. Full reports and PDF downloads after sign-up.</p>
   </div>
   <div class="hp" id="hero" style="position:relative;overflow:hidden">{imgs}
@@ -667,9 +680,17 @@ var rn=document.querySelector('.rnav');
 if(rn&&'IntersectionObserver' in window){var links={};rn.querySelectorAll('a').forEach(function(a){links[a.getAttribute('href').slice(1)]=a});
  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){rn.querySelectorAll('a').forEach(function(a){a.classList.remove('on')});var a=links[e.target.id];if(a){a.classList.add('on');a.scrollIntoView({block:'nearest',inline:'nearest'})}}})},{rootMargin:'-30% 0px -60% 0px'});
  document.querySelectorAll('.rs').forEach(function(s){io.observe(s)});}
-/* signed-out preview: show overview and inspiration only */
-var rep=document.getElementById('report');
-if(rep&&location.hash==='#preview'){rep.querySelectorAll('.rs').forEach(function(s,k){if(k>1)s.classList.add('hide')});document.querySelector('.src')&&document.querySelector('.src').classList.add('hide');var g=document.getElementById('gate');g.classList.remove('hide');rep.after(g)}
+/* sign-in state: signed-out readers see the overview and inspiration, then a sign-up block */
+var rep=document.getElementById('report'),gated=false;
+function gate(on){if(!rep)return;if(on===gated)return;gated=on;rep.querySelectorAll('.rs').forEach(function(s,k){if(k>1)s.classList.toggle('hide',on)});var g=document.getElementById('gate');if(g){g.classList.toggle('hide',!on);if(on)rep.after(g)}}
+function setUser(u){var R=document.documentElement;R.classList.toggle('fc-in',!!u);try{u?localStorage.setItem('fc-in','1'):localStorage.removeItem('fc-in')}catch(e){}
+ var av=document.getElementById('fcav');if(av&&u){var n=(u.displayName||u.email||'').trim();av.textContent=n?n[0].toUpperCase():'You'}
+ var gr=document.getElementById('greet');if(gr&&u&&u.displayName){gr.textContent=gr.textContent.replace(/\.$/,', '+u.displayName.split(' ')[0]+'.')}
+ gate(!u||location.hash==='#preview');
+ if(u&&document.body.dataset.page==='landing'&&!/forecut\.in/.test(document.referrer)&&!/[?&]stay/.test(location.search))location.replace('/home')}
+gate(!document.documentElement.classList.contains('fc-in')||location.hash==='#preview');
+(function wait(n){if(window.FCAuth&&FCAuth.onChange){FCAuth.onChange(setUser)}else if(n<80)setTimeout(function(){wait(n+1)},100)})(0);
+document.addEventListener('click',function(e){var a=e.target.closest('[data-pdf]');if(a&&!document.documentElement.classList.contains('fc-in')){e.preventDefault();location.href='/account.html#signup'}});
 /* detail pop-up */
 var DM=document.getElementById('dm'),FI=window.FC_ITEMS;
 if(DM&&FI){var cards=[].slice.call(document.querySelectorAll('button.item')),cur=-1,last=null,ST={e:'Emerging',r:'Rising',p:'Peaking',f:'Fading'},SC={e:'st-e',r:'st-r',p:'st-p',f:'st-f'};
@@ -769,8 +790,8 @@ def account():
 <div class="hd" style="margin-bottom:16px"><h2 class="dsp" style="font-size:28px">Continue where you left off</h2></div>
 <p class="gr" style="margin-bottom:36px" id="contempty">Reports you open and work you save in the tools will appear here.</p>
 <div class="hd" style="margin-bottom:16px"><h2 class="dsp" style="font-size:28px">Saved details</h2><a class="lk" href="#">See all</a></div><div class="g g4" style="gap:16px;margin-bottom:40px">''' + ''.join(
-        f'<a href="/v2/{p["sk"]}-womenswear.html"><div style="aspect-ratio:4/5">{img(p["img"], p["n"])}</div><div style="font-weight:500;margin-top:10px">{E(p["n"])}</div><div class="small gr">{p["s"]}, {p["st"]}</div></a>' for p in pool) + '''</div>
-<div class="g split" style="grid-template-columns:3fr 2fr;gap:32px"><div><div class="hd" style="margin-bottom:10px"><h2 class="dsp" style="font-size:28px">My work</h2><a class="lk" href="/v2/tools.html">Open tools</a></div><p class="gr">Styles, tech packs, palettes and patterns you save in the tools.</p></div>
+        f'<a href="/{p["sk"]}-womenswear.html"><div style="aspect-ratio:4/5">{img(p["img"], p["n"])}</div><div style="font-weight:500;margin-top:10px">{E(p["n"])}</div><div class="small gr">{p["s"]}, {p["st"]}</div></a>' for p in pool) + '''</div>
+<div class="g split" style="grid-template-columns:3fr 2fr;gap:32px"><div><div class="hd" style="margin-bottom:10px"><h2 class="dsp" style="font-size:28px">My work</h2><a class="lk" href="/tools.html">Open tools</a></div><p class="gr">Styles, tech packs, palettes and patterns you save in the tools.</p></div>
 <div><div class="hd" style="margin-bottom:10px"><h2 class="dsp" style="font-size:28px">Downloads</h2></div><p class="gr">Report PDFs you download.</p>
 <div style="margin-top:26px;border:1px solid var(--ru);padding:18px 20px"><div style="font-weight:500;margin-bottom:6px">Team</div><p class="small gr" style="margin-bottom:12px">Share styles and tech packs with classmates or colleagues.</p><a class="btn s o" href="/account.html#team">Invite someone</a></div></div></div>
 </div></div></main>'''
@@ -796,7 +817,7 @@ var g=document.getElementById('greet');if(g){var hr=new Date().getHours();g.text
 var P=window.FC_DOTD;if(P&&P.length){var d=new Date(),i=Math.floor((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()))/864e5)%P.length,x=P[i];
  document.getElementById('dimg').src=x.src||('/img/'+x.img+'.webp');document.getElementById('dimg').alt=x.n;document.getElementById('dname').textContent=x.n;document.getElementById('dnote').textContent=x.note;document.getElementById('dcat').textContent=x.k;document.getElementById('darea').textContent=x.a;
  document.getElementById('dst').textContent=x.st+' in '+x.s+(x.nx?', '+x.nx+' next season':'');document.getElementById('ddate').textContent='Detail of the day, '+d.toLocaleDateString('en-GB',{day:'numeric',month:'long'});
- var t=/Footwear/.test(x.k)?'footwear':/Menswear/.test(x.k)?'menswear':'womenswear';document.getElementById('dlink').href='/v2/'+x.sk+'-'+t+'.html';}
+ var t=/Footwear/.test(x.k)?'footwear':/Menswear/.test(x.k)?'menswear':'womenswear';document.getElementById('dlink').href='/'+x.sk+'-'+t+'.html';}
 var rep=document.getElementById('report');
 if(rep){try{localStorage.setItem('fc-last-report',JSON.stringify({u:location.pathname,t:document.querySelector('h1').textContent,s:document.title.split(' ')[0]}))}catch(e){}
 }
@@ -807,16 +828,26 @@ var cl=document.getElementById('contlink');if(cl){try{var lr=JSON.parse(localSto
 
 
 def main():
-    os.makedirs(OUT, exist_ok=True)
-    shutil.copy(os.path.join(B, 'v2', 'forecut.css'), os.path.join(OUT, 'forecut.css'))
-    shutil.copy(os.path.join(B, 'v2', 'archivo.woff2'), os.path.join(OUT, 'archivo.woff2'))
-    open(os.path.join(OUT, 'forecut.js'), 'w').write(JS + JS2)
-    pages = {'index': landing(), 'home': home(), 'forecasts': forecasts(), 'insights': insights(), 'tools': tools(), 'account': account()}
+    os.makedirs(ASSET, exist_ok=True)
+    shutil.copy(os.path.join(B, 'v2', 'forecut.css'), os.path.join(ASSET, 'forecut.css'))
+    shutil.copy(os.path.join(B, 'v2', 'archivo.woff2'), os.path.join(ASSET, 'archivo.woff2'))
+    open(os.path.join(ASSET, 'forecut.js'), 'w').write(JS + JS2)
+    pages = {}
+    for name, fn, si in [('index', landing, f'hero-{NEXT}'), ('home', home, None), ('forecasts', forecasts, None), ('insights', insights, None)]:
+        _PATH[:] = ['' if name == 'index' else name + '.html', si]
+        pages[name] = fn()
     for s, t in REPORTS:
+        _PATH[:] = [report_slug(s, t) + '.html', cover_img(s, t)]
         pages[report_slug(s, t)] = report(s, t)
     for n, h in pages.items():
         open(os.path.join(OUT, n + '.html'), 'w').write(h)
-    print(len(pages), 'pages written to v2/')
+    # sitemap: add the new pages (clean_urls.py tidies the URLs afterwards)
+    sm_p = os.path.join(ROOT, 'sitemap.xml')
+    if os.path.exists(sm_p):
+        sm = open(sm_p).read()
+        add = ''.join(f'<url><loc>{BASE}{n}.html</loc><lastmod>{TODAY.isoformat()}</lastmod></url>\n' for n in pages if n != 'index' and f'{BASE}{n}.html' not in sm and f'{BASE}{n}<' not in sm)
+        open(sm_p, 'w').write(sm.replace('</urlset>', add + '</urlset>'))
+    print(len(pages), 'pages written')
 
 
 if __name__ == '__main__':

@@ -36,4 +36,8 @@ python3 seo.py
 python3 search.py && ONLY=search.html python3 seo.py
 
 python3 tools_hub.py
+# redesigned pages (landing, home, forecasts, insights, report pages); after seo.py so the old home is replaced
+python3 v2/build_v2.py
+python3 v2/cover_prompts.py
+# report PDFs are slower: python3 v2/pdf_v2.py all
 python3 clean_urls.py
