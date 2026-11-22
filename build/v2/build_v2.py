@@ -175,7 +175,8 @@ def nav_app(active=''):
 
 
 def _nav(links, active, right, mob):
-    return ('<header class="nav"><div class="w"><a class="logo" href="/">FORECUT</a><nav class="links" aria-label="Main">' +
+    home = '/home.html' if links[0][0] == 'Home' else '/'
+    return (f'<header class="nav"><div class="w"><a class="logo" href="{home}">FORECUT</a><nav class="links" aria-label="Main">' +
             ''.join(f'<a{" class=on" if t == active else ""} href="{u}">{t}</a>' for t, u in links) +
             f'</nav><div class="r">{right}<button class="mbtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mmenu">{BURGER}</button></div></div></header>'
             '<div class="mmenu" id="mmenu">' + ''.join(f'<a class="big" href="{u}">{t}<span>{d}</span></a>' for t, u, d in mob) +

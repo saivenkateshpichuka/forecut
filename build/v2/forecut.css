@@ -62,7 +62,7 @@ html{scroll-padding-top:80px}
 .nav{position:sticky;top:0;z-index:40}
 .mbtn{display:none;background:none;border:0;padding:8px;margin-right:-8px;cursor:pointer}
 .mmenu{display:none}
-.crumb{padding:18px 0 0;font-size:14px;color:var(--gr)}.crumb a:hover{color:var(--ink)}
+.crumb{padding-top:18px;font-size:14px;color:var(--gr)}.crumb a:hover{color:var(--ink)}
 .ch{cursor:pointer;font-family:inherit;color:inherit}
 .cov:hover .ctl{text-decoration:underline;text-underline-offset:3px}
 .stage{display:inline-block;font-size:13px;font-weight:500;padding:2px 8px;border:1px solid currentColor}
