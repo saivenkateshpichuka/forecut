@@ -175,13 +175,19 @@ def nav_app(active=''):
     links = [('Home', '/home.html'), ('Forecasts', '/forecasts.html'), ('Insights', '/insights.html'), ('Tools', '/tools.html')]
     return _nav(links, active, f'<a class="srch" href="/search.html">{SEARCH} Search forecasts</a><a class="av in-only" href="/account.html" aria-label="Your account" id="fcav">You</a><a class="out-only" href="/account.html#signin">Log in</a><a class="btn s out-only" href="/account.html#signup">Sign up free</a>',
                 [('Home', '/home.html', ''), ('Forecasts', '/forecasts.html', 'Seasons, topics, regions'), ('Insights', '/insights.html', 'Reports and articles'),
-                 ('Tools', '/tools.html', 'Free design tools'), ('Your dashboard', '/account.html', 'Plan, saved work'), ('Search', '/search.html', '')])
+                 ('Tools', '/tools.html', 'Design tools'), ('Your dashboard', '/account.html', 'Plan, saved work'), ('Search', '/search.html', '')])
+
+
+MEGA = ('<div class="mega"><div class="w">' + ''.join(
+    f'<div><a class="mh" href="/forecasts.html#{s}"><b>{META[s]["code"]}</b><span>{E(META[s]["stage"])}</span></a>' +
+    ''.join(f'<a href="/{s}-{k}.html">{E(t)}</a>' for k, t, _, _ in TOPICS) + '</div>' for s in SKEYS) +
+    '<div class="mx"><a class="mh" href="/forecasts.html"><b>All forecasts</b><span>Every season and topic</span></a><a href="/regions.html">Regional forecasts</a><a href="/india.html">India forecasts</a><a href="/resort-27.html">Resort 27</a><a href="/pre-fall-27.html">Pre-Fall 27</a><a href="/colour.html">Colour library</a></div></div></div>')
 
 
 def _nav(links, active, right, mob):
     home = '/home.html' if links[0][0] == 'Home' else '/'
     return (f'<header class="nav"><div class="w"><a class="logo" href="{home}" aria-label="Forecut home">{LOGO}</a><nav class="links" aria-label="Main">' +
-            ''.join(f'<a{" class=on" if t == active else ""} href="{u}">{t}</a>' for t, u in links) +
+            ''.join((f'<div class="dd"><a{" class=on" if t == active else ""} href="{u}" aria-haspopup="true">{t}</a>{MEGA}</div>' if t == 'Forecasts' else f'<a{" class=on" if t == active else ""} href="{u}">{t}</a>') for t, u in links) +
             f'</nav><div class="r">{right}<button class="mbtn" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mmenu">{BURGER}</button></div></div></header>'
             '<div class="mmenu" id="mmenu">' + ''.join(f'<a class="big" href="{u}">{t}<span>{d}</span></a>' for t, u, d in mob) +
             '<p class="small gr" style="margin-top:20px">hello@forecut.in</p></div>')
@@ -262,11 +268,14 @@ def cover_art(s, topic, big=False, part=None):
     thumb = f'cover-{s}-{topic}'
     t = TOPIC[topic][1]
     title = E(part or t)
-    pal = ''.join(f'<i style="background:{c}"></i>' for c, _ in META[s]['palette'])
+    its = topic_items(s, topic)
+    mix = {k: sum(1 for x in its if x[2] == k) for k in 'erpf'}
+    mx = max(mix.values()) or 1
+    pal = ''.join(f'<i class="c-{k}" style="--h:{max(8, round(100 * mix[k] / mx))}%;--k:{n}" title="{STAGE[k][0]}"></i>' for n, k in enumerate('erpf'))
     return (f'<div class="art{" big" if big else ""}{" ph" if thumb in IMG else ""}" style="background:{hx};color:{fg}">' +
             (img(thumb, f'{META[s]["code"]} {t}') if thumb in IMG else '') +
             f'<span class="a1">{META[s]["code"]}</span><span class="a2">Forecut</span>'
-            f'<span class="at">{title}</span>' + (f'<span class="as">{E(t)}</span>' if part else '') + f'<span class="pal">{pal}</span></div>')
+            f'<span class="at">{title}</span>' + (f'<span class="as">{E(t)}</span>' if part else '') + f'<span class="mini2" aria-hidden="true">{pal}</span></div>')
 
 
 def cover(s, topic, locked=False, small=False):
@@ -368,6 +377,7 @@ def report(s, topic):
 <p class="small gr">Updated {TODAY.strftime("%-d %B %Y")}.</p></div></section>'''
     secs = [('overview', 'Overview'), ('inspiration', 'Inspiration'), ('development', 'How it developed'), ('forecast', 'The forecast'),
             ('colour', 'Colour'), ('strategy', 'Strategy'), ('pricing', 'Pricing and cost'), ('markets', 'Markets'), ('downloads', 'Downloads')]
+    h += chapters_block(s, topic)
     h += '<nav class="rnav" aria-label="In this report"><div class="w">' + ''.join(f'<a href="#{a}">{t}</a>' for a, t in secs) + '</div></nav>'
     body = ''
     # ---------------- overview
@@ -442,7 +452,7 @@ def report(s, topic):
             tk = f'theme-{s}-{islug(t)}'
             body += (f'<article id="{islug(t)}" class="insp"><div class="ip" style="background:{bg}">' + (img(tk, t) if tk in IMG else '') + '</div>'
                      f'<div><h3 class="dsp">{E(t)}</h3><p>{E(th.get("story", d))}</p><h4>Key pieces</h4><p class="gr">{E(", ".join(kw))}; {E(fl.lower())}.</p>' +
-                     ('<h4>Actions</h4><ul class="ul">' + ''.join(f'<li>{E(a)}</li>' for a in th.get('actions', [])) + '</ul>' if th.get('actions') else '') + '</div></article>')
+                     ('<h4>Actions</h4><ul class="ul">' + ''.join(f'<li>{E(a)}</li>' for a in th.get('actions', [])) + '</ul>' if th.get('actions') else '') + f'<p style="margin-top:16px"><a class="lk" href="/{s}-theme-{islug(t)}.html">Read the full story</a></p></div></article>')
     elif topic == 'colour':
         body += '<div class="g g4 pal4">'
         for hx, nm in m['palette']:
@@ -513,15 +523,7 @@ def report(s, topic):
     h += f'''<div class="w gate hide" id="gate"><h2 class="dsp" style="font-size:32px">Read the full report free</h2><p class="gr" style="margin:12px 0 22px">Sign up to read every section and download the PDFs. It takes under a minute.</p><a class="btn" href="/account.html#signup">Sign up free</a> <a class="btn o" href="/account.html#signin" style="margin-left:8px">Log in</a></div>
 <div class="w" id="report">{body}<p class="small gr src">Sources: {E(m.get("sources", ""))}</p></div>
 <section class="sec st"><div class="w"><h2 class="dsp" style="font-size:30px;margin-bottom:22px">More {m["code"]} reports</h2><div class="g g4">{''.join([cover(s, t) for t, *_ in TOPICS if t != topic][:4])}</div></div></section></main>'''
-    h += '''<div class="dm" id="dm" role="dialog" aria-modal="true" aria-labelledby="dmn" hidden><div class="dmb" data-close></div><div class="dmc" tabindex="-1">
-<button class="dmx" type="button" data-close aria-label="Close">Close</button><div class="dmi"><img alt="" id="dmimg"></div>
-<div class="dmt"><p class="small gr" id="dmk"></p><h2 class="dsp" id="dmn"></h2><p id="dmnote"></p>
-<div class="dmrow"><span class="stage" id="dmst"></span><span class="small gr" id="dmnx"></span></div>
-<h3>Trend curve</h3><div class="tcurve" id="dmcurve"></div>
-<h3>Across the seasons</h3><div class="dmlc" id="dmlc"></div>
-<div class="dmgrid"><section><h3>Design notes</h3><ul id="dmd"></ul></section><section><h3>Fabric and trims</h3><p class="gr" id="dmf"></p></section><section><h3>Where to use it</h3><p class="gr" id="dmu"></p></section><section id="dmth"></section></div>
-<div class="dmact"><button class="btn s" type="button" id="dmsave">Save detail</button><a class="btn s o" href="/trend-to-style.html">Use in Trend to Style</a><a class="btn s o" id="dmpin" target="_blank" rel="noopener">Pin it</a></div>
-<div class="dmnav"><button type="button" id="dmprev">Previous</button><button type="button" id="dmnext">Next</button></div></div></div></div>'''
+    h += DM_HTML
     seas = [META[k2]['code'] for k2 in SKEYS]
     dj = json.dumps({'items': data, 'seasons': seas, 'si': si}, ensure_ascii=False).replace('</', '<\\/')
     return h + footer() + end(f'<script>window.FC_ITEMS={dj}</script>')
@@ -533,8 +535,7 @@ REGIONS_LINKS = [('Europe', '/region-europe.html'), ('North America', '/region-n
 
 def forecasts():
     h = head('Forecasts | Forecut', 'Forecut forecast reports: one report per topic, per season.') + nav_app('Forecasts') + '<main id="main">'
-    h += '''<section class="sec t"><div class="w"><h1 class="dsp" style="font-size:52px">Forecasts</h1>
-<p class="lead" style="margin-top:10px">One report per topic, per season, each with its own set of PDFs.</p></div></section>'''
+    h += '<h1 class="vh">Forecasts</h1>'
     h += ('<div class="fbar"><div class="w"><div class="stabs" role="group" aria-label="Season"><button type="button" class="on" data-v="all"><b>All</b><span>every season</span></button>' +
           ''.join(f'<button type="button" data-v="{s}"><b>{META[s]["code"]}</b><span>{E(META[s]["stage"].lower())}</span></button>' for s in SKEYS) +
           '</div><div class="fsel"><label><span>Topic</span><select id="ftopic"><option value="all">All topics</option>' +
@@ -574,18 +575,18 @@ def hero_slides():
 def hero_html():
     sl = hero_slides()
     imgs = ''.join(f'<div class="hs{" on" if i == 0 else ""}">{img(x["img"], x["n"], style="object-position:50% 20%")}</div>' for i, (x, c) in enumerate(sl))
-    data = json.dumps([{'n': x['n'], 'l': f'Rising for {x["s"]}', 'c': c[0], 'cn': f'Season colour: {c[1].lower()}, {tcx(c[0])}'} for x, c in sl]).replace('</', '<\\/')
+    data = json.dumps([{'n': x['n'], 'l': f'{x["st"].capitalize()} for {x["s"]}', 'k': x['k'], 'a': x['a'], 'note': x['note'], 'nx': (f'Then {x["nx"]} next season' if x['nx'] else '')} for x, c in sl]).replace('</', '<\\/')
     x0, c0 = sl[0]
     return f'''<section class="hero2" style="display:grid;grid-template-columns:1fr 1fr;height:640px;border-bottom:1px solid var(--ru)">
   <div class="hc" style="padding:72px 56px 64px max(40px,calc((100vw - 1280px)/2 + 40px));display:flex;flex-direction:column;justify-content:center">
     <h1 class="dsp">See the next season first.</h1>
-    <p class="lead" style="margin:26px 0 34px">Seasonal trend forecasts with colour, fabric and detail direction, for designers, brands and fashion schools.</p>
+    <p class="lead" style="margin:26px 0 34px">The silhouettes, details, fabrics and colours moving from the runways into stores, read season by season, so you design what sells next.</p>
     <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="/account.html#signup">Sign up free</a><a class="btn o" href="/{NEXT}-trims.html">See a sample report</a></div>
     <p class="small mu" style="margin-top:22px">Free to join. Full reports and PDF downloads after sign-up.</p>
   </div>
   <div class="hp" id="hero" style="position:relative;overflow:hidden">{imgs}
-    <div class="hcard"><div class="small gr" id="hl">Rising for {x0["s"]}</div><div style="font-weight:500" id="hn">{E(x0["n"])}</div>
-      <div class="sw small" style="margin-top:10px"><i id="hc" style="background:{c0[0]};width:28px;height:28px"></i><span id="hcn">Season colour: {E(c0[1].lower())}, {tcx(c0[0])}</span></div>
+    <div class="hcard"><div class="small gr" id="hl">{x0["st"].capitalize()} for {x0["s"]}</div><div style="font-weight:500" id="hn">{E(x0["n"])}</div>
+      <div class="small gr" id="hk" style="margin-top:2px">{E(x0["k"])}, {E(x0["a"].lower())}</div><p class="small" id="hnote" style="margin-top:8px">{E(x0["note"])}</p><div class="small" style="margin-top:6px"><span class="gr" id="hnx">{E(("Then " + x0["nx"] + " next season") if x0["nx"] else "")}</span></div>
       <div class="hprog"><i></i></div></div>
     <button type="button" class="hpause" id="hpause" aria-label="Pause the slideshow">Pause</button>
   </div>
@@ -598,7 +599,7 @@ var RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches
 var H=document.getElementById('hero');
 if(H&&window.FC_HERO){var S=H.querySelectorAll('.hs'),D=window.FC_HERO,i=0,t=null,card=H.querySelector('.hcard'),pb=document.getElementById('hpause');
  function show(n){S[i].classList.remove('on');i=n%S.length;S[i].classList.add('on');var d=D[i];card.classList.remove('in');void card.offsetWidth;
-  document.getElementById('hl').textContent=d.l;document.getElementById('hn').textContent=d.n;document.getElementById('hc').style.background=d.c;document.getElementById('hcn').textContent=d.cn;card.classList.add('in')}
+  document.getElementById('hl').textContent=d.l;document.getElementById('hn').textContent=d.n;document.getElementById('hk').textContent=d.k+', '+d.a.toLowerCase();document.getElementById('hnote').textContent=d.note;document.getElementById('hnx').textContent=d.nx;card.classList.add('in')}
  function play(){t=setInterval(function(){show(i+1)},6000);H.classList.add('run')}
  function stop(){clearInterval(t);t=null;H.classList.remove('run')}
  if(!RM&&S.length>1){play();card.classList.add('in')}else{pb.hidden=true}
@@ -629,12 +630,19 @@ gate(!document.documentElement.classList.contains('fc-in')||location.hash==='#pr
 (function wait(n){if(window.FCAuth&&FCAuth.onChange){FCAuth.onChange(setUser)}else if(n<80)setTimeout(function(){wait(n+1)},100)})(0);
 document.addEventListener('click',function(e){var a=e.target.closest('[data-pdf]');if(a&&!document.documentElement.classList.contains('fc-in')){e.preventDefault();location.href='/account.html#signup'}});
 /* lifecycle table: fill in when it comes into view */
-var lcs=document.querySelectorAll('.lct,.cdev,.tdev');
+var lcs=document.querySelectorAll('.lct,.cdev,.tdev,.sboard,.chg');
+/* what we do: slow cross-fade between pictures */
+document.querySelectorAll('.wim.fade').forEach(function(w,n){var f=w.querySelectorAll('.wf');if(f.length<2||RM)return;var i=0;setTimeout(function(){setInterval(function(){f[i].classList.remove('on');i=(i+1)%f.length;f[i].classList.add('on')},5200)},n*1700)});
+/* marquee rows: repeat the items so the loop is seamless, pause on hover or focus */
+document.querySelectorAll('.marq .mtrack').forEach(function(t){if(RM){t.parentNode.classList.add('still');return}var kids=[].slice.call(t.children);kids.forEach(function(k){var c=k.cloneNode(true);c.setAttribute('aria-hidden','true');c.tabIndex=-1;t.appendChild(c)});t.style.setProperty('--dur',(kids.length*4.5)+'s')});
+/* rising now: season tabs */
+document.querySelectorAll('.rtabs').forEach(function(tb){tb.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;tb.querySelectorAll('button').forEach(function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-selected',on);document.getElementById(x.dataset.p).classList.toggle('hide',!on)})})});
 if(lcs.length){if(RM||!('IntersectionObserver' in window)){lcs.forEach(function(t){t.classList.add('vis')})}else{var lio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');lio.unobserve(e.target)}})},{threshold:.2});lcs.forEach(function(t){lio.observe(t)})}}
 /* Home: saved details and tools you used */
 var sv=document.getElementById('saved');
 if(sv){try{var L=JSON.parse(localStorage.getItem('fc-saved')||'[]');if(L.length){sv.innerHTML=L.slice(0,6).map(function(x){var n=document.createElement('i');n.textContent=x.n||x.name||'';return '<a href="'+(x.u||x.page||'/forecasts.html')+'">'+(x.p?'<span class="sim"><img src="/img/'+x.p+'.webp" alt=""></span>':'<span class="sim"></span>')+'<span><b>'+n.innerHTML+'</b><span class="small gr">'+(x.s||x.season||'')+'</span></span></a>'}).join('')+(L.length>6?'<a class="lk" href="/account.html">See all</a>':'')}}catch(e){}}
 var mt=document.getElementById('mytools');
+if(mt&&window.FC_TOOLS){var RT2=window.recentTools().filter(function(sl){return FC_TOOLS[sl]}).slice(0,4);if(RT2.length){mt.innerHTML=RT2.map(function(sl){return '<a href="/'+sl+'.html"><b>'+FC_TOOLS[sl][0]+'</b><span class="small gr">'+FC_TOOLS[sl][1]+'</span></a>'}).join('')}}
 if(mt){try{var R=JSON.parse(localStorage.getItem('fc-recent-tools')||'[]');if(R.length){mt.innerHTML=R.slice(0,4).map(function(x){var n=document.createElement('i');n.textContent=x.t;return '<a href="'+x.u+'"><b>'+n.innerHTML+'</b><span class="small gr">Used recently</span></a>'}).join('')}}catch(e){}}
 /* forecast finder */
 var ff=document.getElementById('fform');
@@ -754,11 +762,16 @@ if(shelf){var f={season:'all',topic:'all'};document.querySelectorAll('[data-f]')
 /* insights filter */
 var il=document.getElementById('ilist');
 if(il){document.querySelector('[data-f=kind]').addEventListener('click',function(e){var c=e.target.closest('button.ch');if(!c)return;this.querySelectorAll('.ch').forEach(function(x){x.classList.toggle('on',x===c)});var v=c.dataset.v;document.querySelectorAll('[data-kind]').forEach(function(a){a.classList.toggle('hide',v!=='all'&&a.dataset.kind!==v)})});}
-/* tools search + recently used */
-var tq=document.getElementById('tq');
-if(tq){tq.addEventListener('input',function(){var q=tq.value.trim().toLowerCase(),n=0;document.querySelectorAll('a.tool,a.tcard').forEach(function(a){var ok=!q||a.dataset.q.indexOf(q)>-1;a.classList.toggle('hide',!ok);if(ok)n++});document.querySelectorAll('.tgrp').forEach(function(g){g.classList.toggle('hide',!g.querySelector('a.tcard:not(.hide)'))});var tn=document.getElementById('tnone');if(tn)tn.classList.toggle('hide',n>0)});
- try{var r=JSON.parse(localStorage.getItem('fc-recent-tools')||'[]');if(r.length){var h='<p class="small gr" style="margin-bottom:10px">Recently used</p><div class="flt">';r.slice(0,4).forEach(function(x){h+='<a class="ch" href="'+x.u+'">'+x.t+'</a>'});document.getElementById('recent').innerHTML=h+'</div>'}}catch(e){}
- document.querySelectorAll('a.tool,a.tcard').forEach(function(a){a.addEventListener('click',function(){try{var r=JSON.parse(localStorage.getItem('fc-recent-tools')||'[]').filter(function(x){return x.u!==a.getAttribute('href')});r.unshift({u:a.getAttribute('href'),t:(a.querySelector('.tt')||a.querySelector('span')).textContent});localStorage.setItem('fc-recent-tools',JSON.stringify(r.slice(0,6)))}catch(e){}})});}
+/* tools: recently used (same store as the tool pages: {slug, at}) */
+window.recentTools=function(){try{var r=JSON.parse(localStorage.getItem('fc-recent-tools')||'[]'),seen={},out=[];r.forEach(function(x){var sl=typeof x==='string'?x:(x&&(x.slug||(x.u&&x.u.replace(/^\/|\.html$/g,''))));if(sl&&!seen[sl]){seen[sl]=1;out.push(sl)}});return out}catch(e){return[]}}
+var TN={};document.querySelectorAll('a.tcard,a.tool').forEach(function(a){var sl=a.getAttribute('href').replace(/^\/|\.html$/g,'');var t=a.querySelector('.tt');if(t)TN[sl]=t.textContent});
+var rc=document.getElementById('recent');
+if(rc){var RT=window.recentTools().filter(function(sl){return TN[sl]}).slice(0,4);if(RT.length){var h='<p class="small gr" style="margin-bottom:10px">Recently used</p><div class="flt">';RT.forEach(function(sl){h+='<a class="ch" href="/'+sl+'.html">'+TN[sl]+'</a>'});rc.innerHTML=h+'</div>'}}
+document.querySelectorAll('a.tool,a.tcard').forEach(function(a){a.addEventListener('click',function(){try{var sl=a.getAttribute('href').replace(/^\/|\.html$/g,'');var r=JSON.parse(localStorage.getItem('fc-recent-tools')||'[]').filter(function(x){return (x&&x.slug)!==sl&&x!==sl});r.unshift({slug:sl,at:Date.now()});localStorage.setItem('fc-recent-tools',JSON.stringify(r.slice(0,15)))}catch(e){}})});
+/* install Forecut Studio */
+var ib=document.getElementById('instStudio'),bip=null;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();bip=e});
+if(ib){ib.addEventListener('click',function(){var m=document.getElementById('instMsg');if(bip){bip.prompt();bip.userChoice.then(function(){bip=null})}else{m.hidden=false;m.textContent=/iPhone|iPad|Mac/.test(navigator.userAgent)?'In Safari, tap Share, then Add to Home Screen (on a Mac: File, Add to Dock).':'In Chrome or Edge, open the browser menu and choose Install Forecut Studio. If it is already installed, open it from your apps.'}})}
 /* greeting + detail of the day + continue reading */
 var g=document.getElementById('greet');if(g){var hr=new Date().getHours();g.textContent=(hr<12?'Good morning.':hr<17?'Good afternoon.':'Good evening.')}
 var P=window.FC_DOTD;if(P&&P.length){var d=new Date(),i=Math.floor((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()))/864e5)%P.length,x=P[i];
@@ -790,14 +803,14 @@ def detail_ref(name):
     return None
 
 
-def whats_new(n=8):
+def whats_new(n=12):
     xs = [d for d in (detail_ref(x) for x in NEW) if d][:n]
     if not xs:
         return ''
     return ('<section class="sec"><div class="w"><div class="hd"><div><h2 class="dsp">What’s new</h2><p class="gr" style="margin-top:8px">The newest details from runways, fashion weeks and retail.</p></div><a class="lk" href="/search.html">Search all details</a></div>'
-            '<div class="hscroll">' + ''.join(
+            '<div class="marq"><div class="mtrack">' + ''.join(
                 f'<a class="nw" href="{d["u"]}"><span class="nim">{img(d["img"], d["n"])}</span><span class="small gr">{META[d["s"]]["code"]}, <b class="{STAGE[d["st"]][1]}">{STAGE[d["st"]][0].lower()}</b></span>'
-                f'<span class="nn">{E(d["n"])}</span><span class="small gr">{E(d["k"])}</span></a>' for d in xs) + '</div></div></section>')
+                f'<span class="nn">{E(d["n"])}</span><span class="small gr">{E(d["k"])}</span></a>' for d in xs) + '</div></div></div></section>')
 
 
 def finder(compact=False):
@@ -832,7 +845,7 @@ def tool_card(t, big=False):
             (f'<span class="tout">{E(t["output"].replace(" · ", ", "))}</span>' if big else '') + '</a>')
 
 
-def tools_block(title='Free tools, from trend to finished product', intro='Take a trend to a style brief, a pattern, a tech pack and a cost sheet. Free for signed-in members.'):
+def tools_block(title='Design tools, from trend to finished product', intro='Take a trend to a style brief, a pattern, a tech pack and a cost sheet, all saved to your account.'):
     T = {t['slug']: t for t in TOOLS}
     flow = ''.join(f'<span>{g}</span>' for g, _ in GROUPS4)
     return (f'<section class="sec st"><div class="w"><div class="hd"><div><h2 class="dsp">{title}</h2><p class="gr" style="margin-top:8px">{intro}</p></div><a class="lk" href="/tools.html">All tools</a></div>'
@@ -891,14 +904,19 @@ def season_track():
     return f'<div class="strack" aria-label="Where each season is">{cells}</div>'
 
 
+def wim(keys):
+    ks = [k for k in keys if k in IMG][:3]
+    return '<div class="wim fade">' + ''.join(f'<span class="wf{" on" if i == 0 else ""}">{img(k)}</span>' for i, k in enumerate(ks)) + '</div>'
+
+
 def landing():
     h = head('Forecut | Seasonal Fashion Trend Forecasts', 'Seasonal fashion trend forecasts with colour, fabric and detail direction for every season, for designers, brands and fashion schools. Global, with India in depth.').replace('<body>', '<body data-page="landing">', 1) + nav_public() + '<main id="main">'
     h += hero_html() + f'''<section class="sec" id="what"><div class="w">
   <div class="hd"><h2 class="dsp">What we do</h2><p class="gr">Forecut reads runways, retail and fabric fairs, and turns them into reports and tools you can design from.</p></div>
   <div class="g g3">
-    <a href="/forecasts.html"><div class="wim">{img('theme-' + NEXT + '-the-waist-returns')}</div><h3 class="dsp" style="margin:18px 0 8px">Seasonal forecasts</h3><p class="gr">Themes, womenswear, menswear, footwear, knitwear, fabrics and trims for every season, from what is in stores now to two years ahead.</p></a>
-    <a href="/{NEXT}-colour.html"><div class="wim">{img('theme-' + NEXT + '-elegant-ease')}</div><h3 class="dsp" style="margin:18px 0 8px">Colour and materials</h3><p class="gr">Palettes with Pantone TCX and HEX codes, fabrics, finishes and trims for each season.</p></a>
-    <a href="/tools.html"><div class="wim">{img('theme-aw27-quiet-structure')}</div><h3 class="dsp" style="margin:18px 0 8px">Design to production tools</h3><p class="gr">Free tools that take a trend to a style brief, a pattern, a tech pack and a cost sheet.</p></a>
+    <a href="/forecasts.html">{wim(['theme-' + NEXT + '-the-waist-returns', 'cover-' + NEXT + '-womenswear', 'cover-aw27-themes'])}<h3 class="dsp" style="margin:18px 0 8px">Seasonal forecasts</h3><p class="gr">Themes, womenswear, menswear, footwear, knitwear, fabrics and trims for every season, from what is in stores now to two years ahead.</p></a>
+    <a href="/{NEXT}-colour.html">{wim(['theme-' + NEXT + '-elegant-ease', 'cover-' + NEXT + '-colour', 'cover-aw27-fabrics'])}<h3 class="dsp" style="margin:18px 0 8px">Colour and materials</h3><p class="gr">Palettes with Pantone TCX and HEX codes, fabrics, finishes and trims for each season.</p></a>
+    <a href="/tools.html">{wim(['theme-aw27-quiet-structure', 'cover-' + NEXT + '-trims', 'cover-aw27-knitwear'])}<h3 class="dsp" style="margin:18px 0 8px">Design to production tools</h3><p class="gr">Tools that take a trend to a style brief, a pattern, a tech pack and a cost sheet.</p></a>
   </div></div></section>
 {whats_new()}
 {finder()}
@@ -959,8 +977,8 @@ def home():
       <a href="/{NEXT}-colour.html" id="contlink" style="display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:center"><div class="mini">{cover_art(NEXT, 'colour')}</div><div><div class="small gr" id="contseason">{META[NEXT]['code']}</div><div id="conttitle">Colour forecast</div></div></a></div>
     <div class="box1"><h3>Coming up</h3>{''.join(f'<a href="{u}" class="cal sm"><span class="gr">{d.strftime("%-d %b")}</span><span>{E(t)}</span></a>' for d, t, u in coming(4))}</div>
   </div></section>
-<section class="w" style="padding-bottom:8px"><h2 class="dsp" style="font-size:28px;margin-bottom:16px">Where each season is</h2>{season_track()}</section>
-{rising_now()}
+<section class="w" style="padding-bottom:8px"><div class="hd" style="margin-bottom:16px"><div><h2 class="dsp" style="font-size:34px">Where each season is</h2><p class="gr" style="margin-top:8px">Trend mix, the markets reading it most strongly and the pieces to back, season by season.</p></div><a class="lk" href="/regions.html">Markets</a></div>{season_board()}</section>
+{rising_two()}
 <section class="sec st"><div class="w"><div class="hd"><h2 class="dsp" style="font-size:34px">{META[NEXT]['code']} reports</h2><a class="lk" href="/forecasts.html">All forecasts</a></div>
   <div class="g g4">{''.join(cover(NEXT, t) for t in ['trims', 'womenswear', 'footwear', 'fabrics'])}</div></div></section>
 <section class="sec"><div class="w g g2 split" style="gap:40px">
@@ -973,7 +991,8 @@ def home():
   <div class="g g3">{''.join(f'<a href="/{a["slug"]}.html" style="display:grid;grid-template-columns:110px 1fr;gap:16px">' + (f'<div style="aspect-ratio:1">{img(art_img(a))}</div>' if art_img(a) else '<div></div>') + f'<div><p class="small gr">{art_kind(a)}</p><p style="font-weight:500;margin-top:4px">{E(a["title"])}</p></div></a>' for a in ARTS[:3])}</div></div></section>
 </main>'''
     data = json.dumps(pool, ensure_ascii=False).replace('</', '<\\/')
-    return h + footer() + end(f'<script>window.FC_DOTD={data}</script>')
+    tj = json.dumps({t['slug']: [t['title'].replace('&', 'and'), t['lead']] for t in TOOLS}, ensure_ascii=False).replace('</', '<\\/')
+    return h + footer() + end(f'<script>window.FC_DOTD={data};window.FC_TOOLS={tj}</script>')
 
 
 GROUP_TXT = {'Trend': 'Turn a forecast into a brief, a collection plan and a colour story.',
@@ -985,8 +1004,8 @@ GROUP_TXT = {'Trend': 'Turn a forecast into a brief, a collection plan and a col
 def tools():
     T = {t['slug']: t for t in TOOLS}
     h = head('Fashion Design and Production Tools | Forecut', 'Free fashion tools in the order a garment is made: trend briefs, collection plans, colour palettes, patterns, tech packs, costing, production and export.').replace('href="/site.webmanifest"', 'href="/studio.webmanifest"') + nav_app('Tools') + '<main id="main">'
-    h += f'''<section class="thero"><div class="w"><div><h1 class="dsp">Tools</h1><p class="lead">Free tools that take a garment from trend to finished product. Everything you make saves to your account.</p>
-<div class="thact"><label class="srch">{SEARCH}<input id="tq" type="search" placeholder="Find a tool, for example tech pack" aria-label="Find a tool"></label><a class="btn" href="/pattern-maker.html">Open Garment Studio</a></div></div>
+    h += f'''<section class="thero"><div class="w"><div class="thtop"><div><h1 class="dsp">Tools</h1><p class="lead">Your design studio, from trend to finished product. Pick up a brief, a pattern or a tech pack where you left it: your work saves to your account and opens on any device.</p></div>
+<div class="inst"><button class="btn" type="button" id="instStudio">Install Forecut Studio</button><a class="btn o2" href="/pattern-maker.html#install">Install Garment Studio</a><p class="small" id="instMsg" hidden></p></div></div>
 <ol class="tsteps">{''.join(f'<li><a href="#{islug(g)}"><b>{g}</b><span>{E(GROUP_TXT[g])}</span></a></li>' for g, _ in GROUPS4)}</ol></div></section>
 <section class="w" style="padding-top:28px" id="recent"></section>'''
     for g, sl in GROUPS4:
@@ -1001,6 +1020,310 @@ def tools():
     return h + footer() + end()
 
 
+# ------------------------------------------------------------ chapter pages: one page per theme, colour, category or detail group
+DM_HTML = '''<div class="dm" id="dm" role="dialog" aria-modal="true" aria-labelledby="dmn" hidden><div class="dmb" data-close></div><div class="dmc" tabindex="-1">
+<button class="dmx" type="button" data-close aria-label="Close">Close</button><div class="dmi"><img alt="" id="dmimg"></div>
+<div class="dmt"><p class="small gr" id="dmk"></p><h2 class="dsp" id="dmn"></h2><p id="dmnote"></p>
+<div class="dmrow"><span class="stage" id="dmst"></span><span class="small gr" id="dmnx"></span></div>
+<h3>Trend curve</h3><div class="tcurve" id="dmcurve"></div>
+<h3>Across the seasons</h3><div class="dmlc" id="dmlc"></div>
+<div class="dmgrid"><section><h3>Design notes</h3><ul id="dmd"></ul></section><section><h3>Fabric and trims</h3><p class="gr" id="dmf"></p></section><section><h3>Where to use it</h3><p class="gr" id="dmu"></p></section><section id="dmth"></section></div>
+<div class="dmact"><button class="btn s" type="button" id="dmsave">Save detail</button><a class="btn s o" href="/trend-to-style.html">Use in Trend to Style</a><a class="btn s o" id="dmpin" target="_blank" rel="noopener">Pin it</a></div>
+<div class="dmnav"><button type="button" id="dmprev">Previous</button><button type="button" id="dmnext">Next</button></div></div></div></div>'''
+
+FAB_GROUPS = [('Fabrics', {'Fabric', 'Material'}), ('Finishes and washes', {'Finish', 'Wash'}), ('Prints and patterns', {'Print', 'Pattern'}), ('Texture', {'Texture'})]
+TRIM_GROUPS = [('Collars and necklines', {'Collar', 'Neckline', 'Lapel', 'Placket'}), ('Closures and hardware', {'Closure', 'Hardware'}), ('Pockets', {'Pocket'}),
+               ('Seams, hems and pleats', {'Seam', 'Stitch', 'Edge', 'Hem', 'Pleat'}), ('Trims and embellishment', {'Trim', 'Embellishment', 'Perforation', 'Detail'}),
+               ('Cuffs, straps and linings', {'Cuff', 'Strap', 'Lining'})]
+
+
+def hex_rgb(hx):
+    h = (hx or '#888888').lstrip('#')
+    if len(h) == 3:
+        h = ''.join(c * 2 for c in h)
+    return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
+
+
+def cdist(a, b):
+    return sum((x - y) ** 2 for x, y in zip(hex_rgb(a), hex_rgb(b))) ** .5
+
+
+def chapters(s, topic):
+    """(slug, title, kind, key) for each chapter page of a report."""
+    si = SKEYS.index(s)
+    out = []
+    if topic == 'themes':
+        for t in META[s]['themes']:
+            out.append((f'{s}-theme-{islug(t[0])}', t[0], 'theme', t[0]))
+    elif topic == 'colour':
+        for hx, nm in META[s]['palette']:
+            out.append((f'{s}-colour-{islug(nm)}', nm, 'colour', hx))
+    elif topic in ('womenswear', 'menswear', 'footwear'):
+        for k in DET:
+            if k.split('|')[0].lower() == topic and any(it['life'][si] != '-' for it in DET[k]):
+                out.append((f'{s}-{topic}-{islug(k.split("|")[1])}', k.split('|')[1], 'cat', k))
+    elif topic == 'knitwear':
+        for k in ('Womenswear|Knitwear', 'Menswear|Knitwear'):
+            if any(it['life'][si] != '-' for it in DET.get(k, [])):
+                out.append((f'{s}-{k.split("|")[0].lower()}-knitwear', ('Women\'s' if k.startswith('W') else 'Men\'s') + ' knitwear', 'cat', k))
+    else:
+        for g, areas in (FAB_GROUPS if topic == 'fabrics' else TRIM_GROUPS):
+            if any(it['area'] in areas and it['life'][si] != '-' for L in DET.values() for it in L):
+                out.append((f'{s}-{topic}-{islug(g)}', g, 'area', g))
+    return out
+
+
+def ch_items(s, topic, kind, key):
+    si = SKEYS.index(s)
+    allx = season_items(s)
+    if kind == 'theme':
+        return [x for x in allx if key in theme_hits(s, x[1])]
+    if kind == 'cat':
+        return [x for x in allx if x[0] == key]
+    if kind == 'area':
+        areas = dict(FAB_GROUPS + TRIM_GROUPS)[key]
+        return [x for x in allx if x[1]['area'] in areas]
+    # colour: pieces of the themes that lead with this colour, else pieces that name it
+    nm = next((n for c, n in META[s]['palette'] if c == key), '')
+    words = [w for w in nm.lower().replace('-', ' ').split() if len(w) > 3]
+    named = [x for x in allx if any(w in (x[1]['name'] + ' ' + x[1]['note']).lower() for w in words)]
+    ths = [t[0] for t in META[s]['themes'] if min(cdist(t[3], key), cdist(t[4], key)) < 90]
+    viath = [x for x in allx if set(theme_hits(s, x[1])) & set(ths)]
+    seen, out = set(), []
+    for x in named + viath:
+        if x[1]['name'] not in seen:
+            seen.add(x[1]['name']); out.append(x)
+    return out
+
+
+def item_btns(s, grp, data, colour):
+    nxt = si1 = SKEYS.index(s) + 1
+    h = ''
+    for k, it, stg, nx in grp:
+        p = photo(it['name'], s)
+        i = len(data)
+        ds = DESCMOD.build(k.split('|')[0], k.split('|')[1], it)
+        data.append({'n': it['name'], 'k': k.replace('|', ', '), 'a': it['area'], 'note': it['note'], 'l': it['life'], 'st': stg, 'th': theme_hits(s, it),
+                     'o': ds['o'], 'd': ds['d'], 'f': ds['f'], 'u': ds['u'], 'p': p or ''})
+        nxl = ('Next season: ' + STAGE[nx][0].lower()) if nx in STAGE else ('Leaves the forecast next season' if si1 < 5 else '')
+        h += (f'<button type="button" class="item" data-i="{i}"><span class="ph{"" if p else " none"}"' + ('' if p else f' style="background:{colour};color:{"#000" if lum(colour) > .55 else "#fff"}"') + '>' +
+              (img(p, it['name']) if p else f'<em>{E(it["area"])}</em>') + '</span>'
+              f'<span class="h4">{E(it["name"])}</span><span class="p">{E(k.replace("|", ", "))}, {E(it["area"].lower())}</span>'
+              f'<span class="lab"><span class="stage {STAGE[stg][1]}">{STAGE[stg][0]}</span> <span class="gr">{nxl}</span></span></button>')
+    return h
+
+
+def lc_table(s, key):
+    si = SKEYS.index(s)
+    h = ('<div class="lcwrap"><table class="lct"><thead><tr><th scope="col">Piece</th>' +
+         ''.join(f'<th scope="col"{" class=now" if j == si else ""}>{META[k2]["code"]}' + ('<em class="nowp">Now</em>' if j == si else '') + '</th>' for j, k2 in enumerate(SKEYS)) + '</tr></thead><tbody>')
+    for ri, (k, it, st, nx) in enumerate(key):
+        p = photo(it['name'], s)
+        h += (f'<tr><th scope="row"><span class="th">{img(p, "") if p else ""}</span>{E(it["name"])}</th>' +
+              ''.join(f'<td class="c-{c if c != "-" else "n"}{" now" if j == si else ""}" style="--i:{ri};--j:{j}"><span>{STAGE[c][0] if c in STAGE else ""}</span></td>' for j, c in enumerate(it['life'])) + '</tr>')
+    return h + '</tbody></table></div><p class="small gr lckey"><i class="c-e"></i>Emerging <i class="c-r"></i>Rising <i class="c-p"></i>Peaking <i class="c-f"></i>Fading</p>'
+
+
+def ch_card(s, slug, title, kind, key, topic):
+    if kind == 'colour':
+        fg = '#000' if lum(key) > .55 else '#fff'
+        return (f'<a class="chc" href="/{slug}.html"><span class="chim" style="background:{key};color:{fg}"><em>{E(tcx(key))}<br>{key.upper()}</em></span>'
+                f'<span class="cht">{E(title)}</span><span class="small gr">Colour story</span></a>')
+    if kind == 'theme':
+        tk = f'theme-{s}-{islug(key)}'
+        im = img(tk, title) if tk in IMG else ''
+        sub = 'Theme story'
+    else:
+        its = ch_items(s, topic, kind, key)
+        ps = [photo(x[1]['name'], s) for x in by_stage(its, 'r', s) + by_stage(its, 'p', s) + by_stage(its, 'e', s)]
+        ps = [p for p in ps if p]
+        im = img(ps[0], title) if ps else ''
+        sub = 'Detailed report'
+    return f'<a class="chc" href="/{slug}.html"><span class="chim">{im}</span><span class="cht">{E(title)}</span><span class="small gr">{sub}</span></a>'
+
+
+def chapters_block(s, topic):
+    chs = chapters(s, topic)
+    if not chs:
+        return ''
+    lbl = {'themes': 'Each theme in full', 'colour': 'Each colour in full'}.get(topic, 'Open a detailed report')
+    return (f'<section class="w chs" id="chapters"><div class="hd" style="margin-bottom:16px"><h2 class="dsp" style="font-size:30px">{lbl}</h2></div>'
+            f'<div class="chg">' + ''.join(ch_card(s, sl, t, kd, ky, topic) for sl, t, kd, ky in chs) + '</div></section>')
+
+
+def chapter(s, topic, slug, title, kind, key):
+    m = META[s]
+    si = SKEYS.index(s)
+    its = ch_items(s, topic, kind, key)
+    R_ = by_stage(its, 'r', s); Em = by_stage(its, 'e', s); Pk = by_stage(its, 'p', s); Fd = by_stage(its, 'f', s)
+    nxt = META[SKEYS[si + 1]]['code'] if si + 1 < 5 else None
+    tname = TOPIC[topic][1]
+    th_rows = related_themes(s, its) if kind != 'theme' else [t for t in m['themes'] if t[0] == key]
+    colour = topic_colour(s, topic)[0] if kind != 'colour' else key
+    # ---------------- header
+    if kind == 'theme':
+        t = th_rows[0]; th = THEMES.get(f'{s}|{key}', {})
+        tk = f'theme-{s}-{islug(key)}'
+        hero = img(tk, key) if tk in IMG else ''
+        lead = th.get('story', t[1])
+        sub = 'Theme story'
+        desc = f'{m["code"]} theme: {lead}'
+    elif kind == 'colour':
+        nm = title
+        fg = '#000' if lum(key) > .55 else '#fff'
+        r, g, b = hex_rgb(key)
+        hero = f'<div class="chsw" style="background:{key};color:{fg}"><b>{E(nm)}</b><span>{E(tcx(key))}</span><span>{key.upper()}</span><span>RGB {r}, {g}, {b}</span></div>'
+        lead_th = [t for t in m['themes'] if min(cdist(t[3], key), cdist(t[4], key)) < 90]
+        lead = (f'{nm} carries {", ".join(t[0] for t in lead_th[:3])} in {m["code"]}.' if lead_th else f'{nm} is part of the {m["code"]} palette.') + f' {m["intro"]}'
+        sub = 'Colour story'
+        desc = f'{m["code"]} colour forecast: {nm}, {tcx(key)}, {key.upper()}.'
+    else:
+        ps = [photo(x[1]['name'], s) for x in R_ + Pk + Em]
+        ps = [p for p in ps if p]
+        hero = img(ps[0], title) if ps else ''
+        lead = (f'Build around {names(R_, 3)}.' if R_ else f'Lead with {names(Pk, 3)}.' if Pk else f'Test {names(Em, 3)}.' if Em else '') + f' {m["intro"]}'
+        sub = f'{tname}, detailed report'
+        desc = f'{m["code"]} {title.lower()} forecast: {lead}'
+    h = head(f'{m["code"]} {title} | Forecut', desc[:300]) + nav_app('Forecasts') + '<main id="main">'
+    h += f'<div class="w crumb"><a href="/forecasts.html">Forecasts</a> / <a href="/forecasts.html#{s}">{m["code"]}</a> / <a href="/{report_slug(s, topic)}.html">{E(tname)}</a> / {E(title)}</div>'
+    h += (f'<section class="w rhead"><div class="chhero">{hero}</div><div class="rinfo"><p class="small gr">{E(m["title"])}, {E(m["stage"].lower())}. {E(sub)}</p>'
+          f'<h1 class="dsp">{E(title)}</h1><p class="lead">{E(lead)}</p>'
+          f'<div class="ctas"><a class="btn" href="#pieces">See the pieces</a><a class="btn o" href="/{report_slug(s, topic)}.html#downloads">Report PDFs</a></div>'
+          f'<p class="small gr">Updated {TODAY.strftime("%-d %B %Y")}.</p></div></section>')
+    secs = [('story', 'Story'), ('pieces', 'Key pieces'), ('development', 'How it develops'), ('notes', 'Design notes'), ('colour', 'Colour'), ('strategy', 'Strategy and price'), ('more', 'More')]
+    h += '<nav class="rnav" aria-label="On this page"><div class="w">' + ''.join(f'<a href="#{a}">{t}</a>' for a, t in secs) + '</div></nav>'
+    body = ''
+    # ---------------- story
+    body += '<section class="rs" id="story"><div class="rsh"><h2 class="dsp">The story</h2><p class="gr">What is behind it, and where it was seen.</p></div>'
+    for t in th_rows[:3]:
+        th = THEMES.get(f'{s}|{t[0]}', {})
+        tk = f'theme-{s}-{islug(t[0])}'
+        solo = kind == 'theme'
+        body += (f'<article class="insp{" solo" if solo else ""}">' + ('' if solo else f'<div class="ip" style="background:{t[3]}">' + (img(tk, t[0]) if tk in IMG else '') + '</div>') + '<div>'
+                 f'<h3 class="dsp">{E(t[0])}</h3><p>{E(th.get("story", t[1]))}</p>' +
+                 (f'<h4>Why now</h4><p class="gr">{E(th["why"])}</p>' if th.get('why') else '') +
+                 (f'<h4>Seen at</h4><ul class="ul gr">' + ''.join(f'<li><b style="font-weight:500;color:var(--ink)">{E(b[0])}</b>: {E(b[1])}</li>' for b in th['brands'][:6]) + '</ul>' if th.get('brands') else '') +
+                 f'<h4>Key pieces</h4><p class="gr">{E(", ".join(t[6]))}; {E(t[5].lower())}.</p>' +
+                 (f'<p class="small mu" style="margin-top:10px">Source: {E(th["src"])}</p>' if th.get('src') else '') + '</div></article>')
+    moodx = [x for x in R_ + Pk + Em if photo(x[1]['name'], s)][:5]
+    if len(moodx) >= 3:
+        body += '<h3 class="sub">Moodboard</h3><div class="mood">' + ''.join(f'<figure>{img(photo(x[1]["name"], s), x[1]["name"])}<figcaption>{E(x[1]["name"])}</figcaption></figure>' for x in moodx) + '</div>'
+    body += '</section>'
+    # ---------------- pieces
+    data = []
+    body += f'<section class="rs" id="pieces"><div class="rsh"><h2 class="dsp">Key pieces</h2><p class="gr">Select any piece for its design notes, trend curve and lifecycle.</p></div>'
+    stxt = {'e': 'New ideas to test in small quantities.', 'r': 'Growing fast: build these into the range.', 'p': 'At their height: sell through, do not add depth.', 'f': 'Moving out: reduce or rework.'}
+    for st, grp in (('r', R_), ('e', Em), ('p', Pk), ('f', Fd)):
+        if grp:
+            body += f'<div class="stg"><h3 class="dsp">{STAGE[st][0]} in {m["code"]}</h3><p class="gr">{stxt[st]}</p></div><div class="g g4 items">{item_btns(s, grp, data, colour)}</div>'
+    if not its:
+        body += '<p class="gr">Pieces for this story are added as the season is tracked.</p>'
+    body += '</section>'
+    # ---------------- development
+    body += f'<section class="rs" id="development"><div class="rsh"><h2 class="dsp">How it develops</h2><p class="gr"><span class="live"><i></i>Live forecast, updated {TODAY.strftime("%-d %B %Y")}</span><br>Each piece across the five seasons.</p></div>'
+    if kind == 'colour':
+        body += '<div class="cdev">' + ''.join(
+            f'<div class="crow{" now" if j == si else ""}"><span>{META[k2]["code"]}<em>{E(min(META[k2]["palette"], key=lambda p: cdist(p[0], key))[1])}</em></span><div>' +
+            ''.join(f'<i style="background:{c};{"outline:3px solid var(--ink);outline-offset:-3px;flex:2" if c == min(META[k2]["palette"], key=lambda p: cdist(p[0], key))[0] else ""}" title="{E(n)}, {tcx(c)}"></i>' for c, n in META[k2]['palette']) + '</div></div>' for j, k2 in enumerate(SKEYS)) + '</div>'
+        body += f'<p class="gr" style="margin-top:14px">The closest colour in each season is outlined, so you can follow {E(title.lower())} from season to season.</p>'
+    key_its = [x for x in R_ + Pk + Em + Fd if photo(x[1]['name'], s)][:12] + [x for x in R_ + Pk + Em + Fd if not photo(x[1]['name'], s)][:2]
+    if key_its:
+        body += lc_table(s, key_its)
+    body += '</section>'
+    # ---------------- design notes
+    body += '<section class="rs" id="notes"><div class="rsh"><h2 class="dsp">Design notes</h2><p class="gr">How to put the leading pieces into a range.</p></div><div class="notes">'
+    for k, it, st, nx in [x for x in R_ + Pk + Em if photo(x[1]['name'], s)][:6] or (R_ + Pk + Em)[:6]:
+        p = photo(it['name'], s)
+        ds = DESCMOD.build(k.split('|')[0], k.split('|')[1], it)
+        body += (f'<article class="note1"><div class="nim2">{img(p, it["name"]) if p else ""}</div><div><p class="small gr">{E(k.replace("|", ", "))}, <b class="{STAGE[st][1]}">{STAGE[st][0].lower()}</b></p>'
+                 f'<h3 class="dsp">{E(it["name"])}</h3><p>{E(ds["o"])}</p><div class="g g3 split" style="gap:20px;margin-top:14px"><div><h4>Design notes</h4><ul class="ul small gr">' +
+                 ''.join(f'<li>{E(x)}</li>' for x in ds['d']) + f'</ul></div><div><h4>Fabric and trims</h4><p class="small gr">{E(ds["f"])}</p></div><div><h4>Where to use it</h4><p class="small gr">{E(ds["u"])}</p></div></div></div></article>')
+    body += '</div></section>'
+    # ---------------- colour
+    pal = m['palette']
+    if kind == 'colour':
+        tints = ''.join(f'<i style="background:rgb({",".join(str(int(c + (255 - c) * f)) for c in hex_rgb(key))})" title="Tint"></i>' for f in (0, .25, .5, .75)) + ''.join(
+            f'<i style="background:rgb({",".join(str(int(c * f)) for c in hex_rgb(key))})" title="Shade"></i>' for f in (.75, .5))
+        pairs = [p for p in pal if p[0] != key]
+        body += (f'<section class="rs" id="colour"><div class="rsh"><h2 class="dsp">Colour</h2><p class="gr">Codes, tints and the pairings that work this season.</p></div>'
+                 f'<div class="tints">{tints}</div><p class="small gr" style="margin:8px 0 26px">From light tint to deep shade, for knits, prints and accessories.</p><h3 class="sub">Pairs well with</h3><div class="g g3 pairs">' +
+                 ''.join(f'<div><div class="tpair"><div style="background:{key}"></div><div style="background:{c}"></div></div><p style="font-weight:500;margin-top:10px">With {E(n.lower())}</p><p class="small gr">{tcx(c)}, {c.upper()}</p></div>' for c, n in pairs[:6]) + '</div></section>')
+    else:
+        body += (f'<section class="rs" id="colour"><div class="rsh"><h2 class="dsp">Colour</h2><p class="gr">The {m["code"]} palette, with Pantone TCX and HEX codes.</p></div><div class="cstrip">' +
+                 ''.join(f'<a href="/{s}-colour-{islug(nm)}.html"><span style="background:{hx}"></span><b>{E(nm)}</b><em>{tcx(hx)}<br>{hx.upper()}</em></a>' for hx, nm in pal) + '</div>' +
+                 '<div class="g g3" style="gap:20px;margin-top:24px">' + ''.join(f'<p class="small"><b style="font-weight:500">{E(t[0])}:</b> <span class="gr">{E(tcx(t[3]))} with {E(tcx(t[4]))}, for {E(t[5].lower())}.</span></p>' for t in th_rows[:3]) + '</div></section>')
+    # ---------------- strategy and price
+    cols = [('Build depth', 'Rising', R_), ('Test small', 'Emerging', Em), ('Sell through', 'Peaking', Pk), ('Exit or rework', 'Fading', Fd)]
+    body += '<section class="rs" id="strategy"><div class="rsh"><h2 class="dsp">Strategy and price</h2><p class="gr">What to build, test, sell through and drop, with price bands.</p></div><div class="g g4 strat">' + ''.join(
+        f'<div><h3>{a}</h3><p class="small gr">{b} pieces</p><ul>' + (''.join(f'<li>{E(x[1]["name"])}</li>' for x in g[:6]) or '<li class="gr">Nothing at this stage</li>') + '</ul></div>' for a, b, g in cols) + '</div>'
+    acts = [a for t in th_rows[:3] for a in THEMES.get(f'{s}|{t[0]}', {}).get('actions', [])]
+    if acts:
+        body += '<h3 class="sub">Actions</h3><ul class="ul acts">' + ''.join(f'<li>{E(a)}</li>' for a in acts[:6]) + '</ul>'
+    tabs = ''
+    for t in th_rows[:2]:
+        th = THEMES.get(f'{s}|{t[0]}', {})
+        if th.get('prices'):
+            tabs += (f'<div class="ptab"><h3>{E(t[0])}</h3><table><thead><tr><th scope="col">Key garment</th><th scope="col">Value</th><th scope="col">Mid</th><th scope="col">Premium</th></tr></thead><tbody>' +
+                     ''.join(f'<tr><th scope="row">{E(r[0])}</th><td>₹{E(r[1])}</td><td>₹{E(r[2])}</td><td>₹{E(r[3])}</td></tr>' for r in th['prices']) + '</tbody></table>' +
+                     (f'<p class="small" style="margin-top:12px"><b style="font-weight:500">Cost level: {E(th["cost"][0].lower())}.</b> <span class="gr">{E(th["cost"][1])}</span></p>' if th.get('cost') else '') + '</div>')
+    if tabs:
+        body += f'<h3 class="sub">Price bands in ₹ (India), a planning guide</h3><div class="g g2 split" style="gap:32px">{tabs}</div>'
+    body += '</section>'
+    # ---------------- more
+    others = [c for c in chapters(s, topic) if c[0] != slug]
+    body += (f'<section class="rs" id="more"><div class="rsh"><h2 class="dsp">More in {E(tname.lower())}</h2><p class="gr"><a class="lk" href="/{report_slug(s, topic)}.html">Back to the full {m["code"]} report</a></p></div>'
+             f'<div class="chg">' + ''.join(ch_card(s, sl, t, kd, ky, topic) for sl, t, kd, ky in others) + '</div></section>')
+    h += f'''<div class="w gate hide" id="gate"><h2 class="dsp" style="font-size:32px">Read the full story free</h2><p class="gr" style="margin:12px 0 22px">Sign up to read every section and download the PDFs. It takes under a minute.</p><a class="btn" href="/account.html#signup">Sign up free</a> <a class="btn o" href="/account.html#signin" style="margin-left:8px">Log in</a></div>
+<div class="w" id="report">{body}<p class="small gr src">Sources: {E(m.get("sources", ""))}</p></div></main>''' + DM_HTML
+    dj = json.dumps({'items': data, 'seasons': [META[k2]['code'] for k2 in SKEYS], 'si': si}, ensure_ascii=False).replace('</', '<\\/')
+    return h + footer() + end(f'<script>window.FC_ITEMS={dj}</script>')
+
+
+# ------------------------------------------------------------ home: where each season is, with charts
+def season_board():
+    import regions_data as RD
+    cards = ''
+    for j, s in enumerate(SKEYS):
+        si = j
+        its = season_items(s)
+        mix = {k: sum(1 for x in its if x[2] == k) for k in 'erpf'}
+        mx = max(mix.values()) or 1
+        bars = ''.join(f'<span class="b c-{k}" style="--h:{max(6, round(100 * mix[k] / mx))}%;--k:{n}" title="{STAGE[k][0]}"><i></i><em>{STAGE[k][0][:4]}</em></span>' for n, k in enumerate('erpf'))
+        hot = [x for x in its if x[2] in ('r', 'p')]
+        sc = []
+        for r in RD.REGIONS:
+            v = sum(1 for x in hot if any(b in x[1]['name'].lower() for b in r['boost'])) + 2 * len(r['dir'].get(s, []))
+            sc.append((v, r))
+        sc.sort(key=lambda x: -x[0])
+        top = sc[:3]
+        tm = max(1, top[0][0])
+        mk = ''.join(f'<a href="/region-{r["slug"]}.html" class="mkr" style="--w:{max(12, round(100 * v / tm))}%"><span>{E(r["name"])}</span><i></i></a>' for v, r in top)
+        best = by_stage([x for x in its if photo(x[1]['name'], s)], 'p' if j == 0 else 'r', s)[:2]
+        lab = 'Selling best now' if j == 0 else 'Pieces to back'
+        bp = ''.join(f'<a href="/{s}-{("footwear" if x[0].startswith("Footwear") else x[0].split("|")[0].lower())}.html" class="bp"><span>{img(photo(x[1]["name"], s), x[1]["name"])}</span><em>{E(x[1]["name"])}</em></a>' for x in best)
+        cards += (f'<div class="sb{" now" if j == 0 else ""}{" nx" if s == NEXT else ""}"><a class="sbh" href="/forecasts.html#{s}"><b>{META[s]["code"]}</b><span>{E(META[s]["stage"])}</span><em>{E(META[s]["window"])}</em></a>'
+                  f'<div class="sbb"><p class="sbl">Trend mix</p><div class="mix">{bars}</div><p class="sbl">Strongest markets</p><div class="mks">{mk}</div><p class="sbl">{lab}</p><div class="bps">{bp}</div></div></div>')
+    return f'<div class="sboard" aria-label="Where each season is">{cards}</div>'
+
+
+def rising_two():
+    tabs, panes = '', ''
+    for j, s in enumerate([NEXT, SKEYS[SKEYS.index(NEXT) + 1]]):
+        xs = []
+        for t in ('womenswear', 'menswear', 'footwear'):
+            for k, it, st, nx in by_stage(items_for(t, s), 'r', s):
+                p = photo(it['name'], s)
+                if p and it['name'] not in [x[2]['name'] for x in xs]:
+                    xs.append((t, k, it, p, nx))
+        xs = xs[::max(1, len(xs) // 12)][:12]
+        tabs += f'<button type="button" role="tab" aria-selected="{"true" if j == 0 else "false"}" data-p="rp{j}" class="{"on" if j == 0 else ""}"><b>{META[s]["code"]}</b><span>{E(META[s]["stage"].lower())}</span></button>'
+        panes += (f'<div class="rpane{"" if j == 0 else " hide"}" id="rp{j}" role="tabpanel"><div class="marq"><div class="mtrack">' + ''.join(
+            f'<a class="nw" href="/{s}-{t}.html"><span class="nim">{img(p, it["name"])}</span><span class="small gr">{E(k.replace("|", ", "))}</span><span class="nn">{E(it["name"])}</span>'
+            f'<span class="small"><b class="st-r">Rising</b>{(" <span class=gr>then " + STAGE[nx][0].lower() + "</span>") if nx in STAGE else ""}</span></a>' for t, k, it, p, nx in xs) + '</div></div></div>')
+    return (f'<section class="sec"><div class="w"><div class="hd"><div><h2 class="dsp" style="font-size:34px">Rising now</h2><p class="gr" style="margin-top:8px">The pieces to build into the next two seasons.</p></div>'
+            f'<div class="rtabs" role="tablist">{tabs}</div></div>{panes}</div></section>')
+
+
 def main():
     os.makedirs(ASSET, exist_ok=True)
     shutil.copy(os.path.join(B, 'v2', 'forecut.css'), os.path.join(ASSET, 'forecut.css'))
@@ -1011,8 +1334,13 @@ def main():
         _PATH[:] = ['' if name == 'index' else name + '.html', si]
         pages[name] = fn()
     for s, t in REPORTS:
-        _PATH[:] = [report_slug(s, t) + '.html', cover_img(s, t)]
+        _PATH[:] = [report_slug(s, t) + '.html', f'cover-{s}-{t}' if f'cover-{s}-{t}' in IMG else cover_img(s, t)]
         pages[report_slug(s, t)] = report(s, t)
+        for sl, ti, kd, ky in chapters(s, t):
+            if sl in pages:
+                continue
+            _PATH[:] = [sl + '.html', (f'theme-{s}-{islug(ky)}' if kd == 'theme' and f'theme-{s}-{islug(ky)}' in IMG else f'cover-{s}-{t}')]
+            pages[sl] = chapter(s, t, sl, ti, kd, ky)
     for n, h in pages.items():
         open(os.path.join(OUT, n + '.html'), 'w').write(h)
     # sitemap: add the new pages (clean_urls.py tidies the URLs afterwards)
