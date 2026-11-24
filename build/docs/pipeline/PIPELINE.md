@@ -42,3 +42,16 @@ Connections:
 - Yellow (import details): Garment Studio → Tech Pack Builder, Price and Margin Calculator, Break-even Calculator; Tech Pack Builder → Price and Margin Calculator.
 
 ## 5. PLM (upcoming)
+
+## Built on the site (24 Nov 2026)
+
+- Forecast tree: `/{season}-{audience}` hub, `/{season}-{audience}-{topic}` topic page, and a report page per pipeline leaf,
+  for all five seasons and the seven audiences (mens, womens, kids, toddler-boys, toddler-girls, boys, girls).
+  Generator: `build/v2/tree.py`, called from `build/v2/build_v2.py`.
+- Footwear sits inside each audience (hub block, styling looks, colour pages).
+- Kidswear data: `build/kids_data.py` (pieces tagged by audience, plus kids versions of the season themes). Safety notes on kids pages.
+- Every report page has a Download PDF button: the browser prints the page to A4 landscape (signed-in members only).
+- Kids thumbnails: `kids-thumbnail-prompts.csv`; save pictures in `images/` as `kid-<slug>.png`.
+- User home is private (signed-out visitors go to the public home). PLM page is "coming soon".
+- Insights filters: Reports, Journal, Magazine, Market data, Brand updates, Market news, Brand news.
+- Tools page shows sub-features and the tool connections (style brief share; import from my tools).

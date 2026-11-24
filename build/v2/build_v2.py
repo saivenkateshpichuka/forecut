@@ -172,15 +172,16 @@ def nav_public(active=''):
 
 
 def nav_app(active=''):
-    links = [('Home', '/home.html'), ('Forecasts', '/forecasts.html'), ('Insights', '/insights.html'), ('Tools', '/tools.html')]
+    links = [('Home', '/home.html'), ('Forecasts', '/forecasts.html'), ('Insights', '/insights.html'), ('Tools', '/tools.html'), ('PLM', '/plm.html')]
     return _nav(links, active, f'<a class="srch" href="/search.html">{SEARCH} Search forecasts</a><a class="av in-only" href="/account.html" aria-label="Your account" id="fcav">You</a><a class="out-only" href="/account.html#signin">Log in</a><a class="btn s out-only" href="/account.html#signup">Sign up free</a>',
                 [('Home', '/home.html', ''), ('Forecasts', '/forecasts.html', 'Seasons, topics, regions'), ('Insights', '/insights.html', 'Reports and articles'),
-                 ('Tools', '/tools.html', 'Design tools'), ('Your dashboard', '/account.html', 'Plan, saved work'), ('Search', '/search.html', '')])
+                 ('Tools', '/tools.html', 'Design tools'), ('PLM', '/plm.html', 'Coming soon'), ('Your dashboard', '/account.html', 'Plan, saved work'), ('Search', '/search.html', '')])
 
 
 MEGA = ('<div class="mega"><div class="w">' + ''.join(
     f'<div><a class="mh" href="/forecasts.html#{s}"><b>{META[s]["code"]}</b><span>{E(META[s]["stage"])}</span></a>' +
     ''.join(f'<a href="/{s}-{k}.html">{E(t)}</a>' for k, t, _, _ in TOPICS) + '</div>' for s in SKEYS) +
+    '<div class="mx"><a class="mh" href="/forecasts.html#' + NEXT + '"><b>By audience</b><span>' + META[NEXT]['code'] + '</span></a>' + ''.join(f'<a href="/{NEXT}-{k}.html">{t}</a>' for k, t in [('mens', 'Men'), ('womens', 'Women'), ('kids', 'Kids'), ('toddler-boys', 'Toddler boys'), ('toddler-girls', 'Toddler girls'), ('boys', 'Boys'), ('girls', 'Girls')]) + '</div>'
     '<div class="mx"><a class="mh" href="/forecasts.html"><b>All forecasts</b><span>Every season and topic</span></a><a href="/regions.html">Regional forecasts</a><a href="/india.html">India forecasts</a><a href="/resort-27.html">Resort 27</a><a href="/pre-fall-27.html">Pre-Fall 27</a><a href="/colour.html">Colour library</a></div></div></div>')
 
 
@@ -535,6 +536,11 @@ REGIONS_LINKS = [('Europe', '/region-europe.html'), ('North America', '/region-n
                  ('Africa', '/region-africa.html'), ('Oceania', '/region-oceania.html'), ('India', '/india.html'), ('Resort 27', '/resort-27.html'), ('Pre-Fall 27', '/pre-fall-27.html')]
 
 
+def _aud_row(s):
+    import tree as TREE
+    return '<h3 class="sub" style="margin-top:0">Forecasts by audience</h3>' + TREE.aud_row(sys.modules[__name__], s)
+
+
 def forecasts():
     h = head('Forecasts | Forecut', 'Forecut forecast reports: one report per topic, per season.') + nav_app('Forecasts') + '<main id="main">'
     h += '<h1 class="vh">Forecasts</h1>'
@@ -549,7 +555,7 @@ def forecasts():
     for s in order:
         m = META[s]
         h += (f'<section class="sgrp" data-season="{s}" id="{s}"><div class="sgh"><h2 class="dsp">{m["code"]}</h2><p><b>{E(m["title"])}</b><span class="gr">{E(m["stage"])}, in stores {E(m["window"])}</span></p></div>'
-              '<div class="g g4">' + ''.join(cover(s, t) for t, *_ in TOPICS) + '</div></section>')
+              + _aud_row(s) + '<h3 class="sub">Reports by topic</h3><div class="g g4">' + ''.join(cover(s, t) for t, *_ in TOPICS) + '</div></section>')
     h += '<p class="gr hide" id="fnone" style="padding:30px 0">No report matches. Choose another season or topic.</p></div></main>'
     return h + footer() + end()
 
@@ -623,13 +629,13 @@ if(rn&&'IntersectionObserver' in window){var links={};rn.querySelectorAll('a').f
 /* sign-in state: signed-out readers see the overview and inspiration, then a sign-up block */
 var rep=document.getElementById('report'),gated=false;
 function gate(on){if(!rep)return;if(on===gated)return;gated=on;rep.querySelectorAll('.rs').forEach(function(s,k){if(k>1)s.classList.toggle('hide',on)});var g=document.getElementById('gate');if(g){g.classList.toggle('hide',!on);if(on)rep.after(g)}}
-function setUser(u){var R=document.documentElement;R.classList.toggle('fc-in',!!u);try{u?localStorage.setItem('fc-in','1'):localStorage.removeItem('fc-in')}catch(e){}
+function setUser(u){if(!u&&window.FC_PRIVATE){location.replace('/');return}var R=document.documentElement;R.classList.toggle('fc-in',!!u);try{u?localStorage.setItem('fc-in','1'):localStorage.removeItem('fc-in')}catch(e){}
  var av=document.getElementById('fcav');if(av&&u){var n=(u.displayName||u.email||'').trim();av.textContent=n?n[0].toUpperCase():'You'}
  var gr=document.getElementById('greet');if(gr&&u&&u.displayName){gr.textContent=gr.textContent.replace(/\.$/,', '+u.displayName.split(' ')[0]+'.')}
  gate(!u||location.hash==='#preview');
  if(u&&document.body.dataset.page==='landing'&&!/forecut\.in/.test(document.referrer)&&!/[?&]stay/.test(location.search))location.replace('/home')}
 gate(!document.documentElement.classList.contains('fc-in')||location.hash==='#preview');
-(function wait(n){if(window.FCAuth&&FCAuth.onChange){FCAuth.onChange(setUser)}else if(n<80)setTimeout(function(){wait(n+1)},100)})(0);
+(function wait(n){if(window.FCAuth&&FCAuth.onChange){FCAuth.onChange(setUser)}else if(n<80)setTimeout(function(){wait(n+1)},100);else if(window.FC_PRIVATE&&!document.documentElement.classList.contains('fc-in'))location.replace('/')})(0);
 document.addEventListener('click',function(e){var a=e.target.closest('[data-pdf]');if(a&&!document.documentElement.classList.contains('fc-in')){e.preventDefault();location.href='/account.html#signup'}});
 /* lifecycle table: fill in when it comes into view */
 var lcs=document.querySelectorAll('.lct,.cdev,.tdev,.sboard,.chg');
@@ -691,15 +697,33 @@ if(DM&&FI){var cards=[].slice.call(document.querySelectorAll('button.item')),cur
  document.getElementById('dmprev').addEventListener('click',function(){step(-1)});document.getElementById('dmnext').addEventListener('click',function(){step(1)});
  document.getElementById('dmsave').addEventListener('click',function(){var d=FI.items[cur],L=saved(),k=L.findIndex(function(x){return x.n===d.n});if(k<0)L.unshift({n:d.n,s:FI.seasons[FI.si],u:location.pathname,p:d.p,k:d.k});else L.splice(k,1);try{localStorage.setItem('fc-saved',JSON.stringify(L.slice(0,200)))}catch(e){}fill(cur)});
  document.addEventListener('keydown',function(e){if(DM.hidden)return;if(e.key==='Escape')close();else if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1);else if(e.key==='Tab'){var f=[].slice.call(DM.querySelectorAll('button:not([disabled]),a[href]'));var a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}}});}
+ document.addEventListener('click',function(e){var b=e.target.closest('[data-print]');if(!b)return;e.preventDefault();
+  if(!document.documentElement.classList.contains('fc-in')){location.href='/account.html#signup';return}
+  [].forEach.call(document.querySelectorAll('img[loading=lazy]'),function(i){i.loading='eager'});document.documentElement.classList.add('printing');
+  var im=[].filter.call(document.images,function(i){return !i.complete}),n=im.length,go=function(){setTimeout(function(){window.print()},150)};
+  if(!n)go();else{var t=setTimeout(go,4000);im.forEach(function(i){i.addEventListener('load',function(){if(--n===0){clearTimeout(t);go()}},{once:true});i.addEventListener('error',function(){if(--n===0){clearTimeout(t);go()}},{once:true})})}});
 })();
 """
 
 
+def _title_of(u):
+    try:
+        t = re.search(r'<title>([^<|]*)', open(os.path.join(ROOT, u), encoding='utf-8', errors='ignore').read(4000))
+        return t.group(1).strip() if t else None
+    except Exception:
+        return None
+
+
+IKINDS = ['Report', 'Journal', 'Magazine', 'Market data', 'Brand updates', 'Market news', 'Brand news']
+
+
 def insights():
+    import sales_data as SD, regions_data as RD
     rep = [(u, t, d) for u, t, d in json.load(open('reports_index.json')) if u != 'reports.html']
     items = []
     for a in ARTS:
-        items.append(dict(u=f'/{a["slug"]}.html', t=a['title'], k=art_kind(a), d=a.get('date',''), img=art_img(a)))
+        items.append(dict(u=f'/{a["slug"]}.html', t=a['title'], k='Market news' if art_kind(a) == 'Market news' else 'Journal', d=a.get('date', ''), img=art_img(a)))
+    kmap = {'fashion-brand-competition-2026.html': 'Market data', 'fashion-marketing-trends-2026.html': 'Market data', 'india-brand-watch.html': 'Brand updates', 'fashion-controversies-2026.html': 'Brand updates'}
     for u, t, d in rep:
         sl = u[:-5]
         k = next((c for c in (f'rep-{sl}', sl, f'cover-{sl}', f'hero-{sl}') if c in IMG), None)
@@ -709,17 +733,38 @@ def insights():
                 k = og.group(1) if og and og.group(1) in IMG else None
             except Exception:
                 k = None
-        items.append(dict(u='/' + u, t=t.replace('Forecut ', ''), k='Report', d='', img=k))
-    h = head('Insights | Forecut', 'Forecut reports, articles and market news.') + nav_app('Insights') + '<main id="main">'
-    h += '''<section class="sec t"><div class="w split" style="display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap">
-<div><h1 class="dsp" style="font-size:52px">Insights</h1><p class="lead" style="margin-top:10px">Reports, articles and market news.</p></div>
-<div class="flt" data-f="kind"><button class="ch on" type="button" data-v="all">All</button><button class="ch" type="button" data-v="Report">Reports</button><button class="ch" type="button" data-v="Article">Articles</button><button class="ch" type="button" data-v="Market news">Market news</button></div></div></section>'''
+        items.append(dict(u='/' + u, t=t.replace('Forecut ', ''), k=kmap.get(u, 'Report'), d='', img=k))
+    for f in sorted(os.listdir(ROOT)):
+        if (f.startswith('couture-') or f.startswith('innovation-')) and f.endswith('.html'):
+            t = _title_of(f)
+            if t:
+                sl = f[:-5]
+                k = next((c for c in (sl, f'hero-{sl}', f'cover-{sl}') if c in IMG), None)
+                items.append(dict(u='/' + f, t=t, k='Magazine', d='', img=k))
+    for r in RD.REGIONS:
+        items.append(dict(u=f'/region-{r["slug"]}.html', t=f'{r["name"]}: sales calendar, climate and market data', k='Market data', d='', img=next((x for x in ([r.get('img')] if isinstance(r.get('img'), str) else (r.get('img') or [])) if x in IMG), None)))
+    bn = []
+    for m in SD.MARKETS:
+        for b in m['brands']:
+            bn.append(dict(u=f'/region-{m["region"]}.html', t=f'{b[0]}: {b[1]}', k='Brand news', d='', img=None, src=b[2]))
+    items += bn[:30]
+    h = head('Insights | Forecut', 'Forecut reports, journal, magazine, market data, brand updates, market news and brand news.') + nav_app('Insights') + '<main id="main">'
+    h += ('<section class="sec t"><div class="w split" style="display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap">'
+          '<div><h1 class="dsp" style="font-size:52px">Insights</h1><p class="lead" style="margin-top:10px">Reports, journal, magazine, market data and news.</p></div>'
+          '<div class="flt" data-f="kind"><button class="ch on" type="button" data-v="all">All</button>' +
+          ''.join(f'<button class="ch" type="button" data-v="{k}">{k + "s" if k == "Report" else k}</button>' for k in IKINDS) + '</div></div></section>')
     lead = items[0]
     h += (f'<section class="w g split" style="grid-template-columns:7fr 5fr;gap:32px;padding-bottom:40px" id="lead"><a href="{lead["u"]}" data-kind="{lead["k"]}">' + (f'<div style="aspect-ratio:16/10">{img(lead["img"])}</div>' if lead['img'] else '') +
           f'<p class="small gr" style="margin:16px 0 6px">{lead["k"]}</p><h2 class="dsp" style="font-size:34px">{E(lead["t"])}</h2></a><div>' +
           ''.join(f'<a href="{x["u"]}" data-kind="{x["k"]}" style="display:grid;grid-template-columns:110px 1fr;gap:16px;padding:0 0 16px;margin-bottom:16px;border-bottom:1px solid var(--ru)">' + (f'<div style="aspect-ratio:1">{img(x["img"])}</div>' if x['img'] else '<div style="aspect-ratio:1;background:var(--st)"></div>') + f'<div><p class="small gr">{x["k"]}</p><p style="font-weight:500;margin-top:4px">{E(x["t"])}</p></div></a>' for x in items[1:5]) + '</div></section>')
-    h += '<section class="w" style="padding-bottom:72px"><div class="g g3" id="ilist" style="row-gap:32px">' + ''.join(
-        f'<a href="{x["u"]}" data-kind="{x["k"]}">' + (f'<div style="aspect-ratio:16/10">{img(x["img"])}</div>' if x['img'] else '<div style="aspect-ratio:16/10;background:var(--st)"></div>') + f'<p class="small gr" style="margin:12px 0 4px">{x["k"]}</p><p style="font-weight:500">{E(x["t"])}</p></a>' for x in items[5:]) + '</div></section></main>'
+
+    def card(x):
+        if x['k'] == 'Brand news':
+            return (f'<a href="{x["u"]}" data-kind="{x["k"]}" class="bnews"><p class="small gr" style="margin:0 0 6px">Brand news</p><p style="font-weight:500">{E(x["t"])}</p>'
+                    f'<p class="small mu" style="margin-top:8px">Source: {E(x["src"])}</p></a>')
+        return (f'<a href="{x["u"]}" data-kind="{x["k"]}">' + (f'<div style="aspect-ratio:16/10">{img(x["img"])}</div>' if x['img'] else f'<div class="iph"><span>{E(x["k"])}</span></div>') +
+                f'<p class="small gr" style="margin:12px 0 4px">{x["k"]}</p><p style="font-weight:500">{E(x["t"])}</p></a>')
+    h += '<section class="w" style="padding-bottom:72px"><div class="g g3" id="ilist" style="row-gap:32px">' + ''.join(card(x) for x in items[5:]) + '</div></section></main>'
     return h + footer() + end()
 
 
@@ -727,6 +772,22 @@ GROUPS4 = [('Trend', ['trend-to-style', 'rangeboard', 'swatchsmith']),
            ('Design', ['pattern-maker', 'materials-library', 'textile-calculator', 'textile-processing-studio', 'size-chart-builder']),
            ('Specify and cost', ['tech-pack-builder', 'decoration-cost-estimator', 'pricefold', 'evenpoint']),
            ('Produce and sell', ['fit-qc-studio', 'cutclock', 'care-label-generator', 'product-description-writer', 'export-market-checker', 'style-tracker'])]
+
+
+def plm():
+    h = head('PLM, coming soon | Forecut', 'Forecut PLM: one place for every style, from brief to approved sample. Coming soon for signed-in members.') + nav_app('PLM') + '<main id="main">'
+    steps = [('Style library', 'Every style brief, pattern and tech pack in one record, with versions.'),
+             ('Bill of materials', 'Fabrics, trims and costs pulled in from the Fabric and Trims Library and the Tech Pack.'),
+             ('Samples and fittings', 'Track each sample round with Fit and QC Studio notes and photos.'),
+             ('Approvals', 'Sign off design, fit, colour and cost, with a clear history of who approved what.'),
+             ('Suppliers', 'Keep mills, trim suppliers and makers with each style.'),
+             ('Calendar', 'Critical path dates linked to the Production Calendar.')]
+    h += ('<section class="sec t"><div class="w"><p class="small gr">Coming soon</p><h1 class="dsp" style="font-size:56px;margin-top:8px">PLM</h1>'
+          '<p class="lead" style="max-width:36em;margin-top:14px">One place for every style, from brief to approved sample. It builds on the Forecut tools you already use, so your briefs, patterns, tech packs and costings move in without retyping.</p></div></section>'
+          '<section class="w" style="padding-bottom:40px"><div class="g g3" style="gap:20px">' +
+          ''.join(f'<div class="box1"><h3>{E(a)}</h3><p class="small gr">{E(b)}</p></div>' for a, b in steps) + '</div></section>'
+          '<section class="sec st"><div class="w"><h2 class="dsp" style="font-size:32px">Want early access?</h2><p class="gr" style="margin-top:10px">Email <a class="lk" href="mailto:hello@forecut.in">hello@forecut.in</a> and tell us how your team works today. Meanwhile, the <a class="lk" href="/tools.html">Forecut tools</a> are open to signed-in members.</p></div></section></main>')
+    return h + footer() + end()
 
 
 def account():
@@ -844,7 +905,39 @@ FEAT = ['pattern-maker', 'tech-pack-builder', 'trend-to-style', 'rangeboard']
 def tool_card(t, big=False):
     return (f'<a class="tcard" href="/{t["slug"]}.html" data-q="{E((t["title"] + " " + t["lead"] + " " + t["tags"]).lower())}"><span class="tim2"><img src="/tools/covers/{t["slug"]}-640.webp" alt="" loading="lazy"></span>'
             f'<span class="tt">{E(t["title"].replace("&", "and"))}</span><span class="small gr">{E(t["lead"])}</span>' +
-            (f'<span class="tout">{E(t["output"].replace(" · ", ", "))}</span>' if big else '') + '</a>')
+            (f'<span class="tout">{E(t["output"].replace(" · ", ", "))}</span>' if big else '') +
+            ('<span class="tsub">' + ''.join(f'<i{" class=soon" if x.endswith("(coming soon)") else ""}>{E(x.replace(" (coming soon)", ""))}{"<em>Soon</em>" if x.endswith("(coming soon)") else ""}</i>' for x in TSUB[t["slug"]]) + '</span>' if big and t['slug'] in TSUB else '') + '</a>')
+
+
+TSUB = {'trend-to-style': ['Boards', 'Style brief'], 'textile-processing-studio': ['Dye recipe and batch cost', 'Colour blend', 'Processing route', 'Lab dips'],
+        'pattern-maker': ['Draft', 'Edit pieces', '3D'], 'fit-qc-studio': ['Fit sessions and QC', '3D vs real sample (coming soon)'],
+        'tech-pack-builder': ['Imports your style brief and Garment Studio pieces'], 'pricefold': ['Imports from Garment Studio and Tech Pack'], 'evenpoint': ['Imports from Garment Studio']}
+
+
+def tool_links():
+    N = {'tts': (40, 120, 'Trend to Style', 'Style brief', '/trend-to-style.html'), 'gs': (330, 40, 'Garment Studio', 'Draft, edit, 3D', '/pattern-maker.html'),
+         'tp': (330, 200, 'Tech Pack Builder', 'Specs and BOM', '/tech-pack-builder.html'), 'pr': (630, 40, 'Price and Margin', 'Cost and price', '/pricefold.html'),
+         'be': (630, 200, 'Break-even', 'Units to profit', '/evenpoint.html')}
+    W, H = 220, 64
+    L = [('tts', 'gs', 'p'), ('tts', 'tp', 'p'), ('gs', 'tp', 'y'), ('gs', 'pr', 'y'), ('gs', 'be', 'y'), ('tp', 'pr', 'y')]
+    col = {'p': '#c2457a', 'y': '#b07a24'}
+    svg = '<svg viewBox="0 0 900 340" class="tlinks" role="img" aria-label="How the tools share data"><defs>' + ''.join(
+        f'<marker id="ah{k}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L10 5L0 10z" fill="{c}"/></marker>' for k, c in col.items()) + '</defs>'
+    for a, b, k in L:
+        x1, y1 = N[a][0] + W, N[a][1] + H / 2
+        x2, y2 = N[b][0], N[b][1] + H / 2
+        if a == 'gs' and b == 'tp':
+            x1, y1, x2, y2 = N[a][0] + W / 2, N[a][1] + H, N[b][0] + W / 2, N[b][1]
+            d = f'M{x1} {y1}L{x2} {y2 - 2}'
+        else:
+            mx = (x1 + x2) / 2
+            d = f'M{x1} {y1}C{mx} {y1} {mx} {y2} {x2 - 2} {y2}'
+        svg += f'<path d="{d}" fill="none" stroke="{col[k]}" stroke-width="2"{" stroke-dasharray=\"6 5\"" if k == "y" else ""} marker-end="url(#ah{k})"/>'
+    for k, (x, y, t, sub, u) in N.items():
+        svg += f'<a href="{u}"><rect x="{x}" y="{y}" width="{W}" height="{H}" rx="6" fill="#fff" stroke="#1f3d33" stroke-width="1.5"/><text x="{x + 16}" y="{y + 28}" font-size="17" fill="#1c1714">{t}</text><text x="{x + 16}" y="{y + 50}" font-size="13" fill="#6b625b">{sub}</text></a>'
+    svg += '</svg>'
+    return ('<section class="w tconn" id="connections"><div class="tgh"><h2 class="dsp">How the tools connect</h2><p class="gr">Work moves from one tool to the next, so nothing is typed twice.</p></div>' + svg +
+            '<p class="small tleg"><span><i style="background:#c2457a"></i>Shares your style brief</span><span><i style="background:#b07a24"></i>Import from my tools</span></p></section>')
 
 
 def tools_block(title='Design tools, from trend to finished product', intro='Take a trend to a style brief, a pattern, a tech pack and a cost sheet, all saved to your account.'):
@@ -960,7 +1053,7 @@ def landing():
 def home():
     pool = detail_pool()
     T = {t['slug']: t for t in TOOLS}
-    h = head('Home | Forecut', 'Your Forecut start page.') + nav_app('Home') + '<main id="main">'
+    h = head('Home | Forecut', 'Your Forecut start page.').replace('</head>', "<script>window.FC_PRIVATE=1;try{if(localStorage.getItem('fc-in')!=='1')location.replace('/')}catch(e){}</script></head>").replace('content="index,follow"', 'content="noindex,follow"') + nav_app('Home') + '<main id="main">'
     h += f'''<section class="sec t"><div class="w hhead"><div><h1 class="dsp" style="font-size:44px" id="greet">Welcome back.</h1>
 <p class="gr" style="margin-top:8px">New this week: {E(', '.join(NEW[:2]))} and more in the {META[NEXT]['code']} reports.</p></div>
 <form class="fsearch" action="/search.html" method="get" role="search" style="width:min(420px,100%)"><label class="srch" style="width:100%;height:46px">{SEARCH}<input name="q" type="search" placeholder="Search a detail, fabric or colour" aria-label="Search the forecasts"></label></form></div>
@@ -1014,7 +1107,7 @@ def tools():
         h += (f'<section class="w tgrp" id="{islug(g)}"><div class="tgh"><h2 class="dsp">{g}</h2><p class="gr">{E(GROUP_TXT[g])}</p></div>'
               f'<div class="g g3 tgrid">{"".join(tool_card(T[s], big=True) for s in sl)}</div></section>')
     h += '''<p class="w gr hide" id="tnone" style="padding:20px 40px">No tool matches. Try another word.</p>
-<section class="sec st" style="margin-top:56px"><div class="w g g2 split" style="gap:48px;align-items:center">
+''' + tool_links() + '''<section class="sec st" style="margin-top:56px"><div class="w g g2 split" style="gap:48px;align-items:center">
 <div><h2 class="dsp" style="font-size:34px">Works with the forecasts</h2><p class="gr" style="margin-top:12px">Open any detail in a report and send it to Trend to Style. The brief carries into the tech pack, and the tech pack into costing, so nothing is typed twice.</p>
 <p style="margin-top:20px;display:flex;gap:20px;flex-wrap:wrap"><a class="lk" href="/forecasts.html">Open the forecasts</a><a class="lk" href="/trend-to-style.html">Start a style brief</a></p></div>
 <div class="box1"><h3>Use it like an app</h3><p class="gr small">Add Forecut Studio to your phone or desktop: open this page in Chrome or Safari and choose Install, or Add to Home Screen. Your saved work stays on the device and syncs to your account.</p></div>
@@ -1509,7 +1602,7 @@ def main():
     shutil.copy(os.path.join(B, 'v2', 'archivo.woff2'), os.path.join(ASSET, 'archivo.woff2'))
     open(os.path.join(ASSET, 'forecut.js'), 'w').write(JS + JS2)
     pages = {}
-    for name, fn, si in [('index', landing, f'hero-{NEXT}'), ('home', home, None), ('forecasts', forecasts, None), ('insights', insights, None), ('tools', tools, None)]:
+    for name, fn, si in [('index', landing, f'hero-{NEXT}'), ('home', home, None), ('forecasts', forecasts, None), ('insights', insights, None), ('tools', tools, None), ('plm', plm, None)]:
         _PATH[:] = ['' if name == 'index' else name + '.html', si]
         pages[name] = fn()
     for s, t in REPORTS:
@@ -1520,6 +1613,10 @@ def main():
                 continue
             _PATH[:] = [sl + '.html', (f'theme-{s}-{islug(ky)}' if kd == 'theme' and f'theme-{s}-{islug(ky)}' in IMG else f'cover-{s}-{t}')]
             pages[sl] = colour_dept(s, ky) if kd == 'cdept' else colour_story(s, ky) if kd == 'cstory' else chapter(s, t, sl, ti, kd, ky)
+    import tree as TREE
+    tp = TREE.build(sys.modules[__name__])
+    assert not set(tp) & set(pages), set(tp) & set(pages)
+    pages.update(tp)
     for n, h in pages.items():
         open(os.path.join(OUT, n + '.html'), 'w').write(h)
     # colour pages from an earlier palette: keep the address, send readers to the current colour forecast
