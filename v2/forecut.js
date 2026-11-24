@@ -7,11 +7,16 @@ if(shelf){var f={season:'all',topic:'all'};document.querySelectorAll('[data-f]')
 /* insights filter */
 var il=document.getElementById('ilist');
 if(il){document.querySelector('[data-f=kind]').addEventListener('click',function(e){var c=e.target.closest('button.ch');if(!c)return;this.querySelectorAll('.ch').forEach(function(x){x.classList.toggle('on',x===c)});var v=c.dataset.v;document.querySelectorAll('[data-kind]').forEach(function(a){a.classList.toggle('hide',v!=='all'&&a.dataset.kind!==v)})});}
-/* tools search + recently used */
-var tq=document.getElementById('tq');
-if(tq){tq.addEventListener('input',function(){var q=tq.value.trim().toLowerCase(),n=0;document.querySelectorAll('a.tool,a.tcard').forEach(function(a){var ok=!q||a.dataset.q.indexOf(q)>-1;a.classList.toggle('hide',!ok);if(ok)n++});document.querySelectorAll('.tgrp').forEach(function(g){g.classList.toggle('hide',!g.querySelector('a.tcard:not(.hide)'))});var tn=document.getElementById('tnone');if(tn)tn.classList.toggle('hide',n>0)});
- try{var r=JSON.parse(localStorage.getItem('fc-recent-tools')||'[]');if(r.length){var h='<p class="small gr" style="margin-bottom:10px">Recently used</p><div class="flt">';r.slice(0,4).forEach(function(x){h+='<a class="ch" href="'+x.u+'">'+x.t+'</a>'});document.getElementById('recent').innerHTML=h+'</div>'}}catch(e){}
- document.querySelectorAll('a.tool,a.tcard').forEach(function(a){a.addEventListener('click',function(){try{var r=JSON.parse(localStorage.getItem('fc-recent-tools')||'[]').filter(function(x){return x.u!==a.getAttribute('href')});r.unshift({u:a.getAttribute('href'),t:(a.querySelector('.tt')||a.querySelector('span')).textContent});localStorage.setItem('fc-recent-tools',JSON.stringify(r.slice(0,6)))}catch(e){}})});}
+/* tools: recently used (same store as the tool pages: {slug, at}) */
+window.recentTools=function(){try{var r=JSON.parse(localStorage.getItem('fc-recent-tools')||'[]'),seen={},out=[];r.forEach(function(x){var sl=typeof x==='string'?x:(x&&(x.slug||(x.u&&x.u.replace(/^\/|\.html$/g,''))));if(sl&&!seen[sl]){seen[sl]=1;out.push(sl)}});return out}catch(e){return[]}}
+var TN={};document.querySelectorAll('a.tcard,a.tool').forEach(function(a){var sl=a.getAttribute('href').replace(/^\/|\.html$/g,'');var t=a.querySelector('.tt');if(t)TN[sl]=t.textContent});
+var rc=document.getElementById('recent');
+if(rc){var RT=window.recentTools().filter(function(sl){return TN[sl]}).slice(0,4);if(RT.length){var h='<p class="small gr" style="margin-bottom:10px">Recently used</p><div class="flt">';RT.forEach(function(sl){h+='<a class="ch" href="/'+sl+'.html">'+TN[sl]+'</a>'});rc.innerHTML=h+'</div>'}}
+document.querySelectorAll('a.tool,a.tcard').forEach(function(a){a.addEventListener('click',function(){try{var sl=a.getAttribute('href').replace(/^\/|\.html$/g,'');var r=JSON.parse(localStorage.getItem('fc-recent-tools')||'[]').filter(function(x){return (x&&x.slug)!==sl&&x!==sl});r.unshift({slug:sl,at:Date.now()});localStorage.setItem('fc-recent-tools',JSON.stringify(r.slice(0,15)))}catch(e){}})});
+/* install Forecut Studio */
+var ib=document.getElementById('instStudio'),bip=null;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();bip=e});
+if(ib){ib.addEventListener('click',function(){var m=document.getElementById('instMsg');if(bip){bip.prompt();bip.userChoice.then(function(){bip=null})}else{m.hidden=false;m.textContent=/iPhone|iPad|Mac/.test(navigator.userAgent)?'In Safari, tap Share, then Add to Home Screen (on a Mac: File, Add to Dock).':'In Chrome or Edge, open the browser menu and choose Install Forecut Studio. If it is already installed, open it from your apps.'}})}
 /* greeting + detail of the day + continue reading */
 var g=document.getElementById('greet');if(g){var hr=new Date().getHours();g.textContent=(hr<12?'Good morning.':hr<17?'Good afternoon.':'Good evening.')}
 var P=window.FC_DOTD;if(P&&P.length){var d=new Date(),i=Math.floor((Date.UTC(d.getFullYear(),d.getMonth(),d.getDate()))/864e5)%P.length,x=P[i];
@@ -30,7 +35,7 @@ var RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches
 var H=document.getElementById('hero');
 if(H&&window.FC_HERO){var S=H.querySelectorAll('.hs'),D=window.FC_HERO,i=0,t=null,card=H.querySelector('.hcard'),pb=document.getElementById('hpause');
  function show(n){S[i].classList.remove('on');i=n%S.length;S[i].classList.add('on');var d=D[i];card.classList.remove('in');void card.offsetWidth;
-  document.getElementById('hl').textContent=d.l;document.getElementById('hn').textContent=d.n;document.getElementById('hc').style.background=d.c;document.getElementById('hcn').textContent=d.cn;card.classList.add('in')}
+  document.getElementById('hl').textContent=d.l;document.getElementById('hn').textContent=d.n;document.getElementById('hk').textContent=d.k+', '+d.a.toLowerCase();document.getElementById('hnote').textContent=d.note;document.getElementById('hnx').textContent=d.nx;card.classList.add('in')}
  function play(){t=setInterval(function(){show(i+1)},6000);H.classList.add('run')}
  function stop(){clearInterval(t);t=null;H.classList.remove('run')}
  if(!RM&&S.length>1){play();card.classList.add('in')}else{pb.hidden=true}
@@ -61,12 +66,19 @@ gate(!document.documentElement.classList.contains('fc-in')||location.hash==='#pr
 (function wait(n){if(window.FCAuth&&FCAuth.onChange){FCAuth.onChange(setUser)}else if(n<80)setTimeout(function(){wait(n+1)},100)})(0);
 document.addEventListener('click',function(e){var a=e.target.closest('[data-pdf]');if(a&&!document.documentElement.classList.contains('fc-in')){e.preventDefault();location.href='/account.html#signup'}});
 /* lifecycle table: fill in when it comes into view */
-var lcs=document.querySelectorAll('.lct,.cdev,.tdev');
+var lcs=document.querySelectorAll('.lct,.cdev,.tdev,.sboard,.chg');
+/* what we do: slow cross-fade between pictures */
+document.querySelectorAll('.wim.fade').forEach(function(w,n){var f=w.querySelectorAll('.wf');if(f.length<2||RM)return;var i=0;setTimeout(function(){setInterval(function(){f[i].classList.remove('on');i=(i+1)%f.length;f[i].classList.add('on')},5200)},n*1700)});
+/* marquee rows: repeat the items so the loop is seamless, pause on hover or focus */
+document.querySelectorAll('.marq .mtrack').forEach(function(t){if(RM){t.parentNode.classList.add('still');return}var kids=[].slice.call(t.children);kids.forEach(function(k){var c=k.cloneNode(true);c.setAttribute('aria-hidden','true');c.tabIndex=-1;t.appendChild(c)});t.style.setProperty('--dur',(kids.length*4.5)+'s')});
+/* rising now: season tabs */
+document.querySelectorAll('.rtabs').forEach(function(tb){tb.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;tb.querySelectorAll('button').forEach(function(x){var on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-selected',on);document.getElementById(x.dataset.p).classList.toggle('hide',!on)})})});
 if(lcs.length){if(RM||!('IntersectionObserver' in window)){lcs.forEach(function(t){t.classList.add('vis')})}else{var lio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');lio.unobserve(e.target)}})},{threshold:.2});lcs.forEach(function(t){lio.observe(t)})}}
 /* Home: saved details and tools you used */
 var sv=document.getElementById('saved');
 if(sv){try{var L=JSON.parse(localStorage.getItem('fc-saved')||'[]');if(L.length){sv.innerHTML=L.slice(0,6).map(function(x){var n=document.createElement('i');n.textContent=x.n||x.name||'';return '<a href="'+(x.u||x.page||'/forecasts.html')+'">'+(x.p?'<span class="sim"><img src="/img/'+x.p+'.webp" alt=""></span>':'<span class="sim"></span>')+'<span><b>'+n.innerHTML+'</b><span class="small gr">'+(x.s||x.season||'')+'</span></span></a>'}).join('')+(L.length>6?'<a class="lk" href="/account.html">See all</a>':'')}}catch(e){}}
 var mt=document.getElementById('mytools');
+if(mt&&window.FC_TOOLS){var RT2=window.recentTools().filter(function(sl){return FC_TOOLS[sl]}).slice(0,4);if(RT2.length){mt.innerHTML=RT2.map(function(sl){return '<a href="/'+sl+'.html"><b>'+FC_TOOLS[sl][0]+'</b><span class="small gr">'+FC_TOOLS[sl][1]+'</span></a>'}).join('')}}
 if(mt){try{var R=JSON.parse(localStorage.getItem('fc-recent-tools')||'[]');if(R.length){mt.innerHTML=R.slice(0,4).map(function(x){var n=document.createElement('i');n.textContent=x.t;return '<a href="'+x.u+'"><b>'+n.innerHTML+'</b><span class="small gr">Used recently</span></a>'}).join('')}}catch(e){}}
 /* forecast finder */
 var ff=document.getElementById('fform');
