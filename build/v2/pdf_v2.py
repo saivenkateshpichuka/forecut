@@ -162,6 +162,33 @@ def build(s, topic):
                 cells += f'<div class="it">{im}<h4>{E(it["name"])}</h4><p>{E(k.replace("|", ", "))}, {E(it["area"].lower())}</p><p style="color:#000">{E(it["note"])}</p><span class="st s-{st}">{V.STAGE[st][0]}</span>{nl}</div>'
             d.page(f'<h2 class="d" style="font-size:20pt">{E(heading)}</h2><div class="cols c4" style="gap:5mm 6mm">{cells}</div>')
 
+    def colour_cf(d, depts=True):
+        cf = V.CF[s]
+        def ch(c):
+            fgc = '#000' if V.lum(c['hex']) > .55 else '#fff'
+            return (f'<div><div class="sw" style="background:{c["hex"]};outline:.2mm solid #e4e2de;height:24mm;color:{fgc};font-size:7.5pt;padding:2mm">{V.ROLE_NAME.get(c.get("role"), "")}</div>'
+                    f'<p style="font-weight:500;margin-top:1.5mm">{E(c["name"])}</p><p class="sm gr">Pantone {E(c["tcx"])} {E(c["pantone"])}<br>{c["hex"].upper()}</p>' + (f'<p class="sm" style="margin-top:1mm">{E(c["note"])}</p>' if c.get('note') else '') + '</div>')
+        d.page(f'<h2 class="d">Key colours</h2><p class="key" style="margin:-2mm 0 3mm">{E(cf["headline"])}</p><p class="sm gr" style="margin-bottom:5mm">{E(cf["status"])}. Each colour is a real Pantone TCX colour; confirm with a physical Pantone book before dyeing.</p>'
+               '<div class="cols" style="grid-template-columns:repeat(5,1fr);gap:4mm 5mm">' + ''.join(ch(c) for c in cf['key']) + '</div>')
+        sts = cf['stories']
+        for i in range(0, len(sts), 2):
+            cells = ''
+            for st in sts[i:i + 2]:
+                ws = [34, 24, 18, 14, 10][:len(st['colours'])]
+                cells += ('<div><div style="display:flex;height:40mm;gap:.6mm">' + ''.join(f'<i style="background:{c["hex"]};flex:{w}"></i>' for c, w in zip(st['colours'], ws)) + '</div>'
+                          f'<h3 style="font-size:16pt;margin-top:4mm;font-weight:300;font-stretch:125%">{E(st["title"])}</h3><p>{E(st["text"])}</p><p class="sm gr" style="margin-top:2mm">Use for: {E(st["use"])}</p>'
+                          '<p class="sm" style="margin-top:2mm">' + '<br>'.join(f'{E(c["name"])}: Pantone {E(c["tcx"])}, {c["hex"].upper()}' for c in st['colours']) + '</p></div>')
+            d.page(f'<h2 class="d">Colour stories</h2><div class="cols c2" style="gap:12mm">{cells}</div>')
+        if depts:
+            cells = ''
+            for k, lbl in V.CDEPTS:
+                dd = cf['dept'][k]
+                cells += ('<div class="box"><h3>' + lbl + '</h3><div style="display:flex;height:16mm;gap:.6mm;margin:2mm 0">' + ''.join(f'<i style="background:{c["hex"]};flex:1"></i>' for c in dd['colours']) + '</div>'
+                          f'<p class="sm">{E(dd["text"])}</p><p class="sm gr" style="margin-top:2mm">' + '<br>'.join(f'{E(c["name"])}: {E(c["tcx"])}, {c["hex"].upper()}' for c in dd['colours']) + '</p></div>')
+            d.page(f'<h2 class="d">By department</h2><div class="cols c4">{cells}</div>')
+        src = cf['sources']
+        d.page(f'<h2 class="d">How we built it</h2><p style="max-width:200mm">{E(cf["built"])}</p>' + ('<h3 style="margin-top:6mm">Public sources</h3><ul class="sm">' + ''.join(f'<li>{E(t)}: {E(u)}</li>' for t, u in src) + '</ul>' if src else '<p class="gr" style="margin-top:4mm">No fair or runway has shown this season yet. This is a Forecut projection and will be updated.</p>'))
+
     def strategy(d):
         cols = [('Build depth', 's-r', R), ('Test small', 's-e', Em), ('Sell through', 's-p', Pk), ('Exit or rework', 's-f', Fd)]
         d.page('<h2 class="d">Range strategy</h2><div class="cols c4">' + ''.join(
@@ -223,16 +250,19 @@ def build(s, topic):
             for h, g in stage_groups:
                 if g and V.TOPIC[topic][3]:
                     items_pages(d, g, h)
-            colour(d); strategy(d); pricing(d); markets(d)
+            (colour_cf(d) if topic == 'colour' else colour(d)); strategy(d); pricing(d); markets(d)
         elif pk == 'inspiration':
             cover(d, ['Inspiration', 'Moodboard', 'Colour', 'Key pieces'])
-            themes_pages(d); mood(d); colour(d)
+            themes_pages(d); mood(d); (colour_cf(d) if topic == 'colour' else colour(d))
             kp = [x for x in R + Em + Pk if V.photo(x[1]['name'], s)]
             if kp:
                 items_pages(d, kp[:16], 'Key pieces', with_next=False)
         else:
             cover(d, ['Overview', 'Range strategy', 'How it developed', 'Actions and timing', 'Pricing and cost', 'Margin checklist', 'Markets', 'India'])
-            overview(d); strategy(d); development(d); pricing(d); markets(d)
+            overview(d); strategy(d); development(d)
+            if topic == 'colour':
+                colour_cf(d)
+            pricing(d); markets(d)
         back(d)
         docs[pk] = d
     return docs

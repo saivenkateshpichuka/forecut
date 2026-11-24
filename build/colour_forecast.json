@@ -1,0 +1,2325 @@
+{
+ "aw26": {
+  "short": "Browns and near-blacks, with plum and hot accents",
+  "status": "Confirmed by the runways",
+  "headline": "Browns and near-blacks take over from black, lit by plum, moss and hot accents of tomato red, cobalt and mustard.",
+  "built": "Read from the autumn/winter 2026 shows (January menswear, February and March womenswear) and in-store sell-in. Chocolate was the second most-worn colour on the womenswear runways after black, charcoal and pine green grew the most, and plum, moss, tomato red and mustard were the colours reviewers singled out.",
+  "key": [
+   {
+    "name": "Chocolate",
+    "hex": "#54392d",
+    "tcx": "19-1218 TCX",
+    "pantone": "Potting Soil",
+    "role": "core",
+    "note": "The new dark neutral. Coats, tailoring, leather and suede."
+   },
+   {
+    "name": "Charcoal",
+    "hex": "#434447",
+    "tcx": "19-0201 TCX",
+    "pantone": "Asphalt",
+    "role": "core",
+    "note": "Softer than black for tailoring and knits; the fastest-growing dark on the runways."
+   },
+   {
+    "name": "Midnight",
+    "hex": "#282d3c",
+    "tcx": "19-3923 TCX",
+    "pantone": "Navy Blazer",
+    "role": "core",
+    "note": "A near-black blue for coats and evening."
+   },
+   {
+    "name": "Cloud white",
+    "hex": "#efefe8",
+    "tcx": "11-4202 TCX",
+    "pantone": "Star White",
+    "role": "core",
+    "note": "Winter whites: knits, shirting and the light partner to every dark."
+   },
+   {
+    "name": "Plum",
+    "hex": "#51304e",
+    "tcx": "19-3218 TCX",
+    "pantone": "Plum Purple",
+    "role": "seasonal",
+    "note": "The season's alternative to black and burgundy, in velvet, satin and knit."
+   },
+   {
+    "name": "Moss",
+    "hex": "#65663f",
+    "tcx": "18-0220 TCX",
+    "pantone": "Mayfly",
+    "role": "seasonal",
+    "note": "Olive-to-moss greens in tailoring, outerwear and knits."
+   },
+   {
+    "name": "Tomato red",
+    "hex": "#ca3422",
+    "tcx": "18-1564 TCX",
+    "pantone": "Poinciana",
+    "role": "accent",
+    "note": "Leather coats, single statement pieces and shoes."
+   },
+   {
+    "name": "Mustard",
+    "hex": "#cda323",
+    "tcx": "15-0751 TCX",
+    "pantone": "Lemon Curry",
+    "role": "accent",
+    "note": "A warm yellow for knits and accessories."
+   },
+   {
+    "name": "Cobalt",
+    "hex": "#3850a0",
+    "tcx": "18-3949 TCX",
+    "pantone": "Dazzling Blue",
+    "role": "accent",
+    "note": "Saturated blue for outerwear and shoes."
+   },
+   {
+    "name": "Bubblegum",
+    "hex": "#f0a1bf",
+    "tcx": "14-2311 TCX",
+    "pantone": "Prism Pink",
+    "role": "accent",
+    "note": "Soft pink tailoring and knits against browns."
+   }
+  ],
+  "stories": [
+   {
+    "title": "Dark matter",
+    "text": "Browns, charcoal and midnight replace head-to-toe black. Tone on tone, with texture doing the work: brushed wool, suede, velvet.",
+    "colours": [
+     {
+      "name": "Chocolate",
+      "hex": "#54392d",
+      "tcx": "19-1218 TCX",
+      "pantone": "Potting Soil",
+      "role": "core",
+      "note": "The new dark neutral. Coats, tailoring, leather and suede."
+     },
+     {
+      "name": "Charcoal",
+      "hex": "#434447",
+      "tcx": "19-0201 TCX",
+      "pantone": "Asphalt",
+      "role": "core",
+      "note": "Softer than black for tailoring and knits; the fastest-growing dark on the runways."
+     },
+     {
+      "name": "Midnight",
+      "hex": "#282d3c",
+      "tcx": "19-3923 TCX",
+      "pantone": "Navy Blazer",
+      "role": "core",
+      "note": "A near-black blue for coats and evening."
+     },
+     {
+      "name": "Cloud white",
+      "hex": "#efefe8",
+      "tcx": "11-4202 TCX",
+      "pantone": "Star White",
+      "role": "core",
+      "note": "Winter whites: knits, shirting and the light partner to every dark."
+     }
+    ],
+    "use": "Coats, tailoring, knitwear, leather goods"
+   },
+   {
+    "title": "Old masters",
+    "text": "Rich, painterly plum and moss with mustard as the light. Grown-up colour for velvet, satin and heavy knits.",
+    "colours": [
+     {
+      "name": "Plum",
+      "hex": "#51304e",
+      "tcx": "19-3218 TCX",
+      "pantone": "Plum Purple",
+      "role": "seasonal",
+      "note": "The season's alternative to black and burgundy, in velvet, satin and knit."
+     },
+     {
+      "name": "Moss",
+      "hex": "#65663f",
+      "tcx": "18-0220 TCX",
+      "pantone": "Mayfly",
+      "role": "seasonal",
+      "note": "Olive-to-moss greens in tailoring, outerwear and knits."
+     },
+     {
+      "name": "Mustard",
+      "hex": "#cda323",
+      "tcx": "15-0751 TCX",
+      "pantone": "Lemon Curry",
+      "role": "accent",
+      "note": "A warm yellow for knits and accessories."
+     },
+     {
+      "name": "Chocolate",
+      "hex": "#54392d",
+      "tcx": "19-1218 TCX",
+      "pantone": "Potting Soil",
+      "role": "core",
+      "note": "The new dark neutral. Coats, tailoring, leather and suede."
+     }
+    ],
+    "use": "Eveningwear, knits, tailoring"
+   },
+   {
+    "title": "Hot spots",
+    "text": "Single saturated pieces against dark neutrals: a tomato-red leather coat, a cobalt shoe, a bubblegum blazer.",
+    "colours": [
+     {
+      "name": "Tomato red",
+      "hex": "#ca3422",
+      "tcx": "18-1564 TCX",
+      "pantone": "Poinciana",
+      "role": "accent",
+      "note": "Leather coats, single statement pieces and shoes."
+     },
+     {
+      "name": "Cobalt",
+      "hex": "#3850a0",
+      "tcx": "18-3949 TCX",
+      "pantone": "Dazzling Blue",
+      "role": "accent",
+      "note": "Saturated blue for outerwear and shoes."
+     },
+     {
+      "name": "Bubblegum",
+      "hex": "#f0a1bf",
+      "tcx": "14-2311 TCX",
+      "pantone": "Prism Pink",
+      "role": "accent",
+      "note": "Soft pink tailoring and knits against browns."
+     },
+     {
+      "name": "Charcoal",
+      "hex": "#434447",
+      "tcx": "19-0201 TCX",
+      "pantone": "Asphalt",
+      "role": "core",
+      "note": "Softer than black for tailoring and knits; the fastest-growing dark on the runways."
+     }
+    ],
+    "use": "Outerwear, shoes, bags, statement pieces"
+   }
+  ],
+  "dept": {
+   "womenswear": {
+    "title": "Womenswear",
+    "text": "Chocolate and plum lead, with bubblegum, tomato red and butter-warm mustard as the colour.",
+    "colours": [
+     {
+      "name": "Chocolate",
+      "hex": "#54392d",
+      "tcx": "19-1218 TCX",
+      "pantone": "Potting Soil",
+      "role": "core",
+      "note": "The new dark neutral. Coats, tailoring, leather and suede."
+     },
+     {
+      "name": "Plum",
+      "hex": "#51304e",
+      "tcx": "19-3218 TCX",
+      "pantone": "Plum Purple",
+      "role": "seasonal",
+      "note": "The season's alternative to black and burgundy, in velvet, satin and knit."
+     },
+     {
+      "name": "Bubblegum",
+      "hex": "#f0a1bf",
+      "tcx": "14-2311 TCX",
+      "pantone": "Prism Pink",
+      "role": "accent",
+      "note": "Soft pink tailoring and knits against browns."
+     },
+     {
+      "name": "Tomato red",
+      "hex": "#ca3422",
+      "tcx": "18-1564 TCX",
+      "pantone": "Poinciana",
+      "role": "accent",
+      "note": "Leather coats, single statement pieces and shoes."
+     },
+     {
+      "name": "Mustard",
+      "hex": "#cda323",
+      "tcx": "15-0751 TCX",
+      "pantone": "Lemon Curry",
+      "role": "accent",
+      "note": "A warm yellow for knits and accessories."
+     },
+     {
+      "name": "Cloud white",
+      "hex": "#efefe8",
+      "tcx": "11-4202 TCX",
+      "pantone": "Star White",
+      "role": "core",
+      "note": "Winter whites: knits, shirting and the light partner to every dark."
+     }
+    ]
+   },
+   "menswear": {
+    "title": "Menswear",
+    "text": "Charcoal, midnight and chocolate tailoring, moss for outerwear, and a single crimson or cobalt piece.",
+    "colours": [
+     {
+      "name": "Charcoal",
+      "hex": "#434447",
+      "tcx": "19-0201 TCX",
+      "pantone": "Asphalt",
+      "role": "core",
+      "note": "Softer than black for tailoring and knits; the fastest-growing dark on the runways."
+     },
+     {
+      "name": "Midnight",
+      "hex": "#282d3c",
+      "tcx": "19-3923 TCX",
+      "pantone": "Navy Blazer",
+      "role": "core",
+      "note": "A near-black blue for coats and evening."
+     },
+     {
+      "name": "Chocolate",
+      "hex": "#54392d",
+      "tcx": "19-1218 TCX",
+      "pantone": "Potting Soil",
+      "role": "core",
+      "note": "The new dark neutral. Coats, tailoring, leather and suede."
+     },
+     {
+      "name": "Moss",
+      "hex": "#65663f",
+      "tcx": "18-0220 TCX",
+      "pantone": "Mayfly",
+      "role": "seasonal",
+      "note": "Olive-to-moss greens in tailoring, outerwear and knits."
+     },
+     {
+      "name": "Crimson",
+      "hex": "#a11729",
+      "tcx": "19-1758 TCX",
+      "pantone": "Haute Red",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Cobalt",
+      "hex": "#3850a0",
+      "tcx": "18-3949 TCX",
+      "pantone": "Dazzling Blue",
+      "role": "accent",
+      "note": "Saturated blue for outerwear and shoes."
+     }
+    ]
+   },
+   "kidswear": {
+    "title": "Kidswear",
+    "text": "Checks and colour-blocking in deep navy and cherry, warmed with mustard, moss and a soft mauve.",
+    "colours": [
+     {
+      "name": "Navy",
+      "hex": "#29304e",
+      "tcx": "19-3933 TCX",
+      "pantone": "Medieval Blue",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Cherry",
+      "hex": "#b91228",
+      "tcx": "18-1659 TCX",
+      "pantone": "Goji Berry",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Mustard",
+      "hex": "#cda323",
+      "tcx": "15-0751 TCX",
+      "pantone": "Lemon Curry",
+      "role": "accent",
+      "note": "A warm yellow for knits and accessories."
+     },
+     {
+      "name": "Moss",
+      "hex": "#65663f",
+      "tcx": "18-0220 TCX",
+      "pantone": "Mayfly",
+      "role": "seasonal",
+      "note": "Olive-to-moss greens in tailoring, outerwear and knits."
+     },
+     {
+      "name": "Mauve",
+      "hex": "#b18eaa",
+      "tcx": "16-3310 TCX",
+      "pantone": "Lavender Herb",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Oatmeal",
+      "hex": "#daccb4",
+      "tcx": "13-1008 TCX",
+      "pantone": "Bleached Sand",
+      "role": "",
+      "note": ""
+     }
+    ]
+   },
+   "footwear": {
+    "title": "Footwear",
+    "text": "Brown suede is the shoe of the season, with bordeaux the strongest accent and cobalt for the brave.",
+    "colours": [
+     {
+      "name": "Brown suede",
+      "hex": "#54392d",
+      "tcx": "19-1218 TCX",
+      "pantone": "Potting Soil",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Bordeaux",
+      "hex": "#64242e",
+      "tcx": "19-1724 TCX",
+      "pantone": "Cabernet",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Butterscotch",
+      "hex": "#be8a4a",
+      "tcx": "17-1040 TCX",
+      "pantone": "Spruce Yellow",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Anthracite",
+      "hex": "#39373b",
+      "tcx": "19-4205 TCX",
+      "pantone": "Phantom",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Cobalt",
+      "hex": "#3850a0",
+      "tcx": "18-3949 TCX",
+      "pantone": "Dazzling Blue",
+      "role": "accent",
+      "note": "Saturated blue for outerwear and shoes."
+     },
+     {
+      "name": "Tomato red",
+      "hex": "#ca3422",
+      "tcx": "18-1564 TCX",
+      "pantone": "Poinciana",
+      "role": "accent",
+      "note": "Leather coats, single statement pieces and shoes."
+     }
+    ]
+   }
+  },
+  "sources": [
+   [
+    "Runway colour share, Fall 2026 womenswear (tfashion)",
+    "https://tfashion.ai/runway/fw26/colors"
+   ],
+   [
+    "Marie Claire: Fall 2026 colour trends",
+    "https://www.marieclaire.com/fashion/fall-2026-color-trends/"
+   ],
+   [
+    "Who What Wear: autumn 2026 colour trends",
+    "https://www.whowhatwear.com/fashion/fall/autumn-fashion-colour-trends-2026"
+   ],
+   [
+    "Who What Wear: autumn 2026 shoe colours",
+    "https://www.whowhatwear.com/fashion/shoes/autumn-shoe-colour-trends-2026"
+   ],
+   [
+    "Pitti Bimbo 102, AW26 kidswear",
+    "https://bimbo.pittimmagine.com/it/news/pitti-bimbo-102-a-top-edition"
+   ]
+  ]
+ },
+ "ss27": {
+  "short": "Purple, true red and Klein blue over sun-faded neutrals",
+  "status": "Confirmed by the runways",
+  "headline": "Colour comes back in full: purple and lilac, head-to-toe red and Klein blue over sun-faded whites, sand and tobacco.",
+  "built": "Read from the spring/summer 2027 shows (June menswear and Pitti Uomo, September womenswear) and the Première Vision February fabric fair. White rose the most on the runways; purple was the most reported colour in New York; red returned head to toe; menswear moved to butter yellow, lavender, pink and ice blue over earth tones.",
+  "key": [
+   {
+    "name": "Optic white",
+    "hex": "#f2f0eb",
+    "tcx": "11-0602 TCX",
+    "pantone": "Snow White",
+    "role": "core",
+    "note": "Crisp white for shirting, linen and tailoring; the biggest riser on the runways."
+   },
+   {
+    "name": "Sand",
+    "hex": "#dac7ab",
+    "tcx": "13-1009 TCX",
+    "pantone": "Biscotti",
+    "role": "core",
+    "note": "Sun-faded neutral for linen suits, knits and outerwear."
+   },
+   {
+    "name": "Tobacco",
+    "hex": "#684832",
+    "tcx": "18-1028 TCX",
+    "pantone": "Emperador",
+    "role": "core",
+    "note": "Warm brown that replaces black in summer tailoring and leather."
+   },
+   {
+    "name": "Midnight",
+    "hex": "#29304e",
+    "tcx": "19-3933 TCX",
+    "pantone": "Medieval Blue",
+    "role": "core",
+    "note": "Deep blue for tailoring and denim."
+   },
+   {
+    "name": "Lilac",
+    "hex": "#b3a0c9",
+    "tcx": "15-3720 TCX",
+    "pantone": "Lilac Breeze",
+    "role": "seasonal",
+    "note": "Soft purple for dresses, knits and relaxed workwear."
+   },
+   {
+    "name": "Violet",
+    "hex": "#603f83",
+    "tcx": "19-3642 TCX",
+    "pantone": "Royal Purple",
+    "role": "seasonal",
+    "note": "Saturated purple for statement pieces, leather and evening."
+   },
+   {
+    "name": "True red",
+    "hex": "#c71f2d",
+    "tcx": "18-1763 TCX",
+    "pantone": "High Risk Red",
+    "role": "seasonal",
+    "note": "Worn head to toe, not just as a pop."
+   },
+   {
+    "name": "Butter",
+    "hex": "#f6e199",
+    "tcx": "12-0711 TCX",
+    "pantone": "Lemon Meringue",
+    "role": "seasonal",
+    "note": "Soft yellow for knits, shirting and menswear polos."
+   },
+   {
+    "name": "Klein blue",
+    "hex": "#3850a0",
+    "tcx": "18-3949 TCX",
+    "pantone": "Dazzling Blue",
+    "role": "accent",
+    "note": "Intense ultramarine for single statement pieces."
+   },
+   {
+    "name": "Grass green",
+    "hex": "#75a14f",
+    "tcx": "16-0237 TCX",
+    "pantone": "Foliage",
+    "role": "accent",
+    "note": "A living green for knits, prints and swim."
+   }
+  ],
+  "stories": [
+   {
+    "title": "Sun-faded",
+    "text": "Whites, sand, tobacco and ice blue, as if bleached by summer. Linen, cotton and soft tailoring.",
+    "colours": [
+     {
+      "name": "Optic white",
+      "hex": "#f2f0eb",
+      "tcx": "11-0602 TCX",
+      "pantone": "Snow White",
+      "role": "core",
+      "note": "Crisp white for shirting, linen and tailoring; the biggest riser on the runways."
+     },
+     {
+      "name": "Sand",
+      "hex": "#dac7ab",
+      "tcx": "13-1009 TCX",
+      "pantone": "Biscotti",
+      "role": "core",
+      "note": "Sun-faded neutral for linen suits, knits and outerwear."
+     },
+     {
+      "name": "Tobacco",
+      "hex": "#684832",
+      "tcx": "18-1028 TCX",
+      "pantone": "Emperador",
+      "role": "core",
+      "note": "Warm brown that replaces black in summer tailoring and leather."
+     },
+     {
+      "name": "Ice blue",
+      "hex": "#cbdcdf",
+      "tcx": "12-4805 TCX",
+      "pantone": "Wan Blue",
+      "role": "",
+      "note": ""
+     }
+    ],
+    "use": "Tailoring, shirting, linen, menswear"
+   },
+   {
+    "title": "Purple reign",
+    "text": "From lilac to violet, the season's most talked-about colour, paired with butter for an unexpected summer mix.",
+    "colours": [
+     {
+      "name": "Lilac",
+      "hex": "#b3a0c9",
+      "tcx": "15-3720 TCX",
+      "pantone": "Lilac Breeze",
+      "role": "seasonal",
+      "note": "Soft purple for dresses, knits and relaxed workwear."
+     },
+     {
+      "name": "Violet",
+      "hex": "#603f83",
+      "tcx": "19-3642 TCX",
+      "pantone": "Royal Purple",
+      "role": "seasonal",
+      "note": "Saturated purple for statement pieces, leather and evening."
+     },
+     {
+      "name": "Butter",
+      "hex": "#f6e199",
+      "tcx": "12-0711 TCX",
+      "pantone": "Lemon Meringue",
+      "role": "seasonal",
+      "note": "Soft yellow for knits, shirting and menswear polos."
+     },
+     {
+      "name": "Optic white",
+      "hex": "#f2f0eb",
+      "tcx": "11-0602 TCX",
+      "pantone": "Snow White",
+      "role": "core",
+      "note": "Crisp white for shirting, linen and tailoring; the biggest riser on the runways."
+     }
+    ],
+    "use": "Dresses, knits, leather, evening"
+   },
+   {
+    "title": "Full colour",
+    "text": "Red, Klein blue and lemon worn head to toe. Primary colour without prints.",
+    "colours": [
+     {
+      "name": "True red",
+      "hex": "#c71f2d",
+      "tcx": "18-1763 TCX",
+      "pantone": "High Risk Red",
+      "role": "seasonal",
+      "note": "Worn head to toe, not just as a pop."
+     },
+     {
+      "name": "Klein blue",
+      "hex": "#3850a0",
+      "tcx": "18-3949 TCX",
+      "pantone": "Dazzling Blue",
+      "role": "accent",
+      "note": "Intense ultramarine for single statement pieces."
+     },
+     {
+      "name": "Lemon",
+      "hex": "#eddd59",
+      "tcx": "12-0642 TCX",
+      "pantone": "Aurora",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Midnight",
+      "hex": "#29304e",
+      "tcx": "19-3933 TCX",
+      "pantone": "Medieval Blue",
+      "role": "core",
+      "note": "Deep blue for tailoring and denim."
+     }
+    ],
+    "use": "Statement dresses, outerwear, shoes"
+   },
+   {
+    "title": "Living green",
+    "text": "Grass green and teal from nature and the pool: summer knits, swim and prints.",
+    "colours": [
+     {
+      "name": "Grass green",
+      "hex": "#75a14f",
+      "tcx": "16-0237 TCX",
+      "pantone": "Foliage",
+      "role": "accent",
+      "note": "A living green for knits, prints and swim."
+     },
+     {
+      "name": "Teal",
+      "hex": "#358082",
+      "tcx": "17-5117 TCX",
+      "pantone": "Green Blue Slate",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Sand",
+      "hex": "#dac7ab",
+      "tcx": "13-1009 TCX",
+      "pantone": "Biscotti",
+      "role": "core",
+      "note": "Sun-faded neutral for linen suits, knits and outerwear."
+     },
+     {
+      "name": "Butter",
+      "hex": "#f6e199",
+      "tcx": "12-0711 TCX",
+      "pantone": "Lemon Meringue",
+      "role": "seasonal",
+      "note": "Soft yellow for knits, shirting and menswear polos."
+     }
+    ],
+    "use": "Swim, knits, prints, kidswear"
+   }
+  ],
+  "dept": {
+   "womenswear": {
+    "title": "Womenswear",
+    "text": "Lilac and violet lead, with true red and Klein blue for statement pieces and butter for softness.",
+    "colours": [
+     {
+      "name": "Lilac",
+      "hex": "#b3a0c9",
+      "tcx": "15-3720 TCX",
+      "pantone": "Lilac Breeze",
+      "role": "seasonal",
+      "note": "Soft purple for dresses, knits and relaxed workwear."
+     },
+     {
+      "name": "Violet",
+      "hex": "#603f83",
+      "tcx": "19-3642 TCX",
+      "pantone": "Royal Purple",
+      "role": "seasonal",
+      "note": "Saturated purple for statement pieces, leather and evening."
+     },
+     {
+      "name": "True red",
+      "hex": "#c71f2d",
+      "tcx": "18-1763 TCX",
+      "pantone": "High Risk Red",
+      "role": "seasonal",
+      "note": "Worn head to toe, not just as a pop."
+     },
+     {
+      "name": "Klein blue",
+      "hex": "#3850a0",
+      "tcx": "18-3949 TCX",
+      "pantone": "Dazzling Blue",
+      "role": "accent",
+      "note": "Intense ultramarine for single statement pieces."
+     },
+     {
+      "name": "Butter",
+      "hex": "#f6e199",
+      "tcx": "12-0711 TCX",
+      "pantone": "Lemon Meringue",
+      "role": "seasonal",
+      "note": "Soft yellow for knits, shirting and menswear polos."
+     },
+     {
+      "name": "Optic white",
+      "hex": "#f2f0eb",
+      "tcx": "11-0602 TCX",
+      "pantone": "Snow White",
+      "role": "core",
+      "note": "Crisp white for shirting, linen and tailoring; the biggest riser on the runways."
+     }
+    ]
+   },
+   "menswear": {
+    "title": "Menswear",
+    "text": "Sun-faded earth tones and linen, ice blue as the new shirt colour, with butter, lavender, salmon pink and red pops.",
+    "colours": [
+     {
+      "name": "Sand",
+      "hex": "#dac7ab",
+      "tcx": "13-1009 TCX",
+      "pantone": "Biscotti",
+      "role": "core",
+      "note": "Sun-faded neutral for linen suits, knits and outerwear."
+     },
+     {
+      "name": "Tobacco",
+      "hex": "#684832",
+      "tcx": "18-1028 TCX",
+      "pantone": "Emperador",
+      "role": "core",
+      "note": "Warm brown that replaces black in summer tailoring and leather."
+     },
+     {
+      "name": "Ice blue",
+      "hex": "#cbdcdf",
+      "tcx": "12-4805 TCX",
+      "pantone": "Wan Blue",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Butter",
+      "hex": "#f6e199",
+      "tcx": "12-0711 TCX",
+      "pantone": "Lemon Meringue",
+      "role": "seasonal",
+      "note": "Soft yellow for knits, shirting and menswear polos."
+     },
+     {
+      "name": "Salmon pink",
+      "hex": "#e29a86",
+      "tcx": "15-1523 TCX",
+      "pantone": "Shrimp",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Rust",
+      "hex": "#9f5130",
+      "tcx": "18-1250 TCX",
+      "pantone": "Bombay Brown",
+      "role": "",
+      "note": ""
+     }
+    ]
+   },
+   "kidswear": {
+    "title": "Kidswear",
+    "text": "Pool brights over sandy neutrals: lemon, aqua, grass green and coral, with lavender for the softer side.",
+    "colours": [
+     {
+      "name": "Lemon",
+      "hex": "#eddd59",
+      "tcx": "12-0642 TCX",
+      "pantone": "Aurora",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Aqua",
+      "hex": "#58c9d4",
+      "tcx": "14-4816 TCX",
+      "pantone": "Blue Radiance",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Grass green",
+      "hex": "#75a14f",
+      "tcx": "16-0237 TCX",
+      "pantone": "Foliage",
+      "role": "accent",
+      "note": "A living green for knits, prints and swim."
+     },
+     {
+      "name": "Coral",
+      "hex": "#f6745f",
+      "tcx": "16-1541 TCX",
+      "pantone": "Camellia",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Lavender",
+      "hex": "#bdb0d0",
+      "tcx": "14-3812 TCX",
+      "pantone": "Pastel Lilac",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Sand",
+      "hex": "#dac7ab",
+      "tcx": "13-1009 TCX",
+      "pantone": "Biscotti",
+      "role": "core",
+      "note": "Sun-faded neutral for linen suits, knits and outerwear."
+     }
+    ]
+   },
+   "footwear": {
+    "title": "Footwear",
+    "text": "Sandy suedes and natural tones, sea and sky blues, lemon and green reptile effects, and red for heels.",
+    "colours": [
+     {
+      "name": "Sand suede",
+      "hex": "#ccb390",
+      "tcx": "14-1116 TCX",
+      "pantone": "Almond Buff",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Sea blue",
+      "hex": "#006ca9",
+      "tcx": "18-4250 TCX",
+      "pantone": "Indigo Bunting",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Sky blue",
+      "hex": "#a5c5d9",
+      "tcx": "14-4317 TCX",
+      "pantone": "Cool Blue",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Lemon",
+      "hex": "#eddd59",
+      "tcx": "12-0642 TCX",
+      "pantone": "Aurora",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Reptile green",
+      "hex": "#53713d",
+      "tcx": "18-0130 TCX",
+      "pantone": "Cactus",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "True red",
+      "hex": "#c71f2d",
+      "tcx": "18-1763 TCX",
+      "pantone": "High Risk Red",
+      "role": "seasonal",
+      "note": "Worn head to toe, not just as a pop."
+     }
+    ]
+   }
+  },
+  "sources": [
+   [
+    "Refinery29: NYFW spring/summer 2027 colour",
+    "https://www.refinery29.com/en-us/new-york-fashion-week-spring-summer-2027-color-trends"
+   ],
+   [
+    "Runway colour share, Spring 2027 (tfashion)",
+    "https://tfashion.ai/runway/ss27/colors"
+   ],
+   [
+    "The Impression: Spring 2027 colour forecast",
+    "https://theimpression.com/?p=12070953"
+   ],
+   [
+    "Première Vision: key colours SS27",
+    "https://www.premierevision.com/en/articles/2a0d1f83-bafa-f011-832e-000d3a43e2d8/key-colors-for-spring-summer-2027-meaningful-shades"
+   ],
+   [
+    "FashionUnited: Pitti Uomo 110",
+    "https://fashionunited.com/news/fairs/pitti-uomo-110-loud-beats-quiet-collections/2026061973088"
+   ],
+   [
+    "International Leather Maker: SS27 leather colours",
+    "https://internationalleathermaker.com/spring-summer-2027-sees-wearing-and-living-leather-trends/"
+   ]
+  ]
+ },
+ "aw27": {
+  "short": "Violet, plum and bordeaux replace black",
+  "status": "Trade-fair signals; runways in February and March 2027",
+  "headline": "Violet, plum and tannic bordeaux replace black, over neutrals that are no longer neutral: tinted off-blacks, mushroom beige and greyed blue.",
+  "built": "Read from the September 2026 fabric and leather fairs (Première Vision, Lineapelle, Milano Unica) and carried forward from the SS27 runways. The fairs put deep violet, plums, dusty pinks and mauves at the centre, with tinted off-blacks, greyish blues, sage and waxy ochre.",
+  "key": [
+   {
+    "name": "Tinted black",
+    "hex": "#2c2a33",
+    "tcx": "19-3713 TCX",
+    "pantone": "Deep Well",
+    "role": "core",
+    "note": "An off-black with a violet cast, instead of pure black."
+   },
+   {
+    "name": "Mushroom",
+    "hex": "#c7bba4",
+    "tcx": "13-1105 TCX",
+    "pantone": "Brown Rice",
+    "role": "core",
+    "note": "A living beige for knits, coats and leather."
+   },
+   {
+    "name": "Greyed blue",
+    "hex": "#66829a",
+    "tcx": "17-4020 TCX",
+    "pantone": "Blue Shadow",
+    "role": "core",
+    "note": "Grey turned blue: tailoring, denim, outerwear."
+   },
+   {
+    "name": "Copper khaki",
+    "hex": "#8a6f48",
+    "tcx": "17-0935 TCX",
+    "pantone": "Dull Gold",
+    "role": "core",
+    "note": "Khaki leaning to taupe and copper for utility and menswear."
+   },
+   {
+    "name": "Deep violet",
+    "hex": "#563474",
+    "tcx": "19-3638 TCX",
+    "pantone": "Tillandsia Purple",
+    "role": "seasonal",
+    "note": "The key colour of the season, from coats to knits."
+   },
+   {
+    "name": "Tannic bordeaux",
+    "hex": "#64242e",
+    "tcx": "19-1724 TCX",
+    "pantone": "Cabernet",
+    "role": "seasonal",
+    "note": "A deep red-brown alternative to black."
+   },
+   {
+    "name": "Dusty mauve",
+    "hex": "#b0879b",
+    "tcx": "16-2107 TCX",
+    "pantone": "Orchid Haze",
+    "role": "seasonal",
+    "note": "Soft, smoky pink-purple, now gender-neutral."
+   },
+   {
+    "name": "Waxy ochre",
+    "hex": "#c4962c",
+    "tcx": "16-0953 TCX",
+    "pantone": "Tawny Olive",
+    "role": "accent",
+    "note": "A painterly yellow-ochre as the light in dark ranges."
+   },
+   {
+    "name": "Sage",
+    "hex": "#a1ad92",
+    "tcx": "15-6414 TCX",
+    "pantone": "Reseda",
+    "role": "accent",
+    "note": "A light green replacing tinted greys."
+   },
+   {
+    "name": "Silicone pink",
+    "hex": "#e6b2b8",
+    "tcx": "14-1909 TCX",
+    "pantone": "Coral Blush",
+    "role": "accent",
+    "note": "A soft, slightly artificial pink for knits and accessories."
+   }
+  ],
+  "stories": [
+   {
+    "title": "Painted by time",
+    "text": "Plums, bordeaux and waxy ochre, softened as if by an old varnish. Velvet, brushed wool and patinated leather.",
+    "colours": [
+     {
+      "name": "Deep violet",
+      "hex": "#563474",
+      "tcx": "19-3638 TCX",
+      "pantone": "Tillandsia Purple",
+      "role": "seasonal",
+      "note": "The key colour of the season, from coats to knits."
+     },
+     {
+      "name": "Tannic bordeaux",
+      "hex": "#64242e",
+      "tcx": "19-1724 TCX",
+      "pantone": "Cabernet",
+      "role": "seasonal",
+      "note": "A deep red-brown alternative to black."
+     },
+     {
+      "name": "Waxy ochre",
+      "hex": "#c4962c",
+      "tcx": "16-0953 TCX",
+      "pantone": "Tawny Olive",
+      "role": "accent",
+      "note": "A painterly yellow-ochre as the light in dark ranges."
+     },
+     {
+      "name": "Tinted black",
+      "hex": "#2c2a33",
+      "tcx": "19-3713 TCX",
+      "pantone": "Deep Well",
+      "role": "core",
+      "note": "An off-black with a violet cast, instead of pure black."
+     }
+    ],
+    "use": "Coats, eveningwear, leather, knits"
+   },
+   {
+    "title": "New neutrals",
+    "text": "Neutrals with colour inside: off-black, mushroom, greyed blue and copper khaki.",
+    "colours": [
+     {
+      "name": "Tinted black",
+      "hex": "#2c2a33",
+      "tcx": "19-3713 TCX",
+      "pantone": "Deep Well",
+      "role": "core",
+      "note": "An off-black with a violet cast, instead of pure black."
+     },
+     {
+      "name": "Mushroom",
+      "hex": "#c7bba4",
+      "tcx": "13-1105 TCX",
+      "pantone": "Brown Rice",
+      "role": "core",
+      "note": "A living beige for knits, coats and leather."
+     },
+     {
+      "name": "Greyed blue",
+      "hex": "#66829a",
+      "tcx": "17-4020 TCX",
+      "pantone": "Blue Shadow",
+      "role": "core",
+      "note": "Grey turned blue: tailoring, denim, outerwear."
+     },
+     {
+      "name": "Copper khaki",
+      "hex": "#8a6f48",
+      "tcx": "17-0935 TCX",
+      "pantone": "Dull Gold",
+      "role": "core",
+      "note": "Khaki leaning to taupe and copper for utility and menswear."
+     }
+    ],
+    "use": "Tailoring, outerwear, menswear, denim"
+   },
+   {
+    "title": "Pink for all",
+    "text": "Dusty mauve and silicone pink move into menswear and tailoring, not only knits.",
+    "colours": [
+     {
+      "name": "Dusty mauve",
+      "hex": "#b0879b",
+      "tcx": "16-2107 TCX",
+      "pantone": "Orchid Haze",
+      "role": "seasonal",
+      "note": "Soft, smoky pink-purple, now gender-neutral."
+     },
+     {
+      "name": "Silicone pink",
+      "hex": "#e6b2b8",
+      "tcx": "14-1909 TCX",
+      "pantone": "Coral Blush",
+      "role": "accent",
+      "note": "A soft, slightly artificial pink for knits and accessories."
+     },
+     {
+      "name": "Mushroom",
+      "hex": "#c7bba4",
+      "tcx": "13-1105 TCX",
+      "pantone": "Brown Rice",
+      "role": "core",
+      "note": "A living beige for knits, coats and leather."
+     },
+     {
+      "name": "Deep violet",
+      "hex": "#563474",
+      "tcx": "19-3638 TCX",
+      "pantone": "Tillandsia Purple",
+      "role": "seasonal",
+      "note": "The key colour of the season, from coats to knits."
+     }
+    ],
+    "use": "Knits, shirting, tailoring, accessories"
+   },
+   {
+    "title": "Living green",
+    "text": "Sage and moss from regenerative materials and the outdoors.",
+    "colours": [
+     {
+      "name": "Sage",
+      "hex": "#a1ad92",
+      "tcx": "15-6414 TCX",
+      "pantone": "Reseda",
+      "role": "accent",
+      "note": "A light green replacing tinted greys."
+     },
+     {
+      "name": "Moss",
+      "hex": "#65663f",
+      "tcx": "18-0220 TCX",
+      "pantone": "Mayfly",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Copper khaki",
+      "hex": "#8a6f48",
+      "tcx": "17-0935 TCX",
+      "pantone": "Dull Gold",
+      "role": "core",
+      "note": "Khaki leaning to taupe and copper for utility and menswear."
+     },
+     {
+      "name": "Mushroom",
+      "hex": "#c7bba4",
+      "tcx": "13-1105 TCX",
+      "pantone": "Brown Rice",
+      "role": "core",
+      "note": "A living beige for knits, coats and leather."
+     }
+    ],
+    "use": "Outerwear, knits, kidswear"
+   }
+  ],
+  "dept": {
+   "womenswear": {
+    "title": "Womenswear",
+    "text": "Deep violet and tannic bordeaux lead, softened by dusty mauve and silicone pink, with waxy ochre as the light.",
+    "colours": [
+     {
+      "name": "Deep violet",
+      "hex": "#563474",
+      "tcx": "19-3638 TCX",
+      "pantone": "Tillandsia Purple",
+      "role": "seasonal",
+      "note": "The key colour of the season, from coats to knits."
+     },
+     {
+      "name": "Tannic bordeaux",
+      "hex": "#64242e",
+      "tcx": "19-1724 TCX",
+      "pantone": "Cabernet",
+      "role": "seasonal",
+      "note": "A deep red-brown alternative to black."
+     },
+     {
+      "name": "Dusty mauve",
+      "hex": "#b0879b",
+      "tcx": "16-2107 TCX",
+      "pantone": "Orchid Haze",
+      "role": "seasonal",
+      "note": "Soft, smoky pink-purple, now gender-neutral."
+     },
+     {
+      "name": "Silicone pink",
+      "hex": "#e6b2b8",
+      "tcx": "14-1909 TCX",
+      "pantone": "Coral Blush",
+      "role": "accent",
+      "note": "A soft, slightly artificial pink for knits and accessories."
+     },
+     {
+      "name": "Waxy ochre",
+      "hex": "#c4962c",
+      "tcx": "16-0953 TCX",
+      "pantone": "Tawny Olive",
+      "role": "accent",
+      "note": "A painterly yellow-ochre as the light in dark ranges."
+     },
+     {
+      "name": "Mushroom",
+      "hex": "#c7bba4",
+      "tcx": "13-1105 TCX",
+      "pantone": "Brown Rice",
+      "role": "core",
+      "note": "A living beige for knits, coats and leather."
+     }
+    ]
+   },
+   "menswear": {
+    "title": "Menswear",
+    "text": "Tinted black, greyed blue and copper khaki for tailoring and outerwear, with dusky violet for a younger customer.",
+    "colours": [
+     {
+      "name": "Tinted black",
+      "hex": "#2c2a33",
+      "tcx": "19-3713 TCX",
+      "pantone": "Deep Well",
+      "role": "core",
+      "note": "An off-black with a violet cast, instead of pure black."
+     },
+     {
+      "name": "Greyed blue",
+      "hex": "#66829a",
+      "tcx": "17-4020 TCX",
+      "pantone": "Blue Shadow",
+      "role": "core",
+      "note": "Grey turned blue: tailoring, denim, outerwear."
+     },
+     {
+      "name": "Copper khaki",
+      "hex": "#8a6f48",
+      "tcx": "17-0935 TCX",
+      "pantone": "Dull Gold",
+      "role": "core",
+      "note": "Khaki leaning to taupe and copper for utility and menswear."
+     },
+     {
+      "name": "Dusky violet",
+      "hex": "#6b5876",
+      "tcx": "18-3513 TCX",
+      "pantone": "Grape Compote",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Tannic bordeaux",
+      "hex": "#64242e",
+      "tcx": "19-1724 TCX",
+      "pantone": "Cabernet",
+      "role": "seasonal",
+      "note": "A deep red-brown alternative to black."
+     },
+     {
+      "name": "Sage",
+      "hex": "#a1ad92",
+      "tcx": "15-6414 TCX",
+      "pantone": "Reseda",
+      "role": "accent",
+      "note": "A light green replacing tinted greys."
+     }
+    ]
+   },
+   "kidswear": {
+    "title": "Kidswear",
+    "text": "Plum and ochre with sage and dusty pink, grounded in greyed blue and oat. Forecut projection until the January 2027 kidswear fairs.",
+    "colours": [
+     {
+      "name": "Plum",
+      "hex": "#51304e",
+      "tcx": "19-3218 TCX",
+      "pantone": "Plum Purple",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Waxy ochre",
+      "hex": "#c4962c",
+      "tcx": "16-0953 TCX",
+      "pantone": "Tawny Olive",
+      "role": "accent",
+      "note": "A painterly yellow-ochre as the light in dark ranges."
+     },
+     {
+      "name": "Sage",
+      "hex": "#a1ad92",
+      "tcx": "15-6414 TCX",
+      "pantone": "Reseda",
+      "role": "accent",
+      "note": "A light green replacing tinted greys."
+     },
+     {
+      "name": "Dusty mauve",
+      "hex": "#b0879b",
+      "tcx": "16-2107 TCX",
+      "pantone": "Orchid Haze",
+      "role": "seasonal",
+      "note": "Soft, smoky pink-purple, now gender-neutral."
+     },
+     {
+      "name": "Greyed blue",
+      "hex": "#66829a",
+      "tcx": "17-4020 TCX",
+      "pantone": "Blue Shadow",
+      "role": "core",
+      "note": "Grey turned blue: tailoring, denim, outerwear."
+     },
+     {
+      "name": "Oat",
+      "hex": "#daccb4",
+      "tcx": "13-1008 TCX",
+      "pantone": "Bleached Sand",
+      "role": "",
+      "note": ""
+     }
+    ]
+   },
+   "footwear": {
+    "title": "Footwear",
+    "text": "Bordeaux and copper-brown leathers, tinted black, and violet suede for the statement boot.",
+    "colours": [
+     {
+      "name": "Tannic bordeaux",
+      "hex": "#64242e",
+      "tcx": "19-1724 TCX",
+      "pantone": "Cabernet",
+      "role": "seasonal",
+      "note": "A deep red-brown alternative to black."
+     },
+     {
+      "name": "Copper brown",
+      "hex": "#864c24",
+      "tcx": "18-1148 TCX",
+      "pantone": "Caramel Cafe",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Tinted black",
+      "hex": "#2c2a33",
+      "tcx": "19-3713 TCX",
+      "pantone": "Deep Well",
+      "role": "core",
+      "note": "An off-black with a violet cast, instead of pure black."
+     },
+     {
+      "name": "Violet suede",
+      "hex": "#634878",
+      "tcx": "18-3635 TCX",
+      "pantone": "Picasso Lily",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Waxy ochre",
+      "hex": "#c4962c",
+      "tcx": "16-0953 TCX",
+      "pantone": "Tawny Olive",
+      "role": "accent",
+      "note": "A painterly yellow-ochre as the light in dark ranges."
+     },
+     {
+      "name": "Mushroom",
+      "hex": "#c7bba4",
+      "tcx": "13-1105 TCX",
+      "pantone": "Brown Rice",
+      "role": "core",
+      "note": "A living beige for knits, coats and leather."
+     }
+    ]
+   }
+  },
+  "sources": [
+   [
+    "FashionUnited: Première Vision AW27/28 trends",
+    "https://fashionunited.com/news/fairs/premiere-vision-paris-what-fabrics-reveal-about-aw27-28-trends/2026090474424"
+   ],
+   [
+    "Heuritech: Première Vision FW27-28",
+    "https://heuritech.com/articles/premiere-vision-fall-winter-27-28/"
+   ],
+   [
+    "Première Vision: AW27-28 colour preview",
+    "https://www.premierevision.com/articles/fbd142fa-b23c-f111-8ef3-000d3a4af15b/aw-27-28-color-preview-a-color-shaped-by-time"
+   ],
+   [
+    "2C Magazine: AW27-28 fairs",
+    "https://www.2cmag.com/en/trend/"
+   ]
+  ]
+ },
+ "ss28": {
+  "short": "Royal blue, turquoise and greyish mauve",
+  "status": "Long-range forecast from early fair previews",
+  "headline": "Blues come back strong, royal and a new turquoise, beside greyish mauve and violet, over straw and bleached linen, with an after-dark edge of inky blue and murky green.",
+  "built": "A long-range Forecut forecast from the first SS28 previews: Première Vision's October 2026 colour preview (royal blue, deeper sky blue, a new turquoise, greyish mauve and a dense violet), fabric-fair womenswear previews (straw, khaki green, warm beige, peach) and a darker after-dusk summer mood. It will be updated after the February 2027 fairs.",
+  "key": [
+   {
+    "name": "Bleached linen",
+    "hex": "#ede6db",
+    "tcx": "11-0701 TCX",
+    "pantone": "Whisper White",
+    "role": "core",
+    "note": "A warm off-white base for summer."
+   },
+   {
+    "name": "Straw",
+    "hex": "#dabe81",
+    "tcx": "14-0935 TCX",
+    "pantone": "Jojoba",
+    "role": "core",
+    "note": "Natural straw yellow for linen, raffia and knits."
+   },
+   {
+    "name": "Inky blue",
+    "hex": "#29304e",
+    "tcx": "19-3933 TCX",
+    "pantone": "Medieval Blue",
+    "role": "core",
+    "note": "A blue so dark it reads as black: summer's new dark."
+   },
+   {
+    "name": "Khaki green",
+    "hex": "#818455",
+    "tcx": "18-0525 TCX",
+    "pantone": "Iguana",
+    "role": "core",
+    "note": "A muted vegetal green for utility and menswear."
+   },
+   {
+    "name": "Royal blue",
+    "hex": "#3850a0",
+    "tcx": "18-3949 TCX",
+    "pantone": "Dazzling Blue",
+    "role": "seasonal",
+    "note": "Back and brighter, slightly softened."
+   },
+   {
+    "name": "Sonar turquoise",
+    "hex": "#279d9f",
+    "tcx": "16-5123 TCX",
+    "pantone": "Baltic",
+    "role": "seasonal",
+    "note": "A softened turquoise between ocean and digital."
+   },
+   {
+    "name": "Greyish mauve",
+    "hex": "#bdabbe",
+    "tcx": "15-3507 TCX",
+    "pantone": "Lavender Frost",
+    "role": "seasonal",
+    "note": "A light, atmospheric mauve."
+   },
+   {
+    "name": "Magnetic violet",
+    "hex": "#44377d",
+    "tcx": "19-3847 TCX",
+    "pantone": "Deep Blue",
+    "role": "accent",
+    "note": "A dense, bluish violet for contrast."
+   },
+   {
+    "name": "Peach",
+    "hex": "#f5b895",
+    "tcx": "13-1125 TCX",
+    "pantone": "Peach Quartz",
+    "role": "accent",
+    "note": "A soft warm accent for knits and dresses."
+   },
+   {
+    "name": "Acid lemon",
+    "hex": "#ebdf67",
+    "tcx": "12-0646 TCX",
+    "pantone": "Celandine",
+    "role": "accent",
+    "note": "A sharp yellow to light up the dark mood."
+   }
+  ],
+  "stories": [
+   {
+    "title": "Blue hour",
+    "text": "Royal blue, sonar turquoise and inky blue: summer blues with real pigment.",
+    "colours": [
+     {
+      "name": "Royal blue",
+      "hex": "#3850a0",
+      "tcx": "18-3949 TCX",
+      "pantone": "Dazzling Blue",
+      "role": "seasonal",
+      "note": "Back and brighter, slightly softened."
+     },
+     {
+      "name": "Sonar turquoise",
+      "hex": "#279d9f",
+      "tcx": "16-5123 TCX",
+      "pantone": "Baltic",
+      "role": "seasonal",
+      "note": "A softened turquoise between ocean and digital."
+     },
+     {
+      "name": "Inky blue",
+      "hex": "#29304e",
+      "tcx": "19-3933 TCX",
+      "pantone": "Medieval Blue",
+      "role": "core",
+      "note": "A blue so dark it reads as black: summer's new dark."
+     },
+     {
+      "name": "Bleached linen",
+      "hex": "#ede6db",
+      "tcx": "11-0701 TCX",
+      "pantone": "Whisper White",
+      "role": "core",
+      "note": "A warm off-white base for summer."
+     }
+    ],
+    "use": "Shirting, denim, swim, tailoring"
+   },
+   {
+    "title": "Atmosphere",
+    "text": "Greyish mauve and magnetic violet, soft and hazy against bleached linen.",
+    "colours": [
+     {
+      "name": "Greyish mauve",
+      "hex": "#bdabbe",
+      "tcx": "15-3507 TCX",
+      "pantone": "Lavender Frost",
+      "role": "seasonal",
+      "note": "A light, atmospheric mauve."
+     },
+     {
+      "name": "Magnetic violet",
+      "hex": "#44377d",
+      "tcx": "19-3847 TCX",
+      "pantone": "Deep Blue",
+      "role": "accent",
+      "note": "A dense, bluish violet for contrast."
+     },
+     {
+      "name": "Bleached linen",
+      "hex": "#ede6db",
+      "tcx": "11-0701 TCX",
+      "pantone": "Whisper White",
+      "role": "core",
+      "note": "A warm off-white base for summer."
+     },
+     {
+      "name": "Peach",
+      "hex": "#f5b895",
+      "tcx": "13-1125 TCX",
+      "pantone": "Peach Quartz",
+      "role": "accent",
+      "note": "A soft warm accent for knits and dresses."
+     }
+    ],
+    "use": "Dresses, knits, evening"
+   },
+   {
+    "title": "Vegetal",
+    "text": "Straw, khaki green and warm beige for natural fibres and crafted surfaces.",
+    "colours": [
+     {
+      "name": "Straw",
+      "hex": "#dabe81",
+      "tcx": "14-0935 TCX",
+      "pantone": "Jojoba",
+      "role": "core",
+      "note": "Natural straw yellow for linen, raffia and knits."
+     },
+     {
+      "name": "Khaki green",
+      "hex": "#818455",
+      "tcx": "18-0525 TCX",
+      "pantone": "Iguana",
+      "role": "core",
+      "note": "A muted vegetal green for utility and menswear."
+     },
+     {
+      "name": "Bleached linen",
+      "hex": "#ede6db",
+      "tcx": "11-0701 TCX",
+      "pantone": "Whisper White",
+      "role": "core",
+      "note": "A warm off-white base for summer."
+     },
+     {
+      "name": "Warm beige",
+      "hex": "#ccb390",
+      "tcx": "14-1116 TCX",
+      "pantone": "Almond Buff",
+      "role": "",
+      "note": ""
+     }
+    ],
+    "use": "Linen, crochet, menswear, accessories"
+   },
+   {
+    "title": "After dusk",
+    "text": "Summer goes dark: inky blue and murky green with an acid lemon spark.",
+    "colours": [
+     {
+      "name": "Inky blue",
+      "hex": "#29304e",
+      "tcx": "19-3933 TCX",
+      "pantone": "Medieval Blue",
+      "role": "core",
+      "note": "A blue so dark it reads as black: summer's new dark."
+     },
+     {
+      "name": "Murky green",
+      "hex": "#545a3e",
+      "tcx": "18-0322 TCX",
+      "pantone": "Cypress",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Acid lemon",
+      "hex": "#ebdf67",
+      "tcx": "12-0646 TCX",
+      "pantone": "Celandine",
+      "role": "accent",
+      "note": "A sharp yellow to light up the dark mood."
+     },
+     {
+      "name": "Magnetic violet",
+      "hex": "#44377d",
+      "tcx": "19-3847 TCX",
+      "pantone": "Deep Blue",
+      "role": "accent",
+      "note": "A dense, bluish violet for contrast."
+     }
+    ],
+    "use": "Evening, statement pieces, footwear"
+   }
+  ],
+  "dept": {
+   "womenswear": {
+    "title": "Womenswear",
+    "text": "Royal blue and greyish mauve lead, with magnetic violet and peach, over straw and linen.",
+    "colours": [
+     {
+      "name": "Royal blue",
+      "hex": "#3850a0",
+      "tcx": "18-3949 TCX",
+      "pantone": "Dazzling Blue",
+      "role": "seasonal",
+      "note": "Back and brighter, slightly softened."
+     },
+     {
+      "name": "Greyish mauve",
+      "hex": "#bdabbe",
+      "tcx": "15-3507 TCX",
+      "pantone": "Lavender Frost",
+      "role": "seasonal",
+      "note": "A light, atmospheric mauve."
+     },
+     {
+      "name": "Magnetic violet",
+      "hex": "#44377d",
+      "tcx": "19-3847 TCX",
+      "pantone": "Deep Blue",
+      "role": "accent",
+      "note": "A dense, bluish violet for contrast."
+     },
+     {
+      "name": "Peach",
+      "hex": "#f5b895",
+      "tcx": "13-1125 TCX",
+      "pantone": "Peach Quartz",
+      "role": "accent",
+      "note": "A soft warm accent for knits and dresses."
+     },
+     {
+      "name": "Straw",
+      "hex": "#dabe81",
+      "tcx": "14-0935 TCX",
+      "pantone": "Jojoba",
+      "role": "core",
+      "note": "Natural straw yellow for linen, raffia and knits."
+     },
+     {
+      "name": "Bleached linen",
+      "hex": "#ede6db",
+      "tcx": "11-0701 TCX",
+      "pantone": "Whisper White",
+      "role": "core",
+      "note": "A warm off-white base for summer."
+     }
+    ]
+   },
+   "menswear": {
+    "title": "Menswear",
+    "text": "Inky blue and khaki green tailoring, deeper sky-blue shirting and sonar turquoise for summer pieces.",
+    "colours": [
+     {
+      "name": "Inky blue",
+      "hex": "#29304e",
+      "tcx": "19-3933 TCX",
+      "pantone": "Medieval Blue",
+      "role": "core",
+      "note": "A blue so dark it reads as black: summer's new dark."
+     },
+     {
+      "name": "Khaki green",
+      "hex": "#818455",
+      "tcx": "18-0525 TCX",
+      "pantone": "Iguana",
+      "role": "core",
+      "note": "A muted vegetal green for utility and menswear."
+     },
+     {
+      "name": "Deep sky",
+      "hex": "#6ea2d5",
+      "tcx": "16-4132 TCX",
+      "pantone": "Little Boy Blue",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Sonar turquoise",
+      "hex": "#279d9f",
+      "tcx": "16-5123 TCX",
+      "pantone": "Baltic",
+      "role": "seasonal",
+      "note": "A softened turquoise between ocean and digital."
+     },
+     {
+      "name": "Straw",
+      "hex": "#dabe81",
+      "tcx": "14-0935 TCX",
+      "pantone": "Jojoba",
+      "role": "core",
+      "note": "Natural straw yellow for linen, raffia and knits."
+     },
+     {
+      "name": "Bleached linen",
+      "hex": "#ede6db",
+      "tcx": "11-0701 TCX",
+      "pantone": "Whisper White",
+      "role": "core",
+      "note": "A warm off-white base for summer."
+     }
+    ]
+   },
+   "kidswear": {
+    "title": "Kidswear",
+    "text": "Sonar turquoise and acid lemon brights with peach and sky, on linen bases. Forecut projection.",
+    "colours": [
+     {
+      "name": "Sonar turquoise",
+      "hex": "#279d9f",
+      "tcx": "16-5123 TCX",
+      "pantone": "Baltic",
+      "role": "seasonal",
+      "note": "A softened turquoise between ocean and digital."
+     },
+     {
+      "name": "Acid lemon",
+      "hex": "#ebdf67",
+      "tcx": "12-0646 TCX",
+      "pantone": "Celandine",
+      "role": "accent",
+      "note": "A sharp yellow to light up the dark mood."
+     },
+     {
+      "name": "Peach",
+      "hex": "#f5b895",
+      "tcx": "13-1125 TCX",
+      "pantone": "Peach Quartz",
+      "role": "accent",
+      "note": "A soft warm accent for knits and dresses."
+     },
+     {
+      "name": "Deep sky",
+      "hex": "#6ea2d5",
+      "tcx": "16-4132 TCX",
+      "pantone": "Little Boy Blue",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Greyish mauve",
+      "hex": "#bdabbe",
+      "tcx": "15-3507 TCX",
+      "pantone": "Lavender Frost",
+      "role": "seasonal",
+      "note": "A light, atmospheric mauve."
+     },
+     {
+      "name": "Bleached linen",
+      "hex": "#ede6db",
+      "tcx": "11-0701 TCX",
+      "pantone": "Whisper White",
+      "role": "core",
+      "note": "A warm off-white base for summer."
+     }
+    ]
+   },
+   "footwear": {
+    "title": "Footwear",
+    "text": "Natural straw and raffia, khaki and inky leathers, with royal blue and violet suede accents.",
+    "colours": [
+     {
+      "name": "Raffia",
+      "hex": "#c9b27c",
+      "tcx": "14-1025 TCX",
+      "pantone": "Cocoon",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Khaki green",
+      "hex": "#818455",
+      "tcx": "18-0525 TCX",
+      "pantone": "Iguana",
+      "role": "core",
+      "note": "A muted vegetal green for utility and menswear."
+     },
+     {
+      "name": "Inky blue",
+      "hex": "#29304e",
+      "tcx": "19-3933 TCX",
+      "pantone": "Medieval Blue",
+      "role": "core",
+      "note": "A blue so dark it reads as black: summer's new dark."
+     },
+     {
+      "name": "Royal blue",
+      "hex": "#3850a0",
+      "tcx": "18-3949 TCX",
+      "pantone": "Dazzling Blue",
+      "role": "seasonal",
+      "note": "Back and brighter, slightly softened."
+     },
+     {
+      "name": "Violet suede",
+      "hex": "#634878",
+      "tcx": "18-3635 TCX",
+      "pantone": "Picasso Lily",
+      "role": "",
+      "note": ""
+     },
+     {
+      "name": "Bleached linen",
+      "hex": "#ede6db",
+      "tcx": "11-0701 TCX",
+      "pantone": "Whisper White",
+      "role": "core",
+      "note": "A warm off-white base for summer."
+     }
+    ]
+   }
+  },
+  "sources": [
+   [
+    "Première Vision: SS28 colour preview",
+    "https://www.premierevision.com/en/articles/8f0a0d9f-e9cd-f111-bf5b-6045bd889b2a/ss28-color-preview-toward-a-new-chromatic-fluidity"
+   ],
+   [
+    "FashionUnited: After Dusk, SS28",
+    "https://fashionunited.uk/news/fashion/after-dusk-why-spring-summer-2028-is-going-dark/2026103091103"
+   ],
+   [
+    "Italtex: Vegetal Hues SS28",
+    "https://italtextrends.com/blogs/latest-trends/vegetal-hues-natural-colours-and-lightweight-fabrics-for-ss-2028"
+   ]
+  ]
+ },
+ "aw28": {
+  "short": "Ink, mulberry and bottle green",
+  "status": "Long-range Forecut projection",
+  "headline": "Winter deepens the SS28 blues and violets: ink, mulberry and bottle green over oat and slate, with petrol teal and vermilion as accents.",
+  "built": "A long-range Forecut projection. It carries the AW27 move away from black and the SS28 return of strong blues and violets into winter. No AW28 fabric fair has taken place yet; it will be refined after the September 2027 fairs.",
+  "key": [
+   {
+    "name": "Ink",
+    "hex": "#27293d",
+    "tcx": "19-3831 TCX",
+    "pantone": "Maritime Blue",
+    "role": "core",
+    "note": "Deep ink blue as the winter dark."
+   },
+   {
+    "name": "Oat",
+    "hex": "#d7cab0",
+    "tcx": "14-1108 TCX",
+    "pantone": "Wood Ash",
+    "role": "core",
+    "note": "A warm, undyed-wool neutral."
+   },
+   {
+    "name": "Slate",
+    "hex": "#58646d",
+    "tcx": "18-4214 TCX",
+    "pantone": "Stormy Weather",
+    "role": "core",
+    "note": "Blue-grey for tailoring and outerwear."
+   },
+   {
+    "name": "Cocoa",
+    "hex": "#5d4236",
+    "tcx": "19-1224 TCX",
+    "pantone": "Fondue Fudge",
+    "role": "core",
+    "note": "A softer brown carried on from AW26 and AW27."
+   },
+   {
+    "name": "Mulberry",
+    "hex": "#6b264b",
+    "tcx": "19-2428 TCX",
+    "pantone": "Magenta Purple",
+    "role": "seasonal",
+    "note": "A berry purple between violet and bordeaux."
+   },
+   {
+    "name": "Bottle green",
+    "hex": "#264e36",
+    "tcx": "19-6050 TCX",
+    "pantone": "Eden",
+    "role": "seasonal",
+    "note": "A deep green for coats and knits."
+   },
+   {
+    "name": "Antique gold",
+    "hex": "#b68a3a",
+    "tcx": "16-0948 TCX",
+    "pantone": "Harvest Gold",
+    "role": "seasonal",
+    "note": "Ochre deepened into gold for knits and trims."
+   },
+   {
+    "name": "Petrol teal",
+    "hex": "#2a5c6a",
+    "tcx": "19-4826 TCX",
+    "pantone": "Dragonfly",
+    "role": "accent",
+    "note": "The SS28 turquoise, deepened for winter."
+   },
+   {
+    "name": "Vermilion",
+    "hex": "#c2452d",
+    "tcx": "18-1454 TCX",
+    "pantone": "Red Clay",
+    "role": "accent",
+    "note": "A warm red for single statement pieces."
+   },
+   {
+    "name": "Lavender grey",
+    "hex": "#a198af",
+    "tcx": "16-3810 TCX",
+    "pantone": "Wisteria",
+    "role": "accent",
+    "note": "A pale violet-grey to lighten dark ranges."
+   }
+  ],
+  "stories": [
+   {
+    "title": "Night blues",
+    "text": "Ink, slate and petrol teal: blue as the new winter neutral.",
+    "colours": [
+     {
+      "name": "Ink",
+      "hex": "#27293d",
+      "tcx": "19-3831 TCX",
+      "pantone": "Maritime Blue",
+      "role": "core",
+      "note": "Deep ink blue as the winter dark."
+     },
+     {
+      "name": "Slate",
+      "hex": "#58646d",
+      "tcx": "18-4214 TCX",
+      "pantone": "Stormy Weather",
+      "role": "core",
+      "note": "Blue-grey for tailoring and outerwear."
+     },
+     {
+      "name": "Petrol teal",
+      "hex": "#2a5c6a",
+      "tcx": "19-4826 TCX",
+      "pantone": "Dragonfly",
+      "role": "accent",
+      "note": "The SS28 turquoise, deepened for winter."
+     },
+     {
+      "name": "Oat",
+      "hex": "#d7cab0",
+      "tcx": "14-1108 TCX",
+      "pantone": "Wood Ash",
+      "role": "core",
+      "note": "A warm, undyed-wool neutral."
+     }
+    ],
+    "use": "Tailoring, outerwear, denim"
+   },
+   {
+    "title": "Berry and gold",
+    "text": "Mulberry and antique gold, rich and warm for evening and knits.",
+    "colours": [
+     {
+      "name": "Mulberry",
+      "hex": "#6b264b",
+      "tcx": "19-2428 TCX",
+      "pantone": "Magenta Purple",
+      "role": "seasonal",
+      "note": "A berry purple between violet and bordeaux."
+     },
+     {
+      "name": "Antique gold",
+      "hex": "#b68a3a",
+      "tcx": "16-0948 TCX",
+      "pantone": "Harvest Gold",
+      "role": "seasonal",
+      "note": "Ochre deepened into gold for knits and trims."
+     },
+     {
+      "name": "Cocoa",
+      "hex": "#5d4236",
+      "tcx": "19-1224 TCX",
+      "pantone": "Fondue Fudge",
+      "role": "core",
+      "note": "A softer brown carried on from AW26 and AW27."
+     },
+     {
+      "name": "Oat",
+      "hex": "#d7cab0",
+      "tcx": "14-1108 TCX",
+      "pantone": "Wood Ash",
+      "role": "core",
+      "note": "A warm, undyed-wool neutral."
+     }
+    ],
+    "use": "Evening, knits, accessories"
+   },
+   {
+    "title": "Deep forest",
+    "text": "Bottle green with cocoa and oat: outdoor tailoring and heavy knits.",
+    "colours": [
+     {
+      "name": "Bottle green",
+      "hex": "#264e36",
+      "tcx": "19-6050 TCX",
+      "pantone": "Eden",
+      "role": "seasonal",
+      "note": "A deep green for coats and knits."
+     },
+     {
+      "name": "Cocoa",
+      "hex": "#5d4236",
+      "tcx": "19-1224 TCX",
+      "pantone": "Fondue Fudge",
+      "role": "core",
+      "note": "A softer brown carried on from AW26 and AW27."
+     },
+     {
+      "name": "Oat",
+      "hex": "#d7cab0",
+      "tcx": "14-1108 TCX",
+      "pantone": "Wood Ash",
+      "role": "core",
+      "note": "A warm, undyed-wool neutral."
+     },
+     {
+      "name": "Vermilion",
+      "hex": "#c2452d",
+      "tcx": "18-1454 TCX",
+      "pantone": "Red Clay",
+      "role": "accent",
+      "note": "A warm red for single statement pieces."
+     }
+    ],
+    "use": "Outerwear, knits, menswear"
+   }
+  ],
+  "dept": {
+   "womenswear": {
+    "title": "Womenswear",
+    "text": "Mulberry and ink lead, with antique gold, lavender grey and a vermilion statement.",
+    "colours": [
+     {
+      "name": "Mulberry",
+      "hex": "#6b264b",
+      "tcx": "19-2428 TCX",
+      "pantone": "Magenta Purple",
+      "role": "seasonal",
+      "note": "A berry purple between violet and bordeaux."
+     },
+     {
+      "name": "Ink",
+      "hex": "#27293d",
+      "tcx": "19-3831 TCX",
+      "pantone": "Maritime Blue",
+      "role": "core",
+      "note": "Deep ink blue as the winter dark."
+     },
+     {
+      "name": "Antique gold",
+      "hex": "#b68a3a",
+      "tcx": "16-0948 TCX",
+      "pantone": "Harvest Gold",
+      "role": "seasonal",
+      "note": "Ochre deepened into gold for knits and trims."
+     },
+     {
+      "name": "Lavender grey",
+      "hex": "#a198af",
+      "tcx": "16-3810 TCX",
+      "pantone": "Wisteria",
+      "role": "accent",
+      "note": "A pale violet-grey to lighten dark ranges."
+     },
+     {
+      "name": "Vermilion",
+      "hex": "#c2452d",
+      "tcx": "18-1454 TCX",
+      "pantone": "Red Clay",
+      "role": "accent",
+      "note": "A warm red for single statement pieces."
+     },
+     {
+      "name": "Oat",
+      "hex": "#d7cab0",
+      "tcx": "14-1108 TCX",
+      "pantone": "Wood Ash",
+      "role": "core",
+      "note": "A warm, undyed-wool neutral."
+     }
+    ]
+   },
+   "menswear": {
+    "title": "Menswear",
+    "text": "Ink, slate and bottle green tailoring, cocoa knits and petrol teal outerwear.",
+    "colours": [
+     {
+      "name": "Ink",
+      "hex": "#27293d",
+      "tcx": "19-3831 TCX",
+      "pantone": "Maritime Blue",
+      "role": "core",
+      "note": "Deep ink blue as the winter dark."
+     },
+     {
+      "name": "Slate",
+      "hex": "#58646d",
+      "tcx": "18-4214 TCX",
+      "pantone": "Stormy Weather",
+      "role": "core",
+      "note": "Blue-grey for tailoring and outerwear."
+     },
+     {
+      "name": "Bottle green",
+      "hex": "#264e36",
+      "tcx": "19-6050 TCX",
+      "pantone": "Eden",
+      "role": "seasonal",
+      "note": "A deep green for coats and knits."
+     },
+     {
+      "name": "Cocoa",
+      "hex": "#5d4236",
+      "tcx": "19-1224 TCX",
+      "pantone": "Fondue Fudge",
+      "role": "core",
+      "note": "A softer brown carried on from AW26 and AW27."
+     },
+     {
+      "name": "Petrol teal",
+      "hex": "#2a5c6a",
+      "tcx": "19-4826 TCX",
+      "pantone": "Dragonfly",
+      "role": "accent",
+      "note": "The SS28 turquoise, deepened for winter."
+     },
+     {
+      "name": "Oat",
+      "hex": "#d7cab0",
+      "tcx": "14-1108 TCX",
+      "pantone": "Wood Ash",
+      "role": "core",
+      "note": "A warm, undyed-wool neutral."
+     }
+    ]
+   },
+   "kidswear": {
+    "title": "Kidswear",
+    "text": "Bottle green, mulberry and vermilion with gold and oat. Forecut projection.",
+    "colours": [
+     {
+      "name": "Bottle green",
+      "hex": "#264e36",
+      "tcx": "19-6050 TCX",
+      "pantone": "Eden",
+      "role": "seasonal",
+      "note": "A deep green for coats and knits."
+     },
+     {
+      "name": "Mulberry",
+      "hex": "#6b264b",
+      "tcx": "19-2428 TCX",
+      "pantone": "Magenta Purple",
+      "role": "seasonal",
+      "note": "A berry purple between violet and bordeaux."
+     },
+     {
+      "name": "Vermilion",
+      "hex": "#c2452d",
+      "tcx": "18-1454 TCX",
+      "pantone": "Red Clay",
+      "role": "accent",
+      "note": "A warm red for single statement pieces."
+     },
+     {
+      "name": "Antique gold",
+      "hex": "#b68a3a",
+      "tcx": "16-0948 TCX",
+      "pantone": "Harvest Gold",
+      "role": "seasonal",
+      "note": "Ochre deepened into gold for knits and trims."
+     },
+     {
+      "name": "Petrol teal",
+      "hex": "#2a5c6a",
+      "tcx": "19-4826 TCX",
+      "pantone": "Dragonfly",
+      "role": "accent",
+      "note": "The SS28 turquoise, deepened for winter."
+     },
+     {
+      "name": "Oat",
+      "hex": "#d7cab0",
+      "tcx": "14-1108 TCX",
+      "pantone": "Wood Ash",
+      "role": "core",
+      "note": "A warm, undyed-wool neutral."
+     }
+    ]
+   },
+   "footwear": {
+    "title": "Footwear",
+    "text": "Ink and cocoa leathers, mulberry suede and bottle-green boots.",
+    "colours": [
+     {
+      "name": "Ink",
+      "hex": "#27293d",
+      "tcx": "19-3831 TCX",
+      "pantone": "Maritime Blue",
+      "role": "core",
+      "note": "Deep ink blue as the winter dark."
+     },
+     {
+      "name": "Cocoa",
+      "hex": "#5d4236",
+      "tcx": "19-1224 TCX",
+      "pantone": "Fondue Fudge",
+      "role": "core",
+      "note": "A softer brown carried on from AW26 and AW27."
+     },
+     {
+      "name": "Mulberry",
+      "hex": "#6b264b",
+      "tcx": "19-2428 TCX",
+      "pantone": "Magenta Purple",
+      "role": "seasonal",
+      "note": "A berry purple between violet and bordeaux."
+     },
+     {
+      "name": "Bottle green",
+      "hex": "#264e36",
+      "tcx": "19-6050 TCX",
+      "pantone": "Eden",
+      "role": "seasonal",
+      "note": "A deep green for coats and knits."
+     },
+     {
+      "name": "Slate",
+      "hex": "#58646d",
+      "tcx": "18-4214 TCX",
+      "pantone": "Stormy Weather",
+      "role": "core",
+      "note": "Blue-grey for tailoring and outerwear."
+     },
+     {
+      "name": "Antique gold",
+      "hex": "#b68a3a",
+      "tcx": "16-0948 TCX",
+      "pantone": "Harvest Gold",
+      "role": "seasonal",
+      "note": "Ochre deepened into gold for knits and trims."
+     }
+    ]
+   }
+  },
+  "sources": []
+ }
+}

@@ -125,7 +125,7 @@ MORE = {
  ('h2', '9. Learn from sales'),
  ('p', 'After the season, compare sales by colour with your plan. Note which colours sold out, which needed markdowns and which worked only in certain categories. This history makes the next colour story more accurate.'),
  ('h2', 'Example: a six-colour capsule'),
- ('ul', ['<b>Core:</b> navy and ecru.', '<b>Fashion:</b> luminous blue and clay pink.', '<b>Neutral:</b> stone and chocolate.', '<b>Accent (small quantities):</b> marigold for trims and accessories.']),
+ ('ul', ['<b>Core:</b> navy and ecru.', '<b>Fashion:</b> violet and lilac, with true red.', '<b>Neutral:</b> stone and chocolate.', '<b>Accent (small quantities):</b> marigold for trims and accessories.']),
 ],
 }
 

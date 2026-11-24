@@ -112,7 +112,7 @@ COLOURS = {
  'north-america': [('#2f3f6b', 'Deep indigo', 'Y2K and heritage denim'), ('#6e1f2c', 'Burgundy', 'Piped satin and holiday partywear'),
                    ('#b98a5a', 'Camel', 'Equestrian outerwear'), ('#2f6fe0', 'Cobalt blue', 'SS27 colour for spring'), ('#efe6d4', 'Cream', 'Knitwear and tailoring')],
  'south-america': [('#f07a1d', 'Carnival orange', 'Carnival and festival dressing'), ('#2f8a57', 'Tropical green', 'Prints and resortwear'),
-                   ('#f2c230', 'Sun yellow', 'Swim and summer dresses'), ('#ef6fa7', 'Pop pink', 'SS27 accent'), ('#f6f4ee', 'Réveillon white', 'New Year\'s Eve linen and lace')],
+                   ('#f2c230', 'Sun yellow', 'Swim and summer dresses'), ('#b3a0c9', 'Lilac', 'SS27 accent'), ('#f6f4ee', 'Réveillon white', 'New Year\'s Eve linen and lace')],
  'africa': [('#b3261e', 'Runway red', 'Seen at Lagos Fashion Week 2026'), ('#6b3f24', 'Earth brown', 'Tailoring and Aso-Oke'),
             ('#23365e', 'Adire indigo', 'Hand-dyed craft'), ('#c99a3b', 'Gold', 'Festive and "Detty December" partywear'), ('#d9c3a0', 'Sand', 'Kaftans and summer layers')],
  'oceania': [('#d9c7a6', 'Coastal sand', 'Linen and resortwear'), ('#8fb8b0', 'Sea glass', 'Swim and summer knits'),

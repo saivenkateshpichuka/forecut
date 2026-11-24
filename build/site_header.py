@@ -17,7 +17,7 @@ MENU = [
         ('Regions', [('regions.html', 'All regions', 'Global forecast, read by market'), ('region-asia.html', 'Asia', ''),
                      ('region-europe.html', 'Europe', ''), ('region-north-america.html', 'North America', ''),
                      ('india.html', 'India', 'Festive and summer seasons')]),
-    ], ('ss27.html', 'SS27 forecast', 'The waist returns, handcraft goes everyday and a luminous blue leads.', 'img/hero-ss27.webp')),
+    ], ('ss27.html', 'SS27 forecast', 'The waist returns, handcraft goes everyday and colour comes back in full.', 'img/hero-ss27.webp')),
     ('Insight', 'insight', [
         ('Read', [('insights.html', 'Insights', 'Reports, articles and market news'), ('reports.html', 'Reports', 'Ready-to-use trend and market reports'), ('journal.html', 'Journal', 'Analysis and practical guides'),
                   ('celebrity-style.html', 'Celebrity style', 'Weekly red-carpet watch'),

@@ -358,6 +358,8 @@ PARTS = [('full', 'Full forecast report', 'Every section of this report in one d
 
 
 def report(s, topic):
+    if topic == 'colour':
+        return colour_report(s)
     m = META[s]
     si = SKEYS.index(s)
     key, title, desc, f = TOPIC[topic]
@@ -1056,8 +1058,7 @@ def chapters(s, topic):
         for t in META[s]['themes']:
             out.append((f'{s}-theme-{islug(t[0])}', t[0], 'theme', t[0]))
     elif topic == 'colour':
-        for hx, nm in META[s]['palette']:
-            out.append((f'{s}-colour-{islug(nm)}', nm, 'colour', hx))
+        return colour_chapters(s)
     elif topic in ('womenswear', 'menswear', 'footwear'):
         for k in DET:
             if k.split('|')[0].lower() == topic and any(it['life'][si] != '-' for it in DET[k]):
@@ -1125,6 +1126,8 @@ def lc_table(s, key):
 
 
 def ch_card(s, slug, title, kind, key, topic):
+    if topic == 'colour':
+        return ccard(s, slug, title, kind, key)
     if kind == 'colour':
         fg = '#000' if lum(key) > .55 else '#fff'
         return (f'<a class="chc" href="/{slug}.html"><span class="chim" style="background:{key};color:{fg}"><em>{E(tcx(key))}<br>{key.upper()}</em></span>'
@@ -1172,9 +1175,11 @@ def chapter(s, topic, slug, title, kind, key):
         nm = title
         fg = '#000' if lum(key) > .55 else '#fff'
         r, g, b = hex_rgb(key)
-        hero = f'<div class="chsw" style="background:{key};color:{fg}"><b>{E(nm)}</b><span>{E(tcx(key))}</span><span>{key.upper()}</span><span>RGB {r}, {g}, {b}</span></div>'
+        cc = cfind(s, key) or {}
+        hero = f'<div class="chsw" style="background:{key};color:{fg}"><b>{E(nm)}</b><span>Pantone {E(cc.get("tcx", tcx(key)))} {E(cc.get("pantone", ""))}</span><span>{key.upper()}</span><span>RGB {r}, {g}, {b}</span></div>'
         lead_th = [t for t in m['themes'] if min(cdist(t[3], key), cdist(t[4], key)) < 90]
-        lead = (f'{nm} carries {", ".join(t[0] for t in lead_th[:3])} in {m["code"]}.' if lead_th else f'{nm} is part of the {m["code"]} palette.') + f' {m["intro"]}'
+        cc = cfind(s, key) or {}
+        lead = ((ROLE_NAME.get(cc.get('role'), '') + ' colour. ') if cc.get('role') else '') + (cc.get('note') or '') + (f' It carries {", ".join(t[0] for t in lead_th[:3])} in {m["code"]}.' if lead_th else '')
         sub = 'Colour story'
         desc = f'{m["code"]} colour forecast: {nm}, {tcx(key)}, {key.upper()}.'
     else:
@@ -1324,6 +1329,180 @@ def rising_two():
             f'<div class="rtabs" role="tablist">{tabs}</div></div>{panes}</div></section>')
 
 
+# ------------------------------------------------------------ colour forecast: report, stories, departments
+CF = json.load(open(os.path.join(B, 'colour_forecast.json')))
+CDEPTS = [('womenswear', 'Womenswear'), ('menswear', 'Menswear'), ('kidswear', 'Kidswear'), ('footwear', 'Footwear')]
+
+
+def cfind(s, hx):
+    for c in CF[s]['key']:
+        if c['hex'] == hx:
+            return c
+    for st in CF[s]['stories']:
+        for c in st['colours']:
+            if c['hex'] == hx:
+                return c
+    for d in CF[s]['dept'].values():
+        for c in d['colours']:
+            if c['hex'] == hx:
+                return c
+    return None
+
+
+def chip(c, big=False):
+    fg = '#000' if lum(c['hex']) > .55 else '#fff'
+    return (f'<div class="chip{" big" if big else ""}"><span class="cs" style="background:{c["hex"]};color:{fg}">' + (f'<em>{ROLE_NAME.get(c.get("role"), "")}</em>' if c.get('role') else '') + '</span>'
+            f'<b>{E(c["name"])}</b><span class="cc">Pantone {E(c["tcx"])} {E(c["pantone"])}</span><span class="cc">{c["hex"].upper()}</span>' +
+            (f'<span class="cn">{E(c["note"])}</span>' if big and c.get('note') else '') + '</div>')
+
+
+ROLE_NAME = {'core': 'Core', 'seasonal': 'Seasonal', 'accent': 'Accent'}
+
+
+def strip(cs, h=56):
+    ws = [34, 24, 18, 14, 10, 8][:len(cs)]
+    t = sum(ws)
+    return f'<div class="cstr" style="height:{h}px">' + ''.join(f'<i style="background:{c["hex"]};flex:{w / t:.3f}" title="{E(c["name"])}, {E(c["tcx"])}"></i>' for c, w in zip(cs, ws)) + '</div>'
+
+
+def cstatus(s):
+    st = CF[s]['status']
+    cls = 'ok' if st.startswith('Confirmed') else 'mid' if st.startswith('Trade') else 'lr'
+    return f'<span class="cstat {cls}"><i></i>{E(st)}</span>'
+
+
+def colour_chapters(s):
+    out = [(f'{s}-colour-{k}', lbl + ' colour', 'cdept', k) for k, lbl in CDEPTS]
+    out += [(f'{s}-colour-story-{islug(st["title"])}', st['title'], 'cstory', i) for i, st in enumerate(CF[s]['stories'])]
+    out += [(f'{s}-colour-{islug(c["name"])}', c['name'], 'colour', c['hex']) for c in CF[s]['key']]
+    return out
+
+
+def ccard(s, slug, title, kind, key):
+    if kind == 'cdept':
+        cs = CF[s]['dept'][key]['colours']
+        return f'<a class="chc" href="/{slug}.html"><span class="chim pal6">' + ''.join(f'<i style="background:{c["hex"]}"></i>' for c in cs) + f'</span><span class="cht">{E(title)}</span><span class="small gr">Department palette</span></a>'
+    if kind == 'cstory':
+        cs = CF[s]['stories'][key]['colours']
+        return f'<a class="chc" href="/{slug}.html"><span class="chim">{strip(cs, 0).replace("height:0px", "height:100%")}</span><span class="cht">{E(title)}</span><span class="small gr">Colour story</span></a>'
+    c = cfind(s, key)
+    fg = '#000' if lum(key) > .55 else '#fff'
+    return (f'<a class="chc" href="/{slug}.html"><span class="chim" style="background:{key};color:{fg}"><em>{E(c["tcx"]) if c else ""}<br>{key.upper()}</em></span>'
+            f'<span class="cht">{E(title)}</span><span class="small gr">{ROLE_NAME.get(c.get("role"), "Colour") if c else "Colour"}</span></a>')
+
+
+def dept_items(s, dept, n=8):
+    if dept == 'kidswear':
+        return []
+    si = SKEYS.index(s)
+    pref = {'womenswear': 'Womenswear|', 'menswear': 'Menswear|', 'footwear': 'Footwear|'}[dept]
+    xs = [x for x in season_items(s) if x[0].startswith(pref) and x[2] in 'rp' and photo(x[1]['name'], s)]
+    xs.sort(key=lambda x: ('rp'.find(x[2]), x[1]['name']))
+    return xs[:n]
+
+
+def colour_shell(s, title, desc, crumb, hero, lead, secs, body, cta_pdf=True):
+    m = META[s]
+    h = head(f'{m["code"]} {title} | Forecut', desc[:300]) + nav_app('Forecasts') + '<main id="main">'
+    h += f'<div class="w crumb"><a href="/forecasts.html">Forecasts</a> / <a href="/forecasts.html#{s}">{m["code"]}</a> / ' + crumb + f'{E(title)}</div>'
+    h += (f'<section class="w rhead"><div class="chhero">{hero}</div><div class="rinfo"><p class="small gr">{E(m["title"])}, {E(m["stage"].lower())}</p>{cstatus(s)}'
+          f'<h1 class="dsp">{E(title)}</h1><p class="lead">{E(lead)}</p>'
+          f'<div class="ctas"><a class="btn" href="#{secs[1][0]}">{E(secs[1][1])}</a>' + (f'<a class="btn o" href="/{s}-colour.html#downloads">Colour PDFs</a>' if cta_pdf else '') + '</div>'
+          f'<p class="small gr">Updated {TODAY.strftime("%-d %B %Y")}. Pantone TCX codes are the nearest published match; confirm with a physical Pantone book before dyeing.</p></div></section>')
+    h += '<nav class="rnav" aria-label="On this page"><div class="w">' + ''.join(f'<a href="#{a}">{t}</a>' for a, t in secs) + '</div></nav>'
+    h += f'''<div class="w gate hide" id="gate"><h2 class="dsp" style="font-size:32px">See the full colour forecast free</h2><p class="gr" style="margin:12px 0 22px">Sign up to see every colour story, department palette and code.</p><a class="btn" href="/account.html#signup">Sign up free</a> <a class="btn o" href="/account.html#signin" style="margin-left:8px">Log in</a></div>
+<div class="w" id="report">{body}</div></main>'''
+    return h + footer() + end()
+
+
+def sources_block(s):
+    src = CF[s]['sources']
+    return ('<section class="rs" id="sources"><div class="rsh"><h2 class="dsp">How we built it</h2><p class="gr">Forecut\'s own reading of public evidence.</p></div>'
+            f'<p style="max-width:52em">{E(CF[s]["built"])}</p>' +
+            ('<h3 class="sub">Public sources</h3><ul class="ul srcl">' + ''.join(f'<li><a href="{E(u)}" target="_blank" rel="noopener">{E(t)}</a></li>' for t, u in src) + '</ul>' if src else
+             '<p class="gr" style="margin-top:12px">No fair or runway has shown this season yet. This is Forecut\'s projection and will be updated as evidence arrives.</p>') + '</section>')
+
+
+def colour_report(s):
+    m = META[s]
+    c = CF[s]
+    key = c['key']
+    hero = '<div class="cmos">' + ''.join(f'<i style="background:{x["hex"]};--k:{n}" title="{E(x["name"])}"></i>' for n, x in enumerate(key)) + '</div>'
+    secs = [('overview', 'Overview'), ('key', 'Key colours'), ('stories', 'Colour stories'), ('departments', 'By department'), ('development', 'How it develops'), ('themes', 'Colour by theme'), ('sources', 'How we built it'), ('downloads', 'Downloads')]
+    body = (f'<section class="rs" id="overview"><div class="rsh"><h2 class="dsp">Overview</h2><p class="gr">{E(c["status"])}.</p></div><p class="key" style="font-size:22px;max-width:40em;line-height:1.35">{E(c["headline"])}</p>'
+            '<div class="g g3 roles" style="margin-top:28px">' + ''.join(
+                f'<div><h3>{ROLE_NAME[r]}</h3><p class="small gr">{d}</p>{strip([x for x in key if x["role"] == r], 34)}<p class="small" style="margin-top:8px">{E(", ".join(x["name"] for x in key if x["role"] == r))}</p></div>'
+                for r, d in [('core', 'The base of the range: carry these across most styles.'), ('seasonal', 'What makes the season new: give these real depth.'), ('accent', 'Small, high-impact doses: one piece, one trim.')]) + '</div></section>')
+    body += '<section class="rs" id="key"><div class="rsh"><h2 class="dsp">Key colours</h2><p class="gr">Each set on a real Pantone TCX colour, with its official name and HEX.</p></div><div class="chips">' + ''.join(
+        f'<a href="/{s}-colour-{islug(x["name"])}.html">{chip(x, True)}</a>' for x in key) + '</div></section>'
+    body += '<section class="rs" id="stories"><div class="rsh"><h2 class="dsp">Colour stories</h2><p class="gr">How the colours combine, story by story.</p></div><div class="stories">' + ''.join(
+        f'<a class="story" href="/{s}-colour-story-{islug(st["title"])}.html">{strip(st["colours"], 120)}<div><h3 class="dsp">{E(st["title"])}</h3><p>{E(st["text"])}</p><p class="small gr" style="margin-top:8px">Use for: {E(st["use"])}</p>'
+        f'<p class="small" style="margin-top:6px">{E(", ".join(x["name"] for x in st["colours"]))}</p></div></a>' for st in c['stories']) + '</div></section>'
+    body += '<section class="rs" id="departments"><div class="rsh"><h2 class="dsp">By department</h2><p class="gr">Separate palettes for womenswear, menswear, kidswear and footwear.</p></div><div class="g g4 depts">' + ''.join(
+        f'<a class="dept" href="/{s}-colour-{k}.html"><span class="pal6">' + ''.join(f'<i style="background:{x["hex"]}" title="{E(x["name"])}"></i>' for x in c['dept'][k]['colours']) + f'</span><h3>{lbl}</h3><p class="small gr">{E(c["dept"][k]["text"])}</p><span class="lk small">Open the {lbl.lower()} palette</span></a>'
+        for k, lbl in CDEPTS) + '</div></section>'
+    body += (f'<section class="rs" id="development"><div class="rsh"><h2 class="dsp">How it develops</h2><p class="gr"><span class="live"><i></i>Live forecast, updated {TODAY.strftime("%-d %B %Y")}</span><br>Key colours season by season.</p></div><div class="cdev">' +
+             ''.join(f'<a href="/{k2}-colour.html" class="crow{" now" if k2 == s else ""}"><span>{META[k2]["code"]}<em>{E(CF[k2]["short"])}</em></span><div>' + ''.join(f'<i style="background:{x["hex"]}" title="{E(x["name"])}, {E(x["tcx"])}"></i>' for x in CF[k2]['key']) + '</div></a>' for k2 in SKEYS) + '</div></section>')
+    body += '<section class="rs" id="themes"><div class="rsh"><h2 class="dsp">Colour by theme</h2><p class="gr">The lead and accent colour of each season theme.</p></div><div class="g g3" style="gap:24px">'
+    for t, d, pat, bg, fg, fl, kw in m['themes']:
+        body += (f'<a href="/{s}-theme-{islug(t)}.html"><div class="tpair"><div style="background:{bg}"></div><div style="background:{fg}"></div></div>'
+                 f'<p style="font-weight:500;margin-top:10px">{E(t)}</p><p class="small gr">Lead {tcx(bg)}, {bg.upper()}. Accent {tcx(fg)}, {fg.upper()}.</p><p class="small" style="margin-top:6px">Use for: {E(fl.lower())}.</p></a>')
+    body += '</div></section>' + sources_block(s)
+    body += '<section class="rs" id="downloads"><div class="rsh"><h2 class="dsp">Downloads</h2><p class="gr">Each PDF stands on its own, so share only the part a team needs.</p></div><div class="dls">'
+    for pk, pt, pd, pc in PARTS:
+        body += (f'<div class="dl1"><div class="dth">{cover_art(s, "colour", part=pt)}</div><div><h3>{pt}</h3><p class="gr small">{pd}</p><ul>' + ''.join(f'<li>{E(x)}</li>' for x in pc) +
+                 f'</ul><a class="btn s" href="/output/reports/{s}-colour-{pk}.pdf" data-pdf>Download PDF</a></div></div>')
+    body += '</div></section>'
+    body += (f'<section class="rs" id="more"><div class="rsh"><h2 class="dsp">Every colour page</h2></div><div class="chg">' + ''.join(ccard(s, *x) for x in colour_chapters(s)) + '</div></section>')
+    return colour_shell(s, 'Colour forecast', f'{m["code"]} colour forecast: {c["headline"]}', '', hero, c['headline'], secs, body, cta_pdf=False)
+
+
+def colour_dept(s, dept):
+    m = META[s]
+    c = CF[s]
+    d = c['dept'][dept]
+    lbl = dict(CDEPTS)[dept]
+    cs = d['colours']
+    hero = '<div class="cmos">' + ''.join(f'<i style="background:{x["hex"]};--k:{n}" title="{E(x["name"])}"></i>' for n, x in enumerate(cs)) + '</div>'
+    secs = [('palette', 'Palette'), ('combos', 'Combinations'), ('pieces', 'Where it works'), ('development', 'Season to season'), ('more', 'More')]
+    body = '<section class="rs" id="palette"><div class="rsh"><h2 class="dsp">The palette</h2><p class="gr">' + E(d['text']) + '</p></div><div class="chips">' + ''.join(chip(x, True) for x in cs) + '</div></section>'
+    combos = [(cs[0], cs[1], cs[-1]), (cs[2], cs[0], cs[3 % len(cs)]), (cs[1], cs[4 % len(cs)], cs[-1])]
+    body += ('<section class="rs" id="combos"><div class="rsh"><h2 class="dsp">Combinations</h2><p class="gr">Three ways to put the palette together: main colour, second colour, accent.</p></div><div class="g g3">' + ''.join(
+        f'<div class="combo"><div class="cb"><i style="background:{a["hex"]};flex:6"></i><i style="background:{b["hex"]};flex:3"></i><i style="background:{x["hex"]};flex:1"></i></div><p class="small" style="margin-top:10px"><b style="font-weight:500">{E(a["name"])}</b> with {E(b["name"].lower())}, accent {E(x["name"].lower())}</p></div>'
+        for a, b, x in combos) + '</div></section>')
+    its = dept_items(s, dept)
+    body += f'<section class="rs" id="pieces"><div class="rsh"><h2 class="dsp">Where it works</h2><p class="gr">Rising and peaking {lbl.lower()} pieces to colour this season.</p></div>'
+    if its:
+        body += '<div class="g g4">' + ''.join(
+            f'<a class="nw" href="/{s}-{"footwear" if x[0].startswith("Footwear") else x[0].split("|")[0].lower()}.html"><span class="nim">{img(photo(x[1]["name"], s), x[1]["name"])}</span><span class="small gr">{E(x[0].replace("|", ", "))}</span><span class="nn">{E(x[1]["name"])}</span><span class="small"><b class="{STAGE[x[2]][1]}">{STAGE[x[2]][0]}</b> <span class="gr">in {cs[i % len(cs)]["name"].lower()}</span></span></a>' for i, x in enumerate(its)) + '</div>'
+    else:
+        body += '<div class="g g2 split" style="gap:32px">' + ''.join(f'<div><h3 class="sub" style="margin-top:0">{E(st["title"])}</h3>{strip(st["colours"], 40)}<p class="small gr" style="margin-top:8px">{E(st["text"])}</p><p class="small" style="margin-top:6px">For kids: {E(st["use"].lower())}.</p></div>' for st in c['stories']) + '</div>'
+    body += '</section>'
+    body += ('<section class="rs" id="development"><div class="rsh"><h2 class="dsp">Season to season</h2><p class="gr">The ' + lbl.lower() + ' palette across the five seasons.</p></div><div class="cdev">' +
+             ''.join(f'<a href="/{k2}-colour-{dept}.html" class="crow{" now" if k2 == s else ""}"><span>{META[k2]["code"]}<em>{E(CF[k2]["status"].split(";")[0].lower())}</em></span><div>' + ''.join(f'<i style="background:{x["hex"]}" title="{E(x["name"])}"></i>' for x in CF[k2]['dept'][dept]['colours']) + '</div></a>' for k2 in SKEYS) + '</div></section>')
+    body += f'<section class="rs" id="more"><div class="rsh"><h2 class="dsp">More {m["code"]} colour</h2><p class="gr"><a class="lk" href="/{s}-colour.html">Back to the full colour forecast</a></p></div><div class="chg">' + ''.join(ccard(s, *x) for x in colour_chapters(s) if x[2] != 'colour' and x[3] != dept) + '</div></section>'
+    return colour_shell(s, f'{lbl} colour', f'{m["code"]} {lbl.lower()} colour forecast: {d["text"]}', f'<a href="/{s}-colour.html">Colour forecast</a> / ', hero, d['text'], secs, body)
+
+
+def colour_story(s, i):
+    m = META[s]
+    c = CF[s]
+    st = c['stories'][i]
+    cs = st['colours']
+    hero = strip(cs, 0).replace('height:0px', 'height:100%')
+    secs = [('story', 'The story'), ('palette', 'Palette'), ('use', 'How to use it'), ('more', 'More stories')]
+    body = (f'<section class="rs" id="story"><div class="rsh"><h2 class="dsp">The story</h2></div><p class="key" style="font-size:22px;max-width:40em;line-height:1.35">{E(st["text"])}</p>'
+            f'<p class="gr" style="margin-top:14px;max-width:52em">{E(c["headline"])}</p></section>')
+    body += '<section class="rs" id="palette"><div class="rsh"><h2 class="dsp">Palette</h2><p class="gr">In order of how much to use.</p></div><div class="chips">' + ''.join(chip(x, True) for x in cs) + '</div></section>'
+    depts = [(k, lbl) for k, lbl in CDEPTS if any(x['hex'] in [y['hex'] for y in c['dept'][k]['colours']] for x in cs)]
+    body += (f'<section class="rs" id="use"><div class="rsh"><h2 class="dsp">How to use it</h2><p class="gr">Use for: {E(st["use"])}.</p></div><div class="g g3">'
+             f'<div class="box1"><h3>Proportions</h3><p class="small gr">Lead with {E(cs[0]["name"].lower())} as the main colour, {E(cs[1]["name"].lower())} as the second, and keep {E(cs[-1]["name"].lower())} to trims, linings or one piece.</p></div>'
+             f'<div class="box1"><h3>Departments</h3><p class="small gr">{E(", ".join(l for _, l in depts) or "All departments")} carry colours from this story.</p>' + ''.join(f'<a class="lk small" style="display:inline-block;margin:8px 12px 0 0" href="/{s}-colour-{k}.html">{l}</a>' for k, l in depts) + '</div>'
+             f'<div class="box1"><h3>Codes</h3><p class="small gr">' + '<br>'.join(f'{E(x["name"])}: {E(x["tcx"])}, {x["hex"].upper()}' for x in cs) + '</p></div></div></section>')
+    body += f'<section class="rs" id="more"><div class="rsh"><h2 class="dsp">More {m["code"]} colour stories</h2><p class="gr"><a class="lk" href="/{s}-colour.html">Back to the full colour forecast</a></p></div><div class="chg">' + ''.join(ccard(s, *x) for x in colour_chapters(s) if x[2] in ('cstory', 'cdept') and x[3] != i) + '</div></section>'
+    return colour_shell(s, st['title'], f'{m["code"]} colour story, {st["title"]}: {st["text"]}', f'<a href="/{s}-colour.html">Colour forecast</a> / ', hero, st['text'], secs, body)
+
+
 def main():
     os.makedirs(ASSET, exist_ok=True)
     shutil.copy(os.path.join(B, 'v2', 'forecut.css'), os.path.join(ASSET, 'forecut.css'))
@@ -1340,9 +1519,16 @@ def main():
             if sl in pages:
                 continue
             _PATH[:] = [sl + '.html', (f'theme-{s}-{islug(ky)}' if kd == 'theme' and f'theme-{s}-{islug(ky)}' in IMG else f'cover-{s}-{t}')]
-            pages[sl] = chapter(s, t, sl, ti, kd, ky)
+            pages[sl] = colour_dept(s, ky) if kd == 'cdept' else colour_story(s, ky) if kd == 'cstory' else chapter(s, t, sl, ti, kd, ky)
     for n, h in pages.items():
         open(os.path.join(OUT, n + '.html'), 'w').write(h)
+    # colour pages from an earlier palette: keep the address, send readers to the current colour forecast
+    import glob as _g
+    for f in _g.glob(os.path.join(OUT, '*-colour-*.html')):
+        n = os.path.basename(f)[:-5]
+        if n not in pages and n.split('-')[0] in SKEYS:
+            to = f'/{n.split("-")[0]}-colour.html'
+            open(f, 'w').write(f'<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Moved | Forecut</title><meta name="robots" content="noindex"><link rel="canonical" href="{BASE}{to[1:]}"><meta http-equiv="refresh" content="0;url={to}"></head><body><p>This colour has moved. <a href="{to}">See the current colour forecast</a>.</p></body></html>')
     # sitemap: add the new pages (clean_urls.py tidies the URLs afterwards)
     sm_p = os.path.join(ROOT, 'sitemap.xml')
     if os.path.exists(sm_p):
