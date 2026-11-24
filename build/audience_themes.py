@@ -1,0 +1,145 @@
+"""Named themes per season and audience (added 24 Nov 2026 for the corrected forecast pipeline).
+
+Women use the researched season themes in seasons.json / themes.json.
+Men, boys, girls, toddler boys and toddler girls have their own named stories here:
+  (name, story, key-piece keywords, lead colour index, accent colour index)
+Colour indices point into that season's department palette in colour_forecast.json (menswear or kidswear).
+Keywords pick the matching pieces from the audience's own forecast pieces.
+"""
+
+MEN = {
+ 'aw26': [
+  ('Alpine Club', 'Ski-lodge dressing comes down the mountain: patterned knits, fleece and puffers layered over flannel, as seen across the Milan men\'s shows in the Winter Olympics season.',
+   ['fair isle', 'fleece', 'puffer', 'parka', 'shearling', 'alpaca', 'roll neck', 'cable', 'gilet'], 3, 4),
+  ('Workwear Refined', 'The work coat stays the key outerwear piece, now cleaned up and worn with a tie, tailored trousers or dress shoes.',
+   ['work', 'chore', 'carpenter', 'cargo', 'utility', 'waxed', 'painter', 'double-knee', 'field', 'overshirt'], 2, 0),
+  ('Slim Line', 'After seasons of volume, tailoring narrows: streamlined car coats, sharp double-breasted suits and 1930s drape in grey flannel.',
+   ['tailor', 'double-breasted', 'drape', 'overcoat', 'flannel', 'pinstripe', 'lapel', 'oxford', 'derby', 'loafer', 'car coat'], 0, 1),
+  ('Varsity Heritage', 'Preppy sport in winter weight: rugby stripes, cricket jumpers, varsity jackets and button-downs.',
+   ['rugby', 'cricket', 'varsity', 'oxford button', 'chukka', 'stripe', 'polo', 'cardigan'], 1, 4),
+ ],
+ 'ss27': [
+  ('Short Story', 'Proportions shrink: compact jackets, short sleeves and cropped trousers replace the long, oversized line, a practical answer to hotter summers.',
+   ['cropped', 'short', 'boxy', 'bermuda', 'blouson', 'harrington', 'shorts'], 1, 4),
+  ('Ventilated Tailoring', 'Lighter tailoring for heat: unlined jackets, linen and seersucker suits, open-weave knits and perforated leather.',
+   ['unlined', 'linen', 'seersucker', 'travel suit', 'open-stitch', 'perforated', 'summer blazer', 'mesh', 'woven leather'], 0, 2),
+  ('Tender Masculinity', 'A softer lens on menswear: embroidery, sheer panels, crochet, florals and the first real wave of skirts for men.',
+   ['embroider', 'sheer', 'crochet', 'skirt', 'ballet', 'satin', 'knitted', 'resort'], 4, 3),
+  ('New Prep', 'Preppy returns with nostalgia and polish: striped poplin, knitted polos, pleated chinos and loafers.',
+   ['rugby', 'oxford', 'polo', 'striped', 'chino', 'loafer', 'boat', 'pleat', 'tie'], 2, 5),
+ ],
+ 'aw27': [
+  ('Belted Outerwear', 'Coats take a waist: belted field coats, trench details and wrap fronts give menswear outerwear a defined line.',
+   ['belted', 'field coat', 'trench', 'overcoat', 'car coat', 'mac', 'raglan', 'officer'], 0, 4),
+  ('Hand-finished Winter', 'Winter knits look made by hand: fisherman cables, crochet panels, brushed yarns and tonal embroidery.',
+   ['cable', 'fisherman', 'crochet', 'embroider', 'fair isle', 'brushed', 'shawl', 'elbow'], 2, 5),
+  ('Quiet Structure', 'Clean fronts and precise shapes: funnel necks, band collars, single pleats and concealed fastenings.',
+   ['funnel', 'mandarin', 'band-collar', 'clean', 'single-pleat', 'flat-front', 'mock-neck', 'pocketless'], 1, 3),
+  ('Violet Hour', 'Dusky violet and bordeaux move into menswear knits, velvet and evening tailoring.',
+   ['velvet', 'dinner', 'satin', 'roll neck', 'merino', 'cashmere', 'patent'], 3, 4),
+ ],
+ 'ss28': [
+  ('Commuter Tailoring', 'Suits built for the day: stretch, packable, machine-washable and soft-shouldered for travel and the office.',
+   ['commuter', 'technical', 'stretch', 'unstructured', 'travel', 'blazer', 'soft-shoulder'], 0, 2),
+  ('Performance Ease', 'Sportswear function moves into everyday clothes: articulation, breathable mesh and quick-dry fabrics.',
+   ['technical', 'packable', 'mesh', 'trail', 'articulated', 'seamless', 'running', 'taped'], 3, 1),
+  ('Natural Tech', 'Natural fibres that perform: linen, merino and cotton finished for easy care.',
+   ['linen', 'merino', 'cotton', 'waffle', 'knit', 'chambray', 'drawcord'], 5, 4),
+  ('Sport Meets Smart', 'Hybrid shoes and sport soles under tailoring set the tone for the whole look.',
+   ['sport', 'hybrid', 'sneaker-sole', 'cupsole', 'slide', 'loafer', 'derby'], 1, 3),
+ ],
+ 'aw28': [
+  ('Functional Tailoring', 'Tailoring gains utility: belted jackets, bellows pockets, gilets and clean taped seams.',
+   ['belted', 'utility', 'pocket', 'field', 'multi-pocket', 'gilet', 'tailored', 'cargo'], 0, 2),
+  ('Technical Wool', 'Wool that works harder: stretch suiting, water-resistant finishes and travel suits.',
+   ['wool', 'technical', 'water', 'travel', 'merino', 'flannel', 'weatherproof'], 1, 4),
+  ('Deep Earth', 'Cocoa, bottle green and oat in suede, corduroy and quilting.',
+   ['suede', 'corduroy', 'quilt', 'brushed', 'cord', 'leather', 'shearling'], 3, 2),
+  ('Hidden Closures', 'Fastenings disappear: concealed plackets, magnets and hidden zips for a cleaner front.',
+   ['concealed', 'fly-front', 'hidden', 'magnet', 'zip', 'snap', 'storm'], 4, 5),
+ ],
+}
+
+KIDS = {
+ 'aw26': {
+  'boys': [('Explorer Layers', 'Ready for cold school runs and weekend walks: bubble puffers, cord and fleece in navy and moss, with grippy boots.', ['puffer', 'corduroy', 'cord', 'fleece', 'chelsea', 'parka', 'snow'], 0, 3),
+           ('Varsity Junior', 'The adult varsity mood for boys: chenille letters, track jackets and colour-block knits.', ['chenille', 'track', 'colour-block', 'sweatshirt', 'trainer', 'stripe'], 1, 2),
+           ('Tartan Weekend', 'Brushed tartans and flannel checks with a quilted barn jacket.', ['tartan', 'flannel', 'barn', 'check', 'melton', 'toggle'], 3, 5)],
+  'girls': [('Velvet Party Season', 'Plum and cherry velvet for the party calendar, with Mary Janes and satin bows.', ['velvet', 'mary jane', 'satin', 'tulle', 'party'], 1, 4),
+            ('Cosy Cable Club', 'Chunky cables, rib knit dresses and pinafores layered over tights.', ['cable', 'ribbed', 'pinafore', 'knit', 'lambswool', 'leggings'], 5, 4),
+            ('Cherry Pop', 'One bright piece over dark basics: a cherry puffer, a colour-block knit or chunky trainers.', ['puffer', 'colour-block', 'chunky', 'trainer', 'sneaker'], 1, 0)],
+  'toddler-boys': [('Little Lumberjack', 'Flannel checks, corduroy dungarees and sherpa fleece for small explorers.', ['flannel', 'corduroy', 'sherpa', 'dungaree', 'needlecord'], 3, 5),
+                   ('Snow Day', 'Bubble puffers, snow boots and Fair Isle yokes for the coldest days.', ['puffer', 'snow', 'fair isle', 'merino', 'glove'], 0, 1),
+                   ('Festive Mini Gent', 'Waistcoats, mandarin-collar kurta sets and velvet slippers for celebrations.', ['waistcoat', 'kurta', 'velvet', 'jutti', 'bandhgala', 'sherwani'], 2, 0)],
+  'toddler-girls': [('Pointelle and Plum', 'Soft pointelle sets, merino knits and ribbed leggings in mauve and oatmeal.', ['pointelle', 'merino', 'ribbed', 'leggings', 'knit'], 4, 5),
+                    ('First Party Dress', 'A first velvet party dress with a soft tulle skirt and Mary Janes.', ['velvet', 'tulle', 'mary jane', 'satin', 'party'], 1, 2),
+                    ('Snowflake Knits', 'Fair Isle yokes, sherpa fleece and snow boots.', ['fair isle', 'sherpa', 'snow', 'puffer', 'cardigan'], 0, 5)],
+ },
+ 'ss27': {
+  'boys': [('Resort Shirt Club', 'The adult resort shirt scaled down: camp collars, linen shorts and terry polos.', ['camp-collar', 'linen', 'terry', 'shorts', 'seersucker', 'chambray'], 5, 1),
+           ('Primary Play', 'Red, Klein blue and lemon in co-ord sets, retro runners and track tops.', ['co-ord', 'retro', 'track', 'runner', 'polo', 'colour'], 0, 1),
+           ('Pool Day', 'Sun-safe swim sets, water shoes and quick-dry layers for the pool and beach.', ['upf', 'swim', 'water shoes', 'sandal', 'mesh', 'pique'], 1, 2)],
+  'girls': [('Lilac Garden', 'Smocked sundresses, crochet tops and ruffle collars in lavender and butter.', ['smock', 'crochet', 'ruffle', 'broderie', 'puff', 'scallop'], 4, 0),
+            ('Holiday Maxi', 'Tiered crinkle-cotton maxis and jelly sandals for summer holidays and festivals.', ['tiered', 'crinkle', 'jelly', 'voile', 'maxi', 'linen'], 3, 5),
+            ('Sporty Brights', 'Co-ord sets, retro runners and knitted mesh in bright primaries.', ['co-ord', 'retro', 'mesh', 'track', 'sneaker', 'runner'], 2, 1)],
+  'toddler-boys': [('Seersucker Summer', 'Seersucker stripes, linen shorts and fisherman sandals.', ['seersucker', 'linen', 'fisherman', 'stripe', 'chambray', 'shorts'], 1, 5),
+                   ('Fruit Stand', 'Cheerful fruit and vegetable prints on rompers, tank sets and shorts.', ['fruit', 'tank', 'romper', 'set', 'print'], 0, 3),
+                   ('Paddling Pool', 'Sun-safe swim sets and water shoes for the garden pool.', ['upf', 'swim', 'water', 'sandal'], 1, 2)],
+  'toddler-girls': [('Smocked and Sunny', 'Smocked yokes, broderie trims and puff sleeves in cotton.', ['smock', 'broderie', 'puff', 'peter pan', 'collar'], 0, 4),
+                    ('Fruit Picnic', 'Fruit prints, ric-rac braid and easy jersey dresses.', ['fruit', 'ric-rac', 'jersey', 'tiered', 'print'], 3, 2),
+                    ('Little Splash', 'Sun-safe swim sets and jelly sandals.', ['upf', 'swim', 'jelly', 'water', 'sandal'], 1, 4)],
+ },
+ 'aw27': {
+  'boys': [('Trail Explorer', 'Rain parkas, fleece half-zips and reflective tabs with science and map prints.', ['parka', 'fleece', 'reflective', 'space', 'science', 'zip'], 2, 1),
+           ('Pink for Boys', 'Dusty pink and mauve move into boys\' sweats and knits.', ['sweatshirt', 'colour-block', 'knit', 'merino', 'hoodie'], 3, 4),
+           ('Storybook Festive', 'Bandhgalas, velvet blazers and sherwani sets for the wedding season.', ['bandhgala', 'velvet', 'sherwani', 'kurta', 'waistcoat', 'jutti', 'loafer'], 0, 1)],
+  'girls': [('Storybook Velvet', 'Plum velvet, embroidered anarkalis and party shoes for celebrations.', ['velvet', 'anarkali', 'lehenga', 'mary jane', 'party', 'mirror'], 0, 1),
+            ('Mushroom and Mauve', 'Soft neutrals in needlecord, cable knits and quilted jackets.', ['needlecord', 'cable', 'quilted', 'barn', 'pinafore', 'cardigan'], 5, 3),
+            ('Pink Puffer Club', 'A dusty-pink puffer with rib knit dresses and boots.', ['puffer', 'ribbed', 'boot', 'chelsea', 'knit'], 3, 0)],
+  'toddler-boys': [('Little Hiker', 'Rain parkas, fleece and wooden toggles for puddles and parks.', ['parka', 'fleece', 'toggle', 'quilted', 'sherpa'], 2, 4),
+                   ('Story Time Knits', 'Fair Isle yokes, shawl-collar cardigans and merino layers.', ['fair isle', 'shawl', 'merino', 'cardigan', 'knit'], 1, 5),
+                   ('Ceremony Mini', 'Mini sherwanis, waistcoats and juttis for family ceremonies.', ['sherwani', 'waistcoat', 'jutti', 'kurta', 'bandhgala'], 0, 1)],
+  'toddler-girls': [('Mauve Mornings', 'Pointelle, merino and needlecord pinafores in dusty mauve.', ['pointelle', 'merino', 'needlecord', 'pinafore', 'leggings'], 3, 5),
+                    ('Storybook Party', 'Velvet dresses with tulle and satin bows.', ['velvet', 'tulle', 'satin', 'party', 'mary jane'], 0, 1),
+                    ('Puddle Jumper', 'Rain parkas, sherpa fleece and grippy boots.', ['parka', 'sherpa', 'snow', 'boot', 'fleece'], 2, 4)],
+ },
+ 'ss28': {
+  'boys': [('Sea and Sky', 'Turquoise and deep sky in linen-cotton sets and sun-safe swim.', ['co-ord', 'linen', 'upf', 'swim', 'shorts', 'camp-collar'], 0, 3),
+           ('Skate Park', 'Skate shoes, knitted mesh and track tops.', ['skater', 'mesh', 'track', 'trainer', 'slub', 'sweat'], 1, 3),
+           ('Craft Camp', 'Eco-dyed cottons, blanket stitch and linen kurta sets.', ['eco-dyed', 'blanket', 'linen', 'kurta', 'hand'], 5, 2)],
+  'girls': [('Daydream', 'Greyish mauve and peach in tiered dresses, crochet and scalloped edges.', ['tiered', 'crochet', 'scallop', 'voile', 'maxi'], 4, 2),
+            ('Natural Crafts', 'Ric-rac, smocking and eco-dyed cottons with wide-leg linen.', ['ric-rac', 'smock', 'eco-dyed', 'linen', 'broderie'], 5, 4),
+            ('After-Dusk Glow', 'Sequin flip patches and party sneakers in inky blue with acid lemon.', ['sequin', 'party', 'sneaker', 'glitter', 'satin'], 3, 1)],
+  'toddler-boys': [('Little Sailor', 'Heritage stripes, seersucker and chambray.', ['stripe', 'seersucker', 'chambray', 'linen', 'shorts'], 3, 5),
+                   ('Natural Play', 'Eco-dyed cottons, bamboo jersey and extendable hems.', ['eco-dyed', 'bamboo', 'extendable', 'organic', 'grow'], 5, 2),
+                   ('Splash Blue', 'Sun-safe swim and water shoes in turquoise.', ['upf', 'swim', 'water', 'sandal'], 0, 1)],
+  'toddler-girls': [('Peach Daydream', 'Jersey tiered dresses, scalloped edges and cotton voile.', ['tiered', 'scallop', 'voile', 'jersey', 'puff'], 2, 4),
+                    ('Natural Crafts Mini', 'Ric-rac, eco-dyed cotton and smocking.', ['ric-rac', 'eco-dyed', 'smock', 'broderie', 'organic'], 5, 2),
+                    ('Sea Breeze', 'Sun-safe swim sets and sandals in turquoise and sky.', ['upf', 'swim', 'jelly', 'sandal', 'water'], 0, 3)],
+ },
+ 'aw28': {
+  'boys': [('Starry Nights', 'Space prints, bubble puffers and snow boots in ink and petrol teal.', ['space', 'puffer', 'snow', 'merino', 'fleece'], 4, 3),
+           ('Into the Woods', 'Washed cord, wooden toggles and quilted jackets in bottle green.', ['cord', 'toggle', 'quilted', 'melton', 'chelsea', 'flannel'], 0, 5),
+           ('Built to Last', 'Extendable hems, adjustable waists and elbow patches that add wear.', ['extendable', 'adjustable', 'elbow', 'grow', 'twill'], 5, 2)],
+  'girls': [('Berry and Gold', 'Mulberry and antique gold in velvet, mirror work and lehengas.', ['velvet', 'mirror', 'lehenga', 'anarkali', 'party', 'satin'], 1, 3),
+            ('Forest Cord', 'Needlecord, cable knits and Chelsea boots in bottle green.', ['cord', 'cable', 'chelsea', 'cardigan', 'pinafore'], 0, 5),
+            ('Room to Grow', 'Grow-with-me sleeves, extendable hems and soft basics.', ['grow', 'extendable', 'adjustable', 'neutral', 'organic'], 5, 2)],
+  'toddler-boys': [('Night Sky Nursery', 'Space prints, merino and sherpa.', ['space', 'merino', 'sherpa', 'snow', 'fleece'], 4, 3),
+                   ('Woodland Cord', 'Corduroy dungarees, needlecord and wooden toggles.', ['corduroy', 'needlecord', 'toggle', 'dungaree', 'flannel'], 0, 5),
+                   ('Grow-with-me Basics', 'Fold-back cuffs, let-down hems and snap fastenings.', ['grow', 'extendable', 'snap', 'popper', 'bodysuit'], 5, 1)],
+  'toddler-girls': [('Berry Party', 'Velvet and tulle in mulberry with gold accents.', ['velvet', 'tulle', 'satin', 'party', 'mary jane'], 1, 3),
+                    ('Woodland Cosy', 'Cable cardigans, sherpa and merino in green and oat.', ['cable', 'sherpa', 'merino', 'cardigan', 'pointelle'], 0, 5),
+                    ('Room to Grow Mini', 'Grow-with-me sleeves, extendable hems and soft rib.', ['grow', 'extendable', 'ribbed', 'organic', 'popper'], 5, 2)],
+ },
+}
+
+SOURCES = {
+ 'mens': {
+  'aw26': [('AP: Milan Fashion Week men\'s previews for Fall-Winter 2026-27', 'https://www.nbcnewyork.com/news/national-international/milan-fashion-week-trends-buzzwords-menswear-preview-winter/6445871/'),
+           ('Hypebeast: RIP Quiet Luxury, FW26 Wants to Be Seen', 'https://hypebeast.com/2026/3/rip-quiet-luxury-fw26-runway-fall-2026-trends')],
+  'ss27': [('Wallpaper*: Pitti Uomo SS 2027 menswear highlights', 'https://www.wallpaper.com/fashion-beauty/pitti-uomo-ss-2027-menswear-highlights'),
+           ('The Star: Milan menswear finds ease on the runways', 'https://www.thestar.com.my/lifestyle/style/2026/06/23/milan-menswear-finds-ease-on-the-fashion-runways-even-as-the-world-feels-uneasy'),
+           ('Elite Traveler: What men will wear next, according to Pitti Uomo', 'https://elitetraveler.com/style/pitti-uomo-2026-show-revi'),
+           ('Fashionsnap: 27SS men\'s trends', 'https://www.fashionsnap.com/article/27ss-mens-trend-01/')],
+ },
+}

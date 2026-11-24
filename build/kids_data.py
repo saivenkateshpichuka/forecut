@@ -156,6 +156,16 @@ K = [
  ('Fleece-lined clogs', 'k', 'Footwear', 'f', 'Material', 'Clog shapes with soft lining for indoors and short trips.', 'e-r-p'),
  ('Water shoes', 'k tb tg', 'Footwear', 'f', 'Sole', 'Quick-dry shoes with grip soles for pools and beaches.', '-p-p-'),
  ('Skater trainers', 'b g', 'Footwear', 'f', 'Style', 'Flat, padded skate shoes in canvas and suede.', 'p-r-f'),
+
+ # ---------------- boys' occasion and toddler trims (balance, 24 Nov 2026)
+ ('Soft-collar dress shirt', 'b tb', 'Occasion', 'w', 'Collar', 'Cotton dress shirt with a soft collar and easy cuffs; tucks into pleated trousers.', 'rpppp'),
+ ('Pleated dress trousers', 'b tb', 'Occasion', 'w', 'Waist', 'Single-pleat trousers with an adjustable inside waist for ceremonies.', 'prrpp'),
+ ('Clip-on bow ties', 'b', 'Occasion', 'w', 'Detail', 'Pre-tied bow ties on a safety clip; ages 5 and up.', 'rpppr'),
+ ('Nehru waistcoat', 'b tb', 'Occasion', 'w', 'Collar', 'Band-collar waistcoat over a kurta or shirt for festive dressing.', 'rrppp'),
+ ('Linen blazer', 'b', 'Occasion', 'w', 'Fabric', 'Half-lined linen blazer for summer weddings.', '-r-p-'),
+ ('Contrast binding', 'tb tg k', 'Tops', 'k', 'Edge', 'Soft bound edges in a contrast colour on necks and armholes.', 'rpppr'),
+ ('Embroidered motifs', 'tb tg', 'Tops', 'k', 'Embellishment', 'Small flat embroidered animals and fruit instead of appliqué parts.', 'pprrp'),
+ ('Rib-trim edges', 'tb tg k', 'Tops', 'k', 'Trim', 'Contrast rib at cuffs, hems and necks on sweats and tees.', 'ppppp'),
 ]
 
 AUD_KEYS = {'tg': 'toddler-girls', 'tb': 'toddler-boys', 'g': 'girls', 'b': 'boys', 'k': 'kids'}

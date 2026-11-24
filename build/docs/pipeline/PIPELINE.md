@@ -43,15 +43,20 @@ Connections:
 
 ## 5. PLM (upcoming)
 
-## Built on the site (24 Nov 2026)
+## Built on the site (corrected 24 Nov 2026)
 
-- Forecast tree: `/{season}-{audience}` hub, `/{season}-{audience}-{topic}` topic page, and a report page per pipeline leaf,
-  for all five seasons and the seven audiences (mens, womens, kids, toddler-boys, toddler-girls, boys, girls).
-  Generator: `build/v2/tree.py`, called from `build/v2/build_v2.py`.
-- Footwear sits inside each audience (hub block, styling looks, colour pages).
-- Kidswear data: `build/kids_data.py` (pieces tagged by audience, plus kids versions of the season themes). Safety notes on kids pages.
-- Every report page has a Download PDF button: the browser prints the page to A4 landscape (signed-in members only).
-- Kids thumbnails: `kids-thumbnail-prompts.csv`; save pictures in `images/` as `kid-<slug>.png`.
-- User home is private (signed-out visitors go to the public home). PLM page is "coming soon".
-- Insights filters: Reports, Journal, Magazine, Market data, Brand updates, Market news, Brand news.
-- Tools page shows sub-features and the tool connections (style brief share; import from my tools).
+Forecasts > Season > Audience > Forecast section > Named report or theme > Related tool
+e.g. Forecasts > SS27 > Men > Colours > "SS27 Men's Season Palette" > Colour Palette Builder
+
+- Audiences: Men, Women, Boys, Girls, Toddler Boys, Toddler Girls. `/{season}-kids` is a landing page that helps people choose; it has no reports of its own.
+- Sections per audience: Themes, Colour Direction, Silhouette Direction, Fabric Direction, Trim Direction, Styling Direction,
+  Couture Direction (kids: Couture and Occasion Direction), Business Strategy, Innovation Outlook. Page title pattern: "SS27 Men's Colour Direction".
+- Placeholders become named reports, e.g. "SS27 Men's Woven Silhouette Direction", "SS27 Men's Trim Innovation Outlook".
+- Themes are named stories per season and audience: women from the researched season themes (seasons.json/themes.json),
+  men and kids from `build/audience_themes.py`. Each theme page has its own colours, silhouettes, fabrics, trims and
+  product recommendations, and links to the same season-audience colour, fabric, silhouette and trim reports.
+- Every named report and theme: web page + Download PDF (browser print, A4 landscape, signed-in members).
+- Every section and report lists its related tools.
+- Send to tools: findings go to a Board, the Trend to Style brief or the Collection Planner (localStorage `fc-forecast-inbox`,
+  read by `tools/inbox.js`). Each finding keeps season + audience + report/theme title + page link.
+- Generator: `build/v2/tree.py`; kidswear pieces: `build/kids_data.py`. Pages from the earlier structure redirect to the nearest current page.

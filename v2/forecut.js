@@ -99,7 +99,7 @@ if(DM&&FI){var cards=[].slice.call(document.querySelectorAll('button.item')),cur
   var nx=life.charAt(ci+1),msg={e:'Early signals: test in small quantities.',r:'Growth is building: the best time to invest.',p:'At its height: keep in core ranges, avoid over-buying.',f:'Demand is slowing: clear stock and move on.'}[ch];
   if(FI.seasons[ci+1])msg+=X[nx]?' Next, '+FI.seasons[ci+1]+': '+NM[nx].toLowerCase()+'.':' Leaves the forecast in '+FI.seasons[ci+1]+'.';
   return s+'<p class="small gr">'+msg+'</p>'}
- function fill(i){var d=FI.items[i],c=cards[i],im=c.querySelector('img'),dimg=document.getElementById('dmimg');
+ function fill(i){DM.dataset.cur=i;var d=FI.items[i],c=cards[i],im=c.querySelector('img'),dimg=document.getElementById('dmimg');
   var di=DM.querySelector('.dmi'),ph=c.querySelector('.ph');di.classList.toggle('none',!im);di.style.cssText=im?'':ph.getAttribute('style');var pe=di.querySelector('em');if(pe)pe.remove();if(im){dimg.src=im.src;dimg.alt=d.n}else{dimg.removeAttribute('src');var e2=document.createElement('em');e2.textContent=d.a;di.appendChild(e2)}
   document.getElementById('dmk').textContent=d.k+', '+d.a.toLowerCase();document.getElementById('dmn').textContent=d.n;document.getElementById('dmnote').textContent=d.note;
   var st=document.getElementById('dmst');st.textContent=ST[d.st]+' in '+FI.seasons[FI.si];st.className='stage '+SC[d.st];
@@ -123,8 +123,18 @@ if(DM&&FI){var cards=[].slice.call(document.querySelectorAll('button.item')),cur
  cards.forEach(function(c,i){c.addEventListener('click',function(){open(i)})});
  DM.addEventListener('click',function(e){if(e.target.closest('[data-close]'))close()});
  document.getElementById('dmprev').addEventListener('click',function(){step(-1)});document.getElementById('dmnext').addEventListener('click',function(){step(1)});
- document.getElementById('dmsave').addEventListener('click',function(){var d=FI.items[cur],L=saved(),k=L.findIndex(function(x){return x.n===d.n});if(k<0)L.unshift({n:d.n,s:FI.seasons[FI.si],u:location.pathname,p:d.p,k:d.k});else L.splice(k,1);try{localStorage.setItem('fc-saved',JSON.stringify(L.slice(0,200)))}catch(e){}fill(cur)});
+ document.getElementById('dmsave').addEventListener('click',function(){var d=FI.items[cur],L=saved(),k=L.findIndex(function(x){return x.n===d.n});if(k<0)L.unshift({n:d.n,s:FI.seasons[FI.si],u:location.pathname,p:d.p,k:d.k,aud:window.FC_CTX?FC_CTX.aud:'',src:window.FC_CTX?FC_CTX.src:document.title.split(' | ')[0]});else L.splice(k,1);try{localStorage.setItem('fc-saved',JSON.stringify(L.slice(0,200)))}catch(e){}fill(cur)});
  document.addEventListener('keydown',function(e){if(DM.hidden)return;if(e.key==='Escape')close();else if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1);else if(e.key==='Tab'){var f=[].slice.call(DM.querySelectorAll('button:not([disabled]),a[href]'));var a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}}});}
+ /* send findings to a Board, a Style Brief or the Collection Planner, keeping season + audience + report title */
+ var TO={board:['a Board','/trend-to-style.html'],brief:['your Style Brief','/trend-to-style.html'],plan:['Collection Planner','/rangeboard.html']};
+ document.addEventListener('click',function(e){var b=e.target.closest('[data-send]');if(!b)return;e.preventDefault();
+  if(!document.documentElement.classList.contains('fc-in')){location.href='/account.html#signup';return}
+  var X=window.FC_CTX||{season:'',aud:'',src:document.title.split(' | ')[0],url:location.pathname},I=(window.FC_ITEMS&&FC_ITEMS.items)||[],dm=b.closest('.dm'),list;
+  if(dm){list=[I[+dm.dataset.cur]]}else{list=I.slice(0,4);if(!list.length){var ld=document.querySelector('.rinfo .lead');list=[{n:X.src,note:ld?ld.textContent:''}]}}
+  var L;try{L=JSON.parse(localStorage.getItem('fc-forecast-inbox')||'[]')}catch(x){L=[]}
+  list.forEach(function(d){if(!d)return;L.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),to:b.dataset.send,season:X.season,aud:X.aud,src:X.src,url:X.url,n:d.n,note:d.note||'',area:d.a||'',st:d.st||'',k:d.k||'',p:d.p||'',at:new Date().toISOString()})});
+  try{localStorage.setItem('fc-forecast-inbox',JSON.stringify(L.slice(0,200)))}catch(x){}
+  var t=document.getElementById('sendt');if(t){t.innerHTML='Sent to '+TO[b.dataset.send][0]+' with '+X.season+' '+X.aud+', '+X.src.replace(/</g,'')+'. <a href="'+TO[b.dataset.send][1]+'">Open it</a>';t.hidden=false;clearTimeout(t._t);t._t=setTimeout(function(){t.hidden=true},7000)}});
  document.addEventListener('click',function(e){var b=e.target.closest('[data-print]');if(!b)return;e.preventDefault();
   if(!document.documentElement.classList.contains('fc-in')){location.href='/account.html#signup';return}
   [].forEach.call(document.querySelectorAll('img[loading=lazy]'),function(i){i.loading='eager'});document.documentElement.classList.add('printing');

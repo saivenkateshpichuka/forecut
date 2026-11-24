@@ -572,4 +572,16 @@
   var wantImport = /[?&]import=planner/.test(location.search);
   setTool('select'); renderBar(); setMode(wantImport ? 'board' : (S.mode || 'board')); setTimeout(function () { if (B().view.k === 0.6) fit(); }, 60);
   if (wantImport) { try { history.replaceState(null, '', location.pathname); } catch (e) {} setTimeout(function () { var nb = newBoard('blank'); nb.name = 'Collection plan'; S.boards.push(nb); S.cur = nb.id; undo = []; redo = []; sel = []; renderBar(); importPlanner(); }, 120); }
+  /* findings sent from the Forecut forecast pages (tools/inbox.js) keep season, audience and report title */
+  window.ForecutBoard = { add: function (list) {
+    snapshot(); var b = B(), z = maxZ(), y0 = 0, out = [];
+    b.items.forEach(function (i) { if (typeof i.y === 'number' && i.y + (i.h || 0) > y0) y0 = i.y + (i.h || 0); });
+    y0 += 80;
+    list.forEach(function (o, n) {
+      var x = (n % 5) * 240, y = y0 + Math.floor(n / 5) * 200;
+      var it = note(x, y, o.n + '\n' + o.src, NOTE[n % 4]); it.z = ++z; b.items.push(it); out.push(it.id);
+    });
+    sel = out; save(false); draw(); return out.length;
+  } };
+
 })();

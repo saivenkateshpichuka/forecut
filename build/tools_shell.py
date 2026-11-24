@@ -5,7 +5,7 @@ The tool list itself is rendered by tools/shell.js from one registry.
 """
 from html import escape
 
-VER = 'fx-20261116c'
+VER = 'fx-20261124a'
 
 # slug: (brand name, plain label, stage)
 NAMES = {
@@ -53,7 +53,7 @@ def head_links(slug=None):
     return (man + '<link rel="apple-touch-icon" href="apps/studio-192.png">'
             f'<link rel="stylesheet" href="tools/shell.css?v={VER}">'
             f'<script defer src="tools/install.js?v={VER}"></script>'
-            f'<script defer src="tools/style-id.js?v={VER}"></script><script defer src="tools/revisions.js?v={VER}"></script><script defer src="tools/assistant.js?v={VER}"></script><script defer src="tools/shell.js?v={VER}"></script><script defer src="tools/report.js?v={VER}"></script><script defer src="tools/gate.js?v={VER}"></script>'
+            f'<script defer src="tools/style-id.js?v={VER}"></script><script defer src="tools/revisions.js?v={VER}"></script><script defer src="tools/assistant.js?v={VER}"></script><script defer src="tools/shell.js?v={VER}"></script><script defer src="tools/report.js?v={VER}"></script><script defer src="tools/gate.js?v={VER}"></script><script defer src="tools/inbox.js?v={VER}"></script>'
             '<script type="module" src="auth.js"></script>')
 
 
