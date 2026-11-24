@@ -23,7 +23,9 @@ themes_v |= {f'cover-{s}-{t}' for s in seasons for t in ('themes', 'colour', 'wo
 flats_v = {'flat-' + b for b in base} | {'flat-' + b + '-' + s for b in base for s in seasons}
 import tools_hub as _TH
 tools_v = {'tool-' + t['slug'] for t in _TH.TOOLS} | {'tool-3d-drape-studio'}
-valid = tools_v | base | {b + '-' + s for b in base for s in seasons} | heroes | themes_v | flats_v
+import kids_data as _KD
+kids_v = {'kid-' + islug(k[0]) for k in _KD.K}
+valid = tools_v | base | kids_v | {b + '-' + s for b in base for s in seasons} | heroes | themes_v | flats_v
 imgs = set(json.load(open('images.json')))
 import datetime
 log = json.load(open('upload_log.json')) if os.path.exists('upload_log.json') else {}

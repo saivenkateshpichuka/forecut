@@ -34,6 +34,7 @@ jobs:
           python search.py && ONLY=search.html python seo.py
           python v2/build_v2.py
           python v2/cover_prompts.py
+          python v2/kid_prompts.py
           python clean_urls.py
       - name: Commit
         run: |
