@@ -83,32 +83,28 @@
    ],
    "palette": [
     [
-     "#d6337f",
-     "Fuchsia"
+     "#51304e",
+     "Plum"
     ],
     [
-     "#5e1f24",
-     "Oxblood"
+     "#65663f",
+     "Moss"
     ],
     [
-     "#4a2a4f",
-     "Aubergine"
+     "#54392d",
+     "Chocolate"
     ],
     [
-     "#5f6b73",
-     "Slate grey"
+     "#434447",
+     "Charcoal"
     ],
     [
-     "#264d3a",
-     "Forest green"
+     "#ca3422",
+     "Tomato red"
     ],
     [
-     "#c9a227",
+     "#cda323",
      "Mustard"
-    ],
-    [
-     "#efe9dc",
-     "Cream"
     ]
    ],
    "coty": [
@@ -145,7 +141,7 @@
    "stage": "Next season forecast",
    "window": "Feb – Jul 2027",
    "basis": "research",
-   "intro": "The waist returns and handcraft moves into everyday clothes. Shapes get defined again, sneakers step back for elegant shoes, and a bright luminous blue leads the palette.",
+   "intro": "The waist returns and handcraft moves into everyday clothes. Shapes get defined again, sneakers step back for elegant shoes, and colour comes back in full: purple, true red and Klein blue over sun-faded whites and sand.",
    "themes": [
     [
      "The waist returns",
@@ -228,32 +224,32 @@
    ],
    "palette": [
     [
-     "#3d6fd6",
-     "Bright cobalt blue"
+     "#b3a0c9",
+     "Lilac"
     ],
     [
-     "#f07a1d",
-     "Energy orange"
+     "#603f83",
+     "Violet"
     ],
     [
-     "#ef6fa7",
-     "Pop pink"
+     "#c71f2d",
+     "True red"
     ],
     [
-     "#7fa35a",
-     "Meadow green"
+     "#f2f0eb",
+     "Optic white"
     ],
     [
-     "#b57552",
-     "Clay"
+     "#dac7ab",
+     "Sand"
     ],
     [
-     "#b9b2a3",
-     "Stone"
+     "#3850a0",
+     "Klein blue"
     ],
     [
-     "#f2e9d8",
-     "Panna cotta"
+     "#75a14f",
+     "Grass green"
     ]
    ],
    "coty": [],
@@ -265,7 +261,7 @@
    "stage": "Early outlook",
    "window": "Aug 2027 – Jan 2028",
    "basis": "projection",
-   "intro": "Early outlook. SS27 signals carried into winter: waisted outerwear, handcraft on knits, quiet structure and warmer earth tones, with luminous blue deepening for the cold season.",
+   "intro": "Early outlook. SS27 signals carried into winter: waisted outerwear, handcraft on knits and quiet structure, with deep violet, plum and tannic bordeaux taking the place of black.",
    "themes": [
     [
      "Waisted outerwear",
@@ -335,32 +331,32 @@
    ],
    "palette": [
     [
-     "#8a4b2a",
-     "Cognac"
+     "#563474",
+     "Deep violet"
     ],
     [
-     "#9c1f2e",
-     "Carmine"
+     "#64242e",
+     "Tannic bordeaux"
     ],
     [
-     "#6f7880",
-     "Steel grey"
+     "#b0879b",
+     "Dusty mauve"
     ],
     [
-     "#6b6a4b",
-     "Khaki"
+     "#2c2a33",
+     "Tinted black"
     ],
     [
-     "#5a3f7a",
-     "Deep purple"
+     "#c7bba4",
+     "Mushroom"
     ],
     [
-     "#23407a",
-     "Deep blue"
+     "#c4962c",
+     "Waxy ochre"
     ],
     [
-     "#efe6d6",
-     "Cream"
+     "#a1ad92",
+     "Sage"
     ]
    ],
    "coty": [],
@@ -372,7 +368,7 @@
    "stage": "Long-range outlook",
    "window": "Feb – Jul 2028",
    "basis": "projection",
-   "intro": "Long-range outlook. Structured clarity and easy movement: fewer, better pieces with performance comfort for commuting, anchored by a warm earth orange.",
+   "intro": "Long-range outlook. Structured clarity and easy movement: fewer, better pieces with performance comfort for commuting, in strong blues, greyish mauve and straw.",
    "themes": [
     [
      "Structured clarity",
@@ -442,32 +438,32 @@
    ],
    "palette": [
     [
-     "#c0582b",
-     "Earth orange"
+     "#3850a0",
+     "Royal blue"
     ],
     [
-     "#d9b892",
-     "Sand"
+     "#279d9f",
+     "Sonar turquoise"
     ],
     [
-     "#a8a49b",
-     "Stone"
+     "#bdabbe",
+     "Greyish mauve"
     ],
     [
-     "#1f5e63",
-     "Deep teal"
+     "#ede6db",
+     "Bleached linen"
     ],
     [
-     "#f3f0e8",
-     "Off-white"
+     "#dabe81",
+     "Straw"
     ],
     [
-     "#9fae95",
-     "Sage"
+     "#44377d",
+     "Magnetic violet"
     ],
     [
-     "#26324a",
-     "Ink navy"
+     "#f5b895",
+     "Peach"
     ]
    ],
    "coty": [],
@@ -479,7 +475,7 @@
    "stage": "Long-range outlook",
    "window": "Aug 2028 – Jan 2029",
    "basis": "projection",
-   "intro": "Long-range outlook. Functional tailoring and technical wool for winter, hidden closures and hybrid boots, with radiant earth deepening into rust and brick.",
+   "intro": "Long-range outlook. Functional tailoring and technical wool for winter, hidden closures and hybrid boots, in ink blues, mulberry and bottle green.",
    "themes": [
     [
      "Functional tailoring",
@@ -549,32 +545,32 @@
    ],
    "palette": [
     [
-     "#9a4322",
-     "Deep earth"
+     "#6b264b",
+     "Mulberry"
     ],
     [
-     "#8b3a2b",
-     "Rust"
-    ],
-    [
-     "#33363a",
-     "Charcoal"
-    ],
-    [
-     "#d8cdb8",
-     "Oatmeal"
-    ],
-    [
-     "#1f4a35",
+     "#264e36",
      "Bottle green"
     ],
     [
-     "#b08a5e",
-     "Camel"
+     "#b68a3a",
+     "Antique gold"
     ],
     [
-     "#4b4f55",
-     "Graphite"
+     "#27293d",
+     "Ink"
+    ],
+    [
+     "#d7cab0",
+     "Oat"
+    ],
+    [
+     "#2a5c6a",
+     "Petrol teal"
+    ],
+    [
+     "#c2452d",
+     "Vermilion"
     ]
    ],
    "coty": [],
