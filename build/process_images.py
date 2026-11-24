@@ -21,7 +21,9 @@ hubs_v |= set(_RG.IMAGES)
 themes_v |= hubs_v  # hub images: 16:10 like theme tiles
 themes_v |= {f'cover-{s}-{t}' for s in seasons for t in ('themes', 'colour', 'womenswear', 'menswear', 'footwear', 'knitwear', 'fabrics', 'trims')}  # report covers: 16:10
 flats_v = {'flat-' + b for b in base} | {'flat-' + b + '-' + s for b in base for s in seasons}
-valid = base | {b + '-' + s for b in base for s in seasons} | heroes | themes_v | flats_v
+import tools_hub as _TH
+tools_v = {'tool-' + t['slug'] for t in _TH.TOOLS} | {'tool-3d-drape-studio'}
+valid = tools_v | base | {b + '-' + s for b in base for s in seasons} | heroes | themes_v | flats_v
 imgs = set(json.load(open('images.json')))
 import datetime
 log = json.load(open('upload_log.json')) if os.path.exists('upload_log.json') else {}
@@ -37,6 +39,15 @@ for root, dirs, files in os.walk(src):
         try: im = Image.open(p); im.load(); im = im.convert('RGB'); w, h = im.size
         except Exception:  # corrupt/partial upload: set aside so the row stays "not Done" and gets regenerated
             os.makedirs(os.path.join(src, 'broken'), exist_ok=True); shutil.move(p, os.path.join(src, 'broken', f)); broken.append(f); continue
+        if s in tools_v:  # tool cover: 16:9 1280x720 + 640 wide + 1200x630 social card, into tools/covers/
+            sl = s[5:]; os.makedirs('../tools/covers', exist_ok=True)
+            th = int(w * 9 / 16)
+            c = im.crop((0, (h - th) // 2, w, (h - th) // 2 + th)) if th <= h else im.crop(((w - int(h * 16 / 9)) // 2, 0, (w - int(h * 16 / 9)) // 2 + int(h * 16 / 9), h))
+            c.resize((1280, 720), Image.LANCZOS).save(f'../tools/covers/{sl}.webp', 'WEBP', quality=82)
+            c.resize((640, 360), Image.LANCZOS).save(f'../tools/covers/{sl}-640.webp', 'WEBP', quality=80)
+            cw, ch = c.size; oh = int(cw * 630 / 1200)
+            c.crop((0, (ch - oh) // 2, cw, (ch - oh) // 2 + oh)).resize((1200, 630), Image.LANCZOS).save(f'../tools/covers/{sl}-og.jpg', 'JPEG', quality=84)
+            log[s] = datetime.date.today().isoformat(); added.append(s); shutil.move(p, os.path.join(src, 'done', f)); continue
         if s in flats_v:  # technical flat sketch: keep whole drawing, pad to square on white
             im.thumbnail((1000, 1000), Image.LANCZOS); bg = Image.new('RGB', (1000, 1000), (255, 255, 255))
             bg.paste(im, ((1000 - im.width) // 2, (1000 - im.height) // 2)); bg.save(f'../img/{s}.webp', 'WEBP', quality=86)
