@@ -3922,6 +3922,12 @@
    "date": "2026-11-25",
    "hash": "8e3ce8b3d608e68c",
    "note": "First publication"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "beade53ad5319cdf",
+   "note": "Updated"
   }
  ],
  "fc-ss27-women-themes-one-layer-summer": [
@@ -3930,6 +3936,12 @@
    "date": "2026-11-25",
    "hash": "9fc0ba022b5fe6f9",
    "note": "First publication"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "b51caa9b1d5a9893",
+   "note": "Updated"
   }
  ],
  "fc-ss27-women-trims-trending-trims": [
@@ -3937,6 +3949,605 @@
    "v": 1,
    "date": "2026-11-25",
    "hash": "c8f6236d190d8166",
+   "note": "First publication"
+  }
+ ],
+ "fc-aw26-women-themes-season-themes": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 4,
+   "date": "2026-11-25",
+   "hash": "cbe542fccf5a5466",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-women-themes-roaring-twenties": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "99346157f6b905b8",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-women-themes-power-tailoring": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "52a3db279d86ed28",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-women-themes-preppy-sport": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "bfb3450a53df9b8a",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-women-themes-big-outerwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "23db8ab6d400a7af",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-women-themes-fully-loaded": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "c2d7391cc9983fdf",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-themes-season-themes": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 4,
+   "date": "2026-11-25",
+   "hash": "50f2931cc1964ef0",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-themes-the-waist-returns": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "188ee16c681b9b70",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-themes-handcraft": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "0b21f78db2b7a1f5",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-themes-undone": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "18a430c03c0042b1",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-themes-in-motion": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "5f82622177d9a3cd",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-themes-elegant-ease": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "a28a772fb99f32e2",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-themes-reworked-denim": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "75232276ef225c6e",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-women-themes-season-themes": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 4,
+   "date": "2026-11-25",
+   "hash": "a73d0861d782ae6e",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-women-themes-waisted-outerwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "1eab3f228451d3bf",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-women-themes-winter-handcraft": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "f43e208955e877dd",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-women-themes-quiet-structure": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "f8d376e7578bac29",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-women-themes-deep-blue": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "ec5a5c72e54b09b3",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-women-themes-soft-boots": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "dc6291893d615bfe",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-women-themes-season-themes": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 4,
+   "date": "2026-11-25",
+   "hash": "c52488fed6a8c785",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-women-themes-structured-clarity": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "3a40a2608df903fd",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-women-themes-performance-ease": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "e2a002bf066eaadb",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-women-themes-commuter-tailoring": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "b88f15762f568840",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-women-themes-natural-tech": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "595d50f68864a805",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-women-themes-sport-meets-smart": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "d84b90ff91f87ac7",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-women-themes-season-themes": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 4,
+   "date": "2026-11-25",
+   "hash": "d29352ed7a69e8c3",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-women-themes-functional-tailoring": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "a8094be533590455",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-women-themes-technical-wool": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "f3a93fb4ed6ab935",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-women-themes-earth-deepens": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "6d80535e540ae7f8",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-women-themes-hybrid-boots": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "2269a07ecf98ceb7",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-women-themes-hidden-closures": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "e4fca4503b5ba8d3",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-colours-season-colour-analysis": [
+  {
+   "v": 1,
+   "date": "2026-11-25",
+   "hash": "a1b3f47d5b730bcf",
+   "note": "First publication"
+  }
+ ],
+ "fc-ss27-women-trims-trending-trims-report": [
+  {
+   "v": 1,
+   "date": "2026-11-25",
+   "hash": "5681eb559dd54a1c",
    "note": "First publication"
   }
  ]

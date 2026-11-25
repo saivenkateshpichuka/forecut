@@ -183,8 +183,8 @@ A third, smaller story is gloss: vinyl and translucent PVC, latex-effect rubber,
 ))
 
 # 4 ---------------------------------------------------------------- season colours
-R.append(dict(COMMON, kind='report', category='colours', subsection='season-colours', slug='season-colours',
-  title="SS27 Women's Season Colours",
+R.append(dict(COMMON, kind='report', category='colours', subsection='season-colours', slug='season-colour-analysis',
+  title="SS27 Women's Season Colour Analysis",
   summary='Lilac and violet lead the womenswear palette, with butter for softness and true red and Klein blue for statement pieces. White is the neutral that is rising; warm browns and greys give way.',
   trend_status='Rising',
   sections=[
@@ -236,8 +236,8 @@ R[-1]['sections'][0]['body'] = R[-1]['sections'][0]['body']  # palette table abo
 R[-1]['sources'][1] = dict(S['ph'], note='Runway colour observations only')
 
 # 5 ---------------------------------------------------------------- trending trims
-R.append(dict(COMMON, kind='report', category='trims', subsection='trending-trims', slug='trending-trims',
-  title="SS27 Women's Trending Trims",
+R.append(dict(COMMON, kind='report', category='trims', subsection='trending-trims', slug='trending-trims-report',
+  title="SS27 Women's Trending Trims Report",
   summary='Decoration returns in force: three-dimensional petals and corsages, ribbons used as structure, lingerie lace, crystal embroidery and fringe. Belts and visible fastenings carry the season\'s waist and separates story.',
   trend_status='Rising',
   sections=[
@@ -286,7 +286,7 @@ R.append(dict(COMMON, kind='theme', category='themes', subsection='themes', slug
    {'heading': 'The story', 'body': f'''Europe's extreme summer heat shaped the SS27 collections{ref(1)}. Nicolas Ghesquière put it simply at Louis Vuitton: "We needed to think differently. You want one layer"{ref(1)}. His collection cut tailoring from the lightest knits and used fabrics as thin as cigarette paper{ref(2)}. At Dior, Jonathan Anderson made featherweight organza tailoring printed to look like wool suiting, with pleated plissé and petals{ref(1)}, and sheer suits with mesh blazers{ref(2)}. Hermès perforated suede for airflow{ref(1)} and showed sheer knits{ref(2)}. In Milan, Armani, Missoni, Max Mara and Ferragamo showed see-through dresses and veiled skirts and trousers{ref(2)}.
 
 The result is a new idea of summer polish: a complete, tailored look that weighs almost nothing.'''},
-   {'heading': 'Colours', 'body': 'Optic white, butter and lilac from the SS27 womenswear palette, with pale tones that show the transparency of the cloth. See SS27 Women\'s Season Colours for codes.'},
+   {'heading': 'Colours', 'body': 'Optic white, butter and lilac from the SS27 womenswear palette, with pale tones that show the transparency of the cloth. See SS27 Women\'s Season Colour Analysis for codes.'},
    {'heading': 'Silhouettes', 'body': '- Sheer suits: unlined jackets and straight or full skirts in organza or mesh.\n- Single-layer knit tailoring: a fine knit jacket worn alone.\n- Layered midi skirts in two or three sheer layers.\n- Sheer fine-gauge tops over slips or bandeaus.'},
    {'heading': 'Fabrics', 'body': f'Organza, chiffon, tulle and mesh{ref(2)}; nylon organza, double gauze and devoré chiffon{ref(3)}; fine wool and extra-fine merino{ref(4)}; perforated leather and suede{ref(1)}.'},
    {'heading': 'Trims and details', 'body': 'Narrow rolled hems, French seams, ribbon binding, organza petals, minimal hardware.'},
@@ -303,7 +303,7 @@ The result is a new idea of summer polish: a complete, tailored look that weighs
 - Watch return rates; show what is worn underneath on product pages.''',
   sources=src('wp', 'wr', 'pvf', 'pvt'),
   images=[img('sheer-organza-overlays-ss27-photo', 'Sheer organza overlay.', '13 October 2026')],
-  related=['fc-ss27-women-fabrics-woven-fabric-direction', 'fc-ss27-women-silhouettes-knit-shape-and-fit-outlook', 'fc-ss27-women-colours-season-colours'],
+  related=['fc-ss27-women-fabrics-woven-fabric-direction', 'fc-ss27-women-silhouettes-knit-shape-and-fit-outlook', 'fc-ss27-women-colours-season-colour-analysis'],
 ))
 
 # 7 ---------------------------------------------------------------- theme: lingerie as outerwear
@@ -315,7 +315,7 @@ R.append(dict(COMMON, kind='theme', category='themes', subsection='themes', slug
    {'heading': 'The story', 'body': f'''Lingerie was one of the most visible ideas of SS27. Bralettes were worn alone or under jackets, and the bra returned as a simple top{ref(1)}. Prada, Fendi, Tod's, The Attico, Marni, MM6 and Blumarine all showed it: bras under suits and dresses, with skirts, and as tiny tops between swimwear and lingerie{ref(2)}. Fendi paired lace-trimmed bras with a fur stole{ref(3)}; Miu Miu put jewelled bras over sporty rash vests{ref(3)}; Dior placed a black bra top beneath an organza skirt suit{ref(3)}.
 
 The boudoir mood went further. Celine used creased, pressed satin and nightie- and negligee-inspired dresses; Julie Kegels layered deconstructed bras over T-shirts; Ester Manas, with Primadonna, showed sheer, lacy slips and negligees{ref(3)}. In London, Dreaming Eli used "slightly old-fashioned fabrics like lace and satin"{ref(1)}.'''},
-   {'heading': 'Colours', 'body': 'Black, optic white and butter for lingerie bases; violet and true red for evening. See SS27 Women\'s Season Colours for codes.'},
+   {'heading': 'Colours', 'body': 'Black, optic white and butter for lingerie bases; violet and true red for evening. See SS27 Women\'s Season Colour Analysis for codes.'},
    {'heading': 'Silhouettes', 'body': '- Bra and bandeau tops worn under unbuttoned jackets.\n- Slip dresses and slip skirts with lace edges.\n- Negligee-style dresses, unbuttoned at the shoulder.\n- Camisoles layered over knits and T-shirts.'},
    {'heading': 'Fabrics', 'body': f'Fluid and creased satin, lace, sheer tulle and mesh; dark Leavers lace and lace with a melted-film sheen{ref(4)}.'},
    {'heading': 'Trims and details', 'body': 'Lace trims, satin bows and ribbons, adjustable straps, hook-and-eye fastenings as visible details, jewelled or embroidered cups.'},
@@ -332,7 +332,7 @@ The boudoir mood went further. Celine used creased, pressed satin and nightie- a
 - Style the look with jackets and knitwear in campaigns so the idea reads as day wear.''',
   sources=src('fu', 'wr', 'wp', 'pvd'),
   images=[img('lace-cami-layering-tops-ss27-photo', 'Lace camisole layering top.', '14 October 2026'), img('satin-slip-skirts-ss27-photo', 'Satin slip skirt.', '14 October 2026')],
-  related=['fc-ss27-women-trims-trending-trims', 'fc-ss27-women-fabrics-woven-fabric-direction', 'fc-ss27-women-colours-season-colours'],
+  related=['fc-ss27-women-trims-trending-trims-report', 'fc-ss27-women-fabrics-woven-fabric-direction', 'fc-ss27-women-colours-season-colour-analysis'],
 ))
 
 for r in R:

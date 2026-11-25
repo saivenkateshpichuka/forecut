@@ -1661,6 +1661,31 @@ def main():
             f'<meta http-equiv="refresh" content="0;url={to}"><script>location.replace("{to}"+location.hash)</script></head><body><p>{what}. <a href="{to}">Open the current page</a>.</p></body></html>')
     for lg, u in checked.items():
         stub(lg, u)
+    # library pages from an earlier build that no longer exist (moved or renamed): send readers on
+    prev = {}
+    pr_p = os.path.join(B, 'docs', 'migration', 'redirects.json')
+    if os.path.exists(pr_p):
+        prev = json.load(open(pr_p)).get('checked', {})
+    moved_again = {prev[lg]: u for lg, u in checked.items() if lg in prev and prev[lg] != u}
+    renamed = {'/forecasts/ss27/women/trims/trending-trims/': '/forecasts/ss27/women/trims/trending-trims-report/'}
+    for dp, dn, fn in os.walk(os.path.join(OUT, 'forecasts')):
+        if 'index.html' not in fn:
+            continue
+        rel = os.path.relpath(os.path.join(dp, 'index'), OUT)
+        if rel in newp:
+            continue
+        here = '/' + os.path.relpath(dp, OUT) + '/'
+        to = moved_again.get(here) or renamed.get(here)
+        if not to:
+            pp = here.strip('/').split('/')
+            if len(pp) == 4:  # /forecasts/{season}/{category}/{report}/ that moved under an audience
+                to = next((f'/forecasts/{pp[1]}/{a}/{pp[2]}/{pp[3]}/' for a in ('women', 'men', 'kids', 'boys', 'girls', 'toddler-boys', 'toddler-girls') if f'forecasts/{pp[1]}/{a}/{pp[2]}/{pp[3]}/index' in newp), None)
+        if not to:
+            parts = here.strip('/').split('/')
+            while parts and '/'.join(parts) + '/index' not in newp:
+                parts.pop()
+            to = '/' + '/'.join(parts) + '/' if parts else '/forecasts/'
+        open(os.path.join(dp, 'index.html'), 'w').write(f'<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Moved | Forecut</title><meta name="robots" content="noindex"><meta http-equiv="refresh" content="0;url={to}"><script>location.replace("{to}"+location.hash)</script></head><body><p>This page has moved. <a href="{to}">Open the current page</a>.</p></body></html>')
     # pages generated automatically on 24-25 Nov 2026 (forecast tree draft): send readers to the matching category page
     pat = re.compile(r'^(aw26|ss27|aw27|ss28|aw28)-(mens|womens|kids|boys|girls|toddler-boys|toddler-girls)(-.+)?\.html$')
     tree_red = {}

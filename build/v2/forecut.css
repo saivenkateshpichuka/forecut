@@ -668,3 +668,13 @@ a.crow{color:inherit}a.crow:hover span{text-decoration:underline;text-underline-
 .rfigs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
 @media (max-width:860px){.rhead2{grid-template-columns:1fr}.rfigs{grid-template-columns:1fr}}
 .rhead2 .rfig img{max-height:640px;object-fit:cover}
+/* category thumbnails (forecast library) */
+.rci i{position:relative;display:flex!important;align-items:flex-end;padding:10px}
+.rci i b{font-family:var(--disp,inherit);font-style:normal;font-weight:400;font-size:15px;line-height:1.15;color:#fff;mix-blend-mode:normal;text-shadow:0 1px 2px rgba(0,0,0,.25)}
+.rgrid.g9{grid-template-columns:repeat(9,minmax(0,1fr));gap:12px}
+.rgrid.g9 .rct{padding:10px 10px 12px;gap:4px}.rgrid.g9 .rct b{font-size:14px}.rgrid.g9 .rci{aspect-ratio:4/5}
+.ablk{margin:26px 0 8px}.ablk>h3.dsp{font-size:26px;margin-bottom:12px}.ablk>h3 a:hover{text-decoration:underline;text-underline-offset:4px}
+.fseason{padding-top:28px;padding-bottom:40px}.ftabs{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:end}
+@media (max-width:1250px){.rgrid.g9{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media (max-width:860px){.rgrid.g9{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:520px){.rgrid.g9{grid-template-columns:repeat(2,minmax(0,1fr))}}

@@ -22,6 +22,7 @@ CATS = SET['categories']
 CAT = {c['id']: c for c in CATS}
 SUB = {(c['id'], s['id']): s['name'] for c in CATS for s in c['subsections']}
 SUB.update({(c['id'], 'overview'): 'Season reports' for c in CATS})
+SUB.update({('silhouettes', 'footwear'): 'Footwear', ('fabrics', 'across'): 'Across woven and knit', ('silhouettes', 'knit'): 'Knit Silhouettes', ('themes', 'themes'): 'Themes'})
 KIDS = ['kids', 'boys', 'girls', 'toddler-boys', 'toddler-girls']
 ADULT = ['men', 'women']
 ALL = [a['id'] for a in AUDS]
@@ -64,13 +65,13 @@ def mapping(V, s):
             continue
         rs = V.report_slug(s, t)
         if t == 'themes':
-            out.append((rs, 'all', 'themes', 'overview', 'season-themes', ADULT))
+            out.append((rs, 'women', 'themes', 'themes', 'season-themes', []))
         elif t == 'colour':
             out.append((rs, 'all', 'colours', 'season-colours', 'colour-forecast', ALL))
         elif t == 'womenswear':
-            out.append((rs, 'women', 'silhouettes', 'overview', 'womenswear-season-report', []))
+            out.append((rs, 'women', 'silhouettes', 'woven', 'womenswear-season-report', []))
         elif t == 'menswear':
-            out.append((rs, 'men', 'silhouettes', 'overview', 'menswear-season-report', []))
+            out.append((rs, 'men', 'silhouettes', 'woven', 'menswear-season-report', []))
         elif t == 'footwear':
             out.append((rs, 'all', 'silhouettes', 'footwear', 'footwear-season-report', ADULT))
         elif t == 'knitwear':
@@ -82,7 +83,7 @@ def mapping(V, s):
         for sl, ti, kd, ky in V.chapters(s, t):
             rest = sl[len(s) + 1:]
             if t == 'themes':
-                out.append((sl, 'all', 'themes', 'themes', rest[len('theme-'):], ADULT))
+                out.append((sl, 'women', 'themes', 'themes', rest[len('theme-'):], []))
             elif t == 'colour':
                 if kd == 'cdept':
                     a = {'womenswear': 'women', 'menswear': 'men', 'kidswear': 'kids', 'footwear': 'all'}[ky]
@@ -258,7 +259,7 @@ def card(V, it, show_aud=True):
     return (f'<a class="rcard" href="{it["url"]}" data-sub="{it["sub"]}" data-date="{it.get("updated", "")}" data-title="{V.E(it["title"].lower())}">'
             f'<span class="rci">{img}</span><span class="rct"><span class="small gr">{V.META[it["s"]]["code"]}{", " + V.E(who) if who else ""}{", " + V.E(sub) if sub and it["sub"] != "overview" else ""}</span>'
             f'<b>{V.E(it["title"])}</b><span class="small gr rcd">{V.E(it["desc"][:150])}</span>'
-            f'<span class="small rcm">{"PDF" if it.get("pdf", True) else ""}</span></span></a>')
+            '</span></a>')
 
 
 def rel_card(V, r, title):
@@ -355,27 +356,25 @@ def build(V, pages):
             newp[k] = newp[k].replace('<section class="rs" id="related"></section>', '<section class="rs" id="related">' + RR.related_block(V, it, items) + '</section>')
     REL = related(V)
     rtitle = {r['page']: HT.unescape((re.search(r'<title>([^<|]*)', open(os.path.join(ROOT, r['page'] + '.html'), encoding='utf-8', errors='ignore').read(5000)) or [None, r['page']])[1].strip()) for r in REL}
-    # 4. library pages
+    # 4. library pages: season > audience > category > subsection > report
     for s in S:
         for a in AUDS:
             for c in CATS:
                 newp[key_of(url(s, a['id'], c['id']))] = category_page(V, s, a['id'], c['id'], items, REL, rtitle)
+                for sb in c['subsections']:
+                    own = [i for i in items if i['s'] == s and i['aud'] == a['id'] and i['cat'] == c['id'] and i['sub'] == sb['id']]
+                    if len(own) > 1:
+                        newp[key_of(url(s, a['id'], c['id'], sb['id']))] = subsection_page(V, s, a['id'], c, sb, own)
             newp[key_of(url(s, a['id']))] = audience_page(V, s, a['id'], items, REL, rtitle)
         for c in CATS:
             newp[key_of(url(s, None, c['id']))] = shared_category_page(V, s, c['id'], items, REL, rtitle)
         newp[key_of(url(s))] = season_page(V, s, items)
-    idx = index_page(V, items)
-    newp['forecasts/index'] = idx
+    newp['forecasts/index'] = index_page(V, items)
     json.dump(vstore, open(vstore_p, 'w'), indent=1, ensure_ascii=False)
     return newp, redirect, items, REL
 
 
-def for_aud(items, s, aud, cat=None):
-    own = [i for i in items if i['s'] == s and i['aud'] == aud and (cat is None or i['cat'] == cat)]
-    shared = [i for i in items if i['s'] == s and i['aud'] == 'all' and aud in i['also'] and (cat is None or i['cat'] == cat)]
-    if aud in ('boys', 'girls', 'toddler-boys', 'toddler-girls'):
-        shared += [i for i in items if i['s'] == s and i['aud'] == 'kids' and aud in i['also'] and (cat is None or i['cat'] == cat)]
-    return own, shared
+
 
 
 def tools_row(V, cat):
@@ -386,85 +385,119 @@ def tools_row(V, cat):
     return '<div class="tlinks2">' + ''.join(f'<a class="atp" href="/{t}.html">{V.E(T[t]["title"].replace("&", "and"))}</a>' for t in TF[cat] if t in T) + '</div>'
 
 
-def sortbar(c):
-    subs = ''.join(f'<button type="button" class="ch" data-v="{x["id"]}">{x["name"]}</button>' for x in c['subsections']) if len(c['subsections']) > 1 else ''
-    return ('<div class="lbar">' + (f'<div class="flt" data-f="sub"><button type="button" class="ch on" data-v="all">All</button>{subs}</div>' if subs else '<div></div>') +
-            '<label class="small">Sort <select data-sort><option value="sub">By subsection</option><option value="new">Newest first</option><option value="az">A to Z</option></select></label></div>')
+def own_items(items, s, aud, cat=None, sub=None):
+    return [i for i in items if i['s'] == s and i['aud'] == aud and (cat is None or i['cat'] == cat) and (sub is None or i['sub'] == sub)]
+
+
+def tile_colour(V, s, aud, n):
+    d = V.CF[s]['dept'].get({'men': 'menswear', 'women': 'womenswear'}.get(aud, 'kidswear'))
+    cs = d['colours'] if d else V.CF[s]['key']
+    return cs[n % len(cs)]['hex']
+
+
+def thumb_card(V, href, title, sub, img, colour, live=True, extra=''):
+    lum = (lambda h: (0.299 * int(h[1:3], 16) + 0.587 * int(h[3:5], 16) + 0.114 * int(h[5:7], 16)) / 255)(colour) if colour and len(colour) == 7 else 0
+    ink = '#1c1714' if lum > 0.6 else '#ffffff'
+    pic = f'<img src="{img}" alt="" loading="lazy">' if img else f'<i style="background:{colour}"><b style="color:{ink};text-shadow:none">{V.E(title.split(" ", 1)[1] if " " in title else title)}</b></i>'
+    tag = 'a' if live else 'div'
+    return (f'<{tag} class="rcard{"" if live else " off"}"{f" href=\"{href}\"" if live else ""}{extra}><span class="rci">{pic}</span>'
+            f'<span class="rct"><b>{V.E(title)}</b><span class="small gr rcd">{V.E(sub)}</span></span></{tag}>')
+
+
+def cat_thumb(V, s, aud, c, items, n):
+    own = own_items(items, s, aud, c['id'])
+    img = next((i['img'] for i in own if i.get('img')), None)
+    title = f'{V.META[s]["code"]} {AUD[aud]["possessive"]} {c["name"]}'
+    sub = 'Reports available' if own else 'In preparation'
+    return thumb_card(V, url(s, aud, c['id']), title, sub, img, tile_colour(V, s, aud, n), extra=f' data-aud="{aud}" data-cat="{c["id"]}"')
+
+
+def sub_thumbs(V, s, aud, c, items):
+    """Report thumbnails inside a category: named themes, or one per subsection that has reviewed reports."""
+    m = V.META[s]
+    out, missing = [], []
+    if c['id'] == 'themes':
+        for i in own_items(items, s, aud, 'themes'):
+            out.append(card(V, i, False))
+        return out, missing
+    for n, sb in enumerate(c['subsections']):
+        own = own_items(items, s, aud, c['id'], sb['id'])
+        title = f'{m["code"]} {AUD[aud]["possessive"]} {sb["name"]}'
+        if not own:
+            missing.append(title)
+            continue
+        if len(own) == 1:
+            i = own[0]
+            out.append(thumb_card(V, i['url'], title, i['title'] if i['title'] != title else i['desc'][:140], i.get('img'), tile_colour(V, s, aud, n)))
+        else:
+            img = next((i['img'] for i in own if i.get('img')), None)
+            out.append(thumb_card(V, url(s, aud, c['id'], sb['id']), title, ', '.join(i['title'] for i in own[:4]), img, tile_colour(V, s, aud, n)))
+    return out, missing
 
 
 def category_page(V, s, aud, cat, items, REL, rtitle):
     m = V.META[s]
     c = CAT[cat]
-    own, shared = for_aud(items, s, aud, cat)
-    rel = [r for r in REL if s in r['seasons'] and aud in r['auds'] and r['cat'] == cat]
-    title = f'{m["code"]} {poss(aud)} {c["name"]}'
+    title = f'{m["code"]} {AUD[aud]["possessive"]} {c["name"]}'
+    th, missing = sub_thumbs(V, s, aud, c, items)
     body = ''
-    groups = [{'id': 'overview', 'name': 'Season reports'}] + c['subsections']
-    inner = ''
-    for g in groups:
-        o = [i for i in own if i['sub'] == g['id']]
-        sh = [i for i in shared if i['sub'] == g['id']]
-        rl = [r for r in rel if r['sub'] == g['id']]
-        if not (o or sh or rl):
-            if g['id'] != 'overview':
-                inner += (f'<div class="lgrp" data-sub="{g["id"]}"><h3 class="sub">{V.E(g["name"])}</h3>' +
-                          prep(V, f'{m["code"]} {poss(aud)} {g["name"].lower()} reports are in preparation.') + '</div>')
-            continue
-        inner += f'<div class="lgrp" data-sub="{g["id"]}"><h3 class="sub">{V.E(g["name"])}</h3>'
-        if o:
-            inner += '<div class="rgrid">' + ''.join(card(V, i, False) for i in o) + '</div>'
-        if sh:
-            inner += f'<p class="small gr shl">Shared research: applies to {AUD[aud]["name"].lower()} and other audiences.</p><div class="rgrid">' + ''.join(card(V, i) for i in sh) + '</div>'
-        if rl:
-            inner += '<p class="small gr shl">Related reading</p><div class="rgrid rl">' + ''.join(rel_card(V, r, rtitle[r['page']]) for r in rl) + '</div>'
-        inner += '</div>'
-    body += lsec('reports', 'Reports', 'Open any report for the full analysis and its PDF.', sortbar(c) + f'<div class="lgrps">{inner}</div>')
+    if th:
+        body += lsec('reports', 'Reports', 'Open a report for the full analysis. Each page can be saved as a PDF.', '<div class="rgrid">' + ''.join(th) + '</div>')
+    if missing or not th:
+        names = missing if missing else []
+        txt = ('In preparation: ' + '; '.join(names) + '.') if names else f'{title}: reports are in preparation.'
+        body += lsec('prep', 'In preparation' if th else 'Reports', 'Reports appear here once their research has been reviewed.', prep(V, txt))
+    rel = [r for r in REL if s in r['seasons'] and aud in r['auds'] and r['cat'] == cat]
+    if rel:
+        body += lsec('reading', 'Related reading', 'Articles and guides from Forecut on this subject.', '<div class="rgrid rl">' + ''.join(rel_card(V, r, rtitle[r['page']]) for r in rel) + '</div>')
+    shared = [i for i in items if i['s'] == s and i['aud'] == 'all' and i['cat'] == cat]
+    if shared:
+        body += lsec('shared', 'Season research across audiences', f'{m["code"]} research that covers several audiences.', f'<p><a class="lk" href="{url(s, None, cat)}">{V.E(m["code"])} {V.E(c["name"])}: research across audiences</a></p>')
     body += lsec('tools', 'Related tools', 'Take this direction into your own work.', tools_row(V, cat))
     other = ''.join(f'<a class="atp{" on" if x["id"] == cat else ""}" href="{url(s, aud, x["id"])}">{V.E(x["name"])}</a>' for x in CATS)
-    body += lsec('more', f'More {m["code"]} {AUD[aud]["name"].lower()}', 'The other categories for this season and audience.', f'<div class="atps">{other}</div>')
-    return page(V, key_of(url(s, aud, cat))[:-5], title, f'{title}: {c["about"]}', f'<div class="w crumb"><a href="/forecasts/">Forecasts</a> / <a href="{url(s)}">{m["code"]}</a> / <a href="{url(s, aud)}">{AUD[aud]["name"]}</a> / {V.E(c["name"])}</div>',
+    body += lsec('more', f'More {m["code"]} {AUD[aud]["name"]}', '', f'<div class="atps">{other}</div>')
+    return page(V, key_of(url(s, aud, cat))[:-5], title, f'{title}: {c["about"]}',
+                f'<div class="w crumb"><a href="/forecasts/">Forecasts</a> / <a href="{url(s)}">{m["code"]}</a> / <a href="{url(s, aud)}">{AUD[aud]["name"]}</a> / {V.E(c["name"])}</div>',
                 phead(V, f'{m["title"]}, {AUD[aud]["name"]}', title, c['about']), body)
+
+
+def subsection_page(V, s, aud, c, sb, own):
+    m = V.META[s]
+    title = f'{m["code"]} {AUD[aud]["possessive"]} {sb["name"]}'
+    body = lsec('reports', 'Reports', 'Open a report for the full analysis. Each page can be saved as a PDF.', '<div class="rgrid">' + ''.join(card(V, i, False) for i in own) + '</div>')
+    return page(V, key_of(url(s, aud, c['id'], sb['id']))[:-5], title, f'{title}: {c["about"]}',
+                f'<div class="w crumb"><a href="/forecasts/">Forecasts</a> / <a href="{url(s)}">{m["code"]}</a> / <a href="{url(s, aud)}">{AUD[aud]["name"]}</a> / <a href="{url(s, aud, c["id"])}">{V.E(c["name"])}</a> / {V.E(sb["name"])}</div>',
+                phead(V, f'{m["title"]}, {AUD[aud]["name"]}, {c["name"]}', title, c['about']), body)
 
 
 def shared_category_page(V, s, cat, items, REL, rtitle):
     m = V.META[s]
     c = CAT[cat]
     sh = [i for i in items if i['s'] == s and i['aud'] == 'all' and i['cat'] == cat]
-    rel = [r for r in REL if s in r['seasons'] and r['cat'] == cat]
-    title = f'{m["code"]} {c["name"]}: research for all audiences'
-    inner = ''
-    for g in [{'id': 'overview', 'name': 'Season reports'}] + c['subsections']:
-        o = [i for i in sh if i['sub'] == g['id']]
-        rl = [r for r in rel if r['sub'] == g['id']]
-        if o or rl:
-            inner += f'<div class="lgrp" data-sub="{g["id"]}"><h3 class="sub">{V.E(g["name"])}</h3><div class="rgrid">' + ''.join(card(V, i, False) for i in o) + '</div>'
-            if rl:
-                inner += '<p class="small gr shl">Related reading</p><div class="rgrid rl">' + ''.join(rel_card(V, r, rtitle[r['page']]) for r in rl) + '</div>'
-            inner += '</div>'
+    title = f'{m["code"]} {c["name"]}: research across audiences'
+    groups = {}
+    for i in sh:
+        groups.setdefault(SUB.get((cat, i['sub']), 'Reports'), []).append(i)
+    inner = ''.join(f'<h3 class="sub">{V.E(g)}</h3><div class="rgrid" style="margin-bottom:28px">' + ''.join(card(V, i, False) for i in its) + '</div>' for g, its in groups.items())
     if not inner:
-        inner = prep(V, f'Shared {m["code"]} {c["name"].lower()} research is in preparation. See each audience below.')
-    body = lsec('reports', 'Shared research', 'Research that applies across audiences. Each audience page links to the parts that concern it.', f'<div class="lgrps">{inner}</div>')
-    body += lsec('audiences', 'By audience', f'{c["name"]} for each audience.', '<div class="atps">' + ''.join(f'<a class="atp" href="{url(s, a["id"], cat)}">{m["code"]} {V.E(a["possessive"])} {V.E(c["name"])}</a>' for a in AUDS) + '</div>')
+        inner = prep(V, f'No {m["code"]} {c["name"].lower()} research covers several audiences.')
+    body = lsec('reports', 'Research across audiences', 'Season research that covers more than one audience.', inner)
+    body += lsec('audiences', 'By audience', '', '<div class="atps">' + ''.join(f'<a class="atp" href="{url(s, a["id"], cat)}">{m["code"]} {V.E(a["possessive"])} {V.E(c["name"])}</a>' for a in AUDS) + '</div>')
     return page(V, key_of(url(s, None, cat))[:-5], title, f'{title}. {c["about"]}', f'<div class="w crumb"><a href="/forecasts/">Forecasts</a> / <a href="{url(s)}">{m["code"]}</a> / {V.E(c["name"])}</div>',
                 phead(V, m['title'], title, c['about']), body)
+
+
+def aud_block(V, s, aud, items, head=True):
+    a = AUD[aud]
+    m = V.META[s]
+    h = (f'<div class="ablk" data-aud="{aud}"><h3 class="dsp"><a href="{url(s, aud)}">{m["code"]} {V.E(a["name"])}</a></h3>' if head else '<div class="ablk">')
+    return h + '<div class="rgrid g9">' + ''.join(cat_thumb(V, s, aud, c, items, n) for n, c in enumerate(CATS)) + '</div></div>'
 
 
 def audience_page(V, s, aud, items, REL, RT={}):
     m = V.META[s]
     a = AUD[aud]
-    cards = ''
-    for c in CATS:
-        own, shared = for_aud(items, s, aud, c['id'])
-        rel = [r for r in REL if s in r['seasons'] and aud in r['auds'] and r['cat'] == c['id']]
-        top = (own + shared)[:3]
-        lst = ''.join(f'<li><a href="{i["url"]}">{V.E(i["title"])}</a>{"" if i["aud"] == aud else " <span class=\"small gr\">(shared)</span>"}</li>' for i in top)
-        if len(top) < 3:
-            lst += ''.join(f'<li><a href="/{r["page"]}.html">{V.E(RT.get(r["page"], r["page"]))}</a> <span class="small gr">(related reading)</span></li>' for r in rel[:3 - len(top)])
-        state = '' if (own or shared) else '<p class="small gr">Reports in preparation.</p>'
-        th = next((i['img'] for i in own + shared if i.get('img')), None)
-        cards += (f'<div class="acat"><a class="acath" href="{url(s, aud, c["id"])}">' + (f'<span class="aci"><img src="{th}" alt="" loading="lazy"></span>' if th else '<span class="aci"></span>') +
-                  f'<b class="dsp">{V.E(c["name"])}</b><span class="small gr">{V.E(m["code"])} {V.E(a["possessive"])} {V.E(c["name"])}</span></a>{state}<ul>{lst}</ul></div>')
-    body = lsec('categories', 'Forecast categories', 'Open a category for its reports, each with its own PDF.', f'<div class="acats">{cards}</div>')
+    body = lsec('categories', 'Categories', 'Open a category for its reports.', aud_block(V, s, aud, items, head=False))
     body += lsec('tools', 'Start working', 'Send findings from any report to a Board, a Style Brief or the Collection Planner.', tools_row(V, 'themes') + tools_row(V, 'colours'))
     sw = ''.join(f'<a class="atp{" on" if x == s else ""}" href="{url(x, aud)}">{V.META[x]["code"]}</a>' for x in seasons(V))
     aw = ''.join(f'<a class="atp{" on" if x["id"] == aud else ""}" href="{url(s, x["id"])}">{V.E(x["name"])}</a>' for x in AUDS)
@@ -477,62 +510,61 @@ def audience_page(V, s, aud, items, REL, RT={}):
 
 def season_page(V, s, items):
     m = V.META[s]
-    st = status(s)
-    auds = ''
-    for a in AUDS:
-        n_own = [i for i in items if i['s'] == s and i['aud'] == a['id']]
-        lst = ''.join(f'<li><a href="{url(s, a["id"], c["id"])}">{V.E(c["name"])}</a></li>' for c in CATS)
-        auds += (f'<div class="ac"><a class="ach" href="{url(s, a["id"])}"><b class="dsp">{m["code"]} {V.E(a["name"])}</b><span class="small gr">{V.E(a["note"])}</span></a><ul>{lst}</ul></div>')
-    body = lsec('audiences', 'Audiences', 'Each audience has its own categories and reports.', f'<div class="atree">{auds}</div>')
-    sh = [i for i in items if i['s'] == s and i['aud'] == 'all' and i['sub'] == 'overview' or (i['s'] == s and i['aud'] == 'all' and i['slug'] in ('colour-forecast',))]
+    body = lsec('audiences', 'Audiences and categories', 'Every audience has its own nine categories.', ''.join(aud_block(V, s, a['id'], items) for a in AUDS))
+    sh = [i for i in items if i['s'] == s and i['aud'] == 'all']
     if sh:
-        body += lsec('season', 'Season research', 'Reports that cover several audiences.', '<div class="rgrid">' + ''.join(card(V, i, False) for i in sh) + '</div>')
+        cats = []
+        for c in CATS:
+            if any(i['cat'] == c['id'] for i in sh):
+                cats.append(f'<a class="atp" href="{url(s, None, c["id"])}">{V.E(c["name"])}</a>')
+        body += lsec('season', 'Research across audiences', 'Season research that covers several audiences: the colour forecast and colour stories, footwear, knitwear, fabrics and trims.', f'<div class="atps">{"".join(cats)}</div>')
     links = [p for p in SEASON_LINKS.get(s, []) if os.path.exists(os.path.join(ROOT, p + '.html'))]
     if links:
         lt = []
         for p in links:
             t = re.search(r'<title>([^<|]*)', open(os.path.join(ROOT, p + '.html'), encoding='utf-8', errors='ignore').read(5000))
-            lt.append(f'<li><a href="/{p}.html">{V.E(t.group(1).strip() if t else p)}</a>{" (complete season edition, all categories on one page)" if p == s else ""}</li>')
+            lt.append(f'<li><a href="/{p}.html">{V.E(HT.unescape(t.group(1).strip()) if t else p)}</a>{" (complete season edition on one page)" if p == s else ""}</li>')
         body += lsec('editions', 'Season editions and regional forecasts', '', f'<ul class="ul srcl">{"".join(lt)}</ul>')
-    kick = f'{m["stage"]}, in stores {m["window"]}' + (' (library)' if st == 'archive' else '')
+    kick = f'{m["stage"]}, in stores {m["window"]}' + (' (earlier season)' if status(s) == 'archive' else '')
     return page(V, key_of(url(s))[:-5], f'{m["code"]} Forecast', f'{m["title"]} forecast: {m["intro"][:200]}',
-                f'<div class="w crumb"><a href="/forecasts/">Forecasts</a> / {m["code"]}</div>', phead(V, kick, f'{m["title"]}', m['intro']), body, si=f'hero-{s}' if f'hero-{s}' in V.IMG else None)
+                f'<div class="w crumb"><a href="/forecasts/">Forecasts</a> / {m["code"]}</div>', phead(V, kick, m['title'], m['intro']), body, si=f'hero-{s}' if f'hero-{s}' in V.IMG else None)
 
 
 def index_page(V, items):
     S = seasons(V)
+    pub = [s for s in S if status(s) == 'published']
     F = featured(V)
-    h = ''
-    def season_block(s, big):
-        m = V.META[s]
-        au = ''.join(f'<a class="atp" href="{url(s, a["id"])}">{V.E(a["name"])}</a>' for a in AUDS)
-        return (f'<div class="sblk{" big" if big else ""}" data-season="{s}"><a class="sbh" href="{url(s)}"><b class="dsp">{m["code"]}</b><span>{V.E(m["title"])}</span>'
-                f'<span class="small gr">{V.E(m["stage"])}, in stores {V.E(m["window"])}</span></a><div class="atps">{au}</div></div>')
-    h += lsec('featured', f'{SET["featured_year"]} forecasts', 'The seasons in focus now.', '<div class="sfeat">' + ''.join(season_block(s, True) for s in F) + '</div>')
-    lib = [s for s in S if s not in F and status(s) == 'published']
-    if lib:
-        h += lsec('library', 'Further ahead', 'Later seasons in the forecast library.', '<div class="sfeat">' + ''.join(season_block(s, False) for s in lib) + '</div>')
+    order = F + [s for s in pub if s not in F]
     arc = [s for s in S if status(s) == 'archive']
-    if arc:
-        h += lsec('archive', 'Earlier seasons', 'Kept in the library for reference.', '<div class="sfeat">' + ''.join(season_block(s, False) for s in arc) + '</div>')
+    tabs = ('<div class="ftabs"><div class="stabs" role="group" aria-label="Season">' +
+            ''.join(f'<button type="button" data-v="{s}"{" class=on" if n == 0 else ""}><b>{V.META[s]["code"]}</b><span>{V.E(V.META[s]["stage"].lower())}</span></button>' for n, s in enumerate(order + arc)) +
+            '</div><div class="fsel"><label><span>Audience</span><select id="faud"><option value="">All audiences</option>' + ''.join(f'<option value="{a["id"]}">{V.E(a["name"])}</option>' for a in AUDS) +
+            '</select></label><label><span>Category</span><select id="fcat"><option value="">All categories</option>' + ''.join(f'<option value="{c["id"]}">{V.E(c["name"])}</option>' for c in CATS) + '</select></label></div></div>')
+    h = ''
+    for n, s in enumerate(order + arc):
+        m = V.META[s]
+        lab = f'{SET["featured_year"]} forecast' if s in F else ('Earlier season' if s in arc else 'Forecast')
+        h += (f'<section class="w fseason" data-season="{s}" id="{s}"{"" if n == 0 else " hidden"}><div class="sgh"><h2 class="dsp"><a href="{url(s)}">{m["code"]}</a></h2>'
+              f'<p><b>{V.E(m["title"])}</b><span class="gr">{V.E(lab)}. {V.E(m["stage"])}, in stores {V.E(m["window"])}</span></p></div>' +
+              ''.join(aud_block(V, s, a['id'], items) for a in AUDS) + '</section>')
     data = [{'t': i['title'], 's': i['s'], 'a': i['aud'], 'c': i['cat'], 'u': i['url'], 'd': i['desc'][:140], 'sc': V.META[i['s']]['code'],
              'an': AUD[i['aud']]['name'] if i['aud'] in AUD else 'All audiences', 'cn': CAT[i['cat']]['name']} for i in items]
-    filt = ('<div class="lsearch"><input type="search" id="lq" placeholder="Search the forecast library" aria-label="Search the forecast library">'
-            '<select id="ls" aria-label="Season"><option value="">All seasons</option>' + ''.join(f'<option value="{s}">{V.META[s]["code"]}</option>' for s in S) + '</select>'
-            '<select id="la" aria-label="Audience"><option value="">All audiences</option>' + ''.join(f'<option value="{a["id"]}">{V.E(a["name"])}</option>' for a in AUDS) + '</select>'
-            '<select id="lc" aria-label="Category"><option value="">All categories</option>' + ''.join(f'<option value="{c["id"]}">{V.E(c["name"])}</option>' for c in CATS) + '</select></div>'
-            '<div id="lres" class="lres"></div>')
-    h += lsec('search', 'Search the library', 'Filter by season, audience and category, or search by topic.', filt)
-    js = ('<script>(function(){var D=' + json.dumps(data, ensure_ascii=False).replace('</', '<\\/') + ',q=document.getElementById("lq"),s=document.getElementById("ls"),a=document.getElementById("la"),c=document.getElementById("lc"),o=document.getElementById("lres");'
-          'function e(x){return String(x).replace(/[&<>"]/g,function(k){return{"&":"&amp;","<":"&lt;",">":"&gt;","\\"":"&quot;"}[k]})}'
-          'function run(){var t=q.value.trim().toLowerCase();if(!t&&!s.value&&!a.value&&!c.value){o.innerHTML="";return}'
-          'var r=D.filter(function(d){return(!s.value||d.s===s.value)&&(!c.value||d.c===c.value)&&(!a.value||d.a===a.value||d.a==="all")&&(!t||(d.t+" "+d.d+" "+d.cn).toLowerCase().indexOf(t)>-1)});'
-          'o.innerHTML=r.length?r.slice(0,80).map(function(d){return\'<a class="lr" href="\'+d.u+\'"><span class="small gr">\'+e(d.sc+", "+d.an+", "+d.cn)+\'</span><b>\'+e(d.t)+\'</b><span class="small gr">\'+e(d.d)+\'</span></a>\'}).join(""):\'<p class="gr">Nothing matches. Try another season, audience or word.</p>\'}'
-          '[q,s,a,c].forEach(function(x){x.addEventListener("input",run);x.addEventListener("change",run)})})();</script>')
+    srch = ('<section class="w lsec" id="search"><div class="rsh"><h2 class="dsp">Search the library</h2><p class="gr">Search every published report by topic.</p></div>'
+            '<div class="lsearch"><input type="search" id="lq" placeholder="Search reports, e.g. skirts, satin, lilac" aria-label="Search the forecast library"></div><div id="lres" class="lres"></div></section>')
+    js = ('<script>(function(){var D=' + json.dumps(data, ensure_ascii=False).replace('</', '<\\/') + ';'
+          'var secs=[].slice.call(document.querySelectorAll(".fseason")),tabs=[].slice.call(document.querySelectorAll(".ftabs [data-v]")),fa=document.getElementById("faud"),fc=document.getElementById("fcat");'
+          'function show(v){tabs.forEach(function(t){t.classList.toggle("on",t.dataset.v===v)});secs.forEach(function(x){x.hidden=x.dataset.season!==v})}'
+          'tabs.forEach(function(t){t.addEventListener("click",function(){show(t.dataset.v);history.replaceState(null,"","#"+t.dataset.v)})});'
+          'if(location.hash&&document.getElementById(location.hash.slice(1)))show(location.hash.slice(1));'
+          'function filt(){[].forEach.call(document.querySelectorAll(".fseason .ablk"),function(b){b.hidden=!!fa.value&&b.dataset.aud!==fa.value});'
+          '[].forEach.call(document.querySelectorAll(".fseason .rcard"),function(c){c.hidden=!!fc.value&&c.dataset.cat!==fc.value})}fa.addEventListener("change",filt);fc.addEventListener("change",filt);'
+          'var q=document.getElementById("lq"),o=document.getElementById("lres");function e(x){return String(x).replace(/[&<>"]/g,function(k){return{"&":"&amp;","<":"&lt;",">":"&gt;","\\"":"&quot;"}[k]})}'
+          'q.addEventListener("input",function(){var t=q.value.trim().toLowerCase();if(t.length<2){o.innerHTML="";return}var r=D.filter(function(d){return(d.t+" "+d.d+" "+d.cn+" "+d.an+" "+d.sc).toLowerCase().indexOf(t)>-1});'
+          'o.innerHTML=r.length?r.slice(0,60).map(function(d){return\'<a class="lr" href="\'+d.u+\'"><span class="small gr">\'+e(d.sc+", "+d.an+", "+d.cn)+\'</span><b>\'+e(d.t)+\'</b></a>\'}).join(""):\'<p class="gr">Nothing matches.</p>\'})})();</script>')
     V._PATH[:] = ['forecasts/', None]
-    title = 'Forecasts'
-    hh = V.head('Forecasts | Forecut', 'Forecut fashion forecasts by season and audience: men, women, kids, boys, girls, toddler boys and toddler girls, each with themes, colours, silhouettes, fabrics, trims, styling, couture, business strategy and innovations.') + V.nav_app('Forecasts') + '<main id="main">'
-    hh += phead(V, 'Season, audience, category, report', title, 'Choose a season, then an audience and a category. Every report opens as its own page with a PDF.') + h + '</main>'
+    hh = V.head('Forecasts | Forecut', 'Forecut fashion forecasts by season, audience and category: men, women, kids, boys, girls, toddler boys and toddler girls.') + V.nav_app('Forecasts') + '<main id="main">'
+    hh += phead(V, 'Season, audience, category', 'Forecasts', 'Choose a season, then an audience and a category. Each report opens as its own page, which you can save as a PDF.')
+    hh += f'<div class="fbar"><div class="w">{tabs}</div></div>' + h + srch + '</main>'
     return hh + V.footer() + V.end(js)
 
 
