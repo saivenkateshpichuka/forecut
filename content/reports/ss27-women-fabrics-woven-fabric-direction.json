@@ -1,0 +1,93 @@
+{
+ "season": "ss27",
+ "audience": "women",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Shows 10 September to 6 October 2026; Premiere Vision Paris, February 2026; analysis October to November 2026",
+ "markets": "Global: New York, London, Milan, Paris and Copenhagen runways; applies to premium and mid-market womenswear",
+ "kind": "report",
+ "category": "fabrics",
+ "subsection": "woven",
+ "slug": "woven-fabric-direction",
+ "title": "SS27 Women's Woven Fabric Direction",
+ "summary": "Two families carry the season: crisp, dense silks and satins with real body, and very light sheers that let a whole look stay as one layer. Fine wools, linens and refined cottons hold the tailoring and shirting core.",
+ "trend_status": "Rising",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "Satin appeared in 20.8% of SS27 womenswear looks, up 3.0 points, second only to twill at 26.2%<sup>[1]</sup>. Buyers in Paris singled out duchesse satin and high-shine finishes<sup>[2]</sup>. Première Vision had already set out the two silk directions in February: \"Couture Density\" (radzimirs, mikados, duchesse satins, faille, piqué damasks and weighted silks, crisp and substantial) and \"Opalescent Lightness\" (crepes, devoré chiffons, nylon organzas and double gauzes)<sup>[3]</sup>.\n\nOn the runway, lightness was the stronger story. Dior showed featherweight organza tailoring printed to look like classic wool suiting<sup>[4]</sup> and sheer suits with mesh blazers<sup>[5]</sup>. Louis Vuitton used fabrics as thin as cigarette paper<sup>[5]</sup>; Hermès perforated suede for airflow<sup>[4]</sup>. In Milan, Giorgio Armani, Missoni, Max Mara and Ferragamo showed see-through dresses and veiled skirts and trousers in chiffon, tulle, mesh and organza<sup>[5]</sup>.\n\nA third, smaller story is gloss: vinyl and translucent PVC, latex-effect rubber, shiny nylon and organza at Ferragamo, Prada, MSGM, Jil Sander and others, and latex coated in gold leaf at Saint Laurent<sup>[5]</sup>."
+  },
+  {
+   "heading": "Fabric by fabric",
+   "body": "| Fabric | Construction and hand | Best uses | Status |\n|---|---|---|---|\n| Duchesse satin, mikado, faille | Dense satin and faille weaves; crisp, lustrous, substantial<sup>[3]</sup> | Structured skirts, evening, occasion | Rising |\n| Fluid satin and crepe-back satin | Satin weave; fluid, high shine | Slip skirts and dresses, wide trousers | Peaking |\n| Organza, chiffon, tulle, mesh | Open, very light weaves and nets<sup>[5]</sup> | Sheer suits, overlays, layered skirts | Rising |\n| Double gauze, devoré chiffon | Light, layered; moiré effects from layering<sup>[3]</sup> | Blouses, summer dresses | Emerging |\n| Fine pure wool and wool blends | Lightweight wool, blended with viscose, silk or linen; fine prunelles, softened checks<sup>[3]</sup> | Summer tailoring, skirts | Core |\n| Double crepe | Heavier, dense, supple drape; dry, cool hand<sup>[3]</sup> | Fluid tailoring, column dresses | Rising |\n| Linen and linen blends | Firm, clean yarn-dyed linens; straw-like tweeds and basket weaves<sup>[3]</sup> | Jackets, skirts, trousers | Core |\n| Silk-blend shirting | Silk with cotton, viscose or lyocell in poplins, twills, crepes<sup>[3]</sup> | Shirts and blouses | Rising |\n| Dense cotton satin, micro twill | Crisp, smooth, lightly sanded<sup>[3]</sup> | Tailored trousers, skirts | Core |\n| Vinyl, PVC, coated fabrics | Glossy, coated<sup>[5]</sup> | Accent skirts, outerwear details | Emerging |"
+  },
+  {
+   "heading": "Why it matters",
+   "body": "The silhouette story depends on cloth. A straight skirt at the knee needs a fabric with body; a single-layer summer look needs a fabric that is light but not flimsy. That is why the two extremes, dense silk and featherweight sheer, rise together. Première Vision also notes satins, double satins and taffetas moving towards stretch<sup>[6]</sup>, which makes structured skirts and fitted jackets easier to wear."
+  }
+ ],
+ "timing": "Dense satins and sheers are in SS27 production now. Forecut expects dense silks to carry into AW27 occasion wear, while the very light sheers are a summer story. Coated and vinyl fabrics are early: use as accents.",
+ "products": "- **Satin:** slip skirts, bias-cut dresses, wide trousers, jabot and bow blouses.\n- **Organza and chiffon:** sheer suits and overlays, layered midi skirts, sheer sleeves.\n- **Fine wool and double crepe:** cropped, waisted jackets and straight skirts for the working wardrobe.\n- **Linen:** jackets, skirts and trousers for high summer and resort markets.",
+ "design_implications": "- **Pair weights deliberately.** Combine one structured fabric (duchesse, faille, crepe) with one sheer (organza, chiffon) in the same colour.\n- **Sheers need clean construction.** Use French seams and narrow rolled hems; satin needs fine needles and careful pressing<sup>[2]</sup>.\n- **Print the illusion.** Dior's organza printed to look like wool<sup>[4]</sup> shows a way to keep tailoring codes in a summer weight.\n- **Check fibre content.** Much commercial satin is polyester<sup>[2]</sup>; state composition clearly and test pilling and seam slippage on satin and organza.",
+ "commercial_implications": "- **Price on fibre and finish.** Silk duchesse and mikado justify a premium; polyester satins should sit at entry price with clear labelling.\n- **Plan matched colour.** Head-to-toe colour and satin-with-sheer pairings need every fabric and trim lab-dipped to one shade before bulk.\n- **Order sheers with linings.** Budget for slips and under-layers so sheer pieces sell as complete looks.\n- **Keep vinyl and PVC small.** Accent pieces only, with careful care labelling.",
+ "sources": [
+  {
+   "title": "Spring 2027 womenswear trends from the runways (SS27), T-Fashion Runway Index",
+   "publisher": "T-Fashion",
+   "url": "https://tfashion.ai/runway/ss27",
+   "date": "data as of 18 October 2026",
+   "note": "Share of looks across 12,320 looks from 359 designers, compared with SS26"
+  },
+  {
+   "title": "Spring/Summer 2027 fashion trends from the runways",
+   "publisher": "Pham Fashion House",
+   "url": "https://www.phamfashion.com/blog/spring-summer-2027-fashion-trends-runway",
+   "date": "November 2026",
+   "note": "Manufacturer commentary; used here for production notes"
+  },
+  {
+   "title": "Spring-Summer 27 Decodings: Fabrics",
+   "publisher": "Premiere Vision",
+   "url": "https://www.premierevision.com/articles/e620fe9e-3407-f111-8333-000d3a2973d4/spring-summer-27-decodings-fabrics",
+   "date": "13 February 2026"
+  },
+  {
+   "title": "The defining trends and takeaways from the S/S 2027 shows",
+   "publisher": "Wallpaper*",
+   "url": "https://www.wallpaper.com/fashion-beauty/fashion-week-trends-spring-summer-2027",
+   "date": "October 2026"
+  },
+  {
+   "title": "Spring/Summer 2027 trends: 10 ideas from Milan and Paris",
+   "publisher": "Wordrobe",
+   "url": "https://wordrobeshop.com/en/spring-summer-2027-trends-milan-paris/",
+   "date": "October 2026"
+  },
+  {
+   "title": "Decoding Spring-Summer 27 key transversal highlights",
+   "publisher": "Premiere Vision",
+   "url": "https://www.premierevision.com/articles/86fffb89-9602-f111-8333-000d3a2973d4/decoding-spring-summer-27-key-transversal-highlights",
+   "date": "5 February 2026"
+  }
+ ],
+ "images": [
+  {
+   "file": "satin-slip-skirts-ss27-photo",
+   "caption": "Satin slip skirt. Forecut visual, not a runway photograph.",
+   "credit": "Forecut",
+   "provenance": "Created for Forecut and supplied through the Forecut image upload on 14 October 2026. Illustrative, not a runway photograph.",
+   "licence": "Forecut image. Tool and licence terms to be confirmed by the owner."
+  },
+  {
+   "file": "sheer-organza-blouses-ss27-photo",
+   "caption": "Sheer organza blouse. Forecut visual, not a runway photograph.",
+   "credit": "Forecut",
+   "provenance": "Created for Forecut and supplied through the Forecut image upload on 14 October 2026. Illustrative, not a runway photograph.",
+   "licence": "Forecut image. Tool and licence terms to be confirmed by the owner."
+  }
+ ],
+ "related": [
+  "fc-ss27-women-silhouettes-woven-silhouette-direction",
+  "fc-ss27-women-themes-one-layer-summer"
+ ]
+}

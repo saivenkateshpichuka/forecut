@@ -3877,5 +3877,67 @@
    "hash": "83d462f015fcd239",
    "note": "Moved into the season, audience and category structure"
   }
+ ],
+ "fc-ss27-women-colours-season-colours": [
+  {
+   "v": 1,
+   "date": "2026-11-25",
+   "hash": "bd721e2e00455947",
+   "note": "First publication"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "0924aa550db022b7",
+   "note": "Updated"
+  }
+ ],
+ "fc-ss27-women-fabrics-woven-fabric-direction": [
+  {
+   "v": 1,
+   "date": "2026-11-25",
+   "hash": "fa008c7422ca2fd9",
+   "note": "First publication"
+  }
+ ],
+ "fc-ss27-women-silhouettes-knit-shape-and-fit-outlook": [
+  {
+   "v": 1,
+   "date": "2026-11-25",
+   "hash": "47d4be10b3f72fe0",
+   "note": "First publication"
+  }
+ ],
+ "fc-ss27-women-silhouettes-woven-silhouette-direction": [
+  {
+   "v": 1,
+   "date": "2026-11-25",
+   "hash": "7f2db75e10e77cff",
+   "note": "First publication"
+  }
+ ],
+ "fc-ss27-women-themes-lingerie-as-outerwear": [
+  {
+   "v": 1,
+   "date": "2026-11-25",
+   "hash": "8e3ce8b3d608e68c",
+   "note": "First publication"
+  }
+ ],
+ "fc-ss27-women-themes-one-layer-summer": [
+  {
+   "v": 1,
+   "date": "2026-11-25",
+   "hash": "9fc0ba022b5fe6f9",
+   "note": "First publication"
+  }
+ ],
+ "fc-ss27-women-trims-trending-trims": [
+  {
+   "v": 1,
+   "date": "2026-11-25",
+   "hash": "c8f6236d190d8166",
+   "note": "First publication"
+  }
  ]
 }

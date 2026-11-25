@@ -1,0 +1,83 @@
+{
+ "season": "ss27",
+ "audience": "women",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Shows 10 September to 6 October 2026; Premiere Vision Paris, February 2026; analysis October to November 2026",
+ "markets": "Global: New York, London, Milan, Paris and Copenhagen runways; applies to premium and mid-market womenswear",
+ "kind": "report",
+ "category": "colours",
+ "subsection": "season-colours",
+ "slug": "season-colours",
+ "title": "SS27 Women's Season Colours",
+ "summary": "Lilac and violet lead the womenswear palette, with butter for softness and true red and Klein blue for statement pieces. White is the neutral that is rising; warm browns and greys give way.",
+ "trend_status": "Rising",
+ "sections": [
+  {
+   "heading": "The palette",
+   "body": "| Colour | Pantone TCX (nearest) | HEX | Role |\n|---|---|---|---|\n| Lilac | 15-3720 TCX | #B3A0C9 | Seasonal: lead colour |\n| Violet | 19-3642 TCX | #603F83 | Seasonal: depth and evening |\n| Butter | 12-0711 TCX | #F6E199 | Seasonal: soft neutral |\n| True red | 18-1763 TCX | #C71F2D | Seasonal: statement |\n| Klein blue | 18-3949 TCX | #3850A0 | Accent: statement |\n| Optic white | 11-0602 TCX | #F2F0EB | Core |\n\nThese colours come from Forecut's SS27 colour forecast, built from runway colour shares, editorial colour reports and Première Vision's key colours<sup>[1]</sup>. Pantone TCX codes are the nearest published match: confirm against a physical Pantone book before dyeing."
+  },
+  {
+   "heading": "The evidence",
+   "body": "**Purple is the season's new colour.** Chanel showed lilac, Miu Miu royal purple, and violet ran through Milan<sup>[2]</sup>.\n\n**Soft, calming pastels.** Pascal K. Douglas described \"colours that soothe and lower cortisol levels: butter, lavender, sage\"<sup>[3]</sup>. Victoria Beckham and Icicle in Paris and Ashley Williams in London showed shoulder-padded shirts in light blue, yellow and baby pink; Bottega Veneta paired light-yellow pleated trousers with a bright pink jabot blouse<sup>[3]</sup>. Dior used a ballet-slipper pink across blazers, skirts and dresses<sup>[4]</sup>.\n\n**Strong blocks of primary colour.** Chanel, Balenciaga and Celine paired canary yellow, true red and cobalt in strong blocks<sup>[2]</sup>.\n\n**White up, browns down.** White rose from 23.7% to 28.4% of looks and ecru gained 1.4 points, while chocolate, almond and grey each lost between 1.5 and 1.8 points<sup>[5]</sup>. Black remains the most worn colour at 35.2%<sup>[5]</sup>.\n\n**Gold as a full look.** At Saint Laurent, 49 of 59 looks were gold, from brass to rose<sup>[4]</sup>. Treat gold as a finish (lamé, metallic thread, hardware) rather than a dyed colour."
+  },
+  {
+   "heading": "Colour groups and how much to use",
+   "body": "- **Core (about half the range):** optic white and black, with sand and midnight from the season's shared key colours for depth.\n- **Seasonal (about a third):** lilac, violet, butter and true red. Lilac and butter carry day pieces; violet and red carry evening and statement pieces.\n- **Accent (the rest):** Klein blue, and gold as a finish. One piece or one detail per look."
+  },
+  {
+   "heading": "Combinations and applications",
+   "body": "- **Lilac with butter and white.** The softest combination: shirts, knitwear and skirts for day.\n- **Violet with true red.** An evening and occasion pairing; use satin or duchesse to carry the depth.\n- **Head-to-toe single colour.** Céline, Akris and Stella McCartney showed one shade from head to toe <sup>[2]</sup>; lilac, red or white work best.\n- **Primary blocks.** True red, Klein blue and butter in large, flat blocks on tailoring and knitwear.\n- **White as the base.** Optic white suits, skirts and shirts take any of the seasonal colours as an accent."
+  }
+ ],
+ "timing": "Lilac and violet are rising into SS27 and continue into winter: Première Vision's AW27-28 trend forum opened with deep violet, plums, dusty pinks and mauves <sup>[6]</sup>. Butter and pastels are a summer story. White is rising for SS27; warm browns are fading.",
+ "products": "- **Lilac and butter:** shirts, knitwear, skirts, summer tailoring.\n- **Violet and true red:** occasion dresses, satin skirts, statement tailoring.\n- **Klein blue:** knitwear, shirts, accessories.\n- **Optic white:** suiting, shirting, layered summer dresses.",
+ "design_implications": "- **Approve one standard per colour.** Head-to-toe and colour-blocked looks need every fabric and trim to match one approved shade; each white needs its own standard.\n- **Test lilac across fibres.** Lilac shifts strongly between silk, cotton and polyester; dye lab dips on every base cloth.\n- **Use gold as a finish.** Lamé, metallic yarns and hardware, not a dyed colour.",
+ "commercial_implications": "- **Lead with lilac in visual merchandising** and keep it in depth across categories, so a customer can build a full look.\n- **Buy red and Klein blue lighter.** Strong colours sell as statements: fewer units, more styles.\n- **Reduce warm browns** compared with AW26 and SS26 buys; move the neutral budget towards white and ecru.",
+ "sources": [
+  {
+   "title": "Forecut SS27 colour forecast: method and sources",
+   "publisher": "Forecut",
+   "url": "https://forecut.in/forecasts/ss27/colours/colour-forecast/",
+   "date": "November 2026",
+   "note": "Built from Refinery29, T-Fashion colour shares, The Impression and Premiere Vision key colours"
+  },
+  {
+   "title": "Spring/Summer 2027 fashion trends from the runways",
+   "publisher": "Pham Fashion House",
+   "url": "https://www.phamfashion.com/blog/spring-summer-2027-fashion-trends-runway",
+   "date": "November 2026",
+   "note": "Runway colour observations only"
+  },
+  {
+   "title": "SS27 womenswear trends: the key looks from New York, London, Milan and Paris fashion weeks",
+   "publisher": "FashionUnited (AFP)",
+   "url": "https://fashionunited.com/news/fashion/ss27-womenswear-trends-the-key-looks-from-new-york-london-milan-and-paris-fashion-weeks/2026100775061",
+   "date": "7 October 2026"
+  },
+  {
+   "title": "Spring/Summer 2027 trends: 10 ideas from Milan and Paris",
+   "publisher": "Wordrobe",
+   "url": "https://wordrobeshop.com/en/spring-summer-2027-trends-milan-paris/",
+   "date": "October 2026"
+  },
+  {
+   "title": "Spring 2027 womenswear trends from the runways (SS27), T-Fashion Runway Index",
+   "publisher": "T-Fashion",
+   "url": "https://tfashion.ai/runway/ss27",
+   "date": "data as of 18 October 2026",
+   "note": "Share of looks across 12,320 looks from 359 designers, compared with SS26"
+  },
+  {
+   "title": "Premiere Vision Paris: what fabrics reveal about AW27/28 trends",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.uk/news/fairs/premiere-vision-paris-what-fabrics-reveal-about-aw27-28-trends/2026090490139",
+   "date": "4 September 2026"
+  }
+ ],
+ "images": [],
+ "related": [
+  "fc-ss27-colours-colour-forecast",
+  "fc-ss27-women-colours-womenswear-colour"
+ ]
+}

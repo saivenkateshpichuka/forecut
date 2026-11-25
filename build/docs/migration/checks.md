@@ -1,51 +1,51 @@
-# Migration checks (dev~0)
+# Migration checks (HEAD)
 
 - Moved pages checked: 283; report text identical to the last published version: 0
 - Pages not redirected because a check failed: 0
 - Generated summary pages redirected to their category page: 2341
 - PDFs in output/reports: 120; linked from library pages: 120; not linked: 0 []
-- Library pages scanned: 684; broken internal links: 0; missing images: 0
+- Library pages scanned: 691; broken internal links: 0; missing images: 0
 
 ## Problems
 
 - None
-- /aw26-colour: no earlier full page in dev~0 to compare
-- /aw26-colour-bubblegum: no earlier full page in dev~0 to compare
-- /aw26-colour-charcoal: no earlier full page in dev~0 to compare
-- /aw26-colour-chocolate: no earlier full page in dev~0 to compare
-- /aw26-colour-cloud-white: no earlier full page in dev~0 to compare
-- /aw26-colour-cobalt: no earlier full page in dev~0 to compare
-- /aw26-colour-footwear: no earlier full page in dev~0 to compare
-- /aw26-colour-kidswear: no earlier full page in dev~0 to compare
-- /aw26-colour-menswear: no earlier full page in dev~0 to compare
-- /aw26-colour-midnight: no earlier full page in dev~0 to compare
-- /aw26-colour-moss: no earlier full page in dev~0 to compare
-- /aw26-colour-mustard: no earlier full page in dev~0 to compare
-- /aw26-colour-plum: no earlier full page in dev~0 to compare
-- /aw26-colour-story-dark-matter: no earlier full page in dev~0 to compare
-- /aw26-colour-story-hot-spots: no earlier full page in dev~0 to compare
-- /aw26-colour-story-old-masters: no earlier full page in dev~0 to compare
-- /aw26-colour-tomato-red: no earlier full page in dev~0 to compare
-- /aw26-colour-womenswear: no earlier full page in dev~0 to compare
-- /aw26-fabrics: no earlier full page in dev~0 to compare
-- /aw26-fabrics-fabrics: no earlier full page in dev~0 to compare
-- /aw26-fabrics-finishes-and-washes: no earlier full page in dev~0 to compare
-- /aw26-fabrics-prints-and-patterns: no earlier full page in dev~0 to compare
-- /aw26-fabrics-texture: no earlier full page in dev~0 to compare
-- /aw26-footwear: no earlier full page in dev~0 to compare
-- /aw26-footwear-boots: no earlier full page in dev~0 to compare
-- /aw26-footwear-heels-flats: no earlier full page in dev~0 to compare
-- /aw26-footwear-men-s-shoes: no earlier full page in dev~0 to compare
-- /aw26-footwear-sneakers-casual: no earlier full page in dev~0 to compare
-- /aw26-knitwear: no earlier full page in dev~0 to compare
-- /aw26-menswear: no earlier full page in dev~0 to compare
-- /aw26-menswear-knitwear: no earlier full page in dev~0 to compare
-- /aw26-menswear-outerwear: no earlier full page in dev~0 to compare
-- /aw26-menswear-shirts-polos: no earlier full page in dev~0 to compare
-- /aw26-menswear-tailoring: no earlier full page in dev~0 to compare
-- /aw26-menswear-trousers: no earlier full page in dev~0 to compare
-- /aw26-theme-big-outerwear: no earlier full page in dev~0 to compare
-- /aw26-theme-fully-loaded: no earlier full page in dev~0 to compare
-- /aw26-theme-power-tailoring: no earlier full page in dev~0 to compare
-- /aw26-theme-preppy-sport: no earlier full page in dev~0 to compare
-- /aw26-theme-roaring-twenties: no earlier full page in dev~0 to compare
+- /aw26-colour: no earlier full page in HEAD to compare
+- /aw26-colour-bubblegum: no earlier full page in HEAD to compare
+- /aw26-colour-charcoal: no earlier full page in HEAD to compare
+- /aw26-colour-chocolate: no earlier full page in HEAD to compare
+- /aw26-colour-cloud-white: no earlier full page in HEAD to compare
+- /aw26-colour-cobalt: no earlier full page in HEAD to compare
+- /aw26-colour-footwear: no earlier full page in HEAD to compare
+- /aw26-colour-kidswear: no earlier full page in HEAD to compare
+- /aw26-colour-menswear: no earlier full page in HEAD to compare
+- /aw26-colour-midnight: no earlier full page in HEAD to compare
+- /aw26-colour-moss: no earlier full page in HEAD to compare
+- /aw26-colour-mustard: no earlier full page in HEAD to compare
+- /aw26-colour-plum: no earlier full page in HEAD to compare
+- /aw26-colour-story-dark-matter: no earlier full page in HEAD to compare
+- /aw26-colour-story-hot-spots: no earlier full page in HEAD to compare
+- /aw26-colour-story-old-masters: no earlier full page in HEAD to compare
+- /aw26-colour-tomato-red: no earlier full page in HEAD to compare
+- /aw26-colour-womenswear: no earlier full page in HEAD to compare
+- /aw26-fabrics: no earlier full page in HEAD to compare
+- /aw26-fabrics-fabrics: no earlier full page in HEAD to compare
+- /aw26-fabrics-finishes-and-washes: no earlier full page in HEAD to compare
+- /aw26-fabrics-prints-and-patterns: no earlier full page in HEAD to compare
+- /aw26-fabrics-texture: no earlier full page in HEAD to compare
+- /aw26-footwear: no earlier full page in HEAD to compare
+- /aw26-footwear-boots: no earlier full page in HEAD to compare
+- /aw26-footwear-heels-flats: no earlier full page in HEAD to compare
+- /aw26-footwear-men-s-shoes: no earlier full page in HEAD to compare
+- /aw26-footwear-sneakers-casual: no earlier full page in HEAD to compare
+- /aw26-knitwear: no earlier full page in HEAD to compare
+- /aw26-menswear: no earlier full page in HEAD to compare
+- /aw26-menswear-knitwear: no earlier full page in HEAD to compare
+- /aw26-menswear-outerwear: no earlier full page in HEAD to compare
+- /aw26-menswear-shirts-polos: no earlier full page in HEAD to compare
+- /aw26-menswear-tailoring: no earlier full page in HEAD to compare
+- /aw26-menswear-trousers: no earlier full page in HEAD to compare
+- /aw26-theme-big-outerwear: no earlier full page in HEAD to compare
+- /aw26-theme-fully-loaded: no earlier full page in HEAD to compare
+- /aw26-theme-power-tailoring: no earlier full page in HEAD to compare
+- /aw26-theme-preppy-sport: no earlier full page in HEAD to compare
+- /aw26-theme-roaring-twenties: no earlier full page in HEAD to compare

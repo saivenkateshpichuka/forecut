@@ -344,9 +344,15 @@ def build(V, pages):
             r = json.load(open(os.path.join(CONTENT, 'reports', f)))
             if r.get('status') == 'published' and r.get('season') in S:
                 import reports_render as RR
+                r.setdefault('slug', os.path.splitext(f)[0])
                 it, html = RR.render(V, r, vstore, today)
                 newp[key_of(it['url'])] = html
                 items.append(it)
+    import reports_render as RR
+    for k in [k for k in newp if 'id="related"></section>' in newp[k]]:
+        it = next((i for i in items if key_of(i['url']) == k), None)
+        if it:
+            newp[k] = newp[k].replace('<section class="rs" id="related"></section>', '<section class="rs" id="related">' + RR.related_block(V, it, items) + '</section>')
     REL = related(V)
     rtitle = {r['page']: HT.unescape((re.search(r'<title>([^<|]*)', open(os.path.join(ROOT, r['page'] + '.html'), encoding='utf-8', errors='ignore').read(5000)) or [None, r['page']])[1].strip()) for r in REL}
     # 4. library pages
