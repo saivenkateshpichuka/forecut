@@ -1,0 +1,44 @@
+{
+ "season": "ss27",
+ "audience": "men",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Milan, Paris and Pitti Uomo menswear shows, June 2026; Premiere Vision Paris, February 2026; analysis July to November 2026",
+ "markets": "Global: Milan, Paris and Florence runways; premium and mid-market menswear",
+ "kind": "report",
+ "category": "innovations",
+ "subsection": "design-production",
+ "slug": "design-and-production-innovations-report",
+ "title": "SS27 Men's Design and Production Innovations",
+ "summary": "Body scanning and 3D sampling, product data ready for the EU Digital Product Passport, and SS27 production planned around new EU rules and the Lunar New Year.",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Balenciaga used 3D body scans to build mannequins for its couture<sup>[1]</sup>.\n- The EU textiles Digital Product Passport delegated act is planned for the fourth quarter of 2027; since 19 July 2026, large companies may not destroy certain unsold apparel; since 1 July 2026, a temporary €3 duty applies per item on consignments up to €150<sup>[2]</sup>.\n- Brands are diversifying sourcing towards Vietnam, Bangladesh, India, Turkey and Morocco<sup>[2]</sup>.\n- Lunar New Year falls on 6 February 2027; factories slow from late January<sup>[3]</sup>."
+  }
+ ],
+ "design_implications": "- Develop first samples in 3D; record fibre, origin and care for every style.",
+ "commercial_implications": "- Build buffer time around Lunar New Year; buy shallower in the EU.",
+ "sources": [
+  {
+   "title": "Bare skin, fantasy and the machine: 3 takeaways from Paris' starry couture week",
+   "publisher": "Associated Press",
+   "url": "https://www.clickondetroit.com/entertainment/2026/07/09/bare-skin-fantasy-and-the-machine-3-takeaways-from-paris-starry-couture-week/",
+   "date": "9 July 2026"
+  },
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  },
+  {
+   "title": "Spring/Summer 2027 fashion trends from the runways",
+   "publisher": "Pham Fashion House",
+   "url": "https://www.phamfashion.com/blog/spring-summer-2027-fashion-trends-runway",
+   "date": "November 2026",
+   "note": "Manufacturer commentary; runway observations and production notes only"
+  }
+ ],
+ "images": []
+}

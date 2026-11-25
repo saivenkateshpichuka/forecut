@@ -1,0 +1,49 @@
+{
+ "season": "ss27",
+ "audience": "kids",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Europe-led kidswear trade fairs; premium and mid-market childrenswear, newborn to teen",
+ "kind": "report",
+ "images": [],
+ "category": "trims",
+ "subsection": "trim-stories",
+ "slug": "trim-stories-report",
+ "title": "SS27 Kids' Trim Stories",
+ "summary": "Trims that carry each SS27 kids' theme: flat seams for Pool Days, minimal details for Lull, characters for Happenstance and tape for Sailor Stripes.",
+ "sections": [
+  {
+   "heading": "Pool Days",
+   "body": "Flat seams, covered elastics, zip garages, printed labels."
+  },
+  {
+   "heading": "Lull",
+   "body": "Tonal stitching, stripe trims, natural buttons; subtle details and clever contrasts<sup>[1]</sup>."
+  },
+  {
+   "heading": "Happenstance",
+   "body": "Character embroidery, appliqué, novelty buttons and playful embellishment<sup>[1]</sup>."
+  },
+  {
+   "heading": "Sailor Stripes",
+   "body": "Sailor collars, contrast tape, anchor-look buttons<sup>[2]</sup>."
+  }
+ ],
+ "design_implications": "- One trim family per theme.\n- Safety: no drawstrings or long cords at the hood, neck or waist of young children's clothing, in line with EN 14682; test the attachment strength of buttons, beads, shells and other decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Trims refresh carry-over blocks.",
+ "sources": [
+  {
+   "title": "Kids spring/summer 2027 trends outlined by Future Snoops",
+   "publisher": "Playtime",
+   "url": "https://www.iloveplaytime.com/kids-spring-summer-2027-trends-outlined-by-future-snoops/",
+   "date": "June 2026"
+  },
+  {
+   "title": "Playtime Paris SS27: where fashion met the spirit of a summer music festival",
+   "publisher": "Junior Style (Aleksandra Ataca)",
+   "url": "https://juniorstyle.net/playtime-paris-ss27-where-fashion-met-the-spirit-of-a-summer-music-festival/",
+   "date": "30 June 2026"
+  }
+ ]
+}

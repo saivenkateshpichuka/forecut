@@ -1,0 +1,78 @@
+{
+ "season": "ss27",
+ "audience": "kids",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Europe-led kidswear trade fairs; premium and mid-market childrenswear, newborn to teen",
+ "kind": "report",
+ "images": [],
+ "category": "colours",
+ "subsection": "season-colours",
+ "slug": "season-colour-analysis",
+ "title": "SS27 Kids' Season Colour Analysis",
+ "summary": "Bright, saturated summer colour returns to kidswear, led by red, aqua and lemon, balanced by soft pastels and calm neutrals.",
+ "trend_status": "Rising",
+ "sections": [
+  {
+   "heading": "The palette",
+   "body": "| Colour | Pantone TCX (nearest) | HEX | Role |\n|---|---|---|---|\n| Lemon | 12-0642 TCX | #EDDD59 | Seasonal |\n| Aqua | 14-4816 TCX | #58C9D4 | Seasonal |\n| Grass green | 16-0237 TCX | #75A14F | Seasonal |\n| Coral | 16-1541 TCX | #F6745F | Seasonal |\n| Lavender | 14-3812 TCX | #BDB0D0 | Seasonal |\n| Sand | 13-1009 TCX | #DAC7AB | Core |\n| Red | 18-1664 TCX | #D01C1F | Accent, newly strong |\n| Navy | 19-3920 TCX | #2B2E43 | Core |\n\nThe first six are Forecut's SS27 kidswear palette<sup>[1]</sup>; red and navy are added from the June trade fairs<sup>[2]</sup>. Confirm codes against a physical Pantone book before dyeing."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- **Red:** \"one of the defining colors of the season\" at Playtime Paris, from bright statement shades to deeper tones<sup>[2]</sup>.\n- **Navy and nautical:** sailor collars and navy blues throughout Playtime Paris<sup>[2]</sup>.\n- **Colour overall:** Pitti Bimbo called its June edition \"the most colorful summer edition yet\"<sup>[3]</sup>; Pisamonas' SS27 shoes arrive \"full of color\"<sup>[4]</sup>; Poco Blush showed bold hues for girls<sup>[5]</sup>.\n- **Soft pastels:** Piccoli Principi's \"Pearl & Tides\" runs from vintage pink to pastel green and soft navy<sup>[4]</sup>.\n- **Neutrals:** Fatamadrina notes \"neutrals enhanced with terracotta and sage green\" alongside bright, saturated colours<sup>[6]</sup>."
+  },
+  {
+   "heading": "Colour groups",
+   "body": "- **Core:** navy, sand, white.\n- **Seasonal brights:** lemon, aqua, coral, grass green.\n- **Seasonal soft:** lavender, vintage pink, pastel green.\n- **Accent:** red."
+  },
+  {
+   "heading": "By age",
+   "body": "- **Baby and toddler:** soft pastels and sand, with one bright accent.\n- **Kids:** brights with navy and white.\n- **Older kids and teens:** red, navy and stripes; lavender for girls who want softer colour."
+  }
+ ],
+ "timing": "Red is rising for SS27; brights return after several pastel-led seasons. Soft pastels stay core for baby.",
+ "products": "- Red: tees, sandals, accessories. Aqua and lemon: swim and play. Lavender: dresses and knits. Navy and sand: bottoms and basics.",
+ "design_implications": "- Lab-dip brights on both jersey and swim fabric; they shift between substrates.\n- Check colour fastness to chlorinated and salt water for swim.",
+ "commercial_implications": "- Navy and sand carry volume; brights and red carry newness.",
+ "sources": [
+  {
+   "title": "Forecut SS27 colour forecast: method and sources",
+   "publisher": "Forecut",
+   "url": "https://forecut.in/forecasts/ss27/colours/colour-forecast/",
+   "date": "November 2026",
+   "note": "Built from runway colour shares, Pitti Uomo coverage, International Leather Maker and Premiere Vision key colours"
+  },
+  {
+   "title": "Playtime Paris SS27: where fashion met the spirit of a summer music festival",
+   "publisher": "Junior Style (Aleksandra Ataca)",
+   "url": "https://juniorstyle.net/playtime-paris-ss27-where-fashion-met-the-spirit-of-a-summer-music-festival/",
+   "date": "30 June 2026"
+  },
+  {
+   "title": "Pitti Bimbo 103: the energy of summer ignites kidswear",
+   "publisher": "Pitti Immagine",
+   "url": "https://www.pittimmagine.com/en/pittimmagine/archive/bimbo103/news/pitti-bimbo-103-novit-",
+   "date": "13 May 2026"
+  },
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  },
+  {
+   "title": "Pitti Bimbo in Florence proves the merits of an intimate format",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fairs/pitti-bimbo-in-florence-proves-the-merits-of-an-intimate-format/2026062673207",
+   "date": "26 June 2026"
+  },
+  {
+   "title": "Childrenswear fashion trends and forecast S/S 2027",
+   "publisher": "Fatamadrina (surface design studio for childrenswear)",
+   "url": "https://fatamadrina.eu/en/blogs/fashion-trends/kidswear-fashion-trends-ss-2027",
+   "date": "2026",
+   "note": "Design studio forecast; used for season-wide fabric, silhouette and print notes"
+  }
+ ]
+}

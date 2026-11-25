@@ -1,0 +1,75 @@
+{
+ "season": "ss27",
+ "audience": "kids",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Europe-led kidswear trade fairs; premium and mid-market childrenswear, newborn to teen",
+ "kind": "theme",
+ "images": [],
+ "category": "themes",
+ "subsection": "themes",
+ "slug": "sailor-stripes",
+ "title": "SS27 Kids' Sailor Stripes",
+ "summary": "Nautical classics return with energy: sailor collars, navy and red, and stripes in every direction.",
+ "trend_status": "Rising",
+ "sections": [
+  {
+   "heading": "The story",
+   "body": "At Playtime Paris, \"red emerged as one of the defining colors of the season\", \"stripes were another dominant trend\" in horizontal, vertical and diagonal runs, and \"sailor collars, navy blues, nautical details\" appeared throughout, tied to summer travel and the seaside<sup>[1]</sup>. MilK's Dressing Idéal included a sailor top by Loir Paris<sup>[2]</sup>. At Pitti Bimbo, Cozmo showed striped T-shirts and coordinated sets<sup>[3]</sup> and Gray Label kept to stripes alone<sup>[4]</sup>. Fatamadrina lists nautical themes and a \"Nostalgic Nautical\" board<sup>[5]</sup>."
+  },
+  {
+   "heading": "Colours",
+   "body": "| Colour | Pantone TCX (nearest) | HEX |\n|---|---|---|\n| Navy | 19-3920 TCX Peacoat | #2B2E43 |\n| Red | 18-1664 TCX Fiery Red | #D01C1F |\n| White | optic white | #FFFFFF |\n| Sand | 13-1009 TCX | #DAC7AB |"
+  },
+  {
+   "heading": "Silhouettes",
+   "body": "- Sailor-collar tops and dresses; Breton tees.\n- Shorts and dungarees with button fronts.\n- Coordinated stripe sets."
+  },
+  {
+   "heading": "Fabrics",
+   "body": "Cotton jersey and interlock for stripes; poplin and twill for collared pieces; denim."
+  },
+  {
+   "heading": "Trims and details",
+   "body": "Sailor collars with contrast tape, anchor or metal-look buttons, ric-rac."
+  }
+ ],
+ "timing": "In stores February to July 2027. A classic with renewed energy; red is the newness.",
+ "products": "- Breton tees, sailor tops, stripe sets, dungarees, red accessories and sandals.",
+ "design_implications": "- Vary stripe direction and width across the range.\n- Engineer stripes to match at seams.\n- Safety: no drawstrings or long cords at the hood, neck or waist of young children's clothing, in line with EN 14682; test the attachment strength of buttons, beads, shells and other decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Stripes are reorder lines; red and sailor collars are the seasonal buys.",
+ "sources": [
+  {
+   "title": "Playtime Paris SS27: where fashion met the spirit of a summer music festival",
+   "publisher": "Junior Style (Aleksandra Ataca)",
+   "url": "https://juniorstyle.net/playtime-paris-ss27-where-fashion-met-the-spirit-of-a-summer-music-festival/",
+   "date": "30 June 2026"
+  },
+  {
+   "title": "MilK's Spring/Summer 2027 Dressing Ideal",
+   "publisher": "Playtime",
+   "url": "https://www.iloveplaytime.com/milks-spring-summer-2027-dressing-ideal/",
+   "date": "July 2026"
+  },
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  },
+  {
+   "title": "Pitti Bimbo in Florence proves the merits of an intimate format",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fairs/pitti-bimbo-in-florence-proves-the-merits-of-an-intimate-format/2026062673207",
+   "date": "26 June 2026"
+  },
+  {
+   "title": "Childrenswear fashion trends and forecast S/S 2027",
+   "publisher": "Fatamadrina (surface design studio for childrenswear)",
+   "url": "https://fatamadrina.eu/en/blogs/fashion-trends/kidswear-fashion-trends-ss-2027",
+   "date": "2026",
+   "note": "Design studio forecast; used for season-wide fabric, silhouette and print notes"
+  }
+ ]
+}

@@ -1,0 +1,41 @@
+{
+ "season": "ss27",
+ "audience": "kids",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Europe-led kidswear trade fairs; premium and mid-market childrenswear, newborn to teen",
+ "kind": "report",
+ "images": [],
+ "category": "trims",
+ "subsection": "trim-market-strategy",
+ "slug": "trim-market-strategy-report",
+ "title": "SS27 Kids' Trim Market Strategy",
+ "summary": "In a slowing childrenswear market, use trims to add value to fewer, longer-lasting pieces; avoid fragile decoration that shortens a garment's life.",
+ "sections": [
+  {
+   "heading": "The market context",
+   "body": "In Italy, childrenswear exports fell 9.3% and domestic sales 2.6% in 2025, according to Confindustria Moda data reported by Fortune Italia; families are focused on sustainability and well-being, and the sector is moving toward functionality, material quality and durability<sup>[1]</sup>. Fashion overall is expected to remain in low single-digit growth in 2027<sup>[2]</sup>."
+  },
+  {
+   "heading": "Build, test, sell through",
+   "body": "| Action | Trims |\n|---|---|\n| Build | Embroidery, appliqué, sailor collars and tape |\n| Test | Shell and bead decoration (older kids only), sparkle for party |\n| Sell through | Fragile glued decoration |"
+  }
+ ],
+ "design_implications": "- Choose trims that survive repeated washing and hand-me-downs.\n- Safety: no drawstrings or long cords at the hood, neck or waist of young children's clothing, in line with EN 14682; test the attachment strength of buttons, beads, shells and other decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Durable trims support resale and hand-me-down value, which parents increasingly consider.",
+ "sources": [
+  {
+   "title": "Pitti, la moda bambino punta su sostenibilita e protezione UV: cosi i brand preparano l'estate 2027",
+   "publisher": "Fortune Italia",
+   "url": "https://www.fortuneita.com/?p=383263",
+   "date": "24 June 2026"
+  },
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  }
+ ]
+}

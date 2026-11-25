@@ -1,0 +1,39 @@
+{
+ "season": "ss27",
+ "audience": "men",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Milan, Paris and Pitti Uomo menswear shows, June 2026; Premiere Vision Paris, February 2026; analysis July to November 2026",
+ "markets": "Global: Milan, Paris and Florence runways; premium and mid-market menswear",
+ "kind": "report",
+ "category": "business-strategy",
+ "subsection": "assortment-pricing",
+ "slug": "assortment-and-pricing-strategy",
+ "title": "SS27 Men's Assortment and Pricing Strategy",
+ "summary": "Plan SS27 menswear for low growth: separates and sets that combine, summer tailoring sold as separates, shallow fashion buys and full price on what is new.",
+ "sections": [
+  {
+   "heading": "The market",
+   "body": "Fashion is expected to remain in low single-digit growth in 2027; sales up 4% with inventory up 10% is a weaker position than steady stock; mid-market brands face promotional pressure from luxury and value players<sup>[1]</sup>. Resale is expected to grow two to three times faster than first-hand fashion through 2027<sup>[1]</sup>."
+  },
+  {
+   "heading": "Assortment",
+   "body": "| Tier | What goes in it |\n|---|---|\n| Core (about half) | Shirts in ice blue and white, straight trousers, knit polos, sand and tobacco |\n| Seasonal (about a third) | Summer suits, shorts, cropped blousons, sets, satin shirts |\n| Statement (the rest) | Studded denim, sheer shirts, skirts and aprons, orange and aquatic pieces |"
+  },
+  {
+   "heading": "Pricing",
+   "body": "- Full price on rising pieces (cropped jackets, summer suits, sets).\n- Value on core reorder lines.\n- Premium for leather and hand-finished pieces.\n- Sets priced to reward buying both pieces."
+  }
+ ],
+ "design_implications": "- Fewer styles, more combinations; shared fabrics across shirts and sets.",
+ "commercial_implications": "- Weekly sales-to-stock tracking; chase winners.\n- In the EU, plan rework and resale routes for unsold stock.",
+ "sources": [
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  }
+ ],
+ "images": []
+}

@@ -1,0 +1,85 @@
+{
+ "season": "ss27",
+ "audience": "men",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Milan, Paris and Pitti Uomo menswear shows, June 2026; Premiere Vision Paris, February 2026; analysis July to November 2026",
+ "markets": "Global: Milan, Paris and Florence runways; premium and mid-market menswear",
+ "kind": "theme",
+ "category": "themes",
+ "subsection": "themes",
+ "slug": "ventilated-tailoring",
+ "title": "SS27 Men's Ventilated Tailoring",
+ "summary": "The suit adapts to heat: lighter, open-necked and in places transparent, in silk, gauze, seersucker and perforated leather.",
+ "trend_status": "Rising",
+ "sections": [
+  {
+   "heading": "The story",
+   "body": "Milan designers \"went lighter\" in silhouette and broadly agreed that a well-dressed man still wears a suit, but the suit is adapting<sup>[1]</sup>: lighter, less oversized tailoring with open necklines and more airflow, dress shirts left unbuttoned or rendered transparent<sup>[1]</sup>. Thom Browne showed layered seersucker suiting<sup>[1]</sup>. In Paris, Jonathan Anderson's Dior collection had fluid suits in very light, almost sheer silk and gauze<sup>[2]</sup>, and Hypebeast tracked sheer double-breasted suits at Dior and sheer trousers at Hed Mayner<sup>[3]</sup>. At Pitti Uomo, Herno launched crease-proof travel pieces in stretch wool and technical fabrics<sup>[4]</sup>."
+  },
+  {
+   "heading": "Colours",
+   "body": "Ice blue, sand and white, with tobacco for depth. See SS27 Men's Season Colours."
+  },
+  {
+   "heading": "Silhouettes",
+   "body": "- Unlined, soft-shoulder jackets with open-necked shirts.\n- Lighter double-breasted suits.\n- Long trousers cut closer to the body."
+  },
+  {
+   "heading": "Fabrics",
+   "body": "Silk and gauze<sup>[2]</sup>, seersucker<sup>[1]</sup>, perforated and woven leather<sup>[1]</sup>, fine lightweight wools blended with silk or linen<sup>[5]</sup>, crease-proof stretch wool<sup>[4]</sup>."
+  },
+  {
+   "heading": "Trims and details",
+   "body": "Minimal canvas and interlining, unlined backs, mother-of-pearl buttons, open-weave and perforated panels."
+  }
+ ],
+ "timing": "In stores February to July 2027; strongest for wedding season and summer events. Forecut expects lighter tailoring to carry into SS28.",
+ "products": "- Unlined summer suits; seersucker suits; linen travel suits; sheer or semi-sheer shirts.\n- Customers: working men who still wear tailoring in hot climates; wedding guests.",
+ "design_implications": "- Remove weight: half-canvas or unconstructed fronts, quarter lining.\n- Test semi-sheer shirting for modesty and comfort before committing.\n- Use crease-recovery and stretch wool for travel pieces.",
+ "commercial_implications": "- Lead tailoring with summer weights rather than four-season cloth.\n- Price sheer and silk pieces at premium; seersucker and linen at mid.",
+ "sources": [
+  {
+   "title": "Milan menswear finds ease on the fashion runways, even as the world feels uneasy",
+   "publisher": "The Star (Associated Press)",
+   "url": "https://www.thestar.com.my/lifestyle/style/2026/06/23/milan-menswear-finds-ease-on-the-fashion-runways-even-as-the-world-feels-uneasy",
+   "date": "23 June 2026"
+  },
+  {
+   "title": "Five key takeaways from a scorching men's Paris Fashion Week",
+   "publisher": "FashionUnited (AFP)",
+   "url": "https://fashionunited.com/news/fashion/five-key-takeaways-from-a-scorching-mens-paris-fashion-week/2026062973213",
+   "date": "29 June 2026"
+  },
+  {
+   "title": "The SS27 trends: what comes after fashion's hottest season ever?",
+   "publisher": "Hypebeast",
+   "url": "https://hypebeast.com/2026/7/ss27-mens-trends-runway-spring-summer-2027-menswear-info",
+   "date": "July 2026"
+  },
+  {
+   "title": "Pitti Uomo SS 2027: menswear highlights",
+   "publisher": "Wallpaper*",
+   "url": "https://www.wallpaper.com/fashion-beauty/pitti-uomo-ss-2027-menswear-highlights",
+   "date": "June 2026"
+  },
+  {
+   "title": "Spring-Summer 27 Decodings: Fabrics",
+   "publisher": "Premiere Vision",
+   "url": "https://www.premierevision.com/articles/e620fe9e-3407-f111-8333-000d3a2973d4/spring-summer-27-decodings-fabrics",
+   "date": "13 February 2026"
+  }
+ ],
+ "images": [
+  {
+   "file": "pinstripe-suiting-ss27-photo",
+   "caption": "Pinstripe suiting. Forecut visual, not a runway photograph.",
+   "credit": "Forecut",
+   "provenance": "Created for Forecut and supplied through the Forecut image upload on 14 October 2026. Illustrative, not a runway photograph.",
+   "licence": "Forecut image. Tool and licence terms to be confirmed by the owner."
+  }
+ ],
+ "related": [
+  "fc-ss27-men-fabrics-woven-fabric-direction"
+ ]
+}

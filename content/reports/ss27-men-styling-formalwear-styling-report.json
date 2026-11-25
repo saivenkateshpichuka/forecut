@@ -1,0 +1,61 @@
+{
+ "season": "ss27",
+ "audience": "men",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Milan, Paris and Pitti Uomo menswear shows, June 2026; Premiere Vision Paris, February 2026; analysis July to November 2026",
+ "markets": "Global: Milan, Paris and Florence runways; premium and mid-market menswear",
+ "kind": "report",
+ "category": "styling",
+ "subsection": "formalwear",
+ "slug": "formalwear-styling-report",
+ "title": "SS27 Men's Formalwear Styling",
+ "summary": "Formal SS27 menswear: the lighter suit with an open neck, monochrome black suits, leather suiting and tuxedos cut for both men and women.",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "Designers broadly agreed that a well-dressed man still wears a suit, but lighter, with open necklines and unbuttoned or transparent shirts<sup>[1]</sup>. Paris showed black suits with matching trousers and monochrome dressing at Celine, IM Men and Valette Studio<sup>[2]</sup>. Saint Laurent used beige leather for suits<sup>[3]</sup>. At couture, Elie Saab cut tuxedos and capes for women as well as men<sup>[4]</sup>."
+  },
+  {
+   "heading": "Formulas",
+   "body": "- **Light suit + open-neck shirt + loafers.**\n- **Black suit + black shirt, no tie.**\n- **Beige or camel leather jacket + matching trousers.**\n- **Seersucker suit + knit polo.**\n- **Tuxedo jacket + satin shirt for evening.**"
+  }
+ ],
+ "design_implications": "- Shirts designed to be worn open: collar that holds its shape without a tie.",
+ "commercial_implications": "- Offer suits as separates; summer weights lead.",
+ "sources": [
+  {
+   "title": "Milan menswear finds ease on the fashion runways, even as the world feels uneasy",
+   "publisher": "The Star (Associated Press)",
+   "url": "https://www.thestar.com.my/lifestyle/style/2026/06/23/milan-menswear-finds-ease-on-the-fashion-runways-even-as-the-world-feels-uneasy",
+   "date": "23 June 2026"
+  },
+  {
+   "title": "Between heatwave and restraint: menswear trends from Paris",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.uk/news/fashion/between-heatwave-and-restraint-menswear-trends-from-paris/2026070288940",
+   "date": "2 July 2026"
+  },
+  {
+   "title": "Five key takeaways from a scorching men's Paris Fashion Week",
+   "publisher": "FashionUnited (AFP)",
+   "url": "https://fashionunited.com/news/fashion/five-key-takeaways-from-a-scorching-mens-paris-fashion-week/2026062973213",
+   "date": "29 June 2026"
+  },
+  {
+   "title": "Bare skin, fantasy and the machine: 3 takeaways from Paris' starry couture week",
+   "publisher": "Associated Press",
+   "url": "https://www.clickondetroit.com/entertainment/2026/07/09/bare-skin-fantasy-and-the-machine-3-takeaways-from-paris-starry-couture-week/",
+   "date": "9 July 2026"
+  }
+ ],
+ "images": [
+  {
+   "file": "double-breasted-jackets-ss27-photo",
+   "caption": "Double-breasted jacket. Forecut visual, not a runway photograph.",
+   "credit": "Forecut",
+   "provenance": "Created for Forecut and supplied through the Forecut image upload on 14 October 2026. Illustrative, not a runway photograph.",
+   "licence": "Forecut image. Tool and licence terms to be confirmed by the owner."
+  }
+ ]
+}

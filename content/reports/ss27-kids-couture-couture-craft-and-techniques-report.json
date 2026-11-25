@@ -1,0 +1,48 @@
+{
+ "season": "ss27",
+ "audience": "kids",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Europe-led kidswear trade fairs; premium and mid-market childrenswear, newborn to teen",
+ "kind": "report",
+ "images": [],
+ "category": "couture",
+ "subsection": "craft-techniques",
+ "slug": "couture-craft-and-techniques-report",
+ "title": "SS27 Kids' Couture Craft and Techniques",
+ "summary": "Craft in premium kidswear: artist-designed prints, handcrafted embroidery, handmade costumes and luxury \"princess\" dressing.",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Halcyon Nights builds several graphic universes each season with patterns designed by a panel of artists<sup>[1]</sup>.\n- Bobo Choses publishes illustrated books alongside its collections<sup>[1]</sup>.\n- Selini Action makes handmade costumes decorated with shells, pebbles, seaweed and embroidery<sup>[2]</sup>.\n- Speranza and Junona show luxury \"princess\" style<sup>[1]</sup>.\n- Fatamadrina's \"Wildflowers Bloom\" uses delicate handcrafted embroidery<sup>[3]</sup>."
+  },
+  {
+   "heading": "Translating to ready-to-wear",
+   "body": "- Artist collaborations on prints.\n- Hand embroidery on one placement per garment.\n- Smocking and pleating for occasion dresses."
+  }
+ ],
+ "design_implications": "- Budget hand work into hero pieces.\n- Safety: no drawstrings or long cords at the hood, neck or waist of young children's clothing, in line with EN 14682; test the attachment strength of buttons, beads, shells and other decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Tell the craft and artist story; price as limited.",
+ "sources": [
+  {
+   "title": "Pitti Bimbo in Florence proves the merits of an intimate format",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fairs/pitti-bimbo-in-florence-proves-the-merits-of-an-intimate-format/2026062673207",
+   "date": "26 June 2026"
+  },
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  },
+  {
+   "title": "Childrenswear fashion trends and forecast S/S 2027",
+   "publisher": "Fatamadrina (surface design studio for childrenswear)",
+   "url": "https://fatamadrina.eu/en/blogs/fashion-trends/kidswear-fashion-trends-ss-2027",
+   "date": "2026",
+   "note": "Design studio forecast; used for season-wide fabric, silhouette and print notes"
+  }
+ ]
+}

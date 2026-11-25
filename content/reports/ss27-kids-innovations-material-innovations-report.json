@@ -1,0 +1,41 @@
+{
+ "season": "ss27",
+ "audience": "kids",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Europe-led kidswear trade fairs; premium and mid-market childrenswear, newborn to teen",
+ "kind": "report",
+ "images": [],
+ "category": "innovations",
+ "subsection": "material-innovations",
+ "slug": "material-innovations-report",
+ "title": "SS27 Kids' Material Innovations",
+ "summary": "Materials for SS27 kidswear: UPF-rated swim and performance knits, recycled fibres, organic and certified cotton, quick-dry and sand-free fabrics.",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- UV filters in swimwear, tees and accessories<sup>[1]</sup>.\n- Recycled fibres, organic cotton and certified materials; breathable, quick-dry fabrics<sup>[1]</sup>.\n- Sustainable lycra (Piccoli Principi), UPF50+ performance fabrics and sand-free towels (Teeter Totter), recycled fine fabrics with UPF 50+ (Marie Raxevisky)<sup>[2]</sup>."
+  },
+  {
+   "heading": "Readiness",
+   "body": "| Material | Readiness (Forecut assessment) |\n|---|---|\n| UPF swim and knit | Ready; test and label |\n| Recycled polyamide and polyester swim | Ready |\n| Organic cotton (certified) | Ready |\n| Sand-free microfibre towels | Ready |"
+  }
+ ],
+ "design_implications": "- Test UPF to a recognised standard (EN 13758 or AS/NZS 4399).\n- Safety: no drawstrings or long cords at the hood, neck or waist of young children's clothing, in line with EN 14682; test the attachment strength of buttons, beads, shells and other decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Verify every sustainability claim before using it.",
+ "sources": [
+  {
+   "title": "Pitti, la moda bambino punta su sostenibilita e protezione UV: cosi i brand preparano l'estate 2027",
+   "publisher": "Fortune Italia",
+   "url": "https://www.fortuneita.com/?p=383263",
+   "date": "24 June 2026"
+  },
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  }
+ ]
+}

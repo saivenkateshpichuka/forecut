@@ -1,0 +1,72 @@
+{
+ "season": "ss27",
+ "audience": "men",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Milan, Paris and Pitti Uomo menswear shows, June 2026; Premiere Vision Paris, February 2026; analysis July to November 2026",
+ "markets": "Global: Milan, Paris and Florence runways; premium and mid-market menswear",
+ "kind": "report",
+ "category": "silhouettes",
+ "subsection": "knit",
+ "slug": "knit-shape-and-fit-outlook",
+ "title": "SS27 Men's Knit Shape and Fit Outlook",
+ "summary": "Knitwear goes light and textured: knitted polos and short-sleeve knit shirts, open-stitch summer knits, sun-faded cables and V-necks, cut closer to the body.",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "Brunello Cucinelli showed rainbow cable-knit sweaters with a sun-faded finish<sup>[1]</sup>; Hypebeast pointed to the V-neck sweater in orange<sup>[2]</sup>. Première Vision's SS27 knit selection highlights flat, Derby and Richelieu ribs that are more elastic and elongated than jersey, and retro-sport stitches such as honeycomb piqué, diamond and wheat stitch<sup>[3]</sup>. Its overview adds cool wools and extra-fine merino<sup>[4]</sup>. Milan used knits within lighter, closer silhouettes<sup>[5]</sup>."
+  },
+  {
+   "heading": "Shapes and fit",
+   "body": "- **Knitted polo and short-sleeve knit shirt:** the summer shirt replacement; fit close at the shoulder, straight body.\n- **V-neck sweater:** close fit, worn alone or over a T-shirt.\n- **Open-stitch summer knit:** relaxed, for layering over shirts.\n- **Cable crewneck in a light yarn:** classic shape, sun-faded colour.\n- **Rib tank:** close, for layering under open shirts and jackets."
+  }
+ ],
+ "timing": "In stores February to July 2027. Knit polos and short-sleeve knit shirts are a long-running growth line; open-stitch knits are a summer idea.",
+ "products": "- Knitted polos, knit shirts, V-necks, open-stitch knits, light cables, rib tanks.",
+ "design_implications": "- Use 14 to 16 gauge for polos and knit shirts; check sheerness in light colours.\n- Retro-sport stitches (piqué, honeycomb) add texture without weight.",
+ "commercial_implications": "- Knit polos and knit shirts are reorder lines: buy core colours deep.\n- Keep open-stitch and statement cables to smaller buys.",
+ "sources": [
+  {
+   "title": "Pitti Uomo SS 2027: menswear highlights",
+   "publisher": "Wallpaper*",
+   "url": "https://www.wallpaper.com/fashion-beauty/pitti-uomo-ss-2027-menswear-highlights",
+   "date": "June 2026"
+  },
+  {
+   "title": "The SS27 trends: what comes after fashion's hottest season ever?",
+   "publisher": "Hypebeast",
+   "url": "https://hypebeast.com/2026/7/ss27-mens-trends-runway-spring-summer-2027-menswear-info",
+   "date": "July 2026"
+  },
+  {
+   "title": "Spring-Summer 27 Decodings: Fabrics",
+   "publisher": "Premiere Vision",
+   "url": "https://www.premierevision.com/articles/e620fe9e-3407-f111-8333-000d3a2973d4/spring-summer-27-decodings-fabrics",
+   "date": "13 February 2026"
+  },
+  {
+   "title": "Decoding Spring-Summer 27 key transversal highlights",
+   "publisher": "Premiere Vision",
+   "url": "https://www.premierevision.com/articles/86fffb89-9602-f111-8333-000d3a2973d4/decoding-spring-summer-27-key-transversal-highlights",
+   "date": "5 February 2026"
+  },
+  {
+   "title": "Milan menswear finds ease on the fashion runways, even as the world feels uneasy",
+   "publisher": "The Star (Associated Press)",
+   "url": "https://www.thestar.com.my/lifestyle/style/2026/06/23/milan-menswear-finds-ease-on-the-fashion-runways-even-as-the-world-feels-uneasy",
+   "date": "23 June 2026"
+  }
+ ],
+ "images": [
+  {
+   "file": "open-johnny-collar-knit-polos-ss27-photo",
+   "caption": "Open Johnny-collar knit polo. Forecut visual, not a runway photograph.",
+   "credit": "Forecut",
+   "provenance": "Created for Forecut and supplied through the Forecut image upload on 14 October 2026. Illustrative, not a runway photograph.",
+   "licence": "Forecut image. Tool and licence terms to be confirmed by the owner."
+  }
+ ],
+ "related": [
+  "fc-ss27-men-fabrics-knit-fabric-direction"
+ ]
+}

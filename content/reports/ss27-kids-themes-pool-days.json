@@ -1,0 +1,71 @@
+{
+ "season": "ss27",
+ "audience": "kids",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Europe-led kidswear trade fairs; premium and mid-market childrenswear, newborn to teen",
+ "kind": "theme",
+ "images": [],
+ "category": "themes",
+ "subsection": "themes",
+ "slug": "pool-days",
+ "title": "SS27 Kids' Pool Days",
+ "summary": "Summer swim and sun protection move to the centre of kidswear: UPF50+ swimwear and tees, quick-dry sets, beach towels and coordinated pool looks.",
+ "trend_status": "Rising",
+ "sections": [
+  {
+   "heading": "The story",
+   "body": "Pitti Bimbo 103 took \"The Pitti Pool\" as its theme and called itself \"the most colorful summer edition yet\"<sup>[1]</sup>. Swimwear, T-shirts and accessories with built-in UV filters were prominent: Fortune Italia notes they were recently niche products and are now becoming more common, driven by family concern for health and by changing climate conditions<sup>[2]</sup>. Newer lines emphasise breathability, quick drying and comfort<sup>[2]</sup>.\n\nExhibitors showed the idea across the range. Piccoli Principi's \"Pearl & Tides\" swimwear in two-pieces and swimsuits uses technical fabrics including sustainable lycra, and \"each piece guarantees UV protection\"; Teeter Totter's \"Aegean Chromatique\" offers UPF50+ swim and sportswear, backpacks and ultra-light, sand-free beach towels; Marie Raxevisky's \"Beach Couture\" line includes UPF 50+ certified swimwear, sarongs and skirts<sup>[3]</sup>."
+  },
+  {
+   "heading": "Colours",
+   "body": "Aqua and soft navy with vintage pink and pastel green<sup>[3]</sup>, plus red as the accent. See SS27 Kids' Season Colours."
+  },
+  {
+   "heading": "Silhouettes",
+   "body": "- One-piece and two-piece swimsuits; long-sleeve swim tops.\n- Swim shorts and board shorts with matching tops.\n- Cover-ups: sarongs, skirts and terry tops."
+  },
+  {
+   "heading": "Fabrics",
+   "body": "UPF-rated swim fabrics including recycled or sustainable lycra<sup>[3]</sup>; quick-dry performance knits<sup>[2]</sup>; terry for cover-ups<sup>[4]</sup>."
+  },
+  {
+   "heading": "Trims and details",
+   "body": "Flat seams, covered elastics, zip garages at the neck, and labels printed rather than sewn where skin contact is high."
+  }
+ ],
+ "timing": "In stores March to August 2027; strongest for holiday and pool months. Forecut expects UV-protective kidswear to keep growing beyond SS27.",
+ "products": "- UPF swimwear, rash guards, UV tees and hats, swim shorts, cover-ups, beach towels and bags.\n- Customers: families buying for holidays and summer camps; grandparents buying gifts.",
+ "design_implications": "- Only claim UPF ratings that have been tested to a recognised standard such as EN 13758 or AS/NZS 4399, and state the rating on the label.\n- Design swim, tee and cover-up as one coordinated set.\n- Safety: no drawstrings or long cords at the hood, neck or waist of young children's clothing, in line with EN 14682; test the attachment strength of buttons, beads, shells and other decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Build depth in swimwear and UV tees; they sell as sets.\n- UPF ratings support full price; keep them visible on product pages.",
+ "sources": [
+  {
+   "title": "Pitti Bimbo 103: the energy of summer ignites kidswear",
+   "publisher": "Pitti Immagine",
+   "url": "https://www.pittimmagine.com/en/pittimmagine/archive/bimbo103/news/pitti-bimbo-103-novit-",
+   "date": "13 May 2026"
+  },
+  {
+   "title": "Pitti, la moda bambino punta su sostenibilita e protezione UV: cosi i brand preparano l'estate 2027",
+   "publisher": "Fortune Italia",
+   "url": "https://www.fortuneita.com/?p=383263",
+   "date": "24 June 2026"
+  },
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  },
+  {
+   "title": "MilK's Spring/Summer 2027 Dressing Ideal",
+   "publisher": "Playtime",
+   "url": "https://www.iloveplaytime.com/milks-spring-summer-2027-dressing-ideal/",
+   "date": "July 2026"
+  }
+ ],
+ "related": [
+  "fc-ss27-kids-innovations-material-innovations-report"
+ ]
+}

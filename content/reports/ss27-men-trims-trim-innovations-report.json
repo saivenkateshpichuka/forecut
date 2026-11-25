@@ -1,0 +1,41 @@
+{
+ "season": "ss27",
+ "audience": "men",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Milan, Paris and Pitti Uomo menswear shows, June 2026; Premiere Vision Paris, February 2026; analysis July to November 2026",
+ "markets": "Global: Milan, Paris and Florence runways; premium and mid-market menswear",
+ "kind": "report",
+ "category": "trims",
+ "subsection": "trim-innovations",
+ "slug": "trim-innovations-report",
+ "title": "SS27 Men's Trim Innovations",
+ "summary": "Cooling and performance details move into menswear: fan-cooled garments, running-vest bottle holders and passport pockets, alongside chrome-free leather components.",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- **Integrated cooling:** Rick Owens showed inflatable tracksuits with integrated fans using Adidas's Climacool heat-regulation technology<sup>[1]</sup>.\n- **Performance details:** Y-3 showed a running vest with bottle holders<sup>[1]</sup>.\n- **Travel details:** Herno added passport-sized pockets to crease-proof travel pieces<sup>[2]</sup>.\n- **Chrome-free leather:** Margaret Howell's Dr Martens 1461 uses chrome-free leather by C.F. Stead, designed to patina<sup>[2]</sup>."
+  },
+  {
+   "heading": "Readiness",
+   "body": "| Innovation | Readiness (Forecut assessment) |\n|---|---|\n| Passport and utility pockets | Ready |\n| Bottle and gear holders | Ready from sportswear suppliers |\n| Chrome-free leather trims | Ready; check supply |\n| Integrated fans | Experimental; showpieces only |"
+  }
+ ],
+ "design_implications": "- Add functional pockets to travel tailoring and outerwear.",
+ "commercial_implications": "- Functional details justify full price on core pieces.",
+ "sources": [
+  {
+   "title": "Between heatwave and restraint: menswear trends from Paris",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.uk/news/fashion/between-heatwave-and-restraint-menswear-trends-from-paris/2026070288940",
+   "date": "2 July 2026"
+  },
+  {
+   "title": "Pitti Uomo SS 2027: menswear highlights",
+   "publisher": "Wallpaper*",
+   "url": "https://www.wallpaper.com/fashion-beauty/pitti-uomo-ss-2027-menswear-highlights",
+   "date": "June 2026"
+  }
+ ],
+ "images": []
+}

@@ -1,0 +1,65 @@
+{
+ "season": "ss27",
+ "audience": "men",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Milan, Paris and Pitti Uomo menswear shows, June 2026; Premiere Vision Paris, February 2026; analysis July to November 2026",
+ "markets": "Global: Milan, Paris and Florence runways; premium and mid-market menswear",
+ "kind": "report",
+ "category": "colours",
+ "subsection": "season-colours",
+ "slug": "season-colour-analysis",
+ "title": "SS27 Men's Season Colour Analysis",
+ "summary": "Sun-faded earth tones and linen neutrals, ice blue as the new shirt colour, with butter, salmon pink and rust, and aquatic blues and orange for statements.",
+ "trend_status": "Rising",
+ "sections": [
+  {
+   "heading": "The palette",
+   "body": "| Colour | Pantone TCX (nearest) | HEX | Role |\n|---|---|---|---|\n| Sand | 13-1009 TCX | #DAC7AB | Core |\n| Tobacco | 18-1028 TCX | #684832 | Core |\n| Ice blue | 12-4805 TCX | #CBDCDF | Seasonal: the new shirt colour |\n| Butter | 12-0711 TCX | #F6E199 | Seasonal |\n| Salmon pink | 15-1523 TCX | #E29A86 | Seasonal |\n| Rust | 18-1250 TCX | #9F5130 | Accent |\n\nThis is Forecut's SS27 menswear palette<sup>[1]</sup>. Confirm codes against a physical Pantone book before dyeing."
+  },
+  {
+   "heading": "The evidence",
+   "body": "Two strong colour signals came from the June shows. **Aquatic blues**, from turquoise and sky blue to electric blue, ran through leather jackets, shorts, linen shirts and loafers at Shinyakozuka, Auralee, Zegna and others<sup>[2]</sup>. **Orange**, from blood orange and rust to tangerine, appeared at Dries Van Noten, Willy Chavarria, Saint Laurent and Jacquemus<sup>[2]</sup>. Dries Van Noten also showed nude and aquamarine<sup>[3]</sup>. Paris collections leaned on monochrome palettes, notably at Celine and IM Men<sup>[4]</sup>. Leather came in camel and beige at Dior and Saint Laurent<sup>[3]</sup>."
+  },
+  {
+   "heading": "Colour groups",
+   "body": "- **Core:** sand and tobacco, with white and black for tailoring.\n- **Seasonal:** ice blue, butter and salmon pink for shirts, knits and summer suits.\n- **Accent:** rust and orange, and aquatic blue, for one piece per look (a bag, cap, jacket or shorts)."
+  },
+  {
+   "heading": "Combinations",
+   "body": "- Ice blue shirt with sand trousers and tobacco suede.\n- Head-to-toe sand or beige, including leather.\n- Turquoise or sky blue shorts with a white shirt.\n- Orange accessory or blouson over tobacco and sand."
+  }
+ ],
+ "timing": "Ice blue and sand are rising for SS27. Aquatic blues and orange are statement colours for high summer.",
+ "products": "- Ice blue: shirts. Sand and beige: suits, trousers, leather. Aquatic blue: shorts, linen shirts, leather jackets. Orange: blousons, knits, bags.",
+ "design_implications": "- Lab-dip ice blue across poplin, linen and knit; it shifts between fibres.\n- Use orange as one accessory or garment per look, as runways suggested.",
+ "commercial_implications": "- Lead shirts with ice blue; keep sand and tobacco deep.\n- Buy aquatic blue and orange as smaller statement buys.",
+ "sources": [
+  {
+   "title": "Forecut SS27 colour forecast: method and sources",
+   "publisher": "Forecut",
+   "url": "https://forecut.in/forecasts/ss27/colours/colour-forecast/",
+   "date": "November 2026",
+   "note": "Built from runway colour shares, Pitti Uomo coverage, International Leather Maker and Premiere Vision key colours"
+  },
+  {
+   "title": "The SS27 trends: what comes after fashion's hottest season ever?",
+   "publisher": "Hypebeast",
+   "url": "https://hypebeast.com/2026/7/ss27-mens-trends-runway-spring-summer-2027-menswear-info",
+   "date": "July 2026"
+  },
+  {
+   "title": "Five key takeaways from a scorching men's Paris Fashion Week",
+   "publisher": "FashionUnited (AFP)",
+   "url": "https://fashionunited.com/news/fashion/five-key-takeaways-from-a-scorching-mens-paris-fashion-week/2026062973213",
+   "date": "29 June 2026"
+  },
+  {
+   "title": "Between heatwave and restraint: menswear trends from Paris",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.uk/news/fashion/between-heatwave-and-restraint-menswear-trends-from-paris/2026070288940",
+   "date": "2 July 2026"
+  }
+ ],
+ "images": []
+}

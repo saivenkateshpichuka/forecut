@@ -1,0 +1,60 @@
+{
+ "season": "ss27",
+ "audience": "men",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Milan, Paris and Pitti Uomo menswear shows, June 2026; Premiere Vision Paris, February 2026; analysis July to November 2026",
+ "markets": "Global: Milan, Paris and Florence runways; premium and mid-market menswear",
+ "kind": "report",
+ "category": "fabrics",
+ "subsection": "knit",
+ "slug": "knit-fabric-direction",
+ "title": "SS27 Men's Knit Fabric Direction",
+ "summary": "Cool wools and extra-fine merino, elastic ribs, retro-sport piqués and sun-faded cotton cables for SS27 menswear knits.",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "Première Vision highlighted flat, Derby and Richelieu ribs, more elastic and elongated than jersey, and retro-sport bindings, honeycomb piqués, plated knits, diamond and wheat stitches in slightly yellowed, sepia-like tones<sup>[1]</sup>; cool wools and extra-fine merino<sup>[2]</sup>. Brunello Cucinelli's cable knits were dyed with resin for a sun-faded, one-of-a-kind finish<sup>[3]</sup>."
+  },
+  {
+   "heading": "Fabric by fabric",
+   "body": "| Knit | Hand | Uses |\n|---|---|---|\n| Extra-fine merino | Smooth, cool | Polos, V-necks, knit shirts |\n| Cool wool | Dry, crisp | Knit jackets |\n| Cotton cable, garment-faded | Textured, soft | Crewnecks |\n| Honeycomb and piqué | Structured, breathable | Polos |\n| Derby and Richelieu rib | Elastic, close | Tanks, fitted knits |"
+  }
+ ],
+ "timing": "In stores February to July 2027.",
+ "products": "- Knit polos and shirts, crewnecks, rib tanks, knit jackets.",
+ "design_implications": "- Specify recovery and pilling tests on merino and rib.\n- Garment-dye cotton knits for the sun-faded look.",
+ "commercial_implications": "- Merino at mid to premium; cotton cables at entry to mid.",
+ "sources": [
+  {
+   "title": "Spring-Summer 27 Decodings: Fabrics",
+   "publisher": "Premiere Vision",
+   "url": "https://www.premierevision.com/articles/e620fe9e-3407-f111-8333-000d3a2973d4/spring-summer-27-decodings-fabrics",
+   "date": "13 February 2026"
+  },
+  {
+   "title": "Decoding Spring-Summer 27 key transversal highlights",
+   "publisher": "Premiere Vision",
+   "url": "https://www.premierevision.com/articles/86fffb89-9602-f111-8333-000d3a2973d4/decoding-spring-summer-27-key-transversal-highlights",
+   "date": "5 February 2026"
+  },
+  {
+   "title": "Pitti Uomo SS 2027: menswear highlights",
+   "publisher": "Wallpaper*",
+   "url": "https://www.wallpaper.com/fashion-beauty/pitti-uomo-ss-2027-menswear-highlights",
+   "date": "June 2026"
+  }
+ ],
+ "images": [
+  {
+   "file": "ribbed-polo-knits-ss27-photo",
+   "caption": "Ribbed polo knit. Forecut visual, not a runway photograph.",
+   "credit": "Forecut",
+   "provenance": "Created for Forecut and supplied through the Forecut image upload on 14 October 2026. Illustrative, not a runway photograph.",
+   "licence": "Forecut image. Tool and licence terms to be confirmed by the owner."
+  }
+ ],
+ "related": [
+  "fc-ss27-men-silhouettes-knit-shape-and-fit-outlook"
+ ]
+}

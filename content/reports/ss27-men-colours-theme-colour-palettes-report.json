@@ -1,0 +1,48 @@
+{
+ "season": "ss27",
+ "audience": "men",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Milan, Paris and Pitti Uomo menswear shows, June 2026; Premiere Vision Paris, February 2026; analysis July to November 2026",
+ "markets": "Global: Milan, Paris and Florence runways; premium and mid-market menswear",
+ "kind": "report",
+ "category": "colours",
+ "subsection": "theme-colour-palettes",
+ "slug": "theme-colour-palettes-report",
+ "title": "SS27 Men's Theme Colour Palettes",
+ "summary": "A working palette for each SS27 men's theme: Short Story, Ventilated Tailoring, Tender Masculinity and Pyjama Polish.",
+ "sections": [
+  {
+   "heading": "Palettes by theme",
+   "body": "| Theme | Lead | Accent | Range colours | Carried by |\n|---|---|---|---|---|\n| Short Story | Tobacco 18-1028 TCX | Rust 18-1250 TCX | Sand 13-1009 TCX | Cropped leather and suede blousons, shorts |\n| Ventilated Tailoring | Sand 13-1009 TCX | Ice blue 12-4805 TCX | White | Summer suits, open shirts |\n| Tender Masculinity | Salmon pink 15-1523 TCX | Aquamarine (sea blue family) | Butter 12-0711 TCX | Satin shirts, soft knits |\n| Pyjama Polish | Ice blue 12-4805 TCX | Black (piping) | Sand, khaki | Two-piece sets, tunic shirts |"
+  },
+  {
+   "heading": "Why these palettes",
+   "body": "They follow the runway colour: monochrome sets at Celine and IM Men<sup>[1]</sup>, khaki, blue and beige sleepwear sets with black piping at Dior<sup>[2]</sup>, nude and aquamarine at Dries Van Noten<sup>[2]</sup>, and Forecut's SS27 menswear palette<sup>[3]</sup>."
+  }
+ ],
+ "design_implications": "- Lead colour on most of the look; accent on one piece or the piping.\n- Share sand across themes so pieces cross-sell.",
+ "commercial_implications": "- Build depth in sand and ice blue; accents as small buys.",
+ "sources": [
+  {
+   "title": "Between heatwave and restraint: menswear trends from Paris",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.uk/news/fashion/between-heatwave-and-restraint-menswear-trends-from-paris/2026070288940",
+   "date": "2 July 2026"
+  },
+  {
+   "title": "Five key takeaways from a scorching men's Paris Fashion Week",
+   "publisher": "FashionUnited (AFP)",
+   "url": "https://fashionunited.com/news/fashion/five-key-takeaways-from-a-scorching-mens-paris-fashion-week/2026062973213",
+   "date": "29 June 2026"
+  },
+  {
+   "title": "Forecut SS27 colour forecast: method and sources",
+   "publisher": "Forecut",
+   "url": "https://forecut.in/forecasts/ss27/colours/colour-forecast/",
+   "date": "November 2026",
+   "note": "Built from runway colour shares, Pitti Uomo coverage, International Leather Maker and Premiere Vision key colours"
+  }
+ ],
+ "images": []
+}

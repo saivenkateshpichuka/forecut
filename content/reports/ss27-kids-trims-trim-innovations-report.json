@@ -1,0 +1,41 @@
+{
+ "season": "ss27",
+ "audience": "kids",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Europe-led kidswear trade fairs; premium and mid-market childrenswear, newborn to teen",
+ "kind": "report",
+ "images": [],
+ "category": "trims",
+ "subsection": "trim-innovations",
+ "slug": "trim-innovations-report",
+ "title": "SS27 Kids' Trim Innovations",
+ "summary": "Functional and sensory details in kidswear: scented finishes, UPF-rated components, reversible construction and gadgets attached to bags.",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Poco Blush's T-shirt releases a minty scent when crumpled; its printed dress is reversible<sup>[1]</sup>.\n- Sticky Lemon showed a mini digital camera that attaches to a bag<sup>[1]</sup>.\n- Cadhan uses dermatologically tested fragrances in its sleep line, with a \"Sogni d'oro\" line for sensitive skin<sup>[2]</sup>.\n- Teeter Totter's ultra-light, sand-free beach towels<sup>[2]</sup>."
+  },
+  {
+   "heading": "Readiness",
+   "body": "| Innovation | Readiness (Forecut assessment) |\n|---|---|\n| Reversible construction | Ready |\n| Sand-free towel fabrics | Ready |\n| Scented finishes | Test skin safety and wash durability first |\n| Bag-attached gadgets | Accessory category; check toy and battery rules |"
+  }
+ ],
+ "design_implications": "- Any finish on skin-contact garments needs skin-safety evidence.\n- Safety: no drawstrings or long cords at the hood, neck or waist of young children's clothing, in line with EN 14682; test the attachment strength of buttons, beads, shells and other decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Novelty sells as gift and story; keep buys small.",
+ "sources": [
+  {
+   "title": "Pitti Bimbo in Florence proves the merits of an intimate format",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fairs/pitti-bimbo-in-florence-proves-the-merits-of-an-intimate-format/2026062673207",
+   "date": "26 June 2026"
+  },
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  }
+ ]
+}

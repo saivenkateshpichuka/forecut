@@ -1,0 +1,57 @@
+{
+ "season": "ss27",
+ "audience": "kids",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Europe-led kidswear trade fairs; premium and mid-market childrenswear, newborn to teen",
+ "kind": "report",
+ "images": [],
+ "category": "colours",
+ "subsection": "colour-stories",
+ "slug": "colour-stories-report",
+ "title": "SS27 Kids' Colour Stories",
+ "summary": "Three colour stories for SS27 kidswear: Pool Brights, Seaside Calm and Red and Navy.",
+ "sections": [
+  {
+   "heading": "Pool Brights",
+   "body": "Aqua, lemon, coral and grass green for swim, play and summer camp. It reflects Pitti Bimbo's pool theme and colourful summer edition<sup>[1]</sup>."
+  },
+  {
+   "heading": "Seaside Calm",
+   "body": "Sand, white, soft navy, vintage pink and pastel green for basics, baby and nightwear. It follows Piccoli Principi's \"Pearl & Tides\" palette<sup>[2]</sup> and Future Snoops' Lull<sup>[3]</sup>."
+  },
+  {
+   "heading": "Red and Navy",
+   "body": "Red, navy and white for stripes, sailor pieces and denim, from Playtime Paris<sup>[4]</sup>."
+  }
+ ],
+ "design_implications": "- One delivery or capsule per story.\n- Seaside Calm mixes with both other stories.",
+ "commercial_implications": "- Seaside Calm and Red and Navy carry volume; Pool Brights peaks before holidays.",
+ "sources": [
+  {
+   "title": "Pitti Bimbo 103: the energy of summer ignites kidswear",
+   "publisher": "Pitti Immagine",
+   "url": "https://www.pittimmagine.com/en/pittimmagine/archive/bimbo103/news/pitti-bimbo-103-novit-",
+   "date": "13 May 2026"
+  },
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  },
+  {
+   "title": "Kids spring/summer 2027 trends outlined by Future Snoops",
+   "publisher": "Playtime",
+   "url": "https://www.iloveplaytime.com/kids-spring-summer-2027-trends-outlined-by-future-snoops/",
+   "date": "June 2026"
+  },
+  {
+   "title": "Playtime Paris SS27: where fashion met the spirit of a summer music festival",
+   "publisher": "Junior Style (Aleksandra Ataca)",
+   "url": "https://juniorstyle.net/playtime-paris-ss27-where-fashion-met-the-spirit-of-a-summer-music-festival/",
+   "date": "30 June 2026"
+  }
+ ]
+}

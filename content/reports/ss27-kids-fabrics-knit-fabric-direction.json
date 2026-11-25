@@ -1,0 +1,60 @@
+{
+ "season": "ss27",
+ "audience": "kids",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Europe-led kidswear trade fairs; premium and mid-market childrenswear, newborn to teen",
+ "kind": "report",
+ "images": [],
+ "category": "fabrics",
+ "subsection": "knit",
+ "slug": "knit-fabric-direction",
+ "title": "SS27 Kids' Knit Fabric Direction",
+ "summary": "Organic cotton jersey and interlock, terry, micro-mesh, and UPF-rated performance and swim fabrics for SS27 kidswear.",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "Terry and micro-mesh are among Fatamadrina's SS27 fabrics<sup>[1]</sup>; MilK chose a terry top<sup>[2]</sup>. Salt and Pepper describes its SS27 fabrics as sustainable organic cotton, \"exceptionally soft and gentle on the skin\"<sup>[3]</sup>. Cadhan uses soft organic cotton for pyjamas<sup>[4]</sup>. Teeter Totter uses performance fabrics with responsible materials and UPF50+ protection; Piccoli Principi uses technical fabrics including sustainable lycra<sup>[4]</sup>. Newer lines emphasise breathability and quick drying<sup>[5]</sup>."
+  },
+  {
+   "heading": "Fabric by fabric",
+   "body": "| Knit | Hand | Uses |\n|---|---|---|\n| Organic cotton jersey | Soft | Tees, sets |\n| Interlock | Smooth, stable | Baby, pyjamas |\n| Terry | Soft, absorbent | Tops, shorts, cover-ups |\n| Micro-mesh | Light, airy | Sport, layers |\n| UPF swim and performance knits | Stretch, quick-dry | Swim, rash guards |"
+  }
+ ],
+ "design_implications": "- Test UPF after stretch and wet, when protection can drop.\n- Safety: no drawstrings or long cords at the hood, neck or waist of young children's clothing, in line with EN 14682; test the attachment strength of buttons, beads, shells and other decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Organic cotton basics support repeat purchase; UPF supports full price.",
+ "sources": [
+  {
+   "title": "Childrenswear fashion trends and forecast S/S 2027",
+   "publisher": "Fatamadrina (surface design studio for childrenswear)",
+   "url": "https://fatamadrina.eu/en/blogs/fashion-trends/kidswear-fashion-trends-ss-2027",
+   "date": "2026",
+   "note": "Design studio forecast; used for season-wide fabric, silhouette and print notes"
+  },
+  {
+   "title": "MilK's Spring/Summer 2027 Dressing Ideal",
+   "publisher": "Playtime",
+   "url": "https://www.iloveplaytime.com/milks-spring-summer-2027-dressing-ideal/",
+   "date": "July 2026"
+  },
+  {
+   "title": "Salt and Pepper: Spring/Summer 2027 brand profile",
+   "publisher": "Pitti Immagine Bimbo",
+   "url": "https://bimbo.pittimmagine.com/103/exhibitors/S/salt-and-pepper",
+   "date": "June 2026"
+  },
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  },
+  {
+   "title": "Pitti, la moda bambino punta su sostenibilita e protezione UV: cosi i brand preparano l'estate 2027",
+   "publisher": "Fortune Italia",
+   "url": "https://www.fortuneita.com/?p=383263",
+   "date": "24 June 2026"
+  }
+ ]
+}

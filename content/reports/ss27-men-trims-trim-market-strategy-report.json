@@ -1,0 +1,45 @@
+{
+ "season": "ss27",
+ "audience": "men",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Milan, Paris and Pitti Uomo menswear shows, June 2026; Premiere Vision Paris, February 2026; analysis July to November 2026",
+ "markets": "Global: Milan, Paris and Florence runways; premium and mid-market menswear",
+ "kind": "report",
+ "category": "trims",
+ "subsection": "trim-market-strategy",
+ "slug": "trim-market-strategy-report",
+ "title": "SS27 Men's Trim Market Strategy",
+ "summary": "In a low-growth 2027, use piping, embroidery and pocket details to update core menswear; keep hand-applied studs and beading for premium pieces.",
+ "sections": [
+  {
+   "heading": "The market context",
+   "body": "Fashion is expected to remain in low single-digit growth in 2027, with high freight, energy and financing costs, and markdown risk from excess stock<sup>[1]</sup>. In the EU, large companies may not destroy certain unsold apparel since 19 July 2026<sup>[1]</sup>."
+  },
+  {
+   "heading": "Build, test, sell through",
+   "body": "| Action | Trims |\n|---|---|\n| Build | Contrast piping, flat pockets, embroidered motifs |\n| Test | Studs and stones<sup>[2]</sup>, bird embroidery<sup>[2]</sup>, beading |\n| Sell through | Heavy distressing and logo hardware |"
+  },
+  {
+   "heading": "By market",
+   "body": "- **India and the Gulf:** embroidery and piping suit festive and resort dressing; India's GDP grew 7.8% year on year in the second quarter of 2026<sup>[1]</sup>.\n- **Europe:** keep trims modular so unsold stock can be reworked.\n- **United States:** use trims to differentiate core shirts at full price."
+  }
+ ],
+ "design_implications": "- Design trims that can be added late (embroidery, piping) to respond to sales.",
+ "commercial_implications": "- Track sell-through by trim variant and chase winners.",
+ "sources": [
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  },
+  {
+   "title": "The SS27 trends: what comes after fashion's hottest season ever?",
+   "publisher": "Hypebeast",
+   "url": "https://hypebeast.com/2026/7/ss27-mens-trends-runway-spring-summer-2027-menswear-info",
+   "date": "July 2026"
+  }
+ ],
+ "images": []
+}

@@ -1,0 +1,73 @@
+{
+ "season": "ss27",
+ "audience": "men",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Milan, Paris and Pitti Uomo menswear shows, June 2026; Premiere Vision Paris, February 2026; analysis July to November 2026",
+ "markets": "Global: Milan, Paris and Florence runways; premium and mid-market menswear",
+ "kind": "report",
+ "category": "fabrics",
+ "subsection": "woven",
+ "slug": "woven-fabric-direction",
+ "title": "SS27 Men's Woven Fabric Direction",
+ "summary": "Sheer shirting, satin, seersucker, soft leather and light tailoring wools lead SS27 menswear fabrics, with crease-proof stretch for travel.",
+ "trend_status": "Rising",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- **Sheer shirting:** translucent fabrics from subtle to full transparency, at Kiko Kostadinov, Feng Chen Wang, Dior, Prada, Dries Van Noten, Jacquemus and Saint Laurent<sup>[1]</sup>.\n- **Satin:** synthetic and silk satin, floral and white, with a billowing drape, at Willy Chavarria, Celine, GmbH and AMI<sup>[1]</sup>.\n- **Silk and gauze tailoring:** fluid, almost sheer suits at Dior<sup>[2]</sup>.\n- **Seersucker:** layered seersucker suiting at Thom Browne<sup>[3]</sup>.\n- **Leather:** camel at Dior, beige suits at Saint Laurent, brown leather Bermudas at Sonia Carrasco and leather tracksuits at Givenchy; leather is becoming \"more malleable\", with \"flexibility, fluidity, lightness, almost like butter\", according to Alice Feillard of Galeries Lafayette<sup>[2]</sup>. Milan used woven and perforated leather for breathability<sup>[3]</sup>.\n- **Tailoring cloth:** fine, lightweight wools blended with viscose, silk or linen; heavier double crepes with a dry, cool hand<sup>[4]</sup>.\n- **Travel fabrics:** crease-proof stretch wool and technical materials at Herno<sup>[5]</sup>."
+  },
+  {
+   "heading": "Fabric by fabric",
+   "body": "| Fabric | Construction and hand | Best uses | Status |\n|---|---|---|---|\n| Sheer cotton and silk voile | Very light, open | Shirts, layering | Rising |\n| Satin (silk or synthetic) | Satin weave, fluid | Shirts, sets, trousers | Rising |\n| Seersucker | Puckered plain weave, cool | Suits, shirts, shorts | Rising |\n| Lightweight wool blends | Fine worsted with silk or linen | Summer suits | Core |\n| Soft and perforated leather | Supple, breathable | Blousons, Bermudas, suits | Rising |\n| Linen | Firm, cool | Shirts, suits, trousers | Core |\n| Stretch and crease-proof wool | Technical worsted | Travel tailoring | Rising |"
+  }
+ ],
+ "timing": "In stores February to July 2027. Soft leather and seersucker continue into SS28 (Forecut assessment).",
+ "products": "- Sheer shirts, satin shirts and sets, seersucker suits, leather blousons and shorts, linen and travel suits.",
+ "design_implications": "- Sheer shirts need French seams and clean facings.\n- Test leather for colour fastness and perforation strength.\n- Choose crease-recovery finishes for travel suits.",
+ "commercial_implications": "- Leather at premium; seersucker and linen at mid; satin across tiers depending on fibre.\n- State fibre content clearly on satins.",
+ "sources": [
+  {
+   "title": "The SS27 trends: what comes after fashion's hottest season ever?",
+   "publisher": "Hypebeast",
+   "url": "https://hypebeast.com/2026/7/ss27-mens-trends-runway-spring-summer-2027-menswear-info",
+   "date": "July 2026"
+  },
+  {
+   "title": "Five key takeaways from a scorching men's Paris Fashion Week",
+   "publisher": "FashionUnited (AFP)",
+   "url": "https://fashionunited.com/news/fashion/five-key-takeaways-from-a-scorching-mens-paris-fashion-week/2026062973213",
+   "date": "29 June 2026"
+  },
+  {
+   "title": "Milan menswear finds ease on the fashion runways, even as the world feels uneasy",
+   "publisher": "The Star (Associated Press)",
+   "url": "https://www.thestar.com.my/lifestyle/style/2026/06/23/milan-menswear-finds-ease-on-the-fashion-runways-even-as-the-world-feels-uneasy",
+   "date": "23 June 2026"
+  },
+  {
+   "title": "Spring-Summer 27 Decodings: Fabrics",
+   "publisher": "Premiere Vision",
+   "url": "https://www.premierevision.com/articles/e620fe9e-3407-f111-8333-000d3a2973d4/spring-summer-27-decodings-fabrics",
+   "date": "13 February 2026"
+  },
+  {
+   "title": "Pitti Uomo SS 2027: menswear highlights",
+   "publisher": "Wallpaper*",
+   "url": "https://www.wallpaper.com/fashion-beauty/pitti-uomo-ss-2027-menswear-highlights",
+   "date": "June 2026"
+  }
+ ],
+ "images": [
+  {
+   "file": "leather-overshirts-ss27-photo",
+   "caption": "Leather overshirt. Forecut visual, not a runway photograph.",
+   "credit": "Forecut",
+   "provenance": "Created for Forecut and supplied through the Forecut image upload on 14 October 2026. Illustrative, not a runway photograph.",
+   "licence": "Forecut image. Tool and licence terms to be confirmed by the owner."
+  }
+ ],
+ "related": [
+  "fc-ss27-men-themes-ventilated-tailoring"
+ ]
+}

@@ -1,0 +1,51 @@
+{
+ "season": "ss27",
+ "audience": "kids",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Europe-led kidswear trade fairs; premium and mid-market childrenswear, newborn to teen",
+ "kind": "report",
+ "images": [],
+ "category": "business-strategy",
+ "subsection": "assortment-pricing",
+ "slug": "assortment-and-pricing-strategy",
+ "title": "SS27 Kids' Assortment and Pricing Strategy",
+ "summary": "Plan SS27 kidswear for a slower market: durable core, sets that sell together and apart, shallow buys on novelty, and full price for UV and organic value.",
+ "sections": [
+  {
+   "heading": "The market",
+   "body": "In Italy, childrenswear exports fell 9.3% and domestic sales 2.6% in 2025 (Confindustria Moda via Fortune Italia)<sup>[1]</sup>. Pitti Bimbo, which once had more than 500 exhibitors, now runs a smaller, more selective format<sup>[2]</sup>. Fashion overall is expected to grow in low single digits in 2027; resale is expected to grow two to three times faster than first-hand fashion through 2027<sup>[3]</sup>."
+  },
+  {
+   "heading": "Assortment",
+   "body": "| Tier | What goes in it |\n|---|---|\n| Core (about half) | Organic tees, stripes, denim, shorts, pyjamas in navy, sand, white |\n| Seasonal (about a third) | Swim and UV, sets, dresses, sailor pieces, brights |\n| Statement (the rest) | Character and story pieces, party, reversible and novelty |"
+  },
+  {
+   "heading": "Pricing",
+   "body": "- Full price on UPF and certified-organic pieces; show the benefit.\n- Value on basics.\n- Sets priced to reward buying both pieces.\n- Premium on artist prints and hand craft."
+  }
+ ],
+ "design_implications": "- Durable construction supports hand-me-down and resale value.\n- Safety: no drawstrings or long cords at the hood, neck or waist of young children's clothing, in line with EN 14682; test the attachment strength of buttons, beads, shells and other decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Track sell-through weekly; chase swim before holidays.",
+ "sources": [
+  {
+   "title": "Pitti, la moda bambino punta su sostenibilita e protezione UV: cosi i brand preparano l'estate 2027",
+   "publisher": "Fortune Italia",
+   "url": "https://www.fortuneita.com/?p=383263",
+   "date": "24 June 2026"
+  },
+  {
+   "title": "Pitti Bimbo in Florence proves the merits of an intimate format",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fairs/pitti-bimbo-in-florence-proves-the-merits-of-an-intimate-format/2026062673207",
+   "date": "26 June 2026"
+  },
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  }
+ ]
+}

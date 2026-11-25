@@ -1,0 +1,61 @@
+{
+ "season": "ss27",
+ "audience": "men",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Milan, Paris and Pitti Uomo menswear shows, June 2026; Premiere Vision Paris, February 2026; analysis July to November 2026",
+ "markets": "Global: Milan, Paris and Florence runways; premium and mid-market menswear",
+ "kind": "report",
+ "category": "trims",
+ "subsection": "trim-stories",
+ "slug": "trim-stories-report",
+ "title": "SS27 Men's Trim Stories",
+ "summary": "Trims that carry each SS27 men's theme: flat pockets and raw edges for Short Story, light construction for Ventilated Tailoring, embroidery and feathers for Tender Masculinity, piping for Pyjama Polish.",
+ "sections": [
+  {
+   "heading": "Short Story",
+   "body": "Flat patch pockets, raw edges on collarless truckers<sup>[1]</sup>, button-fly and elastic waists on boxer shorts."
+  },
+  {
+   "heading": "Ventilated Tailoring",
+   "body": "Perforated and woven leather panels<sup>[2]</sup>, unlined construction, light horn and shell buttons."
+  },
+  {
+   "heading": "Tender Masculinity",
+   "body": "Organza feathers and cornflower-blue embellishment at Simone Rocha<sup>[3]</sup>; embroidered florals; brooches."
+  },
+  {
+   "heading": "Pyjama Polish",
+   "body": "Black collars and piping on khaki, blue and beige sets at Dior<sup>[4]</sup>; covered buttons; drawstrings."
+  }
+ ],
+ "design_implications": "- One trim family per theme, used consistently.",
+ "commercial_implications": "- Trims refresh core shirts and jackets without new patterns.",
+ "sources": [
+  {
+   "title": "The SS27 trends: what comes after fashion's hottest season ever?",
+   "publisher": "Hypebeast",
+   "url": "https://hypebeast.com/2026/7/ss27-mens-trends-runway-spring-summer-2027-menswear-info",
+   "date": "July 2026"
+  },
+  {
+   "title": "Milan menswear finds ease on the fashion runways, even as the world feels uneasy",
+   "publisher": "The Star (Associated Press)",
+   "url": "https://www.thestar.com.my/lifestyle/style/2026/06/23/milan-menswear-finds-ease-on-the-fashion-runways-even-as-the-world-feels-uneasy",
+   "date": "23 June 2026"
+  },
+  {
+   "title": "Pitti Uomo SS 2027: menswear highlights",
+   "publisher": "Wallpaper*",
+   "url": "https://www.wallpaper.com/fashion-beauty/pitti-uomo-ss-2027-menswear-highlights",
+   "date": "June 2026"
+  },
+  {
+   "title": "Five key takeaways from a scorching men's Paris Fashion Week",
+   "publisher": "FashionUnited (AFP)",
+   "url": "https://fashionunited.com/news/fashion/five-key-takeaways-from-a-scorching-mens-paris-fashion-week/2026062973213",
+   "date": "29 June 2026"
+  }
+ ],
+ "images": []
+}

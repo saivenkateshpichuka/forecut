@@ -1,0 +1,53 @@
+{
+ "season": "ss27",
+ "audience": "men",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Milan, Paris and Pitti Uomo menswear shows, June 2026; Premiere Vision Paris, February 2026; analysis July to November 2026",
+ "markets": "Global: Milan, Paris and Florence runways; premium and mid-market menswear",
+ "kind": "report",
+ "category": "innovations",
+ "subsection": "material-innovations",
+ "slug": "material-innovations-report",
+ "title": "SS27 Men's Material Innovations",
+ "summary": "Materials for SS27 menswear: crease-proof stretch wool, technical cottons and water-repellent linen, chrome-free leather, softshell and heat-regulating sportswear fabrics.",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Herno's travel collection uses crease-proof fabrics, stretch wool and technical materials<sup>[1]</sup>.\n- Première Vision highlights technical cottons and water-repellent linens, and compact milanos and softshells<sup>[2]</sup>.\n- Margaret Howell's Dr Martens 1461 uses chrome-free leather by C.F. Stead<sup>[1]</sup>.\n- Rick Owens used Adidas's Climacool heat-regulation technology<sup>[3]</sup>.\n- Balenciaga used lab-grown AMSilk silk in its July 2026 couture<sup>[4]</sup>."
+  },
+  {
+   "heading": "Readiness",
+   "body": "| Material | Readiness (Forecut assessment) |\n|---|---|\n| Stretch and crease-proof wool | Ready |\n| Water-repellent linen, technical cotton | Ready from specialist mills |\n| Chrome-free leather | Ready; limited supply |\n| Heat-regulating sport fabrics | Ready in sportswear |\n| Lab-grown silk | Early; showpieces only |"
+  }
+ ],
+ "design_implications": "- Use technical wools in travel tailoring; water-repellent linen for unlined outerwear.",
+ "commercial_implications": "- Verify every sustainability claim before using it.",
+ "sources": [
+  {
+   "title": "Pitti Uomo SS 2027: menswear highlights",
+   "publisher": "Wallpaper*",
+   "url": "https://www.wallpaper.com/fashion-beauty/pitti-uomo-ss-2027-menswear-highlights",
+   "date": "June 2026"
+  },
+  {
+   "title": "Decoding Spring-Summer 27 key transversal highlights",
+   "publisher": "Premiere Vision",
+   "url": "https://www.premierevision.com/articles/86fffb89-9602-f111-8333-000d3a2973d4/decoding-spring-summer-27-key-transversal-highlights",
+   "date": "5 February 2026"
+  },
+  {
+   "title": "Between heatwave and restraint: menswear trends from Paris",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.uk/news/fashion/between-heatwave-and-restraint-menswear-trends-from-paris/2026070288940",
+   "date": "2 July 2026"
+  },
+  {
+   "title": "Bare skin, fantasy and the machine: 3 takeaways from Paris' starry couture week",
+   "publisher": "Associated Press",
+   "url": "https://www.clickondetroit.com/entertainment/2026/07/09/bare-skin-fantasy-and-the-machine-3-takeaways-from-paris-starry-couture-week/",
+   "date": "9 July 2026"
+  }
+ ],
+ "images": []
+}

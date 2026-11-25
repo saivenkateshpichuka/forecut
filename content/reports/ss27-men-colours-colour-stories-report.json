@@ -1,0 +1,52 @@
+{
+ "season": "ss27",
+ "audience": "men",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Milan, Paris and Pitti Uomo menswear shows, June 2026; Premiere Vision Paris, February 2026; analysis July to November 2026",
+ "markets": "Global: Milan, Paris and Florence runways; premium and mid-market menswear",
+ "kind": "report",
+ "category": "colours",
+ "subsection": "colour-stories",
+ "slug": "colour-stories-report",
+ "title": "SS27 Men's Colour Stories",
+ "summary": "Three colour stories for SS27 menswear: Sun-Faded for tailoring and linen, Aquatic for summer shirts and shorts, and Orange Energy for statements.",
+ "sections": [
+  {
+   "heading": "Sun-Faded",
+   "body": "Optic white, sand, tobacco and ice blue<sup>[1]</sup>. Tailoring, shirting, linen. Brunello Cucinelli's cable knits with a sun-faded finish, achieved with resin in the dyeing process, show the look in knitwear<sup>[2]</sup>."
+  },
+  {
+   "heading": "Aquatic",
+   "body": "Turquoise, sky blue and electric blue on leather jackets, shorts, linen shirts, socks and boat shoes<sup>[3]</sup>. Pair with white."
+  },
+  {
+   "heading": "Orange Energy",
+   "body": "Blood orange, rust, tangerine and true orange, on a sunset-gradient overcoat, a cropped blouson or a V-neck sweater, or as a single accessory such as a bag or cap<sup>[3]</sup>."
+  }
+ ],
+ "design_implications": "- Give each story its own delivery or capsule.\n- Sun-Faded mixes with both other stories; Aquatic and Orange are best kept apart.",
+ "commercial_implications": "- Sun-Faded carries volume; Aquatic and Orange Energy carry newness.",
+ "sources": [
+  {
+   "title": "Forecut SS27 colour forecast: method and sources",
+   "publisher": "Forecut",
+   "url": "https://forecut.in/forecasts/ss27/colours/colour-forecast/",
+   "date": "November 2026",
+   "note": "Built from runway colour shares, Pitti Uomo coverage, International Leather Maker and Premiere Vision key colours"
+  },
+  {
+   "title": "Pitti Uomo SS 2027: menswear highlights",
+   "publisher": "Wallpaper*",
+   "url": "https://www.wallpaper.com/fashion-beauty/pitti-uomo-ss-2027-menswear-highlights",
+   "date": "June 2026"
+  },
+  {
+   "title": "The SS27 trends: what comes after fashion's hottest season ever?",
+   "publisher": "Hypebeast",
+   "url": "https://hypebeast.com/2026/7/ss27-mens-trends-runway-spring-summer-2027-menswear-info",
+   "date": "July 2026"
+  }
+ ],
+ "images": []
+}

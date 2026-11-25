@@ -1,0 +1,47 @@
+{
+ "season": "ss27",
+ "audience": "kids",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Europe-led kidswear trade fairs; premium and mid-market childrenswear, newborn to teen",
+ "kind": "report",
+ "images": [],
+ "category": "colours",
+ "subsection": "theme-colour-palettes",
+ "slug": "theme-colour-palettes-report",
+ "title": "SS27 Kids' Theme Colour Palettes",
+ "summary": "A working palette for each SS27 kids' theme: Pool Days, Lull, Happenstance and Sailor Stripes.",
+ "sections": [
+  {
+   "heading": "Palettes by theme",
+   "body": "| Theme | Lead | Accent | Range colours |\n|---|---|---|---|\n| Pool Days | Aqua 14-4816 TCX | Coral 16-1541 TCX | Navy 19-3920 TCX, white, vintage pink |\n| Lull | Sand 13-1009 TCX | Aqua 14-4816 TCX | White, navy |\n| Happenstance | Lemon 12-0642 TCX | Red 18-1664 TCX | Grass green 16-0237 TCX, lavender 14-3812 TCX |\n| Sailor Stripes | Navy 19-3920 TCX | Red 18-1664 TCX | White, sand |"
+  },
+  {
+   "heading": "Why these palettes",
+   "body": "They follow the trade-fair evidence: Piccoli Principi's vintage pink, pastel green and soft navy swim<sup>[1]</sup>; red, navy and nautical at Playtime Paris<sup>[2]</sup>; Future Snoops' calm, coastal Lull and playful Happenstance<sup>[3]</sup>."
+  }
+ ],
+ "design_implications": "- Lead colour on most pieces; accent on one item or trim per outfit.\n- Share navy and white across themes so pieces mix.",
+ "commercial_implications": "- Depth in lead colours; accents as small buys.",
+ "sources": [
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  },
+  {
+   "title": "Playtime Paris SS27: where fashion met the spirit of a summer music festival",
+   "publisher": "Junior Style (Aleksandra Ataca)",
+   "url": "https://juniorstyle.net/playtime-paris-ss27-where-fashion-met-the-spirit-of-a-summer-music-festival/",
+   "date": "30 June 2026"
+  },
+  {
+   "title": "Kids spring/summer 2027 trends outlined by Future Snoops",
+   "publisher": "Playtime",
+   "url": "https://www.iloveplaytime.com/kids-spring-summer-2027-trends-outlined-by-future-snoops/",
+   "date": "June 2026"
+  }
+ ]
+}

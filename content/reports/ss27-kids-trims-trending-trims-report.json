@@ -1,0 +1,54 @@
+{
+ "season": "ss27",
+ "audience": "kids",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Europe-led kidswear trade fairs; premium and mid-market childrenswear, newborn to teen",
+ "kind": "report",
+ "images": [],
+ "category": "trims",
+ "subsection": "trending-trims",
+ "slug": "trending-trims-report",
+ "title": "SS27 Kids' Trending Trims Report",
+ "summary": "Sailor collars and nautical tape, handcrafted embroidery, character appliqués, shells and sparkling details lead SS27 kidswear trims, under strict safety rules.",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- **Nautical details:** sailor collars and navy at Playtime Paris<sup>[1]</sup>.\n- **Character elements and layered accessories**<sup>[1]</sup>.\n- **Handcrafted embroidery:** Fatamadrina's \"Wildflowers Bloom\" uses delicate handcrafted embroidery<sup>[2]</sup>.\n- **Shells, pebbles, seaweed and embroideries:** on Selini Action's handmade costumes<sup>[3]</sup>.\n- **Sparkle:** Pitti Bimbo's Pirouette runway promised \"bold looks, sparkling details, and positive vibes\"<sup>[4]</sup>."
+  },
+  {
+   "heading": "Trims table",
+   "body": "| Trim | Application | Status | Safety note |\n|---|---|---|---|\n| Sailor collar and tape | Tops, dresses | Rising | None specific |\n| Embroidery | Dresses, shirts | Rising | Soft backing on skin side |\n| Character appliqué | Tees, sets | Core | Securely stitched, no loose edges |\n| Shell and bead decoration | Swim, costumes | Emerging | Pull-test; avoid for under-3s |\n| Sequins and sparkle | Party | Seasonal | Line the inside; check edges |"
+  }
+ ],
+ "design_implications": "- Prefer printed or embroidered motifs to attached parts for baby and toddler.\n- Safety: no drawstrings or long cords at the hood, neck or waist of young children's clothing, in line with EN 14682; test the attachment strength of buttons, beads, shells and other decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Embroidery and appliqué add value to core tees and dresses without new blocks.",
+ "sources": [
+  {
+   "title": "Playtime Paris SS27: where fashion met the spirit of a summer music festival",
+   "publisher": "Junior Style (Aleksandra Ataca)",
+   "url": "https://juniorstyle.net/playtime-paris-ss27-where-fashion-met-the-spirit-of-a-summer-music-festival/",
+   "date": "30 June 2026"
+  },
+  {
+   "title": "Childrenswear fashion trends and forecast S/S 2027",
+   "publisher": "Fatamadrina (surface design studio for childrenswear)",
+   "url": "https://fatamadrina.eu/en/blogs/fashion-trends/kidswear-fashion-trends-ss-2027",
+   "date": "2026",
+   "note": "Design studio forecast; used for season-wide fabric, silhouette and print notes"
+  },
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  },
+  {
+   "title": "Pitti Bimbo 103: the energy of summer ignites kidswear",
+   "publisher": "Pitti Immagine",
+   "url": "https://www.pittimmagine.com/en/pittimmagine/archive/bimbo103/news/pitti-bimbo-103-novit-",
+   "date": "13 May 2026"
+  }
+ ]
+}
