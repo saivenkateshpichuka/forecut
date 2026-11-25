@@ -1,0 +1,48 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss28",
+ "audience": "girls",
+ "category": "trims",
+ "subsection": "trim-market-strategy",
+ "slug": "trim-market-strategy-report",
+ "title": "SS28 Girls' Trim Market Strategy",
+ "summary": "Trim strategy for SS28 girlswear: durable, verifiable and easy to change late.",
+ "research_period": "SS28 previews published November 2025 to November 2026; SS27 runway record",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Long-range projection. SS28 kidswear fairs (Pitti Bimbo and Playtime) take place in June 2027. This report projects from SS28 adult previews, the SS27 kidswear fair record and long-term drivers such as heat and UV protection, and will be updated after the fairs."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Fashion is expected to remain in low single-digit growth in 2027; resale is expected to grow two to three times faster than first-hand fashion<sup>[1]</sup>\n- C2 Fashion Studio calls SS28 \"Structured Clarity\": consumers \"are no longer asking for more. They're asking for better\"<sup>[2]</sup>"
+  },
+  {
+   "heading": "Build, test, sell through",
+   "body": "| Action | Trims |\n|---|---|\n| Build | Embroidery, printed labels |\n| Test | Crochet trims |\n| Avoid | Small parts, glued decoration |"
+  }
+ ],
+ "timing": "In stores February to July 2028.",
+ "products": "",
+ "design_implications": "- Document trim materials for any environmental claim.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Late-added trims (embroidery, piping) let you react to sales.",
+ "sources": [
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  },
+  {
+   "title": "Spring Summer 2028 trend intelligence: the rise of structured clarity",
+   "publisher": "FashionUnited (partner content, C2 Fashion Studio)",
+   "url": "https://fashionunited.com/news/fashion/spring-summer-2028-trend-intelligence-the-rise-of-structured-clarity/2026060372742",
+   "date": "June 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

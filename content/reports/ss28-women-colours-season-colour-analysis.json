@@ -1,0 +1,64 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss28",
+ "audience": "women",
+ "category": "colours",
+ "subsection": "season-colours",
+ "slug": "season-colour-analysis",
+ "title": "SS28 Women's Season Colour Analysis",
+ "summary": "SS28 womenswear colour is projected to bring royal blue and greyish mauve forward, over straw and bleached linen, with darker after-dusk tones for evening.",
+ "research_period": "SS28 previews published November 2025 to November 2026; SS27 runway record",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Long-range projection. SS28 fabric fairs open with Première Vision Paris on 26-28 January 2027, and the shows run from June to October 2027. This report projects from the first SS28 forecaster and fair previews, the SS27 runways and long-term market and regulatory drivers. Forecut will update it after the fairs and again after the shows."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Forecut's SS28 colour forecast: royal blue and a new turquoise beside greyish mauve and violet, over straw and bleached linen, with an after-dark edge<sup>[1]</sup>\n- Future Snoops' SS28 colour shift \"After Dusk\": \"Deep aubergines, inky blues and murky greens are bringing a darker, more atmospheric mood to warm-weather dressing\"<sup>[2]</sup>\n- Its named colours include Aubergine Skin, Solar Midnight, Smoky Lavender and Swamp Green, with Cloud Bloom as a luminous counterpoint and Fruit Punch for \"juicy intensity\"; dark shades work best with contrast, not head to toe<sup>[2]</sup>\n- Copenhagen SS27 data showed colour returning and neutrals fading; Jacquemus built its SS27 show around turquoise and orange<sup>[3]</sup>"
+  },
+  {
+   "heading": "The palette",
+   "body": "| Colour | Pantone TCX (nearest) | HEX | Role |\n|---|---|---|---|\n| Royal blue | 18-3949 TCX | #3850A0 | Seasonal: lead |\n| Greyish mauve | 15-3507 TCX | #BDABBE | Seasonal |\n| Magnetic violet | 19-3847 TCX | #44377D | Accent |\n| Peach | 13-1125 TCX | #F5B895 | Accent |\n| Straw | 14-0935 TCX | #DABE81 | Core |\n| Bleached linen | 11-0701 TCX | #EDE6DB | Core |\n| Inky blue | 19-3933 TCX | #29304E | Core |\n\nConfirm codes against a physical Pantone book before dyeing."
+  },
+  {
+   "heading": "Colour groups",
+   "body": "- **Core:** bleached linen, straw, inky blue.\n- **Seasonal:** royal blue, greyish mauve.\n- **Accent:** magnetic violet, peach."
+  },
+  {
+   "heading": "By product",
+   "body": "- Royal blue: shirts, dresses, tailoring.\n- Greyish mauve: sheer layers, knits.\n- Inky blue: evening, after-dusk dressing.\n- Straw and linen: summer bases, raffia accessories."
+  }
+ ],
+ "timing": "In stores February to July 2028.",
+ "products": "",
+ "design_implications": "- Lab-dip key colours on each main fabric before committing.",
+ "commercial_implications": "- Keep the core deep and the accents shallow until the fairs confirm them.",
+ "sources": [
+  {
+   "title": "Forecut SS28 colour forecast",
+   "publisher": "Forecut",
+   "url": "https://forecut.in/forecasts/ss28/colours/colour-forecast/",
+   "date": "November 2026",
+   "note": "Long-range forecast from Première Vision's October 2026 SS28 colour preview and fabric-fair previews"
+  },
+  {
+   "title": "After Dusk: why Spring/Summer 2028 is going dark",
+   "publisher": "FashionUnited (Joanne Thomas, Director of Color, Future Snoops)",
+   "url": "https://fashionunited.com/news/fashion/after-dusk-why-spring-summer-2028-is-going-dark/2026103075456",
+   "date": "30 October 2026"
+  },
+  {
+   "title": "Copenhagen SS27's data points to one thing: colour is back, neutrals are out",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fashion/copenhagen-ss27s-data-points-to-one-thing-colour-is-back-neutrals-are-out/2026081874112",
+   "date": "18 August 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25",
+ "trend_status": "Projected"
+}

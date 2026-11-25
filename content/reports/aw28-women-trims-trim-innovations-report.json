@@ -1,0 +1,48 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw28",
+ "audience": "women",
+ "category": "trims",
+ "subsection": "trim-innovations",
+ "slug": "trim-innovations-report",
+ "title": "AW28 Women's Trim Innovations",
+ "summary": "Trim and detail innovations for AW28: repairable parts and product data labels.",
+ "research_period": "AW28/29 colour previews (October 2026), AW27 fairs (September 2026), SS28 previews",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Long-range projection. AW28 fabric fairs take place in September 2027 and the shows in early 2028. This report projects from the first AW28/29 colour forecasts, the AW27 fabric fairs, SS28 previews and long-term market and regulatory drivers. Forecut will update it as evidence arrives."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- AW27 fairs made wool lighter and softer, brought back double-faced woollens and hid performance inside classic suitings<sup>[1]</sup>\n- The EU textiles Digital Product Passport delegated act is planned for the fourth quarter of 2027, so AW28 production will be planned under it<sup>[2]</sup>"
+  },
+  {
+   "heading": "Readiness",
+   "body": "| Innovation | Readiness (Forecut assessment) |\n|---|---|\n| Repairable, replaceable parts | Ready in outerwear and bags |\n| Bonded and heat-fused construction | Ready |\n| Product data labels (QR or NFC) | Ready; required as the EU passport arrives |"
+  }
+ ],
+ "timing": "In stores August 2028 to January 2029.",
+ "products": "",
+ "design_implications": "- Design for repair and disassembly.",
+ "commercial_implications": "- Function supports full price.",
+ "sources": [
+  {
+   "title": "Première Vision Paris: what fabrics reveal about AW27/28 trends",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fairs/premiere-vision-paris-what-fabrics-reveal-about-aw27-28-trends/2026090474424",
+   "date": "4 September 2026"
+  },
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

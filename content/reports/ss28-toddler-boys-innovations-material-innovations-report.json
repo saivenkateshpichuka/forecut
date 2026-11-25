@@ -1,0 +1,48 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss28",
+ "audience": "toddler-boys",
+ "category": "innovations",
+ "subsection": "material-innovations",
+ "slug": "material-innovations-report",
+ "title": "SS28 Toddler Boys' Material Innovations",
+ "summary": "Material innovations for SS28 kidswear: UPF fabrics, cooling jersey, recycled swim.",
+ "research_period": "SS28 previews published November 2025 to November 2026; SS27 runway record",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Long-range projection. SS28 kidswear fairs (Pitti Bimbo and Playtime) take place in June 2027. This report projects from SS28 adult previews, the SS27 kidswear fair record and long-term drivers such as heat and UV protection, and will be updated after the fairs."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- UV-protective, breathable and quick-dry kidswear became common at Pitti Bimbo in June 2026<sup>[1]</sup>\n- Everyday basics gain \"integrated wellness properties\" and materials that \"intuitively adjust for temperature and activity\"<sup>[2]</sup>"
+  },
+  {
+   "heading": "Readiness",
+   "body": "| Material | Readiness (Forecut assessment) |\n|---|---|\n| UPF fabrics | Ready |\n| Cooling jersey | Early |\n| Recycled swim | Ready |"
+  }
+ ],
+ "timing": "In stores February to July 2028.",
+ "products": "",
+ "design_implications": "- Prefer proven materials; trial new ones in small runs.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Verify every environmental claim (EU Directive 2024/825).",
+ "sources": [
+  {
+   "title": "Pitti, la moda bambino punta su sostenibilita e protezione UV: cosi i brand preparano l'estate 2027",
+   "publisher": "Fortune Italia",
+   "url": "https://www.fortuneita.com/?p=383263",
+   "date": "24 June 2026"
+  },
+  {
+   "title": "SS28 preview: the modern flow of performance design",
+   "publisher": "FashionUnited (Rachael Gentner, Future Snoops)",
+   "url": "https://fashionunited.com/news/fashion/ss28-preview-the-modern-flow-of-performance-design/2025112269243",
+   "date": "November 2025"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

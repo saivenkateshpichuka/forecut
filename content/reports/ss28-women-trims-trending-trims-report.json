@@ -1,0 +1,48 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss28",
+ "audience": "women",
+ "category": "trims",
+ "subsection": "trending-trims",
+ "slug": "trending-trims-report",
+ "title": "SS28 Women's Trending Trims Report",
+ "summary": "SS28 women's trims: lace insets, satin piping, natural buttons, hand embroidery.",
+ "research_period": "SS28 previews published November 2025 to November 2026; SS27 runway record",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Long-range projection. SS28 fabric fairs open with Première Vision Paris on 26-28 January 2027, and the shows run from June to October 2027. This report projects from the first SS28 forecaster and fair previews, the SS27 runways and long-term market and regulatory drivers. Forecut will update it after the fairs and again after the shows."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Milano Unica's SS28 theme \"Metamorphosis\" rests on Lightness, Enrichment (\"the rediscovery of handcrafted techniques\") and Adaptability, with LIGHTWEAR, HANDWEAR and TECHWEAR themes<sup>[1]</sup>\n- Future Snoops' SS28 performance preview: \"smart translucent membranes, hyperlight wovens, and innovative technical silks\", ultrastretch wovens, modular constructions and articulated seams<sup>[2]</sup>"
+  },
+  {
+   "heading": "Trims table",
+   "body": "| Trim | Application | Status |\n|---|---|---|\n| Lace insets | Evening | Rising |\n| Satin piping | Slips | Rising |\n| Natural buttons | Linen | Core |\n| Hand embroidery | Dresses | Rising |"
+  }
+ ],
+ "timing": "In stores February to July 2028.",
+ "products": "",
+ "design_implications": "- Wash-test every trim.",
+ "commercial_implications": "- Trims refresh carry-over blocks.",
+ "sources": [
+  {
+   "title": "MU Metamorphosis: Spring-Summer 2028 collections",
+   "publisher": "Milano Unica",
+   "url": "https://www.milanounica.it/en/media-sp",
+   "date": "2026"
+  },
+  {
+   "title": "SS28 preview: the modern flow of performance design",
+   "publisher": "FashionUnited (Rachael Gentner, Future Snoops)",
+   "url": "https://fashionunited.com/news/fashion/ss28-preview-the-modern-flow-of-performance-design/2025112269243",
+   "date": "November 2025"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

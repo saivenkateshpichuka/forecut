@@ -1,0 +1,46 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw28",
+ "audience": "toddler-girls",
+ "category": "business-strategy",
+ "subsection": "assortment-pricing",
+ "slug": "assortment-and-pricing-strategy",
+ "title": "AW28 Toddler Girls' Assortment and Pricing Strategy",
+ "summary": "Assortment and pricing for AW28 toddler girls.",
+ "research_period": "AW28/29 colour previews (October 2026), AW27 fairs (September 2026), SS28 previews",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Long-range projection. AW28 kidswear fairs take place in January 2028. This report projects from the first AW28/29 colour forecasts, the AW27 fairs, kidswear brands' long-term practices and market drivers, and will be updated as evidence arrives."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Fashion entered 2027 expecting low single-digit growth, with markdown risk and faster growth in resale<sup>[1]</sup>"
+  },
+  {
+   "heading": "Assortment",
+   "body": "| Tier | What goes in it |\n|---|---|\n| Core | Basics, cords, fleece |\n| Seasonal | Coats, velvet |\n| Statement | Festive |"
+  },
+  {
+   "heading": "Pricing",
+   "body": "- Full price on outerwear and merino."
+  }
+ ],
+ "timing": "In stores August 2028 to January 2029.",
+ "products": "",
+ "design_implications": "- Fewer styles, more combinations.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Track sales-to-stock weekly; plan resale and rework routes.",
+ "sources": [
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

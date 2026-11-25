@@ -1,0 +1,64 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw28",
+ "audience": "boys",
+ "category": "colours",
+ "subsection": "season-colours",
+ "slug": "season-colour-analysis",
+ "title": "AW28 Boys' Season Colour Analysis",
+ "summary": "AW28 boyswear colour is projected around bottle green and petrol teal with vermilion.",
+ "research_period": "AW28/29 colour previews (October 2026), AW27 fairs (September 2026), SS28 previews",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Long-range projection. AW28 kidswear fairs take place in January 2028. This report projects from the first AW28/29 colour forecasts, the AW27 fairs, kidswear brands' long-term practices and market drivers, and will be updated as evidence arrives."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Forecut's AW28 projection: ink, mulberry and bottle green over oat and slate, with petrol teal and vermilion as accents<sup>[1]</sup>\n- Future Snoops' AW28/29 \"Blocked brights\": \"Bold colour becomes an act of defiance, a refusal to disappear into the algorithmic mass\"; blue leads, with red and purple rising, and cornflower as a new \"anchor colour\"<sup>[2]</sup>\n- AW27 fairs put violet, plum and deep red forward as alternatives to black, and pink and mauve became gender-neutral<sup>[3]</sup>"
+  },
+  {
+   "heading": "The palette",
+   "body": "| Colour | Pantone TCX (nearest) | HEX | Role |\n|---|---|---|---|\n| Bottle green | 19-6050 TCX | #264E36 | Seasonal: lead |\n| Petrol teal | 19-4826 TCX | #2A5C6A | Accent |\n| Vermilion | 18-1454 TCX | #C2452D | Accent |\n| Oat | 14-1108 TCX | #D7CAB0 | Core |\n\nConfirm codes against a physical Pantone book before dyeing."
+  },
+  {
+   "heading": "Colour groups",
+   "body": "- **Core:** oat, petrol teal.\n- **Seasonal:** bottle green, mulberry, antique gold.\n- **Accent:** vermilion."
+  },
+  {
+   "heading": "By product",
+   "body": "- Bottle green: coats.\n- Mulberry: knits.\n- Vermilion: accessories.\n- Oat: basics."
+  }
+ ],
+ "timing": "In stores August 2028 to January 2029.",
+ "products": "",
+ "design_implications": "- Lab-dip key colours on each main fabric before committing.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Keep the core deep and the accents shallow until the fairs confirm them.",
+ "sources": [
+  {
+   "title": "Forecut AW28 colour forecast",
+   "publisher": "Forecut",
+   "url": "https://forecut.in/forecasts/aw28/colours/colour-forecast/",
+   "date": "November 2026",
+   "note": "Long-range Forecut projection carrying the AW27 move away from black and the SS28 return of strong blues and violets"
+  },
+  {
+   "title": "Spotted on the catwalk: Future Snoops' colour trends for AW28/29",
+   "publisher": "FashionUnited (Esmee Blaazer)",
+   "url": "https://fashionunited.com/news/fashion/spotted-on-the-catwalk-future-snoops-colour-trends-for-aw28-29/2026102075255",
+   "date": "20 October 2026"
+  },
+  {
+   "title": "Première Vision Paris: what fabrics reveal about AW27/28 trends",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fairs/premiere-vision-paris-what-fabrics-reveal-about-aw27-28-trends/2026090474424",
+   "date": "4 September 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25",
+ "trend_status": "Projected"
+}

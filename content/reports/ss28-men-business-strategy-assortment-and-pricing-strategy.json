@@ -1,0 +1,52 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss28",
+ "audience": "men",
+ "category": "business-strategy",
+ "subsection": "assortment-pricing",
+ "slug": "assortment-and-pricing-strategy",
+ "title": "SS28 Men's Assortment and Pricing Strategy",
+ "summary": "Assortment and pricing for SS28 menswear.",
+ "research_period": "SS28 previews published November 2025 to November 2026; SS27 runway record",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Long-range projection. SS28 fabric fairs open with Première Vision Paris on 26-28 January 2027, and the shows run from June to October 2027. This report projects from the first SS28 forecaster and fair previews, the SS27 runways and long-term market and regulatory drivers. Forecut will update it after the fairs and again after the shows."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Fashion is expected to remain in low single-digit growth in 2027; resale is expected to grow two to three times faster than first-hand fashion<sup>[1]</sup>\n- C2 Fashion Studio calls SS28 \"Structured Clarity\": consumers \"are no longer asking for more. They're asking for better\"<sup>[2]</sup>"
+  },
+  {
+   "heading": "Assortment",
+   "body": "| Tier | What goes in it |\n|---|---|\n| Core (about half) | Shirts, trousers, polos in inky blue, linen, khaki |\n| Seasonal (about a third) | Technical suits, turquoise, linen suits |\n| Statement (the rest) | Satin and crochet |"
+  },
+  {
+   "heading": "Pricing",
+   "body": "- Full price on technical tailoring.\n- Value on polos and tees."
+  }
+ ],
+ "timing": "In stores February to July 2028.",
+ "products": "",
+ "design_implications": "- Fewer styles, more combinations.",
+ "commercial_implications": "- Track sales-to-stock weekly; plan resale and rework routes.",
+ "sources": [
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  },
+  {
+   "title": "Spring Summer 2028 trend intelligence: the rise of structured clarity",
+   "publisher": "FashionUnited (partner content, C2 Fashion Studio)",
+   "url": "https://fashionunited.com/news/fashion/spring-summer-2028-trend-intelligence-the-rise-of-structured-clarity/2026060372742",
+   "date": "June 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

@@ -1,0 +1,49 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw28",
+ "audience": "toddler-girls",
+ "category": "colours",
+ "subsection": "theme-colour-palettes",
+ "slug": "theme-colour-palettes-report",
+ "title": "AW28 Toddler Girls' Theme Colour Palettes",
+ "summary": "Working palettes for the AW28 toddler girls themes.",
+ "research_period": "AW28/29 colour previews (October 2026), AW27 fairs (September 2026), SS28 previews",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Long-range projection. AW28 kidswear fairs take place in January 2028. This report projects from the first AW28/29 colour forecasts, the AW27 fairs, kidswear brands' long-term practices and market drivers, and will be updated as evidence arrives."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Forecut's AW28 projection: ink, mulberry and bottle green over oat and slate, with petrol teal and vermilion as accents<sup>[1]</sup>\n- Future Snoops' AW28/29 \"Blocked brights\": \"Bold colour becomes an act of defiance, a refusal to disappear into the algorithmic mass\"; blue leads, with red and purple rising, and cornflower as a new \"anchor colour\"<sup>[2]</sup>"
+  },
+  {
+   "heading": "Palettes by theme",
+   "body": "| Theme | Lead | Accent | Range |\n|---|---|---|---|\n| Little Berry | Mulberry | Antique gold | Oat |"
+  }
+ ],
+ "timing": "In stores August 2028 to January 2029.",
+ "products": "",
+ "design_implications": "- Lead colour on most pieces, accent on one.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Share core colours across themes.",
+ "sources": [
+  {
+   "title": "Forecut AW28 colour forecast",
+   "publisher": "Forecut",
+   "url": "https://forecut.in/forecasts/aw28/colours/colour-forecast/",
+   "date": "November 2026",
+   "note": "Long-range Forecut projection carrying the AW27 move away from black and the SS28 return of strong blues and violets"
+  },
+  {
+   "title": "Spotted on the catwalk: Future Snoops' colour trends for AW28/29",
+   "publisher": "FashionUnited (Esmee Blaazer)",
+   "url": "https://fashionunited.com/news/fashion/spotted-on-the-catwalk-future-snoops-colour-trends-for-aw28-29/2026102075255",
+   "date": "20 October 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

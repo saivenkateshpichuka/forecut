@@ -1,0 +1,48 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss28",
+ "audience": "boys",
+ "category": "trims",
+ "subsection": "trending-trims",
+ "slug": "trending-trims-report",
+ "title": "SS28 Boys' Trending Trims Report",
+ "summary": "SS28 kidswear trims: flat seams, embroidery, printed UPF labels, secure snaps.",
+ "research_period": "SS28 previews published November 2025 to November 2026; SS27 runway record",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Long-range projection. SS28 kidswear fairs (Pitti Bimbo and Playtime) take place in June 2027. This report projects from SS28 adult previews, the SS27 kidswear fair record and long-term drivers such as heat and UV protection, and will be updated after the fairs."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Milano Unica's SS28 theme \"Metamorphosis\" rests on Lightness, Enrichment (\"the rediscovery of handcrafted techniques\") and Adaptability, with LIGHTWEAR, HANDWEAR and TECHWEAR themes<sup>[1]</sup>\n- Future Snoops' SS28 performance preview: \"smart translucent membranes, hyperlight wovens, and innovative technical silks\", ultrastretch wovens, modular constructions and articulated seams<sup>[2]</sup>"
+  },
+  {
+   "heading": "Trims table",
+   "body": "| Trim | Application | Status |\n|---|---|---|\n| Side stripes | Shorts, polos | Rising |\n| Rubber badges | Tees | Rising |\n| Printed labels | All | Core |"
+  }
+ ],
+ "timing": "In stores February to July 2028.",
+ "products": "",
+ "design_implications": "- Wash-test every trim. No small detachable parts for under-3s.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Trims refresh carry-over blocks.",
+ "sources": [
+  {
+   "title": "MU Metamorphosis: Spring-Summer 2028 collections",
+   "publisher": "Milano Unica",
+   "url": "https://www.milanounica.it/en/media-sp",
+   "date": "2026"
+  },
+  {
+   "title": "SS28 preview: the modern flow of performance design",
+   "publisher": "FashionUnited (Rachael Gentner, Future Snoops)",
+   "url": "https://fashionunited.com/news/fashion/ss28-preview-the-modern-flow-of-performance-design/2025112269243",
+   "date": "November 2025"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

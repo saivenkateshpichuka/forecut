@@ -1,0 +1,42 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw28",
+ "audience": "toddler-girls",
+ "category": "trims",
+ "subsection": "trim-market-strategy",
+ "slug": "trim-market-strategy-report",
+ "title": "AW28 Toddler Girls' Trim Market Strategy",
+ "summary": "Trim strategy for AW28 toddler girls: durable, verifiable and easy to change late.",
+ "research_period": "AW28/29 colour previews (October 2026), AW27 fairs (September 2026), SS28 previews",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Long-range projection. AW28 kidswear fairs take place in January 2028. This report projects from the first AW28/29 colour forecasts, the AW27 fairs, kidswear brands' long-term practices and market drivers, and will be updated as evidence arrives."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Fashion entered 2027 expecting low single-digit growth, with markdown risk and faster growth in resale<sup>[1]</sup>"
+  },
+  {
+   "heading": "Build, test, sell through",
+   "body": "| Action | Trims |\n|---|---|\n| Build | Embroidery, reflective tape |\n| Test | Gold-tone details |\n| Avoid | Small parts |"
+  }
+ ],
+ "timing": "In stores August 2028 to January 2029.",
+ "products": "",
+ "design_implications": "- Document trim materials for any environmental claim.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Late-added trims (embroidery, piping) let you react to sales.",
+ "sources": [
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

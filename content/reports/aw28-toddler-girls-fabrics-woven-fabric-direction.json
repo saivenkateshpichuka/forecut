@@ -1,0 +1,48 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw28",
+ "audience": "toddler-girls",
+ "category": "fabrics",
+ "subsection": "woven",
+ "slug": "woven-fabric-direction",
+ "title": "AW28 Toddler Girls' Woven Fabric Direction",
+ "summary": "AW28 kidswear wovens: cord, denim, water-repellent shells, velvet.",
+ "research_period": "AW28/29 colour previews (October 2026), AW27 fairs (September 2026), SS28 previews",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Long-range projection. AW28 kidswear fairs take place in January 2028. This report projects from the first AW28/29 colour forecasts, the AW27 fairs, kidswear brands' long-term practices and market drivers, and will be updated as evidence arrives."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- AW27 fairs made wool lighter and softer, brought back double-faced woollens and hid performance inside classic suitings<sup>[1]</sup>\n- Deep classic brown in leather and leather-look pieces, sporty pieces and tailoring, suited to suede and canvas-like materials<sup>[2]</sup>"
+  },
+  {
+   "heading": "Fabric by fabric",
+   "body": "| Fabric | Hand | Uses |\n|---|---|---|\n| Cord | Soft | Trousers |\n| Denim | Durable | Jeans |\n| Water-repellent shell | Light | Coats |\n| Velvet | Rich | Occasion |"
+  }
+ ],
+ "timing": "In stores August 2028 to January 2029.",
+ "products": "",
+ "design_implications": "- Book mill development slots early.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Natural fibres support a premium.",
+ "sources": [
+  {
+   "title": "Première Vision Paris: what fabrics reveal about AW27/28 trends",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fairs/premiere-vision-paris-what-fabrics-reveal-about-aw27-28-trends/2026090474424",
+   "date": "4 September 2026"
+  },
+  {
+   "title": "Spotted on the catwalk: Future Snoops' colour trends for AW28/29",
+   "publisher": "FashionUnited (Esmee Blaazer)",
+   "url": "https://fashionunited.com/news/fashion/spotted-on-the-catwalk-future-snoops-colour-trends-for-aw28-29/2026102075255",
+   "date": "20 October 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

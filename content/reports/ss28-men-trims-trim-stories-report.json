@@ -1,0 +1,50 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss28",
+ "audience": "men",
+ "category": "trims",
+ "subsection": "trim-stories",
+ "slug": "trim-stories-report",
+ "title": "SS28 Men's Trim Stories",
+ "summary": "Trims that carry each SS28 menswear theme.",
+ "research_period": "SS28 previews published November 2025 to November 2026; SS27 runway record",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Long-range projection. SS28 fabric fairs open with Première Vision Paris on 26-28 January 2027, and the shows run from June to October 2027. This report projects from the first SS28 forecaster and fair previews, the SS27 runways and long-term market and regulatory drivers. Forecut will update it after the fairs and again after the shows."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Milano Unica's SS28 theme \"Metamorphosis\" rests on Lightness, Enrichment (\"the rediscovery of handcrafted techniques\") and Adaptability, with LIGHTWEAR, HANDWEAR and TECHWEAR themes<sup>[1]</sup>"
+  },
+  {
+   "heading": "Technical Ease",
+   "body": "Articulated seams, concealed vents."
+  },
+  {
+   "heading": "After Dark",
+   "body": "Tonal piping."
+  },
+  {
+   "heading": "Crafted Linen",
+   "body": "Wooden and shell buttons."
+  }
+ ],
+ "timing": "In stores February to July 2028.",
+ "products": "",
+ "design_implications": "- One trim family per theme.",
+ "commercial_implications": "- Use trims to update core.",
+ "sources": [
+  {
+   "title": "MU Metamorphosis: Spring-Summer 2028 collections",
+   "publisher": "Milano Unica",
+   "url": "https://www.milanounica.it/en/media-sp",
+   "date": "2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}
