@@ -6,9 +6,6 @@ import os, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from src_ss27 import S, src, ref, write
 
-S['js'] = {'title': 'Playtime Paris SS27: where fashion met the spirit of a summer music festival', 'publisher': 'Junior Style (Aleksandra Ataca)', 'url': 'https://juniorstyle.net/playtime-paris-ss27-where-fashion-met-the-spirit-of-a-summer-music-festival/', 'date': '30 June 2026'}
-S['fata'] = {'title': 'Childrenswear fashion trends and forecast S/S 2027', 'publisher': 'Fatamadrina (surface design studio for childrenswear)', 'url': 'https://fatamadrina.eu/en/blogs/fashion-trends/kidswear-fashion-trends-ss-2027', 'date': '2026', 'note': 'Design studio forecast; used for season-wide fabric, silhouette and print notes'}
-S['sp'] = {'title': 'Salt and Pepper: Spring/Summer 2027 brand profile', 'publisher': 'Pitti Immagine Bimbo', 'url': 'https://bimbo.pittimmagine.com/103/exhibitors/S/salt-and-pepper', 'date': 'June 2026'}
 
 OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'content', 'reports')
 C = {'season': 'ss27', 'audience': 'kids', 'status': 'published', 'published': '2026-11-25',

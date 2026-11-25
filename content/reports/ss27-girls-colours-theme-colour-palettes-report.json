@@ -1,0 +1,51 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "girls",
+ "category": "colours",
+ "subsection": "theme-colour-palettes",
+ "slug": "theme-colour-palettes-report",
+ "title": "SS27 Girls' Theme Colour Palettes",
+ "summary": "Palettes for SS27 girls' themes: Beach Couture, Wildflower and Playground Pop.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Piccoli Principi's \"Pearl & Tides\" swimwear runs from vintage pink to pastel green and soft navy, in technical fabrics including sustainable lycra, with UV protection<sup>[1]</sup>\n- Fatamadrina lists oversized florals, checks with fruit prints, paisley, vintage geometrics, nautical themes and gingham, and \"Wildflowers Bloom\" with delicate handcrafted embroidery<sup>[2]</sup>\n- Poco Blush, designed \"almost exclusively for girls\", showed bold hues and a loose, printed, reversible dress, and a T-shirt that releases a minty scent when crumpled<sup>[3]</sup>"
+  },
+  {
+   "heading": "Palettes by theme",
+   "body": "| Theme | Lead | Accent | Range |\n|---|---|---|---|\n| Beach Couture | Vintage pink | Soft navy | Pastel green, coral 16-1541 TCX |\n| Wildflower | Lavender 14-3812 TCX | Pastel green | Sand, white |\n| Playground Pop | Lemon 12-0642 TCX | Red 18-1664 TCX | Coral, aqua |"
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- Share sand and white.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Accents shallow.",
+ "sources": [
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  },
+  {
+   "title": "Childrenswear fashion trends and forecast S/S 2027",
+   "publisher": "Fatamadrina (surface design studio for childrenswear)",
+   "url": "https://fatamadrina.eu/en/blogs/fashion-trends/kidswear-fashion-trends-ss-2027",
+   "date": "2026",
+   "note": "Design studio forecast; used for season-wide fabric, silhouette and print notes"
+  },
+  {
+   "title": "Pitti Bimbo in Florence proves the merits of an intimate format",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fairs/pitti-bimbo-in-florence-proves-the-merits-of-an-intimate-format/2026062673207",
+   "date": "26 June 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

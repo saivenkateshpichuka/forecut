@@ -1,0 +1,44 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "toddler-girls",
+ "category": "business-strategy",
+ "subsection": "assortment-pricing",
+ "slug": "assortment-and-pricing-strategy",
+ "title": "SS27 Toddler Girls' Assortment and Pricing Strategy",
+ "summary": "Assortment and pricing for toddler girls.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- In Italy, childrenswear exports fell 9.3% and domestic sales 2.6% in 2025 (Confindustria Moda via Fortune Italia)<sup>[1]</sup>\n- Fashion is expected to grow in low single digits in 2027; resale is expected to grow two to three times faster than first-hand fashion through 2027<sup>[2]</sup>"
+  },
+  {
+   "heading": "Assortment",
+   "body": "| Tier | What |\n|---|---|\n| Core | Rompers, sets, sleepwear |\n| Seasonal | Swim, themes |\n| Statement | Occasion, heirloom |"
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- Durable for hand-me-downs.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Gift price points.",
+ "sources": [
+  {
+   "title": "Pitti, la moda bambino punta su sostenibilita e protezione UV: cosi i brand preparano l'estate 2027",
+   "publisher": "Fortune Italia",
+   "url": "https://www.fortuneita.com/?p=383263",
+   "date": "24 June 2026"
+  },
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

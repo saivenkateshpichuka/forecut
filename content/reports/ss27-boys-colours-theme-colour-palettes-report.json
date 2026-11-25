@@ -1,0 +1,38 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "boys",
+ "category": "colours",
+ "subsection": "theme-colour-palettes",
+ "slug": "theme-colour-palettes-report",
+ "title": "SS27 Boys' Theme Colour Palettes",
+ "summary": "Working palettes for the SS27 boys' themes: Refined Sport, Workwear Denim and Harbour Club.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- At Playtime Paris, red \"emerged as one of the defining colors of the season\"; stripes ran horizontal, vertical and diagonal<sup>[1]</sup>\n- Sport influence was presented \"through a more refined, creative lens\"; denim felt \"stronger and more diverse than in recent seasons\"<sup>[1]</sup>"
+  },
+  {
+   "heading": "Palettes by theme",
+   "body": "| Theme | Lead | Accent | Range colours |\n|---|---|---|---|\n| Refined Sport | Navy 19-3920 TCX | Red 18-1664 TCX | White, aqua 14-4816 TCX, grass green 16-0237 TCX |\n| Workwear Denim | Mid indigo | Red 18-1664 TCX | Sand 13-1009 TCX, white |\n| Harbour Club | Navy 19-3920 TCX | Red 18-1664 TCX | White, sand 13-1009 TCX |"
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- Share navy and white across themes so pieces mix.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Build depth in lead colours; accents shallow.",
+ "sources": [
+  {
+   "title": "Playtime Paris SS27: where fashion met the spirit of a summer music festival",
+   "publisher": "Junior Style (Aleksandra Ataca)",
+   "url": "https://juniorstyle.net/playtime-paris-ss27-where-fashion-met-the-spirit-of-a-summer-music-festival/",
+   "date": "30 June 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

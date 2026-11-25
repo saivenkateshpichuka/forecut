@@ -1,0 +1,51 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "girls",
+ "category": "trims",
+ "subsection": "trending-trims",
+ "slug": "trending-trims-report",
+ "title": "SS27 Girls' Trending Trims Report",
+ "summary": "Girls' trims: hand embroidery, ruffles, smocking, lined sequins, shell and bead details for older girls.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Fatamadrina lists oversized florals, checks with fruit prints, paisley, vintage geometrics, nautical themes and gingham, and \"Wildflowers Bloom\" with delicate handcrafted embroidery<sup>[1]</sup>\n- Selini Action makes handmade costumes decorated with shells, pebbles, seaweed and embroidery<sup>[2]</sup>\n- Pitti Bimbo 103 took \"The Pitti Pool\" as its theme and called it \"the most colorful summer edition yet\"<sup>[3]</sup>"
+  },
+  {
+   "heading": "Trims table",
+   "body": "| Trim | Application | Safety note |\n|---|---|---|\n| Embroidery | Dresses | Soft backing |\n| Smocking | Dresses | None |\n| Sequins | Party | Lined |\n| Shells and beads | Older girls only | Pull-test |"
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- No small parts for younger sizes.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Embroidery adds value.",
+ "sources": [
+  {
+   "title": "Childrenswear fashion trends and forecast S/S 2027",
+   "publisher": "Fatamadrina (surface design studio for childrenswear)",
+   "url": "https://fatamadrina.eu/en/blogs/fashion-trends/kidswear-fashion-trends-ss-2027",
+   "date": "2026",
+   "note": "Design studio forecast; used for season-wide fabric, silhouette and print notes"
+  },
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  },
+  {
+   "title": "Pitti Bimbo 103: the energy of summer ignites kidswear",
+   "publisher": "Pitti Immagine",
+   "url": "https://www.pittimmagine.com/en/pittimmagine/archive/bimbo103/news/pitti-bimbo-103-novit-",
+   "date": "13 May 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

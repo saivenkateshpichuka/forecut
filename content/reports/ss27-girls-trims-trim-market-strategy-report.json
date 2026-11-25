@@ -1,0 +1,38 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "girls",
+ "category": "trims",
+ "subsection": "trim-market-strategy",
+ "slug": "trim-market-strategy-report",
+ "title": "SS27 Girls' Trim Market Strategy",
+ "summary": "Durable embroidery and smocking over fragile decoration.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- In Italy, childrenswear exports fell 9.3% and domestic sales 2.6% in 2025 (Confindustria Moda via Fortune Italia)<sup>[1]</sup>\n- Newer lines emphasise breathability, quick drying and comfort; childrenswear is moving toward functionality, material quality and durability<sup>[1]</sup>"
+  },
+  {
+   "heading": "Build, test, sell through",
+   "body": "| Action | Trims |\n|---|---|\n| Build | Embroidery, smocking |\n| Test | Sequins, shells |\n| Sell through | Glued decoration |"
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- Wash-test all trims.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Durability supports resale.",
+ "sources": [
+  {
+   "title": "Pitti, la moda bambino punta su sostenibilita e protezione UV: cosi i brand preparano l'estate 2027",
+   "publisher": "Fortune Italia",
+   "url": "https://www.fortuneita.com/?p=383263",
+   "date": "24 June 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

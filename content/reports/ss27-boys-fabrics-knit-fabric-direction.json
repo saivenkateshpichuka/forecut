@@ -1,0 +1,51 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "boys",
+ "category": "fabrics",
+ "subsection": "knit",
+ "slug": "knit-fabric-direction",
+ "title": "SS27 Boys' Knit Fabric Direction",
+ "summary": "Boys' knits: cotton jersey, piqué, micro-mesh, terry and UPF-rated swim and performance fabrics.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Fatamadrina lists lightweight linen, voile, organic cotton, terry and micro-mesh as SS27 fabrics<sup>[1]</sup>\n- Swimwear, T-shirts and accessories with built-in UV filters were prominent and are becoming common, linked to family concern for health and to changing climate<sup>[2]</sup>\n- Teeter Totter showed UPF50+ swim and sportswear, backpacks and ultra-light, sand-free beach towels<sup>[3]</sup>\n- Newer lines emphasise breathability, quick drying and comfort; childrenswear is moving toward functionality, material quality and durability<sup>[2]</sup>"
+  },
+  {
+   "heading": "Fabric by fabric",
+   "body": "| Knit | Hand | Uses |\n|---|---|---|\n| Organic cotton jersey | Soft | Tees |\n| Piqué | Structured | Polos |\n| Micro-mesh | Airy | Sport tops, linings |\n| Terry | Absorbent | Shorts, cover-ups |\n| UPF swim and performance | Stretch, quick-dry | Swim, rash guards |"
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- Test UPF after stretching and wetting.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- UPF supports full price.",
+ "sources": [
+  {
+   "title": "Childrenswear fashion trends and forecast S/S 2027",
+   "publisher": "Fatamadrina (surface design studio for childrenswear)",
+   "url": "https://fatamadrina.eu/en/blogs/fashion-trends/kidswear-fashion-trends-ss-2027",
+   "date": "2026",
+   "note": "Design studio forecast; used for season-wide fabric, silhouette and print notes"
+  },
+  {
+   "title": "Pitti, la moda bambino punta su sostenibilita e protezione UV: cosi i brand preparano l'estate 2027",
+   "publisher": "Fortune Italia",
+   "url": "https://www.fortuneita.com/?p=383263",
+   "date": "24 June 2026"
+  },
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

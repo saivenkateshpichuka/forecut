@@ -1,0 +1,44 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "girls",
+ "category": "innovations",
+ "subsection": "material-innovations",
+ "slug": "material-innovations-report",
+ "title": "SS27 Girls' Material Innovations",
+ "summary": "Materials for girls: UPF swim, recycled lycra, organic cotton and quick-dry fabrics.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Piccoli Principi's \"Pearl & Tides\" swimwear runs from vintage pink to pastel green and soft navy, in technical fabrics including sustainable lycra, with UV protection<sup>[1]</sup>\n- Swimwear, T-shirts and accessories with built-in UV filters were prominent and are becoming common, linked to family concern for health and to changing climate<sup>[2]</sup>\n- Collections increasingly use recycled fibres, organic cotton and certified materials<sup>[2]</sup>"
+  },
+  {
+   "heading": "Readiness",
+   "body": "| Material | Readiness |\n|---|---|\n| UPF swim | Ready |\n| Recycled lycra | Ready |\n| Organic cotton | Ready |"
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- Test UPF.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Verify claims.",
+ "sources": [
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  },
+  {
+   "title": "Pitti, la moda bambino punta su sostenibilita e protezione UV: cosi i brand preparano l'estate 2027",
+   "publisher": "Fortune Italia",
+   "url": "https://www.fortuneita.com/?p=383263",
+   "date": "24 June 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

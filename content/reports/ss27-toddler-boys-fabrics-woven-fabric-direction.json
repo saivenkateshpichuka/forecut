@@ -1,0 +1,45 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "toddler-boys",
+ "category": "fabrics",
+ "subsection": "woven",
+ "slug": "woven-fabric-direction",
+ "title": "SS27 Toddler Boys' Woven Fabric Direction",
+ "summary": "Wovens for toddler boys: cotton muslin, voile, light poplin and linen-cotton.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Fatamadrina lists lightweight linen, voile, organic cotton, terry and micro-mesh as SS27 fabrics<sup>[1]</sup>\n- Collections increasingly use recycled fibres, organic cotton and certified materials<sup>[2]</sup>"
+  },
+  {
+   "heading": "Fabric by fabric",
+   "body": "| Fabric | Uses |\n|---|---|\n| Cotton muslin | Dresses, shirts, wraps |\n| Voile | Dresses |\n| Light poplin | Shirts |\n| Linen-cotton | Shorts |"
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- Pre-wash; soft finishes only.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Organic certification supports price.",
+ "sources": [
+  {
+   "title": "Childrenswear fashion trends and forecast S/S 2027",
+   "publisher": "Fatamadrina (surface design studio for childrenswear)",
+   "url": "https://fatamadrina.eu/en/blogs/fashion-trends/kidswear-fashion-trends-ss-2027",
+   "date": "2026",
+   "note": "Design studio forecast; used for season-wide fabric, silhouette and print notes"
+  },
+  {
+   "title": "Pitti, la moda bambino punta su sostenibilita e protezione UV: cosi i brand preparano l'estate 2027",
+   "publisher": "Fortune Italia",
+   "url": "https://www.fortuneita.com/?p=383263",
+   "date": "24 June 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

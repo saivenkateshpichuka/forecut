@@ -1,0 +1,59 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "girls",
+ "category": "trims",
+ "subsection": "trim-stories",
+ "slug": "trim-stories-report",
+ "title": "SS27 Girls' Trim Stories",
+ "summary": "Trims for each girls' theme.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Marie Raxevisky's \"Beach Couture\" offers UPF 50+ swimwear, sarongs and skirts in fine Italian and recycled fabrics, with mother-daughter matching<sup>[1]</sup>\n- Fatamadrina lists oversized florals, checks with fruit prints, paisley, vintage geometrics, nautical themes and gingham, and \"Wildflowers Bloom\" with delicate handcrafted embroidery<sup>[2]</sup>\n- Poco Blush, designed \"almost exclusively for girls\", showed bold hues and a loose, printed, reversible dress, and a T-shirt that releases a minty scent when crumpled<sup>[3]</sup>"
+  },
+  {
+   "heading": "Beach Couture",
+   "body": "Ruffles, bows, scalloped edges."
+  },
+  {
+   "heading": "Wildflower",
+   "body": "Hand embroidery, smocking."
+  },
+  {
+   "heading": "Playground Pop",
+   "body": "Appliqué, sequins, characters."
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- One trim family per theme.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Trims refresh blocks.",
+ "sources": [
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  },
+  {
+   "title": "Childrenswear fashion trends and forecast S/S 2027",
+   "publisher": "Fatamadrina (surface design studio for childrenswear)",
+   "url": "https://fatamadrina.eu/en/blogs/fashion-trends/kidswear-fashion-trends-ss-2027",
+   "date": "2026",
+   "note": "Design studio forecast; used for season-wide fabric, silhouette and print notes"
+  },
+  {
+   "title": "Pitti Bimbo in Florence proves the merits of an intimate format",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fairs/pitti-bimbo-in-florence-proves-the-merits-of-an-intimate-format/2026062673207",
+   "date": "26 June 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

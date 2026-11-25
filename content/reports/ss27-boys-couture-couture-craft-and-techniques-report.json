@@ -1,0 +1,44 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "boys",
+ "category": "couture",
+ "subsection": "craft-techniques",
+ "slug": "couture-craft-and-techniques-report",
+ "title": "SS27 Boys' Couture Craft and Techniques",
+ "summary": "Craft for boys: artist-designed prints, embroidered badges and hand-finished details on hero pieces.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Halcyon Nights builds several graphic universes each season with patterns from a panel of artists; Bobo Choses publishes illustrated books alongside its collections<sup>[1]</sup>\n- Junior Style saw a \"growing whimsical trend\", layered styling and character-driven accessories; Tinycottons showed a \"wonderfully chic bellboy character\"<sup>[2]</sup>"
+  },
+  {
+   "heading": "Translating to ready-to-wear",
+   "body": "- Artist prints on camp shirts.\n- Embroidered badges on polos.\n- Character embroidery on caps and tees."
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- Hand work on one placement only.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Tell the artist story; price as limited.",
+ "sources": [
+  {
+   "title": "Pitti Bimbo in Florence proves the merits of an intimate format",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fairs/pitti-bimbo-in-florence-proves-the-merits-of-an-intimate-format/2026062673207",
+   "date": "26 June 2026"
+  },
+  {
+   "title": "Playtime Paris SS27: where fashion met the spirit of a summer music festival",
+   "publisher": "Junior Style (Aleksandra Ataca)",
+   "url": "https://juniorstyle.net/playtime-paris-ss27-where-fashion-met-the-spirit-of-a-summer-music-festival/",
+   "date": "30 June 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

@@ -1,0 +1,46 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "boys",
+ "category": "trims",
+ "subsection": "trim-stories",
+ "slug": "trim-stories-report",
+ "title": "SS27 Boys' Trim Stories",
+ "summary": "Trims that carry each boys' theme: piping for Refined Sport, workwear hardware for Workwear Denim, tape for Harbour Club.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Sport influence was presented \"through a more refined, creative lens\"; denim felt \"stronger and more diverse than in recent seasons\"<sup>[1]</sup>\n- Sailor collars, navy blues and nautical details appeared throughout Playtime Paris<sup>[1]</sup>"
+  },
+  {
+   "heading": "Refined Sport",
+   "body": "Side stripes, piping, rubber badges."
+  },
+  {
+   "heading": "Workwear Denim",
+   "body": "Hammer loops, patch pockets, shank buttons."
+  },
+  {
+   "heading": "Harbour Club",
+   "body": "Sailor tape, anchor-look buttons."
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- One trim family per theme.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Use trims to update carry-over blocks.",
+ "sources": [
+  {
+   "title": "Playtime Paris SS27: where fashion met the spirit of a summer music festival",
+   "publisher": "Junior Style (Aleksandra Ataca)",
+   "url": "https://juniorstyle.net/playtime-paris-ss27-where-fashion-met-the-spirit-of-a-summer-music-festival/",
+   "date": "30 June 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

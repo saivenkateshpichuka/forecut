@@ -1,0 +1,48 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "toddler-girls",
+ "category": "colours",
+ "subsection": "season-colours",
+ "slug": "season-colour-analysis",
+ "title": "SS27 Toddler Girls' Season Colour Analysis",
+ "summary": "Soft pastels with coral and lemon for SS27 toddler girls.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Piccoli Principi's \"Pearl & Tides\" swimwear runs from vintage pink to pastel green and soft navy, in technical fabrics including sustainable lycra, with UV protection<sup>[1]</sup>\n- At Playtime Paris, red \"emerged as one of the defining colors of the season\"; stripes ran horizontal, vertical and diagonal<sup>[2]</sup>"
+  },
+  {
+   "heading": "The palette",
+   "body": "| Colour | Pantone TCX (nearest) | HEX | Role |\n|---|---|---|---|\n| Lavender | 14-3812 TCX | #BDB0D0 | Seasonal |\n| Coral | 16-1541 TCX | #F6745F | Seasonal |\n| Aqua | 14-4816 TCX | #58C9D4 | Seasonal |\n| Sand | 13-1009 TCX | #DAC7AB | Core |\n| Lemon | 12-0642 TCX | #EDDD59 | Seasonal |\n\nConfirm codes against a physical Pantone book before dyeing."
+  },
+  {
+   "heading": "Colour groups",
+   "body": "- **Core:** sand, white.\n- **Seasonal:** lavender, coral, aqua.\n- Playful colour remains important for this age; keep brights as accents."
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- Low-impact, skin-friendly dyes; check colour fastness to saliva and sweat where required.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Depth in sand and white basics.",
+ "sources": [
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  },
+  {
+   "title": "Playtime Paris SS27: where fashion met the spirit of a summer music festival",
+   "publisher": "Junior Style (Aleksandra Ataca)",
+   "url": "https://juniorstyle.net/playtime-paris-ss27-where-fashion-met-the-spirit-of-a-summer-music-festival/",
+   "date": "30 June 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

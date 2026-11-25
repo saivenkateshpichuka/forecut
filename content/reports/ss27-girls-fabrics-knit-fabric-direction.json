@@ -1,0 +1,51 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "girls",
+ "category": "fabrics",
+ "subsection": "knit",
+ "slug": "knit-fabric-direction",
+ "title": "SS27 Girls' Knit Fabric Direction",
+ "summary": "Girls' knits: organic jersey, terry, rib, pointelle and UPF swim fabrics including recycled lycra.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Fatamadrina lists lightweight linen, voile, organic cotton, terry and micro-mesh as SS27 fabrics<sup>[1]</sup>\n- Piccoli Principi's \"Pearl & Tides\" swimwear runs from vintage pink to pastel green and soft navy, in technical fabrics including sustainable lycra, with UV protection<sup>[2]</sup>\n- Salt and Pepper describes its SS27 fabrics as sustainable organic cotton, \"exceptionally soft and gentle on the skin\"<sup>[3]</sup>"
+  },
+  {
+   "heading": "Fabric by fabric",
+   "body": "| Knit | Uses |\n|---|---|\n| Organic jersey | Tees, dresses |\n| Terry | Sets |\n| Rib and pointelle | Tanks, cardigans |\n| UPF swim, recycled lycra | Swim |"
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- Test UPF after stretch.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Swim at full price.",
+ "sources": [
+  {
+   "title": "Childrenswear fashion trends and forecast S/S 2027",
+   "publisher": "Fatamadrina (surface design studio for childrenswear)",
+   "url": "https://fatamadrina.eu/en/blogs/fashion-trends/kidswear-fashion-trends-ss-2027",
+   "date": "2026",
+   "note": "Design studio forecast; used for season-wide fabric, silhouette and print notes"
+  },
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  },
+  {
+   "title": "Salt and Pepper: Spring/Summer 2027 brand profile",
+   "publisher": "Pitti Immagine Bimbo",
+   "url": "https://bimbo.pittimmagine.com/103/exhibitors/S/salt-and-pepper",
+   "date": "June 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

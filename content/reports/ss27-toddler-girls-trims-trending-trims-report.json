@@ -1,0 +1,39 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "toddler-girls",
+ "category": "trims",
+ "subsection": "trending-trims",
+ "slug": "trending-trims-report",
+ "title": "SS27 Toddler Girls' Trending Trims Report",
+ "summary": "Trims for toddler girls: snaps, flat seams, printed labels, embroidery with soft backing.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Fatamadrina lists oversized florals, checks with fruit prints, paisley, vintage geometrics, nautical themes and gingham, and \"Wildflowers Bloom\" with delicate handcrafted embroidery<sup>[1]</sup>"
+  },
+  {
+   "heading": "Trims table",
+   "body": "| Trim | Note |\n|---|---|\n| Snap closures | Pull-tested |\n| Printed labels | No scratch |\n| Embroidery | Soft backing |\n| Appliqué | Fully stitched |"
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- No small detachable parts.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Function sells.",
+ "sources": [
+  {
+   "title": "Childrenswear fashion trends and forecast S/S 2027",
+   "publisher": "Fatamadrina (surface design studio for childrenswear)",
+   "url": "https://fatamadrina.eu/en/blogs/fashion-trends/kidswear-fashion-trends-ss-2027",
+   "date": "2026",
+   "note": "Design studio forecast; used for season-wide fabric, silhouette and print notes"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

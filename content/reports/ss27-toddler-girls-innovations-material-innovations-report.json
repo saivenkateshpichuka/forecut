@@ -1,0 +1,50 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "toddler-girls",
+ "category": "innovations",
+ "subsection": "material-innovations",
+ "slug": "material-innovations-report",
+ "title": "SS27 Toddler Girls' Material Innovations",
+ "summary": "Materials for toddler girls: certified organic cotton, UPF swim, skin-friendly finishes.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Salt and Pepper describes its SS27 fabrics as sustainable organic cotton, \"exceptionally soft and gentle on the skin\"<sup>[1]</sup>\n- Swimwear, T-shirts and accessories with built-in UV filters were prominent and are becoming common, linked to family concern for health and to changing climate<sup>[2]</sup>\n- Cadhan showed soft organic cotton pyjamas, with a \"Sogni d'oro\" line for sensitive skin<sup>[3]</sup>"
+  },
+  {
+   "heading": "Readiness",
+   "body": "| Material | Readiness |\n|---|---|\n| Organic cotton | Ready |\n| UPF swim | Ready |\n| Dermatologically tested finishes | Specialist |"
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- Skin-safety evidence.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Verify claims.",
+ "sources": [
+  {
+   "title": "Salt and Pepper: Spring/Summer 2027 brand profile",
+   "publisher": "Pitti Immagine Bimbo",
+   "url": "https://bimbo.pittimmagine.com/103/exhibitors/S/salt-and-pepper",
+   "date": "June 2026"
+  },
+  {
+   "title": "Pitti, la moda bambino punta su sostenibilita e protezione UV: cosi i brand preparano l'estate 2027",
+   "publisher": "Fortune Italia",
+   "url": "https://www.fortuneita.com/?p=383263",
+   "date": "24 June 2026"
+  },
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

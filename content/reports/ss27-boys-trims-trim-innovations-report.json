@@ -1,0 +1,44 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "boys",
+ "category": "trims",
+ "subsection": "trim-innovations",
+ "slug": "trim-innovations-report",
+ "title": "SS27 Boys' Trim Innovations",
+ "summary": "Functional details for boys: UPF-rated components, reflective trims, scented and novelty finishes tested for skin safety.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Poco Blush, designed \"almost exclusively for girls\", showed bold hues and a loose, printed, reversible dress, and a T-shirt that releases a minty scent when crumpled<sup>[1]</sup>\n- Sticky Lemon showed backpacks in key shades from past collections and a mini digital camera that attaches to a bag<sup>[1]</sup>\n- Teeter Totter showed UPF50+ swim and sportswear, backpacks and ultra-light, sand-free beach towels<sup>[2]</sup>"
+  },
+  {
+   "heading": "Readiness",
+   "body": "| Innovation | Readiness (Forecut assessment) |\n|---|---|\n| Reflective trims | Ready |\n| Sand-free towel fabric | Ready |\n| Scented finishes | Test skin safety first |\n| Bag-attached gadgets | Accessory category; check toy rules |"
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- Skin-safety evidence for any finish.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Novelty as small gift buys.",
+ "sources": [
+  {
+   "title": "Pitti Bimbo in Florence proves the merits of an intimate format",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fairs/pitti-bimbo-in-florence-proves-the-merits-of-an-intimate-format/2026062673207",
+   "date": "26 June 2026"
+  },
+  {
+   "title": "Slow living: run, dive, play, the summer wardrobe (Pitti Bimbo 103 exhibitors)",
+   "publisher": "Pitti Immagine",
+   "url": "https://bimbo.pittimmagine.com/en/news/slow-living-pitti-bimbo-103",
+   "date": "29 May 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

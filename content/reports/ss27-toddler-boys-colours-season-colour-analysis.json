@@ -1,0 +1,48 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "toddler-boys",
+ "category": "colours",
+ "subsection": "season-colours",
+ "slug": "season-colour-analysis",
+ "title": "SS27 Toddler Boys' Season Colour Analysis",
+ "summary": "Aqua, navy and sand with green and red accents for SS27 toddler boys.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- At Playtime Paris, red \"emerged as one of the defining colors of the season\"; stripes ran horizontal, vertical and diagonal<sup>[1]</sup>\n- Sailor collars, navy blues and nautical details appeared throughout Playtime Paris<sup>[1]</sup>\n- Pitti Bimbo 103 took \"The Pitti Pool\" as its theme and called it \"the most colorful summer edition yet\"<sup>[2]</sup>"
+  },
+  {
+   "heading": "The palette",
+   "body": "| Colour | Pantone TCX (nearest) | HEX | Role |\n|---|---|---|---|\n| Aqua | 14-4816 TCX | #58C9D4 | Seasonal |\n| Navy | 19-3920 TCX | #2B2E43 | Core |\n| Sand | 13-1009 TCX | #DAC7AB | Core |\n| Grass green | 16-0237 TCX | #75A14F | Seasonal |\n| Red | 18-1664 TCX | #D01C1F | Accent |\n\nConfirm codes against a physical Pantone book before dyeing."
+  },
+  {
+   "heading": "Colour groups",
+   "body": "- **Core:** sand, white.\n- **Seasonal:** aqua, navy, sand.\n- Playful colour remains important for this age; keep brights as accents."
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- Low-impact, skin-friendly dyes; check colour fastness to saliva and sweat where required.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Depth in sand and white basics.",
+ "sources": [
+  {
+   "title": "Playtime Paris SS27: where fashion met the spirit of a summer music festival",
+   "publisher": "Junior Style (Aleksandra Ataca)",
+   "url": "https://juniorstyle.net/playtime-paris-ss27-where-fashion-met-the-spirit-of-a-summer-music-festival/",
+   "date": "30 June 2026"
+  },
+  {
+   "title": "Pitti Bimbo 103: the energy of summer ignites kidswear",
+   "publisher": "Pitti Immagine",
+   "url": "https://www.pittimmagine.com/en/pittimmagine/archive/bimbo103/news/pitti-bimbo-103-novit-",
+   "date": "13 May 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

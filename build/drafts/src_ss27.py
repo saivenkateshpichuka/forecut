@@ -22,6 +22,11 @@ S = {
  'milk': {'title': 'MilK\'s Spring/Summer 2027 Dressing Ideal', 'publisher': 'Playtime', 'url': 'https://www.iloveplaytime.com/milks-spring-summer-2027-dressing-ideal/', 'date': 'July 2026'},
  'ptf': {'title': 'Playtime Fest Paris: where fashion meets music for Spring/Summer 2027', 'publisher': 'Junior Style', 'url': 'https://juniorstyle.net/?p=35403', 'date': 'June 2026'},
  'en14682': {'title': 'EN 14682: Safety of children\'s clothing. Cords and drawstrings on children\'s clothing', 'publisher': 'CEN (European standard)', 'url': 'https://standards.cencenelec.eu/', 'date': 'current edition'},
+ 'js': {'title': 'Playtime Paris SS27: where fashion met the spirit of a summer music festival', 'publisher': 'Junior Style (Aleksandra Ataca)', 'url': 'https://juniorstyle.net/playtime-paris-ss27-where-fashion-met-the-spirit-of-a-summer-music-festival/', 'date': '30 June 2026'},
+ 'fata': {'title': 'Childrenswear fashion trends and forecast S/S 2027', 'publisher': 'Fatamadrina (surface design studio for childrenswear)', 'url': 'https://fatamadrina.eu/en/blogs/fashion-trends/kidswear-fashion-trends-ss-2027', 'date': '2026', 'note': 'Design studio forecast; used for season-wide fabric, silhouette and print notes'},
+ 'sp': {'title': 'Salt and Pepper: Spring/Summer 2027 brand profile', 'publisher': 'Pitti Immagine Bimbo', 'url': 'https://bimbo.pittimmagine.com/103/exhibitors/S/salt-and-pepper', 'date': 'June 2026'},
+ 'bofmm': {'title': 'Why mini-me dressing is big business', 'publisher': 'The Business of Fashion', 'url': 'https://www.businessoffashion.com/articles/news-analysis/why-mini-me-dressing-is-big-business/', 'date': 'earlier coverage', 'note': 'Background on celebrity and social-media driven family dressing'},
+ 'natmm': {'title': 'Tracking the rise of the mini-me trend', 'publisher': 'The National', 'url': 'https://www.thenationalnews.com/lifestyle/luxury/tracking-the-rise-of-the-mini-me-trend-1.628541', 'date': 'earlier coverage', 'note': 'Background on luxury childrenswear and family dressing'},
 }
 
 

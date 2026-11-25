@@ -1,0 +1,53 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "boys",
+ "category": "colours",
+ "subsection": "season-colours",
+ "slug": "season-colour-analysis",
+ "title": "SS27 Boys' Season Colour Analysis",
+ "summary": "Boyswear moves from all-navy to red and navy with aqua and lemon brights for summer play.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- At Playtime Paris, red \"emerged as one of the defining colors of the season\"; stripes ran horizontal, vertical and diagonal<sup>[1]</sup>\n- Sailor collars, navy blues and nautical details appeared throughout Playtime Paris<sup>[1]</sup>\n- Pitti Bimbo 103 took \"The Pitti Pool\" as its theme and called it \"the most colorful summer edition yet\"<sup>[2]</sup>"
+  },
+  {
+   "heading": "The palette",
+   "body": "| Colour | Pantone TCX (nearest) | HEX | Role |\n|---|---|---|---|\n| Navy | 19-3920 TCX | #2B2E43 | Core |\n| Red | 18-1664 TCX | #D01C1F | Seasonal: lead accent |\n| Sand | 13-1009 TCX | #DAC7AB | Core |\n| Aqua | 14-4816 TCX | #58C9D4 | Seasonal |\n| Lemon | 12-0642 TCX | #EDDD59 | Seasonal |\n| Grass green | 16-0237 TCX | #75A14F | Seasonal |\n\nConfirm codes against a physical Pantone book before dyeing."
+  },
+  {
+   "heading": "Colour groups",
+   "body": "- **Core:** navy, sand, white.\n- **Seasonal:** red; aqua and lemon for swim and play.\n- **Accent:** grass green."
+  },
+  {
+   "heading": "By age",
+   "body": "- **4 to 7:** brights and stripes.\n- **8 to 14:** navy, red and sand; brights on one piece only."
+  }
+ ],
+ "timing": "Red is the newness for SS27; navy stays core.",
+ "products": "- Red: tees, caps, sneakers. Navy and sand: shorts and chinos. Aqua and lemon: swim.",
+ "design_implications": "- Lab-dip red on jersey and swim fabric; check colour fastness to chlorine and salt water.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Depth in navy and sand; red as a strong seasonal buy.",
+ "sources": [
+  {
+   "title": "Playtime Paris SS27: where fashion met the spirit of a summer music festival",
+   "publisher": "Junior Style (Aleksandra Ataca)",
+   "url": "https://juniorstyle.net/playtime-paris-ss27-where-fashion-met-the-spirit-of-a-summer-music-festival/",
+   "date": "30 June 2026"
+  },
+  {
+   "title": "Pitti Bimbo 103: the energy of summer ignites kidswear",
+   "publisher": "Pitti Immagine",
+   "url": "https://www.pittimmagine.com/en/pittimmagine/archive/bimbo103/news/pitti-bimbo-103-novit-",
+   "date": "13 May 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25",
+ "trend_status": "Rising"
+}

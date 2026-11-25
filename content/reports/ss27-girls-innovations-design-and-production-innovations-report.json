@@ -1,0 +1,50 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "girls",
+ "category": "innovations",
+ "subsection": "design-production",
+ "slug": "design-and-production-innovations-report",
+ "title": "SS27 Girls' Design and Production Innovations",
+ "summary": "Design and production for girlswear: story-led collections, durable construction, product data for the EU passport.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Halcyon Nights builds several graphic universes each season with patterns from a panel of artists; Bobo Choses publishes illustrated books alongside its collections<sup>[1]</sup>\n- Newer lines emphasise breathability, quick drying and comfort; childrenswear is moving toward functionality, material quality and durability<sup>[2]</sup>\n- The EU textiles Digital Product Passport delegated act is planned for the fourth quarter of 2027; since 19 July 2026 large companies may not destroy certain unsold apparel<sup>[3]</sup>"
+  },
+  {
+   "heading": "Actions",
+   "body": "- Build stories across products.\n- Record fibre, origin and safety tests."
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- Grade for growth.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Plan resale routes.",
+ "sources": [
+  {
+   "title": "Pitti Bimbo in Florence proves the merits of an intimate format",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fairs/pitti-bimbo-in-florence-proves-the-merits-of-an-intimate-format/2026062673207",
+   "date": "26 June 2026"
+  },
+  {
+   "title": "Pitti, la moda bambino punta su sostenibilita e protezione UV: cosi i brand preparano l'estate 2027",
+   "publisher": "Fortune Italia",
+   "url": "https://www.fortuneita.com/?p=383263",
+   "date": "24 June 2026"
+  },
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

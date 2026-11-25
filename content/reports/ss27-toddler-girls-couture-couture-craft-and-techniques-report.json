@@ -1,0 +1,45 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "toddler-girls",
+ "category": "couture",
+ "subsection": "craft-techniques",
+ "slug": "couture-craft-and-techniques-report",
+ "title": "SS27 Toddler Girls' Couture Craft and Techniques",
+ "summary": "Craft for toddler girls: smocking, hand embroidery and artist prints.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Halcyon Nights builds several graphic universes each season with patterns from a panel of artists; Bobo Choses publishes illustrated books alongside its collections<sup>[1]</sup>\n- Fatamadrina lists oversized florals, checks with fruit prints, paisley, vintage geometrics, nautical themes and gingham, and \"Wildflowers Bloom\" with delicate handcrafted embroidery<sup>[2]</sup>"
+  },
+  {
+   "heading": "Translating",
+   "body": "- Smocking.\n- Embroidery with soft backing.\n- Artist prints."
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- Hand work on safe placements.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Heirloom gifts.",
+ "sources": [
+  {
+   "title": "Pitti Bimbo in Florence proves the merits of an intimate format",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fairs/pitti-bimbo-in-florence-proves-the-merits-of-an-intimate-format/2026062673207",
+   "date": "26 June 2026"
+  },
+  {
+   "title": "Childrenswear fashion trends and forecast S/S 2027",
+   "publisher": "Fatamadrina (surface design studio for childrenswear)",
+   "url": "https://fatamadrina.eu/en/blogs/fashion-trends/kidswear-fashion-trends-ss-2027",
+   "date": "2026",
+   "note": "Design studio forecast; used for season-wide fabric, silhouette and print notes"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

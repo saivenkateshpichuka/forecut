@@ -1,0 +1,51 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "boys",
+ "category": "fabrics",
+ "subsection": "woven",
+ "slug": "woven-fabric-direction",
+ "title": "SS27 Boys' Woven Fabric Direction",
+ "summary": "Boys' wovens: lightweight denim and chambray, cotton twill, seersucker and linen-cotton, with certified organic and recycled options.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Sport influence was presented \"through a more refined, creative lens\"; denim felt \"stronger and more diverse than in recent seasons\"<sup>[1]</sup>\n- Collections increasingly use recycled fibres, organic cotton and certified materials<sup>[2]</sup>\n- Fatamadrina lists lightweight linen, voile, organic cotton, terry and micro-mesh as SS27 fabrics<sup>[3]</sup>"
+  },
+  {
+   "heading": "Fabric by fabric",
+   "body": "| Fabric | Hand | Uses |\n|---|---|---|\n| Light denim, chambray | Soft, durable | Shorts, overalls, shirts |\n| Cotton twill | Firm | Workwear shorts, chinos |\n| Seersucker | Cool | Shirts, shorts |\n| Linen-cotton | Cool, textured | Shirts, Bermudas |"
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- Certify organic and recycled claims before labelling.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Denim and twill are volume.",
+ "sources": [
+  {
+   "title": "Playtime Paris SS27: where fashion met the spirit of a summer music festival",
+   "publisher": "Junior Style (Aleksandra Ataca)",
+   "url": "https://juniorstyle.net/playtime-paris-ss27-where-fashion-met-the-spirit-of-a-summer-music-festival/",
+   "date": "30 June 2026"
+  },
+  {
+   "title": "Pitti, la moda bambino punta su sostenibilita e protezione UV: cosi i brand preparano l'estate 2027",
+   "publisher": "Fortune Italia",
+   "url": "https://www.fortuneita.com/?p=383263",
+   "date": "24 June 2026"
+  },
+  {
+   "title": "Childrenswear fashion trends and forecast S/S 2027",
+   "publisher": "Fatamadrina (surface design studio for childrenswear)",
+   "url": "https://fatamadrina.eu/en/blogs/fashion-trends/kidswear-fashion-trends-ss-2027",
+   "date": "2026",
+   "note": "Design studio forecast; used for season-wide fabric, silhouette and print notes"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

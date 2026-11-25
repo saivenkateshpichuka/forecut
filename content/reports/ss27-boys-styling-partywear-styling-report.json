@@ -1,0 +1,44 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "ss27",
+ "audience": "boys",
+ "category": "styling",
+ "subsection": "partywear",
+ "slug": "partywear-styling-report",
+ "title": "SS27 Boys' Partywear Styling",
+ "summary": "Party boyswear: printed shirts, bright shorts and statement sneakers.",
+ "research_period": "Pitti Bimbo 103, Florence, 24-25 June 2026; Playtime Paris, 28-30 June 2026; analysis July to November 2026",
+ "markets": "Premium and mid-market childrenswear, Europe-led fairs, global retail",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- Pitti Bimbo 103 took \"The Pitti Pool\" as its theme and called it \"the most colorful summer edition yet\"<sup>[1]</sup>\n- At Playtime Paris, red \"emerged as one of the defining colors of the season\"; stripes ran horizontal, vertical and diagonal<sup>[2]</sup>"
+  },
+  {
+   "heading": "Formulas",
+   "body": "- **Printed camp shirt + bright shorts.**\n- **Red polo + white shorts.**\n- **Character tee + denim.**"
+  }
+ ],
+ "timing": "",
+ "products": "",
+ "design_implications": "- Prints scaled to size.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Late-spring delivery for summer parties.",
+ "sources": [
+  {
+   "title": "Pitti Bimbo 103: the energy of summer ignites kidswear",
+   "publisher": "Pitti Immagine",
+   "url": "https://www.pittimmagine.com/en/pittimmagine/archive/bimbo103/news/pitti-bimbo-103-novit-",
+   "date": "13 May 2026"
+  },
+  {
+   "title": "Playtime Paris SS27: where fashion met the spirit of a summer music festival",
+   "publisher": "Junior Style (Aleksandra Ataca)",
+   "url": "https://juniorstyle.net/playtime-paris-ss27-where-fashion-met-the-spirit-of-a-summer-music-festival/",
+   "date": "30 June 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}
