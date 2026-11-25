@@ -1,0 +1,64 @@
+{
+ "season": "ss27",
+ "audience": "women",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Shows 10 September to 6 October 2026; Haute Couture, July 2026; Premiere Vision Paris, February 2026; analysis October to November 2026",
+ "markets": "Global: New York, London, Milan, Paris and Copenhagen runways; premium and mid-market womenswear",
+ "kind": "report",
+ "category": "business-strategy",
+ "subsection": "category-opportunities",
+ "slug": "category-opportunities-report",
+ "title": "SS27 Women's Category Opportunities",
+ "summary": "Skirts, short and waisted jackets, satin pieces, floral prints and accessories-style trims are the SS27 womenswear growth categories. Loose trousers, chinos and mini dresses are shrinking.",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "Runway share of looks, SS27 against SS26<sup>[1]</sup>:\n\n| Category | SS26 | SS27 | Change |\n|---|---|---|---|\n| Skirts | 19.3% | 27.9% | +8.6 points |\n| Straight skirts | 5.1% | 10.3% | +5.2 points |\n| Dropped-waist dress | 0.6% | 4.9% | +4.3 points |\n| Jackets | 20.9% | 23.1% | +2.2 points |\n| Satin | 17.8% (derived) | 20.8% | +3.0 points |\n| Floral prints | 11.4% | 14.2% | +2.8 points |\n| Dresses | 37.0% | 33.3% | -3.7 points |\n| Loose trousers | 11.5% | 3.0% | -8.5 points |\n| Chinos | 6.7% | 1.5% | -5.2 points |\n| Mini dresses | 9.8% | 4.8% | -5.0 points |\n\nRetail buyers at Le Bon Marché and Galeries Lafayette Paris highlighted skirts and separates<sup>[2]</sup>. Outside apparel, jewellery and leather goods are projected to grow 4 to 6% a year between 2025 and 2027<sup>[3]</sup>."
+  },
+  {
+   "heading": "Opportunities",
+   "body": "1. **Skirts:** the biggest shift of the season; build straight and midi skirts as a core category.\n2. **Jackets:** short, waisted jackets and skirt suits.\n3. **Satin:** slip skirts and dresses, blouses and wide trousers.\n4. **Prints:** florals in particular, on dresses and skirts.\n5. **Add-on accessories:** belts, corsages, brooches and bows, which follow the runway trims and the strength of accessories."
+  },
+  {
+   "heading": "Categories to reduce",
+   "body": "Loose trousers, chinos and mini dresses fell sharply in runway share. Reduce depth, move customers to straight tailored trousers and midi lengths, and clear remaining stock before the SS27 drop."
+  }
+ ],
+ "design_implications": "- Shift design time from trousers to skirts and jackets.\n- Plan skirt and jacket pairs in shared fabrics and colours.",
+ "commercial_implications": "- Re-weight the SS27 open-to-buy towards skirts and jackets.\n- Test accessories-style trims as add-ons at the till and online checkout.\n- Watch early sell-through on dropped-waist dresses before adding depth.",
+ "sources": [
+  {
+   "title": "Spring 2027 womenswear trends from the runways (SS27), T-Fashion Runway Index",
+   "publisher": "T-Fashion",
+   "url": "https://tfashion.ai/runway/ss27",
+   "date": "data as of 18 October 2026",
+   "note": "Share of looks across 12,320 looks from 359 designers, compared with SS26"
+  },
+  {
+   "title": "SS27 womenswear trends: the key looks from New York, London, Milan and Paris fashion weeks",
+   "publisher": "FashionUnited (AFP)",
+   "url": "https://fashionunited.com/news/fashion/ss27-womenswear-trends-the-key-looks-from-new-york-london-milan-and-paris-fashion-weeks/2026100775061",
+   "date": "7 October 2026"
+  },
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  }
+ ],
+ "images": [
+  {
+   "file": "pencil-midi-skirts-ss27-photo",
+   "caption": "Pencil midi skirt. Forecut visual, not a runway photograph.",
+   "credit": "Forecut",
+   "provenance": "Created for Forecut and supplied through the Forecut image upload on 14 October 2026. Illustrative, not a runway photograph.",
+   "licence": "Forecut image. Tool and licence terms to be confirmed by the owner."
+  }
+ ],
+ "related": [
+  "fc-ss27-women-business-strategy-assortment-and-pricing-strategy",
+  "fc-ss27-women-silhouettes-woven-silhouette-direction"
+ ]
+}

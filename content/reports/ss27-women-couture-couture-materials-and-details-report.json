@@ -1,0 +1,51 @@
+{
+ "season": "ss27",
+ "audience": "women",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Shows 10 September to 6 October 2026; Haute Couture, July 2026; Premiere Vision Paris, February 2026; analysis October to November 2026",
+ "markets": "Global: New York, London, Milan, Paris and Copenhagen runways; premium and mid-market womenswear",
+ "kind": "report",
+ "category": "couture",
+ "subsection": "materials-details",
+ "slug": "couture-materials-and-details-report",
+ "title": "SS27 Women's Couture Materials and Details",
+ "summary": "Couture materials moved beyond silk and lace in 2026: lab-grown silk, silicone, latex, glass beads and feathers. The details that translate are feathers, satin macramé, corsetry and pearl beading.",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- **Lab-grown silk:** Balenciaga used AMSilk silk, which the house describes as \"stronger than steel\"<sup>[1]</sup>.\n- **Silicone, latex, clay and paint:** Schiaparelli used poured silicone, sculpted clay, latex and paint<sup>[2]</sup>, and techniques from a workshop that makes lifelike silicone infants for films<sup>[1]</sup>.\n- **Feathers:** goose and ostrich feathers at Balenciaga<sup>[2]</sup>, ostrich feathers at Stéphane Rolland<sup>[1]</sup>.\n- **Satin macramé, agate and diamonds:** Stéphane Rolland<sup>[1]</sup>.\n- **Beading:** a prom dress beaded in putty-pink pearls at Schiaparelli and hand-blown glass beads on tulle at Iris van Herpen<sup>[1]</sup>.\n- **Velvet:** velvet roses at Zuhair Murad and velvet corseted gowns at Elie Saab<sup>[1]</sup>."
+  },
+  {
+   "heading": "Details that translate",
+   "body": "| Couture detail | Ready-to-wear translation | Price tier |\n|---|---|---|\n| Feathers | Feather trim at a hem or cuff | Premium |\n| Satin macramé | Macramé belts and straps | Mid to premium |\n| Pearl beading | Pearl buttons and beaded necklines | Mid to premium |\n| Corsetry | Corset seaming and rubberised meshes<sup>[3]</sup> instead of boning | Mid |\n| Moulded and coated surfaces | Coated lace and pearlescent satins<sup>[3]</sup> | Mid |"
+  }
+ ],
+ "design_implications": "- Source feathers and beads from certified, traceable suppliers and state care clearly.\n- Test coated and moulded materials for cracking and cleaning before committing.",
+ "commercial_implications": "- Keep exotic materials to a few showpieces; translate the look into accessible trims for volume.\n- Lab-grown and bio-based materials carry a sustainability story: check claims before using them.",
+ "sources": [
+  {
+   "title": "Bare skin, fantasy and the machine: 3 takeaways from Paris' starry couture week",
+   "publisher": "Associated Press",
+   "url": "https://www.clickondetroit.com/entertainment/2026/07/09/bare-skin-fantasy-and-the-machine-3-takeaways-from-paris-starry-couture-week/",
+   "date": "9 July 2026"
+  },
+  {
+   "title": "The fall 2026 couture season was filled with show-stopping moments",
+   "publisher": "The Zoe Report",
+   "url": "https://www.thezoereport.com/fashion/paris-couture-week-fall-2026",
+   "date": "July 2026"
+  },
+  {
+   "title": "Decoding Spring-Summer 27 key transversal highlights",
+   "publisher": "Premiere Vision",
+   "url": "https://www.premierevision.com/articles/86fffb89-9602-f111-8333-000d3a2973d4/decoding-spring-summer-27-key-transversal-highlights",
+   "date": "5 February 2026"
+  }
+ ],
+ "images": [],
+ "related": [
+  "fc-ss27-women-couture-couture-craft-and-techniques-report",
+  "fc-ss27-women-innovations-material-innovations-report"
+ ]
+}

@@ -1,0 +1,55 @@
+{
+ "season": "ss27",
+ "audience": "women",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Shows 10 September to 6 October 2026; Haute Couture, July 2026; Premiere Vision Paris, February 2026; analysis October to November 2026",
+ "markets": "Global: New York, London, Milan, Paris and Copenhagen runways; premium and mid-market womenswear",
+ "kind": "report",
+ "category": "innovations",
+ "subsection": "material-innovations",
+ "slug": "material-innovations-report",
+ "title": "SS27 Women's Material Innovations",
+ "summary": "Materials to watch for SS27 womenswear: lab-grown silk, stretch satins and taffetas, water-repellent linens, technical cottons, softshell and compact knits, and coated surfaces.",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "- **Lab-grown silk:** Balenciaga used AMSilk silk in its July 2026 couture collection<sup>[1]</sup>.\n- **Stretch satins:** Première Vision reports satins, double satins and taffetas moving towards stretch<sup>[2]</sup>.\n- **Technical cottons and water-repellent linens:** part of the \"Robust Elegance\" direction, with cottons gaining strength through yarn and weave<sup>[2]</sup>.\n- **Compact milanos and softshells:** in \"Powerful Flexibility\"<sup>[2]</sup>.\n- **Membrane-backed draperies, spacers and rubberised meshes:** structural fabrics borrowed from corsetry<sup>[2]</sup>.\n- **Coated surfaces:** vinyl and translucent PVC, latex-effect rubber and shiny nylon on the SS27 runways<sup>[3]</sup>."
+  },
+  {
+   "heading": "Readiness",
+   "body": "| Material | Readiness (Forecut assessment) | Use in SS27 |\n|---|---|---|\n| Stretch satin and taffeta | Ready, widely available | Skirts, fitted jackets |\n| Water-repellent linen | Ready from specialist mills | Trench coats, jackets |\n| Technical cotton | Ready | Workwear-inspired jackets and trousers |\n| Compact milano, softshell | Ready | Structured knit jackets and skirts |\n| Corsetry meshes and spacers | Ready from lingerie suppliers | Bodices, bra tops |\n| Lab-grown silk | Early; limited supply and high cost | Showpieces only |\n| PVC and coated fabrics | Ready; check environmental claims and care | Accent pieces |"
+  },
+  {
+   "heading": "Further reading",
+   "body": "Forecut's fabric innovation reports cover regenerated fibres, recycled polyester, bio-based materials and finishing in more depth; see the Innovations articles linked from this category."
+  }
+ ],
+ "design_implications": "- Use stretch satins to make structured skirts and jackets easier to wear.\n- Test coated fabrics for cracking, peeling and cleaning; label care clearly.\n- Consider water-repellent linen for unlined summer outerwear.",
+ "commercial_implications": "- Ready materials can go into SS27 volume; early ones belong in a few hero pieces.\n- Check every sustainability claim (bio-based, recycled, lab-grown) against supplier certificates before using it in marketing.",
+ "sources": [
+  {
+   "title": "Bare skin, fantasy and the machine: 3 takeaways from Paris' starry couture week",
+   "publisher": "Associated Press",
+   "url": "https://www.clickondetroit.com/entertainment/2026/07/09/bare-skin-fantasy-and-the-machine-3-takeaways-from-paris-starry-couture-week/",
+   "date": "9 July 2026"
+  },
+  {
+   "title": "Decoding Spring-Summer 27 key transversal highlights",
+   "publisher": "Premiere Vision",
+   "url": "https://www.premierevision.com/articles/86fffb89-9602-f111-8333-000d3a2973d4/decoding-spring-summer-27-key-transversal-highlights",
+   "date": "5 February 2026"
+  },
+  {
+   "title": "Spring/Summer 2027 trends: 10 ideas from Milan and Paris",
+   "publisher": "Wordrobe",
+   "url": "https://wordrobeshop.com/en/spring-summer-2027-trends-milan-paris/",
+   "date": "October 2026"
+  }
+ ],
+ "images": [],
+ "related": [
+  "fc-ss27-women-innovations-design-and-production-innovations-report",
+  "fc-ss27-women-fabrics-woven-fabric-direction"
+ ]
+}

@@ -1,0 +1,56 @@
+{
+ "season": "ss27",
+ "audience": "women",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Shows 10 September to 6 October 2026; Haute Couture, July 2026; Premiere Vision Paris, February 2026; analysis October to November 2026",
+ "markets": "Global: New York, London, Milan, Paris and Copenhagen runways; premium and mid-market womenswear",
+ "kind": "report",
+ "category": "innovations",
+ "subsection": "design-production",
+ "slug": "design-and-production-innovations-report",
+ "title": "SS27 Women's Design and Production Innovations",
+ "summary": "Body scanning and 3D development, product data ready for the EU's Digital Product Passport, and production planned around new EU rules on unsold stock and low-value imports.",
+ "sections": [
+  {
+   "heading": "Design: scanning and 3D",
+   "body": "Balenciaga used 3D body scans to build new mannequins for its July 2026 couture collection<sup>[1]</sup>. The same approach is available to ready-to-wear: scanning fit models and developing first samples in 3D reduces sampling rounds. Forecut's Garment Studio supports drafting and 3D checks before a physical sample."
+  },
+  {
+   "heading": "Product data and regulation",
+   "body": "- **Digital Product Passport:** it will not apply to all fashion from the start of 2027; the European Commission plans to adopt the textiles delegated act in the fourth quarter of 2027<sup>[2]</sup>. Brands that collect fibre, origin and care data now will be ready.\n- **Unsold goods:** since 19 July 2026, large companies may not destroy certain unsold apparel, accessories and footwear in the EU<sup>[2]</sup>.\n- **Low-value imports:** since 1 July 2026, the EU applies a temporary €3 customs duty per item on consignments worth up to €150<sup>[2]</sup>.\n- **Ultra-fast fashion:** a French law adopted on 8 July 2026 allows penalties of up to 50% of a product's price<sup>[2]</sup>."
+  },
+  {
+   "heading": "Production planning",
+   "body": "- **Sourcing:** brands are diversifying towards Vietnam, Bangladesh, India, Turkey and Morocco while keeping China relationships<sup>[2]</sup>.\n- **Calendar:** Lunar New Year falls on 6 February 2027; Vietnamese and Chinese factories slow from late January and usually return to full capacity in early March<sup>[3]</sup>. Plan bulk for later spring drops after the holiday.\n- **Climate risk:** the World Meteorological Organization warns that El Niño could bring drought, flooding and extreme heat to key sourcing regions through early 2027<sup>[2]</sup>."
+  }
+ ],
+ "design_implications": "- Develop first samples in 3D and keep physical sampling for final fit and fabric approval.\n- Record fibre composition, origin and care for every style from the start.",
+ "commercial_implications": "- Buy shallower in the EU and plan rework, resale or donation routes for unsold stock.\n- Build buffer time around Lunar New Year and climate disruption into the SS27 critical path.",
+ "sources": [
+  {
+   "title": "Bare skin, fantasy and the machine: 3 takeaways from Paris' starry couture week",
+   "publisher": "Associated Press",
+   "url": "https://www.clickondetroit.com/entertainment/2026/07/09/bare-skin-fantasy-and-the-machine-3-takeaways-from-paris-starry-couture-week/",
+   "date": "9 July 2026"
+  },
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  },
+  {
+   "title": "Spring/Summer 2027 fashion trends from the runways",
+   "publisher": "Pham Fashion House",
+   "url": "https://www.phamfashion.com/blog/spring-summer-2027-fashion-trends-runway",
+   "date": "November 2026",
+   "note": "Manufacturer commentary; runway observations and production notes only"
+  }
+ ],
+ "images": [],
+ "related": [
+  "fc-ss27-women-innovations-material-innovations-report",
+  "fc-ss27-women-business-strategy-assortment-and-pricing-strategy"
+ ]
+}

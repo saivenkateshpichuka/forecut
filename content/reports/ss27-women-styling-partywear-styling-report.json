@@ -1,0 +1,60 @@
+{
+ "season": "ss27",
+ "audience": "women",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Shows 10 September to 6 October 2026; Haute Couture, July 2026; Premiere Vision Paris, February 2026; analysis October to November 2026",
+ "markets": "Global: New York, London, Milan, Paris and Copenhagen runways; premium and mid-market womenswear",
+ "kind": "report",
+ "category": "styling",
+ "subsection": "partywear",
+ "slug": "partywear-styling-report",
+ "title": "SS27 Women's Partywear Styling",
+ "summary": "Party SS27 is gold, bias-cut and jewelled: Saint Laurent's gold, Chanel's 1930s gowns, Louis Vuitton's reflective sixties dresses and Miu Miu's cocktail dresses worn with swimwear.",
+ "sections": [
+  {
+   "heading": "The runway looks",
+   "body": "Gold was the season's evening colour: 49 of 59 Saint Laurent looks were gold, from brass to rose, in lamé, organza, lace, brocade, jacquard and gold-leaf latex<sup>[1]</sup>. Chanel included bias-cut 1930s gowns<sup>[1]</sup>; Louis Vuitton showed sixties dresses with reflective diamonds in grey, silver and yellow<sup>[1]</sup>. Miu Miu paired jewelled cocktail dresses with swimwear<sup>[2]</sup>, and Roksanda showed tasselled evening dresses<sup>[3]</sup>. Early-2000s glamour returned at Etro, Roberto Cavalli and Gucci with leopard print, glitter, micro hems and stilettos over five inches<sup>[1]</sup>."
+  },
+  {
+   "heading": "Formulas",
+   "body": "- **Gold head to toe.** A gold lamé or metallic jacquard dress, or a gold skirt with a black top.\n- **Bias-cut slip.** A satin bias-cut dress in violet, black or optic white, with a fine knit or jacket over the shoulders.\n- **Sixties shift.** A short, straight dress with reflective embellishment and flat shoes.\n- **Jewelled dress + swim layer.** A beaded dress over a bandeau or swimsuit for holiday evenings.\n- **Fringe in motion.** A tasselled dress or skirt for dancing."
+  }
+ ],
+ "design_implications": "- Line metallic and beaded fabrics to protect skin and seams.\n- Bias-cut dresses need to hang before hemming and careful grading.\n- Keep one statement element per look: gold, fringe or beading.",
+ "commercial_implications": "- Partywear sells close to events; plan the main delivery for the late-spring wedding and party season and keep quantities tight.\n- Price gold and beaded pieces at premium; offer a satin slip at mid price as the accessible version.",
+ "sources": [
+  {
+   "title": "Spring/Summer 2027 trends: 10 ideas from Milan and Paris",
+   "publisher": "Wordrobe",
+   "url": "https://wordrobeshop.com/en/spring-summer-2027-trends-milan-paris/",
+   "date": "October 2026"
+  },
+  {
+   "title": "The defining trends and takeaways from the S/S 2027 shows",
+   "publisher": "Wallpaper*",
+   "url": "https://www.wallpaper.com/fashion-beauty/fashion-week-trends-spring-summer-2027",
+   "date": "October 2026"
+  },
+  {
+   "title": "Spring/Summer 2027 fashion trends from the runways",
+   "publisher": "Pham Fashion House",
+   "url": "https://www.phamfashion.com/blog/spring-summer-2027-fashion-trends-runway",
+   "date": "November 2026",
+   "note": "Manufacturer commentary; runway observations and production notes only"
+  }
+ ],
+ "images": [
+  {
+   "file": "satin-slip-skirts-ss27-photo",
+   "caption": "Satin slip skirt. Forecut visual, not a runway photograph.",
+   "credit": "Forecut",
+   "provenance": "Created for Forecut and supplied through the Forecut image upload on 14 October 2026. Illustrative, not a runway photograph.",
+   "licence": "Forecut image. Tool and licence terms to be confirmed by the owner."
+  }
+ ],
+ "related": [
+  "fc-ss27-women-styling-celebrity-influence-report",
+  "fc-ss27-women-fabrics-woven-fabric-direction"
+ ]
+}

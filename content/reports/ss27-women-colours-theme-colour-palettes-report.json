@@ -1,0 +1,65 @@
+{
+ "season": "ss27",
+ "audience": "women",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Shows 10 September to 6 October 2026; Haute Couture, July 2026; Premiere Vision Paris, February 2026; analysis October to November 2026",
+ "markets": "Global: New York, London, Milan, Paris and Copenhagen runways; premium and mid-market womenswear",
+ "kind": "report",
+ "category": "colours",
+ "subsection": "theme-colour-palettes",
+ "slug": "theme-colour-palettes-report",
+ "title": "SS27 Women's Theme Colour Palettes",
+ "summary": "A working palette for each SS27 women's theme: the lead and accent colours, how much of each to use, and which products carry them.",
+ "sections": [
+  {
+   "heading": "How to read the palettes",
+   "body": "Each theme has a lead colour (the largest area of the look), an accent (used in small doses) and one or two colours from the SS27 womenswear palette that connect the theme to the rest of the range. Pantone TCX codes are the nearest published match to each colour; confirm against a physical Pantone book before dyeing. The themes themselves are described on their own pages under SS27 Women's Themes."
+  },
+  {
+   "heading": "Palettes by theme",
+   "body": "| Theme | Lead colour | Accent | Range colours | Carried by |\n|---|---|---|---|---|\n| One-Layer Summer | Optic white, 11-0602 TCX, #F2F0EB | Butter, 12-0711 TCX, #F6E199 | Lilac 15-3720 TCX | Sheer suits, organza skirts, fine knits |\n| Lingerie as Outerwear | Black | Violet, 19-3642 TCX, #603F83 | Optic white, true red 18-1763 TCX | Slip skirts, camisoles, bra tops, lace trims |\n| The Waist Returns | Strong blue, nearest 18-4048 TCX, #2F5FC0 | Pale blue, nearest 13-3920 TCX, #CFE0FF | Optic white, Klein blue 18-3949 TCX | Peplum jackets, basque-waist dresses, bubble hems |\n| Handcraft | Amber brown, nearest 17-1147 TCX, #A8623F | Cream pink, nearest 11-1306 TCX, #F6E2D4 | Sand 13-1009 TCX | Lace, smocking and embroidery on poplin and knits |\n| Undone | Warm grey, nearest 17-0610 TCX, #8F897C | Off-white, nearest 11-0608 TCX, #F2EFE8 | Sand 13-1009 TCX | Raw-edge muslin, slip straps, unfinished hems |\n| In Motion | Burnt orange, nearest 16-1448 TCX, #D4651F | Pale apricot, nearest 12-1009 TCX, #FFE1C9 | Butter 12-0711 TCX | Fringe, stripes, swing skirts |\n| Elegant Ease | Deep green, nearest 17-6333 TCX, #4F7A3C | Pale green, nearest 12-5404 TCX, #E4F0DA | Optic white | Slim ties, mules, pointed flats, soft tailoring |\n| Reworked Denim | Deep indigo, nearest 19-4057 TCX, #24446F | Washed blue, nearest 13-3920 TCX, #C9D8EF | Optic white | Denim suits, cut-offs, coated denim |"
+  },
+  {
+   "heading": "Why these palettes",
+   "body": "The two new SS27 women's themes follow the runway colour evidence directly: white rose from 23.7% to 28.4% of SS27 looks and black stayed the most worn colour at 35.2%<sup>[1]</sup>, which gives One-Layer Summer its white base and Lingerie as Outerwear its black base. Purple is the season's new colour, from Chanel's lilac to Miu Miu's royal purple<sup>[2]</sup>, so violet becomes the lingerie theme's accent. Butter is one of the soft, calming shades named on the runways<sup>[3]</sup>.\n\nThe six earlier SS27 themes keep the colours they were published with. Their nearest Pantone codes are listed so that they can be lab-dipped alongside the new palette."
+  }
+ ],
+ "design_implications": "- Use the lead colour on at least half of the look; keep the accent to one piece or one detail.\n- Theme palettes share colours on purpose (optic white, sand, butter), so pieces from different themes can be sold together.\n- Approve one physical standard per colour before sampling, especially whites and lilac, which shift between fibres.",
+ "commercial_implications": "- Put depth into the lead colours of the two new themes (optic white, black) and keep accent colours as smaller buys.\n- Plan floor and online stories by theme, so the customer sees a complete palette in one place.\n- Carry-over colours from the earlier SS27 themes (sand, off-white) reduce dye-lot risk across deliveries.",
+ "sources": [
+  {
+   "title": "Spring 2027 womenswear trends from the runways (SS27), T-Fashion Runway Index",
+   "publisher": "T-Fashion",
+   "url": "https://tfashion.ai/runway/ss27",
+   "date": "data as of 18 October 2026",
+   "note": "Share of looks across 12,320 looks from 359 designers, compared with SS26"
+  },
+  {
+   "title": "Spring/Summer 2027 fashion trends from the runways",
+   "publisher": "Pham Fashion House",
+   "url": "https://www.phamfashion.com/blog/spring-summer-2027-fashion-trends-runway",
+   "date": "November 2026",
+   "note": "Manufacturer commentary; runway observations and production notes only"
+  },
+  {
+   "title": "SS27 womenswear trends: the key looks from New York, London, Milan and Paris fashion weeks",
+   "publisher": "FashionUnited (AFP)",
+   "url": "https://fashionunited.com/news/fashion/ss27-womenswear-trends-the-key-looks-from-new-york-london-milan-and-paris-fashion-weeks/2026100775061",
+   "date": "7 October 2026"
+  },
+  {
+   "title": "Forecut SS27 colour forecast: method and sources",
+   "publisher": "Forecut",
+   "url": "https://forecut.in/forecasts/ss27/colours/colour-forecast/",
+   "date": "November 2026",
+   "note": "Built from Refinery29, T-Fashion colour shares, The Impression and Premiere Vision key colours"
+  }
+ ],
+ "images": [],
+ "related": [
+  "fc-ss27-women-colours-season-colour-analysis",
+  "fc-ss27-women-themes-one-layer-summer",
+  "fc-ss27-women-themes-lingerie-as-outerwear"
+ ]
+}

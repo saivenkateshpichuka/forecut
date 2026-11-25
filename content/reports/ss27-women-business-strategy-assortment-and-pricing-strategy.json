@@ -1,0 +1,53 @@
+{
+ "season": "ss27",
+ "audience": "women",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Shows 10 September to 6 October 2026; Haute Couture, July 2026; Premiere Vision Paris, February 2026; analysis October to November 2026",
+ "markets": "Global: New York, London, Milan, Paris and Copenhagen runways; premium and mid-market womenswear",
+ "kind": "report",
+ "category": "business-strategy",
+ "subsection": "assortment-pricing",
+ "slug": "assortment-and-pricing-strategy",
+ "title": "SS27 Women's Assortment and Pricing Strategy",
+ "summary": "Plan SS27 for low growth and high costs: fewer, more flexible styles built as separates, tighter depth on fashion pieces, full price on what is new, and deliveries timed to heat and events.",
+ "sections": [
+  {
+   "heading": "The market",
+   "body": "The IMF expects global growth of 3.4% in 2027 and inflation of 3.9%, but fashion is expected to stay in low single digits<sup>[1]</sup>. Freight, energy and financing costs remain high, and excess stock both ties up cash and leads to markdowns: sales up 4% with inventory up 10% is a weaker position than steady stock<sup>[1]</sup>. Mid-market brands face promotional pressure from luxury and value players<sup>[1]</sup>. Resale is expected to grow two to three times faster than first-hand fashion in 2027<sup>[2]</sup>.\n\nWeather matters for timing: UK data show that a 1°C warmer May brings clothing sales forward from June<sup>[1]</sup>."
+  },
+  {
+   "heading": "Assortment",
+   "body": "| Tier | Share of options (Forecut guide) | What goes in it |\n|---|---|---|\n| Core | About half | Straight skirts, tailored trousers, shirts, rib knits, white and black |\n| Seasonal | About a third | Midi and layered skirts, waisted jackets, satin, lilac and violet, florals |\n| Statement | The rest | Gold, sheer suits, bubble skirts, beaded and feathered pieces |\n\n- Build the range as **separates** in shared colours, so each piece sells with two or three others.\n- Keep **statement** pieces to short runs with a planned exit.\n- Cut **loose trousers, chinos and mini dresses** compared with SS26."
+  },
+  {
+   "heading": "Pricing",
+   "body": "- **Full price on what is new:** rising pieces (skirts, waisted jackets, satin) are what customers come in for.\n- **Value on what customers know:** peaking pieces (lingerie lace, crochet) carry promotions.\n- **Premium for craft:** hand-applied petals, beading and silk duchesse justify higher prices; label the craft.\n- **Sets:** price skirt suits and denim sets to reward buying both pieces."
+  },
+  {
+   "heading": "Timing",
+   "body": "- Deliver core separates early (February and March).\n- Hold sheer and single-layer pieces for the first heat, and be ready to bring them forward if spring is warm.\n- Time partywear and statement pieces for the wedding and event season."
+  }
+ ],
+ "design_implications": "- Design fewer styles with more combinations.\n- Use shared fabrics across skirts and jackets to simplify buying and reduce minimums.",
+ "commercial_implications": "- Track the sales-to-inventory ratio by category every week and chase winners rather than buying deep.\n- In the EU, plan for the unsold-goods destruction ban: buy shallower and keep stock that can be reworked or resold.\n- Consider a resale or take-back offer for premium pieces.",
+ "sources": [
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  },
+  {
+   "title": "What to expect in the global fashion industry in 2026",
+   "publisher": "McKinsey & Company",
+   "url": "https://www.mckinsey.com/industries/retail/our-insights/what-to-expect-in-the-global-fashion-industry-in-2026",
+   "date": "2025"
+  }
+ ],
+ "images": [],
+ "related": [
+  "fc-ss27-women-business-strategy-category-opportunities-report",
+  "fc-ss27-women-trims-trim-market-strategy-report"
+ ]
+}

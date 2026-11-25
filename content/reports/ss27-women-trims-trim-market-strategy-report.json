@@ -1,0 +1,62 @@
+{
+ "season": "ss27",
+ "audience": "women",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Shows 10 September to 6 October 2026; Haute Couture, July 2026; Premiere Vision Paris, February 2026; analysis October to November 2026",
+ "markets": "Global: New York, London, Milan, Paris and Copenhagen runways; premium and mid-market womenswear",
+ "kind": "report",
+ "category": "trims",
+ "subsection": "trim-market-strategy",
+ "slug": "trim-market-strategy-report",
+ "title": "SS27 Women's Trim Market Strategy",
+ "summary": "Where to spend on trims in a low-growth, cost-pressured 2027: use trims to refresh core shapes, sell decorative trims as add-ons, and keep labour-heavy embellishment for premium pieces.",
+ "sections": [
+  {
+   "heading": "The market context",
+   "body": "Fashion is expected to stay in low single-digit growth in 2027, and FashionUnited's outlook argues that the question is how much growth will cost<sup>[1]</sup>. Freight, energy and financing costs remain high, and excess stock ties up cash and forces markdowns<sup>[1]</sup>. In the mid-market, promotional pressure and competition from luxury and value players squeeze margins<sup>[1]</sup>. Since 19 July 2026, large companies in the EU may not destroy certain unsold apparel, accessories and footwear<sup>[1]</sup>.\n\nIn that climate, trims are a low-risk way to update a range: they change how a core piece looks without new patterns, new fabrics or new production runs."
+  },
+  {
+   "heading": "Build, test, sell through, exit",
+   "body": "| Action | Trims | Why |\n|---|---|---|\n| Build | Belts, ribbon ties and bows, lace edging | Rising on the runway<sup>[2]</sup><sup>[3]</sup>; low cost; work across price points |\n| Test | Fringe, visible fastenings (Velcro, cross-lacing, sequinned snaps), brooches | Early signals<sup>[2]</sup><sup>[3]</sup><sup>[4]</sup>; higher fashion risk |\n| Sell through | Lingerie lace, crochet trims | At their height; avoid new depth |\n| Premium only | 3D petals, crystal and bead embroidery | Hand labour; cost justified only at higher prices |"
+  },
+  {
+   "heading": "By market",
+   "body": "- **Europe:** with the unsold-goods destruction ban<sup>[1]</sup>, keep trims modular and removable so unsold stock can be reworked.\n- **India and the Gulf:** embroidery, lace and ribbon suit festive and modest dressing; India's economy grew 7.8% year on year in the second quarter of 2026<sup>[1]</sup>.\n- **United States:** belts and add-on accessories support units per transaction where spending growth is modest<sup>[1]</sup>.\n- **Hot-climate markets:** light trims (ribbon, rolled hems) suit single-layer summer clothes."
+  }
+ ],
+ "design_implications": "- Design core pieces with trim positions in mind (belt loops, ribbon channels, removable corsage pins).\n- Standardise trim suppliers across themes to raise order quantities and cut cost.",
+ "commercial_implications": "- Budget trims as a share of the cost price per tier, with hand-applied decoration kept to premium.\n- Track sell-through by trim variant and reorder the winners in season.\n- Price separately sold trims (belts, corsages, brooches) to lift the average basket.",
+ "sources": [
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  },
+  {
+   "title": "Spring/Summer 2027 trends: 10 ideas from Milan and Paris",
+   "publisher": "Wordrobe",
+   "url": "https://wordrobeshop.com/en/spring-summer-2027-trends-milan-paris/",
+   "date": "October 2026"
+  },
+  {
+   "title": "The defining trends and takeaways from the S/S 2027 shows",
+   "publisher": "Wallpaper*",
+   "url": "https://www.wallpaper.com/fashion-beauty/fashion-week-trends-spring-summer-2027",
+   "date": "October 2026"
+  },
+  {
+   "title": "Spring/Summer 2027 fashion trends from the runways",
+   "publisher": "Pham Fashion House",
+   "url": "https://www.phamfashion.com/blog/spring-summer-2027-fashion-trends-runway",
+   "date": "November 2026",
+   "note": "Manufacturer commentary; runway observations and production notes only"
+  }
+ ],
+ "images": [],
+ "related": [
+  "fc-ss27-women-trims-trending-trims-report",
+  "fc-ss27-women-business-strategy-assortment-and-pricing-strategy"
+ ]
+}

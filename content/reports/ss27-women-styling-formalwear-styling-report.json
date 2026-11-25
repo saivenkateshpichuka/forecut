@@ -1,0 +1,60 @@
+{
+ "season": "ss27",
+ "audience": "women",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Shows 10 September to 6 October 2026; Haute Couture, July 2026; Premiere Vision Paris, February 2026; analysis October to November 2026",
+ "markets": "Global: New York, London, Milan, Paris and Copenhagen runways; premium and mid-market womenswear",
+ "kind": "report",
+ "category": "styling",
+ "subsection": "formalwear",
+ "slug": "formalwear-styling-report",
+ "title": "SS27 Women's Formalwear Styling",
+ "summary": "Formal SS27 means the skirt suit, the cinched jacket and tailoring made light: knee-length skirts, peplum jackets, gold with a trench and organza suits for heat.",
+ "sections": [
+  {
+   "heading": "The runway looks",
+   "body": "Chanel's narrow, knee-length skirts in smocked tweed and sheer organza<sup>[1]</sup> and its new tweed suit<sup>[2]</sup> set the tone for formal dressing. Givenchy showed cinched peplum tailoring, trench riffs and woollen overcoats<sup>[1]</sup>; Armani, Gucci and Jil Sander cinched jackets at the waist, and Jil Sander, Tod's and Marni shortened them<sup>[2]</sup>. Saint Laurent paired gold pencil skirts with trench coats<sup>[3]</sup>. For heat, Dior made organza tailoring printed to look like wool suiting<sup>[1]</sup>.\n\nSarah Burton described her Givenchy wardrobe as one \"to bring precision and simplicity to dressing\"<sup>[1]</sup>."
+  },
+  {
+   "heading": "Formulas",
+   "body": "- **Skirt suit.** A cropped, waisted jacket with a matching knee-length straight skirt.\n- **Peplum jacket + slim trouser.** For the office; the waist is defined, the trouser stays straight.\n- **Trench + pencil skirt.** A light trench over a satin or metallic pencil skirt.\n- **Organza suit.** A summer suit in printed or plain organza over a slip, for weddings and day events in heat.\n- **Shirt + full midi skirt + belt.** A poplin shirt tucked into a layered midi skirt, cinched with a leather belt."
+  }
+ ],
+ "design_implications": "- Cut skirt suits as separates sold together, so customers can buy different sizes top and bottom.\n- Use cool wool, double crepe and organza to keep formalwear wearable in summer.\n- Specify linings and finishing carefully: formal pieces are judged on the inside as much as the outside.",
+ "commercial_implications": "- Skirt suits replace part of the trouser-suit buy this season.\n- Offer alteration-friendly seam allowances on skirts and jackets for a better fit at full price.",
+ "sources": [
+  {
+   "title": "The defining trends and takeaways from the S/S 2027 shows",
+   "publisher": "Wallpaper*",
+   "url": "https://www.wallpaper.com/fashion-beauty/fashion-week-trends-spring-summer-2027",
+   "date": "October 2026"
+  },
+  {
+   "title": "Spring/Summer 2027 trends: 10 ideas from Milan and Paris",
+   "publisher": "Wordrobe",
+   "url": "https://wordrobeshop.com/en/spring-summer-2027-trends-milan-paris/",
+   "date": "October 2026"
+  },
+  {
+   "title": "Spring/Summer 2027 fashion trends from the runways",
+   "publisher": "Pham Fashion House",
+   "url": "https://www.phamfashion.com/blog/spring-summer-2027-fashion-trends-runway",
+   "date": "November 2026",
+   "note": "Manufacturer commentary; runway observations and production notes only"
+  }
+ ],
+ "images": [
+  {
+   "file": "cinched-one-button-jackets-ss27-photo",
+   "caption": "Cinched one-button jacket. Forecut visual, not a runway photograph.",
+   "credit": "Forecut",
+   "provenance": "Created for Forecut and supplied through the Forecut image upload on 14 October 2026. Illustrative, not a runway photograph.",
+   "licence": "Forecut image. Tool and licence terms to be confirmed by the owner."
+  }
+ ],
+ "related": [
+  "fc-ss27-women-silhouettes-woven-silhouette-direction",
+  "fc-ss27-women-styling-partywear-styling-report"
+ ]
+}

@@ -1,0 +1,85 @@
+{
+ "season": "ss27",
+ "audience": "women",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Shows 10 September to 6 October 2026; Haute Couture, July 2026; Premiere Vision Paris, February 2026; analysis October to November 2026",
+ "markets": "Global: New York, London, Milan, Paris and Copenhagen runways; premium and mid-market womenswear",
+ "kind": "report",
+ "category": "fabrics",
+ "subsection": "knit",
+ "slug": "knit-fabric-direction",
+ "title": "SS27 Women's Knit Fabric Direction",
+ "summary": "Fine, cool and elastic: extra-fine merino, cool wools and combed mohair for single-layer knits; flat, Derby and Richelieu ribs for close fits; retro-sport stitches and crochet for texture.",
+ "trend_status": "Rising",
+ "sections": [
+  {
+   "heading": "The evidence",
+   "body": "Première Vision's SS27 knit selection set out two families. \"Iconic Sweaterwear\" uses flat, Derby and Richelieu ribs, which are more elastic and elongated than jersey<sup>[1]</sup>. \"Retro Sport\" revives bindings, weighted and reverse stitches, honeycomb piqués, plated knits, diamond stitch and wheat stitch, in slightly yellowed, sepia-like tones<sup>[1]</sup>. Its season overview adds cool wools, extra-fine merino and combed mohairs, and compact milanos for structured pieces<sup>[2]</sup>.\n\nOn the runway, the finest knits did the most work. Louis Vuitton cut tailoring from the lightest knits to be worn as one layer, Hermès showed sheer knits<sup>[3]</sup>, and Chanel's collection included sheer knits<sup>[4]</sup>. Bottega Veneta and Brunello Cucinelli showed crochet and open-stitch knits in oversized cuts<sup>[5]</sup>. Jersey held its share of looks at 12.1%<sup>[6]</sup>."
+  },
+  {
+   "heading": "Fabric by fabric",
+   "body": "| Knit | Structure and hand | Gauge (Forecut guide) | Best uses | Status |\n|---|---|---|---|---|\n| Extra-fine merino | Smooth, cool, light | 16 to 18 gauge | Sheer layers, knit tailoring | Rising |\n| Silk and silk-blend knits | Fluid, slightly sheer | 18 gauge and finer | Single-layer tops and dresses | Rising |\n| Cool wool | Dry, crisp hand | 14 to 16 gauge | Knit jackets, polos | Rising |\n| Combed mohair | Light, airy halo | 5 to 7 gauge, open | Loose cardigans over slips | Emerging |\n| Derby and Richelieu ribs | Elastic, elongated, close-fitting | 12 to 16 gauge | Long rib tops, column dresses | Rising |\n| Honeycomb and retro-sport piqué | Textured, structured | 12 to 14 gauge | Polos, knit shirts | Emerging |\n| Compact milano | Dense, stable | 14 gauge | Structured knit jackets and skirts | Rising |\n| Crochet and open stitch | Open, hand-made look | Varies | Oversized tops, dresses over slips | Peaking |\n| Cotton jersey | Soft, stable | 24 to 28 gauge | T-shirts, layering | Core |"
+  },
+  {
+   "heading": "Why it matters",
+   "body": "Single-layer dressing for heat puts knit in place of the light jacket and shirt. The fibre and gauge decide whether a knit can be worn alone: fine merino and silk blends can, open crochet needs a slip underneath. Rib structures with good recovery also let knits replace darts and seams on fitted tops, which simplifies production."
+  }
+ ],
+ "timing": "In stores February to July 2027. Fine merino and silk-blend knits continue into AW27 as transitional layers. Crochet is at its height and suits the high-summer drop only.",
+ "products": "- Sheer fine-gauge tops and tunics; knit jackets and cardigan-jackets; long rib tops and column dresses; knit polos; crochet tops and dresses.\n- Customers: women who want one piece that works alone in heat; younger customers for crochet and sheer layers.",
+ "design_implications": "- Choose fibre and gauge before the shape; test sheerness on the body under shop lighting.\n- Stabilise shoulders and necklines on open stitches with tape.\n- Specify recovery tests for rib (length growth after wear) in the tech pack.\n- Design sheer knits with a matching under-layer.",
+ "commercial_implications": "- Price fine merino and silk blends at the premium tier; crochet works at entry and mid price in cotton.\n- Plan reorders for rib tops and knit polos, which repeat across seasons; keep crochet as a short run.\n- Sheer knits need clear product photography of what is worn underneath to limit returns.",
+ "sources": [
+  {
+   "title": "Spring-Summer 27 Decodings: Fabrics",
+   "publisher": "Premiere Vision",
+   "url": "https://www.premierevision.com/articles/e620fe9e-3407-f111-8333-000d3a2973d4/spring-summer-27-decodings-fabrics",
+   "date": "13 February 2026"
+  },
+  {
+   "title": "Decoding Spring-Summer 27 key transversal highlights",
+   "publisher": "Premiere Vision",
+   "url": "https://www.premierevision.com/articles/86fffb89-9602-f111-8333-000d3a2973d4/decoding-spring-summer-27-key-transversal-highlights",
+   "date": "5 February 2026"
+  },
+  {
+   "title": "The defining trends and takeaways from the S/S 2027 shows",
+   "publisher": "Wallpaper*",
+   "url": "https://www.wallpaper.com/fashion-beauty/fashion-week-trends-spring-summer-2027",
+   "date": "October 2026"
+  },
+  {
+   "title": "Spring/Summer 2027 trends: 10 ideas from Milan and Paris",
+   "publisher": "Wordrobe",
+   "url": "https://wordrobeshop.com/en/spring-summer-2027-trends-milan-paris/",
+   "date": "October 2026"
+  },
+  {
+   "title": "Goodbye plain knits: five unexpected sweater trends",
+   "publisher": "Grazia (citing Elle)",
+   "url": "https://graziamagazine.com/us/?p=118537",
+   "date": "autumn 2026"
+  },
+  {
+   "title": "Spring 2027 womenswear trends from the runways (SS27), T-Fashion Runway Index",
+   "publisher": "T-Fashion",
+   "url": "https://tfashion.ai/runway/ss27",
+   "date": "data as of 18 October 2026",
+   "note": "Share of looks across 12,320 looks from 359 designers, compared with SS26"
+  }
+ ],
+ "images": [
+  {
+   "file": "sheer-fine-gauge-layers-ss27-photo",
+   "caption": "Sheer fine-gauge layer. Forecut visual, not a runway photograph.",
+   "credit": "Forecut",
+   "provenance": "Created for Forecut and supplied through the Forecut image upload on 14 October 2026. Illustrative, not a runway photograph.",
+   "licence": "Forecut image. Tool and licence terms to be confirmed by the owner."
+  }
+ ],
+ "related": [
+  "fc-ss27-women-silhouettes-knit-shape-and-fit-outlook",
+  "fc-ss27-women-fabrics-woven-fabric-direction"
+ ]
+}

@@ -1,0 +1,72 @@
+{
+ "season": "ss27",
+ "audience": "women",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Shows 10 September to 6 October 2026; Haute Couture, July 2026; Premiere Vision Paris, February 2026; analysis October to November 2026",
+ "markets": "Global: New York, London, Milan, Paris and Copenhagen runways; premium and mid-market womenswear",
+ "kind": "report",
+ "category": "colours",
+ "subsection": "colour-stories",
+ "slug": "colour-stories-report",
+ "title": "SS27 Women's Colour Stories",
+ "summary": "Four colour stories for the SS27 womenswear range: Purple Reign for dresses and knits, Full Colour for statement tailoring, Sun-Faded for linen and shirting, and Living Green for swim and summer knits.",
+ "sections": [
+  {
+   "heading": "Purple Reign",
+   "body": "**Lilac 15-3720 TCX, violet 19-3642 TCX, butter 12-0711 TCX, optic white 11-0602 TCX.**\n\nThe lead story for women. Lilac appeared at Chanel, royal purple at Miu Miu and violet across Milan<sup>[1]</sup>; on the red carpet, Demi Moore wore custom red and lilac Gucci at Cannes<sup>[2]</sup>. Use lilac for day dresses, knitwear and shirts, violet for satin and evening, and butter as a soft companion rather than a contrast."
+  },
+  {
+   "heading": "Full Colour",
+   "body": "**True red 18-1763 TCX, Klein blue 18-3949 TCX, lemon 12-0642 TCX, midnight 19-3933 TCX.**\n\nChanel, Balenciaga and Celine paired canary yellow, true red and cobalt in strong blocks<sup>[1]</sup>, and Céline, Akris and Stella McCartney dressed head to toe in a single colour<sup>[1]</sup>. \"Colour confidence\" was also one of the trends of the Cannes red carpet, with Simone Ashley and Isabelle Huppert in red<sup>[2]</sup>. Use this story on tailoring, coats and statement dresses, one colour per look or two colours in large blocks."
+  },
+  {
+   "heading": "Sun-Faded",
+   "body": "**Optic white 11-0602 TCX, sand 13-1009 TCX, tobacco 18-1028 TCX, ice blue 12-4805 TCX.**\n\nWhite is the rising neutral of SS27, up from 23.7% to 28.4% of looks, with ecru also gaining<sup>[3]</sup>. \"'90s minimalism\" in pristine white gowns was another Cannes trend<sup>[2]</sup>. This story carries linen tailoring, shirting and the sheer layers of the One-Layer Summer theme."
+  },
+  {
+   "heading": "Living Green",
+   "body": "**Grass green 16-0237 TCX, teal 17-5117 TCX, sand 13-1009 TCX, butter 12-0711 TCX.**\n\nA smaller story for swim, summer knits and prints. It suits holiday and resort drops and markets with long, hot summers."
+  },
+  {
+   "heading": "Where the stories come from",
+   "body": "These four stories are Forecut's SS27 colour stories<sup>[4]</sup>, applied here to womenswear products. The same stories are used across audiences with different products; this page sets out how they work for women."
+  }
+ ],
+ "design_implications": "- Give each story its own delivery or capsule, so colours do not fight on the shop floor.\n- Purple Reign and Sun-Faded mix well (lilac with white); Full Colour works best on its own.\n- Match trims to the story: tonal buttons and lace for Purple Reign, contrast piping for Full Colour, natural horn and shell for Sun-Faded.",
+ "commercial_implications": "- Lead the season with Purple Reign and Sun-Faded; they carry most of the volume.\n- Buy Full Colour as statements: more styles, fewer units each.\n- Use Living Green for the high-summer and holiday drop.",
+ "sources": [
+  {
+   "title": "Spring/Summer 2027 fashion trends from the runways",
+   "publisher": "Pham Fashion House",
+   "url": "https://www.phamfashion.com/blog/spring-summer-2027-fashion-trends-runway",
+   "date": "November 2026",
+   "note": "Manufacturer commentary; runway observations and production notes only"
+  },
+  {
+   "title": "5 trends we spotted on the Cannes red carpet",
+   "publisher": "NET-A-PORTER, Porter",
+   "url": "https://www.net-a-porter.com/en-gb/porter/article-0c53a186fd183827/fashion/art-of-style/cannes-film-festival-2026",
+   "date": "May 2026"
+  },
+  {
+   "title": "Spring 2027 womenswear trends from the runways (SS27), T-Fashion Runway Index",
+   "publisher": "T-Fashion",
+   "url": "https://tfashion.ai/runway/ss27",
+   "date": "data as of 18 October 2026",
+   "note": "Share of looks across 12,320 looks from 359 designers, compared with SS26"
+  },
+  {
+   "title": "Forecut SS27 colour forecast: method and sources",
+   "publisher": "Forecut",
+   "url": "https://forecut.in/forecasts/ss27/colours/colour-forecast/",
+   "date": "November 2026",
+   "note": "Built from Refinery29, T-Fashion colour shares, The Impression and Premiere Vision key colours"
+  }
+ ],
+ "images": [],
+ "related": [
+  "fc-ss27-women-colours-season-colour-analysis",
+  "fc-ss27-colours-colour-forecast"
+ ]
+}

@@ -1,0 +1,79 @@
+{
+ "season": "ss27",
+ "audience": "women",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Shows 10 September to 6 October 2026; Haute Couture, July 2026; Premiere Vision Paris, February 2026; analysis October to November 2026",
+ "markets": "Global: New York, London, Milan, Paris and Copenhagen runways; premium and mid-market womenswear",
+ "kind": "report",
+ "category": "trims",
+ "subsection": "trim-stories",
+ "slug": "trim-stories-report",
+ "title": "SS27 Women's Trim Stories",
+ "summary": "The trims that carry each SS27 women's theme: ribbon and rolled hems for One-Layer Summer, lace and satin bows for Lingerie as Outerwear, belts and peplum seams for The Waist Returns, and lace, smocking and embroidery for Handcraft.",
+ "sections": [
+  {
+   "heading": "One-Layer Summer",
+   "body": "Narrow rolled hems and French seams keep sheer cloth clean<sup>[1]</sup>; ribbon binding replaces facings; organza petals, as at Dior, give decoration without weight<sup>[2]</sup>. Hardware stays minimal so a look still reads as one layer."
+  },
+  {
+   "heading": "Lingerie as Outerwear",
+   "body": "Lace trims, satin bows and adjustable straps, with hook-and-eye and visible lingerie fastenings. Fendi showed lace-trimmed bras with a fur stole<sup>[2]</sup>; Première Vision highlighted dark Leavers lace and lace with a melted-film sheen<sup>[3]</sup>. Bra tops need lingerie components: firm elastic top edges and adjustable sliders."
+  },
+  {
+   "heading": "The Waist Returns",
+   "body": "Belts carry the waist story: Anteprima, Ferragamo, Alberta Ferretti and Ermanno Scervino cinched fluid pieces, Bottega Veneta and Max Mara used leather belts, and Ferragamo enlarged belts and covered snap buttons in sequins<sup>[4]</sup>. Add peplum seams, basque-waist panels and belt loops."
+  },
+  {
+   "heading": "Handcraft",
+   "body": "Lace flowers, smocking and embroidery on poplin and knits. Première Vision's \"Drawn\" embroidery direction, with scattered, childlike florals and grass stems on tulle and gauze<sup>[3]</sup>, and Chanel's corsages<sup>[2]</sup> point the way."
+  },
+  {
+   "heading": "In Motion",
+   "body": "Fringe and tassels: Roksanda showed tasselled evening dresses and Ahluwalia fringed skirts, and fringe was a fast-rising detail in Copenhagen<sup>[1]</sup>. Use fringe at hems and on scarves where movement shows it."
+  }
+ ],
+ "design_implications": "- Choose one trim family per theme and use it consistently across the theme's pieces.\n- Lab-dip trims to the garment colour; lace and ribbon in particular vary by dye lot.\n- Test attachment strength and washing for petals, beads and fringe.",
+ "commercial_implications": "- Trims are the cheapest way to make core shapes read as a theme; plan one core skirt or shirt in several theme trims.\n- Sell belts, corsages and bows separately as add-ons.",
+ "sources": [
+  {
+   "title": "Spring/Summer 2027 fashion trends from the runways",
+   "publisher": "Pham Fashion House",
+   "url": "https://www.phamfashion.com/blog/spring-summer-2027-fashion-trends-runway",
+   "date": "November 2026",
+   "note": "Manufacturer commentary; runway observations and production notes only"
+  },
+  {
+   "title": "The defining trends and takeaways from the S/S 2027 shows",
+   "publisher": "Wallpaper*",
+   "url": "https://www.wallpaper.com/fashion-beauty/fashion-week-trends-spring-summer-2027",
+   "date": "October 2026"
+  },
+  {
+   "title": "Spring-Summer 27 Decodings: Decoration",
+   "publisher": "Premiere Vision",
+   "url": "https://www.premierevision.com/articles/fd62f60f-4c07-f111-8333-000d3a2973d4/spring-summer-27-decodings-decoration",
+   "date": "February 2026"
+  },
+  {
+   "title": "Spring/Summer 2027 trends: 10 ideas from Milan and Paris",
+   "publisher": "Wordrobe",
+   "url": "https://wordrobeshop.com/en/spring-summer-2027-trends-milan-paris/",
+   "date": "October 2026"
+  }
+ ],
+ "images": [
+  {
+   "file": "lace-trimmed-hems-ss27-photo",
+   "caption": "Lace-trimmed hem. Forecut visual, not a runway photograph.",
+   "credit": "Forecut",
+   "provenance": "Created for Forecut and supplied through the Forecut image upload on 14 October 2026. Illustrative, not a runway photograph.",
+   "licence": "Forecut image. Tool and licence terms to be confirmed by the owner."
+  }
+ ],
+ "related": [
+  "fc-ss27-women-trims-trending-trims-report",
+  "fc-ss27-women-themes-one-layer-summer",
+  "fc-ss27-women-themes-lingerie-as-outerwear"
+ ]
+}

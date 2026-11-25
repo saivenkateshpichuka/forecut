@@ -1,0 +1,75 @@
+{
+ "season": "ss27",
+ "audience": "women",
+ "status": "published",
+ "published": "2026-11-25",
+ "research_period": "Shows 10 September to 6 October 2026; Haute Couture, July 2026; Premiere Vision Paris, February 2026; analysis October to November 2026",
+ "markets": "Global: New York, London, Milan, Paris and Copenhagen runways; premium and mid-market womenswear",
+ "kind": "report",
+ "category": "styling",
+ "subsection": "celebrity-influence",
+ "slug": "celebrity-influence-report",
+ "title": "SS27 Women's Celebrity Influence",
+ "summary": "The 2026 red carpets previewed SS27: sheer gowns, strong colour, dark romance, '90s white minimalism and feathers. This is how those looks reach the SS27 customer.",
+ "sections": [
+  {
+   "heading": "What the red carpet showed",
+   "body": "At Cannes in May 2026, NET-A-PORTER's editors identified five red-carpet trends<sup>[1]</sup>:\n\n- **Sheer beauty.** Despite the festival's dress code, Natasha Poly wore a see-through georgette and pleated satin Ferragamo gown, and Chloé Zhao a pointelle-knit gown from Gabriela Hearst<sup>[1]</sup>.\n- **Colour confidence.** Demi Moore wore custom red and lilac Gucci, and Simone Ashley and Isabelle Huppert wore vintage red McQueen and Gucci<sup>[1]</sup>.\n- **Dark romance.** Black gowns with ruffles, velvet and lace on Ruth Negga, Cate Blanchett and Cara and Poppy Delevingne; Negga's custom Saint Laurent combined a guipure lace bodice with a tulle peplum<sup>[1]</sup>.\n- **'90s minimalism.** Pristine white gowns with clean, minimal shapes<sup>[1]</sup>.\n- **Feathers.** Some of the most talked-about looks of the festival<sup>[1]</sup>.\n\nAt Paris Haute Couture Week in July, Demi Moore and Cynthia Erivo attended Pierpaolo Piccioli's Balenciaga debut, which closed with Gigi Hadid<sup>[2]</sup>."
+  },
+  {
+   "heading": "How it connects to SS27",
+   "body": "Each red-carpet trend has a direct SS27 runway counterpart: sheer gowns and the sheer suits of Dior and Louis Vuitton<sup>[3]</sup>; red and lilac and the season's purple and primary blocks<sup>[4]</sup>; dark romance and the dark lace of Première Vision's decoration report<sup>[5]</sup>; white minimalism and the rise of white to 28.4% of SS27 looks<sup>[6]</sup>. Red-carpet exposure months before delivery is why these ideas are likely to sell when they reach stores in spring 2027 (Forecut assessment)."
+  },
+  {
+   "heading": "Looks to build",
+   "body": "- **The sheer column:** a sheer knit or georgette column dress over a slip, with flat sandals for day.\n- **Red head to toe:** a red satin skirt with a red knit or shirt.\n- **Lilac evening:** a lilac satin slip dress with a cropped jacket.\n- **White minimal:** a white bias-cut dress or a white suit with no visible trims.\n- **Dark romance for day:** a black lace-trimmed slip skirt with a white shirt."
+  }
+ ],
+ "design_implications": "- Translate red-carpet ideas into day weights: georgette and fine knit instead of beaded tulle.\n- Keep the celebrity idea in one element (colour, sheerness, lace) and simplify the rest.",
+ "commercial_implications": "- Time marketing to the 2027 awards and festival calendar, when the same ideas return to the red carpet.\n- Sheer and occasion pieces sell close to events; plan smaller, later deliveries for them.\n- Avoid licensing or naming celebrities in product marketing without agreements.",
+ "sources": [
+  {
+   "title": "5 trends we spotted on the Cannes red carpet",
+   "publisher": "NET-A-PORTER, Porter",
+   "url": "https://www.net-a-porter.com/en-gb/porter/article-0c53a186fd183827/fashion/art-of-style/cannes-film-festival-2026",
+   "date": "May 2026"
+  },
+  {
+   "title": "Bare skin, fantasy and the machine: 3 takeaways from Paris' starry couture week",
+   "publisher": "Associated Press",
+   "url": "https://www.clickondetroit.com/entertainment/2026/07/09/bare-skin-fantasy-and-the-machine-3-takeaways-from-paris-starry-couture-week/",
+   "date": "9 July 2026"
+  },
+  {
+   "title": "Spring/Summer 2027 trends: 10 ideas from Milan and Paris",
+   "publisher": "Wordrobe",
+   "url": "https://wordrobeshop.com/en/spring-summer-2027-trends-milan-paris/",
+   "date": "October 2026"
+  },
+  {
+   "title": "Spring/Summer 2027 fashion trends from the runways",
+   "publisher": "Pham Fashion House",
+   "url": "https://www.phamfashion.com/blog/spring-summer-2027-fashion-trends-runway",
+   "date": "November 2026",
+   "note": "Manufacturer commentary; runway observations and production notes only"
+  },
+  {
+   "title": "Spring-Summer 27 Decodings: Decoration",
+   "publisher": "Premiere Vision",
+   "url": "https://www.premierevision.com/articles/fd62f60f-4c07-f111-8333-000d3a2973d4/spring-summer-27-decodings-decoration",
+   "date": "February 2026"
+  },
+  {
+   "title": "Spring 2027 womenswear trends from the runways (SS27), T-Fashion Runway Index",
+   "publisher": "T-Fashion",
+   "url": "https://tfashion.ai/runway/ss27",
+   "date": "data as of 18 October 2026",
+   "note": "Share of looks across 12,320 looks from 359 designers, compared with SS26"
+  }
+ ],
+ "images": [],
+ "related": [
+  "fc-ss27-women-styling-partywear-styling-report",
+  "fc-ss27-women-colours-season-colour-analysis"
+ ]
+}
