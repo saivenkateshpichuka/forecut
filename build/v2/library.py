@@ -346,6 +346,12 @@ def build(V, pages):
             if r.get('status') == 'published' and r.get('season') in S:
                 import reports_render as RR
                 r.setdefault('slug', os.path.splitext(f)[0])
+                # an image uploaded under the name given in the image prompt list is attached automatically
+                gen = f"{r['season']}-{r['audience']}-{r['category']}-{r['slug']}"
+                if not r.get('images') and os.path.isfile(os.path.join(ROOT, 'img', gen + '.webp')):
+                    r['images'] = [{'file': gen, 'caption': r['title'] + '. Forecut generated image, not a photograph of a real collection.',
+                                    'credit': 'Forecut', 'provenance': 'Created with ChatGPT image generation (OpenAI) and edited by Forecut.',
+                                    'licence': 'Forecut image. Generated under the image tool\'s terms of use.'}]
                 it, html = RR.render(V, r, vstore, today)
                 newp[key_of(it['url'])] = html
                 items.append(it)
@@ -406,7 +412,8 @@ def thumb_card(V, href, title, sub, img, colour, live=True, extra=''):
 
 def cat_thumb(V, s, aud, c, items, n):
     own = own_items(items, s, aud, c['id'])
-    img = next((i['img'] for i in own if i.get('img')), None)
+    tile = f'{s}-{aud}-{c["id"]}-tile'
+    img = ('/img/' + tile + '.webp') if os.path.isfile(os.path.join(ROOT, 'img', tile + '.webp')) else next((i['img'] for i in own if i.get('img')), None)
     title = f'{V.META[s]["code"]} {AUD[aud]["possessive"]} {c["name"]}'
     sub = 'Reports available' if own else 'In preparation'
     return thumb_card(V, url(s, aud, c['id']), title, sub, img, tile_colour(V, s, aud, n), extra=f' data-aud="{aud}" data-cat="{c["id"]}"')
