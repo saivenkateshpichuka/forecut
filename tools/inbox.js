@@ -35,7 +35,7 @@
     var h = '<h2>From Forecut forecasts</h2><p class="fi-sub">Findings you sent from the forecast pages. Each keeps its season, audience and report title.</p><ul>';
     L.slice(0, 30).forEach(function (x) {
       h += '<li data-id="' + esc(x.id) + '"><span><b>' + esc(x.n) + '</b>' + (x.st ? ' <span class="fi-src" style="display:inline">(' + esc(ST[x.st] || x.st) + ')</span>' : '') +
-        '<span class="fi-src">' + esc(x.season + ' ' + x.aud) + ', <a href="' + esc(x.url) + '">' + esc(x.src) + '</a></span></span><span class="fi-act">' +
+        '<span class="fi-src">' + esc(x.season + ' ' + x.aud) + ', <a href="' + esc(x.url) + '">' + esc(x.src) + '</a>' + (x.cv ? ' (version ' + esc(x.cv) + ')' : '') + '</span></span><span class="fi-act">' +
         (tool === 'rangeboard' ? '<button class="pr" data-fi="plan">Add as style</button>' : '<button class="pr" data-fi="board">Add to board</button><button data-fi="brief">Use in style brief</button>') +
         '<button class="x" data-fi="drop">Dismiss</button></span></li>';
     });

@@ -1,0 +1,61 @@
+# Forecut content manager (Sveltia CMS). Access: GitHub sign-in; only accounts with write access to the repository can save.
+# Setup (owner, once): create a GitHub OAuth app and deploy the sveltia-cms-auth worker on Cloudflare, then put its URL in base_url.
+# Keys and secrets go in the Cloudflare worker settings, never in this file.
+backend:
+  name: github
+  repo: saivenkateshpichuka/forecut
+  branch: dev
+  # base_url: https://<your-auth-worker>.workers.dev
+media_folder: images
+public_folder: /img
+collections:
+  - name: settings
+    label: Publishing settings
+    files:
+      - name: settings
+        label: Seasons, featured year, audiences, categories
+        file: content/settings.json
+        format: json
+        fields:
+          - {name: featured_year, label: Featured year, widget: number, value_type: int, hint: "Seasons of this year lead the Forecasts page. Change to 2028 when 2027 ends."}
+          - name: seasons
+            label: Seasons
+            widget: list
+            fields:
+              - {name: id, label: Season code (e.g. ss29), widget: string}
+              - {name: status, label: Status, widget: select, options: [draft, published, archive], hint: "Only published and archive seasons appear. Publish a season only when it has reviewed content."}
+              - {name: note, label: Note, widget: string, required: false}
+          - {name: audiences, label: Audiences, widget: list, fields: [{name: id, widget: string}, {name: name, widget: string}, {name: possessive, widget: string}, {name: note, widget: string}]}
+          - {name: categories, label: Categories, widget: list, fields: [{name: id, widget: string}, {name: name, widget: string}, {name: about, widget: text}, {name: subsections, widget: list, fields: [{name: id, widget: string}, {name: name, widget: string}]}]}
+  - name: reports
+    label: Forecast reports and themes
+    folder: content/reports
+    format: json
+    create: true
+    identifier_field: title
+    slug: "{{fields.season}}-{{fields.audience}}-{{fields.category}}-{{slug}}"
+    summary: "{{season}} {{audience}} {{category}}: {{title}} ({{status}})"
+    fields:
+      - {name: kind, label: Type, widget: select, options: [report, theme]}
+      - {name: status, label: Status, widget: select, options: [draft, review, scheduled, published, updated, archived], default: draft}
+      - {name: publish_on, label: Publish on (for scheduled), widget: datetime, required: false}
+      - {name: season, label: Season, widget: string, hint: "e.g. ss27"}
+      - {name: audience, label: Audience, widget: select, options: [men, women, kids, boys, girls, toddler-boys, toddler-girls, all]}
+      - {name: also_for, label: Also link from (for shared research), widget: select, multiple: true, required: false, options: [men, women, kids, boys, girls, toddler-boys, toddler-girls]}
+      - {name: category, label: Category, widget: select, options: [themes, colours, silhouettes, fabrics, trims, styling, couture, business-strategy, innovations]}
+      - {name: subsection, label: Subsection, widget: string, hint: "e.g. woven, knit, season-colours, trending-trims, celebrity, reports"}
+      - {name: title, label: Title, widget: string, hint: "Describe the actual subject, e.g. SS27 Women's Woven Silhouette Direction"}
+      - {name: slug, label: Address name, widget: string}
+      - {name: summary, label: Short summary, widget: text}
+      - {name: research_period, label: Research period, widget: string}
+      - {name: markets, label: Market or geography, widget: string}
+      - {name: timing, label: Expected timing, widget: text, required: false}
+      - {name: trend_status, label: Trend status, widget: select, required: false, options: [Emerging, Rising, Peaking, Fading, Core Classic]}
+      - {name: sections, label: Analysis, widget: list, fields: [{name: heading, widget: string}, {name: body, widget: markdown}]}
+      - {name: design_implications, label: Design implications, widget: markdown}
+      - {name: commercial_implications, label: Commercial implications, widget: markdown}
+      - {name: products, label: Relevant products and customers, widget: markdown, required: false}
+      - {name: sources, label: Evidence and sources, widget: list, fields: [{name: title, widget: string}, {name: publisher, widget: string}, {name: url, widget: string}, {name: date, widget: string}, {name: note, widget: string, required: false}]}
+      - {name: images, label: Images, widget: list, required: false, fields: [{name: file, widget: image}, {name: caption, widget: string}, {name: credit, widget: string}, {name: provenance, widget: string}, {name: licence, widget: string}]}
+      - {name: related, label: Related content IDs, widget: list, required: false, field: {name: id, widget: string}}
+      - {name: version_note, label: What changed in this version, widget: string, required: false}

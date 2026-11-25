@@ -1,0 +1,3881 @@
+{
+ "fc-aw26-themes-season-themes": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "cbe542fccf5a5466",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-themes-roaring-twenties": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "99346157f6b905b8",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-themes-power-tailoring": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "52a3db279d86ed28",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-themes-preppy-sport": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "bfb3450a53df9b8a",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-themes-big-outerwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "23db8ab6d400a7af",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-themes-fully-loaded": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "c2d7391cc9983fdf",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-colours-colour-forecast": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "28367787732ceb2f",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-women-colours-womenswear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "34fd150cd5fcd3d3",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-men-colours-menswear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "0472611edac70766",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-kids-colours-kidswear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "eb3e6c1a90ad0034",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-colours-footwear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "2cf037f63a00abda",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-colours-dark-matter": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "8f5d9ccfb674f727",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-colours-old-masters": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "8c79776a6b1a34ed",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-colours-hot-spots": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "af73b20406064283",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-colours-colour-chocolate": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "e4c388ccae15e274",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-colours-colour-charcoal": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "3093376d67abca4b",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-colours-colour-midnight": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "b082d43c29723801",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-colours-colour-cloud-white": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "44c25bd281c33ded",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-colours-colour-plum": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "f352bcce16cfd22f",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-colours-colour-moss": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "e2f090e43585136c",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-colours-colour-tomato-red": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "09bb1a1b2b25c7f0",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-colours-colour-mustard": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "a8e37a5611ff067e",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-colours-colour-cobalt": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "e488a37c6d37ae1d",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-colours-colour-bubblegum": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "c24d8f4101731c9b",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-women-silhouettes-womenswear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "179e83e3dcfdf82c",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-women-silhouettes-coats-jackets": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "a200966559a10b0b",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-women-silhouettes-dresses": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "cd6a2960230ebbaa",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-women-silhouettes-tops-shirts": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "01d3eb28f696e91a",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-women-silhouettes-knitwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "5e8386d065f5b9d5",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-women-silhouettes-trousers-skirts": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "7e4dd4d5187cbbb3",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-women-silhouettes-denim": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "c172f0929a7fd212",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-women-silhouettes-tailoring": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "bbfee767cc34f417",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-men-silhouettes-menswear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "8987e712fc3a8656",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-men-silhouettes-outerwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "75c28185ee07292a",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-men-silhouettes-shirts-polos": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "8de430828bed65fa",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-men-silhouettes-knitwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "7e4b745bd469a49c",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-men-silhouettes-tailoring": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "befa8cccfa42d860",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-men-silhouettes-trousers": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "34f29caf3cf8fb72",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-silhouettes-footwear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "dd193f60e075f2de",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-women-silhouettes-heels-flats": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "46235479dd94464a",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-women-silhouettes-boots": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "6a4b7aa10f9431a6",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-men-silhouettes-mens-shoes": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "f08ad41070d65084",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-silhouettes-sneakers-casual": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "44da644d33a4b91b",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-silhouettes-knitwear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "25b4751a838ff606",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-fabrics-fabrics-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "30da23440f4426ca",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-fabrics-fabrics-and-materials": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "493227a4c680d7bb",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-fabrics-finishes-and-washes": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "0b379f8b7e714697",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-fabrics-prints-and-patterns": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "247332e49e564fff",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-fabrics-texture": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "07ea56194c6fec1d",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-trims-trims-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "c2c62ed5bb602a6e",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-trims-collars-and-necklines": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "c749b84369d968c6",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-trims-closures-and-hardware": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "e2644a13c9421193",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-trims-pockets": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "59a1fc247822a9fc",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-trims-seams-hems-and-pleats": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "2c15be1285494d83",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-trims-trims-and-embellishment": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "3c839c834483b2f8",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw26-trims-cuffs-straps-and-linings": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "966ecf883a114666",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-themes-season-themes": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "50f2931cc1964ef0",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-themes-the-waist-returns": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "188ee16c681b9b70",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-themes-handcraft": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "0b21f78db2b7a1f5",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-themes-undone": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "18a430c03c0042b1",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-themes-in-motion": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "5f82622177d9a3cd",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-themes-elegant-ease": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "a28a772fb99f32e2",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-themes-reworked-denim": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "75232276ef225c6e",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-colours-colour-forecast": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "24f99c49fd378a78",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-colours-womenswear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "dbe0f40801ea88a9",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-men-colours-menswear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "36880e05ce830194",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-kids-colours-kidswear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "f4eee02e051aff29",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-colours-footwear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "7f055351602e07f1",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-colours-sun-faded": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "6df553d7d26894dc",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-colours-purple-reign": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "15d34a6492d41ed2",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-colours-full-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "77fd4c1c14233f70",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-colours-living-green": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "cb543ca918479286",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-colours-colour-optic-white": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "2712f99e2cc50018",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-colours-colour-sand": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "46b771330fbb40ad",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-colours-colour-tobacco": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "1861853f179983fd",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-colours-colour-midnight": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "f31f9153f2606520",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-colours-colour-lilac": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "7d1722a9596769b2",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-colours-colour-violet": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "b273ee5ac3a0e653",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-colours-colour-true-red": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "ca5e21c19456fa84",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-colours-colour-butter": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "bee94af8612e7be9",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-colours-colour-klein-blue": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "3194ea95b5908c02",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-colours-colour-grass-green": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "fb9e8287e3769d36",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-silhouettes-womenswear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "1a7d12f16713839f",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-silhouettes-coats-jackets": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "5387a0ba01b91f3d",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-silhouettes-dresses": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "3fd7c385e435f4d2",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-silhouettes-tops-shirts": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "1e14e4b78dc7755d",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-silhouettes-knitwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "3ecef3f00f97b04f",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-silhouettes-trousers-skirts": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "10643cfa69f6be50",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-silhouettes-denim": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "ef81215150a7be84",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-silhouettes-tailoring": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "e298c786e72e263a",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-men-silhouettes-menswear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "f497f12027c086ea",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-men-silhouettes-outerwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "96c96d26838a538b",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-men-silhouettes-shirts-polos": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "4f6a476a0fb27a2e",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-men-silhouettes-knitwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "f5ce9979d9c31631",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-men-silhouettes-tailoring": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "117522b886325314",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-men-silhouettes-trousers": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "ff8cf2e8cbaea33b",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-silhouettes-footwear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "d4eee0caf8c352dd",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-silhouettes-heels-flats": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "235bfd3465b6c38f",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-women-silhouettes-boots": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "cf99301a1d431731",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-men-silhouettes-mens-shoes": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "4b90ce41eb93d04e",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-silhouettes-sneakers-casual": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "fc8c07b40572dfb2",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-silhouettes-knitwear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "d777c89cc5ac5675",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-fabrics-fabrics-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "043c337973a7b422",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-fabrics-fabrics-and-materials": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "60d2734eb0d201a8",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-fabrics-finishes-and-washes": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "b0c16c0e2e69c79d",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-fabrics-prints-and-patterns": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "47da9ef52e23b207",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-fabrics-texture": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "5749ab211d22f6f5",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-trims-trims-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "98771176a8d4413e",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-trims-collars-and-necklines": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "4f8f4f94a5b55985",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-trims-closures-and-hardware": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "7f8aae201285e030",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-trims-pockets": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "719a04235775e76f",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-trims-seams-hems-and-pleats": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "c6ed3e27562f7ec1",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-trims-trims-and-embellishment": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "bc8651b23c6fb00d",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss27-trims-cuffs-straps-and-linings": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "26740a55340f7b74",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-themes-season-themes": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "a73d0861d782ae6e",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-themes-waisted-outerwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "1eab3f228451d3bf",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-themes-winter-handcraft": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "f43e208955e877dd",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-themes-quiet-structure": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "f8d376e7578bac29",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-themes-deep-blue": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "ec5a5c72e54b09b3",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-themes-soft-boots": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "dc6291893d615bfe",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-colours-colour-forecast": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "74d21c5626330f36",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-women-colours-womenswear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "4e5d908077e2c6a8",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-men-colours-menswear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "9a810e621cbeceeb",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-kids-colours-kidswear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "5131ddf6a9602763",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-colours-footwear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "b43ed596764b94fb",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-colours-painted-by-time": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "3207dc2082fcd510",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-colours-new-neutrals": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "0419247c9757f98d",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-colours-pink-for-all": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "ea496c3a3a01ef81",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-colours-living-green": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "e337c03444b21cab",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-colours-colour-tinted-black": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "f6af609a3a268f1a",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-colours-colour-mushroom": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "ef2bdd685aae6a1e",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-colours-colour-greyed-blue": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "7cb66be9b0437f16",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-colours-colour-copper-khaki": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "e99e8f732149a3c7",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-colours-colour-deep-violet": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "5f3bd3e4c8dececb",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-colours-colour-tannic-bordeaux": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "aa4e5cf01b4290d0",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-colours-colour-dusty-mauve": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "841bfb2b8ae9d942",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-colours-colour-waxy-ochre": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "63070bf157e37a01",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-colours-colour-sage": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "9640ab1fe63d43f1",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-colours-colour-silicone-pink": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "3e7fc350508715a5",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-women-silhouettes-womenswear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "2dc9ae81a278b63a",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-women-silhouettes-coats-jackets": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "57a4d7ee8ea3e3c5",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-women-silhouettes-dresses": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "e63166ba7118d2b5",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-women-silhouettes-tops-shirts": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "3b5db8a731479fe8",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-women-silhouettes-knitwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "89c3f3f793bbadfb",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-women-silhouettes-trousers-skirts": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "aa6825b0c110c07f",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-women-silhouettes-denim": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "81b93f782f9f0d29",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-women-silhouettes-tailoring": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "37ecc3dfe49bc564",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-men-silhouettes-menswear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "dac1195322ecd5fe",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-men-silhouettes-outerwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "909cd7ecdc8d4f37",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-men-silhouettes-shirts-polos": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "7173b2cb319d9931",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-men-silhouettes-knitwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "8c8eb1770512cf7a",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-men-silhouettes-tailoring": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "6959d7e5fa8469a6",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-men-silhouettes-trousers": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "960d56893839c6e0",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-silhouettes-footwear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "5d2cf827c6abbf3e",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-women-silhouettes-heels-flats": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "ed99f38a59c2cebc",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-women-silhouettes-boots": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "7e25bfd78e8388d1",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-men-silhouettes-mens-shoes": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "17dcac603e4d21db",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-silhouettes-sneakers-casual": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "baf74d76173a32e4",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-silhouettes-knitwear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "f4a4c23406bd0046",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-fabrics-fabrics-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "045bc84167295337",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-fabrics-fabrics-and-materials": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "6590331a27c275dd",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-fabrics-finishes-and-washes": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "e4819407310f025f",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-fabrics-prints-and-patterns": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "244a4902e723902e",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-fabrics-texture": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "3fbd31c3884a4dae",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-trims-trims-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "6143bdd28c000f06",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-trims-collars-and-necklines": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "89440eea830ad8c3",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-trims-closures-and-hardware": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "0ffa5aa8472f6926",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-trims-pockets": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "16e39f75dc8138ab",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-trims-seams-hems-and-pleats": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "609697582407093a",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-trims-trims-and-embellishment": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "35b5c2cba0cab678",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw27-trims-cuffs-straps-and-linings": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "895fa79249f04e14",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-themes-season-themes": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "c52488fed6a8c785",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-themes-structured-clarity": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "3a40a2608df903fd",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-themes-performance-ease": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "e2a002bf066eaadb",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-themes-commuter-tailoring": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "b88f15762f568840",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-themes-natural-tech": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "595d50f68864a805",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-themes-sport-meets-smart": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "d84b90ff91f87ac7",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-colours-colour-forecast": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "bbee6866be4498b8",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-women-colours-womenswear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "e8f26dce14763691",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-men-colours-menswear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "e6f8112baf2cafca",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-kids-colours-kidswear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "75e85a5a4d12dc6d",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-colours-footwear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "a40833d5f84a0f2e",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-colours-blue-hour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "24bbb6a8f9671131",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-colours-atmosphere": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "0e39cc7523321c74",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-colours-vegetal": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "e075362e0c7c5293",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-colours-after-dusk": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "230a59b213dffc4c",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-colours-colour-bleached-linen": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "e1868cecefc866b7",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-colours-colour-straw": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "0a66e5c77832351d",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-colours-colour-inky-blue": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "62048135e0e495a2",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-colours-colour-khaki-green": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "f4ee1ee4de3fb024",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-colours-colour-royal-blue": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "26c98d778b717e3a",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-colours-colour-sonar-turquoise": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "29c180344a99b072",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-colours-colour-greyish-mauve": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "2f45ee2a60c870b8",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-colours-colour-magnetic-violet": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "0b4df117127e1515",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-colours-colour-peach": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "ae3b00bf5fad0f3d",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-colours-colour-acid-lemon": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "32a7e970e73d6a08",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-women-silhouettes-womenswear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "9b87ec65e4cf746a",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-women-silhouettes-coats-jackets": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "d747f956ed464497",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-women-silhouettes-dresses": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "349b731524665e22",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-women-silhouettes-tops-shirts": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "d2653a9b7d72f868",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-women-silhouettes-knitwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "0193e87fcc7f1112",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-women-silhouettes-trousers-skirts": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "f0c72cc50e3ecaf5",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-women-silhouettes-denim": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "7d29cc82578daf66",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-women-silhouettes-tailoring": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "adf205febafdca0e",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-men-silhouettes-menswear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "8736c8144c6c7ef5",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-men-silhouettes-outerwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "e312b21cdcaef664",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-men-silhouettes-shirts-polos": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "41a9c93ad91be4c1",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-men-silhouettes-knitwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "33080b509d95880a",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-men-silhouettes-tailoring": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "9b2831328b726f1d",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-men-silhouettes-trousers": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "f26cda9ea0df4bec",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-silhouettes-footwear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "81f21fe3ee3ac525",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-women-silhouettes-heels-flats": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "5d15cf951b6ed120",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-women-silhouettes-boots": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "2c6a753fc99431e9",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-men-silhouettes-mens-shoes": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "afc091dff6266e5f",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-silhouettes-sneakers-casual": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "a0fede7dd4cd7b21",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-silhouettes-knitwear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "45f9914cf82e073f",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-fabrics-fabrics-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "84b34a3def04c211",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-fabrics-fabrics-and-materials": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "699ec927e763da29",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-fabrics-finishes-and-washes": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "b510d4d5540609c4",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-fabrics-prints-and-patterns": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "c31146cfbb440109",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-trims-trims-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "c73bf1928ee0f70b",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-trims-collars-and-necklines": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "c09f0dcea43c5d25",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-trims-closures-and-hardware": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "0af4c0fad079b1b6",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-trims-pockets": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "dc8dc739fea8e636",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-trims-seams-hems-and-pleats": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "49721174593a1134",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-trims-trims-and-embellishment": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "59c5576827c38b38",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-ss28-trims-cuffs-straps-and-linings": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "9045bfcaa0f799d7",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-themes-season-themes": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "d29352ed7a69e8c3",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-themes-functional-tailoring": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "a8094be533590455",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-themes-technical-wool": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "f3a93fb4ed6ab935",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-themes-earth-deepens": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "6d80535e540ae7f8",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-themes-hybrid-boots": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "2269a07ecf98ceb7",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-themes-hidden-closures": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "e4fca4503b5ba8d3",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-colours-colour-forecast": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "7034cc0d722eb1c4",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-women-colours-womenswear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "2f198ab37fb0e62c",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-men-colours-menswear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "50c613f8e27f96d9",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-kids-colours-kidswear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "bfb20b12320d4947",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-colours-footwear-colour": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "8b74a39992faea97",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-colours-night-blues": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "af1756b1c151fa3e",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-colours-berry-and-gold": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "5655f7be25e5a901",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-colours-deep-forest": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "e6a17c2447b8c428",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-colours-colour-ink": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "5139038e58dee5fc",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-colours-colour-oat": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "4e6629e2d0dd6e58",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-colours-colour-slate": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "26007cb167d7fe9c",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-colours-colour-cocoa": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "0f6b950ecde9851b",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-colours-colour-mulberry": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "da60e34f49211520",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-colours-colour-bottle-green": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "56f34a5bb5095c13",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-colours-colour-antique-gold": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "79c2c2885e002bce",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-colours-colour-petrol-teal": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "3ff6454bc0709307",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-colours-colour-vermilion": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "869a15d078f3bdae",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-colours-colour-lavender-grey": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "b44b0495a4665ad9",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-women-silhouettes-womenswear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "12739762903aef02",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-women-silhouettes-coats-jackets": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "3a19896b18d3aaeb",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-women-silhouettes-dresses": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "4fb835942a083874",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-women-silhouettes-tops-shirts": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "a7fe16fcad250fc4",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-women-silhouettes-knitwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "fe1b610db7025ec1",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-women-silhouettes-trousers-skirts": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "fd90baada5c6f580",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-women-silhouettes-denim": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "764da0492ee2ad3c",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-women-silhouettes-tailoring": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "df7434065fcc7475",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-men-silhouettes-menswear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "72b5daf96ba21d1a",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-men-silhouettes-outerwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "c8a1605ef7a01c90",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-men-silhouettes-shirts-polos": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "1add0dc74bcfabe0",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-men-silhouettes-knitwear": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "672f02c60ca21008",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-men-silhouettes-tailoring": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "f7c283f0876b167b",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-men-silhouettes-trousers": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "181a0feb684390fe",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-silhouettes-footwear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "64506cd520fc9552",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-women-silhouettes-heels-flats": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "6b615475838e18ba",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-women-silhouettes-boots": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "a28d193865081c46",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-men-silhouettes-mens-shoes": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "2dfe5eb7b01711de",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-silhouettes-sneakers-casual": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "19cb125430f35fa3",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-silhouettes-knitwear-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "c06fbdcf24f8d461",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-fabrics-fabrics-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "4bf315c4075a35e3",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-fabrics-fabrics-and-materials": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "e9ec2f1eaa8ff602",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-fabrics-finishes-and-washes": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "3e04786006a842a4",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-fabrics-prints-and-patterns": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "44069e49a27b42b2",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-fabrics-texture": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "a298eba99a784ebd",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-trims-trims-season-report": [
+  {
+   "v": 1,
+   "date": "2026-11-22",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 3,
+   "date": "2026-11-25",
+   "hash": "75142341f34565ce",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-trims-collars-and-necklines": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "c90fdebe9fd0ecd3",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-trims-closures-and-hardware": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "1a44e9d7987cefd8",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-trims-pockets": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "55d039e50253c18c",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-trims-seams-hems-and-pleats": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "4dcf483bf8ed5982",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-trims-trims-and-embellishment": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "1914aab0e2e2a222",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ],
+ "fc-aw28-trims-cuffs-straps-and-linings": [
+  {
+   "v": 1,
+   "date": "2026-11-24",
+   "note": "Earlier edition at the original address"
+  },
+  {
+   "v": 2,
+   "date": "2026-11-25",
+   "hash": "83d462f015fcd239",
+   "note": "Moved into the season, audience and category structure"
+  }
+ ]
+}

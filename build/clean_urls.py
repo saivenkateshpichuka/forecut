@@ -45,7 +45,7 @@ def glob_lang(s):
 
 def run():
     n = 0
-    for f in sorted(ROOT.glob('*.html')) + sorted((ROOT / 'tools').glob('*.html')):
+    for f in sorted(ROOT.glob('*.html')) + sorted((ROOT / 'tools').glob('*.html')) + sorted((ROOT / 'forecasts').glob('**/*.html')):
         s = f.read_text(); o = s
         s = glob_lang(fix(s))
         a = s.find('<script>(function(l){var p=l.pathname;')

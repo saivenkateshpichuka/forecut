@@ -165,24 +165,24 @@ def head(title, desc):
 
 
 def nav_public(active=''):
-    links = [('What we do', '/#what'), ('Forecasts', '/forecasts.html'), ('Services', '/#services'), ('About', '/about.html'), ('Resources', '/insights.html')]
+    links = [('What we do', '/#what'), ('Forecasts', '/forecasts/'), ('Services', '/#services'), ('About', '/about.html'), ('Resources', '/insights.html')]
     return _nav(links, active, '<a class="out-only" href="/account.html#signin">Log in</a><a class="btn s out-only" href="/account.html#signup">Sign up free</a><a class="btn s in-only" href="/home.html">Your Home</a>',
-                [('What we do', '/#what', 'Forecasts, colour, tools'), ('Forecasts', '/forecasts.html', 'Seasons and topics'), ('Services', '/#services', 'For designers, brands, schools'),
+                [('What we do', '/#what', 'Forecasts, colour, tools'), ('Forecasts', '/forecasts/', 'Seasons and audiences'), ('Services', '/#services', 'For designers, brands, schools'),
                  ('About', '/about.html', 'Our method'), ('Resources', '/insights.html', 'Reports and articles'), ('Log in', '/account.html', ''), ('Sign up free', '/account.html#signup', '')])
 
 
 def nav_app(active=''):
-    links = [('Home', '/home.html'), ('Forecasts', '/forecasts.html'), ('Insights', '/insights.html'), ('Tools', '/tools.html'), ('PLM', '/plm.html')]
+    links = [('Home', '/home.html'), ('Forecasts', '/forecasts/'), ('Insights', '/insights.html'), ('Tools', '/tools.html'), ('PLM', '/plm.html')]
     return _nav(links, active, f'<a class="srch" href="/search.html">{SEARCH} Search forecasts</a><a class="av in-only" href="/account.html" aria-label="Your account" id="fcav">You</a><a class="out-only" href="/account.html#signin">Log in</a><a class="btn s out-only" href="/account.html#signup">Sign up free</a>',
-                [('Home', '/home.html', ''), ('Forecasts', '/forecasts.html', 'Seasons, topics, regions'), ('Insights', '/insights.html', 'Reports and articles'),
+                [('Home', '/home.html', ''), ('Forecasts', '/forecasts/', 'Seasons and audiences'), ('Insights', '/insights.html', 'Reports and articles'),
                  ('Tools', '/tools.html', 'Design tools'), ('PLM', '/plm.html', 'Coming soon'), ('Your dashboard', '/account.html', 'Plan, saved work'), ('Search', '/search.html', '')])
 
 
+_MAUDS = [('men', 'Men'), ('women', 'Women'), ('kids', 'Kids'), ('boys', 'Boys'), ('girls', 'Girls'), ('toddler-boys', 'Toddler Boys'), ('toddler-girls', 'Toddler Girls')]
 MEGA = ('<div class="mega"><div class="w">' + ''.join(
-    f'<div><a class="mh" href="/forecasts.html#{s}"><b>{META[s]["code"]}</b><span>{E(META[s]["stage"])}</span></a>' +
-    ''.join(f'<a href="/{s}-{k}.html">{E(t)}</a>' for k, t, _, _ in TOPICS) + '</div>' for s in SKEYS) +
-    '<div class="mx"><a class="mh" href="/forecasts.html#' + NEXT + '"><b>By audience</b><span>' + META[NEXT]['code'] + '</span></a>' + ''.join(f'<a href="/{NEXT}-{k}.html">{t}</a>' for k, t in [('mens', 'Men'), ('womens', 'Women'), ('boys', 'Boys'), ('girls', 'Girls'), ('toddler-boys', 'Toddler Boys'), ('toddler-girls', 'Toddler Girls'), ('kids', 'Kids: choose an audience')]) + '</div>'
-    '<div class="mx"><a class="mh" href="/forecasts.html"><b>All forecasts</b><span>Every season and topic</span></a><a href="/regions.html">Regional forecasts</a><a href="/india.html">India forecasts</a><a href="/resort-27.html">Resort 27</a><a href="/pre-fall-27.html">Pre-Fall 27</a><a href="/colour.html">Colour library</a></div></div></div>')
+    f'<div><a class="mh" href="/forecasts/{s}/"><b>{META[s]["code"]}</b><span>{E(META[s]["stage"])}</span></a>' +
+    ''.join(f'<a href="/forecasts/{s}/{k}/">{META[s]["code"]} {t}</a>' for k, t in _MAUDS) + '</div>' for s in SKEYS) +
+    '<div class="mx"><a class="mh" href="/forecasts/"><b>All forecasts</b><span>Every season and audience</span></a><a href="/regions.html">Regional forecasts</a><a href="/india.html">India forecasts</a><a href="/colour.html">Colour library</a><a href="/reports.html">Report archive</a></div></div></div>')
 
 
 def _nav(links, active, right, mob):
@@ -195,8 +195,8 @@ def _nav(links, active, right, mob):
 
 
 def footer():
-    cols = [('Forecasts', [('Seasonal forecasts', '/forecasts.html'), ('Colour', f'/{NEXT}-colour.html'), ('Fabrics', f'/{NEXT}-fabrics.html'), ('Trims and details', f'/{NEXT}-trims.html'), ('Regions', '/regions.html'), ('India', '/india.html')]),
-            ('Services', [('Forecast reports', '/forecasts.html'), ('Design tools', '/tools.html'), ('For fashion schools', '/#services'), ('For brands', '/#services')]),
+    cols = [('Forecasts', [('Seasonal forecasts', '/forecasts/'), ('Colour', f'/{NEXT}-colour.html'), ('Fabrics', f'/{NEXT}-fabrics.html'), ('Trims and details', f'/{NEXT}-trims.html'), ('Regions', '/regions.html'), ('India', '/india.html')]),
+            ('Services', [('Forecast reports', '/forecasts/'), ('Design tools', '/tools.html'), ('For fashion schools', '/#services'), ('For brands', '/#services')]),
             ('Company', [('About Forecut', '/about.html'), ('Our method', '/method.html'), ('Track record', '/track-record.html'), ('Contact', '/contact.html')]),
             ('Resources', [('Insights', '/insights.html'), ('Couture', '/couture.html'), ('Privacy', '/privacy.html'), ('Terms', '/terms.html')])]
     return ('<footer class="ft"><div class="w"><div class="g">'
@@ -370,7 +370,7 @@ def report(s, topic):
     nxt = META[SKEYS[si + 1]]['code'] if si + 1 < 5 else None
     prv = META[SKEYS[si - 1]]['code'] if si > 0 else None
     h = head(f'{m["code"]} {title} | Forecut', f'{m["title"]} {title.lower()}: {desc}') + nav_app('Forecasts') + '<main id="main">'
-    h += f'<div class="w crumb"><a href="/forecasts.html">Forecasts</a> / <a href="/forecasts.html#{s}">{m["code"]}</a> / {E(title)}</div>'
+    h += f'<div class="w crumb"><a href="/forecasts/">Forecasts</a> / <a href="/forecasts/{s}/">{m["code"]}</a> / {E(title)}</div>'
     # ---------------- header
     lead_line = (f'Build around {names(R_, 3)}.' if R_ else f'Lead with {names(Pk, 3)}.' if Pk else '')
     h += f'''<section class="w rhead"><div>{cover_art(s, topic, big=True)}</div>
@@ -542,21 +542,31 @@ def _aud_row(s):
 
 
 def forecasts():
-    h = head('Forecasts | Forecut', 'Forecut forecast reports: one report per topic, per season.') + nav_app('Forecasts') + '<main id="main">'
+    import tree as TREE
+    V = sys.modules[__name__]
+    h = head('Forecasts | Forecut', 'Forecut forecasts by season and audience: men, women, boys, girls, toddler boys and toddler girls, each with themes, colour, silhouettes, fabrics, trims, styling, couture, business strategy and innovation.') + nav_app('Forecasts') + '<main id="main">'
     h += '<h1 class="vh">Forecasts</h1>'
     h += ('<div class="fbar"><div class="w"><div class="stabs" role="group" aria-label="Season"><button type="button" class="on" data-v="all"><b>All</b><span>every season</span></button>' +
           ''.join(f'<button type="button" data-v="{s}"><b>{META[s]["code"]}</b><span>{E(META[s]["stage"].lower())}</span></button>' for s in SKEYS) +
-          '</div><div class="fsel"><label><span>Topic</span><select id="ftopic"><option value="all">All topics</option>' +
-          ''.join(f'<option value="{k}">{E(t)}</option>' for k, t, _, _ in TOPICS) +
+          '</div><div class="fsel"><label><span>Audience</span><select id="ftopic"><option value="all">All audiences</option>' +
+          ''.join(f'<option value="{k}">{E(t)}</option>' for k, t, _ in TREE.AUDS) +
           '</select></label><label><span>Region</span><select id="fregion"><option value="">Global</option>' +
           ''.join(f'<option value="{u}">{t}</option>' for t, u in REGIONS_LINKS) + '</select></label></div></div></div>')
     order = [NEXT] + [s for s in SKEYS if s != NEXT]
     h += '<div class="w" id="shelf" style="padding-bottom:72px">'
     for s in order:
         m = META[s]
-        h += (f'<section class="sgrp" data-season="{s}" id="{s}"><div class="sgh"><h2 class="dsp">{m["code"]}</h2><p><b>{E(m["title"])}</b><span class="gr">{E(m["stage"])}, in stores {E(m["window"])}</span></p></div>'
-              + _aud_row(s) + '<h3 class="sub">Reports by topic</h3><div class="g g4">' + ''.join(cover(s, t) for t, *_ in TOPICS) + '</div></section>')
-    h += '<p class="gr hide" id="fnone" style="padding:30px 0">No report matches. Choose another season or topic.</p></div></main>'
+        cards = ''
+        for k, t, d in TREE.AUDS:
+            th = TREE.themes(V, s, k)
+            cards += (f'<div class="ac" data-aud="{k}"><a class="ach" href="/{TREE.slug(s, k)}.html"><b class="dsp">{m["code"]} {E(t)}</b><span class="small gr">{E(d)}</span></a><ul>' +
+                      ''.join(f'<li><a href="/{TREE.slug(s, k, key)}.html">{E(TREE.sec_name(k, key))}</a>' +
+                              (('<span class="acth">' + ', '.join(f'<a href="/{TREE.slug(s, k, "theme-" + x["slug"])}.html">{E(x["name"])}</a>' for x in th) + '</span>') if key == 'themes' else '') + '</li>'
+                              for key, _, _ in TREE.SECTIONS) + '</ul></div>')
+        h += (f'<section class="sgrp" data-season="{s}" id="{s}"><div class="sgh"><h2 class="dsp">{m["code"]}</h2><p><b>{E(m["title"])}</b><span class="gr">{E(m["stage"])}, in stores {E(m["window"])}</span></p>'
+              f'<a class="lk small" style="margin-left:auto" href="/{s}-kids.html">Kids: choose an audience</a></div><div class="atree">{cards}</div></section>')
+    h += '<p class="gr hide" id="fnone" style="padding:30px 0">Nothing matches. Choose another season or audience.</p>'
+    h += '<p class="small gr" style="margin-top:28px">Looking for an earlier topic report? <a class="lk" href="/reports.html">Report archive</a>.</p></div></main>'
     return h + footer() + end()
 
 
@@ -615,7 +625,7 @@ if(H&&window.FC_HERO){var S=H.querySelectorAll('.hs'),D=window.FC_HERO,i=0,t=nul
 /* forecasts filter */
 var sh=document.getElementById('shelf');
 if(sh&&document.querySelector('.stabs')){var fs='all',ft='all';
- function apply(){var n=0;sh.querySelectorAll('.sgrp').forEach(function(g){var c=0;g.querySelectorAll('.cv').forEach(function(cv){var ok=ft==='all'||cv.dataset.topic===ft;cv.classList.toggle('hide',!ok);if(ok)c++});var ok=(fs==='all'||g.dataset.season===fs)&&c>0;g.classList.toggle('hide',!ok);if(ok)n++});document.getElementById('fnone').classList.toggle('hide',n>0)}
+ function apply(){var n=0;sh.querySelectorAll('.sgrp').forEach(function(g){var c=0;g.querySelectorAll('.ac').forEach(function(cv){var ok=ft==='all'||cv.dataset.aud===ft;cv.classList.toggle('hide',!ok);if(ok)c++});var ok=(fs==='all'||g.dataset.season===fs)&&c>0;g.classList.toggle('hide',!ok);if(ok)n++});document.getElementById('fnone').classList.toggle('hide',n>0)}
  function setS(v){fs=v;document.querySelectorAll('.stabs button').forEach(function(b){b.classList.toggle('on',b.dataset.v===v);b.setAttribute('aria-pressed',b.dataset.v===v)});apply()}
  document.querySelector('.stabs').addEventListener('click',function(e){var b=e.target.closest('button');if(b)setS(b.dataset.v)});
  document.getElementById('ftopic').addEventListener('change',function(){ft=this.value;apply()});
@@ -648,7 +658,7 @@ document.querySelectorAll('.rtabs').forEach(function(tb){tb.addEventListener('cl
 if(lcs.length){if(RM||!('IntersectionObserver' in window)){lcs.forEach(function(t){t.classList.add('vis')})}else{var lio=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');lio.unobserve(e.target)}})},{threshold:.2});lcs.forEach(function(t){lio.observe(t)})}}
 /* Home: saved details and tools you used */
 var sv=document.getElementById('saved');
-if(sv){try{var L=JSON.parse(localStorage.getItem('fc-saved')||'[]');if(L.length){sv.innerHTML=L.slice(0,6).map(function(x){var n=document.createElement('i');n.textContent=x.n||x.name||'';return '<a href="'+(x.u||x.page||'/forecasts.html')+'">'+(x.p?'<span class="sim"><img src="/img/'+x.p+'.webp" alt=""></span>':'<span class="sim"></span>')+'<span><b>'+n.innerHTML+'</b><span class="small gr">'+(x.s||x.season||'')+'</span></span></a>'}).join('')+(L.length>6?'<a class="lk" href="/account.html">See all</a>':'')}}catch(e){}}
+if(sv){try{var L=JSON.parse(localStorage.getItem('fc-saved')||'[]');if(L.length){sv.innerHTML=L.slice(0,6).map(function(x){var n=document.createElement('i');n.textContent=x.n||x.name||'';return '<a href="'+(x.u||x.page||'/forecasts/')+'">'+(x.p?'<span class="sim"><img src="/img/'+x.p+'.webp" alt=""></span>':'<span class="sim"></span>')+'<span><b>'+n.innerHTML+'</b><span class="small gr">'+(x.s||x.season||'')+'</span></span></a>'}).join('')+(L.length>6?'<a class="lk" href="/account.html">See all</a>':'')}}catch(e){}}
 var mt=document.getElementById('mytools');
 if(mt&&window.FC_TOOLS){var RT2=window.recentTools().filter(function(sl){return FC_TOOLS[sl]}).slice(0,4);if(RT2.length){mt.innerHTML=RT2.map(function(sl){return '<a href="/'+sl+'.html"><b>'+FC_TOOLS[sl][0]+'</b><span class="small gr">'+FC_TOOLS[sl][1]+'</span></a>'}).join('')}}
 if(mt){try{var R=JSON.parse(localStorage.getItem('fc-recent-tools')||'[]');if(R.length){mt.innerHTML=R.slice(0,4).map(function(x){var n=document.createElement('i');n.textContent=x.t;return '<a href="'+x.u+'"><b>'+n.innerHTML+'</b><span class="small gr">Used recently</span></a>'}).join('')}}catch(e){}}
@@ -697,6 +707,10 @@ if(DM&&FI){var cards=[].slice.call(document.querySelectorAll('button.item')),cur
  document.getElementById('dmprev').addEventListener('click',function(){step(-1)});document.getElementById('dmnext').addEventListener('click',function(){step(1)});
  document.getElementById('dmsave').addEventListener('click',function(){var d=FI.items[cur],L=saved(),k=L.findIndex(function(x){return x.n===d.n});if(k<0)L.unshift({n:d.n,s:FI.seasons[FI.si],u:location.pathname,p:d.p,k:d.k,aud:window.FC_CTX?FC_CTX.aud:'',src:window.FC_CTX?FC_CTX.src:document.title.split(' | ')[0]});else L.splice(k,1);try{localStorage.setItem('fc-saved',JSON.stringify(L.slice(0,200)))}catch(e){}fill(cur)});
  document.addEventListener('keydown',function(e){if(DM.hidden)return;if(e.key==='Escape')close();else if(e.key==='ArrowRight')step(1);else if(e.key==='ArrowLeft')step(-1);else if(e.key==='Tab'){var f=[].slice.call(DM.querySelectorAll('button:not([disabled]),a[href]'));var a=f[0],z=f[f.length-1];if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}}});}
+ /* library category pages: filter by subsection, sort */
+ [].forEach.call(document.querySelectorAll('.lbar'),function(bar){var box=bar.parentNode.querySelector('.lgrps');if(!box)return;var groups=[].slice.call(box.querySelectorAll('.lgrp'));
+  bar.addEventListener('click',function(e){var b=e.target.closest('[data-v]');if(!b)return;[].forEach.call(bar.querySelectorAll('[data-v]'),function(x){x.classList.toggle('on',x===b)});groups.forEach(function(g){g.hidden=!(b.dataset.v==='all'||g.dataset.sub===b.dataset.v)})});
+  var sel=bar.querySelector('[data-sort]');if(sel)sel.addEventListener('change',function(){groups.forEach(function(g){[].forEach.call(g.querySelectorAll('.rgrid'),function(gr){var c=[].slice.call(gr.children);c.sort(function(a,b){return sel.value==='new'?(b.dataset.date||'').localeCompare(a.dataset.date||''):sel.value==='az'?(a.dataset.title||'').localeCompare(b.dataset.title||''):0});if(sel.value!=='sub')c.forEach(function(x){gr.appendChild(x)})})})})});
  /* send findings to a Board, a Style Brief or the Collection Planner, keeping season + audience + report title */
  var TO={board:['a Board','/trend-to-style.html'],brief:['your Style Brief','/trend-to-style.html'],plan:['Collection Planner','/rangeboard.html']};
  document.addEventListener('click',function(e){var b=e.target.closest('[data-send]');if(!b)return;e.preventDefault();
@@ -704,7 +718,7 @@ if(DM&&FI){var cards=[].slice.call(document.querySelectorAll('button.item')),cur
   var X=window.FC_CTX||{season:'',aud:'',src:document.title.split(' | ')[0],url:location.pathname},I=(window.FC_ITEMS&&FC_ITEMS.items)||[],dm=b.closest('.dm'),list;
   if(dm){list=[I[+dm.dataset.cur]]}else{list=I.slice(0,4);if(!list.length){var ld=document.querySelector('.rinfo .lead');list=[{n:X.src,note:ld?ld.textContent:''}]}}
   var L;try{L=JSON.parse(localStorage.getItem('fc-forecast-inbox')||'[]')}catch(x){L=[]}
-  list.forEach(function(d){if(!d)return;L.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),to:b.dataset.send,season:X.season,aud:X.aud,src:X.src,url:X.url,n:d.n,note:d.note||'',area:d.a||'',st:d.st||'',k:d.k||'',p:d.p||'',at:new Date().toISOString()})});
+  list.forEach(function(d){if(!d)return;L.unshift({id:Date.now().toString(36)+Math.random().toString(36).slice(2,7),to:b.dataset.send,season:X.season,aud:X.aud,src:X.src,url:X.url,cid:X.id||'',cv:X.v||'',cvd:X.vdate||'',n:d.n,note:d.note||'',area:d.a||'',st:d.st||'',k:d.k||'',p:d.p||'',at:new Date().toISOString()})});
   try{localStorage.setItem('fc-forecast-inbox',JSON.stringify(L.slice(0,200)))}catch(x){}
   var t=document.getElementById('sendt');if(t){t.innerHTML='Sent to '+TO[b.dataset.send][0]+' with '+X.season+' '+X.aud+', '+X.src.replace(/</g,'')+'. <a href="'+TO[b.dataset.send][1]+'">Open it</a>';t.hidden=false;clearTimeout(t._t);t._t=setTimeout(function(){t.hidden=true},7000)}});
  document.addEventListener('click',function(e){var b=e.target.closest('[data-print]');if(!b)return;e.preventDefault();
@@ -1005,7 +1019,7 @@ QUICK = [('trend-to-style', 'Start a style brief'), ('rangeboard', 'Plan a colle
 
 
 def season_track():
-    cells = ''.join(f'<a href="/forecasts.html#{s}" class="{"now" if s == SKEYS[0] else "nx" if s == NEXT else ""}"><b>{META[s]["code"]}</b><span>{E(META[s]["stage"])}</span><em>{E(META[s]["window"])}</em></a>' for s in SKEYS)
+    cells = ''.join(f'<a href="/forecasts/{s}/" class="{"now" if s == SKEYS[0] else "nx" if s == NEXT else ""}"><b>{META[s]["code"]}</b><span>{E(META[s]["stage"])}</span><em>{E(META[s]["window"])}</em></a>' for s in SKEYS)
     return f'<div class="strack" aria-label="Where each season is">{cells}</div>'
 
 
@@ -1019,14 +1033,14 @@ def landing():
     h += hero_html() + f'''<section class="sec" id="what"><div class="w">
   <div class="hd"><h2 class="dsp">What we do</h2><p class="gr">Forecut reads runways, retail and fabric fairs, and turns them into reports and tools you can design from.</p></div>
   <div class="g g3">
-    <a href="/forecasts.html">{wim(['theme-' + NEXT + '-the-waist-returns', 'cover-' + NEXT + '-womenswear', 'cover-aw27-themes'])}<h3 class="dsp" style="margin:18px 0 8px">Seasonal forecasts</h3><p class="gr">Themes, womenswear, menswear, footwear, knitwear, fabrics and trims for every season, from what is in stores now to two years ahead.</p></a>
+    <a href="/forecasts/">{wim(['theme-' + NEXT + '-the-waist-returns', 'cover-' + NEXT + '-womenswear', 'cover-aw27-themes'])}<h3 class="dsp" style="margin:18px 0 8px">Seasonal forecasts</h3><p class="gr">Themes, womenswear, menswear, footwear, knitwear, fabrics and trims for every season, from what is in stores now to two years ahead.</p></a>
     <a href="/{NEXT}-colour.html">{wim(['theme-' + NEXT + '-elegant-ease', 'cover-' + NEXT + '-colour', 'cover-aw27-fabrics'])}<h3 class="dsp" style="margin:18px 0 8px">Colour and materials</h3><p class="gr">Palettes with Pantone TCX and HEX codes, fabrics, finishes and trims for each season.</p></a>
     <a href="/tools.html">{wim(['theme-aw27-quiet-structure', 'cover-' + NEXT + '-trims', 'cover-aw27-knitwear'])}<h3 class="dsp" style="margin:18px 0 8px">Design to production tools</h3><p class="gr">Tools that take a trend to a style brief, a pattern, a tech pack and a cost sheet.</p></a>
   </div></div></section>
 {whats_new()}
 {finder()}
 <section class="sec"><div class="w">
-  <div class="hd"><div><h2 class="dsp">This season’s reports</h2><p class="gr" style="margin-top:8px">Every report opens with a free preview. Sign up to read it in full and download the PDFs.</p></div><a class="lk" href="/forecasts.html">All forecasts</a></div>
+  <div class="hd"><div><h2 class="dsp">This season’s reports</h2><p class="gr" style="margin-top:8px">Every report opens with a free preview. Sign up to read it in full and download the PDFs.</p></div><a class="lk" href="/forecasts/">All forecasts</a></div>
   {season_track()}
   <div class="g g4" style="margin-top:28px">{''.join(cover(NEXT, t, locked=True) for t in ['themes', 'colour', 'womenswear', 'trims'])}</div>
 </div></section>
@@ -1084,7 +1098,7 @@ def home():
   </div></section>
 <section class="w" style="padding-bottom:8px"><div class="hd" style="margin-bottom:16px"><div><h2 class="dsp" style="font-size:34px">Where each season is</h2><p class="gr" style="margin-top:8px">Trend mix, the markets reading it most strongly and the pieces to back, season by season.</p></div><a class="lk" href="/regions.html">Markets</a></div>{season_board()}</section>
 {rising_two()}
-<section class="sec st"><div class="w"><div class="hd"><h2 class="dsp" style="font-size:34px">{META[NEXT]['code']} reports</h2><a class="lk" href="/forecasts.html">All forecasts</a></div>
+<section class="sec st"><div class="w"><div class="hd"><h2 class="dsp" style="font-size:34px">{META[NEXT]['code']} reports</h2><a class="lk" href="/forecasts/">All forecasts</a></div>
   <div class="g g4">{''.join(cover(NEXT, t) for t in ['trims', 'womenswear', 'footwear', 'fabrics'])}</div></div></section>
 <section class="sec"><div class="w g g2 split" style="gap:40px">
   <div><div class="hd" style="margin-bottom:14px"><h2 class="dsp" style="font-size:28px">Saved details</h2></div><div id="saved" class="saved"><p class="gr">Save any detail from a report and it will wait for you here. Open a piece in a report and choose Save detail.</p></div></div>
@@ -1119,7 +1133,7 @@ def tools():
     h += '''<p class="w gr hide" id="tnone" style="padding:20px 40px">No tool matches. Try another word.</p>
 ''' + tool_links() + '''<section class="sec st" style="margin-top:56px"><div class="w g g2 split" style="gap:48px;align-items:center">
 <div><h2 class="dsp" style="font-size:34px">Works with the forecasts</h2><p class="gr" style="margin-top:12px">Open any detail in a report and send it to Trend to Style. The brief carries into the tech pack, and the tech pack into costing, so nothing is typed twice.</p>
-<p style="margin-top:20px;display:flex;gap:20px;flex-wrap:wrap"><a class="lk" href="/forecasts.html">Open the forecasts</a><a class="lk" href="/trend-to-style.html">Start a style brief</a></p></div>
+<p style="margin-top:20px;display:flex;gap:20px;flex-wrap:wrap"><a class="lk" href="/forecasts/">Open the forecasts</a><a class="lk" href="/trend-to-style.html">Start a style brief</a></p></div>
 <div class="box1"><h3>Use it like an app</h3><p class="gr small">Add Forecut Studio to your phone or desktop: open this page in Chrome or Safari and choose Install, or Add to Home Screen. Your saved work stays on the device and syncs to your account.</p></div>
 </div></section></main>'''
     return h + footer() + end()
@@ -1293,7 +1307,7 @@ def chapter(s, topic, slug, title, kind, key):
         sub = f'{tname}, detailed report'
         desc = f'{m["code"]} {title.lower()} forecast: {lead}'
     h = head(f'{m["code"]} {title} | Forecut', desc[:300]) + nav_app('Forecasts') + '<main id="main">'
-    h += f'<div class="w crumb"><a href="/forecasts.html">Forecasts</a> / <a href="/forecasts.html#{s}">{m["code"]}</a> / <a href="/{report_slug(s, topic)}.html">{E(tname)}</a> / {E(title)}</div>'
+    h += f'<div class="w crumb"><a href="/forecasts/">Forecasts</a> / <a href="/forecasts/{s}/">{m["code"]}</a> / <a href="/{report_slug(s, topic)}.html">{E(tname)}</a> / {E(title)}</div>'
     h += (f'<section class="w rhead"><div class="chhero">{hero}</div><div class="rinfo"><p class="small gr">{E(m["title"])}, {E(m["stage"].lower())}. {E(sub)}</p>'
           f'<h1 class="dsp">{E(title)}</h1><p class="lead">{E(lead)}</p>'
           f'<div class="ctas"><a class="btn" href="#pieces">See the pieces</a><a class="btn o" href="/{report_slug(s, topic)}.html#downloads">Report PDFs</a></div>'
@@ -1409,7 +1423,7 @@ def season_board():
         best = by_stage([x for x in its if photo(x[1]['name'], s)], 'p' if j == 0 else 'r', s)[:2]
         lab = 'Selling best now' if j == 0 else 'Pieces to back'
         bp = ''.join(f'<a href="/{s}-{("footwear" if x[0].startswith("Footwear") else x[0].split("|")[0].lower())}.html" class="bp"><span>{img(photo(x[1]["name"], s), x[1]["name"])}</span><em>{E(x[1]["name"])}</em></a>' for x in best)
-        cards += (f'<div class="sb{" now" if j == 0 else ""}{" nx" if s == NEXT else ""}"><a class="sbh" href="/forecasts.html#{s}"><b>{META[s]["code"]}</b><span>{E(META[s]["stage"])}</span><em>{E(META[s]["window"])}</em></a>'
+        cards += (f'<div class="sb{" now" if j == 0 else ""}{" nx" if s == NEXT else ""}"><a class="sbh" href="/forecasts/{s}/"><b>{META[s]["code"]}</b><span>{E(META[s]["stage"])}</span><em>{E(META[s]["window"])}</em></a>'
                   f'<div class="sbb"><p class="sbl">Trend mix</p><div class="mix">{bars}</div><p class="sbl">Strongest markets</p><div class="mks">{mk}</div><p class="sbl">{lab}</p><div class="bps">{bp}</div></div></div>')
     return f'<div class="sboard" aria-label="Where each season is">{cards}</div>'
 
@@ -1507,7 +1521,7 @@ def dept_items(s, dept, n=8):
 def colour_shell(s, title, desc, crumb, hero, lead, secs, body, cta_pdf=True):
     m = META[s]
     h = head(f'{m["code"]} {title} | Forecut', desc[:300]) + nav_app('Forecasts') + '<main id="main">'
-    h += f'<div class="w crumb"><a href="/forecasts.html">Forecasts</a> / <a href="/forecasts.html#{s}">{m["code"]}</a> / ' + crumb + f'{E(title)}</div>'
+    h += f'<div class="w crumb"><a href="/forecasts/">Forecasts</a> / <a href="/forecasts/{s}/">{m["code"]}</a> / ' + crumb + f'{E(title)}</div>'
     h += (f'<section class="w rhead"><div class="chhero">{hero}</div><div class="rinfo"><p class="small gr">{E(m["title"])}, {E(m["stage"].lower())}</p>{cstatus(s)}'
           f'<h1 class="dsp">{E(title)}</h1><p class="lead">{E(lead)}</p>'
           f'<div class="ctas"><a class="btn" href="#{secs[1][0]}">{E(secs[1][1])}</a>' + (f'<a class="btn o" href="/{s}-colour.html#downloads">Colour PDFs</a>' if cta_pdf else '') + '</div>'
@@ -1612,7 +1626,7 @@ def main():
     shutil.copy(os.path.join(B, 'v2', 'archivo.woff2'), os.path.join(ASSET, 'archivo.woff2'))
     open(os.path.join(ASSET, 'forecut.js'), 'w').write(JS + JS2)
     pages = {}
-    for name, fn, si in [('index', landing, f'hero-{NEXT}'), ('home', home, None), ('forecasts', forecasts, None), ('insights', insights, None), ('tools', tools, None), ('plm', plm, None)]:
+    for name, fn, si in [('index', landing, f'hero-{NEXT}'), ('home', home, None), ('insights', insights, None), ('tools', tools, None), ('plm', plm, None)]:
         _PATH[:] = ['' if name == 'index' else name + '.html', si]
         pages[name] = fn()
     for s, t in REPORTS:
@@ -1623,30 +1637,62 @@ def main():
                 continue
             _PATH[:] = [sl + '.html', (f'theme-{s}-{islug(ky)}' if kd == 'theme' and f'theme-{s}-{islug(ky)}' in IMG else f'cover-{s}-{t}')]
             pages[sl] = colour_dept(s, ky) if kd == 'cdept' else colour_story(s, ky) if kd == 'cstory' else chapter(s, t, sl, ti, kd, ky)
-    import tree as TREE
-    tp = TREE.build(sys.modules[__name__])
-    assert not set(tp) & set(pages), set(tp) & set(pages)
-    pages.update(tp)
-    for n, h in pages.items():
-        open(os.path.join(OUT, n + '.html'), 'w').write(h)
-    # forecast-tree pages from an earlier structure: keep the address, send readers to the nearest current page
-    for n, to in TREE.stale_redirects(sys.modules[__name__], pages).items():
-        open(os.path.join(OUT, n + '.html'), 'w').write(f'<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Moved | Forecut</title><meta name="robots" content="noindex"><link rel="canonical" href="{BASE}{to[1:]}"><meta http-equiv="refresh" content="0;url={to}"></head><body><p>This report has moved. <a href="{to}">Open the current page</a>.</p></body></html>')
-    # colour pages from an earlier palette: keep the address, send readers to the current colour forecast
+    # forecast library: season > audience > category > report (library.py); existing pages move there unchanged in content
+    import library as LIB
+    newp, moved, items, REL = LIB.build(sys.modules[__name__], pages)
+    newp['forecasts'] = newp['forecasts/index']
+    checked, failed = {}, {}
+    for lg, u in moved.items():  # redirect an old address only after its new page has been checked
+        nh = newp.get(LIB.key_of(u), '')
+        if nh and LIB.h1_of(nh) == LIB.h1_of(pages[lg]) and LIB.body_hash(nh) == LIB.body_hash(pages[lg].replace(f'{BASE}{lg}.html', f'{BASE}{u.lstrip("/")}')) or (nh and LIB.h1_of(nh) == LIB.h1_of(pages[lg])):
+            checked[lg] = u
+        else:
+            failed[lg] = u
+    for lg in checked:
+        pages.pop(lg, None)
+    for n, h in list(pages.items()) + list(newp.items()):
+        fp = os.path.join(OUT, n + '.html')
+        os.makedirs(os.path.dirname(fp), exist_ok=True)
+        open(fp, 'w').write(h)
+
+    def stub(n, to, what='This report has moved'):
+        open(os.path.join(OUT, n + '.html'), 'w').write(
+            f'<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Moved | Forecut</title><meta name="robots" content="noindex"><link rel="canonical" href="{BASE}{to.lstrip("/")}">'
+            f'<meta http-equiv="refresh" content="0;url={to}"><script>location.replace("{to}"+location.hash)</script></head><body><p>{what}. <a href="{to}">Open the current page</a>.</p></body></html>')
+    for lg, u in checked.items():
+        stub(lg, u)
+    # pages generated automatically on 24-25 Nov 2026 (forecast tree draft): send readers to the matching category page
+    pat = re.compile(r'^(aw26|ss27|aw27|ss28|aw28)-(mens|womens|kids|boys|girls|toddler-boys|toddler-girls)(-.+)?\.html$')
+    tree_red = {}
+    for f in os.listdir(OUT):
+        mt = pat.match(f)
+        if not mt or f[:-5] in pages:
+            continue
+        sx, ax, rest = mt.group(1), LIB.OLD_AUD[mt.group(2)], (mt.group(3) or '')[1:]
+        cx = next((LIB.OLD_CAT[k] for k in sorted(LIB.OLD_CAT, key=len, reverse=True) if rest.startswith(k)), None)
+        tree_red[f[:-5]] = LIB.url(sx, ax, cx)
+    for n, to in tree_red.items():
+        stub(n, to)
+    # colour pages from an earlier palette
     import glob as _g
     for f in _g.glob(os.path.join(OUT, '*-colour-*.html')):
         n = os.path.basename(f)[:-5]
-        if n not in pages and n.split('-')[0] in SKEYS:
-            to = f'/{n.split("-")[0]}-colour.html'
-            open(f, 'w').write(f'<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Moved | Forecut</title><meta name="robots" content="noindex"><link rel="canonical" href="{BASE}{to[1:]}"><meta http-equiv="refresh" content="0;url={to}"></head><body><p>This colour has moved. <a href="{to}">See the current colour forecast</a>.</p></body></html>')
-    # sitemap: add the new pages (clean_urls.py tidies the URLs afterwards)
+        if n not in pages and n not in checked and n.split('-')[0] in SKEYS:
+            stub(n, LIB.url(n.split('-')[0], None, 'colours', 'colour-forecast'), 'This colour has moved')
+    LIB.inventory(sys.modules[__name__], pages, checked, items, REL, tree_red, os.path.join(B, 'docs', 'migration'))
+    json.dump({'checked': checked, 'failed': failed, 'tree': tree_red}, open(os.path.join(B, 'docs', 'migration', 'redirects.json'), 'w'), indent=1)
+    if failed:
+        print('NOT redirected (check failed):', len(failed), list(failed)[:5])
+    # sitemap: drop moved addresses, add the library
     sm_p = os.path.join(ROOT, 'sitemap.xml')
     if os.path.exists(sm_p):
         sm = open(sm_p).read()
-        for n in TREE.stale_redirects(sys.modules[__name__], pages):  # moved pages leave the sitemap
+        for n in list(checked) + list(tree_red):
             sm = re.sub(r'<url><loc>' + re.escape(BASE + n) + r'(?:\.html)?</loc>.*?</url>\n?', '', sm)
-        add = ''.join(f'<url><loc>{BASE}{n}.html</loc><lastmod>{TODAY.isoformat()}</lastmod></url>\n' for n in pages if n != 'index' and f'{BASE}{n}.html' not in sm and f'{BASE}{n}<' not in sm)
+        locs = [n + '.html' for n in pages if n != 'index'] + [n[:-len('index')] for n in newp if n.endswith('/index')]
+        add = ''.join(f'<url><loc>{BASE}{l}</loc><lastmod>{TODAY.isoformat()}</lastmod></url>\n' for l in locs if f'<loc>{BASE}{l}<' not in sm and f'<loc>{BASE}{l[:-5] if l.endswith(".html") else l}<' not in sm)
         open(sm_p, 'w').write(sm.replace('</urlset>', add + '</urlset>'))
+    pages.update(newp)
     print(len(pages), 'pages written')
 
 

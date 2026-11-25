@@ -579,7 +579,7 @@
     y0 += 80;
     list.forEach(function (o, n) {
       var x = (n % 5) * 240, y = y0 + Math.floor(n / 5) * 200;
-      var it = note(x, y, o.n + '\n' + o.src, NOTE[n % 4]); it.z = ++z; b.items.push(it); out.push(it.id);
+      var it = note(x, y, o.n + '\n' + o.season + ' ' + o.aud + ', ' + o.src + (o.cv ? ' (version ' + o.cv + ')' : ''), NOTE[n % 4]); it.z = ++z; b.items.push(it); out.push(it.id);
     });
     sel = out; save(false); draw(); return out.length;
   } };

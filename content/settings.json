@@ -1,0 +1,40 @@
+{
+  "about": "Forecut publishing settings. Edited in the content manager (/cms/); only people with write access to the repository can save. A season, category or report is shown only when it has reviewed content.",
+  "featured_year": 2027,
+  "seasons": [
+    {"id": "aw26", "status": "archive", "note": "In stores now; kept in the library."},
+    {"id": "ss27", "status": "published"},
+    {"id": "aw27", "status": "published"},
+    {"id": "ss28", "status": "published"},
+    {"id": "aw28", "status": "published"}
+  ],
+  "audiences": [
+    {"id": "men", "name": "Men", "possessive": "Men's", "note": "Menswear and men's footwear"},
+    {"id": "women", "name": "Women", "possessive": "Women's", "note": "Womenswear and women's footwear"},
+    {"id": "kids", "name": "Kids", "possessive": "Kids'", "note": "Kidswear as a whole: unisex, gender-neutral and shared research"},
+    {"id": "boys", "name": "Boys", "possessive": "Boys'", "note": "Ages 5 to 14"},
+    {"id": "girls", "name": "Girls", "possessive": "Girls'", "note": "Ages 5 to 14"},
+    {"id": "toddler-boys", "name": "Toddler Boys", "possessive": "Toddler Boys'", "note": "Ages 1 to 4"},
+    {"id": "toddler-girls", "name": "Toddler Girls", "possessive": "Toddler Girls'", "note": "Ages 1 to 4"}
+  ],
+  "categories": [
+    {"id": "themes", "name": "Themes", "about": "The named stories of the season, each with its own colours, silhouettes, fabrics and trims.",
+     "subsections": [{"id": "themes", "name": "Themes"}]},
+    {"id": "colours", "name": "Colours", "about": "The season palette, colour by theme, combinations, applications and the colour narrative.",
+     "subsections": [{"id": "season-colours", "name": "Season Colours"}, {"id": "theme-colours", "name": "Theme Colour Palettes"}, {"id": "colour-stories", "name": "Colour Stories"}]},
+    {"id": "silhouettes", "name": "Silhouettes", "about": "Garment shapes, proportions, fit direction, key details and product applications.",
+     "subsections": [{"id": "woven", "name": "Woven"}, {"id": "knit", "name": "Knit"}, {"id": "footwear", "name": "Footwear"}]},
+    {"id": "fabrics", "name": "Fabrics", "about": "Material structures, weights, finishes, performance, sourcing and product uses.",
+     "subsections": [{"id": "woven", "name": "Woven"}, {"id": "knit", "name": "Knit"}, {"id": "across", "name": "Across woven and knit"}]},
+    {"id": "trims", "name": "Trims", "about": "Components, applications, adoption, commercial implications and new developments.",
+     "subsections": [{"id": "trending-trims", "name": "Trending Trims"}, {"id": "trim-stories", "name": "Trim Stories"}, {"id": "market-strategy", "name": "Market Strategy"}, {"id": "innovation", "name": "Innovation"}]},
+    {"id": "styling", "name": "Styling", "about": "Outfit direction, influences, combinations and occasions.",
+     "subsections": [{"id": "celebrity", "name": "Celebrity"}, {"id": "casual-wear", "name": "Casual Wear"}, {"id": "formal-wear", "name": "Formal Wear"}, {"id": "party-wear", "name": "Party Wear"}]},
+    {"id": "couture", "name": "Couture", "about": "Elevated craft, construction, decoration and material direction.",
+     "subsections": [{"id": "reports", "name": "Reports"}]},
+    {"id": "business-strategy", "name": "Business Strategy", "about": "Category opportunities, customer and market implications, assortment and pricing direction.",
+     "subsections": [{"id": "reports", "name": "Reports"}]},
+    {"id": "innovations", "name": "Innovations", "about": "Emerging materials, processes and technology, and how ready they are for use.",
+     "subsections": [{"id": "reports", "name": "Reports"}]}
+  ]
+}
