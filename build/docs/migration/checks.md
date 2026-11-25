@@ -3,7 +3,7 @@
 - Moved pages checked: 283; report text identical to the last published version: 0
 - Pages not redirected because a check failed: 0
 - Generated summary pages redirected to their category page: 2341
-- PDFs in output/reports: 120; linked from library pages: 120; not linked: 0 []
+- PDFs in output/reports: 120; linked from library pages: 0; not linked: 120 ['aw26-colour-business.pdf', 'aw26-colour-full.pdf', 'aw26-colour-inspiration.pdf', 'aw26-fabrics-business.pdf', 'aw26-fabrics-full.pdf', 'aw26-fabrics-inspiration.pdf']
 - Library pages scanned: 1396; broken internal links: 0; missing images: 0
 
 ## Problems
