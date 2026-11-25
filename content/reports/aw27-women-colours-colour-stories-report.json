@@ -1,0 +1,66 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw27",
+ "audience": "women",
+ "category": "colours",
+ "subsection": "colour-stories",
+ "slug": "colour-stories-report",
+ "title": "AW27 Women's Colour Stories",
+ "summary": "Four AW27 women's colour stories: Painted by Time, New Neutrals, Pink for All and Living Green.",
+ "research_period": "Pitti Filati, June 2026; Première Vision, Lineapelle and Milano Unica, September 2026; forecaster reports to November 2026",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Pre-runway forecast. The AW27 shows run from January to March 2027. This report is built from the 2026 yarn, fabric and leather fairs (Pitti Filati in June; Première Vision, Lineapelle and Milano Unica in September), published forecaster views and the SS27 runways. Forecut will update it after the shows."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Première Vision's colour preview opens with \"grayed mid-tones, as if patinated by time\", with purples \"taking center stage\"<sup>[1]</sup>\n- Neutrals shift: grey toward greyish blue, khaki toward taupe, green or copper, navy toward turquoise or purplish tones<sup>[2]</sup>\n- Pink and mauve are becoming gender-neutral, reaching menswear and even junior sweatshirts<sup>[2]</sup>\n- Première Vision's AW27 theme \"Living Matter\" puts materials \"at the center\", with materials \"infused with memory\"<sup>[3]</sup>"
+  },
+  {
+   "heading": "Painted by Time",
+   "body": "Deep violet, tannic bordeaux, waxy ochre and tinted black, softened as if by old varnish, for velvet and patinated leather."
+  },
+  {
+   "heading": "New Neutrals",
+   "body": "Tinted black, mushroom, greyed blue and copper khaki: neutrals with colour inside."
+  },
+  {
+   "heading": "Pink for All",
+   "body": "Dusty mauve and silicone pink in tailoring and knits."
+  },
+  {
+   "heading": "Living Green",
+   "body": "Sage and moss with copper khaki for natural fibres."
+  }
+ ],
+ "timing": "In stores August 2027 to January 2028.",
+ "products": "",
+ "design_implications": "- One story per delivery.",
+ "commercial_implications": "- New Neutrals carries volume.",
+ "sources": [
+  {
+   "title": "AW 27-28 colour preview: a colour shaped by time",
+   "publisher": "Première Vision",
+   "url": "https://www.premierevision.com/articles/fbd142fa-b23c-f111-8ef3-000d3a4af15b/aw-27-28-color-preview-a-color-shaped-by-time",
+   "date": "2026"
+  },
+  {
+   "title": "Première Vision Paris: what fabrics reveal about AW27/28 trends",
+   "publisher": "FashionUnited (Florence Julienne)",
+   "url": "https://fashionunited.com/news/fairs/premiere-vision-paris-what-fabrics-reveal-about-aw27-28-trends/2026090474424",
+   "date": "4 September 2026"
+  },
+  {
+   "title": "Autumn-Winter 27-28: \"Living Matter\"",
+   "publisher": "Première Vision",
+   "url": "https://www.premierevision.com/articles/e03ad204-f054-f111-8fca-000d3a3a75fd/autumn-winter-27-28-living-matter-towards-creation-reconnected-with-life",
+   "date": "21 May 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

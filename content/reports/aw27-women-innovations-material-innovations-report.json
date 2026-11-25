@@ -1,0 +1,54 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw27",
+ "audience": "women",
+ "category": "innovations",
+ "subsection": "material-innovations",
+ "slug": "material-innovations-report",
+ "title": "AW27 Women's Material Innovations",
+ "summary": "Material innovations for AW27 women: thermoregulating and lighter wools, hidden membranes, bio-based leather alternatives, chrome-free leathers.",
+ "research_period": "Pitti Filati, June 2026; Première Vision, Lineapelle and Milano Unica, September 2026; forecaster reports to November 2026",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Pre-runway forecast. The AW27 shows run from January to March 2027. This report is built from the 2026 yarn, fabric and leather fairs (Pitti Filati in June; Première Vision, Lineapelle and Milano Unica in September), published forecaster views and the SS27 runways. Forecut will update it after the shows."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Separable double-faced woollens return in more varied weights; ultrafine yarns and tight knits make wool lighter and softer, with thermal comfort without synthetics<sup>[1]</sup>\n- Citywear suitings hide waterproof, breathable or windproof membranes, three-layer constructions and bi-stretch, so a jacket looks like a classic suit while performing like technical wear<sup>[1]</sup>\n- Leather alternatives (bio-based polymers, hemp, wool, brushed alpaca) remain niche, with a \"considerable gap\" between market weight and communication<sup>[1]</sup>\n- TFL names authenticity, \"soft volumes and clean, refined colours\" and nubuck as a key leather; vegetable-tanned and chrome-free leathers are growing strongly<sup>[2]</sup>\n- Woolmark presented merino wool as \"the technical fibre\" for AW27 sourcing at Pitti Filati<sup>[3]</sup>"
+  },
+  {
+   "heading": "Readiness",
+   "body": "| Material | Readiness (Forecut assessment) |\n|---|---|\n| Lighter, softer wools | Ready |\n| Membrane suiting | Ready |\n| Chrome-free and vegetable-tanned leather | Ready; growing |\n| Bio-based leather alternatives | Niche; verify claims |"
+  }
+ ],
+ "timing": "In stores August 2027 to January 2028.",
+ "products": "",
+ "design_implications": "- Prefer proven fibres over unproven alternatives.",
+ "commercial_implications": "- Do not overclaim; EU greenwashing rules apply.",
+ "sources": [
+  {
+   "title": "Première Vision Paris: what fabrics reveal about AW27/28 trends",
+   "publisher": "FashionUnited (Florence Julienne)",
+   "url": "https://fashionunited.com/news/fairs/premiere-vision-paris-what-fabrics-reveal-about-aw27-28-trends/2026090474424",
+   "date": "4 September 2026"
+  },
+  {
+   "title": "TFL colour trends Autumn-Winter 2027-28",
+   "publisher": "TFL",
+   "url": "https://www.tfl.com/en/advice/tfl-colour-trends/tfl-colour-trends-autumn-winter-2027-28/",
+   "date": "April 2026"
+  },
+  {
+   "title": "Woolmark at Pitti Filati, June 2026",
+   "publisher": "The Woolmark Company",
+   "url": "https://www.woolmark.com/industry/newsroom/pitti-filati-june-2026/",
+   "date": "24 June 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

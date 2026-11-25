@@ -1,0 +1,42 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw27",
+ "audience": "girls",
+ "category": "colours",
+ "subsection": "theme-colour-palettes",
+ "slug": "theme-colour-palettes-report",
+ "title": "AW27 Girls' Theme Colour Palettes",
+ "summary": "Palettes for AW27 girlswear themes.",
+ "research_period": "Pitti Filati, June 2026; Première Vision, Lineapelle and Milano Unica, September 2026; forecaster reports to November 2026",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Pre-fair forecast. The AW27 kidswear fairs (Pitti Bimbo and Playtime Paris) take place in January 2027. This report applies the 2026 adult yarn, fabric and leather fair evidence and the AW26 kidswear fair record to kidswear, and will be updated after the fairs."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Pink and mauve are becoming gender-neutral, reaching menswear and even junior sweatshirts<sup>[1]</sup>"
+  },
+  {
+   "heading": "Palettes by theme",
+   "body": "| Theme | Lead | Accent | Range |\n|---|---|---|---|\n| Dressage | Plum | Waxy ochre | Oat |\n| Lace and Knit | Dusty mauve | Sage | Oat |"
+  }
+ ],
+ "timing": "In stores August 2027 to January 2028.",
+ "products": "",
+ "design_implications": "- Share oat and greyed blue.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Accents shallow.",
+ "sources": [
+  {
+   "title": "Première Vision Paris: what fabrics reveal about AW27/28 trends",
+   "publisher": "FashionUnited (Florence Julienne)",
+   "url": "https://fashionunited.com/news/fairs/premiere-vision-paris-what-fabrics-reveal-about-aw27-28-trends/2026090474424",
+   "date": "4 September 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

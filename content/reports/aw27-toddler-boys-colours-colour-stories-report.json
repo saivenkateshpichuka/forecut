@@ -1,0 +1,52 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw27",
+ "audience": "toddler-boys",
+ "category": "colours",
+ "subsection": "colour-stories",
+ "slug": "colour-stories-report",
+ "title": "AW27 Toddler Boys' Colour Stories",
+ "summary": "Colour stories for AW27 toddler boys.",
+ "research_period": "Pitti Filati, June 2026; Première Vision, Lineapelle and Milano Unica, September 2026; forecaster reports to November 2026",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Pre-fair forecast. The AW27 kidswear fairs (Pitti Bimbo and Playtime Paris) take place in January 2027. This report applies the 2026 adult yarn, fabric and leather fair evidence and the AW26 kidswear fair record to kidswear, and will be updated after the fairs."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Première Vision's colour preview opens with \"grayed mid-tones, as if patinated by time\", with purples \"taking center stage\"<sup>[1]</sup>\n- Première Vision's AW27 theme \"Living Matter\" puts materials \"at the center\", with materials \"infused with memory\"<sup>[2]</sup>"
+  },
+  {
+   "heading": "Stable",
+   "body": "Oat, greyed blue, ochre."
+  },
+  {
+   "heading": "Cosy",
+   "body": "Oat and sage."
+  }
+ ],
+ "timing": "In stores August 2027 to January 2028.",
+ "products": "",
+ "design_implications": "- One capsule per story.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- The calmest story carries volume.",
+ "sources": [
+  {
+   "title": "AW 27-28 colour preview: a colour shaped by time",
+   "publisher": "Première Vision",
+   "url": "https://www.premierevision.com/articles/fbd142fa-b23c-f111-8ef3-000d3a4af15b/aw-27-28-color-preview-a-color-shaped-by-time",
+   "date": "2026"
+  },
+  {
+   "title": "Autumn-Winter 27-28: \"Living Matter\"",
+   "publisher": "Première Vision",
+   "url": "https://www.premierevision.com/articles/e03ad204-f054-f111-8fca-000d3a3a75fd/autumn-winter-27-28-living-matter-towards-creation-reconnected-with-life",
+   "date": "21 May 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

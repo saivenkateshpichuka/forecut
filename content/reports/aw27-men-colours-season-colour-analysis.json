@@ -1,0 +1,61 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw27",
+ "audience": "men",
+ "category": "colours",
+ "subsection": "season-colours",
+ "slug": "season-colour-analysis",
+ "title": "AW27 Men's Season Colour Analysis",
+ "summary": "AW27 menswear colour: tinted black, greyed blue and copper khaki for tailoring and outerwear; dusky violet and tannic bordeaux for a younger customer.",
+ "research_period": "Pitti Filati, June 2026; Première Vision, Lineapelle and Milano Unica, September 2026; forecaster reports to November 2026",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Pre-runway forecast. The AW27 shows run from January to March 2027. This report is built from the 2026 yarn, fabric and leather fairs (Pitti Filati in June; Première Vision, Lineapelle and Milano Unica in September), published forecaster views and the SS27 runways. Forecut will update it after the shows."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Neutrals shift: grey toward greyish blue, khaki toward taupe, green or copper, navy toward turquoise or purplish tones<sup>[1]</sup>\n- At Première Vision, deep violet, plums, dusty pinks, mauves and tinted off-blacks set the tone; violet is \"centre stage\", and plum and deep red become alternatives to black<sup>[1]</sup>\n- Van den Hoek's menswear colour: sand, beige, brown and cognac, army to bright greens, grey as a base, and one bold accent<sup>[2]</sup>\n- Forecut's AW27 colour forecast: violet, plum and tannic bordeaux replace black over tinted neutrals<sup>[3]</sup>"
+  },
+  {
+   "heading": "The palette",
+   "body": "| Colour | Pantone TCX (nearest) | HEX | Role |\n|---|---|---|---|\n| Tinted black | 19-3713 TCX | #2C2A33 | Core |\n| Greyed blue | 17-4020 TCX | #66829A | Core |\n| Copper khaki | 17-0935 TCX | #8A6F48 | Core |\n| Dusky violet | 18-3513 TCX | #6B5876 | Seasonal |\n| Tannic bordeaux | 19-1724 TCX | #64242E | Seasonal |\n| Sage | 15-6414 TCX | #A1AD92 | Accent |\n| Mushroom | 13-1105 TCX | #C7BBA4 | Core |\n\nConfirm codes against a physical Pantone book before dyeing."
+  },
+  {
+   "heading": "Colour groups",
+   "body": "- **Core:** tinted black, greyed blue, copper khaki, mushroom.\n- **Seasonal:** dusky violet, tannic bordeaux.\n- **Accent:** sage, and one bold accent on a subdued base."
+  }
+ ],
+ "timing": "In stores August 2027 to January 2028.",
+ "products": "",
+ "design_implications": "- Lab-dip tinted black against true black.",
+ "commercial_implications": "- Move part of the black and navy buy to tinted black and greyed blue.",
+ "sources": [
+  {
+   "title": "Première Vision Paris: what fabrics reveal about AW27/28 trends",
+   "publisher": "FashionUnited (Florence Julienne)",
+   "url": "https://fashionunited.com/news/fairs/premiere-vision-paris-what-fabrics-reveal-about-aw27-28-trends/2026090474424",
+   "date": "4 September 2026"
+  },
+  {
+   "title": "Fall/Winter 2027/28 trend report: controlled audacity in an age of agency",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fashion/fall-winter-2027-28-trend-report-controlled-audacity-in-an-age-of-agency/2026110375529",
+   "date": "3 November 2026",
+   "note": "Compiled by FashionUnited from forecaster and fair documents and checked by an editor; only non-WGSN material is used here"
+  },
+  {
+   "title": "Forecut AW27 colour forecast",
+   "publisher": "Forecut",
+   "url": "https://forecut.in/forecasts/aw27/colours/colour-forecast/",
+   "date": "November 2026",
+   "note": "Built from the September 2026 fabric and leather fairs and the SS27 runways"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25",
+ "trend_status": "Rising"
+}

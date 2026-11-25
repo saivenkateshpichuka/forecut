@@ -1,0 +1,54 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw27",
+ "audience": "girls",
+ "category": "innovations",
+ "subsection": "design-production",
+ "slug": "design-and-production-innovations-report",
+ "title": "AW27 Girls' Design and Production Innovations",
+ "summary": "Design and production for AW27 girlswear: permanent ranges, take-back, grading for growth and product data for the EU passport.",
+ "research_period": "Pitti Filati, June 2026; Première Vision, Lineapelle and Milano Unica, September 2026; forecaster reports to November 2026",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Pre-fair forecast. The AW27 kidswear fairs (Pitti Bimbo and Playtime Paris) take place in January 2027. This report applies the 2026 adult yarn, fabric and leather fair evidence and the AW26 kidswear fair record to kidswear, and will be updated after the fairs."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- At Playtime Paris in January 2026 (AW26 collections), CSR was \"no longer a peripheral narrative\": Minimalisma uses silk, merino, organic cotton and linen; MarMar Copenhagen uses Tencel modal and organic cotton for clothes that \"last\"; Gray Label sells a permanent unisex range and runs a pre-loved take-back<sup>[1]</sup>\n- The EU textiles Digital Product Passport delegated act is planned for the fourth quarter of 2027; since 19 July 2026 large companies may not destroy certain unsold apparel<sup>[2]</sup>\n- EU Directive 2024/825 bans greenwashing and misleading environmental claims; Italy's transposing decree entered into force on 27 September 2026<sup>[3]</sup>"
+  },
+  {
+   "heading": "Actions",
+   "body": "- Permanent core styles with seasonal drops.\n- Pre-loved take-back.\n- Record fibre, origin and safety tests."
+  }
+ ],
+ "timing": "In stores August 2027 to January 2028.",
+ "products": "",
+ "design_implications": "- Grade for growth.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Plan resale routes.",
+ "sources": [
+  {
+   "title": "CSR drives desirability in kidswear market: Playtime 2026 insights",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fairs/csr-drives-desirability-in-kidswear-market-playtime-2026-insights/2026012870269",
+   "date": "28 January 2026"
+  },
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  },
+  {
+   "title": "Events at Lineapelle September 2026 (EU Directive 2024/825 on greenwashing)",
+   "publisher": "Lineapelle",
+   "url": "https://www.lineapelle-fair.it/en/news-events/view/events-lineapelle-september-2026",
+   "date": "6 August 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

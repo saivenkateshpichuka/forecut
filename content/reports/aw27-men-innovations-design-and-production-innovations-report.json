@@ -1,0 +1,55 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw27",
+ "audience": "men",
+ "category": "innovations",
+ "subsection": "design-production",
+ "slug": "design-and-production-innovations-report",
+ "title": "AW27 Men's Design and Production Innovations",
+ "summary": "Design and production for AW27 menswear: design for repair, light volume and product data for the EU passport.",
+ "research_period": "Pitti Filati, June 2026; Première Vision, Lineapelle and Milano Unica, September 2026; forecaster reports to November 2026",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Pre-runway forecast. The AW27 shows run from January to March 2027. This report is built from the 2026 yarn, fabric and leather fairs (Pitti Filati in June; Première Vision, Lineapelle and Milano Unica in September), published forecaster views and the SS27 runways. Forecut will update it after the shows."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Footwear forecasters (AEC and Trendstop) describe \"style without sacrifice\", durability and repair with replaceable parts, sensory quilted surfaces and 70s and 90s micro-heels<sup>[1]</sup>\n- The EU textiles Digital Product Passport delegated act is planned for the fourth quarter of 2027; since 19 July 2026 large companies may not destroy certain unsold apparel<sup>[2]</sup>\n- EU Directive 2024/825 bans greenwashing and misleading environmental claims; Italy's transposing decree entered into force on 27 September 2026<sup>[3]</sup>"
+  },
+  {
+   "heading": "Actions",
+   "body": "- Replaceable parts.\n- Record fibre and origin."
+  }
+ ],
+ "timing": "In stores August 2027 to January 2028.",
+ "products": "",
+ "design_implications": "- Repair.",
+ "commercial_implications": "- Plan around Lunar New Year 2028.",
+ "sources": [
+  {
+   "title": "Fall/Winter 2027/28 trend report: controlled audacity in an age of agency",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fashion/fall-winter-2027-28-trend-report-controlled-audacity-in-an-age-of-agency/2026110375529",
+   "date": "3 November 2026",
+   "note": "Compiled by FashionUnited from forecaster and fair documents and checked by an editor; only non-WGSN material is used here"
+  },
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  },
+  {
+   "title": "Events at Lineapelle September 2026 (EU Directive 2024/825 on greenwashing)",
+   "publisher": "Lineapelle",
+   "url": "https://www.lineapelle-fair.it/en/news-events/view/events-lineapelle-september-2026",
+   "date": "6 August 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

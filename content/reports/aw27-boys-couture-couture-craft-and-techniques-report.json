@@ -1,0 +1,55 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw27",
+ "audience": "boys",
+ "category": "couture",
+ "subsection": "craft-techniques",
+ "slug": "couture-craft-and-techniques-report",
+ "title": "AW27 Boys' Couture Craft and Techniques",
+ "summary": "Craft for AW27 boyswear: knitted texture, quilt geometry and natural dyeing.",
+ "research_period": "Pitti Filati, June 2026; Première Vision, Lineapelle and Milano Unica, September 2026; forecaster reports to November 2026",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Pre-fair forecast. The AW27 kidswear fairs (Pitti Bimbo and Playtime Paris) take place in January 2027. This report applies the 2026 adult yarn, fabric and leather fair evidence and the AW26 kidswear fair record to kidswear, and will be updated after the fairs."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Pitti Filati's AW27 research theme \"Discipline\" draws on equestrian codes: dressage (braided manes, saddle pads), Western reining (Quarter Horse spots, quilt geometry, denim, suede, flannel) and show jumping (stripes, colour blocking, technical knits)<sup>[1]</sup>\n- Van den Hoek describes natural dyes from tea, coffee, corn and tree bark, whose limits give richer colour gradations<sup>[2]</sup>\n- Première Vision's AW27 theme \"Living Matter\" puts materials \"at the center\", with materials \"infused with memory\"<sup>[3]</sup>"
+  },
+  {
+   "heading": "Translating",
+   "body": "- Intarsia and hand-finished knits.\n- Quilt geometry.\n- Natural dyes on basics."
+  }
+ ],
+ "timing": "In stores August 2027 to January 2028.",
+ "products": "",
+ "design_implications": "- Hand work on safe placements.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Heritage and gift value.",
+ "sources": [
+  {
+   "title": "Pitti Filati 99 Research Area: Discipline (Fall/Winter 2027/2028)",
+   "publisher": "Pitti Immagine Filati",
+   "url": "https://filati.pittimmagine.com/99/spazioricerca",
+   "date": "June 2026"
+  },
+  {
+   "title": "Fall/Winter 2027/28 trend report: controlled audacity in an age of agency",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fashion/fall-winter-2027-28-trend-report-controlled-audacity-in-an-age-of-agency/2026110375529",
+   "date": "3 November 2026",
+   "note": "Compiled by FashionUnited from forecaster and fair documents and checked by an editor; only non-WGSN material is used here"
+  },
+  {
+   "title": "Autumn-Winter 27-28: \"Living Matter\"",
+   "publisher": "Première Vision",
+   "url": "https://www.premierevision.com/articles/e03ad204-f054-f111-8fca-000d3a3a75fd/autumn-winter-27-28-living-matter-towards-creation-reconnected-with-life",
+   "date": "21 May 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

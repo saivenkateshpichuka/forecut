@@ -1,0 +1,60 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw27",
+ "audience": "girls",
+ "category": "innovations",
+ "subsection": "material-innovations",
+ "slug": "material-innovations-report",
+ "title": "AW27 Girls' Material Innovations",
+ "summary": "Material innovations for AW27 girlswear: machine-washable merino, recycled down alternatives, closed-loop modal, chrome-free leather.",
+ "research_period": "Pitti Filati, June 2026; Première Vision, Lineapelle and Milano Unica, September 2026; forecaster reports to November 2026",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Pre-fair forecast. The AW27 kidswear fairs (Pitti Bimbo and Playtime Paris) take place in January 2027. This report applies the 2026 adult yarn, fabric and leather fair evidence and the AW26 kidswear fair record to kidswear, and will be updated after the fairs."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Woolmark presented merino wool as \"the technical fibre\" for AW27 sourcing at Pitti Filati<sup>[1]</sup>\n- At Playtime Paris in January 2026 (AW26 collections), CSR was \"no longer a peripheral narrative\": Minimalisma uses silk, merino, organic cotton and linen; MarMar Copenhagen uses Tencel modal and organic cotton for clothes that \"last\"; Gray Label sells a permanent unisex range and runs a pre-loved take-back<sup>[2]</sup>\n- TFL names authenticity, \"soft volumes and clean, refined colours\" and nubuck as a key leather; vegetable-tanned and chrome-free leathers are growing strongly<sup>[3]</sup>\n- Leather alternatives (bio-based polymers, hemp, wool, brushed alpaca) remain niche, with a \"considerable gap\" between market weight and communication<sup>[4]</sup>"
+  },
+  {
+   "heading": "Readiness",
+   "body": "| Material | Readiness |\n|---|---|\n| Washable merino | Ready |\n| Closed-loop modal blends | Ready |\n| Chrome-free leather shoes | Ready |\n| Bio-based leather alternatives | Niche |"
+  }
+ ],
+ "timing": "In stores August 2027 to January 2028.",
+ "products": "",
+ "design_implications": "- Skin-friendly finishes.\n- Safety: no drawstrings or long cords at the hood, neck or waist, in line with EN 14682; test the attachment strength of buttons, snaps and decorations, and keep small detachable parts off baby and toddler pieces.",
+ "commercial_implications": "- Verify every claim.",
+ "sources": [
+  {
+   "title": "Woolmark at Pitti Filati, June 2026",
+   "publisher": "The Woolmark Company",
+   "url": "https://www.woolmark.com/industry/newsroom/pitti-filati-june-2026/",
+   "date": "24 June 2026"
+  },
+  {
+   "title": "CSR drives desirability in kidswear market: Playtime 2026 insights",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fairs/csr-drives-desirability-in-kidswear-market-playtime-2026-insights/2026012870269",
+   "date": "28 January 2026"
+  },
+  {
+   "title": "TFL colour trends Autumn-Winter 2027-28",
+   "publisher": "TFL",
+   "url": "https://www.tfl.com/en/advice/tfl-colour-trends/tfl-colour-trends-autumn-winter-2027-28/",
+   "date": "April 2026"
+  },
+  {
+   "title": "Première Vision Paris: what fabrics reveal about AW27/28 trends",
+   "publisher": "FashionUnited (Florence Julienne)",
+   "url": "https://fashionunited.com/news/fairs/premiere-vision-paris-what-fabrics-reveal-about-aw27-28-trends/2026090474424",
+   "date": "4 September 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

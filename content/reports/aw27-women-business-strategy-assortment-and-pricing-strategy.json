@@ -1,0 +1,46 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw27",
+ "audience": "women",
+ "category": "business-strategy",
+ "subsection": "assortment-pricing",
+ "slug": "assortment-and-pricing-strategy",
+ "title": "AW27 Women's Assortment and Pricing Strategy",
+ "summary": "Plan AW27 womenswear for low growth: depth in coats and suiting, shallow statement buys, full price on what is new.",
+ "research_period": "Pitti Filati, June 2026; Première Vision, Lineapelle and Milano Unica, September 2026; forecaster reports to November 2026",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Pre-runway forecast. The AW27 shows run from January to March 2027. This report is built from the 2026 yarn, fabric and leather fairs (Pitti Filati in June; Première Vision, Lineapelle and Milano Unica in September), published forecaster views and the SS27 runways. Forecut will update it after the shows."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Fashion is expected to remain in low single-digit growth in 2027, with markdown risk from excess stock<sup>[1]</sup>\n- Resale is expected to grow two to three times faster than first-hand fashion through 2027<sup>[1]</sup>\n- The EU textiles Digital Product Passport delegated act is planned for the fourth quarter of 2027; since 19 July 2026 large companies may not destroy certain unsold apparel<sup>[1]</sup>"
+  },
+  {
+   "heading": "Assortment",
+   "body": "| Tier | What goes in it |\n|---|---|\n| Core (about half) | Tailoring, knits in mushroom, tinted black, greyed blue |\n| Seasonal (about a third) | Violet and bordeaux coats, velvet, skirt suits |\n| Statement (the rest) | Lace, lurex, teddy coats |"
+  },
+  {
+   "heading": "Pricing",
+   "body": "- Full price on double-faced and technical coats.\n- Value on merino basics."
+  }
+ ],
+ "timing": "In stores August 2027 to January 2028.",
+ "products": "",
+ "design_implications": "- Fewer styles, more combinations.",
+ "commercial_implications": "- Plan resale and rework routes in the EU.",
+ "sources": [
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

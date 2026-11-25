@@ -1,0 +1,46 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw27",
+ "audience": "men",
+ "category": "business-strategy",
+ "subsection": "assortment-pricing",
+ "slug": "assortment-and-pricing-strategy",
+ "title": "AW27 Men's Assortment and Pricing Strategy",
+ "summary": "AW27 menswear assortment and pricing for low growth.",
+ "research_period": "Pitti Filati, June 2026; Première Vision, Lineapelle and Milano Unica, September 2026; forecaster reports to November 2026",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Pre-runway forecast. The AW27 shows run from January to March 2027. This report is built from the 2026 yarn, fabric and leather fairs (Pitti Filati in June; Première Vision, Lineapelle and Milano Unica in September), published forecaster views and the SS27 runways. Forecut will update it after the shows."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Fashion is expected to remain in low single-digit growth in 2027, with markdown risk from excess stock<sup>[1]</sup>\n- Resale is expected to grow two to three times faster than first-hand fashion through 2027<sup>[1]</sup>"
+  },
+  {
+   "heading": "Assortment",
+   "body": "| Tier | What |\n|---|---|\n| Core | Tailoring, knits in tinted black, greyed blue |\n| Seasonal | Down, waistcoats, pinks |\n| Statement | Velvet, skirts, fur-effect |"
+  },
+  {
+   "heading": "Pricing",
+   "body": "- Full price on technical outerwear."
+  }
+ ],
+ "timing": "In stores August 2027 to January 2028.",
+ "products": "",
+ "design_implications": "- Fewer styles.",
+ "commercial_implications": "- Track weekly.",
+ "sources": [
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

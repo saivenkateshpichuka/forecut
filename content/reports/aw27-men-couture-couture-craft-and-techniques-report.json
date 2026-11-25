@@ -1,0 +1,55 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw27",
+ "audience": "men",
+ "category": "couture",
+ "subsection": "craft-techniques",
+ "slug": "couture-craft-and-techniques-report",
+ "title": "AW27 Men's Couture Craft and Techniques",
+ "summary": "Craft for AW27 menswear: natural dyeing, double-faced finishing, intricate weaving and patinated leather.",
+ "research_period": "Pitti Filati, June 2026; Première Vision, Lineapelle and Milano Unica, September 2026; forecaster reports to November 2026",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Pre-runway forecast. The AW27 shows run from January to March 2027. This report is built from the 2026 yarn, fabric and leather fairs (Pitti Filati in June; Première Vision, Lineapelle and Milano Unica in September), published forecaster views and the SS27 runways. Forecut will update it after the shows."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Van den Hoek describes natural dyes from tea, coffee, corn and tree bark, whose limits give richer colour gradations<sup>[1]</sup>\n- Separable double-faced woollens return in more varied weights; ultrafine yarns and tight knits make wool lighter and softer, with thermal comfort without synthetics<sup>[2]</sup>\n- APLF's AW27 leather directions run from raw, vegetable-tanned and waxed pull-up leathers to ultra-supple nappas and cashmere-hand suedes, glazed and moiré luxury leathers, and rubbery, holographic and laser-engraved experimental leathers<sup>[3]</sup>"
+  },
+  {
+   "heading": "Translating",
+   "body": "- Naturally dyed knits.\n- Double-faced coats.\n- Patinated leather."
+  }
+ ],
+ "timing": "In stores August 2027 to January 2028.",
+ "products": "",
+ "design_implications": "- Hand work on hero pieces.",
+ "commercial_implications": "- Craft story on label.",
+ "sources": [
+  {
+   "title": "Fall/Winter 2027/28 trend report: controlled audacity in an age of agency",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fashion/fall-winter-2027-28-trend-report-controlled-audacity-in-an-age-of-agency/2026110375529",
+   "date": "3 November 2026",
+   "note": "Compiled by FashionUnited from forecaster and fair documents and checked by an editor; only non-WGSN material is used here"
+  },
+  {
+   "title": "Première Vision Paris: what fabrics reveal about AW27/28 trends",
+   "publisher": "FashionUnited (Florence Julienne)",
+   "url": "https://fashionunited.com/news/fairs/premiere-vision-paris-what-fabrics-reveal-about-aw27-28-trends/2026090474424",
+   "date": "4 September 2026"
+  },
+  {
+   "title": "APLF colour and material trends Fall-Winter 2027/28",
+   "publisher": "APLF",
+   "url": "https://www.aplf.com/aplf-colour-material-trends-fall-winter-2027-28/",
+   "date": "2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

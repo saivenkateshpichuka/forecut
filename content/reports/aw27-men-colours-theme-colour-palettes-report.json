@@ -1,0 +1,49 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw27",
+ "audience": "men",
+ "category": "colours",
+ "subsection": "theme-colour-palettes",
+ "slug": "theme-colour-palettes-report",
+ "title": "AW27 Men's Theme Colour Palettes",
+ "summary": "Palettes for AW27 men's themes.",
+ "research_period": "Pitti Filati, June 2026; Première Vision, Lineapelle and Milano Unica, September 2026; forecaster reports to November 2026",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Pre-runway forecast. The AW27 shows run from January to March 2027. This report is built from the 2026 yarn, fabric and leather fairs (Pitti Filati in June; Première Vision, Lineapelle and Milano Unica in September), published forecaster views and the SS27 runways. Forecut will update it after the shows."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Van den Hoek's menswear colour: sand, beige, brown and cognac, army to bright greens, grey as a base, and one bold accent<sup>[1]</sup>\n- Pink and mauve are becoming gender-neutral, reaching menswear and even junior sweatshirts<sup>[2]</sup>"
+  },
+  {
+   "heading": "Palettes",
+   "body": "| Theme | Lead | Accent | Range |\n|---|---|---|---|\n| Protected | Tinted black 19-3713 TCX | Sage 15-6414 TCX | Greyed blue, copper khaki |\n| Elegant Layers | Mushroom 13-1105 TCX | Tannic bordeaux 19-1724 TCX | Copper khaki |\n| Pink for All | Dusty mauve 16-2107 TCX | Dusky violet 18-3513 TCX | Tinted black |"
+  }
+ ],
+ "timing": "In stores August 2027 to January 2028.",
+ "products": "",
+ "design_implications": "- Share tinted black.",
+ "commercial_implications": "- Accents shallow.",
+ "sources": [
+  {
+   "title": "Fall/Winter 2027/28 trend report: controlled audacity in an age of agency",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fashion/fall-winter-2027-28-trend-report-controlled-audacity-in-an-age-of-agency/2026110375529",
+   "date": "3 November 2026",
+   "note": "Compiled by FashionUnited from forecaster and fair documents and checked by an editor; only non-WGSN material is used here"
+  },
+  {
+   "title": "Première Vision Paris: what fabrics reveal about AW27/28 trends",
+   "publisher": "FashionUnited (Florence Julienne)",
+   "url": "https://fashionunited.com/news/fairs/premiere-vision-paris-what-fabrics-reveal-about-aw27-28-trends/2026090474424",
+   "date": "4 September 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

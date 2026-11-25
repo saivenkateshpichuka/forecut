@@ -96,3 +96,29 @@ def palette(rows):
 
 def table(head, rows):
     return '| ' + ' | '.join(head) + ' |\n|' + '---|' * len(head) + '\n' + '\n'.join('| ' + ' | '.join(r) + ' |' for r in rows)
+
+
+KEYS = [(('colours', 'season-colours'), 'col'), (('colours', 'theme-colour-palettes'), 'tcp'), (('colours', 'colour-stories'), 'cs'),
+        (('silhouettes', 'woven'), 'sw'), (('silhouettes', 'knit'), 'sk'), (('fabrics', 'woven'), 'fw'), (('fabrics', 'knit'), 'fk'),
+        (('trims', 'trending-trims'), 'tt'), (('trims', 'trim-stories'), 'ts'), (('trims', 'trim-market-strategy'), 'tm'),
+        (('trims', 'trim-innovations'), 'ti'), (('styling', 'celebrity-influence'), 'celeb'), (('styling', 'casualwear'), 'casual'),
+        (('styling', 'formalwear'), 'formal'), (('styling', 'partywear'), 'party'), (('couture', 'craft-techniques'), 'craft'),
+        (('couture', 'materials-details'), 'mat'), (('business-strategy', 'category-opportunities'), 'opp'),
+        (('business-strategy', 'assortment-pricing'), 'ass'), (('innovations', 'material-innovations'), 'mi'),
+        (('innovations', 'design-production'), 'dpi')]
+
+
+def build_audience(s, aud, D, E):
+    """D: {'themes': [dict], key: dict(s=, ev=[E keys], b=[(h, body)], t=, p=, d=, c=, st=)}"""
+    def evs(ks):
+        return [E[k] for k in ks]
+    for th in D.get('themes', []):
+        s.theme(aud, th['slug'], th['name'], th['s'], th['story'], th['col'], th['sil'], th['fab'], th['trim'],
+                status=th.get('st', 'Rising'), timing=th.get('t', D.get('t', '')), products=th.get('p', ''),
+                design=th.get('d', ''), commercial=th.get('c', ''))
+    for (cat, sub), key in KEYS:
+        x = D.get(key)
+        if not x:
+            raise SystemExit(f'missing {aud} {key}')
+        s.rep(aud, cat, sub, x['s'], ev=evs(x.get('ev', [])), sections=x.get('b', []), timing=x.get('t', D.get('t', '')),
+              products=x.get('p', ''), design=x.get('d', ''), commercial=x.get('c', ''), status=x.get('st'))

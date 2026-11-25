@@ -1,0 +1,49 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw27",
+ "audience": "men",
+ "category": "trims",
+ "subsection": "trim-innovations",
+ "slug": "trim-innovations-report",
+ "title": "AW27 Men's Trim Innovations",
+ "summary": "Men's trim innovations: heat-fused padding, bonded seams, magnetic closures, replaceable parts.",
+ "research_period": "Pitti Filati, June 2026; Première Vision, Lineapelle and Milano Unica, September 2026; forecaster reports to November 2026",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Pre-runway forecast. The AW27 shows run from January to March 2027. This report is built from the 2026 yarn, fabric and leather fairs (Pitti Filati in June; Première Vision, Lineapelle and Milano Unica in September), published forecaster views and the SS27 runways. Forecut will update it after the shows."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Menswear forecaster Edwin van den Hoek: jackets, trousers and down grow bigger without weight (\"It looks very big, but it is very light to wear\"); layering at the neck; fur or hairy collars; leather as a refined detail<sup>[1]</sup>\n- APLF trims include patinated brass buckles, hammered studs, horn closures, magnetic closures, invisible zips, jewelled buckles, decorative chains, oversized resin buckles and rubberised webbing<sup>[2]</sup>\n- Footwear forecasters (AEC and Trendstop) describe \"style without sacrifice\", durability and repair with replaceable parts, sensory quilted surfaces and 70s and 90s micro-heels<sup>[1]</sup>"
+  },
+  {
+   "heading": "Readiness",
+   "body": "| Innovation | Readiness |\n|---|---|\n| Heat-fused padding | Ready in outerwear |\n| Magnetic closures | Ready |\n| Replaceable parts | Early |"
+  }
+ ],
+ "timing": "In stores August 2027 to January 2028.",
+ "products": "",
+ "design_implications": "- Design for repair.",
+ "commercial_implications": "- Function supports price.",
+ "sources": [
+  {
+   "title": "Fall/Winter 2027/28 trend report: controlled audacity in an age of agency",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fashion/fall-winter-2027-28-trend-report-controlled-audacity-in-an-age-of-agency/2026110375529",
+   "date": "3 November 2026",
+   "note": "Compiled by FashionUnited from forecaster and fair documents and checked by an editor; only non-WGSN material is used here"
+  },
+  {
+   "title": "APLF colour and material trends Fall-Winter 2027/28",
+   "publisher": "APLF",
+   "url": "https://www.aplf.com/aplf-colour-material-trends-fall-winter-2027-28/",
+   "date": "2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

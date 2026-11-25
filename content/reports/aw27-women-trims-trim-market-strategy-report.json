@@ -1,0 +1,48 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw27",
+ "audience": "women",
+ "category": "trims",
+ "subsection": "trim-market-strategy",
+ "slug": "trim-market-strategy-report",
+ "title": "AW27 Women's Trim Market Strategy",
+ "summary": "In a low-growth year, put trim spend on tailoring and coats and keep ornament for hero evening pieces; avoid unverifiable eco claims.",
+ "research_period": "Pitti Filati, June 2026; Première Vision, Lineapelle and Milano Unica, September 2026; forecaster reports to November 2026",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Pre-runway forecast. The AW27 shows run from January to March 2027. This report is built from the 2026 yarn, fabric and leather fairs (Pitti Filati in June; Première Vision, Lineapelle and Milano Unica in September), published forecaster views and the SS27 runways. Forecut will update it after the shows."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- Fashion is expected to remain in low single-digit growth in 2027, with markdown risk from excess stock<sup>[1]</sup>\n- EU Directive 2024/825 bans greenwashing and misleading environmental claims; Italy's transposing decree entered into force on 27 September 2026<sup>[2]</sup>"
+  },
+  {
+   "heading": "Build, test, sell through",
+   "body": "| Action | Trims |\n|---|---|\n| Build | Horn and corozo buttons, piping |\n| Test | Jewelled buckles, lace insets |\n| Sell through | Heavy logo hardware |"
+  }
+ ],
+ "timing": "In stores August 2027 to January 2028.",
+ "products": "",
+ "design_implications": "- Document trim materials for claims.",
+ "commercial_implications": "- Do not market \"eco\" trims without proof.",
+ "sources": [
+  {
+   "title": "Fashion: 2027, the year growth will finally have to be profitable",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/business/fashion-2027-the-year-growth-will-finally-have-to-be-profitable/2026111875626",
+   "date": "18 November 2026"
+  },
+  {
+   "title": "Events at Lineapelle September 2026 (EU Directive 2024/825 on greenwashing)",
+   "publisher": "Lineapelle",
+   "url": "https://www.lineapelle-fair.it/en/news-events/view/events-lineapelle-september-2026",
+   "date": "6 August 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}

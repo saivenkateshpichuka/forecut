@@ -1,0 +1,48 @@
+{
+ "kind": "report",
+ "status": "published",
+ "season": "aw27",
+ "audience": "women",
+ "category": "colours",
+ "subsection": "theme-colour-palettes",
+ "slug": "theme-colour-palettes-report",
+ "title": "AW27 Women's Theme Colour Palettes",
+ "summary": "Palettes for AW27 women's themes: Dramatic Presence, Soft Armour and Remastered Classics.",
+ "research_period": "Pitti Filati, June 2026; Première Vision, Lineapelle and Milano Unica, September 2026; forecaster reports to November 2026",
+ "markets": "Global; premium and mid-market",
+ "sections": [
+  {
+   "heading": "How this forecast was built",
+   "body": "Pre-runway forecast. The AW27 shows run from January to March 2027. This report is built from the 2026 yarn, fabric and leather fairs (Pitti Filati in June; Première Vision, Lineapelle and Milano Unica in September), published forecaster views and the SS27 runways. Forecut will update it after the shows."
+  },
+  {
+   "heading": "The evidence",
+   "body": "- At Première Vision, deep violet, plums, dusty pinks, mauves and tinted off-blacks set the tone; violet is \"centre stage\", and plum and deep red become alternatives to black<sup>[1]</sup>\n- Boland expects mustard and chartreuse, creamy white and \"sensual black\", with bold red, yellow, blue, green and purple<sup>[2]</sup>"
+  },
+  {
+   "heading": "Palettes by theme",
+   "body": "| Theme | Lead | Accent | Range |\n|---|---|---|---|\n| Dramatic Presence | Deep violet 19-3638 TCX | Waxy ochre 16-0953 TCX | Tannic bordeaux, tinted black |\n| Soft Armour | Greyed blue 17-4020 TCX | Silicone pink 14-1909 TCX | Mushroom, tinted black |\n| Remastered Classics | Mushroom 13-1105 TCX | Mustard or chartreuse | Creamy white, tinted black |"
+  }
+ ],
+ "timing": "In stores August 2027 to January 2028.",
+ "products": "",
+ "design_implications": "- Share mushroom and tinted black across themes.",
+ "commercial_implications": "- Accents as small buys.",
+ "sources": [
+  {
+   "title": "Première Vision Paris: what fabrics reveal about AW27/28 trends",
+   "publisher": "FashionUnited (Florence Julienne)",
+   "url": "https://fashionunited.com/news/fairs/premiere-vision-paris-what-fabrics-reveal-about-aw27-28-trends/2026090474424",
+   "date": "4 September 2026"
+  },
+  {
+   "title": "In pictures: AW27/28 trends through the lens of Christine Boland",
+   "publisher": "FashionUnited",
+   "url": "https://fashionunited.com/news/fashion/in-pictures-aw27-28-trends-through-the-lens-of-christine-boland/2026082974217",
+   "date": "29 August 2026"
+  }
+ ],
+ "images": [],
+ "related": [],
+ "published": "2026-11-25"
+}
