@@ -1,6 +1,6 @@
 (function(){
 var dlg=document.getElementById('dc');
-var SK=['AW26','SS27','AW27','SS28','AW28'],H={e:35,r:65,p:100,f:50},C={e:'#D9A441',r:'#2F6B4F',p:'#14231F',f:'#9AA39E'},N={e:'Emerging',r:'Rising',p:'Peaking',f:'Fading'};
+var SK=['AW26','SS27','AW27','SS28','AW28'],H={e:35,r:65,p:100,f:50},C={e:'#FFA400',r:'#00C27A',p:'#FF3D6E',f:'#6D7CFF'},N={e:'Emerging',r:'Rising',p:'Peaking',f:'Fading'};
 var DO={e:'Test in small runs and watch the January fairs before committing depth.',r:'Build range depth now; this is the window to add colours and fabrics.',p:'Buy the core, protect margin and plan the exit.',f:'Reduce, clear and keep only proven sellers.'};
 function el(i){return document.getElementById(i)}
 var DD=null;
@@ -15,8 +15,8 @@ function graph(L){var W=360,Ht=130,pl=36,pr=36,pt=14,pb=18,pts=[],x,y,i,c,s='';
   for(i=0;i<4;i++){s+='<line x1="'+(pl+i*(W-pl-pr)/4)+'" x2="'+(pl+i*(W-pl-pr)/4)+'" y1="'+pt+'" y2="'+(Ht-pb)+'" class="gv"/>'}
   s+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+(Ht-pb)+'" y2="'+(Ht-pb)+'" class="ga"/>';
   var seg=[],cur=[];pts.forEach(function(p){if(p[1]===null){if(cur.length)seg.push(cur);cur=[]}else cur.push(p)});if(cur.length)seg.push(cur);
-  seg.forEach(function(g){if(g.length>1)s+='<polyline fill="none" stroke="#14231F" stroke-width="2" points="'+g.map(function(p){return p[0]+','+p[1]}).join(' ')+'"/>'});
-  pts.forEach(function(p,k){if(p[1]===null)return;s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+(k==+dlg.dataset.cur?7:5)+'" fill="'+C[p[2]]+'" stroke="#fff" stroke-width="2"/>'});
+  seg.forEach(function(g){if(g.length>1)s+='<polyline class="gl1" pathLength="1" fill="none" stroke="#1f3d33" stroke-width="2.5" points="'+g.map(function(p){return p[0]+','+p[1]}).join(' ')+'"/>'});
+  pts.forEach(function(p,k){if(p[1]===null)return;var now=k==+dlg.dataset.cur;if(now)s+='<circle class="ring" cx="'+p[0]+'" cy="'+p[1]+'" r="9" fill="'+C[p[2]]+'"/>';s+='<circle class="gd" style="--i:'+k+'" cx="'+p[0]+'" cy="'+p[1]+'" r="'+(now?7:5)+'" fill="'+C[p[2]]+'" stroke="#fff" stroke-width="2"/>'});
   return '<svg viewBox="0 0 '+W+' '+Ht+'" role="img" aria-label="Trend strength by season" class="gr">'+s+'</svg>'}
 
 var SL=[],I=0;
@@ -44,4 +44,19 @@ document.addEventListener('click',function(e){
   if(f){var bar=f.parentNode,sec=bar.parentNode;[].forEach.call(bar.children,function(x){x.classList.toggle('on',x===f)});
     [].forEach.call(sec.querySelectorAll('.rcard'),function(c){c.style.display=(f.dataset.aud=='all'||c.dataset.aud==f.dataset.aud)?'':'none'})}
 });
+
+/* live behaviour */
+document.addEventListener('click',function(e){var b=e.target.closest('[data-pdf]');if(!b)return;
+  if(!document.documentElement.classList.contains('fc-in')){location.href='/account.html#signup';return}
+  if(b.dataset.pdf=='dialog')document.body.classList.add('pd');window.print()});
+window.addEventListener('afterprint',function(){document.body.classList.remove('pd')});
+var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+function count(t){var v=+t.dataset.v,s=performance.now();if(rm){t.textContent=v;return}t.textContent='0';(function f(n){var k=Math.min(1,(n-s)/900);t.textContent=Math.round(v*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)})(s)}
+if('IntersectionObserver' in window&&!rm){
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(!x.isIntersecting)return;var n=x.target;n.classList.add('in');
+    if(n.classList.contains('cv'))n.querySelectorAll('.gv2').forEach(count);io.unobserve(n)})},{threshold:.18});
+  document.querySelectorAll('.cv').forEach(function(n){io.observe(n)});
+  var rv=document.querySelectorAll('.tile,.rcard,.tc,.hs,.sc2,.ct,.th,.sw,.swm,.bd,.stl2 li');
+  rv.forEach(function(n,i){n.classList.add('rv');n.style.setProperty('--d',(i%6)*60+'ms');io.observe(n)});
+}else{document.querySelectorAll('.cv').forEach(function(n){n.classList.add('in')})}
 })();

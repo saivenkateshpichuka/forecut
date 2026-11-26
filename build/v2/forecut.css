@@ -391,7 +391,7 @@ b.st-e,b.st-r,b.st-p,b.st-f{font-weight:500}
 .dd>a{display:flex;align-items:center}
 .mega{position:fixed;left:0;right:0;top:68px;background:#fff;border-top:1px solid var(--ru);border-bottom:1px solid var(--ru);box-shadow:0 18px 30px rgba(28,23,20,.08);opacity:0;visibility:hidden;transform:translateY(-6px);transition:opacity .18s,transform .18s,visibility 0s .18s;z-index:45}
 .dd:hover .mega,.dd:focus-within .mega{opacity:1;visibility:visible;transform:none;transition:opacity .18s,transform .18s}
-.mega .w{display:grid;grid-template-columns:repeat(6,1fr);gap:24px;padding-top:24px;padding-bottom:28px;height:auto!important;align-items:start}
+.mega .w{display:grid;grid-template-columns:repeat(5,1fr);gap:24px;padding-top:24px;padding-bottom:28px;height:auto!important;align-items:start}
 .mega .w>div{display:flex;flex-direction:column;gap:2px}
 .mega a{font-size:14px;color:var(--gr);padding:4px 0;border:0!important;height:auto!important}
 .mega a:hover{color:var(--fg);text-decoration:underline;text-underline-offset:3px}

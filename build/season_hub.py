@@ -97,6 +97,9 @@ def load(s):
         im = [x for x in (r.get('images') or []) if x['file'] in IMG and not re.search(r'-f\d$', x['file'])]
         r['_img'] = im[0]['file'] if im else None
         r['_id'] = f"{r['audience']}-{r['category']}-{r['slug']}"
+        if f"rpt-{S}-{r['_id']}" in IMG:
+            r['images'] = [{'file': f"rpt-{S}-{r['_id']}", 'caption': r['title'], 'credit': 'Forecut'}] + [x for x in (r.get('images') or [])]
+            r['_img'] = f"rpt-{S}-{r['_id']}"
         REPORTS.append(r)
     PAL = META['palette']
     assign_fallback()
@@ -129,6 +132,9 @@ AUDSETS = {'womenswear': ['women'], 'menswear': ['men'], 'kidswear': ['kids', 'b
 KIDS = ('kids', 'boys', 'girls', 'toddler-boys', 'toddler-girls')
 
 
+NOFB = ('innovations', 'styling', 'business-strategy', 'couture')
+
+
 def pool_for(r):
     cat, aud = r['category'], r['audience']
     dept = 'Menswear' if aud == 'men' else 'Womenswear'
@@ -150,7 +156,7 @@ def assign_fallback():
     import zlib
     for r in REPORTS:
         r['_fb'] = None
-        if r['_img'] or r['audience'] in KIDS:
+        if r['_img'] or r['audience'] in KIDS or r['category'] in NOFB:
             continue
         pl = [x for x in pool_for(r) if x in IMG]
         if pl:
@@ -159,7 +165,7 @@ def assign_fallback():
 
 def related_items(r, n=6):
     cat, aud = r['category'], r['audience']
-    if aud in KIDS:
+    if aud in KIDS or cat in NOFB:
         return []
     dept = 'Menswear' if aud == 'men' else 'Womenswear'
     f = {'silhouettes': lambda it: it['area'] in SIL, 'fabrics': lambda it: it['area'] in FAB, 'trims': lambda it: it['area'] in TRIM}.get(cat, lambda it: True)
@@ -202,25 +208,44 @@ def reports_for(key):
 P = '/forecasts/ss27/'
 C = P + 'c/'
 FONTS = ''
+AUTH_HEAD = ("<script>try{if(localStorage.getItem('fc-in')==='1')document.documentElement.classList.add('fc-in')}catch(e){}</script>"
+             '<script type="module" src="/auth.js"></script>')
+AUTH_SYNC = ("<script>(function w(n){if(window.FCAuth&&FCAuth.onChange){FCAuth.onChange(function(u){document.documentElement.classList.toggle('fc-in',!!u);try{u?localStorage.setItem('fc-in','1'):localStorage.removeItem('fc-in')}catch(e){}})}"
+             "else if(n<60)setTimeout(function(){w(n+1)},150)})(0)</script>")
 
 
 def page(title, desc, body, extra='', canon=None):
     canon = canon or P
     return (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
-            f'<!--forecut-new--><meta name="robots" content="index,follow"><title>{E(title)}</title><meta name="description" content="{E(desc[:200])}"><link rel="canonical" href="https://forecut.in{canon}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc[:200])}"><meta property="og:type" content="website"><link rel="icon" href="/favicon.svg" type="image/svg+xml">{FONTS}'
-            f'<link rel="stylesheet" href="{C}style.css"></head><body>{header()}{body}{footer()}{extra}</body></html>')
+            f'<!--forecut-new--><meta name="robots" content="index,follow"><title>{E(title)}</title><meta name="description" content="{E(desc[:200])}"><link rel="canonical" href="https://forecut.in{canon}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc[:200])}"><meta property="og:type" content="website"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="preload" href="/v2/archivo.woff2" as="font" type="font/woff2" crossorigin><meta name="theme-color" content="#1f3d33">{AUTH_HEAD}'
+            f'<link rel="stylesheet" href="{C}style.css"></head><body>{header()}{body}{footer()}{AUTH_SYNC}{extra}</body></html>')
+
+
+MARK = '<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/><path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="#e0784b" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+LOGO = MARK + '<span>FORECUT</span>'
+LOGO_LIGHT = MARK.replace('fill="#1f3d33"', 'fill="#f5f0e8"').replace('stroke="#f5f0e8"', 'stroke="#1f3d33"') + '<span>FORECUT</span>'
+MEGA_CATS = [('themes', 'Themes'), ('colour', 'Colour'), ('silhouettes', 'Silhouettes'), ('fabrics', 'Fabrics and materials'), ('womenswear', 'Womenswear'), ('menswear', 'Menswear'), ('footwear', 'Footwear'), ('trims', 'Trims and details')]
 
 
 def header():
-    return (f'<header class="top"><div class="w tb"><a class="logo" href="/">Forecut</a><nav><a href="/forecasts/">Forecasts</a>{seasonnav()}<a href="/insights.html">Insights</a>'
-            f'<a href="/tools.html">Tools</a><a href="/about.html">About</a></nav><a class="btn" href="/account.html#signin">Log in</a></div></header>')
+    cols = ''
+    for x in SEASONS:
+        m = META_ALL[x]
+        cols += (f'<div><a class="mh" href="/forecasts/{x}/"><b>{m["code"]}</b><span>{E(m["stage"])}</span></a>' +
+                 ''.join(f'<a href="/forecasts/{x}/c/{k}.html">{t}</a>' for k, t in MEGA_CATS) + '</div>')
+    mega = (f'<div class="mega"><div class="w">{cols}<div class="mx"><a class="mh" href="/forecasts/"><b>All forecasts</b><span>Every season</span></a>'
+            '<a href="/regions.html">Regional forecasts</a><a href="/india.html">India forecasts</a><a href="/colour.html">Colour library</a><a href="/insights.html">Insights</a></div></div></div>')
+    links = [('What we do', '/#what'), ('Forecasts', '/forecasts/'), ('Services', '/#services'), ('About', '/about.html'), ('Resources', '/insights.html')]
+    nav = ''.join((f'<div class="dd"><a class="on" href="{u}" aria-haspopup="true">{t}</a>{mega}</div>' if t == 'Forecasts' else f'<a href="{u}">{t}</a>') for t, u in links)
+    return (f'<header class="nav"><div class="w"><a class="logo" href="/" aria-label="Forecut home">{LOGO}</a><nav class="links" aria-label="Main">{nav}</nav>'
+            '<div class="r"><a class="out-only" href="/account.html#signin">Log in</a><a class="btn s out-only" href="/account.html#signup">Sign up free</a><a class="btn s in-only" href="/home.html">Your Home</a></div></div></header>')
 
 
 def footer():
     cols = [('Forecasts', [('All forecasts', '/forecasts/'), (CODE, P), ('Themes', C + 'themes.html'), ('Colour', C + 'colour.html'), ('Footwear', C + 'footwear.html')]),
             ('Company', [('About Forecut', '/about.html'), ('Our method', '/method.html'), ('Contact', '/contact.html')]),
             ('Resources', [('Insights', '/insights.html'), ('Tools', '/tools.html'), ('Privacy', '/privacy.html'), ('Terms', '/terms.html')])]
-    return ('<footer class="ft"><div class="w fg"><div><b class="logo">Forecut</b><p>Seasonal fashion forecasts and design tools.</p><p>hello@forecut.in</p></div>' +
+    return ('<footer class="ft"><div class="w fg"><div><b class="logo">' + LOGO_LIGHT + '</b><p>Seasonal fashion forecasts and design tools.</p><p>hello@forecut.in</p></div>' +
             ''.join(f'<div><h4>{h}</h4>' + ''.join(f'<a href="{u}">{t}</a>' for t, u in xs) + '</div>' for h, xs in cols) + '</div></footer>')
 
 
@@ -245,9 +270,9 @@ def rcard(r):
     if r['_img'] or r.get('_fb'):
         top = f'<span class="rci"><img src="/img/{r["_img"] or r["_fb"]}.webp" alt="" loading="lazy"></span>'
     else:
-        top = f'<span class="rci ph"><span class="pal">{palette}</span><em>{E(RCAT.get(r["category"], ""))}</em></span>'
+        top = f'<span class="rci ph">{MARK}<em>{E(RCAT.get(r["category"], ""))}</em></span>'
     return (f'<a class="rcard" data-aud="{r["audience"]}" href="{P}r/{r["_id"]}.html">{top}<span class="rcb"><span class="chip">{E(AUDN.get(r["audience"], r["audience"]))}</span>'
-            f'<b>{E(r["title"])}</b><span class="rs">{E(r.get("summary", "")[:170])}</span></span></a>')
+            f'<b>{E(r["title"])}</b><span class="rs">{E(nc(r.get("summary", ""))[:170])}</span></span></a>')
 
 
 def audfilter(auds):
@@ -261,7 +286,7 @@ def category_page(key):
     _, title, lead = CAT[key]
     items = [it for it in ITEMS if item_filter(key, it)]
     reps = reports_for(key)
-    body = f'{catnav(key)}<main><section class="w ph1"><p class="crumb"><a href="{P}">{CODE}</a> / {E(title)}</p><h1>{E(title)}</h1><p class="lead">{E(lead)}</p></section>'
+    body = f'{catnav(key)}<main><section class="w ph1"><p class="crumb"><a href="{P}">{CODE}</a> / {E(title)}</p><h1>{E(title)}</h1><p class="lead">{E(lead)}</p><p>{live()}</p></section>'
     if key == 'colour':
         sw = ''.join(f'<button type="button" class="sw" data-copy="{h}"><span style="background:{h}"></span><b>{E(n)}</b><small>{tcx(h)}, {h.upper()}</small></button>' for h, n in PAL)
         body += f'<section class="w sec"><h2>Season palette</h2><p class="sub">Select a swatch to copy its HEX code.</p><div class="swg">{sw}</div></section>'
@@ -283,16 +308,6 @@ def category_page(key):
             L.sort(key=lambda x: ('erpf'.index(x['st'])))
             body += f'<div class="grp" id="g{n}"><h3>{E(g)}</h3><div class="tg">{"".join(tile(i, n) for i in L)}</div></div>'
         body += '</section>'
-    if not items and key in ('innovations', 'styling', 'business', 'couture'):
-        f_ = {'innovations': lambda it: it['area'] in FAB or it['area'] in TRIM, 'styling': lambda it: it['dept'] in ('Womenswear', 'Menswear'), 'business': lambda it: it['dept'] in ('Womenswear', 'Menswear', 'Footwear'),
-              'couture': lambda it: it['dept'] == 'Womenswear' and it['sub'] in ('Dresses', 'Tailoring', 'Coats & Jackets')}[key]
-        pc = [it for it in ITEMS if it['img'] and f_(it) and it['st'] in 'er']
-        pc.sort(key=lambda x: (x['st'] != 'e', x['name']))
-        step = max(1, len(pc) // 12)
-        pc = pc[::step][:12]
-        if pc:
-            lab = {'innovations': 'Pieces and details to watch', 'styling': 'Looks and pieces to watch', 'business': 'Pieces to plan around', 'couture': 'Pieces in this story'}[key]
-            body += f'<section class="w sec"><h2>{lab}</h2><p class="sub">Select any piece to open its detail card with drawings, notes and its timing graph.</p><div class="tg">{"".join(tile(i, 0) for i in pc)}</div></section>'
     if key == 'accessories':
         todo = ['Bags and small leather goods', 'Belts', 'Jewellery', 'Headwear', 'Eyewear', 'Scarves and hosiery']
         body += ('<section class="w sec"><h2>In research</h2><p class="sub">These accessory groups are being researched and will be added with sourced evidence.</p><div class="todo">' +
@@ -326,7 +341,35 @@ DIALOG = ('<dialog id="dc" aria-label="Detail card"><div class="dcg"><div class=
           '<div id="dnotes" class="dsec" hidden><h4>Design notes</h4><ul id="dnl"></ul></div>'
           '<div id="dfab" class="dsec" hidden><h4>Fabric and trims</h4><p id="dft"></p></div>'
           '<div id="duse" class="dsec" hidden><h4>Where to use it</h4><p id="dut"></p></div>'
-          '<div class="acts"><button type="button" class="btn">Add to spec pack</button><button type="button" class="btn o">Save to board</button></div></div></div></dialog>')
+          '<div class="acts"><button type="button" class="btn">Add to spec pack</button><button type="button" class="btn o">Save to board</button><button type="button" class="btn o" data-pdf="dialog">Download PDF</button></div></div></div></dialog>')
+
+
+import datetime as _dt
+TODAY = _dt.date.today().strftime('%-d %B %Y')
+
+
+def live(txt='Live forecast'):
+    return f'<span class="live"><i></i>{txt}, updated {TODAY}</span>'
+
+
+def ticker():
+    rs = sorted(REPORTS, key=lambda r: r.get('published', ''), reverse=True)
+    seen, out = set(), []
+    for r in rs:
+        k = r['title']
+        if k in seen or r['audience'] not in ('women', 'men'):
+            continue
+        seen.add(k); out.append(f'<a href="{P}r/{r["_id"]}.html"><b>New</b> {E(nc(r["title"]))}</a>')
+        if len(out) >= 10:
+            break
+    if not out:
+        return ''
+    row = ''.join(out)
+    return f'<div class="tick" aria-label="Latest updates"><div class="tkt">{row}{row}</div></div>'
+
+
+def nc(t):
+    return re.sub(r'\s*\[\d+(?:\s*[,\u2013-]\s*\d+)*\]', '', t or '')
 
 
 def report_page(r):
@@ -342,17 +385,17 @@ def report_page(r):
     meta = [('Season', META['title']), ('Audience', AUDN.get(r['audience'], '')), ('Category', RCAT.get(r['category'], '')), ('Published', r.get('published', '')),
             ('Research period', r.get('research_period', '')), ('Market', r.get('markets', '')), ('Trend status', r.get('trend_status', ''))]
     mt = ''.join(f'<div><dt>{a}</dt><dd>{E(b)}</dd></div>' for a, b in meta if b)
-    secs = ''.join(f'<section class="rsec"><h2>{E(s_["heading"])}</h2>{md(s_["body"])}</section>' for s_ in r.get('sections', []))
+    secs = ''.join(f'<section class="rsec"><h2>{E(s_["heading"])}</h2>{md(nc(s_["body"]))}</section>' for s_ in r.get('sections', []))
     for h, k in (('Timing', 'timing'), ('Products and customers', 'products'), ('Design implications', 'design_implications'), ('Commercial implications', 'commercial_implications')):
         if r.get(k):
-            secs += f'<section class="rsec"><h2>{h}</h2>{md(r[k])}</section>'
+            secs += f'<section class="rsec"><h2>{h}</h2>{md(nc(r[k]))}</section>'
     if len(imgs) > 1:
         secs += '<section class="rsec"><h2>Images</h2><div class="rfs">' + ''.join(f'<figure class="rf"><img src="/img/{x["file"]}.webp" alt="{E(x.get("caption", ""))}" loading="lazy"><figcaption>{E(x.get("caption", ""))} <span>{E(x.get("credit", ""))}</span></figcaption></figure>' for x in imgs[1:]) + '</div></section>'
     src = ''.join(f'<li><a href="{E(x["url"])}" target="_blank" rel="noopener">{E(x["title"])}</a>, {E(x.get("publisher", ""))}{", " + E(x["date"]) if x.get("date") else ""}{". " + E(x["note"]) if x.get("note") else ""}</li>' for x in (r.get('sources') or []))
     if src:
-        secs += f'<section class="rsec"><h2>Evidence and sources</h2><ol class="srcs">{src}</ol></section>'
+        secs += f'<section class="rsec"><h2>Evidence and sources</h2><ul class="srcs">{src}</ul></section>'
     body = (f'{catnav(cat if cat in CAT else "")}<main><article class="w rp"><p class="crumb"><a href="{P}">{CODE}</a> / <a href="{C}{cat}.html">{E(RCAT.get(r["category"], ""))}</a> / {E(AUDN.get(r["audience"], ""))}</p>'
-            f'<div class="rh"><div><h1>{E(r["title"])}</h1><p class="lead">{E(r.get("summary", ""))}</p></div>{hero}</div><dl class="meta">{mt}</dl>{secs}'
+            f'<div class="rh"><div><h1>{E(r["title"])}</h1><p class="lead">{E(nc(r.get("summary", "")))}</p></div>{hero}</div><dl class="meta">{mt}</dl>{secs}'
             + (f'<section class="rsec"><h2>Pieces to look at</h2><p class="sub">Select any piece to open its detail card.</p><div class="tg">{"".join(tile(i, 0) for i in rel)}</div></section>' if rel else '') + '</article></main>' + (dialog() if rel else ''))
     return page(f'{r["title"]} | Forecut', r.get('summary', ''), body, f'<script src="{C}app.js"></script>' if rel else '', f'{P}r/{r["_id"]}.html')
 
@@ -399,16 +442,25 @@ def theme_curve(t):
 
 
 def curve_svg(vals):
-    W, Hh, pl, pb, pt = 520, 170, 40, 28, 16
+    W, Hh, pl, pb, pt = 560, 190, 20, 30, 28
     mx = max(vals) or 1
-    cols = ''
+    n = len(vals)
+    cw = (W - pl * 2) / n
+    pts, bars = [], ''
     for i, v in enumerate(vals):
-        x = pl + i * (W - pl - 10) / 5 + 14
-        w = (W - pl - 10) / 5 - 28
+        x = pl + i * cw + cw * 0.2
+        w = cw * 0.6
         h = (Hh - pb - pt) * v / mx
-        cur = ' class="cur"' if i == SI else ''
-        cols += f'<rect{cur} x="{x:.0f}" y="{Hh - pb - h:.0f}" width="{w:.0f}" height="{h:.0f}" rx="3"/><text x="{x + w / 2:.0f}" y="{Hh - pb - h - 6:.0f}" text-anchor="middle" class="gv2">{v}</text><text x="{x + w / 2:.0f}" y="{Hh - 8}" text-anchor="middle" class="gl">{SK[i].upper()}</text>'
-    return f'<svg viewBox="0 0 {W} {Hh}" class="cv" role="img" aria-label="Pieces carrying this theme, by season">{cols}</svg>'
+        y = Hh - pb - h
+        cur = ' cur' if i == SI else ''
+        bars += (f'<rect class="bar{cur}" style="--i:{i}" x="{x:.0f}" y="{y:.0f}" width="{w:.0f}" height="{h:.0f}" rx="4"/>'
+                 f'<text class="gv2" data-v="{v}" style="--i:{i}" x="{x + w / 2:.0f}" y="{y - 8:.0f}" text-anchor="middle">{v}</text>'
+                 f'<text class="gl{cur}" x="{x + w / 2:.0f}" y="{Hh - 9}" text-anchor="middle">{SK[i].upper()}</text>')
+        pts.append((x + w / 2, y))
+    line = ' '.join(f'{px:.0f},{py:.0f}' for px, py in pts)
+    dots = ''.join(f'<circle class="dot{" cur" if i == SI else ""}" style="--i:{i}" cx="{px:.0f}" cy="{py:.0f}" r="{6 if i == SI else 4.5}"/>' for i, (px, py) in enumerate(pts))
+    return (f'<svg viewBox="0 0 {W} {Hh}" class="cv" role="img" aria-label="Pieces carrying this theme, by season: {", ".join(f"{SK[i].upper()} {v}" for i, v in enumerate(vals))}">'
+            f'{bars}<polyline class="cl" pathLength="1" points="{line}" fill="none"/>{dots}</svg>')
 
 
 def theme_page(t):
@@ -423,14 +475,14 @@ def theme_page(t):
     curve = theme_curve(t)
     peak = SK[curve.index(max(curve))].upper() if max(curve) else CODE
     kws = [k.lower() for k in t[6]] + [t[5].lower(), t[0].lower()]
-    rel = [r for r in REPORTS if any(k in (r['title'] + ' ' + r.get('summary', '')).lower() for k in kws)][:6]
+    rel = [r for r in REPORTS if (r['_img'] or r.get('_fb')) and any(k in (r['title'] + ' ' + r.get('summary', '')).lower() for k in kws)][:6]
     reps = ''.join(rcard(r) for r in rel)
     sib = ''.join(f'<a class="chip lk" href="{P}t/{islug(x[0])}.html">{E(x[0])}</a>' for x in META['themes'] if x[0] != t[0])
     body = (f'{catnav("themes")}<main><section class="w ph1 thh"><div><p class="crumb"><a href="{P}">{CODE}</a> / <a href="{C}themes.html">Themes</a> / {E(t[0])}</p><h1>{E(t[0])}</h1><p class="lead">{E(t[1])}</p>'
-            f'<p class="small">Key item: <b>{E(t[5])}</b></p><div>{kw}</div></div>'
+            f'<p class="small">Key item: <b>{E(t[5])}</b></p><div>{kw}</div><p class="hb">{live()}</p><p class="hb"><button class="btn o" type="button" data-pdf>Download PDF</button></p></div>'
             + (f'<span class="thp" style="background:{t[4]}"><img src="/img/{hero}.webp" alt="{E(t[0])}"></span>' if hero else '') + '</section>'
             f'<section class="w sec"><h2>The theme board</h2><p class="sub">The pieces and details that make up this theme, in the order they matter.</p><div class="bdg">{board}</div></section>'
-            f'<section class="w sec"><h2>How strong is it?</h2><p class="sub">Number of pieces and details in the Forecut model that carry this theme, by season. It builds towards {peak}.</p>{curve_svg(curve)}</section>'
+            f'<section class="w sec"><h2>How strong is it?</h2><p class="sub">Pieces and details in the Forecut model that carry this theme, by season. It builds towards {peak}. {live('Live model')}</p>{curve_svg(curve)}</section>'
             f'<section class="w sec"><h2>Colour</h2><p class="sub">The season palette this theme draws from.</p><div class="swr">{pal}</div></section>'
             f'<section class="w sec"><h2>Pieces that carry it</h2><p class="sub">Select any item to open its detail card with drawings, spec notes and its timing graph.</p><div class="tg">{tiles}</div></section>'
             + (f'<section class="w sec"><h2>Related reports</h2><div class="rg">{reps}</div></section>' if reps else '') +
@@ -502,8 +554,8 @@ def hub():
                f'<p class="lead sm">{E(META["intro"])}</p><p class="small">{E(META["stage"])}, {E(META["window"])}. <a class="more" href="{C}themes.html">See the themes</a></p>')
     body = (f'<main><section class="w hero"><div><p class="crumb">Forecasts / {CODE}</p><h1>{E(META["title"].replace("/", " "))}</h1><p class="lead">{E(META["intro"])}</p>'
             f'<div class="ctas"><a class="btn" href="{C}themes.html">Start with the themes</a><a class="btn o" href="{C}womenswear.html">Browse key items</a></div>'
-            f'<p class="small">{E(META["stage"])}, {E(META["window"])}. Updated weekly.</p></div>'
-            f'<div class="hg">{hero_imgs}</div></section>'
+            f'<p>{live()}</p><p class="small">{E(META["stage"])}, {E(META["window"])}.</p></div>'
+            f'<div class="hg">{hero_imgs}</div></section>{ticker()}'
             f'<div class="cn stk"><div class="w">' + ''.join(f'<a href="#s{n}">{t}</a>' for n, t in [(1, 'Market context'), (2, 'Signals'), (3, 'Trends'), (4, 'Colour and materials'), (5, 'Products and detailing'), (6, 'Commercial call'), (7, 'Validate')]) + '</div></div>' +
             sec(1, 'Market context', 'What is shaping this season?', drivers) +
             sec(2, 'Signals', 'Where is it showing up already?', f'<div class="cg">{ct("innovations")}{ct("styling")}</div>') +
@@ -563,15 +615,30 @@ def home_page():
 
 
 def landing():
+    load('ss27')
     cards = ''
     for x in SEASONS:
         m = META_ALL[x]
-        cards += (f'<a class="sc on" href="/forecasts/{x}/"><b>{m["code"]}</b><span class="sn">{E(m["title"].replace("/", " "))}</span><span>{E(m["stage"])}, {E(m["window"])}.</span>'
-                  f'<span class="go">Open the forecast</span></a>')
-    stages = ''.join(f'<li><span>{t}</span></li>' for t in ['Market context', 'Signals', 'Trends', 'Colour and materials', 'Products and detailing', 'Commercial call', 'Validate and update'])
-    body = (f'<main><section class="w ph1"><p class="crumb">Forecasts</p><h1>Fashion forecasts</h1><p class="lead">Every season, from what is changing in people\'s lives to the exact details to make. Updated weekly.</p></section>'
-            f'<section class="w sec"><div class="scg">{cards}</div></section><section class="w sec"><h2>How every forecast is organised</h2><ol class="stl">{stages}</ol></section></main>')
-    return page('Fashion forecasts | Forecut', 'Seasonal fashion forecasts: themes, colour, silhouettes, key items, footwear, trims and more.', body, '', '/forecasts/')
+        hero = next((f'theme-{x}-{islug(t[0])}' for t in m['themes'] if f'theme-{x}-{islug(t[0])}' in IMG), None)
+        im = f'<span class="sci"><img src="/img/{hero}.webp" alt="" loading="lazy"></span>' if hero else ''
+        tl = ''.join(f'<li>{E(t[0])}</li>' for t in m['themes'][:4])
+        lab = {'ss27': 'now', 'aw27': 'early', 'ss28': 'range', 'aw28': 'range'}[x]
+        cards += (f'<a class="sc2 {lab}" href="/forecasts/{x}/">{im}<span class="scb"><b>{m["code"]}</b><span class="sn">{E(m["title"].replace("/", " "))}</span>'
+                  f'<span class="stg">{E(m["stage"])}</span><small>{E(m["window"])}</small><ul>{tl}</ul><span class="go">Open the forecast</span></span></a>')
+    st = [('Market context', 'What is shaping the season and the markets you sell into.'), ('Signals', 'What fairs, shows and retail are telling us.'),
+          ('Trends', 'The season themes and how each one builds.'), ('Colour and materials', 'The palette with Pantone TCX and HEX, fabrics and trims.'),
+          ('Products and detailing', 'Key items and the details to make, with photos, flat sketches and notes.'), ('Commercial call', 'What to buy, how deep and what to watch.'),
+          ('Validate and update', 'What we checked and what changed this week.')]
+    stages = ''.join(f'<li><b>{t}</b><span>{d}</span></li>' for t, d in st)
+    hero_imgs = ''.join(f'<img src="/img/theme-{x}-{islug(META_ALL[x]["themes"][0][0])}.webp" alt="">' for x in SEASONS[:3] if f'theme-{x}-{islug(META_ALL[x]["themes"][0][0])}' in IMG)
+    ok = [it for it in ITEMS if it['img'] and it['st'] in 'er']
+    pick = [ok[i * 37 % len(ok)] for i in range(5)]
+    body = (f'<main><section class="w hero"><div><p class="crumb">Forecasts</p><h1>See the next season first.</h1><p class="lead">Themes, colour, silhouettes and the exact details to make, season by season, from the next two years.</p>'
+            f'<div class="ctas"><a class="btn" href="/forecasts/ss27/">Open SS27</a><a class="btn o" href="#how">How it works</a></div><p>{live()}</p></div><div class="hg">{hero_imgs}</div></section>{ticker()}'
+            f'<section class="w sec"><h2>Choose a season</h2><div class="scg2">{cards}</div></section>'
+            f'<section class="w sec" id="how"><h2>How every forecast is organised</h2><ol class="stl2">{stages}</ol></section>'
+            f'<section class="w sec"><h2>The detail cards</h2><p class="sub">Every key item opens a card with photos, flat sketches, design notes, fabric and trims, and its timing graph.</p><div class="tg">{"".join(tile(i, 0) for i in pick)}</div></section></main>' + dialog())
+    return page('Fashion forecasts | Forecut', 'Seasonal fashion forecasts: themes, colour, silhouettes, key items, footwear, trims and more.', body, f'<script src="{C}app.js"></script>', '/forecasts/')
 
 
 def stub(new):

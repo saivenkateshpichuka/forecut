@@ -181,8 +181,8 @@ def nav_app(active=''):
 _MAUDS = [('men', 'Men'), ('women', 'Women'), ('kids', 'Kids'), ('boys', 'Boys'), ('girls', 'Girls'), ('toddler-boys', 'Toddler Boys'), ('toddler-girls', 'Toddler Girls')]
 MEGA = ('<div class="mega"><div class="w">' + ''.join(
     f'<div><a class="mh" href="/forecasts/{s}/"><b>{META[s]["code"]}</b><span>{E(META[s]["stage"])}</span></a>' +
-    ''.join(f'<a href="/forecasts/{s}/{k}/">{META[s]["code"]} {t}</a>' for k, t in _MAUDS) + '</div>' for s in SKEYS) +
-    '<div class="mx"><a class="mh" href="/forecasts/"><b>All forecasts</b><span>Every season and audience</span></a><a href="/regions.html">Regional forecasts</a><a href="/india.html">India forecasts</a><a href="/colour.html">Colour library</a><a href="/reports.html">Report archive</a></div></div></div>')
+    ''.join(f'<a href="/forecasts/{s}/c/{k}.html">{t}</a>' for k, t in [('themes', 'Themes'), ('colour', 'Colour'), ('silhouettes', 'Silhouettes'), ('fabrics', 'Fabrics and materials'), ('womenswear', 'Womenswear'), ('menswear', 'Menswear'), ('footwear', 'Footwear'), ('trims', 'Trims and details')]) + '</div>' for s in ['ss27', 'aw27', 'ss28', 'aw28']) +
+    '<div class="mx"><a class="mh" href="/forecasts/"><b>All forecasts</b><span>Every season</span></a><a href="/regions.html">Regional forecasts</a><a href="/india.html">India forecasts</a><a href="/colour.html">Colour library</a><a href="/insights.html">Insights</a></div></div></div>')
 
 
 def _nav(links, active, right, mob):
