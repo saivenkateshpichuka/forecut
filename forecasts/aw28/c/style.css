@@ -138,3 +138,4 @@ body{font-stretch:100%}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}.cv .bar,.cv .dot{transform:none;opacity:1}.cv .gv2{opacity:1}.cv .cl,.gr .gl1{stroke-dashoffset:0}}
 @media print{.nav,.ft,.tick,.catnav,.cn,button,.btn,.af{display:none!important}body.pd>*:not(dialog){display:none!important}body.pd dialog{position:static!important;display:block!important;border:0;box-shadow:none;width:100%!important;max-width:none!important;margin:0}body.pd .dcg{height:auto!important}body.pd .dcb{max-height:none!important;overflow:visible!important}.rv{opacity:1!important;transform:none!important}.cv .bar,.cv .dot{transform:none!important;opacity:1!important}.cv .gv2{opacity:1!important}.cv .cl{stroke-dashoffset:0!important}}
 .sec>h2{margin-bottom:18px}.ft .logo{color:#f5f0e8}
+.rci img{object-position:50% 25%}
