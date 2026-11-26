@@ -372,33 +372,54 @@ def nc(t):
     return re.sub(r'\s*\[\d+(?:\s*[,\u2013-]\s*\d+)*\]', '', t or '')
 
 
+STAGES4 = [('Emerging', 'e'), ('Rising', 'r'), ('Peaking', 'p'), ('Fading', 'f')]
+
+
 def report_page(r):
     imgs = [x for x in (r.get('images') or []) if x['file'] in IMG and not re.search(r'-f\d$', x['file'])]
     hero = ''
     if imgs:
         im = imgs[0]
-        hero = f'<figure class="rf"><img src="/img/{im["file"]}.webp" alt="{E(im.get("caption", ""))}"><figcaption>{E(im.get("caption", ""))} <span>{E(im.get("credit", ""))}</span></figcaption></figure>'
-    if not imgs and r.get('_fb'):
-        hero = f'<figure class="rf"><img src="/img/{r["_fb"]}.webp" alt=""><figcaption>Illustration from the {E(META["title"].replace("/", " "))} forecast</figcaption></figure>'
+        hero = f'<figure class="rf"><img src="/img/{im["file"]}.webp" alt="{E(im.get("caption", ""))}"><figcaption>{E(im.get("caption", ""))}</figcaption></figure>'
+    elif r.get('_fb'):
+        hero = f'<figure class="rf"><img src="/img/{r["_fb"]}.webp" alt=""><figcaption>From the {E(META["title"].replace("/", " "))} forecast</figcaption></figure>'
     cat = {'themes': 'themes', 'colours': 'colour', 'business-strategy': 'business'}.get(r['category'], r['category'])
     rel = related_items(r)
-    meta = [('Season', META['title']), ('Audience', AUDN.get(r['audience'], '')), ('Category', RCAT.get(r['category'], '')), ('Published', r.get('published', '')),
-            ('Research period', r.get('research_period', '')), ('Market', r.get('markets', '')), ('Trend status', r.get('trend_status', ''))]
-    mt = ''.join(f'<div><dt>{a}</dt><dd>{E(b)}</dd></div>' for a, b in meta if b)
-    secs = ''.join(f'<section class="rsec"><h2>{E(s_["heading"])}</h2>{md(nc(s_["body"]))}</section>' for s_ in r.get('sections', []))
-    for h, k in (('Timing', 'timing'), ('Products and customers', 'products'), ('Design implications', 'design_implications'), ('Commercial implications', 'commercial_implications')):
-        if r.get(k):
-            secs += f'<section class="rsec"><h2>{h}</h2>{md(nc(r[k]))}</section>'
+    status = (r.get('trend_status') or '').strip()
+    sk = next((k for n, k in STAGES4 if n.lower() == status.lower()), None)
+    life = ''
+    if sk:
+        idx = 'erpf'.index(sk)
+        life = ('<div class="lc" aria-label="Trend status: ' + status + '">' + ''.join(
+            f'<span class="{"on s-" + k if i == idx else ("done" if i < idx else "")}" style="--i:{i}"><i></i>{n}</span>' for i, (n, k) in enumerate(STAGES4)) + '</div>')
+    facts = [('Season', META['title'].replace('/', ' ')), ('Audience', AUDN.get(r['audience'], '')), ('Published', r.get('published', ''))]
+    fct = ''.join(f'<div><dt>{a_}</dt><dd>{E(b_)}</dd></div>' for a_, b_ in facts if b_)
+    more = ''.join(f'<p><b>{a_}</b> {E(nc(b_))}</p>' for a_, b_ in (('Research period', r.get('research_period', '')), ('Markets', r.get('markets', ''))) if b_)
+    timing = f'<aside class="rtime"><b>When it lands</b><p>{E(nc(r["timing"]))}</p></aside>' if r.get('timing') else ''
+    main, toc = '', []
+    for s_ in r.get('sections', []):
+        sid = islug(s_['heading'])
+        toc.append((sid, s_['heading']))
+        main += f'<section class="rsec" id="{sid}"><h2>{E(s_["heading"])}</h2>{md(nc(s_["body"]))}</section>'
     if len(imgs) > 1:
-        secs += '<section class="rsec"><h2>Images</h2><div class="rfs">' + ''.join(f'<figure class="rf"><img src="/img/{x["file"]}.webp" alt="{E(x.get("caption", ""))}" loading="lazy"><figcaption>{E(x.get("caption", ""))} <span>{E(x.get("credit", ""))}</span></figcaption></figure>' for x in imgs[1:]) + '</div></section>'
-    src = ''.join(f'<li><a href="{E(x["url"])}" target="_blank" rel="noopener">{E(x["title"])}</a>, {E(x.get("publisher", ""))}{", " + E(x["date"]) if x.get("date") else ""}{". " + E(x["note"]) if x.get("note") else ""}</li>' for x in (r.get('sources') or []))
-    if src:
-        secs += f'<section class="rsec"><h2>Evidence and sources</h2><ul class="srcs">{src}</ul></section>'
+        toc.append(('images', 'Images'))
+        main += '<section class="rsec" id="images"><h2>Images</h2><div class="rfs">' + ''.join(f'<figure class="rf"><img src="/img/{x["file"]}.webp" alt="{E(x.get("caption", ""))}" loading="lazy"><figcaption>{E(x.get("caption", ""))}</figcaption></figure>' for x in imgs[1:]) + '</div></section>'
+    tri = ''
+    for h, k, ic in (('Products and customers', 'products', 'Make'), ('Design implications', 'design_implications', 'Design'), ('Commercial implications', 'commercial_implications', 'Buy')):
+        if r.get(k):
+            tri += f'<section class="rc"><span class="rk">{ic}</span><h2>{h}</h2>{md(nc(r[k]))}</section>'
+    if tri:
+        toc.append(('act', 'What to do'))
+    src = ''.join(f'<li><a href="{E(x["url"])}" target="_blank" rel="noopener">{E(x["title"])}</a>, {E(x.get("publisher", ""))}{", " + E(x["date"]) if x.get("date") else ""}</li>' for x in (r.get('sources') or []))
+    tocs = ''.join(f'<a href="#{i}">{E(t)}</a>' for i, t in toc)
     body = (f'{catnav(cat if cat in CAT else "")}<main><article class="w rp"><p class="crumb"><a href="{P}">{CODE}</a> / <a href="{C}{cat}.html">{E(RCAT.get(r["category"], ""))}</a> / {E(AUDN.get(r["audience"], ""))}</p>'
-            f'<div class="rh"><div><h1>{E(r["title"])}</h1><p class="lead">{E(nc(r.get("summary", "")))}</p></div>{hero}</div><dl class="meta">{mt}</dl>{secs}'
-            + (f'<section class="rsec"><h2>Pieces to look at</h2><p class="sub">Select any piece to open its detail card.</p><div class="tg">{"".join(tile(i, 0) for i in rel)}</div></section>' if rel else '') + '</article></main>' + (dialog() if rel else ''))
-    return page(f'{r["title"]} | Forecut', r.get('summary', ''), body, f'<script src="{C}app.js"></script>' if rel else '', f'{P}r/{r["_id"]}.html')
-
+            f'<div class="rh2{" nohero" if not hero else ""}"><div class="rhl">{live("Live report")}<h1>{E(r["title"])}</h1><p class="lead">{E(nc(r.get("summary", "")))}</p>{life}'
+            f'<dl class="fx">{fct}</dl><button class="btn o" type="button" data-pdf>Download PDF</button></div>{hero}</div>{timing}'
+            f'<div class="rbody"><nav class="toc" aria-label="On this page"><b>On this page</b>{tocs}<details><summary>Research details</summary>{more}</details></nav><div class="rmain">{main}</div></div>'
+            + (f'<div class="rtri" id="act">{tri}</div>' if tri else '')
+            + (f'<section class="rsec wide"><h2>Pieces to look at</h2><p class="sub">Select any piece to open its detail card.</p><div class="tg">{"".join(tile(i, 0) for i in rel)}</div></section>' if rel else '')
+            + (f'<details class="srcd"><summary>Evidence and sources</summary><ul class="srcs">{src}</ul></details>' if src else '') + '</article></main>' + (dialog() if rel else ''))
+    return page(f'{r["title"]} | Forecut', nc(r.get('summary', '')), body, f'<script src="{C}app.js"></script>', f'{P}r/{r["_id"]}.html')
 
 
 STOP = set('with that this from their they have been into more what when over then than made makes make keep keeps item items piece pieces season seasons back after years every each next moves move bring brings'.split())
