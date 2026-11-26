@@ -9,13 +9,17 @@ import pantone as PT
 
 B = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(B)
-OUT = os.path.join(ROOT, 'forecasts', 'ss27')
 S = 'ss27'
+OUT = os.path.join(ROOT, 'forecasts', S)
+SEASONS = ['ss27', 'aw27', 'ss28', 'aw28']
 SK = ['aw26', 'ss27', 'aw27', 'ss28', 'aw28']
 SKL = ['AW26', 'SS27', 'AW27', 'SS28', 'AW28']
 E = html.escape
 DET = json.load(open(os.path.join(B, 'details.json')))['model']
-META = json.load(open(os.path.join(B, 'seasons.json')))['meta'][S]
+META_ALL = json.load(open(os.path.join(B, 'seasons.json')))['meta']
+META = META_ALL[S]
+SI = 1
+CODE = 'SS27'
 IMG = set(os.path.splitext(f)[0] for f in os.listdir(os.path.join(ROOT, 'img')) if f.endswith('.webp'))
 STAGE = {'e': 'Emerging', 'r': 'Rising', 'p': 'Peaking', 'f': 'Fading'}
 DO = {'e': 'Test in small runs and watch the January fairs before committing depth.',
@@ -69,23 +73,34 @@ def tcx(h):
 
 
 # ---------------------------------------------------------------- data
-ITEMS = []   # dict(name, area, note, life, dept, sub, img)
-for k, L in DET.items():
-    dept, sub = k.split('|')
-    for it in L:
-        if it['life'][1] != '-':
-            ph, fl = media(it['name'])
-            ITEMS.append(dict(name=it['name'], area=it['area'], note=it['note'], life=it['life'], dept=dept, sub=sub, img=ph, flats=fl, st=it['life'][1]))
-REPORTS = []
-for f in sorted(glob.glob(os.path.join(ROOT, 'content', 'reports', 'ss27-*.json'))):
-    r = json.load(open(f))
-    if r.get('status') != 'published':
-        continue
-    im = [x for x in (r.get('images') or []) if x['file'] in IMG and not re.search(r'-f\d$', x['file'])]
-    r['_img'] = im[0]['file'] if im else None
-    r['_id'] = f"{r['audience']}-{r['category']}-{r['slug']}"
-    REPORTS.append(r)
-PAL = META['palette']
+def load(s):
+    global S, OUT, META, SI, CODE, ITEMS, REPORTS, PAL, P, C
+    S = s
+    OUT = os.path.join(ROOT, 'forecasts', S)
+    META = META_ALL[S]
+    SI = SK.index(S)
+    CODE = META['code']
+    P = f'/forecasts/{S}/'
+    C = P + 'c/'
+    ITEMS = []   # dict(name, area, note, life, dept, sub, img)
+    for k, L in DET.items():
+        dept, sub = k.split('|')
+        for it in L:
+            if it['life'][SI] != '-':
+                ph, fl = media(it['name'])
+                ITEMS.append(dict(name=it['name'], area=it['area'], note=it['note'], life=it['life'], dept=dept, sub=sub, img=ph, flats=fl, st=it['life'][SI]))
+    REPORTS = []
+    for f in sorted(glob.glob(os.path.join(ROOT, 'content', 'reports', S + '-*.json'))):
+        r = json.load(open(f))
+        if r.get('status') != 'published':
+            continue
+        im = [x for x in (r.get('images') or []) if x['file'] in IMG and not re.search(r'-f\d$', x['file'])]
+        r['_img'] = im[0]['file'] if im else None
+        r['_id'] = f"{r['audience']}-{r['category']}-{r['slug']}"
+        REPORTS.append(r)
+    PAL = META['palette']
+
+
 
 CATS = [  # key, title, lead, kind, filter
     ('themes', 'Themes', 'The big stories of the season: why each is happening and the pieces that carry it.'),
@@ -144,19 +159,20 @@ C = P + 'c/'
 FONTS = ''
 
 
-def page(title, desc, body, extra='', canon='/forecasts/ss27/'):
+def page(title, desc, body, extra='', canon=None):
+    canon = canon or P
     return (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
             f'<!--forecut-new--><meta name="robots" content="index,follow"><title>{E(title)}</title><meta name="description" content="{E(desc[:200])}"><link rel="canonical" href="https://forecut.in{canon}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc[:200])}"><meta property="og:type" content="website"><link rel="icon" href="/favicon.svg" type="image/svg+xml">{FONTS}'
             f'<link rel="stylesheet" href="{C}style.css"></head><body>{header()}{body}{footer()}{extra}</body></html>')
 
 
 def header():
-    return (f'<header class="top"><div class="w tb"><a class="logo" href="/">Forecut</a><nav><a href="/forecasts/">Forecasts</a><a href="{P}">SS27</a><a href="/insights.html">Insights</a>'
+    return (f'<header class="top"><div class="w tb"><a class="logo" href="/">Forecut</a><nav><a href="/forecasts/">Forecasts</a>{seasonnav()}<a href="/insights.html">Insights</a>'
             f'<a href="/tools.html">Tools</a><a href="/about.html">About</a></nav><a class="btn" href="/account.html#signin">Log in</a></div></header>')
 
 
 def footer():
-    cols = [('Forecasts', [('All forecasts', '/forecasts/'), ('SS27', P), ('Themes', C + 'themes.html'), ('Colour', C + 'colour.html'), ('Footwear', C + 'footwear.html')]),
+    cols = [('Forecasts', [('All forecasts', '/forecasts/'), (CODE, P), ('Themes', C + 'themes.html'), ('Colour', C + 'colour.html'), ('Footwear', C + 'footwear.html')]),
             ('Company', [('About Forecut', '/about.html'), ('Our method', '/method.html'), ('Contact', '/contact.html')]),
             ('Resources', [('Insights', '/insights.html'), ('Tools', '/tools.html'), ('Privacy', '/privacy.html'), ('Terms', '/terms.html')])]
     return ('<footer class="ft"><div class="w fg"><div><b class="logo">Forecut</b><p>Seasonal fashion forecasts and design tools.</p><p>hello@forecut.in</p></div>' +
@@ -200,7 +216,7 @@ def category_page(key):
     _, title, lead = CAT[key]
     items = [it for it in ITEMS if item_filter(key, it)]
     reps = reports_for(key)
-    body = f'{catnav(key)}<main><section class="w ph1"><p class="crumb"><a href="{P}">SS27</a> / {E(title)}</p><h1>{E(title)}</h1><p class="lead">{E(lead)}</p></section>'
+    body = f'{catnav(key)}<main><section class="w ph1"><p class="crumb"><a href="{P}">{CODE}</a> / {E(title)}</p><h1>{E(title)}</h1><p class="lead">{E(lead)}</p></section>'
     if key == 'colour':
         sw = ''.join(f'<button type="button" class="sw" data-copy="{h}"><span style="background:{h}"></span><b>{E(n)}</b><small>{tcx(h)}, {h.upper()}</small></button>' for h, n in PAL)
         body += f'<section class="w sec"><h2>Season palette</h2><p class="sub">Select a swatch to copy its HEX code.</p><div class="swg">{sw}</div></section>'
@@ -243,8 +259,8 @@ def category_page(key):
                 nm = s_.replace('-', ' ').capitalize() if s_ != 'reports' else 'Reports'
                 body += f'<h3 class="gh">{E(nm)}</h3><div class="rg">{"".join(rcard(r) for r in rs)}</div>'
         body += '</section>'
-    body += '</main>' + DIALOG
-    return page(f'{title}, SS27 | Forecut', lead, body, f'<script src="{C}app.js"></script>', f'{C}{key}.html')
+    body += '</main>' + dialog()
+    return page(f'{title}, {CODE} | Forecut', lead, body, f'<script src="{C}app.js"></script>', f'{C}{key}.html')
 
 
 DIALOG = ('<dialog id="dc" aria-label="Detail card"><div class="dcg"><div class="dci"><img id="dimg" alt=""><button type="button" class="sl p" id="dprev" aria-label="Previous image">&#8249;</button><button type="button" class="sl n" id="dnext" aria-label="Next image">&#8250;</button><span class="scap" id="dcap"></span></div><div class="dcb">'
@@ -261,7 +277,7 @@ def report_page(r):
         im = imgs[0]
         hero = f'<figure class="rf"><img src="/img/{im["file"]}.webp" alt="{E(im.get("caption", ""))}"><figcaption>{E(im.get("caption", ""))} <span>{E(im.get("credit", ""))}</span></figcaption></figure>'
     cat = {'themes': 'themes', 'colours': 'colour', 'business-strategy': 'business'}.get(r['category'], r['category'])
-    meta = [('Season', 'Spring/Summer 2027'), ('Audience', AUDN.get(r['audience'], '')), ('Category', RCAT.get(r['category'], '')), ('Published', r.get('published', '')),
+    meta = [('Season', META['title']), ('Audience', AUDN.get(r['audience'], '')), ('Category', RCAT.get(r['category'], '')), ('Published', r.get('published', '')),
             ('Research period', r.get('research_period', '')), ('Market', r.get('markets', '')), ('Trend status', r.get('trend_status', ''))]
     mt = ''.join(f'<div><dt>{a}</dt><dd>{E(b)}</dd></div>' for a, b in meta if b)
     secs = ''.join(f'<section class="rsec"><h2>{E(s_["heading"])}</h2>{md(s_["body"])}</section>' for s_ in r.get('sections', []))
@@ -273,9 +289,17 @@ def report_page(r):
     src = ''.join(f'<li><a href="{E(x["url"])}" target="_blank" rel="noopener">{E(x["title"])}</a>, {E(x.get("publisher", ""))}{", " + E(x["date"]) if x.get("date") else ""}{". " + E(x["note"]) if x.get("note") else ""}</li>' for x in (r.get('sources') or []))
     if src:
         secs += f'<section class="rsec"><h2>Evidence and sources</h2><ol class="srcs">{src}</ol></section>'
-    body = (f'{catnav(cat if cat in CAT else "")}<main><article class="w rp"><p class="crumb"><a href="{P}">SS27</a> / <a href="{C}{cat}.html">{E(RCAT.get(r["category"], ""))}</a> / {E(AUDN.get(r["audience"], ""))}</p>'
+    body = (f'{catnav(cat if cat in CAT else "")}<main><article class="w rp"><p class="crumb"><a href="{P}">{CODE}</a> / <a href="{C}{cat}.html">{E(RCAT.get(r["category"], ""))}</a> / {E(AUDN.get(r["audience"], ""))}</p>'
             f'<div class="rh"><div><h1>{E(r["title"])}</h1><p class="lead">{E(r.get("summary", ""))}</p></div>{hero}</div><dl class="meta">{mt}</dl>{secs}</article></main>')
     return page(f'{r["title"]} | Forecut', r.get('summary', ''), body, '', f'{P}r/{r["_id"]}.html')
+
+
+def seasonnav():
+    return ''.join(f'<a href="/forecasts/{x}/"{" class=cur" if x == S else ""}>{META_ALL[x]["code"]}</a>' for x in SEASONS)
+
+
+def dialog():
+    return DIALOG.replace('<dialog id="dc"', f'<dialog id="dc" data-cur="{SI}" data-code="{CODE}"')
 
 
 def tile_photo(k):
@@ -287,6 +311,12 @@ def tile_photo(k):
             for it in ITEMS:
                 if it['area'] == a and it['img'] and it['st'] in 'rp':
                     return it['img']
+    if k in ('themes', 'womenswear', 'menswear', 'footwear', 'knitwear', 'colour', 'fabrics', 'trims'):
+        pick = {'themes': lambda it: True, 'womenswear': lambda it: it['dept'] == 'Womenswear', 'menswear': lambda it: it['dept'] == 'Menswear', 'footwear': lambda it: it['dept'] == 'Footwear',
+                'knitwear': lambda it: it['sub'] == 'Knitwear', 'colour': lambda it: True, 'fabrics': lambda it: it['area'] in FAB, 'trims': lambda it: it['area'] in TRIM}[k]
+        c_ = [it for it in ITEMS if it['img'] and pick(it) and it['st'] in 'rp']
+        if c_:
+            return c_[{'themes': 0, 'colour': 3}.get(k, 0) % len(c_)]['img']
     if k == 'kidswear':
         for r in REPORTS:
             if r['audience'] in AUDSETS['kidswear'] and r['_img']:
@@ -303,9 +333,9 @@ def hub():
             return f'<a class="ct" href="{C}{k}.html"><span class="cti"><img src="/img/{im}.webp" alt="" loading="lazy"></span><b>{E(t)}</b><span>{E(lead)}</span></a>'
         return f'<a class="ct" href="{C}{k}.html"><span class="cti tp"><em>{E(t)}</em></span><b>{E(t)}</b><span>{E(lead)}</span></a>'
     def sec(n, t, q, inner):
-        return f'<section class="w sec st" id="s{n}"><div class="sth"><b>{n}</b><h2>{t}</h2><span>{q}</span></div>{inner}</section>'
+        return f'<section class="w sec st" id="s{n}"><div class="sth"><h2>{t}</h2><span>{q}</span></div>{inner}</section>'
     ths = ''.join(f'<a class="tc" href="{C}themes.html"><span class="tci" style="background:{t[4]}"><img src="/img/theme-{S}-{islug(t[0])}.webp" alt="" loading="lazy"></span><b>{E(t[0])}</b><span>{E(t[1])}</span></a>' for t in META['themes'])
-    arts = sorted(glob.glob(os.path.join(ROOT, '*ss27*guide*.html')) + glob.glob(os.path.join(ROOT, '*ss27*.html')))
+    arts = sorted(glob.glob(os.path.join(ROOT, f'*{S}*guide*.html')) + (glob.glob(os.path.join(ROOT, f'*{S}*.html')) if S == 'ss27' else []))
     guides, seen = '', set()
     for f in arts:
         n = os.path.basename(f)[:-5]
@@ -319,29 +349,34 @@ def hub():
         guides += f'<a class="ct" href="/{n}.html"><span class="cti">{pic}</span><b>{E(t)}</b></a>'
     latest = sorted(REPORTS, key=lambda r: r.get('published', ''), reverse=True)[:6]
     lt = ''.join(f'<li><b>{E(r.get("published", ""))}</b><a href="{P}r/{r["_id"]}.html">{E(r["title"])}</a></li>' for r in latest)
-    keyitems = [it for it in ITEMS if it['st'] == 'r' and it['img']][:8]
-    body = (f'<main><section class="w hero"><div><p class="crumb">Forecasts / SS27</p><h1>Spring Summer 2027</h1><p class="lead">{E(META["intro"])}</p>'
+    hero_imgs = ''.join(f'<img src="/img/{x}.webp" alt="">' for x in (tile_photo(k) for k in ('themes', 'womenswear', 'menswear')) if x)
+    proj = META.get('basis') == 'projection'
+    NEXTCHK = ('Next check: the January 2027 fairs. Every page here is updated after them.' if S == 'ss27' else
+               'This is an outlook built from yarn and fabric fairs, trade coverage and the Forecut trend model. It is checked and updated as each fair and show happens.')
+    drivers = (f'<p class="lead sm">Market guides for the season, by region.</p><div class="cg">{guides}</div>' if guides else
+               f'<p class="lead sm">{E(META["intro"])}</p><p class="small">{E(META["stage"])}, {E(META["window"])}. <a class="more" href="{C}themes.html">See the themes</a></p>')
+    body = (f'<main><section class="w hero"><div><p class="crumb">Forecasts / {CODE}</p><h1>{E(META["title"].replace("/", " "))}</h1><p class="lead">{E(META["intro"])}</p>'
             f'<div class="ctas"><a class="btn" href="{C}themes.html">Start with the themes</a><a class="btn o" href="{C}womenswear.html">Browse key items</a></div>'
-            f'<p class="small">Preview built from the existing SS27 research, updated weekly once live.</p></div>'
-            f'<div class="hg"><img src="/img/cover-{S}-themes.webp" alt=""><img src="/img/cover-{S}-womenswear.webp" alt=""><img src="/img/cover-{S}-menswear.webp" alt=""></div></section>'
-            f'<div class="cn stk"><div class="w">' + ''.join(f'<a href="#s{n}">{n} {t}</a>' for n, t in [(1, 'Drivers'), (2, 'Signals'), (3, 'Trends'), (4, 'Colour and materials'), (5, 'Products and detailing'), (6, 'Commercial call'), (7, 'Validate')]) + '</div></div>' +
-            sec(1, 'Drivers', 'What is changing in people\'s lives?', f'<p class="lead sm">Market guides for the season, by region.</p><div class="cg">{guides}</div>') +
+            f'<p class="small">{E(META["stage"])}, {E(META["window"])}. Updated weekly.</p></div>'
+            f'<div class="hg">{hero_imgs}</div></section>'
+            f'<div class="cn stk"><div class="w">' + ''.join(f'<a href="#s{n}">{t}</a>' for n, t in [(1, 'Drivers'), (2, 'Signals'), (3, 'Trends'), (4, 'Colour and materials'), (5, 'Products and detailing'), (6, 'Commercial call'), (7, 'Validate')]) + '</div></div>' +
+            sec(1, 'Drivers', 'What is changing in people\'s lives?', drivers) +
             sec(2, 'Signals', 'Where is it showing up already?', f'<div class="cg">{ct("innovations")}{ct("styling")}</div>') +
             sec(3, 'Trends', 'Which signals add up to a real direction?', f'<div class="tcg">{ths}</div><p><a class="more" href="{C}themes.html">All themes and theme reports</a></p>') +
             sec(4, 'Colour and materials', 'What does it look and feel like?', f'<div class="swr">{sw}</div><div class="cg">{ct("colour")}{ct("fabrics")}{ct("trims")}</div>') +
             sec(5, 'Products and detailing', 'What exactly should be made?', f'<div class="cg">{ct("silhouettes")}{ct("womenswear")}{ct("menswear")}{ct("kidswear")}{ct("footwear")}{ct("knitwear")}{ct("accessories")}{ct("couture")}</div>') +
             sec(6, 'Commercial call', 'How much should a brand back it?', f'<div class="cg">{ct("business")}</div>') +
-            sec(7, 'Validate and update', 'Were we right?', f'<ul class="log">{lt}</ul><p class="small">Next check: the January 2027 fairs. Every page here is updated after them.</p>') + '</main>')
-    return page('Spring Summer 2027 forecast | Forecut', META['intro'], body)
+            sec(7, 'Validate and update', 'Were we right?', f'<ul class="log">{lt}</ul><p class="small">{NEXTCHK}</p>') + '</main>')
+    return page(f'{META["title"].replace("/", " ")} forecast | Forecut', META['intro'], body)
 
 
 def landing():
-    seas = [('SS27', 'Spring Summer 2027', 'Live in the new design: every theme, colour, silhouette, key item, footwear, trim and report.', P, True),
-            ('AW27', 'Autumn Winter 2027', 'Being rebuilt in the new design.', '', False), ('SS28', 'Spring Summer 2028', 'Being rebuilt in the new design.', '', False),
-            ('AW28', 'Autumn Winter 2028', 'Being rebuilt in the new design.', '', False)]
-    cards = ''.join((f'<a class="sc on" href="{u}"><b>{c}</b><span class="sn">{n}</span><span>{d}</span><span class="go">Open the forecast</span></a>' if live else
-                     f'<div class="sc"><b>{c}</b><span class="sn">{n}</span><span>{d}</span></div>') for c, n, d, u, live in seas)
-    stages = ''.join(f'<li><b>{n}</b><span>{t}</span></li>' for n, t in [(1, 'Drivers'), (2, 'Signals'), (3, 'Trends'), (4, 'Colour and materials'), (5, 'Products and detailing'), (6, 'Commercial call'), (7, 'Validate and update')])
+    cards = ''
+    for x in SEASONS:
+        m = META_ALL[x]
+        cards += (f'<a class="sc on" href="/forecasts/{x}/"><b>{m["code"]}</b><span class="sn">{E(m["title"].replace("/", " "))}</span><span>{E(m["stage"])}, {E(m["window"])}.</span>'
+                  f'<span class="go">Open the forecast</span></a>')
+    stages = ''.join(f'<li><span>{t}</span></li>' for t in ['Drivers', 'Signals', 'Trends', 'Colour and materials', 'Products and detailing', 'Commercial call', 'Validate and update'])
     body = (f'<main><section class="w ph1"><p class="crumb">Forecasts</p><h1>Fashion forecasts</h1><p class="lead">Every season, from what is changing in people\'s lives to the exact details to make. Updated weekly.</p></section>'
             f'<section class="w sec"><div class="scg">{cards}</div></section><section class="w sec"><h2>How every forecast is organised</h2><ol class="stl">{stages}</ol></section></main>')
     return page('Fashion forecasts | Forecut', 'Seasonal fashion forecasts: themes, colour, silhouettes, key items, footwear, trims and more.', body, '', '/forecasts/')
@@ -353,7 +388,7 @@ def stub(new):
             f'<body><p>This page has moved to <a href="{new}">{new}</a>.</p></body></html>')
 
 
-def build():
+def build_season():
     for d in ('c', 'r'):
         shutil.rmtree(os.path.join(OUT, d), ignore_errors=True)
         os.makedirs(os.path.join(OUT, d))
@@ -371,18 +406,24 @@ def build():
         if os.path.isdir(old):   # keep the old report URL working: send it to the new page
             open(os.path.join(old, 'index.html'), 'w').write(stub(f'{P}r/{r["_id"]}.html'))
             n_stub += 1
+    print(S, 'pages:', len(urls), 'items:', len(ITEMS), 'reports:', len(REPORTS), 'redirected:', n_stub)
+    return urls
+
+
+def build():
+    urls = []
+    for x in SEASONS:
+        load(x)
+        urls += build_season()
     html_l = landing()
     for f in (os.path.join(ROOT, 'forecasts', 'index.html'), os.path.join(ROOT, 'forecasts.html')):
         open(f, 'w').write(html_l)
-    # sitemap
     sm = os.path.join(ROOT, 'sitemap.xml')
     if os.path.exists(sm):
-        x = open(sm).read()
-        x = re.sub(r'<!--forecut-new-->.*?<!--/forecut-new-->\n?', '', x, flags=re.S)
-        add = '<!--forecut-new-->' + ''.join(f'<url><loc>https://forecut.in{u}</loc></url>' for u in urls) + '<!--/forecut-new-->\n'
-        x = x.replace('</urlset>', add + '</urlset>')
-        open(sm, 'w').write(x)
-    print('pages:', len(urls), 'items:', len(ITEMS), 'reports:', len(REPORTS), 'old report urls redirected:', n_stub)
+        x_ = open(sm).read()
+        x_ = re.sub(r'<!--forecut-new-->.*?<!--/forecut-new-->\n?', '', x_, flags=re.S)
+        add = '<!--forecut-new-->' + '<url><loc>https://forecut.in/forecasts/</loc></url>' + ''.join(f'<url><loc>https://forecut.in{u}</loc></url>' for u in urls) + '<!--/forecut-new-->\n'
+        open(sm, 'w').write(x_.replace('</urlset>', add + '</urlset>'))
 
 
 if __name__ == '__main__':

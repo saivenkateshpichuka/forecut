@@ -12,8 +12,8 @@ document.addEventListener('click',function(e){
     var st=t.dataset.st,L=t.dataset.life;
     el('dn').textContent=t.dataset.n;el('dnote').textContent=t.dataset.note;el('dsub').textContent=t.dataset.sub+', '+t.dataset.a;
     SL=[];if(t.dataset.img)SL.push({f:t.dataset.img,k:'Photo'});(t.dataset.flats?t.dataset.flats.split(','):[]).forEach(function(f,i,a){SL.push({f:f,k:'Flat sketch'+(a.length>1?' '+(i+1)+' of '+a.length:'')})});I=0;show(t.dataset.n);
-    el('dpill').innerHTML='<span class="pill s-'+st+'">'+N[st]+' in SS27</span>';
-    var h='';for(var i=0;i<5;i++){var c=L.charAt(i);h+='<div'+(i==1?' class="now"':'')+'>'+(c=='-'?'':'<i style="height:'+H[c]+'%;background:'+C[c]+'"></i>')+'<b>'+SK[i]+'</b><span>'+(c=='-'?'Not in forecast':N[c])+'</span></div>'}
+    el('dpill').innerHTML='<span class="pill s-'+st+'">'+N[st]+' in '+dlg.dataset.code+'</span>';
+    var h='';for(var i=0;i<5;i++){var c=L.charAt(i);h+='<div'+(i==+dlg.dataset.cur?' class="now"':'')+'>'+(c=='-'?'':'<i style="height:'+H[c]+'%;background:'+C[c]+'"></i>')+'<b>'+SK[i]+'</b><span>'+(c=='-'?'Not in forecast':N[c])+'</span></div>'}
     el('dlife').innerHTML=h;el('ddo').textContent=DO[st];
     dlg.showModal();return;
   }
