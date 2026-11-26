@@ -486,28 +486,54 @@ def curve_svg(vals):
 
 def theme_page(t):
     sl = islug(t[0])
-    its = theme_items(t)
+    its = sorted(theme_items(t), key=lambda x: 'erpf'.index(x['st']))
     imgs = [it for it in its if it['img']]
     hero = f'theme-{S}-{sl}' if f'theme-{S}-{sl}' in IMG else (imgs[0]['img'] if imgs else None)
     kw = ''.join(f'<span class="chip">{E(k)}</span>' for k in t[6])
-    board = ''.join(f'<span class="bd"><img src="/img/{it["img"]}.webp" alt="{E(it["name"])}" loading="lazy"><em>{E(it["name"])}</em></span>' for it in imgs[:8])
-    pal = ''.join(f'<span class="swm"><i style="background:{h}"></i><b>{E(n)}</b><small>{tcx(h)}, {h.upper()}</small></span>' for h, n in PAL)
-    tiles = ''.join(tile(it, 0) for it in sorted(its, key=lambda x: 'erpf'.index(x['st'])))
+    acc = ('Footwear', 'Accessories', 'Bags', 'Jewellery', 'Headwear')
+    fabs = [i for i in its if i['area'] in FAB]
+    trims = [i for i in its if i['area'] in TRIM and i not in fabs]
+    accs = [i for i in its if i['dept'] in acc and i not in fabs and i not in trims]
+    gar = [i for i in its if i not in fabs and i not in trims and i not in accs]
+    sils = [i for i in gar if i['area'] in ('Silhouette', 'Waist', 'Shoulder', 'Length', 'Proportion', 'Fit')]
     curve = theme_curve(t)
     peak = SK[curve.index(max(curve))].upper() if max(curve) else CODE
     kws = [k.lower() for k in t[6]] + [t[5].lower(), t[0].lower()]
     rel = [r for r in REPORTS if (r['_img'] or r.get('_fb')) and any(k in (r['title'] + ' ' + r.get('summary', '')).lower() for k in kws)][:6]
     reps = ''.join(rcard(r) for r in rel)
     sib = ''.join(f'<a class="chip lk" href="{P}t/{islug(x[0])}.html">{E(x[0])}</a>' for x in META['themes'] if x[0] != t[0])
-    body = (f'{catnav("themes")}<main><section class="w ph1 thh"><div><p class="crumb"><a href="{P}">{CODE}</a> / <a href="{C}themes.html">Themes</a> / {E(t[0])}</p><h1>{E(t[0])}</h1><p class="lead">{E(t[1])}</p>'
-            f'<p class="small">Key item: <b>{E(t[5])}</b></p><div>{kw}</div><p class="hb">{live()}</p><p class="hb"><button class="btn o" type="button" data-pdf>Download PDF</button></p></div>'
+    pal = ''.join(f'<span class="swm"><i style="background:{h}"></i><b>{E(n)}</b><small>{tcx(h)}, {h.upper()}</small></span>' for h, n in PAL)
+    combos = ''.join(f'<span class="cmb">{"".join(f"<i style=background:{PAL[(k + j) % len(PAL)][0]}></i>" for j in (0, 2, 4))}<small>{E(PAL[k][1])} + {E(PAL[(k + 2) % len(PAL)][1])} + {E(PAL[(k + 4) % len(PAL)][1])}</small></span>' for k in range(min(4, len(PAL))))
+    secs = []
+
+    def sec(id_, h2, sub, inner):
+        if inner:
+            secs.append((id_, h2))
+            return f'<section class="w tsec" id="{id_}"><h2>{h2}</h2><p class="sub">{sub}</p>{inner}</section>'
+        return ''
+    def grid(L, n=8):
+        return '<div class="tg">' + ''.join(tile(i, 0) for i in L[:n]) + '</div>' if L else ''
+    def mood():
+        return '<div class="bdg">' + ''.join(f'<span class="bd"><img src="/img/{it["img"]}.webp" alt="{E(it["name"])}" loading="lazy"><em>{E(it["name"])}</em></span>' for it in imgs[:8]) + '</div>' if imgs else ''
+    flats = [i for i in gar if i.get('flats')]
+    parts = [
+        sec('story', 'The theme', f'Why it matters in {CODE}.', f'<p class="tlead">{E(t[1])}</p><p class="small">Key item: <b>{E(t[5])}</b></p><div>{kw}</div>'),
+        sec('mood', 'Mood board', 'The pieces and details that make up this theme, in the order they matter.', mood()),
+        sec('strength', 'How strong is it?', f'It builds towards {peak}. {live("Live model")}', curve_svg(curve)),
+        sec('colour', 'Colour direction', 'The season palette this theme draws from. Keep colour consistent across apparel, trims and accessories.', f'<div class="swr">{pal}</div><h3 class="h3">Colour combinations</h3><div class="cmr">{combos}</div>'),
+        sec('fabrics', 'Fabrics, prints and finishes', 'Materials and surface developments to sample first. Confirm weight, drape and care with real swatches.', grid(fabs)),
+        sec('silhouettes', 'Silhouettes and proportions', 'The shapes and waist, shoulder and length decisions that carry the theme.', grid(sils)),
+        sec('garments', 'Key garments', 'Build a coherent family of styles rather than unrelated trend pieces. Select a piece for its drawings and spec notes.', grid([g for g in gar if g not in sils] or gar, 12)),
+        sec('details', 'Design details and trims', 'Functional details that stay visually quiet. Sample hardware before bulk approval.', grid(trims)),
+        sec('accessories', 'Footwear and accessories', 'Extend the same material and colour story into the full look.', grid(accs)),
+        sec('reports', 'Read more', 'Full reports that cover this theme.', f'<div class="rg">{reps}</div>' if reps else ''),
+        sec('other', 'Other themes this season', '', f'<div>{sib}</div>'),
+    ]
+    toc = ''.join(f'<a href="#{i}">{E(h2)}</a>' for i, h2 in secs)
+    body = (f'{catnav("themes")}<main><section class="w ph1 thh"><div><p class="crumb"><a href="{P}">{CODE}</a> / <a href="{C}themes.html">Themes</a> / {E(t[0])}</p><p class="hb">{live()}</p><h1>{E(t[0])}</h1><p class="lead">{E(t[1])}</p>'
+            f'<p class="hb"><button class="btn o" type="button" data-pdf>Download PDF</button></p></div>'
             + (f'<span class="thp" style="background:{t[4]}"><img src="/img/{hero}.webp" alt="{E(t[0])}"></span>' if hero else '') + '</section>'
-            f'<section class="w sec"><h2>The theme board</h2><p class="sub">The pieces and details that make up this theme, in the order they matter.</p><div class="bdg">{board}</div></section>'
-            f'<section class="w sec"><h2>How strong is it?</h2><p class="sub">Pieces and details in the Forecut model that carry this theme, by season. It builds towards {peak}. {live('Live model')}</p>{curve_svg(curve)}</section>'
-            f'<section class="w sec"><h2>Colour</h2><p class="sub">The season palette this theme draws from.</p><div class="swr">{pal}</div></section>'
-            f'<section class="w sec"><h2>Pieces that carry it</h2><p class="sub">Select any item to open its detail card with drawings, spec notes and its timing graph.</p><div class="tg">{tiles}</div></section>'
-            + (f'<section class="w sec"><h2>Related reports</h2><div class="rg">{reps}</div></section>' if reps else '') +
-            f'<section class="w sec"><h2>Other themes this season</h2><div>{sib}</div></section></main>' + dialog())
+            f'<nav class="w ttoc" aria-label="On this page">{toc}</nav>' + ''.join(parts) + '</main>' + dialog())
     return page(f'{t[0]}, {META["title"].replace("/", " ")} theme | Forecut', t[1], body, f'<script src="{C}app.js"></script>', f'{P}t/{sl}.html')
 
 
