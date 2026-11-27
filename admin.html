@@ -70,7 +70,7 @@ dialog .x{all:unset;cursor:pointer;font-size:18px;padding:4px 8px}
 }
 </style>
 <script type="module" src="/auth.js"></script>
-</head><body>
+<link rel="stylesheet" href="/m.css"></head><body>
 <header><div class="in"><b>FORECUT · ADMIN</b><small id="who"></small></div></header>
 <main>
 <div id="state" class="msg">Loading…</div>
@@ -727,4 +727,4 @@ function tab(k) {
 document.querySelector('.tabs').addEventListener('click', (e) => { const b = e.target.closest('[data-tab]'); if (b) tab(b.dataset.tab); });
 const h0 = location.hash.slice(1); if (/^[mrcefis]$/.test(h0)) tab(h0);
 </script>
-</body></html>
+<script src="/m.js" defer></script></body></html>

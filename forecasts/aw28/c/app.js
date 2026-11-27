@@ -48,7 +48,11 @@ document.addEventListener('click',function(e){
 /* live behaviour */
 document.addEventListener('click',function(e){var b=e.target.closest('[data-pdf]');if(!b)return;
   if(!document.documentElement.classList.contains('fc-in')){location.href='/account.html#signup';return}
-  if(b.dataset.pdf=='dialog')document.body.classList.add('pd');window.print()});
+  if(b.dataset.pdf=='dialog')document.body.classList.add('pd');
+  var im=[].slice.call(document.images);im.forEach(function(i){i.loading='eager'});
+  document.querySelectorAll('.rv').forEach(function(n){n.classList.add('rvd')});
+  document.querySelectorAll('.cv').forEach(function(n){n.classList.add('in')});
+  Promise.all(im.map(function(i){return i.complete?1:new Promise(function(r){i.onload=i.onerror=r})})).then(function(){setTimeout(function(){window.print()},250)})});
 window.addEventListener('afterprint',function(){document.body.classList.remove('pd')});
 var rm=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 function count(t){var v=+t.dataset.v,s=performance.now();if(rm){t.textContent=v;return}t.textContent='0';(function f(n){var k=Math.min(1,(n-s)/900);t.textContent=Math.round(v*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(f)})(s)}

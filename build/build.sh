@@ -45,3 +45,5 @@ python3 v2/kid_prompts.py
 python3 season_hub.py
 python3 clean_urls.py
 python3 maintenance.py
+
+python3 mobile_inject.py

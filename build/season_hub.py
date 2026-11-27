@@ -218,7 +218,7 @@ def page(title, desc, body, extra='', canon=None):
     canon = canon or P
     return (f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
             f'<!--forecut-new--><meta name="robots" content="index,follow"><title>{E(title)}</title><meta name="description" content="{E(desc[:200])}"><link rel="canonical" href="https://forecut.in{canon}"><meta property="og:title" content="{E(title)}"><meta property="og:description" content="{E(desc[:200])}"><meta property="og:type" content="website"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><link rel="preload" href="/v2/archivo.woff2" as="font" type="font/woff2" crossorigin><meta name="theme-color" content="#1f3d33">{AUTH_HEAD}'
-            f'<link rel="stylesheet" href="{C}style.css"></head><body>{header()}{body}{footer()}{AUTH_SYNC}{extra}</body></html>')
+            f'<link rel="stylesheet" href="{C}style.css"></head><body><div class="pdfh"><b class="logo">{LOGO}</b><span>forecut.in</span></div>{header()}{body}{footer()}{AUTH_SYNC}{extra}</body></html>')
 
 
 MARK = '<svg viewBox="0 0 32 32" aria-hidden="true"><rect x="2" y="2" width="28" height="28" rx="7" fill="#1f3d33"/><path d="M10 23V9h12M10 16h8" stroke="#f5f0e8" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M22 18l3 3-3 3" stroke="#e0784b" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>'
@@ -463,25 +463,45 @@ def theme_curve(t):
 
 
 def curve_svg(vals):
-    W, Hh, pl, pb, pt = 560, 190, 20, 30, 28
+    W, H, pl, pr, pb, pt = 640, 280, 44, 24, 38, 40
     mx = max(vals) or 1
+    top = ((mx + 3) // 4) * 4 or 4
     n = len(vals)
-    cw = (W - pl * 2) / n
-    pts, bars = [], ''
-    for i, v in enumerate(vals):
-        x = pl + i * cw + cw * 0.2
-        w = cw * 0.6
-        h = (Hh - pb - pt) * v / mx
-        y = Hh - pb - h
+    step = (W - pl - pr) / (n - 1)
+    ph = H - pb - pt
+    pts = [(pl + i * step, pt + ph - ph * v / top) for i, v in enumerate(vals)]
+
+    def seg(i0, i1):
+        d = f'M{pts[i0][0]:.1f},{pts[i0][1]:.1f}'
+        for i in range(i0, i1):
+            p0 = pts[max(i - 1, 0)]; p1 = pts[i]; p2 = pts[i + 1]; p3 = pts[min(i + 2, n - 1)]
+            c1 = (p1[0] + (p2[0] - p0[0]) / 6, min(max(p1[1] + (p2[1] - p0[1]) / 6, pt), pt + ph))
+            c2 = (p2[0] - (p3[0] - p1[0]) / 6, min(max(p2[1] - (p3[1] - p1[1]) / 6, pt), pt + ph))
+            d += f' C{c1[0]:.1f},{c1[1]:.1f} {c2[0]:.1f},{c2[1]:.1f} {p2[0]:.1f},{p2[1]:.1f}'
+        return d
+    full = seg(0, n - 1)
+    area = full + f' L{pts[-1][0]:.1f},{pt + ph} L{pts[0][0]:.1f},{pt + ph} Z'
+    grid = ''
+    for k in range(0, 5):
+        v = top * k // 4
+        y = pt + ph - ph * v / top
+        grid += f'<line class="gg" x1="{pl}" x2="{W - pr}" y1="{y:.1f}" y2="{y:.1f}"/><text class="ga" x="{pl - 10}" y="{y + 4:.1f}" text-anchor="end">{v}</text>'
+    cx = pts[SI][0]
+    guide = f'<line class="gd" x1="{cx:.1f}" x2="{cx:.1f}" y1="{pt - 6}" y2="{pt + ph}"/><g class="now"><rect x="{cx - 22:.1f}" y="4" width="44" height="20" rx="10"/><text x="{cx:.1f}" y="18" text-anchor="middle">Now</text></g>'
+    past = seg(0, SI) if SI > 0 else ''
+    fut = seg(SI, n - 1) if SI < n - 1 else ''
+    dots = ''
+    for i, (px, py) in enumerate(pts):
         cur = ' cur' if i == SI else ''
-        bars += (f'<rect class="bar{cur}" style="--i:{i}" x="{x:.0f}" y="{y:.0f}" width="{w:.0f}" height="{h:.0f}" rx="4"/>'
-                 f'<text class="gv2" data-v="{v}" style="--i:{i}" x="{x + w / 2:.0f}" y="{y - 8:.0f}" text-anchor="middle">{v}</text>'
-                 f'<text class="gl{cur}" x="{x + w / 2:.0f}" y="{Hh - 9}" text-anchor="middle">{SK[i].upper()}</text>')
-        pts.append((x + w / 2, y))
-    line = ' '.join(f'{px:.0f},{py:.0f}' for px, py in pts)
-    dots = ''.join(f'<circle class="dot{" cur" if i == SI else ""}" style="--i:{i}" cx="{px:.0f}" cy="{py:.0f}" r="{6 if i == SI else 4.5}"/>' for i, (px, py) in enumerate(pts))
-    return (f'<svg viewBox="0 0 {W} {Hh}" class="cv" role="img" aria-label="Pieces carrying this theme, by season: {", ".join(f"{SK[i].upper()} {v}" for i, v in enumerate(vals))}">'
-            f'{bars}<polyline class="cl" pathLength="1" points="{line}" fill="none"/>{dots}</svg>')
+        dots += (f'<g class="pt{cur}" style="--i:{i}">' + (f'<circle class="ring" cx="{px:.1f}" cy="{py:.1f}" r="9"/>' if i == SI else '') +
+                 f'<circle class="dot{cur}" cx="{px:.1f}" cy="{py:.1f}" r="{6 if i == SI else 4.5}"><title>{SK[i].upper()}: {vals[i]}</title></circle>'
+                 f'<text class="gv2" data-v="{vals[i]}" style="--i:{i}" x="{px:.1f}" y="{py - 14:.1f}" text-anchor="middle">{vals[i]}</text></g>')
+    labs = ''.join(f'<text class="gl{" cur" if i == SI else ""}" x="{px:.1f}" y="{H - 12}" text-anchor="middle">{SK[i].upper()}</text>' for i, (px, _) in enumerate(pts))
+    return (f'<div class="cvw"><svg viewBox="0 0 {W} {H}" class="cv" role="img" aria-label="Pieces carrying this theme, by season: {", ".join(f"{SK[i].upper()} {v}" for i, v in enumerate(vals))}">'
+            f'<defs><linearGradient id="cvg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#1f3d33" stop-opacity=".28"/><stop offset="1" stop-color="#1f3d33" stop-opacity="0"/></linearGradient></defs>'
+            f'{grid}<path class="ar" d="{area}"/>{guide}'
+            + (f'<path class="cl" pathLength="1" d="{past}"/>' if past else '') + (f'<path class="cf" d="{fut}"/>' if fut else '') + f'{dots}{labs}</svg>'
+            '<p class="cvn"><span><i class="k1"></i>To date</span><span><i class="k2"></i>Forecast</span><span>Pieces and details carrying this theme</span></p></div>')
 
 
 def board_collage(t, hero, imgs, flats, rel):
@@ -552,7 +572,7 @@ def theme_page(t):
         sec('colour', 'Colour direction', 'The season palette this theme draws from. Keep colour consistent across apparel, trims and accessories.', f'<div class="swr">{pal}</div><h3 class="h3">Colour combinations</h3><div class="cmr">{combos}</div>'),
         sec('fabrics', 'Fabrics, prints and finishes', 'Materials and surface developments to sample first. Confirm weight, drape and care with real swatches.', grid(fabs)),
         sec('silhouettes', 'Silhouettes and proportions', 'The shapes and waist, shoulder and length decisions that carry the theme.', grid(sils)),
-        sec('garments', 'Key garments', 'Build a coherent family of styles rather than unrelated trend pieces. Select a piece for its drawings and spec notes.', grid([g for g in gar if g not in sils] or gar, 12)),
+        sec('garments', 'Key garments', 'Build a coherent family of styles rather than unrelated trend pieces. Select a piece for its drawings and spec notes.', grid([g for g in gar if g not in sils], 12)),
         sec('details', 'Design details and trims', 'Functional details that stay visually quiet. Sample hardware before bulk approval.', grid(trims)),
         sec('accessories', 'Footwear and accessories', 'Extend the same material and colour story into the full look.', grid(accs)),
         sec('reports', 'Read more', 'Full reports that cover this theme.', f'<div class="rg">{reps}</div>' if reps else ''),
