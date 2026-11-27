@@ -403,7 +403,7 @@ DIALOG = ('<dialog id="dc" aria-label="Detail card"><div class="dcg"><div class=
           '<div id="dnotes" class="dsec" hidden><h4>Design notes</h4><ul id="dnl"></ul></div>'
           '<div id="dfab" class="dsec" hidden><h4>Fabric and trims</h4><p id="dft"></p></div>'
           '<div id="duse" class="dsec" hidden><h4>Where to use it</h4><p id="dut"></p></div>'
-          '<div class="acts"><button type="button" class="btn">Add to spec pack</button><button type="button" class="btn o">Save to board</button><button type="button" class="btn o" data-pdf="dialog">Download PDF</button></div></div></div></dialog>')
+          '<div class="acts"><button type="button" class="btn" data-save="spec">Add to spec pack</button><button type="button" class="btn o" data-save="board">Save to board</button><button type="button" class="btn o" data-pdf="dialog">Download PDF</button><button type="button" class="btn o" data-png="dialog">Download PNG</button></div></div></div></dialog>')
 
 
 import datetime as _dt
@@ -771,15 +771,28 @@ def home_page():
     if gl:
         mk = ('<aside class="mkp"><b>Markets this season</b><p class="small">Regional guides for ' + CODE + ', with what buyers want and when.</p><ul>' +
               ''.join(f'<li style="--i:{i}"><a href="/{n}.html"><span class="mr">{E(tag)}</span><span>{E(t)}</span></a></li>' for i, (tag, t, n) in enumerate(gl)) + '</ul></aside>')
-    body = (f'<main><section class="w hh"><div><p class="crumb">Your start page</p><h1 id="greet">Welcome back.</h1><p class="lead">New this week in the {META["code"]} forecast, and where each season stands.</p></div>'
-            f'<form class="hsr" action="/search.html" method="get" role="search"><input name="q" type="search" placeholder="Search a detail, colour or report" aria-label="Search"><button class="btn" type="submit">Search</button></form></section>'
-            f'<section class="w sec"><div class="hf"><div class="hfi">{ft}</div><div><p class="crumb">Detail of the day</p><h2>{E(feat["name"])}</h2><p class="lead sm">{E(desc)}</p>'
-            f'<p>{pill(feat["st"])} <span class="chip">{E(feat["dept"])}, {E(feat["sub"])}</span></p><p class="small">Open the card for drawings, spec notes and its trend graph.</p></div>{mk}</div></section>'
-            f'<section class="w sec"><h2>Where each season is</h2><div class="hsg">{seasons}</div></section>'
-            f'<section class="w sec"><h2>Rising and emerging now</h2><p class="sub">Select any item to open its detail card.</p><div class="tg">{"".join(tile(i, 0) for i in rs)}</div><p><a class="more" href="{C}womenswear.html">Browse all details</a></p></section>'
-            f'<section class="w sec"><h2>New this week</h2><div class="rg">{rc}</div></section>'
-            f'<section class="w sec"><h2>{CODE} colour</h2><div class="swr">{sw}</div><p><a class="more" href="{C}colour.html">Full palette with Pantone TCX and HEX</a></p></section>'
-            f'<section class="w sec"><h2>Your tools</h2><div class="cg">{tl}</div><p><a class="more" href="/tools.html">All tools</a></p></section></main>' + dialog())
+    news = ''.join(f'<li><a href="{P}r/{r["_id"]}.html"><b>{E(r["title"])}</b><span>{E(AUDN.get(r["audience"], r["audience"]))}</span></a></li>' for r in latest[:5])
+    ssn = ''.join(f'<a class="sr{" now" if x == "ss27" else ""}" href="/forecasts/{x}/"><b>{META_ALL[x]["code"]}</b><span>{E(META_ALL[x]["stage"])}<small>{E(META_ALL[x]["window"])}</small></span></a>' for x in SEASONS)
+    tl2 = ''.join(f'<a href="/{a}.html"><span class="tli"><img src="/tools/covers/{a}-640.webp" alt="" loading="lazy"></span><b>{E(b)}</b></a>' for a, b in tools)
+    mag = '<a class="mgc" href="/magazine/2026-12.html"><span class="mgi2"><img src="/img/theme-ss27-the-waist-returns.webp" alt="" loading="lazy"></span><span><b>December 2026</b><small>Issue 01 · The waist returns</small><em>Read the issue</em></span></a>'
+    mk2 = mk.replace('<aside class="mkp">', '<div class="mkp">').replace('</aside>', '</div>') if mk else ''
+    body = (f'<main class="w dsh" id="dsh"><header class="dh"><div><p class="crumb">Your dashboard</p><h1 id="greet">Welcome back.</h1></div>'
+            f'<form class="hsr" action="/search.html" method="get" role="search"><input name="q" type="search" placeholder="Search a detail, colour or report" aria-label="Search"><button class="btn" type="submit">Search</button></form></header>'
+            f'<div class="dk"><a href="#board"><b data-count="fc-board">0</b><span>Saved to board</span></a><a href="#spec"><b data-count="fc-spec">0</b><span>In spec pack</span></a><a href="/forecasts/"><b>4</b><span>Seasons live</span></a><a href="/magazine/"><b>Dec</b><span>Latest magazine</span></a></div>'
+            f'<div class="dg"><div class="dm">'
+            f'<section class="dp"><div class="dph"><h2>Continue where you left off</h2><a class="more" href="{C}themes.html">Open {CODE} themes</a></div><div class="tg d4" id="d-recent"></div></section>'
+            f'<section class="dp" id="board"><div class="dph"><h2>Your board</h2><button class="lnk" type="button" data-clear="fc-board">Clear</button></div><div class="tg d4" id="d-board"></div><p class="note">Saved on this device.</p></section>'
+            f'<section class="dp" id="spec"><div class="dph"><h2>Spec pack</h2><button class="lnk" type="button" data-clear="fc-spec">Clear</button></div><ul class="spl" id="d-spec"></ul><p class="note">Open an item to download its card as PDF or PNG.</p></section>'
+            f'<section class="dp"><div class="dph"><h2>Rising and emerging now</h2><a class="more" href="{C}womenswear.html">Browse all details</a></div><div class="tg d4">{"".join(tile(i, 0) for i in rs[:4])}</div></section>'
+            f'<section class="dp"><div class="dph"><h2>Your tools</h2><a class="more" href="/tools.html">All tools</a></div><div class="tls">{tl2}</div></section>'
+            + (f'<section class="dp"><div class="dph"><h2>Markets this season</h2></div>{mk2}</section>' if mk2 else '') +
+            f'</div><aside class="ds">'
+            f'<section class="dp"><div class="dph"><h2>Seasons</h2></div><div class="srl">{ssn}</div></section>'
+            f'<section class="dp"><div class="dph"><h2>Magazine</h2></div>{mag}</section>'
+            f'<section class="dp"><div class="dph"><h2>New reports</h2><a class="more" href="/reports.html">All</a></div><ul class="nl">{news}</ul></section>'
+            +
+            f'<section class="dp"><div class="dph"><h2>Detail of the day</h2></div><div class="dod">{ft}<p class="small gr">{E(desc)}</p></div></section>'
+            f'</aside></div></main>' + dialog())
     guard = ("<script>try{if(localStorage.getItem('fc-in')!=='1')location.replace('/')}catch(e){}</script><script type=\"module\" src=\"/auth.js\"></script>"
              "<script>(function w(n){if(window.FCAuth&&FCAuth.onChange){FCAuth.onChange(function(u){if(!u){try{localStorage.removeItem('fc-in')}catch(e){}location.replace('/');return}"
              "var g=document.getElementById('greet'),h=new Date().getHours(),t=h<12?'Good morning':h<17?'Good afternoon':'Good evening';g.textContent=t+(u.displayName?', '+u.displayName.split(' ')[0]:'')+'.'})}else if(n<80)setTimeout(function(){w(n+1)},100)})(0)</script>")

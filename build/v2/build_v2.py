@@ -1053,11 +1053,11 @@ def landing():
   <p class="lead">Every season starts from the global runways and is read for six regions. Forecut adds what most forecasters leave out: Indian festive and summer seasons, handloom, craft clusters and the colours that sell there.</p>
   <p style="margin-top:24px;display:flex;gap:24px;flex-wrap:wrap"><a class="lk" href="/india.html">See the India forecasts</a><a class="lk" href="/regions.html">All regions</a></p></div>
 </div></section>
-<section class="sec st" id="services"><div class="w"><div class="hd"><h2 class="dsp">Who it is for</h2></div><div class="g g4 who">
-  <div><h3>Designers</h3><p class="gr small">Know what to sketch next, with colours and details you can put straight into a tech pack.</p></div>
-  <div><h3>Brands and buyers</h3><p class="gr small">Plan ranges by what is rising, peaking or fading in each market, with price bands for key garments.</p></div>
-  <div><h3>Fashion schools</h3><p class="gr small">Give a whole batch current forecasts and tools for projects and portfolios, with an access code.</p></div>
-  <div><h3>Students</h3><p class="gr small">Learn to read a forecast and build a collection from it, from mood to tech pack.</p></div>
+<section class="sec st" id="services"><div class="w"><div class="hd"><h2 class="dsp">Who it is for</h2><a class="lk" href="/services/">All services</a></div><div class="g g4 who">
+  <a href="/services/designers.html"><h3>Designers</h3><p class="gr small">Know what to sketch next, with colours and details you can put straight into a tech pack.</p><span class="lk" style="display:inline-block;margin-top:12px">See the route</span></a>
+  <a href="/services/brands.html"><h3>Brands and buyers</h3><p class="gr small">Plan ranges by what is rising, peaking or fading in each market, with price bands for key garments.</p><span class="lk" style="display:inline-block;margin-top:12px">See the route</span></a>
+  <a href="/services/fashion-schools.html"><h3>Fashion schools</h3><p class="gr small">Give a whole batch current forecasts and tools for projects and portfolios, with an access code.</p><span class="lk" style="display:inline-block;margin-top:12px">See the route</span></a>
+  <a href="/services/students.html"><h3>Students</h3><p class="gr small">Learn to read a forecast and build a collection from it, from mood to tech pack.</p><span class="lk" style="display:inline-block;margin-top:12px">See the route</span></a>
 </div></div></section>
 {method_block()}
 <section class="sec st"><div class="w g split" style="grid-template-columns:1fr 2fr;gap:56px">

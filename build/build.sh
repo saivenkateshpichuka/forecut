@@ -42,8 +42,11 @@ python3 v2/cover_prompts.py
 python3 v2/tool_cover_prompts.py
 python3 v2/kid_prompts.py
 # report PDFs are slower: python3 v2/pdf_v2.py all
+python3 biz_pages.py
+python3 magazine.py
 python3 season_hub.py
 python3 clean_urls.py
 python3 maintenance.py
+python3 chrome_inject.py
 
 python3 mobile_inject.py

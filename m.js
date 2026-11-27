@@ -18,7 +18,7 @@ var d=document.createElement('div');d.className='mdraw';d.id='mdr';d.setAttribut
 d.innerHTML='<div class="mdh"><b>Menu</b><button type="button" id="mdx" aria-label="Close menu">&times;</button></div>'+
 '<div class="mda"><a class="out-only mdb" href="/account.html#signup">Sign up</a><a class="out-only mdl" href="/account.html#signin">Log in</a><a class="in-only mdb" href="/home.html">Your Home</a></div>'+
 S.map(function(s){return '<details'+(p.indexOf('/forecasts/'+s[0])===0?' open':'')+'><summary><b>'+s[1]+'</b><span>'+s[2]+'</span></summary><div class="mdg">'+C.map(function(c){return '<a href="/forecasts/'+s[0]+'/c/'+c[0]+'.html">'+c[1]+'</a>'}).join('')+'<a class="all" href="/forecasts/'+s[0]+'/">All '+s[1]+'</a></div></details>'}).join('')+
-'<div class="mdk"><a href="/forecasts/">All forecasts</a><a href="/regions.html">Regional forecasts</a><a href="/india.html">India forecasts</a><a href="/#services">Services</a><a href="/about.html">About</a><a href="/insights.html">Insights</a><a href="mailto:hello@forecut.in">hello@forecut.in</a></div>';
+'<div class="mdk"><a href="/forecasts/">All forecasts</a><a href="/regions.html">Regional forecasts</a><a href="/india.html">India forecasts</a><a href="/what-we-do.html">What we do</a><a href="/services/">Services</a><a href="/magazine/">Monthly magazine</a><a href="/about.html">About</a><a href="/resources.html">Resources</a><a href="/insights.html">Insights</a><a href="mailto:hello@forecut.in">hello@forecut.in</a></div>';
 function add(){document.body.appendChild(d);document.body.appendChild(bar);
 var b=document.getElementById('mmb'),x=document.getElementById('mdx');
 function set(o){d.hidden=!o;b.setAttribute('aria-expanded',o);document.documentElement.classList.toggle('mlock',o)}

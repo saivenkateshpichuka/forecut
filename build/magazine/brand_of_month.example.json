@@ -1,0 +1,5 @@
+{"name": "Brand name", "country": "Country", "one_line": "One sentence on what the brand is known for.",
+ "story": ["Paragraph 1", "Paragraph 2", "Paragraph 3"],
+ "what_to_learn": ["Lesson 1", "Lesson 2", "Lesson 3"],
+ "facts": [["Founded", "Year"], ["Based in", "City"], ["Known for", "Category"]],
+ "sources": ["Source name and link"]}
