@@ -124,12 +124,12 @@ function host() {
   const slot = document.getElementById('fc-account-slot');
   if (slot) { slot.classList.add('fca'); return slot; }
   const nl = document.getElementById('navlinks');
-  if (nl) { nl.querySelectorAll('a[href*="account.html"]').forEach(a => { a.style.display = 'none'; }); const w = document.createElement('span'); w.className = 'fca'; w.style.marginLeft = '12px'; const mb = nl.parentNode.querySelector('.menu'); nl.parentNode.insertBefore(w, mb || nl.nextSibling); return w; }
+  if (nl) { nl.querySelectorAll('a[href*="account"]').forEach(a => { a.style.display = 'none'; }); const w = document.createElement('span'); w.className = 'fca'; w.style.marginLeft = '12px'; const mb = nl.parentNode.querySelector('.menu'); nl.parentNode.insertBefore(w, mb || nl.nextSibling); return w; }
   const bar = document.querySelector('.bar'); if (bar) { const w = document.createElement('span'); w.className = 'fca fcbar'; bar.appendChild(w); return w; }
   const l = document.querySelector('nav .links'); if (l) { const w = document.createElement('span'); w.className = 'fca'; l.appendChild(w); return w; }
   return null;
 }
-const here = location.pathname.replace(/^\//, '') || 'index.html';
+const here = location.pathname.replace(/^\//, '') || '/';
 const isAccount = /account(\.html)?$/.test(here);
 const w = host();
 let wasMember = null;
@@ -163,14 +163,14 @@ onAuthStateChanged(auth, async (u) => {
   } catch (e) {}
 });
 onAuthStateChanged(auth, (u) => {
-  if (u) { unlock(); const cta = document.querySelector('header.hero#top .cta a[href*="account"]'); if (cta) { cta.textContent = 'My saved details'; cta.href = '/account.html#saved'; } } else if (wasMember) { location.reload(); return; }
+  if (u) { unlock(); const cta = document.querySelector('header.hero#top .cta a[href*="account"]'); if (cta) { cta.textContent = 'My saved details'; cta.href = '/account#saved'; } } else if (wasMember) { location.reload(); return; }
   wasMember = !!u;
   if (!w) return;
-  if (!u) { w.innerHTML = isAccount ? '' : `<a class="fcin" href="/account.html?next=${encodeURIComponent(location.pathname + location.hash)}">Sign in</a>`; return; }
+  if (!u) { w.innerHTML = isAccount ? '' : `<a class="fcin" href="/account?next=${encodeURIComponent(location.pathname + location.hash)}">Sign in</a>`; return; }
   const name = u.displayName || (u.email || '').split('@')[0];
   const ini = (name || '?').trim().charAt(0).toUpperCase();
   w.innerHTML = `<button class="fcav" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Account menu">${w.id === 'fc-account-slot' ? `<span class="fc-avatar">${u.photoURL ? `<img src="${u.photoURL}" alt="" referrerpolicy="no-referrer">` : ini}</span><span class="fc-account-label">My account</span>` : (u.photoURL ? `<img src="${u.photoURL}" alt="" referrerpolicy="no-referrer">` : ini)}</button>
-  <div class="fcm" role="menu" hidden><b></b><small></small><span class="tg">Member · all seasons unlocked</span><a href="/account.html#overview" role="menuitem">Dashboard</a><a href="/account.html#projects" role="menuitem">Projects &amp; files</a><a href="/account.html#brand" role="menuitem">Brand kit</a><a href="/account.html#account" role="menuitem">Account settings</a><button type="button" role="menuitem" class="fcout">Sign out</button></div>`;
+  <div class="fcm" role="menu" hidden><b></b><small></small><span class="tg">Member · all seasons unlocked</span><a href="/account#overview" role="menuitem">Dashboard</a><a href="/account#projects" role="menuitem">Projects &amp; files</a><a href="/account#brand" role="menuitem">Brand kit</a><a href="/account#account" role="menuitem">Account settings</a><button type="button" role="menuitem" class="fcout">Sign out</button></div>`;
   w.querySelector('.fcm b').textContent = name; w.querySelector('.fcm small').textContent = u.email || '';
   const b = w.querySelector('.fcav'), m = w.querySelector('.fcm');
   b.onclick = (e) => { e.stopPropagation(); m.hidden = !m.hidden; b.setAttribute('aria-expanded', String(!m.hidden)); };
@@ -185,7 +185,7 @@ onAuthStateChanged(auth, (u) => {
   const b = document.createElement('button'); b.type = 'button'; b.className = 'fcfbb';
   b.innerHTML = '<span aria-hidden="true">★</span> Feedback<span class="fcfbx"> · 1 year free</span>';
   b.title = 'Give feedback and get 1 year of full Forecut access free';
-  b.onclick = () => window.FCFeedback ? window.FCFeedback.open() : (location.href = '/account.html#signin');
+  b.onclick = () => window.FCFeedback ? window.FCFeedback.open() : (location.href = '/account#signin');
   const slot = document.getElementById('fc-install-slot');
   if (slot && slot.parentNode) slot.parentNode.insertBefore(b, slot); else if (w) w.parentNode.insertBefore(b, w); else fxNav.insertBefore(b, fxNav.querySelector('.fx-signin'));
   const st = document.createElement('style');
@@ -226,7 +226,7 @@ onAuthStateChanged(auth, (u) => {
   function gate(why) {
     if (document.querySelector('.fcg')) return;
     const g = document.createElement('div'); g.className = 'fcg'; g.setAttribute('role', 'dialog'); g.setAttribute('aria-modal', 'true');
-    g.innerHTML = '<div><small>Free trial · until 1 January 2027</small><h3></h3><p>Sign in free to unlock every season, region, report and download during the trial. It takes one tap with Google.</p><a href="/account.html?next=' + encodeURIComponent(location.pathname + location.search + location.hash) + '#signup">Sign in free</a><button type="button">Not now</button></div>';
+    g.innerHTML = '<div><small>Free trial · until 1 January 2027</small><h3></h3><p>Sign in free to unlock every season, region, report and download during the trial. It takes one tap with Google.</p><a href="/account?next=' + encodeURIComponent(location.pathname + location.search + location.hash) + '#signup">Sign in free</a><button type="button">Not now</button></div>';
     g.querySelector('h3').textContent = why;
     g.addEventListener('click', (e) => { if (e.target === g || e.target.tagName === 'BUTTON') g.remove(); });
     document.body.appendChild(g); g.querySelector('a').focus();
@@ -284,7 +284,7 @@ onAuthStateChanged(auth, (u) => {
     };
     setTimeout(() => { const s1 = w.querySelector('[data-r]'); if (s1) s1.focus(); }, 50);
   }
-  window.FCFeedback = { open: () => { const u = auth.currentUser; if (u) open(u, true); else location.href = '/account.html#signin'; } };
+  window.FCFeedback = { open: () => { const u = auth.currentUser; if (u) open(u, true); else location.href = '/account#signin'; } };
   // the automatic pop-up is switched off (owner's request, 17 Nov 2026); the header Feedback button still opens the form.
   // Set AUTO_FEEDBACK = true to show it again once after sign-in.
   const AUTO_FEEDBACK = false;
