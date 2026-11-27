@@ -25,7 +25,7 @@ body.mg{background:#1c1f1d;color:#fff;font:400 16px/1.5 "Archivo",system-ui,sans
 .chips{display:flex;flex-wrap:wrap;gap:1.6cqw}.chips span{padding:1.1cqw 2.6cqw;border-radius:99cqw;background:#efe9de;font-size:2.7cqw;font-weight:500}
 .sws{display:flex;gap:2cqw}.sws i{display:block;width:16cqw;height:16cqw;border-radius:50%}.sws.wide i{flex:1;height:10cqw;border-radius:0}
 .cover{padding:0;color:#fff;background:#1f3d33}.cover .mast{position:absolute;left:6cqw;right:6cqw;top:5cqw;text-align:center;text-shadow:0 1px 18px rgba(0,0,0,.25)}
-.cover .mast b{display:block;font:200 17cqw/1 "Archivo";font-stretch:125%;letter-spacing:.06em}.cover .mast span{font:600 2.4cqw "Archivo";letter-spacing:.3em}
+.cover .mast b{display:block;font:200 12.4cqw/1 "Archivo";font-stretch:125%;letter-spacing:.04em}.cover .mast span{font:600 2.4cqw "Archivo";letter-spacing:.3em}
 .cover .cl{position:absolute;left:6cqw;right:6cqw;bottom:6cqw;text-shadow:0 1px 20px rgba(0,0,0,.45)}.cover h1{font:300 11cqw/.98 "Archivo";font-stretch:125%;letter-spacing:-.03em;margin-bottom:3.5cqw}
 .cover ul{list-style:none}.cover li{font:600 3cqw "Archivo";padding:1cqw 0;border-top:1px solid rgba(255,255,255,.5)}
 .contents ol{list-style:none;columns:1}.contents li{border-bottom:1px solid #e6ded3}.contents a{display:flex;justify-content:space-between;gap:3cqw;padding:2cqw 0;color:inherit;text-decoration:none;font:500 3.3cqw "Archivo"}.contents i{font-style:normal;color:var(--t);font-weight:700}
