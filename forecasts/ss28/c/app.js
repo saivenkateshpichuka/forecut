@@ -10,13 +10,19 @@ function fill(n){function put(id,box,txt){el(id).textContent=txt||'';el(box).hid
     var ul=el('dnl');ul.innerHTML='';(d.d||[]).forEach(function(x){var li=document.createElement('li');li.textContent=x;ul.appendChild(li)});el('dnotes').hidden=!(d.d&&d.d.length);
     put('dft','dfab',d.f);put('dut','duse',d.u)}
   if(DD)go();else load(go)}
-function graph(L){var W=360,Ht=130,pl=36,pr=36,pt=14,pb=18,pts=[],x,y,i,c,s='';
+function graph(L){var W=420,Ht=190,pl=34,pr=34,pt=26,pb=26,pts=[],i,c,x,y,s='',cur=+dlg.dataset.cur;
   for(i=0;i<5;i++){c=L.charAt(i);x=pl+i*(W-pl-pr)/4;y=c=='-'?null:Ht-pb-(H[c]/100)*(Ht-pb-pt);pts.push([x,y,c])}
-  for(i=0;i<4;i++){s+='<line x1="'+(pl+i*(W-pl-pr)/4)+'" x2="'+(pl+i*(W-pl-pr)/4)+'" y1="'+pt+'" y2="'+(Ht-pb)+'" class="gv"/>'}
-  s+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+(Ht-pb)+'" y2="'+(Ht-pb)+'" class="ga"/>';
-  var seg=[],cur=[];pts.forEach(function(p){if(p[1]===null){if(cur.length)seg.push(cur);cur=[]}else cur.push(p)});if(cur.length)seg.push(cur);
-  seg.forEach(function(g){if(g.length>1)s+='<polyline class="gl1" pathLength="1" fill="none" stroke="#1f3d33" stroke-width="2.5" points="'+g.map(function(p){return p[0]+','+p[1]}).join(' ')+'"/>'});
-  pts.forEach(function(p,k){if(p[1]===null)return;var now=k==+dlg.dataset.cur;if(now)s+='<circle class="ring" cx="'+p[0]+'" cy="'+p[1]+'" r="9" fill="'+C[p[2]]+'"/>';s+='<circle class="gd" style="--i:'+k+'" cx="'+p[0]+'" cy="'+p[1]+'" r="'+(now?7:5)+'" fill="'+C[p[2]]+'" stroke="#fff" stroke-width="2"/>'});
+  s+='<defs><linearGradient id="gla" x1="0" x2="1" y1="0" y2="0">'+pts.map(function(p,k){return '<stop offset="'+(k*25)+'%" stop-color="'+(p[2]=='-'?'#ccc':C[p[2]])+'"/>'}).join('')+'</linearGradient><linearGradient id="glf" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#19D68B" stop-opacity=".30"/><stop offset="1" stop-color="#19D68B" stop-opacity="0"/></linearGradient><filter id="glw" x="-20%" y="-40%" width="140%" height="180%"><feGaussianBlur stdDeviation="4"/></filter></defs>';
+  [0,.5,1].forEach(function(f){var yy=pt+(Ht-pb-pt)*f;s+='<line x1="'+pl+'" x2="'+(W-pr)+'" y1="'+yy+'" y2="'+yy+'" stroke="#E6EAE8" stroke-width="1"/>'});
+  var seg=[],cu=[];pts.forEach(function(p){if(p[1]===null){if(cu.length)seg.push(cu);cu=[]}else cu.push(p)});if(cu.length)seg.push(cu);
+  function path(g){var d='M'+g[0][0]+','+g[0][1];for(var k=0;k<g.length-1;k++){var p0=g[Math.max(k-1,0)],p1=g[k],p2=g[k+1],p3=g[Math.min(k+2,g.length-1)];
+    d+=' C'+(p1[0]+(p2[0]-p0[0])/6)+','+(p1[1]+(p2[1]-p0[1])/6)+' '+(p2[0]-(p3[0]-p1[0])/6)+','+(p2[1]-(p3[1]-p1[1])/6)+' '+p2[0]+','+p2[1]}return d}
+  seg.forEach(function(g){if(g.length<2)return;var d=path(g);
+    s+='<path class="gfa" d="'+d+' L'+g[g.length-1][0]+','+(Ht-pb)+' L'+g[0][0]+','+(Ht-pb)+' Z" fill="url(#glf)"/>';
+    s+='<path class="gl1 glow" pathLength="1" d="'+d+'" fill="none" stroke="url(#gla)" stroke-width="9" stroke-linecap="round" filter="url(#glw)" opacity=".55"/>';
+    s+='<path class="gl1" pathLength="1" d="'+d+'" fill="none" stroke="url(#gla)" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>'});
+  pts.forEach(function(p,k){if(p[1]===null)return;var now=k==cur;if(now)s+='<circle class="ring" cx="'+p[0]+'" cy="'+p[1]+'" r="11" fill="'+C[p[2]]+'"/>';
+    s+='<circle class="gd" style="--i:'+k+'" cx="'+p[0]+'" cy="'+p[1]+'" r="'+(now?9:6.5)+'" fill="'+C[p[2]]+'" stroke="#fff" stroke-width="3"/>'});
   return '<svg viewBox="0 0 '+W+' '+Ht+'" role="img" aria-label="Trend strength by season" class="gr">'+s+'</svg>'}
 
 var SL=[],I=0;

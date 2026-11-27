@@ -132,7 +132,7 @@ AUDSETS = {'womenswear': ['women'], 'menswear': ['men'], 'kidswear': ['kids', 'b
 KIDS = ('kids', 'boys', 'girls', 'toddler-boys', 'toddler-girls')
 
 
-NOFB = ('innovations', 'styling', 'business-strategy', 'couture')
+NOFB = ('innovations', 'styling', 'business-strategy', 'couture', 'colours')
 
 
 def pool_for(r):
@@ -265,10 +265,20 @@ def tile(it, i):
             f'<span class="tm">{E(it["area"])} {pill(it["st"])}</span></span></button>')
 
 
+def pal_art(r, cls='rci pal'):
+    k = sum(ord(c) for c in r['_id']) % len(PAL)
+    cols = [PAL[(k + i) % len(PAL)][0] for i in range(5)]
+    hs = [52, 86, 64, 100, 74]
+    bars = ''.join(f'<i style="background:{c};--h:{hs[(i + k) % 5]}%;--i:{i}"></i>' for i, c in enumerate(cols))
+    return f'<span class="{cls}" aria-hidden="true">{bars}</span>'
+
+
 def rcard(r):
     palette = ''.join(f'<i style="background:{h}"></i>' for h, _ in PAL)
     if r['_img'] or r.get('_fb'):
         top = f'<span class="rci"><img src="/img/{r["_img"] or r["_fb"]}.webp" alt="" loading="lazy"></span>'
+    elif r['category'] == 'colours':
+        top = pal_art(r)
     else:
         top = f'<span class="rci ph">{MARK}<em>{E(RCAT.get(r["category"], ""))}</em></span>'
     return (f'<a class="rcard" data-aud="{r["audience"]}" href="{P}r/{r["_id"]}.html">{top}<span class="rcb"><span class="chip">{E(AUDN.get(r["audience"], r["audience"]))}</span>'
@@ -282,11 +292,63 @@ def audfilter(auds):
             ''.join(f'<button type="button" data-aud="{a}">{E(AUDN[a])}</button>' for a in auds) + '</div>')
 
 
+
+def tex(key):
+    cols = [h_ for h_, _ in PAL]
+    n = len(cols)
+    W, H = 640, 300
+    if key in ('knitwear', 'kidswear', 'themes'):
+        g = ''
+        cw, ch, rows = 40, 34, 9
+        for r_ in range(rows):
+            off = 20 if r_ % 2 else 0
+            for c_ in range(-1, 17):
+                x = c_ * cw + off; y = r_ * ch + 8
+                col = cols[(r_ + (c_ // 4)) % n]
+                d = f'M{x},{y} L{x + cw / 2},{y + ch - 6} L{x + cw},{y}'
+                g += f'<g class="kst" style="--d:{(r_ * .1 + max(c_, 0) * .025):.2f}s"><path d="{d}" stroke="{col}" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="{d}" stroke="#fff" stroke-opacity=".35" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round" transform="translate(0,-2)"/></g>'
+        inner = f'<g class="kdrift">{g}</g>'
+    elif key in ('trims', 'accessories'):
+        g = ''
+        for r_ in range(4):
+            for c_ in range(8):
+                x = 40 + c_ * 80 + (40 if r_ % 2 else 0); y = 38 + r_ * 72
+                col = cols[(r_ * 3 + c_) % n]
+                g += (f'<g class="btn2" style="--d:{(r_ * .12 + c_ * .07):.2f}s"><circle cx="{x}" cy="{y}" r="27" fill="{col}"/><circle cx="{x}" cy="{y}" r="20" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="2"/>'
+                      f'<circle cx="{x - 6}" cy="{y - 6}" r="3.2" fill="#fff" fill-opacity=".85"/><circle cx="{x + 6}" cy="{y - 6}" r="3.2" fill="#fff" fill-opacity=".85"/><circle cx="{x - 6}" cy="{y + 6}" r="3.2" fill="#fff" fill-opacity=".85"/><circle cx="{x + 6}" cy="{y + 6}" r="3.2" fill="#fff" fill-opacity=".85"/></g>')
+        inner = g
+    elif key == 'footwear':
+        g = f'<rect width="{W}" height="{H}" fill="#e9dccb"/>'
+        for r_ in range(7):
+            y = 22 + r_ * 42
+            g += f'<path d="M0,{y} H{W}" stroke="{cols[r_ % n]}" stroke-width="3" opacity=".25"/><path class="stch" style="--d:{r_ * .15:.2f}s" d="M0,{y - 10} H{W}" stroke="{cols[r_ % n]}" stroke-width="5" stroke-linecap="round" fill="none"/>'
+        inner = g
+    elif key == 'colour':
+        g = ''
+        for i, c in enumerate(cols):
+            w = W / n
+            g += f'<rect class="wv" style="--d:{i * .12:.2f}s" x="{i * w + 3:.1f}" y="0" width="{w - 6:.1f}" height="{H}" rx="14" fill="{c}"/>'
+        inner = g
+    else:
+        g = ''
+        gw, rh = 36, 34
+        for i in range(0, W // gw + 1):
+            g += f'<rect x="{i * gw}" y="0" width="{gw - 7}" height="{H}" fill="{cols[i % 3]}"/>'
+        for j in range(0, H // rh + 1):
+            g += f'<rect class="wf" style="--d:{j * .1:.2f}s" x="-20" y="{j * rh + 5}" width="{W + 40}" height="{rh - 10}" fill="{cols[3 + j % 2]}"/>'
+        for i in range(0, W // gw + 1):
+            for j in range(0, H // rh + 1):
+                if (i + j) % 2 == 0:
+                    g += f'<rect x="{i * gw}" y="{j * rh + 5}" width="{gw - 7}" height="{rh - 10}" fill="{cols[i % 3]}"/>'
+        inner = g
+    return f'<div class="tex" aria-hidden="true"><svg viewBox="0 0 {W} {H}" preserveAspectRatio="xMidYMid slice">{inner}</svg></div>'
+
+
 def category_page(key):
     _, title, lead = CAT[key]
     items = [it for it in ITEMS if item_filter(key, it)]
     reps = reports_for(key)
-    body = f'{catnav(key)}<main><section class="w ph1"><p class="crumb"><a href="{P}">{CODE}</a> / {E(title)}</p><h1>{E(title)}</h1><p class="lead">{E(lead)}</p><p>{live()}</p></section>'
+    body = f'{catnav(key)}<main><section class="w ph1 hx"><div><p class="crumb"><a href="{P}">{CODE}</a> / {E(title)}</p><h1>{E(title)}</h1><p class="lead">{E(lead)}</p><p>{live()}</p></div>{tex(key)}</section>'
     if key == 'colour':
         sw = ''.join(f'<button type="button" class="sw" data-copy="{h}"><span style="background:{h}"></span><b>{E(n)}</b><small>{tcx(h)}, {h.upper()}</small></button>' for h, n in PAL)
         body += f'<section class="w sec"><h2>Season palette</h2><p class="sub">Select a swatch to copy its HEX code.</p><div class="swg">{sw}</div></section>'
@@ -383,6 +445,8 @@ def report_page(r):
         hero = f'<figure class="rf"><img src="/img/{im["file"]}.webp" alt="{E(im.get("caption", ""))}"><figcaption>{E(im.get("caption", ""))}</figcaption></figure>'
     elif r.get('_fb'):
         hero = f'<figure class="rf"><img src="/img/{r["_fb"]}.webp" alt=""><figcaption>From the {E(META["title"].replace("/", " "))} forecast</figcaption></figure>'
+    elif r['category'] == 'colours':
+        hero = '<figure class="rf">' + pal_art(r, 'rci pal big') + '<figcaption>Season palette</figcaption></figure>'
     cat = {'themes': 'themes', 'colours': 'colour', 'business-strategy': 'business'}.get(r['category'], r['category'])
     rel = related_items(r)
     status = (r.get('trend_status') or '').strip()
@@ -693,10 +757,24 @@ def home_page():
     sw = ''.join(f'<span class="swm"><i style="background:{h}"></i><b>{E(n)}</b><small>{tcx(h)}</small></span>' for h, n in PAL)
     tools = [('trend-to-style', 'Start a style brief'), ('rangeboard', 'Plan a collection'), ('tech-pack-builder', 'Build a tech pack'), ('swatchsmith', 'Make a colour palette')]
     tl = ''.join(f'<a class="ct" href="/{a}.html"><span class="cti"><img src="/tools/covers/{a}-640.webp" alt="" loading="lazy"></span><b>{E(b)}</b></a>' for a, b in tools)
+    mk = ''
+    gl = []
+    for f in sorted(glob.glob(os.path.join(ROOT, '*ss27*.html'))):
+        n = os.path.basename(f)[:-5]
+        if not n.startswith(('australia', 'east-asia', 'eu-', 'gulf', 'north-america', 'southeast-asia')):
+            continue
+        t = re.search(r'<title>(.*?)</title>', open(f, errors='ignore').read(), re.S)
+        t = re.sub(r'\s*\|.*$', '', html.unescape(t.group(1))).strip() if t else n
+        rg = {'australia': 'Australia', 'east-asia': 'East Asia', 'eu-': 'Europe', 'gulf': 'Gulf', 'north-america': 'North America', 'southeast-asia': 'Southeast Asia'}
+        tag = next(v for k, v in rg.items() if n.startswith(k))
+        gl.append((tag, t, n))
+    if gl:
+        mk = ('<aside class="mkp"><b>Markets this season</b><p class="small">Regional guides for ' + CODE + ', with what buyers want and when.</p><ul>' +
+              ''.join(f'<li style="--i:{i}"><a href="/{n}.html"><span class="mr">{E(tag)}</span><span>{E(t)}</span></a></li>' for i, (tag, t, n) in enumerate(gl)) + '</ul></aside>')
     body = (f'<main><section class="w hh"><div><p class="crumb">Your start page</p><h1 id="greet">Welcome back.</h1><p class="lead">New this week in the {META["code"]} forecast, and where each season stands.</p></div>'
             f'<form class="hsr" action="/search.html" method="get" role="search"><input name="q" type="search" placeholder="Search a detail, colour or report" aria-label="Search"><button class="btn" type="submit">Search</button></form></section>'
             f'<section class="w sec"><div class="hf"><div class="hfi">{ft}</div><div><p class="crumb">Detail of the day</p><h2>{E(feat["name"])}</h2><p class="lead sm">{E(desc)}</p>'
-            f'<p>{pill(feat["st"])} <span class="chip">{E(feat["dept"])}, {E(feat["sub"])}</span></p><p class="small">Open the card for drawings, spec notes and its trend graph.</p></div></div></section>'
+            f'<p>{pill(feat["st"])} <span class="chip">{E(feat["dept"])}, {E(feat["sub"])}</span></p><p class="small">Open the card for drawings, spec notes and its trend graph.</p></div>{mk}</div></section>'
             f'<section class="w sec"><h2>Where each season is</h2><div class="hsg">{seasons}</div></section>'
             f'<section class="w sec"><h2>Rising and emerging now</h2><p class="sub">Select any item to open its detail card.</p><div class="tg">{"".join(tile(i, 0) for i in rs)}</div><p><a class="more" href="{C}womenswear.html">Browse all details</a></p></section>'
             f'<section class="w sec"><h2>New this week</h2><div class="rg">{rc}</div></section>'

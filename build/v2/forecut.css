@@ -678,3 +678,11 @@ a.crow{color:inherit}a.crow:hover span{text-decoration:underline;text-underline-
 @media (max-width:1250px){.rgrid.g9{grid-template-columns:repeat(5,minmax(0,1fr))}}
 @media (max-width:860px){.rgrid.g9{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media (max-width:520px){.rgrid.g9{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* signal stages: bright + live */
+.stdef{gap:16px 40px}.stdef p{display:flex;align-items:center;gap:14px;font-size:16px}.stdef p:last-child{display:block}
+.stdef .stage{flex:none;min-width:104px;text-align:center;border:0;font-weight:700;font-size:14px;padding:8px 18px;border-radius:999px;color:#1c1714;margin:0;position:relative;overflow:hidden}
+.stdef .st-e{background:#FFC53D;animation:stp 2.6s ease-in-out infinite}.stdef .st-r{background:#19D68B;animation:stp 2.6s .3s ease-in-out infinite}.stdef .st-p{background:#FF3D6E;color:#fff;animation:stg 2.2s .6s ease-in-out infinite}.stdef .st-f{background:#B7BEFF;animation:stp 2.6s .9s ease-in-out infinite}
+.stdef .stage::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.6) 50%,transparent 65%);transform:translateX(-120%);animation:stsh 4s ease-in-out infinite}
+@keyframes stp{50%{transform:scale(1.07)}}@keyframes stg{0%,100%{box-shadow:0 0 0 0 rgba(255,61,110,.5)}50%{box-shadow:0 0 0 10px rgba(255,61,110,0)}}@keyframes stsh{0%,55%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+@media(prefers-reduced-motion:reduce){.stdef .stage,.stdef .stage::after{animation:none}}

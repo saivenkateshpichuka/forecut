@@ -599,8 +599,9 @@ def hero_html():
   <div class="hc" style="padding:72px 56px 64px max(40px,calc((100vw - 1280px)/2 + 40px));display:flex;flex-direction:column;justify-content:center">
     <h1 class="dsp">See the next season first.</h1>
     <p class="lead" style="margin:26px 0 34px">The silhouettes, details, fabrics and colours moving from the runways into stores, read season by season, so you design what sells next.</p>
-    <div style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="/account.html#signup">Sign up free</a><a class="btn o" href="/{NEXT}-trims.html">See a sample report</a></div>
-    <p class="small mu" style="margin-top:22px">Free to join. Full reports and PDF downloads after sign-up.</p>
+    <div class="out-only" style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="/account.html#signup">Sign up free</a><a class="btn o" href="/{NEXT}-trims.html">See a sample report</a></div>
+    <div class="in-only" style="display:flex;gap:12px;flex-wrap:wrap"><a class="btn" href="/home.html">Open Your Home</a><a class="btn o" href="/forecasts/">Browse the forecasts</a></div>
+    <p class="small mu out-only" style="margin-top:22px">Free to join. Full reports and PDF downloads after sign-up.</p>
   </div>
   <div class="hp" id="hero" style="position:relative;overflow:hidden">{imgs}
     <div class="hcard"><div class="small gr" id="hl">{x0["st"].capitalize()} for {x0["s"]}</div><div style="font-weight:500" id="hn">{E(x0["n"])}</div>

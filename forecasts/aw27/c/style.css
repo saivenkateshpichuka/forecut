@@ -235,3 +235,28 @@ a{color:inherit;text-decoration:none}
 .tci,.rci{display:block!important;height:48mm!important;overflow:hidden;border-radius:6px}.tci img,.rci img{width:100%!important;height:100%!important;object-fit:cover}
 img{max-width:100%}
 }
+
+/* palette art, textures, home panel, buttons, palette animation */
+.rci.pal{display:flex;align-items:flex-end;gap:6px;padding:14px;background:#f5f0e8}.rci.pal i{flex:1;height:var(--h);border-radius:6px 6px 3px 3px;transform-origin:50% 100%;animation:palup 1s calc(var(--i)*.1s) cubic-bezier(.2,.9,.2,1) both}.rci.pal.big{aspect-ratio:4/3;height:auto}
+@keyframes palup{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+.ph1.hx{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,48%);gap:48px;align-items:center}.tex{height:300px;border-radius:16px;overflow:hidden;background:#f5f0e8;box-shadow:inset 0 0 0 1px rgba(0,0,0,.05)}.tex svg{width:100%;height:100%;display:block}
+.kst{opacity:0;transform-box:fill-box;transform-origin:center;animation:kin .7s var(--d) cubic-bezier(.2,.9,.2,1) forwards}@keyframes kin{from{opacity:0;transform:translateY(16px) scale(.6)}to{opacity:1;transform:none}}
+.kdrift{animation:kdr 9s ease-in-out 1.6s infinite alternate}@keyframes kdr{from{transform:translate(0,0)}to{transform:translate(-20px,-12px)}}
+.btn2{transform-box:fill-box;transform-origin:center;opacity:0;animation:bpop .6s var(--d) cubic-bezier(.3,1.6,.5,1) forwards,bsw 5s calc(var(--d) + 1s) ease-in-out infinite}@keyframes bpop{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:scale(1)}}@keyframes bsw{50%{transform:rotate(14deg)}}
+.stch{stroke-dasharray:14 12;animation:sdash 2.4s linear infinite;animation-delay:var(--d)}@keyframes sdash{to{stroke-dashoffset:-52}}
+.wv{transform-box:fill-box;transform-origin:50% 100%;animation:wvu 3.2s var(--d) ease-in-out infinite alternate}@keyframes wvu{from{transform:scaleY(.55)}to{transform:scaleY(1)}}
+.wf{animation:wfs 6s var(--d) ease-in-out infinite alternate}@keyframes wfs{from{transform:translateX(-14px)}to{transform:translateX(14px)}}.wu{animation:wfs 6s var(--d) ease-in-out infinite alternate;animation-direction:alternate-reverse}
+.mkp{background:#f5f0e8;border-radius:14px;padding:22px 24px;align-self:stretch;display:flex;flex-direction:column;gap:8px}.mkp b{font-size:18px}.mkp ul{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}.mkp li{animation:mkin .5s calc(var(--i)*.08s) both}@keyframes mkin{from{opacity:0;transform:translateX(14px)}}
+.mkp a{display:flex;gap:12px;align-items:baseline;padding:10px 12px;background:#fff;border-radius:10px;color:#1c1714;text-decoration:none;font-size:14px;line-height:1.35;transition:transform .2s,box-shadow .2s}.mkp a:hover{transform:translateX(4px);box-shadow:0 6px 16px rgba(31,61,51,.14)}.mkp .mr{flex:none;font-weight:700;font-size:12px;color:#fff;background:#1f3d33;border-radius:999px;padding:3px 10px}
+.hf{grid-template-columns:300px minmax(0,1fr) minmax(280px,360px)!important}
+.acts{flex-wrap:nowrap!important;gap:8px!important}.acts .btn{flex:1 1 auto;white-space:nowrap;padding:10px 12px!important;font-size:14px!important;min-height:0}
+/* colour palettes: paint-in + sheen everywhere */
+.swm,.swg .sw{position:relative}.swm i,.swg .sw span{position:relative;overflow:hidden;display:block}
+.swm.in i,.swg .sw.in span{animation:paint .9s cubic-bezier(.2,.8,.2,1) both}@keyframes paint{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.swm i::after,.swg .sw span::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 35%,rgba(255,255,255,.55) 50%,transparent 65%);transform:translateX(-120%);animation:sheen 6s ease-in-out infinite;animation-delay:calc(var(--d,0ms) + 1.2s)}@keyframes sheen{0%,60%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+.swm,.swg .sw{transition:transform .25s,box-shadow .25s}.swm:hover,.swg .sw:hover{transform:translateY(-6px);box-shadow:0 14px 26px rgba(0,0,0,.18)}
+.swm b,.swg .sw b{display:block;margin-top:8px}
+@media(max-width:1000px){.ph1.hx{grid-template-columns:1fr;gap:22px}.tex{height:180px}.hf{grid-template-columns:1fr!important}}
+@media(prefers-reduced-motion:reduce){.kst,.btn2,.rci.pal i,.mkp li{opacity:1;transform:none}.kdrift,.stch,.wv,.wf,.wu,.swm i::after,.swg .sw span::after{animation:none}}
+.gr .gfa{opacity:0;animation:fade .8s .5s forwards}.gr{width:100%;height:auto;display:block}.dsec .gr{max-width:460px}
+.hf{align-items:start!important}.hf>div:nth-child(2){align-self:center}
