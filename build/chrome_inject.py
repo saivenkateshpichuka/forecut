@@ -37,7 +37,7 @@ def fix(h):
     if '/chrome.css' not in h:
         h = h.replace('</head>', '<link rel="stylesheet" href="/chrome.css"></head>', 1)
     if '/chrome.js' not in h:
-        h = h.replace('</body>', '<script src="/chrome.js" defer></script></body>', 1)
+        _i = h.rfind('</body>'); h = h[:_i] + '<script src="/chrome.js" defer></script>' + h[_i:]
     return h
 
 

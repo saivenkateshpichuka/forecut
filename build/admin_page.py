@@ -201,6 +201,31 @@ dialog .x{all:unset;cursor:pointer;font-size:18px;padding:4px 8px}
         <div><button class="btn" type="submit">Save banner</button> <span id="sMsg" role="status"></span></div>
       </form>
     </div>
+
+    <div class="card">
+      <h2>Pause a tool</h2>
+      <p class="sub">Tick a tool to show members a short "paused" notice instead of the tool, for example while you fix something. Untick to open it again. Changes appear within about 10 minutes.</p>
+      <form id="oForm" style="display:grid;gap:10px">
+        <div id="oList" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:6px 14px"></div>
+        <label>Message shown to members<br><input type="text" id="oMsg" maxlength="160" style="width:100%" placeholder="This tool is being updated and will be back shortly."></label>
+        <div><button class="btn" type="submit">Save tool switches</button> <span id="oOut" role="status"></span></div>
+      </form>
+    </div>
+    <div class="card">
+      <h2>Download data</h2>
+      <p class="sub">Spreadsheet files (CSV) of what members have sent you. Members are under the Members tab.</p>
+      <div class="bar" style="margin:0"><button class="btn o" type="button" data-exp="fb">Feedback</button><button class="btn o" type="button" data-exp="rq">Access requests</button><button class="btn o" type="button" data-exp="cd">Codes</button><button class="btn o" type="button" data-exp="ml">Email history</button></div>
+    </div>
+    <div class="card">
+      <h2>Monthly magazine email</h2>
+      <p class="sub">Write the email for the new issue, copy it, then paste it into your mail app with the member addresses in Bcc.</p>
+      <div style="display:grid;gap:10px">
+        <div class="bar" style="margin:0"><label>Issue name<br><input type="text" id="gName" placeholder="January 2027" style="width:180px"></label><label>Issue link<br><input type="text" id="gLink" value="https://forecut.in/magazine/" style="width:280px"></label></div>
+        <label>Subject<br><input type="text" id="gSub" style="width:100%" readonly></label>
+        <label>Email text<br><textarea id="gBody" rows="9" style="width:100%" readonly></textarea></label>
+        <div class="bar" style="margin:0"><button class="btn" type="button" id="gCopy">Copy email text</button><button class="btn o" type="button" id="gAddr">Copy all member emails</button><span id="gOut" role="status"></span></div>
+      </div>
+    </div>
     <div class="card">
       <h2>Admin app on your phone</h2>
       <p class="sub" id="appTxt"></p>
@@ -718,6 +743,7 @@ function renderIns() {
 
 // ================= site banner + app =================
 function renderSite() {
+  if (typeof renderOff === 'function') renderOff();
   $('sOn').checked = !!site.on; $('sText').value = site.text || ''; $('sLink').value = site.link || ''; $('sLabel').value = site.label || ''; $('sTone').value = site.tone || 'green'; $('sEnds').value = site.ends || ''; prev();
 }
 function prev() { const t = $('sText').value.trim(); $('sPrev').innerHTML = t ? '<div class="ban ' + ($('sTone').value === 'clay' ? 'clay' : 'green') + '"><span>' + esc(t) + '</span>' + ($('sLink').value.trim() ? '<a href="#" onclick="return false">' + esc($('sLabel').value.trim() || 'Find out more') + '</a>' : '') + '<span aria-hidden="true">✕</span></div>' + ($('sOn').checked ? '' : '<p class="small muted">The banner is switched off.</p>') : '<p class="small muted">Type a message to see it here.</p>'; }
@@ -725,13 +751,44 @@ $('sForm').addEventListener('input', prev); $('sForm').addEventListener('change'
 $('sForm').addEventListener('submit', async (e) => {
   e.preventDefault(); let link = $('sLink').value.trim(); if (link && !/^(https:\/\/|\/)/.test(link)) link = link.startsWith('forecut.in') ? 'https://' + link : '/' + link.replace(/^\/+/, '');
   const d = { on: $('sOn').checked, text: $('sText').value.trim().slice(0, 160), link, label: $('sLabel').value.trim().slice(0, 40), tone: $('sTone').value, ends: $('sEnds').value || '', at: nowIso(), by: me.uid };
-  try { await F.setDoc(F.doc(db, 'config', 'site'), d); site = d; $('sLink').value = link; $('sMsg').textContent = d.on ? 'Saved. It shows on forecut.in within about 10 minutes.' : 'Saved. The banner is off.'; } catch (x) { $('sMsg').textContent = 'Not saved: ' + x.message; }
+  try { await F.setDoc(F.doc(db, 'config', 'site'), d, { merge: true }); site = Object.assign({}, site, d); $('sLink').value = link; $('sMsg').textContent = d.on ? 'Saved. It shows on forecut.in within about 10 minutes.' : 'Saved. The banner is off.'; } catch (x) { $('sMsg').textContent = 'Not saved: ' + x.message; }
 });
 let inst = null; const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
 $('appTxt').textContent = standalone ? 'You are using the Forecut Admin app.' : 'Put Forecut Admin on your home screen. It opens straight to this page, like an app, and keeps you signed in.';
 addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); inst = e; $('appBtn').hidden = false; });
 $('appBtn').addEventListener('click', async () => { if (!inst) return; inst.prompt(); await inst.userChoice; inst = null; $('appBtn').hidden = true; });
 
+
+// ================= tool switches, exports, magazine email =================
+const TOOLS = [["trend-to-style", "Trend to Style Brief"], ["rangeboard", "Collection Planner"], ["swatchsmith", "Colour Palette Builder"], ["materials-library", "Fabric & Trims Library"], ["textile-processing-studio", "Textile Processing Studio"], ["size-chart-builder", "Size Chart Builder"], ["pattern-maker", "Garment Studio"], ["tech-pack-builder", "Tech Pack Builder"], ["fit-qc-studio", "Fit & QC Studio"], ["style-tracker", "Style Tracker"], ["decoration-cost-estimator", "Embroidery & Print Cost"], ["pricefold", "Price & Margin Calculator"], ["evenpoint", "Break-even Calculator"], ["cutclock", "Production Calendar"], ["care-label-generator", "Care Label Generator"], ["product-description-writer", "Product Description Writer"], ["export-market-checker", "Export Market Checker"]];
+function renderOff() {
+  const off = String(site.off || '').split(',').filter(Boolean);
+  $('oList').innerHTML = TOOLS.map((t) => '<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" value="' + t[0] + '"' + (off.includes(t[0]) ? ' checked' : '') + '> ' + esc(t[1]) + '</label>').join('');
+  $('oMsg').value = site.offMsg || '';
+}
+$('oForm').addEventListener('submit', async (e) => {
+  e.preventDefault(); const off = [...$('oList').querySelectorAll('input:checked')].map((x) => x.value).join(',');
+  const d = { off, offMsg: $('oMsg').value.trim().slice(0, 160), at: nowIso(), by: me.uid };
+  try { await F.setDoc(F.doc(db, 'config', 'site'), d, { merge: true }); site = Object.assign({}, site, d); $('oOut').textContent = off ? 'Saved. Paused tools: ' + off.split(',').length + '.' : 'Saved. All tools are open.'; } catch (x) { $('oOut').textContent = 'Not saved: ' + (x.message || x); }
+});
+function dlCsv(name, rows) {
+  const csv = rows.map((r) => r.map((c) => '"' + String(c == null ? '' : c).replace(/"/g, '""') + '"').join(',')).join('\n');
+  const u = URL.createObjectURL(new Blob(['\ufeff' + csv], { type: 'text/csv' })); const l = document.createElement('a'); l.href = u; l.download = 'forecut-' + name + '-' + today() + '.csv'; l.click(); setTimeout(() => URL.revokeObjectURL(u), 2000);
+}
+document.addEventListener('click', (e) => {
+  const b = e.target.closest('[data-exp]'); if (!b) return; const k = b.dataset.exp;
+  const cols = (arr) => { const keys = []; arr.forEach((o) => Object.keys(o).forEach((x) => { if (!keys.includes(x) && typeof o[x] !== 'object') keys.push(x); })); return [keys].concat(arr.map((o) => keys.map((x) => o[x]))); };
+  const src = { fb: [feedback, 'feedback'], rq: [requests, 'access-requests'], cd: [codes, 'codes'], ml: [mails, 'email-history'] }[k];
+  if (!src[0].length) { alert('Nothing to download yet.'); return; } dlCsv(src[1], cols(src[0]));
+});
+function mag() {
+  const n = $('gName').value.trim() || 'this month', l = $('gLink').value.trim() || 'https://forecut.in/magazine/';
+  $('gSub').value = 'The Forecut magazine, ' + n + ' is ready to read';
+  $('gBody').value = 'Hi there,\n\nThe ' + n + ' issue of the Forecut magazine is out. Open it and turn the pages like a book:\n' + l + '\n\nInside: the month highlights, fashion news, business, the brand of the month and what is coming next.\n\nSee you next month,\nSai from Forecut\nhello@forecut.in';
+}
+$('gName').addEventListener('input', mag); $('gLink').addEventListener('input', mag); mag();
+$('gCopy').addEventListener('click', async () => { try { await navigator.clipboard.writeText($('gSub').value + '\n\n' + $('gBody').value); $('gOut').textContent = 'Copied.'; } catch (x) { $('gBody').select(); $('gOut').textContent = 'Press Ctrl+C to copy.'; } });
+$('gAddr').addEventListener('click', async () => { const a = members.map((m) => m.email).filter(Boolean).join(', '); try { await navigator.clipboard.writeText(a); $('gOut').textContent = 'Copied ' + members.filter((m) => m.email).length + ' addresses.'; } catch (x) { $('gOut').textContent = 'Could not copy.'; } });
 // ================= tabs =================
 function tab(k) {
   document.querySelectorAll('.tabs button').forEach((x) => x.setAttribute('aria-pressed', x.dataset.tab === k));

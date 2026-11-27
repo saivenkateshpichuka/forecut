@@ -322,10 +322,23 @@ onAuthStateChanged(auth, async (u) => {
     try {
       const r = await fetch('https://firestore.googleapis.com/v1/projects/forcut-forecast/databases/(default)/documents/config/site?key=AIzaSyCPG9vO5NZobpaZga7JfBa13yCstTU9uRM');
       const j = r.ok ? await r.json() : {}, f = j.fields || {}, v = (x) => x ? (x.stringValue != null ? x.stringValue : x.booleanValue) : '';
-      c = { on: !!v(f.on), text: v(f.text) || '', link: v(f.link) || '', label: v(f.label) || '', tone: v(f.tone) || 'green', ends: v(f.ends) || '' };
+      c = { on: !!v(f.on), text: v(f.text) || '', link: v(f.link) || '', label: v(f.label) || '', tone: v(f.tone) || 'green', ends: v(f.ends) || '', off: v(f.off) || '', offMsg: v(f.offMsg) || '' };
       try { sessionStorage.setItem('fc-banner', JSON.stringify({ t: Date.now(), c })); } catch (e) {}
     } catch (e) { return; }
   }
+  // tool paused from the admin page: show a short notice in place of the tool (a convenience switch, not a security control)
+  try {
+    const slug = (location.pathname.split('/').pop() || '').replace(/\.html$/, '');
+    if (c.off && slug && c.off.split(',').includes(slug) && !document.getElementById('fc-paused')) {
+      const box = document.createElement('div'); box.id = 'fc-paused'; box.setAttribute('role', 'alert');
+      box.style.cssText = 'position:fixed;inset:0;z-index:99990;display:grid;place-items:center;padding:24px;background:rgba(244,240,232,.97);font:500 16px/1.5 "DM Sans",system-ui,sans-serif;color:#1e1b18;text-align:center';
+      const inner = document.createElement('div'); inner.style.cssText = 'max-width:440px';
+      const h = document.createElement('h2'); h.textContent = 'This tool is paused for now'; h.style.cssText = 'font:700 24px/1.2 "DM Sans",system-ui,sans-serif;margin:0 0 10px';
+      const p = document.createElement('p'); p.textContent = c.offMsg || 'We are updating it and it will be back shortly.'; p.style.margin = '0 0 18px';
+      const a = document.createElement('a'); a.href = '/tools'; a.textContent = 'See all tools'; a.style.cssText = 'display:inline-block;padding:11px 20px;border-radius:99px;background:#214538;color:#fff;font-weight:700;text-decoration:none';
+      inner.append(h, p, a); box.appendChild(inner); document.body.appendChild(box);
+    }
+  } catch (e) {}
   if (!c.on || !c.text || (c.ends && c.ends < new Date().toISOString().slice(0, 10))) return;
   const key = 'fc-banner-x-' + c.text.length + '-' + c.text.slice(0, 24);
   try { if (localStorage.getItem(key)) return; } catch (e) {}

@@ -14,7 +14,7 @@ for dp, dn, fn in os.walk(ROOT):
         if 'location.replace' in h and '<main' not in h:
             continue
         h = h.replace('</head>', '<link rel="stylesheet" href="/m.css"></head>', 1)
-        h = h.replace('</body>', '<script src="/m.js" defer></script></body>', 1)
+        _i = h.rfind('</body>'); h = h[:_i] + '<script src="/m.js" defer></script>' + h[_i:]
         open(p, 'w', encoding='utf-8').write(h)
         n += 1
 print('mobile layer injected into', n, 'pages')

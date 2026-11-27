@@ -244,7 +244,7 @@ for fn, (title, desc, path) in pages.items():
     elif '<div class="foot">' in h:
         h = h.replace('<div class="foot">', SO.follow('page') + '<div class="foot"><!--socf-->' + SO.icons() + '<!--/socf-->', 1)
     _nav = NAV.replace('data-m="' + tab_for(fn) + '"', 'data-m="' + tab_for(fn) + '" aria-current="page"') if tab_for(fn) else NAV
-    h = h.replace('</body>', _nav + '</body>', 1) if '</body>' in h else h + _nav
+    _ib = h.rfind('</body>'); h = (h[:_ib] + _nav + h[_ib:]) if _ib > -1 else h + _nav
     # owner's rule: pages show the photo only; flat sketches stay inside the detail viewer's "Flat sketch" button
     h = re.sub(r'(<img[^>]*?\ssrc="img/)([a-z0-9-]+)(\.webp")', lambda m: m.group(1) + (m.group(2) + '-photo' if not m.group(2).endswith('-photo') and os.path.exists(os.path.join(R, 'img', m.group(2) + '-photo.webp')) else m.group(2)) + m.group(3), h)
     h = SH.apply(h, fn)

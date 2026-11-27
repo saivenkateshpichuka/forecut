@@ -124,12 +124,12 @@ function host() {
   const slot = document.getElementById('fc-account-slot');
   if (slot) { slot.classList.add('fca'); return slot; }
   const nl = document.getElementById('navlinks');
-  if (nl) { nl.querySelectorAll('a[href*="account"]').forEach(a => { a.style.display = 'none'; }); const w = document.createElement('span'); w.className = 'fca'; w.style.marginLeft = '12px'; const mb = nl.parentNode.querySelector('.menu'); nl.parentNode.insertBefore(w, mb || nl.nextSibling); return w; }
+  if (nl) { nl.querySelectorAll('a[href*="account.html"]').forEach(a => { a.style.display = 'none'; }); const w = document.createElement('span'); w.className = 'fca'; w.style.marginLeft = '12px'; const mb = nl.parentNode.querySelector('.menu'); nl.parentNode.insertBefore(w, mb || nl.nextSibling); return w; }
   const bar = document.querySelector('.bar'); if (bar) { const w = document.createElement('span'); w.className = 'fca fcbar'; bar.appendChild(w); return w; }
   const l = document.querySelector('nav .links'); if (l) { const w = document.createElement('span'); w.className = 'fca'; l.appendChild(w); return w; }
   return null;
 }
-const here = location.pathname.replace(/^\//, '') || '/';
+const here = location.pathname.replace(/^\//, '') || 'index.html';
 const isAccount = /account(\.html)?$/.test(here);
 const w = host();
 let wasMember = null;
@@ -163,14 +163,14 @@ onAuthStateChanged(auth, async (u) => {
   } catch (e) {}
 });
 onAuthStateChanged(auth, (u) => {
-  if (u) { unlock(); const cta = document.querySelector('header.hero#top .cta a[href*="account"]'); if (cta) { cta.textContent = 'My saved details'; cta.href = '/account#saved'; } } else if (wasMember) { location.reload(); return; }
+  if (u) { unlock(); const cta = document.querySelector('header.hero#top .cta a[href*="account"]'); if (cta) { cta.textContent = 'My saved details'; cta.href = '/account.html#saved'; } } else if (wasMember) { location.reload(); return; }
   wasMember = !!u;
   if (!w) return;
-  if (!u) { w.innerHTML = isAccount ? '' : `<a class="fcin" href="/account?next=${encodeURIComponent(location.pathname + location.hash)}">Sign in</a>`; return; }
+  if (!u) { w.innerHTML = isAccount ? '' : `<a class="fcin" href="/account.html?next=${encodeURIComponent(location.pathname + location.hash)}">Sign in</a>`; return; }
   const name = u.displayName || (u.email || '').split('@')[0];
   const ini = (name || '?').trim().charAt(0).toUpperCase();
   w.innerHTML = `<button class="fcav" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="Account menu">${w.id === 'fc-account-slot' ? `<span class="fc-avatar">${u.photoURL ? `<img src="${u.photoURL}" alt="" referrerpolicy="no-referrer">` : ini}</span><span class="fc-account-label">My account</span>` : (u.photoURL ? `<img src="${u.photoURL}" alt="" referrerpolicy="no-referrer">` : ini)}</button>
-  <div class="fcm" role="menu" hidden><b></b><small></small><span class="tg">Member · all seasons unlocked</span><a href="/account#overview" role="menuitem">Dashboard</a><a href="/account#projects" role="menuitem">Projects &amp; files</a><a href="/account#brand" role="menuitem">Brand kit</a><a href="/account#account" role="menuitem">Account settings</a><button type="button" role="menuitem" class="fcout">Sign out</button></div>`;
+  <div class="fcm" role="menu" hidden><b></b><small></small><span class="tg">Member · all seasons unlocked</span><a href="/account.html#overview" role="menuitem">Dashboard</a><a href="/account.html#projects" role="menuitem">Projects &amp; files</a><a href="/account.html#brand" role="menuitem">Brand kit</a><a href="/account.html#account" role="menuitem">Account settings</a><button type="button" role="menuitem" class="fcout">Sign out</button></div>`;
   w.querySelector('.fcm b').textContent = name; w.querySelector('.fcm small').textContent = u.email || '';
   const b = w.querySelector('.fcav'), m = w.querySelector('.fcm');
   b.onclick = (e) => { e.stopPropagation(); m.hidden = !m.hidden; b.setAttribute('aria-expanded', String(!m.hidden)); };
@@ -185,7 +185,7 @@ onAuthStateChanged(auth, (u) => {
   const b = document.createElement('button'); b.type = 'button'; b.className = 'fcfbb';
   b.innerHTML = '<span aria-hidden="true">★</span> Feedback<span class="fcfbx"> · 1 year free</span>';
   b.title = 'Give feedback and get 1 year of full Forecut access free';
-  b.onclick = () => window.FCFeedback ? window.FCFeedback.open() : (location.href = '/account#signin');
+  b.onclick = () => window.FCFeedback ? window.FCFeedback.open() : (location.href = '/account.html#signin');
   const slot = document.getElementById('fc-install-slot');
   if (slot && slot.parentNode) slot.parentNode.insertBefore(b, slot); else if (w) w.parentNode.insertBefore(b, w); else fxNav.insertBefore(b, fxNav.querySelector('.fx-signin'));
   const st = document.createElement('style');
@@ -226,7 +226,7 @@ onAuthStateChanged(auth, (u) => {
   function gate(why) {
     if (document.querySelector('.fcg')) return;
     const g = document.createElement('div'); g.className = 'fcg'; g.setAttribute('role', 'dialog'); g.setAttribute('aria-modal', 'true');
-    g.innerHTML = '<div><small>Free trial · until 1 January 2027</small><h3></h3><p>Sign in free to unlock every season, region, report and download during the trial. It takes one tap with Google.</p><a href="/account?next=' + encodeURIComponent(location.pathname + location.search + location.hash) + '#signup">Sign in free</a><button type="button">Not now</button></div>';
+    g.innerHTML = '<div><small>Free trial · until 1 January 2027</small><h3></h3><p>Sign in free to unlock every season, region, report and download during the trial. It takes one tap with Google.</p><a href="/account.html?next=' + encodeURIComponent(location.pathname + location.search + location.hash) + '#signup">Sign in free</a><button type="button">Not now</button></div>';
     g.querySelector('h3').textContent = why;
     g.addEventListener('click', (e) => { if (e.target === g || e.target.tagName === 'BUTTON') g.remove(); });
     document.body.appendChild(g); g.querySelector('a').focus();
@@ -284,7 +284,7 @@ onAuthStateChanged(auth, (u) => {
     };
     setTimeout(() => { const s1 = w.querySelector('[data-r]'); if (s1) s1.focus(); }, 50);
   }
-  window.FCFeedback = { open: () => { const u = auth.currentUser; if (u) open(u, true); else location.href = '/account#signin'; } };
+  window.FCFeedback = { open: () => { const u = auth.currentUser; if (u) open(u, true); else location.href = '/account.html#signin'; } };
   // the automatic pop-up is switched off (owner's request, 17 Nov 2026); the header Feedback button still opens the form.
   // Set AUTO_FEEDBACK = true to show it again once after sign-in.
   const AUTO_FEEDBACK = false;
@@ -322,10 +322,23 @@ onAuthStateChanged(auth, async (u) => {
     try {
       const r = await fetch('https://firestore.googleapis.com/v1/projects/forcut-forecast/databases/(default)/documents/config/site?key=AIzaSyCPG9vO5NZobpaZga7JfBa13yCstTU9uRM');
       const j = r.ok ? await r.json() : {}, f = j.fields || {}, v = (x) => x ? (x.stringValue != null ? x.stringValue : x.booleanValue) : '';
-      c = { on: !!v(f.on), text: v(f.text) || '', link: v(f.link) || '', label: v(f.label) || '', tone: v(f.tone) || 'green', ends: v(f.ends) || '' };
+      c = { on: !!v(f.on), text: v(f.text) || '', link: v(f.link) || '', label: v(f.label) || '', tone: v(f.tone) || 'green', ends: v(f.ends) || '', off: v(f.off) || '', offMsg: v(f.offMsg) || '' };
       try { sessionStorage.setItem('fc-banner', JSON.stringify({ t: Date.now(), c })); } catch (e) {}
     } catch (e) { return; }
   }
+  // tool paused from the admin page: show a short notice in place of the tool (a convenience switch, not a security control)
+  try {
+    const slug = (location.pathname.split('/').pop() || '').replace(/\.html$/, '');
+    if (c.off && slug && c.off.split(',').includes(slug) && !document.getElementById('fc-paused')) {
+      const box = document.createElement('div'); box.id = 'fc-paused'; box.setAttribute('role', 'alert');
+      box.style.cssText = 'position:fixed;inset:0;z-index:99990;display:grid;place-items:center;padding:24px;background:rgba(244,240,232,.97);font:500 16px/1.5 "DM Sans",system-ui,sans-serif;color:#1e1b18;text-align:center';
+      const inner = document.createElement('div'); inner.style.cssText = 'max-width:440px';
+      const h = document.createElement('h2'); h.textContent = 'This tool is paused for now'; h.style.cssText = 'font:700 24px/1.2 "DM Sans",system-ui,sans-serif;margin:0 0 10px';
+      const p = document.createElement('p'); p.textContent = c.offMsg || 'We are updating it and it will be back shortly.'; p.style.margin = '0 0 18px';
+      const a = document.createElement('a'); a.href = '/tools'; a.textContent = 'See all tools'; a.style.cssText = 'display:inline-block;padding:11px 20px;border-radius:99px;background:#214538;color:#fff;font-weight:700;text-decoration:none';
+      inner.append(h, p, a); box.appendChild(inner); document.body.appendChild(box);
+    }
+  } catch (e) {}
   if (!c.on || !c.text || (c.ends && c.ends < new Date().toISOString().slice(0, 10))) return;
   const key = 'fc-banner-x-' + c.text.length + '-' + c.text.slice(0, 24);
   try { if (localStorage.getItem(key)) return; } catch (e) {}
