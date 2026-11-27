@@ -15,7 +15,8 @@ body.mg{background:#1c1f1d;color:#fff;font:400 16px/1.5 "Archivo",system-ui,sans
 .fc::after,.bk::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(0,0,0,.18),transparent 9%)}
 .bk::after{background:linear-gradient(270deg,rgba(0,0,0,.18),transparent 9%)}
 .book::before{content:"";position:absolute;left:0;top:0;width:50%;height:100%;box-shadow:inset -14px 0 24px -14px rgba(0,0,0,.45)}
-.pg{width:100%;height:100%;background:#fbf8f2;color:var(--ink);container-type:inline-size;position:relative;overflow:hidden;padding:7cqw;font-size:3.4cqw;line-height:1.5}
+.pg{width:100%;height:100%;background:#fbf8f2;color:var(--ink);container-type:inline-size;position:relative;overflow:hidden;padding:7cqw;line-height:1.5}
+.pg>*{font-size:3.4cqw}
 .pg .k{font:600 2.3cqw/1 "Archivo";letter-spacing:.12em;text-transform:uppercase;color:var(--t);margin-bottom:2.6cqw}
 .pg h2{font:300 7.4cqw/1.02 "Archivo";font-stretch:125%;letter-spacing:-.02em;margin:0 0 3cqw}
 .pg h3{font:300 6cqw/1.05 "Archivo";font-stretch:125%;margin:0 0 3cqw}.pg h4{font:600 2.4cqw "Archivo";letter-spacing:.1em;text-transform:uppercase;color:#6b625b;margin:4cqw 0 1.6cqw}
@@ -28,7 +29,7 @@ body.mg{background:#1c1f1d;color:#fff;font:400 16px/1.5 "Archivo",system-ui,sans
 .cover .mast b{display:block;font:200 12.4cqw/1 "Archivo";font-stretch:125%;letter-spacing:.04em}.cover .mast span{font:600 2.4cqw "Archivo";letter-spacing:.3em}
 .cover .cl{position:absolute;left:6cqw;right:6cqw;bottom:6cqw;text-shadow:0 1px 20px rgba(0,0,0,.45)}.cover h1{font:300 11cqw/.98 "Archivo";font-stretch:125%;letter-spacing:-.03em;margin-bottom:3.5cqw}
 .cover ul{list-style:none}.cover li{font:600 3cqw "Archivo";padding:1cqw 0;border-top:1px solid rgba(255,255,255,.5)}
-.contents ol{list-style:none;columns:1}.contents li{border-bottom:1px solid #e6ded3}.contents a{display:flex;justify-content:space-between;gap:3cqw;padding:2cqw 0;color:inherit;text-decoration:none;font:500 3.3cqw "Archivo"}.contents i{font-style:normal;color:var(--t);font-weight:700}
+.contents ol{list-style:none;columns:2;column-gap:5cqw}.contents h2{margin-bottom:2cqw}.contents li{border-bottom:1px solid #e6ded3}.contents a{display:flex;justify-content:space-between;gap:2cqw;padding:1.15cqw 0;color:inherit;text-decoration:none;font:500 2.5cqw/1.25 "Archivo"}.contents i{font-style:normal;color:var(--t);font-weight:700}
 .letter .sig{font:italic 3.6cqw Georgia,serif;margin-top:4cqw}
 .divider{padding:0;display:flex;align-items:flex-end}.divider .dv{position:relative;padding:8cqw;width:100%;background:linear-gradient(0deg,rgba(0,0,0,.42),transparent)}.divider .dv span{font:200 6cqw "Archivo";font-stretch:125%;opacity:.9}.divider h2{font-size:15cqw;margin:2cqw 0}.divider p{font:italic 4.2cqw Georgia,serif;margin:0}
 .lead .big{font-size:5cqw;margin-bottom:5cqw}.lead h2{font-size:8cqw}
@@ -40,7 +41,7 @@ body.mg{background:#1c1f1d;color:#fff;font:400 16px/1.5 "Archivo",system-ui,sans
 .theme2 h3{color:var(--a)}.theme2 .sws i{background:var(--a)}
 .bands{display:flex;flex-direction:column;gap:0;height:72%;margin-top:3cqw}.bands div{flex:1;display:flex;justify-content:space-between;align-items:flex-end;padding:3cqw 4cqw;font:500 3.2cqw "Archivo"}.bands b{font:300 5.6cqw "Archivo";font-stretch:125%}
 .list ol{list-style:none;counter-reset:n}.list li{counter-increment:n;padding:3.4cqw 0;border-bottom:1px solid #e6ded3;font:300 5cqw/1.15 "Archivo";font-stretch:115%}.list li::before{content:counter(n,decimal-leading-zero);color:var(--t);font:600 2.6cqw "Archivo";margin-right:3cqw;letter-spacing:.1em}
-.article h2{font-size:6.4cqw}.article .cols{column-count:2;column-gap:4cqw;font-size:2.7cqw;line-height:1.5}.article .cols p{break-inside:avoid-column}.article .ph{height:32%}
+.article h2{font-size:6.4cqw}.article .cols{column-count:2;column-gap:4cqw;font-size:2.85cqw;line-height:1.5}.article .cols p{break-inside:avoid-column}.article .ph{height:32%}
 .calendar ul{list-style:none}.calendar li{display:grid;grid-template-columns:30cqw 1fr;gap:3cqw;padding:3cqw 0;border-bottom:1px solid #e6ded3}.calendar b{font:300 4cqw "Archivo";font-stretch:120%;color:var(--g)}
 .ahead h2{font-size:8cqw}.ahead .sws.wide i{height:22cqw}.ahead{background:#f5f0e8}
 .brand h2{font-size:9cqw}.brand2 dl{display:grid;grid-template-columns:30cqw 1fr;gap:1.6cqw 3cqw}.brand2 dt{font-weight:700}.brand2 li{margin:0 0 2cqw 4cqw}
