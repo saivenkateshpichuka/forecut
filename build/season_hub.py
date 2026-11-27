@@ -484,6 +484,35 @@ def curve_svg(vals):
             f'{bars}<polyline class="cl" pathLength="1" points="{line}" fill="none"/>{dots}</svg>')
 
 
+def board_collage(t, hero, imgs, flats, rel):
+    sl = islug(t[0])
+    insp = [f'insp-{S}-{sl}-{n}' for n in (1, 2, 3) if f'insp-{S}-{sl}-{n}' in IMG]
+    cards = []
+    def pol(cls, inner, cap=''):
+        return f'<figure class="mb {cls}"><i class="tape"></i>{inner}' + (f'<figcaption>{E(cap)}</figcaption>' if cap else '') + '</figure>'
+    if hero:
+        cards.append(pol('m1', f'<img src="/img/{hero}.webp" alt="{E(t[0])}" loading="lazy">'))
+    for n, f in enumerate(insp):
+        cards.append(pol(f'm{n + 2}', f'<img src="/img/{f}.webp" alt="" loading="lazy">'))
+    if not insp:
+        pc = [h_ for h_, _ in PAL]
+        pats = [f'repeating-linear-gradient(90deg,{pc[1 % len(pc)]} 0 6px,{pc[3 % len(pc)]} 6px 12px)', f'repeating-linear-gradient(45deg,{pc[2 % len(pc)]} 0 5px,{pc[4 % len(pc)]} 5px 10px)', f'radial-gradient(circle at 50% 50%,{pc[0]} 0 38%,{pc[5 % len(pc)]} 40%)']
+        for n_, pt in enumerate(pats):
+            cards.append(f'<figure class="mb tx m{n_ + 2}"><i class="tape"></i><span style="background:{pt};background-size:auto,auto"></span><figcaption>{["Woven stripe", "Cross twill", "Round form"][n_]}</figcaption></figure>')
+    k = 0
+    for hx, nm in PAL[:3]:
+        cards.append(f'<div class="mb sw s{k}"><i style="background:{hx}"></i><b>{tcx(hx)}</b><small>{E(nm)} {hx.upper()}</small></div>')
+        k += 1
+    for n, it in enumerate([i for i in imgs if i['img'] != hero][:3]):
+        cards.append(pol(f'p{n}', f'<img src="/img/{it["img"]}.webp" alt="{E(it["name"])}" loading="lazy">', it['name']))
+    if flats:
+        cards.append(pol('fl', f'<img src="/img/{flats[0]["flats"][0]}.webp" alt="{E(flats[0]["name"])} flat" loading="lazy">', flats[0]['name']))
+    words = ''.join(f'<span class="mw w{n}" style="--r:{(n * 7) % 11 - 5}deg">{E(w.lower())}</span>' for n, w in enumerate(list(t[6]) + [t[5]]))
+    notes = ''.join(f'<p class="mn"><b>{E(r["title"])}</b> {E((lambda x: x if len(x) < 150 else x[:150].rsplit(' ', 1)[0] + '...')(nc(r.get("summary", ""))))}</p>' for r in rel[:3])
+    brush = ''.join(f'<i class="br" style="background:{hx};--w:{70 - 9 * n}%"></i>' for n, (hx, _) in enumerate(PAL[3:6]))
+    return f'<div class="mboard">{"".join(cards)}<div class="mbr">{brush}</div><div class="mwords">{words}</div></div>' + (f'<div class="mnotes"><b>What is driving it</b>{notes}</div>' if notes else '')
+
+
 def theme_page(t):
     sl = islug(t[0])
     its = sorted(theme_items(t), key=lambda x: 'erpf'.index(x['st']))
@@ -518,7 +547,7 @@ def theme_page(t):
     flats = [i for i in gar if i.get('flats')]
     parts = [
         sec('story', 'The theme', f'Why it matters in {CODE}.', f'<p class="tlead">{E(t[1])}</p><p class="small">Key item: <b>{E(t[5])}</b></p><div>{kw}</div>'),
-        sec('mood', 'Mood board', 'The pieces and details that make up this theme, in the order they matter.', mood()),
+        sec('mood', 'Mood board', 'Where this theme comes from: the references, colours, textures and pieces we read it through.', board_collage(t, hero, imgs, flats, rel)),
         sec('strength', 'How strong is it?', f'It builds towards {peak}. {live("Live model")}', curve_svg(curve)),
         sec('colour', 'Colour direction', 'The season palette this theme draws from. Keep colour consistent across apparel, trims and accessories.', f'<div class="swr">{pal}</div><h3 class="h3">Colour combinations</h3><div class="cmr">{combos}</div>'),
         sec('fabrics', 'Fabrics, prints and finishes', 'Materials and surface developments to sample first. Confirm weight, drape and care with real swatches.', grid(fabs)),
